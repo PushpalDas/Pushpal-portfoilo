@@ -1,0 +1,385 @@
+/* ============================================
+   LIVE TRIAL SECTION
+   ============================================ */
+
+.live-trial-section {
+	position: relative;
+	width: 100%;
+	padding: 4rem 0;
+	margin: 2rem 0;
+}
+
+.live-trial-container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.live-trial-header {
+	margin-bottom: 3rem;
+	text-align: left;
+}
+
+.live-trial-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1.2rem;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(34, 200, 130, 0.1);
+	font-size: 0.85rem;
+	color: rgba(34, 200, 130, 1);
+	margin-bottom: 1.5rem;
+	font-weight: 500;
+}
+
+html:not(.dark) .live-trial-badge {
+	background: rgba(34, 200, 130, 0.05);
+	border-color: rgba(34, 200, 130, 0.3);
+	color: rgba(34, 200, 130, 0.9);
+}
+
+.live-indicator {
+	display: inline-block;
+	animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+.live-trial-title {
+	font-size: clamp(2rem, 5vw, 3.5rem);
+	font-weight: 400;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	margin: 0 0 1rem;
+	color: #fff;
+}
+
+html:not(.dark) .live-trial-title {
+	color: #1c1d20;
+}
+
+.title-line {
+	display: block;
+}
+
+.live-trial-description {
+	font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+	color: rgba(255, 255, 255, 0.8);
+	line-height: 1.6;
+	margin: 0;
+	max-width: 600px;
+}
+
+html:not(.dark) .live-trial-description {
+	color: rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================
+   GRID LAYOUT
+   ============================================ */
+
+.live-trial-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: clamp(2rem, 4vw, 3rem);
+	margin-bottom: 3rem;
+}
+
+@media screen and (max-width: 768px) {
+	.live-trial-grid {
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+}
+
+/* ============================================
+   ROLE CARD
+   ============================================ */
+
+.live-trial-card {
+	padding: clamp(1.5rem, 3vw, 2rem);
+	border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	background: rgba(255, 255, 255, 0.05);
+	backdrop-filter: blur(10px);
+	transition: all 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.live-trial-card:hover {
+	border-color: rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.1);
+	transform: translateY(-8px);
+}
+
+html:not(.dark) .live-trial-card {
+	border-color: rgba(0, 0, 0, 0.1);
+	background: rgba(0, 0, 0, 0.02);
+}
+
+html:not(.dark) .live-trial-card:hover {
+	border-color: rgba(0, 0, 0, 0.2);
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html:not(.dark) .card-header {
+	border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.card-header h3 {
+	font-size: 1.2rem;
+	font-weight: 500;
+	margin: 0;
+	color: #fff;
+}
+
+html:not(.dark) .card-header h3 {
+	color: #1c1d20;
+}
+
+.role-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.4rem 1rem;
+	border-radius: 8px;
+	background: rgba(34, 200, 130, 0.2);
+	color: rgba(34, 200, 130, 1);
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.role-content {
+	display: flex;
+	flex-direction: column;
+	gap: 1.2rem;
+}
+
+.role-item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.role-label {
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: rgba(255, 255, 255, 0.6);
+	font-weight: 600;
+}
+
+html:not(.dark) .role-label {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.role-value {
+	font-size: 1rem;
+	color: #fff;
+	margin: 0;
+	font-weight: 500;
+}
+
+html:not(.dark) .role-value {
+	color: #1c1d20;
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.live-trial-stats {
+	display: flex;
+	align-items: center;
+}
+
+.stats-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: clamp(1.5rem, 3vw, 2rem);
+	width: 100%;
+}
+
+.stat-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 1.5rem;
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: rgba(255, 255, 255, 0.03);
+	transition: all 0.4s ease;
+}
+
+.stat-item:hover {
+	border-color: rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.08);
+	transform: translateY(-4px);
+}
+
+html:not(.dark) .stat-item {
+	border-color: rgba(0, 0, 0, 0.08);
+	background: rgba(0, 0, 0, 0.01);
+}
+
+html:not(.dark) .stat-item:hover {
+	border-color: rgba(0, 0, 0, 0.15);
+	background: rgba(0, 0, 0, 0.04);
+}
+
+.stat-value {
+	font-size: clamp(1.5rem, 4vw, 2.5rem);
+	font-weight: 700;
+	color: #fff;
+	line-height: 1;
+	margin-bottom: 0.5rem;
+}
+
+html:not(.dark) .stat-value {
+	color: #1c1d20;
+}
+
+.stat-suffix {
+	font-size: 1rem;
+	color: rgba(34, 200, 130, 1);
+	margin-left: 0.2rem;
+}
+
+.stat-label {
+	font-size: 0.8rem;
+	color: rgba(255, 255, 255, 0.7);
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	font-weight: 500;
+}
+
+html:not(.dark) .stat-label {
+	color: rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================
+   SKILLS
+   ============================================ */
+
+.live-trial-skills {
+	padding: 2rem 0;
+}
+
+.skills-title {
+	font-size: 1.2rem;
+	font-weight: 500;
+	margin: 0 0 1.5rem;
+	color: #fff;
+}
+
+html:not(.dark) .skills-title {
+	color: #1c1d20;
+}
+
+.skills-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.8rem;
+}
+
+.skill-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.65rem 1.2rem;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.05);
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+	white-space: nowrap;
+}
+
+.skill-badge:hover {
+	border-color: #455ce9;
+	background: rgba(69, 92, 233, 0.1);
+	color: #fff;
+}
+
+html:not(.dark) .skill-badge {
+	border-color: rgba(0, 0, 0, 0.1);
+	background: rgba(0, 0, 0, 0.05);
+	color: #1c1d20;
+}
+
+html:not(.dark) .skill-badge:hover {
+	border-color: #455ce9;
+	background: rgba(69, 92, 233, 0.05);
+	color: #1c1d20;
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.live-trial-divider {
+	width: 100%;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		rgba(255, 255, 255, 0),
+		rgba(255, 255, 255, 0.2),
+		rgba(255, 255, 255, 0)
+	);
+	margin-top: 3rem;
+}
+
+html:not(.dark) .live-trial-divider {
+	background: linear-gradient(
+		to right,
+		rgba(0, 0, 0, 0),
+		rgba(0, 0, 0, 0.1),
+		rgba(0, 0, 0, 0)
+	);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media screen and (max-width: 640px) {
+	.live-trial-section {
+		padding: 2rem 0;
+	}
+
+	.stats-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.live-trial-title {
+		font-size: 1.5rem;
+	}
+}

@@ -1,0 +1,72 @@
+import { NextResponse } from 'next/server';
+import fs from 'node:fs';
+import path from 'node:path';
+import { workItems, filters } from '../../../work/constants';
+
+export async function GET(request: Request) {
+	const authHeader = request.headers.get('x-admin-password');
+	if (authHeader !== process.env.ADMIN_PASSWORD) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+	}
+	return NextResponse.json({ items: workItems, filters });
+}
+
+function generateConstantsFile(items: typeof workItems): string {
+	const itemsStr = items
+		.map((item) => {
+			const categories = item.categories
+				.filter((c): c is string => typeof c === 'string')
+				.map((c) => `'${c.replace(/'/g, "\\'")}'`)
+				.join(', ');
+			return `    {
+        title: '${item.title.replace(/'/g, "\\'")}',
+        location: '${item.location.replace(/'/g, "\\'")}',
+        services: '${item.services.replace(/'/g, "\\'")}',
+        year: '${item.year.replace(/'/g, "\\'")}',
+        src: '${item.src.replace(/'/g, "\\'")}',
+        color: '${item.color}',
+        url: '${item.url.replace(/'/g, "\\'")}',
+        categories: [ ${categories}, ],
+    }`;
+		})
+		.join(',\n');
+
+	return `import type { WorkItem } from './types';
+
+export const workItems = [
+${itemsStr},
+];
+
+export const filters = [
+    { key: 'all', label: 'All' },
+    { key: 'product management', label: 'Product Management' },
+    { key: 'project management', label: 'Project Management' },
+    { key: 'core work', label: 'Core Work' },
+    { key: 'ai', label: 'Agentic/Generative AI' },
+    { key: 'hardware', label: 'Physical AI' },
+    { key: 'others', label: 'Others' },
+] as const;
+
+export type FilterKey = (typeof filters)[number]['key'];
+`;
+}
+
+export async function PUT(request: Request) {
+	const authHeader = request.headers.get('x-admin-password');
+	if (authHeader !== process.env.ADMIN_PASSWORD) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
+	try {
+		const { items } = await request.json();
+		const filePath = path.join(process.cwd(), 'app', 'work', 'constants.ts');
+		const content = generateConstantsFile(items);
+		fs.writeFileSync(filePath, content, 'utf-8');
+		return NextResponse.json({ success: true });
+	} catch (error) {
+		return NextResponse.json(
+			{ error: 'Failed to save changes' },
+			{ status: 500 },
+		);
+	}
+}
