@@ -10,68 +10,49 @@ import './work.css';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
-import WorkList from './work-list';
 
 const BREAKPOINTS = { mobile: 0, tablet: 768, desktop: 1280 };
 
 export default function WorkPage() {
-    const { breakpoint } = useBreakpoint(BREAKPOINTS);
-    const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
-    const [subFilter, setSubFilter] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<'rows' | 'grid-2' | 'grid-4'>('rows');
-    const [modal, setModal] = useState<WorkModal>({ active: false, index: 0 });
+	const { breakpoint } = useBreakpoint(BREAKPOINTS);
+	const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
+	const [modal, setModal] = useState<WorkModal>({ active: false, index: 0 });
 
-    // main filtered items based on primary + secondary filter
-    const filteredItems = useMemo(() => {
-        let items = workItems;
-        if (activeFilter !== 'all') {
-            items = items.filter((w) => w.categories.includes(activeFilter));
-        }
-        if (subFilter) {
-            items = items.filter((w) => w.categories.includes(subFilter));
-        }
-        return items;
-    }, [activeFilter, subFilter]);
+	const WORK_CATEGORY_ORDER = ['products', 'core'];
 
-    // compute available sub-filters whenever primary filter changes
-    const availableSubFilters = useMemo(() => {
-        if (activeFilter === 'all') return [];
-        const items = workItems.filter((w) => w.categories.includes(activeFilter));
-        const tags = new Set<string>();
-        items.forEach((w) => {
-            w.categories.forEach((c) => {
-                if (c !== activeFilter) tags.add(c);
-            });
-        });
-        return Array.from(tags);
-    }, [activeFilter]);
+	// main filtered items based on primary filter
+	const filteredItems = useMemo(() => {
+		if (activeFilter !== 'all') {
+			return workItems.filter((w) => w.categories.includes(activeFilter));
+		}
+		// Sort by category priority: products → core
+		return [...workItems].sort((a, b) => {
+			const aPriority = WORK_CATEGORY_ORDER.findIndex((cat) =>
+				a.categories.some((c) => c.toLowerCase() === cat),
+			);
+			const bPriority = WORK_CATEGORY_ORDER.findIndex((cat) =>
+				b.categories.some((c) => c.toLowerCase() === cat),
+			);
+			const aIdx = aPriority === -1 ? WORK_CATEGORY_ORDER.length : aPriority;
+			const bIdx = bPriority === -1 ? WORK_CATEGORY_ORDER.length : bPriority;
+			return aIdx - bIdx;
+		});
+	}, [activeFilter]);
 
-    return (
-        <div className="work-page">
-            <WorkHeader />
-            <WorkFilters
-                activeFilter={activeFilter}
-                setActiveFilter={(f) => {
-                    setActiveFilter(f);
-                    setSubFilter(null);
-                }}
-                subFilters={availableSubFilters}
-                activeSubFilter={subFilter}
-                setSubFilter={setSubFilter}
-                viewMode={viewMode}
-                setViewMode={setViewMode}
-            />
-            <div className="work-content-wrap">
-                {viewMode === 'rows' ? (
-                    <WorkList items={filteredItems} setModal={setModal} />
-                ) : (
-                    <WorkGrid items={filteredItems} gridColumns={viewMode === 'grid-4' ? 4 : 2} />
-                )}
-            </div>
-            {breakpoint === 'desktop' && viewMode === 'rows' && (
-                <FloatingImage modal={modal} items={filteredItems} />
-            )}
-            <Contact />
-        </div>
-    );
+	return (
+		<div className='work-page'>
+			<WorkHeader
+				filters={
+					<WorkFilters
+						activeFilter={activeFilter}
+						setActiveFilter={setActiveFilter}
+					/>
+				}
+			/>
+			<div className='work-content-wrap'>
+				<WorkGrid items={filteredItems} gridColumns={4} />
+			</div>
+			<Contact />
+		</div>
+	);
 }

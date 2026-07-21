@@ -1,0 +1,202 @@
+/* ============================================
+   WORK RIGHT SECTIONS — Three-part layout
+   Upper: Photo (50%)  |  Lower: Features + Who's interested? (50%)
+   ============================================ */
+
+.work-right-layout {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	gap: 1.5rem;
+}
+
+/* Upper section — photo/carousel takes ~50% */
+.work-right-upper {
+	flex: 0 0 auto;
+}
+
+/* Lower section — Features | Who's interested? side by side */
+.work-right-lower {
+	display: grid;
+	grid-template-columns: 55% 45%;
+	gap: 1.5rem;
+	flex: 1;
+}
+
+/* Individual section (Features or Who's interested?) */
+.work-right-section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.work-right-section-title {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: #455ce9;
+	margin: 0;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.work-right-section-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.work-right-section-list li {
+	font-size: 0.78rem;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.65);
+	line-height: 1.4;
+	padding-left: 0.9rem;
+	position: relative;
+	margin: 0;
+}
+
+/* Features independent flex columns (guarantees equal vertical gaps between items) */
+.work-right-features-columns {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 1.2rem;
+}
+
+.work-right-features-col {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.work-right-features-col li {
+	font-size: 0.78rem;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.65);
+	line-height: 1.4;
+	padding-left: 0.9rem;
+	position: relative;
+	margin: 0;
+}
+
+.work-right-features-col li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.4em;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #455ce9;
+	opacity: 0.6;
+}
+
+.work-right-section-list li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0.4em;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #455ce9;
+	opacity: 0.6;
+}
+
+/* Who's interested? — subcategory groups (explicit columns) */
+.work-right-interested {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 1.5rem;
+}
+
+.work-right-interested-col {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1.2rem;
+}
+
+.work-right-interested-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.25rem;
+}
+
+.work-right-interested-category {
+	font-size: 0.7rem;
+	font-weight: 600;
+	color: rgba(0, 0, 0, 0.45);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin: 0;
+	text-align: left;
+}
+
+/* Single group interested styling — spans full width & left-aligned under WHO'S INTERESTED? */
+.work-right-interested-single {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	width: 100%;
+	grid-column: 1 / -1;
+}
+
+.work-right-interested-single .work-right-interested-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+}
+
+.work-right-interested-single .work-right-interested-category {
+	text-align: left;
+	width: 100%;
+}
+
+.work-right-interested-single .work-right-section-list {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+}
+
+.work-right-interested-single .work-right-section-list li {
+	text-align: left;
+	padding-left: 0.9rem;
+	padding-right: 0;
+}
+
+.work-right-interested-single .work-right-section-list li::before {
+	left: 0;
+	right: auto;
+}
+
+/* Responsive */
+@media screen and (max-width: 900px) {
+	.work-right-features-columns {
+		grid-template-columns: 1fr;
+		gap: 0.6rem;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.work-right-lower {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.work-right-section-list li {
+		font-size: 0.75rem;
+	}
+}

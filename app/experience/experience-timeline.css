@@ -6,8 +6,8 @@
 	position: relative;
 	width: 100%;
 	/* timeline now prominent at top, adjust spacing */
-	padding: 2rem 0 3rem;
-	margin: 2rem 0 4rem;
+	padding: 1rem 0 3rem;
+	margin: 0 0 4rem;
 }
 
 .timeline-container {
@@ -106,7 +106,7 @@ html:not(.dark) .toggle-btn:hover {
 }
 
 .timeline-vertical::before {
-	content: '';
+	content: "";
 	position: absolute;
 	left: 0.5rem;
 	top: 0;
@@ -167,7 +167,8 @@ html:not(.dark) .timeline-marker {
 }
 
 @keyframes timeline-pulse {
-	0%, 100% {
+	0%,
+	100% {
 		opacity: 1;
 		transform: scale(1);
 	}
@@ -311,7 +312,7 @@ html:not(.dark) .card-description {
 }
 
 .year-label::before {
-	content: '';
+	content: "";
 	position: absolute;
 	bottom: -16px;
 	left: 50%;

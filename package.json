@@ -9,7 +9,8 @@
     "lint": "biome check --write .",
     "format": "biome format --write .",
     "check": "biome check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "google:auth": "node scripts/google-auth-setup.mjs"
   },
   "dependencies": {
     "@octokit/graphql": "^9.0.0",
@@ -21,6 +22,7 @@
     "@vercel/speed-insights": "^1.0.2",
     "classnames": "2.5.1",
     "date-fns": "^4.1.0",
+    "googleapis": "^173.0.0",
     "gsap": "3.13.0",
     "heic-convert": "^2.1.0",
     "husky": "9.1.7",

@@ -6,7 +6,7 @@ interface Props {
 
 export function WorkContainer({ children }: Props) {
 	return (
-		<div className='grid min-h-screen w-full grid-cols-1 lg:grid-cols-2'>
+		<div className='grid min-h-screen w-full grid-cols-1 lg:grid-cols-2 select-none'>
 			{children}
 		</div>
 	);

@@ -15,8 +15,8 @@ function generateConstantsFile(items: typeof workItems): string {
 	const itemsStr = items
 		.map((item) => {
 			const categories = item.categories
-				.filter((c): c is string => typeof c === 'string')
-				.map((c) => `'${c.replace(/'/g, "\\'")}'`)
+				.filter((c: unknown): c is string => typeof c === 'string')
+				.map((c: string) => `'${c.replace(/'/g, "\\'")}'`)
 				.join(', ');
 			return `    {
         title: '${item.title.replace(/'/g, "\\'")}',
@@ -39,11 +39,8 @@ ${itemsStr},
 
 export const filters = [
     { key: 'all', label: 'All' },
-    { key: 'product management', label: 'Product Management' },
-    { key: 'project management', label: 'Project Management' },
-    { key: 'core work', label: 'Core Work' },
-    { key: 'ai', label: 'Agentic/Generative AI' },
-    { key: 'hardware', label: 'Physical AI' },
+    { key: 'products', label: 'Product' },
+    { key: 'core', label: 'Core' },
     { key: 'others', label: 'Others' },
 ] as const;
 

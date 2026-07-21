@@ -9,7 +9,7 @@ export const mukta = Mukta({
 });
 
 export const inter = Inter({
-	weight: ['300','400','500','600','700'],
+	weight: ['300', '400', '500', '600', '700'],
 	variable: '--font-inter',
 	subsets: ['latin'],
 	display: 'swap',

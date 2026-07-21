@@ -34,10 +34,16 @@
 
 .certifications-header-row {
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .certifications-header-col {
 	flex: 1;
+}
+
+.certifications-header-filters {
+	flex-shrink: 0;
 }
 
 .certifications-header-title {
@@ -62,6 +68,17 @@ html:not(.dark) .certifications-header-title {
 .certifications-header-line-inner {
 	display: block;
 	will-change: transform;
+}
+
+.certifications-header-subtitle {
+	font-size: 0.95rem;
+	color: rgba(255, 255, 255, 0.6);
+	margin: 1rem 0 0;
+	line-height: 1.5;
+}
+
+html:not(.dark) .certifications-header-subtitle {
+	color: rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================
@@ -112,7 +129,9 @@ html:not(.dark) .certifications-header-title {
 	font-weight: 400;
 	cursor: pointer;
 	overflow: hidden;
-	transition: color 0.4s ease, border-color 0.4s ease;
+	transition:
+		color 0.4s ease,
+		border-color 0.4s ease;
 	font-family: inherit;
 }
 
@@ -180,7 +199,9 @@ html:not(.dark) .certifications-filter-btn {
 	color: rgba(255, 255, 255, 0.8);
 	cursor: pointer;
 	overflow: hidden;
-	transition: color 0.4s ease, border-color 0.4s ease;
+	transition:
+		color 0.4s ease,
+		border-color 0.4s ease;
 }
 
 html:not(.dark) .certifications-grid-btn {
@@ -284,7 +305,9 @@ html:not(.dark) .certifications-list-stripe-last {
 	cursor: pointer;
 }
 
-.certifications-list-items:hover .certifications-list-item-wrap:not(:hover) .certifications-list-item {
+.certifications-list-items:hover
+	.certifications-list-item-wrap:not(:hover)
+	.certifications-list-item {
 	opacity: 0.4;
 }
 

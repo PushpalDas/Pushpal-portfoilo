@@ -26,7 +26,7 @@ export const Tile = ({ page, children }: TileProps) => {
 			className='absolute top-0 w-full'
 			style={{
 				opacity,
-				pointerEvents: progress >= 0 || progress >= 1 ? 'none' : undefined,
+				pointerEvents: opacity > 0.1 ? 'auto' : 'none',
 			}}
 		>
 			{cloneElement(children, {

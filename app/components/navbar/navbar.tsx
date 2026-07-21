@@ -15,7 +15,7 @@ const navLinks = [
 	{ href: '/work', label: 'Work' },
 	{ href: '/experience', label: 'Experience' },
 	{ href: '/certifications', label: 'Certifications' },
-	{ href: '/ask-me', label: 'Ask Me' },
+	{ href: '/book-a-meeting', label: 'Book a meeting' },
 ];
 
 export default function Navbar() {
@@ -42,9 +42,7 @@ export default function Navbar() {
 				'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl',
 				'rounded-full border border-white/15 backdrop-blur-2xl',
 				'transition-all duration-300',
-				scrolled
-					? 'bg-white/10 shadow-lg shadow-black/10'
-					: 'bg-white/5',
+				scrolled ? 'bg-white/10 shadow-lg shadow-black/10' : 'bg-white/5',
 				mukta.className,
 			)}
 		>
@@ -78,9 +76,7 @@ export default function Navbar() {
 									href={href}
 									className={classNames(
 										'relative px-3.5 py-1.5 text-sm rounded-full transition-colors duration-200',
-										isActive
-											? 'text-white'
-											: 'text-gray-400 hover:text-white',
+										isActive ? 'text-white' : 'text-gray-400 hover:text-white',
 									)}
 								>
 									{isActive && (

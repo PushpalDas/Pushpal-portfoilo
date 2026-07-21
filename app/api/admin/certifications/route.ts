@@ -15,17 +15,17 @@ function generateConstantsFile(items: typeof certificationItems): string {
 	const itemsStr = items
 		.map((item) => {
 			const categories = item.categories
-				.filter((c): c is string => typeof c === 'string')
-				.map((c) => `'${c.replace(/'/g, "\\'")}'`)
+				.filter((c: unknown): c is string => typeof c === 'string')
+				.map((c: string) => `'${c.replace(/'/g, "\\'")}'`)
 				.join(', ');
 			return `    {
-        title: '${item.title.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
-        location: '${item.location.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
-        services: '${item.services.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
-        year: '${item.year.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
-        src: '${item.src.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
+        title: '${item.title.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
+        location: '${item.location.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
+        services: '${item.services.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
+        year: '${item.year.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
+        src: '${item.src.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
         color: '${item.color}',
-        url: '${item.url.replace(/'/g, "\\'").replace(/®/g, "\\u00AE")}',
+        url: '${item.url.replace(/'/g, "\\'").replace(/®/g, '\\u00AE')}',
         categories: [${categories}],
     }`;
 		})
@@ -39,9 +39,9 @@ ${itemsStr},
 
 export const filters = [
     { key: 'all', label: 'All' },
-    { key: 'cloud', label: 'Cloud' },
-    { key: 'development', label: 'Development' },
-    { key: 'devops', label: 'DevOps' },
+    { key: 'management', label: 'Management' },
+    { key: 'skills', label: 'Skills' },
+    { key: 'achievements', label: 'Achievements' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];

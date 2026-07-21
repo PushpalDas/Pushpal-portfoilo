@@ -105,33 +105,33 @@ export default function Contact() {
 	}, []);
 
 	return (
-		<section ref={sectionRef} className="contact-section">
+		<section ref={sectionRef} className='contact-section'>
 			{/* Rounded divider — height animates to 0 on scroll */}
-			<div className="contact-rounded-div" ref={roundedDivRef}>
-				<div className="contact-rounded-div-inner" />
+			<div className='contact-rounded-div' ref={roundedDivRef}>
+				<div className='contact-rounded-div-inner' />
 			</div>
 
-			<div className="contact-wrapper">
-				<div className="contact-container">
+			<div className='contact-wrapper'>
+				<div className='contact-container'>
 					{/* Main heading */}
-					<div className="contact-heading-row">
-						<h2 ref={headingRef} className="contact-heading">
-							<span className="contact-heading-line">
-								<span ref={line1Ref} className="contact-heading-line-inner">
-									<span className="contact-profile-pic-wrapper">
+					<div className='contact-heading-row'>
+						<h2 ref={headingRef} className='contact-heading'>
+							<span className='contact-heading-line'>
+								<span ref={line1Ref} className='contact-heading-line-inner'>
+									<span className='contact-profile-pic-wrapper'>
 										<Image
-											src="/pushpal.jpeg"
-											alt="Pushpal Das"
+											src='/pushpal.jpeg'
+											alt='Pushpal Das'
 											width={120}
 											height={120}
-											className="contact-profile-pic"
+											className='contact-profile-pic'
 										/>
 									</span>
 									Let&apos;s work
 								</span>
 							</span>
-							<span className="contact-heading-line">
-								<span ref={line2Ref} className="contact-heading-line-inner">
+							<span className='contact-heading-line'>
+								<span ref={line2Ref} className='contact-heading-line-inner'>
 									together
 								</span>
 							</span>
@@ -139,62 +139,64 @@ export default function Contact() {
 					</div>
 
 					{/* Divider + Get in touch button */}
-					<div className="contact-cta-row">
-						<div ref={dividerRef} className="contact-divider" />
-						<div className="contact-btn-fixed">
+					<div className='contact-cta-row'>
+						<div ref={dividerRef} className='contact-divider' />
+						<div className='contact-btn-fixed'>
 							<Magnetic strength={50}>
 								<a
 									ref={btnRef}
-									href="mailto:pushpaldas2001@gmail.com"
-									className="contact-round-btn"
+									href='mailto:pushpaldas2001@gmail.com'
+									className='contact-round-btn'
 								>
-									<span className="contact-round-btn-fill" />
-									<span className="contact-round-btn-text">Get in touch</span>
+									<span className='contact-round-btn-fill' />
+									<span className='contact-round-btn-text'>Get in touch</span>
 								</a>
 							</Magnetic>
 						</div>
 					</div>
 
 					{/* Email */}
-					<div className="contact-email-row">
+					<div className='contact-email-row'>
 						<Magnetic strength={25}>
 							<a
 								ref={emailRef}
-								href="mailto:pushpaldas2001@gmail.com"
-								className="contact-email-link"
+								href='mailto:pushpaldas2001@gmail.com'
+								className='contact-email-link'
 							>
-								<span className="contact-email-fill" />
-								<span className="contact-email-text">pushpaldas2001@gmail.com</span>
+								<span className='contact-email-fill' />
+								<span className='contact-email-text'>
+									pushpaldas2001@gmail.com
+								</span>
 							</a>
 						</Magnetic>
 					</div>
 				</div>
 
 				{/* Bottom footer */}
-				<div ref={bottomRef} className="contact-bottom-footer">
-					<div className="contact-bottom-col">
-						<div className="contact-bottom-group">
-							<h5 className="contact-bottom-label">Version</h5>
-							<p className="contact-bottom-value">2025 © Edition</p>
+				<div ref={bottomRef} className='contact-bottom-footer'>
+					<div className='contact-bottom-col'>
+						<div className='contact-bottom-group'>
+							<h5 className='contact-bottom-label'>Version</h5>
+							<p className='contact-bottom-value'>2025 © Edition</p>
 						</div>
-						<div className="contact-bottom-group">
-							<h5 className="contact-bottom-label">Local time</h5>
-							<p className="contact-bottom-value">
+						<div className='contact-bottom-group'>
+							<h5 className='contact-bottom-label'>Local time</h5>
+							<p className='contact-bottom-value'>
 								<LocalTime />
 							</p>
 						</div>
 					</div>
-					<div className="contact-bottom-col">
-						<div className="contact-bottom-socials">
-							<h5 className="contact-bottom-label">Socials</h5>
-							<ul className="contact-socials-list">
+					<div className='contact-bottom-col'>
+						<div className='contact-bottom-socials'>
+							<h5 className='contact-bottom-label'>Socials</h5>
+							<ul className='contact-socials-list'>
 								<li>
 									<Magnetic strength={15}>
 										<a
-											href="https://github.com/pushpaldas"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="contact-social-link"
+											href='https://github.com/pushpaldas'
+											target='_blank'
+											rel='noopener noreferrer'
+											className='contact-social-link'
 										>
 											Github
 										</a>
@@ -203,10 +205,10 @@ export default function Contact() {
 								<li>
 									<Magnetic strength={15}>
 										<a
-											href="https://www.linkedin.com/in/pushpaldas/"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="contact-social-link"
+											href='https://www.linkedin.com/in/pushpaldas/'
+											target='_blank'
+											rel='noopener noreferrer'
+											className='contact-social-link'
 										>
 											LinkedIn
 										</a>
@@ -215,10 +217,10 @@ export default function Contact() {
 								<li>
 									<Magnetic strength={15}>
 										<a
-											href="https://twitter.com/pushpaldas"
-											target="_blank"
-											rel="noopener noreferrer"
-											className="contact-social-link"
+											href='https://twitter.com/pushpaldas'
+											target='_blank'
+											rel='noopener noreferrer'
+											className='contact-social-link'
 										>
 											Twitter
 										</a>

@@ -40,3 +40,7 @@ yarn-error.log*
 # Contentlayer
 .contentlayer
 .env*.local
+
+# Secrets and booking store
+public/client_secret_*.json
+.data/

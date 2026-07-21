@@ -50,9 +50,17 @@ const ThemeSwitch = () => {
 					<motion.div
 						initial={false}
 						animate={{
-							rotate: mounted && (theme === 'dark' || resolvedTheme === 'dark') ? 180 : 0,
+							rotate:
+								mounted && (theme === 'dark' || resolvedTheme === 'dark')
+									? 180
+									: 0,
 						}}
-						transition={{ duration: 0.5, type: 'spring', stiffness: 200, damping: 10 }}
+						transition={{
+							duration: 0.5,
+							type: 'spring',
+							stiffness: 200,
+							damping: 10,
+						}}
 					>
 						{mounted && (theme === 'dark' || resolvedTheme === 'dark') ? (
 							<SunMediumIcon className='h-5 w-5 text-yellow-400' />

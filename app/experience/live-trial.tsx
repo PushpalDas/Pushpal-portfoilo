@@ -22,8 +22,14 @@ const stats: LiveTrialStats[] = [
 ];
 
 const skills = [
-	'React', 'Next.js', 'TypeScript', 'Node.js',
-	'Tailwind CSS', 'GSAP', 'GraphQL', 'MongoDB'
+	'React',
+	'Next.js',
+	'TypeScript',
+	'Node.js',
+	'Tailwind CSS',
+	'GSAP',
+	'GraphQL',
+	'MongoDB',
 ];
 
 export default function LiveTrial() {
@@ -72,62 +78,59 @@ export default function LiveTrial() {
 	}, []);
 
 	return (
-		<section className="live-trial-section" ref={containerRef}>
-			<div className="live-trial-container">
+		<section className='live-trial-section' ref={containerRef}>
+			<div className='live-trial-container'>
 				{/* Header */}
-				<div className="live-trial-header">
+				<div className='live-trial-header'>
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6 }}
 						viewport={{ once: true }}
-						className="live-trial-badge"
+						className='live-trial-badge'
 					>
-						<span className="live-indicator">●</span> Currently Working
+						<span className='live-indicator'>●</span> Currently Working
 					</motion.div>
-					<h2 className="live-trial-title">
-						<span className="title-line">
-							Full Stack Developer
-						</span>
-						<span className="title-line">
-							at Tech Company
-						</span>
+					<h2 className='live-trial-title'>
+						<span className='title-line'>Full Stack Developer</span>
+						<span className='title-line'>at Tech Company</span>
 					</h2>
-					<p className="live-trial-description">
-						Building scalable web applications with modern technologies and pushing the boundaries of what's possible.
+					<p className='live-trial-description'>
+						Building scalable web applications with modern technologies and
+						pushing the boundaries of what's possible.
 					</p>
 				</div>
 
 				{/* Main Grid */}
-				<div className="live-trial-grid">
+				<div className='live-trial-grid'>
 					{/* Left: Current Role Card */}
 					<motion.div
 						initial={{ opacity: 0, x: -30 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.6 }}
 						viewport={{ once: true }}
-						className="live-trial-card role-card"
+						className='live-trial-card role-card'
 					>
-						<div className="card-header">
+						<div className='card-header'>
 							<h3>Current Role</h3>
-							<div className="role-badge">Active</div>
+							<div className='role-badge'>Active</div>
 						</div>
-						<div className="role-content">
-							<div className="role-item">
-								<span className="role-label">Position</span>
-								<p className="role-value">Full Stack Developer</p>
+						<div className='role-content'>
+							<div className='role-item'>
+								<span className='role-label'>Position</span>
+								<p className='role-value'>Full Stack Developer</p>
 							</div>
-							<div className="role-item">
-								<span className="role-label">Company</span>
-								<p className="role-value">Your Company Name</p>
+							<div className='role-item'>
+								<span className='role-label'>Company</span>
+								<p className='role-value'>Your Company Name</p>
 							</div>
-							<div className="role-item">
-								<span className="role-label">Focus</span>
-								<p className="role-value">Web Development & Architecture</p>
+							<div className='role-item'>
+								<span className='role-label'>Focus</span>
+								<p className='role-value'>Web Development & Architecture</p>
 							</div>
-							<div className="role-item">
-								<span className="role-label">Start Date</span>
-								<p className="role-value">January 2024</p>
+							<div className='role-item'>
+								<span className='role-label'>Start Date</span>
+								<p className='role-value'>January 2024</p>
 							</div>
 						</div>
 					</motion.div>
@@ -139,16 +142,18 @@ export default function LiveTrial() {
 						transition={{ duration: 0.6 }}
 						viewport={{ once: true }}
 						ref={statsRef}
-						className="live-trial-stats"
+						className='live-trial-stats'
 					>
-						<div className="stats-grid">
+						<div className='stats-grid'>
 							{stats.map((stat, index) => (
-								<div key={index} className="stat-item">
-									<div className="stat-value">
+								<div key={index} className='stat-item'>
+									<div className='stat-value'>
 										{stat.value}
-										{stat.suffix && <span className="stat-suffix">{stat.suffix}</span>}
+										{stat.suffix && (
+											<span className='stat-suffix'>{stat.suffix}</span>
+										)}
 									</div>
-									<div className="stat-label">{stat.label}</div>
+									<div className='stat-label'>{stat.label}</div>
 								</div>
 							))}
 						</div>
@@ -162,15 +167,15 @@ export default function LiveTrial() {
 					transition={{ duration: 0.6, delay: 0.2 }}
 					viewport={{ once: true }}
 					ref={skillsRef}
-					className="live-trial-skills"
+					className='live-trial-skills'
 				>
-					<h3 className="skills-title">Tech Stack</h3>
-					<div className="skills-container">
+					<h3 className='skills-title'>Tech Stack</h3>
+					<div className='skills-container'>
 						{skills.map((skill, index) => (
 							<motion.div
 								key={skill}
 								whileHover={{ scale: 1.05, y: -5 }}
-								className="skill-badge"
+								className='skill-badge'
 							>
 								{skill}
 							</motion.div>
@@ -179,7 +184,7 @@ export default function LiveTrial() {
 				</motion.div>
 
 				{/* Visual Divider */}
-				<div className="live-trial-divider" />
+				<div className='live-trial-divider' />
 			</div>
 		</section>
 	);

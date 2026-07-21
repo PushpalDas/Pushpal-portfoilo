@@ -31,11 +31,12 @@ export default function Hero() {
 						</h1>
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
-								I&apos;m Pushpal Das — a Software Engineer and forever a
-								student of the craft. I love building things for the web and am
-								always on the lookout for new challenges and opportunities to
-								learn. I&apos;m passionate about creating beautiful and
-								functional user experiences.
+								I am Pushpal Das — a lifelong learner. I help deep-tech teams
+								translate complex R&D into scalable products.
+								<br />
+								<br />
+								Currently, in the Founders&apos; Office at Ixana, owning
+								delivery efficiency, products &amp; patents
 							</p>
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>
@@ -44,7 +45,7 @@ export default function Hero() {
 								<div className='flex -ml-2'>
 									<Magnetic strength={25}>
 										<Link
-											href='https://www.linkedin.com/in/pushpaldas/'
+											href='https://www.linkedin.com/in/pushpal-das-98485a1b5/'
 											target='_blank'
 											rel='noreferrer'
 											aria-label='linkedin'
@@ -55,7 +56,7 @@ export default function Hero() {
 									</Magnetic>
 									<Magnetic strength={25}>
 										<Link
-											href='https://github.com/pushpaldas'
+											href='https://github.com/PushpalDas'
 											target='_blank'
 											rel='noreferrer'
 											aria-label='github'
@@ -66,7 +67,7 @@ export default function Hero() {
 									</Magnetic>
 									<Magnetic strength={25}>
 										<Link
-											href='https://x.com/pushpaldas'
+											href='https://x.com/Pushpal_D'
 											target='_blank'
 											rel='noreferrer'
 											aria-label='twitter'

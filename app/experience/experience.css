@@ -22,7 +22,7 @@
 	width: 100%;
 	/* top padding remains for spacing, bottom padding reduced to pull timeline closer */
 	padding-top: clamp(8rem, 18vh, 14rem);
-	padding-bottom: clamp(1rem, 3vh, 2rem);
+	padding-bottom: clamp(2rem, 5vh, 4rem);
 	background: transparent;
 }
 
@@ -33,14 +33,17 @@
 	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
-.experience-header-row {
+.experience-header-content {
+	width: 100%;
+}
+
+.experience-header-bottom-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-}
-
-.experience-header-col {
-	flex: 1;
+	flex-wrap: wrap;
+	gap: 1.5rem;
+	margin-top: 1.5rem;
 }
 
 .experience-header-title {
@@ -70,7 +73,7 @@ html:not(.dark) .experience-header-title {
 .experience-header-subtitle {
 	font-size: 0.95rem;
 	color: rgba(255, 255, 255, 0.6);
-	margin: 1rem 0 0;
+	margin: 0;
 	line-height: 1.5;
 }
 
@@ -131,7 +134,9 @@ html:not(.dark) .experience-header-subtitle {
 	font-weight: 400;
 	cursor: pointer;
 	overflow: hidden;
-	transition: color 0.4s ease, border-color 0.4s ease;
+	transition:
+		color 0.4s ease,
+		border-color 0.4s ease;
 	font-family: inherit;
 }
 
@@ -199,7 +204,9 @@ html:not(.dark) .experience-filter-btn {
 	color: rgba(255, 255, 255, 0.8);
 	cursor: pointer;
 	overflow: hidden;
-	transition: color 0.4s ease, border-color 0.4s ease;
+	transition:
+		color 0.4s ease,
+		border-color 0.4s ease;
 }
 
 html:not(.dark) .experience-grid-btn {
@@ -303,7 +310,9 @@ html:not(.dark) .experience-list-stripe-last {
 	cursor: pointer;
 }
 
-.experience-list-items:hover .experience-list-item-wrap:not(:hover) .experience-list-item {
+.experience-list-items:hover
+	.experience-list-item-wrap:not(:hover)
+	.experience-list-item {
 	opacity: 0.4;
 }
 

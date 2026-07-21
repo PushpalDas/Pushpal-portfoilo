@@ -1,11 +1,11 @@
 declare module 'heic-convert' {
-  interface ConvertOptions {
-    buffer: Buffer | ArrayBuffer;
-    format: 'JPEG' | 'PNG';
-    quality?: number;
-  }
+	interface ConvertOptions {
+		buffer: Buffer | ArrayBuffer;
+		format: 'JPEG' | 'PNG';
+		quality?: number;
+	}
 
-  function convert(options: ConvertOptions): Promise<any>;
+	function convert(options: ConvertOptions): Promise<any>;
 
-  export = convert;
+	export = convert;
 }

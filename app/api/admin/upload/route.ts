@@ -38,7 +38,13 @@ export async function POST(request: Request) {
 		}
 
 		// Save the file to public/static/images/project/
-		const saveDir = path.join(process.cwd(), 'public', 'static', 'images', 'project');
+		const saveDir = path.join(
+			process.cwd(),
+			'public',
+			'static',
+			'images',
+			'project',
+		);
 		if (!fs.existsSync(saveDir)) {
 			fs.mkdirSync(saveDir, { recursive: true });
 		}
@@ -51,6 +57,9 @@ export async function POST(request: Request) {
 		return NextResponse.json({ success: true, filename: sanitizedFilename });
 	} catch (error: any) {
 		console.error('Upload error:', error);
-		return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 });
+		return NextResponse.json(
+			{ error: error.message || 'Upload failed' },
+			{ status: 500 },
+		);
 	}
 }

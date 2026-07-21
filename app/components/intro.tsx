@@ -51,14 +51,14 @@ export default function Intro() {
 						className='intro-text'
 						style={{ opacity: opacityForBlock(progress, 0) }}
 					>
-						I build things. 
+						I build things.
 					</div>
 					<span
 						className="intro-text inline-block after:content-['_']"
 						style={{ opacity: opacityForBlock(progress, 1) }}
 					>
-						From silicon to AI,
-						I turn complex technical problems into products people actually use.
+						From silicon to AI, I turn complex technical problems into products
+						people actually use.
 					</span>
 					<span
 						className='intro-text inline-block'
