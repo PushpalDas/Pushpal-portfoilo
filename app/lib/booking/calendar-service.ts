@@ -140,22 +140,30 @@ export async function getAvailableSlots(
 	const dayStartStr = `${dateStr}T21:00:00`;
 	const dayEndStr = `${dateStr}T22:00:00`;
 
-	// Query FreeBusy
-	const freeBusyRes = await calendar.freebusy.query({
-		requestBody: {
-			timeMin: new Date(`${dayStartStr}+05:30`).toISOString(),
-			timeMax: new Date(`${dayEndStr}+05:30`).toISOString(),
-			timeZone: BOOKING_TIME_ZONE,
-			items: [{ id: 'primary' }],
-		},
-	});
+	// Query FreeBusy with 10s timeout and error fallback
+	let busyIntervals: { startMs: number; endMs: number }[] = [];
+	try {
+		const freeBusyRes = await calendar.freebusy.query(
+			{
+				requestBody: {
+					timeMin: new Date(`${dayStartStr}+05:30`).toISOString(),
+					timeMax: new Date(`${dayEndStr}+05:30`).toISOString(),
+					timeZone: BOOKING_TIME_ZONE,
+					items: [{ id: 'primary' }],
+				},
+			},
+			{ timeout: 10000 }
+		);
 
-	const busyIntervals = (freeBusyRes.data.calendars?.primary?.busy || []).map(
-		(b) => ({
-			startMs: new Date(b.start!).getTime(),
-			endMs: new Date(b.end!).getTime(),
-		}),
-	);
+		busyIntervals = (freeBusyRes.data.calendars?.primary?.busy || []).map(
+			(b) => ({
+				startMs: new Date(b.start!).getTime(),
+				endMs: new Date(b.end!).getTime(),
+			}),
+		);
+	} catch (err: any) {
+		console.warn('Google FreeBusy query network warning:', err?.message || err);
+	}
 
 	const slots: AvailableSlot[] = [];
 	const nowMs = Date.now();
@@ -266,48 +274,59 @@ export async function createBooking(payload: BookingPayload) {
 	const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
 
 	try {
-		// 3. Re-check FreeBusy API immediately before insertion
+		// 3. Re-check FreeBusy API immediately before insertion (with 10s timeout)
 		const bufferMs = 15 * 60 * 1000;
-		const freeBusyRes = await calendar.freebusy.query({
-			requestBody: {
-				timeMin: new Date(startUtcMs - bufferMs).toISOString(),
-				timeMax: new Date(endUtc.getTime() + bufferMs).toISOString(),
-				timeZone: BOOKING_TIME_ZONE,
-				items: [{ id: 'primary' }],
-			},
-		});
+		try {
+			const freeBusyRes = await calendar.freebusy.query(
+				{
+					requestBody: {
+						timeMin: new Date(startUtcMs - bufferMs).toISOString(),
+						timeMax: new Date(endUtc.getTime() + bufferMs).toISOString(),
+						timeZone: BOOKING_TIME_ZONE,
+						items: [{ id: 'primary' }],
+					},
+				},
+				{ timeout: 10000 }
+			);
 
-		const busy = freeBusyRes.data.calendars?.primary?.busy || [];
-		if (busy.length > 0) {
-			DurableStore.releaseChunks(chunkKeys);
-			throw new Error('SLOT_ALREADY_BOOKED');
+			const busy = freeBusyRes.data.calendars?.primary?.busy || [];
+			if (busy.length > 0) {
+				DurableStore.releaseChunks(chunkKeys);
+				throw new Error('SLOT_ALREADY_BOOKED');
+			}
+		} catch (fbErr: any) {
+			if (fbErr.message === 'SLOT_ALREADY_BOOKED') throw fbErr;
+			console.warn('Pre-check FreeBusy warning:', fbErr?.message || fbErr);
 		}
 
 		// 4. Insert Calendar Event with Google Meet conference data
 		const summary = `30 min call with Pushpal & ${payload.name}`;
 		const description = `Booked via website.\n\nAttendee: ${payload.name}\nEmail: ${payload.email}\nDuration: ${payload.durationMinutes} mins\nVisitor Timezone: ${payload.visitorTimezone}\n\nNotes:\n${payload.notes || 'None'}`;
 
-		const eventRes = await calendar.events.insert({
-			calendarId: 'primary',
-			conferenceDataVersion: 1,
-			sendUpdates: 'all',
-			requestBody: {
-				summary,
-				description,
-				start: {
-					dateTime: startUtc.toISOString(),
-					timeZone: BOOKING_TIME_ZONE,
-				},
-				end: { dateTime: endUtc.toISOString(), timeZone: BOOKING_TIME_ZONE },
-				attendees: [{ email: payload.email, displayName: payload.name }],
-				conferenceData: {
-					createRequest: {
-						requestId: crypto.randomUUID(),
-						conferenceSolutionKey: { type: 'hangoutsMeet' },
+		const eventRes = await calendar.events.insert(
+			{
+				calendarId: 'primary',
+				conferenceDataVersion: 1,
+				sendUpdates: 'all',
+				requestBody: {
+					summary,
+					description,
+					start: {
+						dateTime: startUtc.toISOString(),
+						timeZone: BOOKING_TIME_ZONE,
+					},
+					end: { dateTime: endUtc.toISOString(), timeZone: BOOKING_TIME_ZONE },
+					attendees: [{ email: payload.email, displayName: payload.name }],
+					conferenceData: {
+						createRequest: {
+							requestId: crypto.randomUUID(),
+							conferenceSolutionKey: { type: 'hangoutsMeet' },
+						},
 					},
 				},
 			},
-		});
+			{ timeout: 15000 }
+		);
 
 		const event = eventRes.data;
 		const eventId = event.id || '';

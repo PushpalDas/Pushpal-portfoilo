@@ -12,4 +12,5 @@ export interface CertificationItem {
 	color: string;
 	url: string;
 	categories: string[];
+	icon?: string;
 }
