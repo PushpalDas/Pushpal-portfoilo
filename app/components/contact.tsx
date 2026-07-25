@@ -258,6 +258,9 @@ export default function Contact() {
 					border-radius: 50%;
 					transform: translate(-50%, -86.666%);
 					z-index: 1;
+					box-shadow: 0 0 2px 1px #1c1d20;
+					-webkit-backface-visibility: hidden;
+					backface-visibility: hidden;
 				}
 
 				:is(.dark) .contact-rounded-div-inner {

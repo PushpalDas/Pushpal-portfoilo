@@ -458,6 +458,9 @@ html:not(.dark) .work-list-col-info p {
 	padding-top: 66.67%;
 	border-radius: 8px;
 	overflow: hidden;
+	background-clip: padding-box;
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 .work-tile-image-bg {
