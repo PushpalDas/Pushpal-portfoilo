@@ -1,62 +1,57 @@
-# dalelarroder.com ⚡️
+# Pushpal Das — Personal Portfolio & Product Playground 🚀
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Deployment**: [Vercel](https://vercel.com)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Analytics**: [Logrocket](https://logrocket.com/)
-- **Content**: [MDX](https://mdxjs.com/)
+A premium, editorial-style personal portfolio built with Next.js, featuring dynamic work case studies, animations inspired by Dennis Snellenberg, and a custom secure content management system.
 
-## Running Locally
+## ⚡ Tech Stack
+- **Framework**: [Next.js](https://nextjs.org/) (App Router, React 19)
+- **Styling**: Tailwind CSS & custom CSS modules
+- **Animations**: GSAP, Motion (Framer Motion), ScrollTrigger
+- **Database/Storage**: File-based local store (`app/work/constants.ts` & `data/case-studies.json`)
+- **Package Manager**: Bun / npm
+
+---
+
+## 🛠️ Main Features
+
+### 1. Dynamic Case Study System
+- Reusable page layouts matching editorial templates.
+- Renders detailed project reviews (TL;DR, context, role, key decisions, outcomes, metrics, media embeds, and external links) dynamically under `/work/[slug]`.
+- Content handles NDP/NDA confidentiality filters automatically.
+
+### 2. Admin Content Manager (`/admin`)
+- Secure password-authenticated Admin dashboard.
+- Live modification of Work items and Certifications.
+- Interactive drag-and-drop handles for reordering both main items and project media grids.
+- Built-in dynamic image-to-web conversions with live upload previews.
+- Smart validation: internal routing to case studies is only activated once case study data is fully saved.
+
+---
+
+## 💻 Running Locally
 
 ### Installation
 
-1. Clone this repo
+1. Install dependencies:
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
 
-```bash
-git clone git@github.com:dlarroder/dalelarroder.git
-```
+2. Configure environment variables. Copy `.env.example` to `.env.local`:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Add your secure `ADMIN_PASSWORD` inside `.env.local` to access `/admin`.
 
-2. Change directory
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   bun run dev
+   ```
 
-```sh
-cd dalelarroder
-```
+---
 
-3. Install dependencies
-
-```bash
-bun install
-```
-
-1. Create a `.env.local` file following the `.env.example`
-
-```bash
-cp .env.example .env.local
-```
-
-5. Add your environment variables to `.env.local`
-
-```txt
-SPOTIFY_REFRESH_TOKEN=<Your env>
-SPOTIFY_CLIENT_SECRET=<Your env>
-SPOTIFY_CLIENT_ID=<Your env>
-// ...
-```
-
-6. Run the development server
-
-```bash
-bun run dev
-```
-
-## Previous Version
-
-This is the second version of my website.
-
-Prevoius v1 version:
-
-- https://v1.dalelarroder.com/
-
-## Licence
-
-[MIT](https://github.com/dlarroder/dalelarroder/blob/master/LICENSE) © [Dale Larroder](https://www.dalelarroder.com)
+## 🔒 License
+Proprietary. Custom development for Pushpal Das.
