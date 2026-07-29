@@ -47,7 +47,7 @@ export const workTiles: WorkTile[] = [
 				height: 576,
 				title: 'XANA — the Google of Ixana',
 				features: [
-					"Ixana's own intelligent data management system.",
+					"Ixana's inbuilt multifile RAG based data singularity platform",
 					'Vector search → Internal docs, meeting recordings, slides, spreadsheets, etc..',
 					'Open any file, ask and find answers quick with XANA.',
 					'No more jumping tabs, 10x efficient than third party babies',

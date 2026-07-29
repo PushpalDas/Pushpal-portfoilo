@@ -9,10 +9,11 @@ export const workItems = [
         src: 'Image__1_.jpg',
         color: '#dbeafe',
         url: '',
+        slug: 'dsa-generative-ai-engine-for-a-guided-spiritual-path',
         categories: [ 'products', ],
     },
     {
-        title: 'Data application, accurate estimation of mineral present in soil',
+        title: 'Data application | Accurate estimation of mineral present in soil',
         location: '',
         services: 'IIRS-ISRO, Govt. of India',
         year: '',
@@ -32,7 +33,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'hardware', 'products', ],
     },
     {
-        title: 'Accelerating Brain Research 10× by Automating Data Analysis with an AI-Powered Insights Platform (neuroadapt) ',
+        title: 'NeuroAdapt | Agentic RAG Engine for Neuroscience Research',
         location: 'India',
         services: 'NeuroAdapt, IISc Bangalore',
         year: '2023-2025',
@@ -42,7 +43,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'XANA, company\'s own intelligent data management system "the Google of Ixana" ',
+        title: 'XANA | Multifile RAG based Data Singularity Platform ',
         location: 'Ixana',
         services: 'Ixana',
         year: '',
@@ -62,7 +63,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'hardware', 'products', ],
     },
     {
-        title: 'Interactive 10-Qubit Quantum Simulator Delivering Real-Time 3D Bloch Visualizations',
+        title: 'Quantum Circuit Simulator | Interactive 10-Qubit Delivering Real-Time 3D Bloch Visualizations',
         location: '',
         services: 'Personal',
         year: '',
@@ -72,17 +73,17 @@ export const workItems = [
         categories: [ 'products', ],
     },
     {
-        title: 'M365 Procurement Orchestrator ',
+        title: 'Procurement Orchestrator | Procurement Process Automation with M365',
         location: '',
         services: 'Ixana',
         year: '',
-        src: 'Gemini_Generated_Image_m78lgwm78lgwm78l.png',
-        color: '#dbeafe',
+        src: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
+        color: '',
         url: '',
         categories: [ 'products', ],
     },
     {
-        title: 'Wish Key ',
+        title: 'WishKey | Key Management System',
         location: '',
         services: 'EEGRAB',
         year: '',
@@ -102,7 +103,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'hardware', 'products', ],
     },
     {
-        title: 'Cost-effective smart watch',
+        title: 'Cost-effective Smart watch ',
         location: '',
         services: 'EEGRAB',
         year: '',
@@ -112,7 +113,7 @@ export const workItems = [
         categories: [ 'core', 'products', ],
     },
     {
-        title: 'Wi-R Near Field Electric (Wi-R NFE), XA-NFE2001 & XA-NFE3001',
+        title: ' XA-NFE2001 & XA-NFE3001 | Wi-R Near Field Electric (Wi-R NFE)',
         location: 'Personal Project',
         services: 'Ixana',
         year: '2024 - 2026',
@@ -122,7 +123,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'hardware', 'products', ],
     },
     {
-        title: 'Reclaiming 80% of PM Time via a Hyper-Efficient, n8n-Powered RCA Report Automation Engine (RCA report) ',
+        title: 'AI PM | Generative AI Engine for RCA Report Automation ',
         location: 'India',
         services: 'Ixana',
         year: '2025',
@@ -132,7 +133,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: '100% Resource Visibility at Zero Operational Cost by Automating Company-Wide Bandwidth Reporting (resource allocation) ',
+        title: 'AI PM | Generative AI Engine for Resource Allocation',
         location: 'India',
         services: 'Ixana',
         year: '2025',
@@ -142,7 +143,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'Scaled Agile Governance via an n8n-Powered Scrum Ecosystem Reducing Oversight Costs to $0.0035 per 100 Tasks (scrum) ',
+        title: 'AI PM | Generative AI Engine for Scrum Ecosystem',
         location: 'India',
         services: 'Ixana',
         year: '2025',
@@ -152,7 +153,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'One-Click RCA Framework for Real-Time Pipeline Diagnostics and Strategic Engineering, LIVE RCA',
+        title: 'AI PM | Generative AI Engine for Real-Time Pipeline Diagnostics and Strategic Engineering ',
         location: 'India',
         services: 'Ixana',
         year: '',
@@ -162,7 +163,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'Governance Engine to Enforce 100% Process Compliance and Auto-Remediate Pipeline Deviations in project management], (activity view) ',
+        title: '"Github for ClickUp" | Automation on the changes going outside PMO framework ',
         location: 'India',
         services: 'Ixana',
         year: 'Coming soon...',
@@ -172,7 +173,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'Automated Company Video Library Sync via n8n, Reducing Manual Maintenance by 95% (video library auto sync) ',
+        title: 'IXANA Video Library | Automated Company Video Library ',
         location: 'India',
         services: 'Ixana',
         year: 'Coming soon...',
@@ -182,7 +183,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'Real-Time, Bi-Directional n8n Sync Engine with Gmail & Outlook Calendar (email automation) ',
+        title: 'Calendar Automation | Real-Time, Bi-Directional Sync Engine with Gmail & Outlook Calendar ',
         location: 'India',
         services: 'Ixana',
         year: '2025',
@@ -192,7 +193,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: ' The Transparent Offer Engine (Salary generator) ',
+        title: 'In progress.. ',
         location: 'India',
         services: 'Ixana',
         year: '2024-coming soon...',
@@ -202,7 +203,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'hardware', 'products', ],
     },
     {
-        title: 'AI Project Planning Operating System',
+        title: 'AI PRD | Multi Agent, Multi LLM Shared Memory Generative System',
         location: '',
         services: 'Ixana',
         year: '',
@@ -212,7 +213,7 @@ export const workItems = [
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {
-        title: 'AI Drafting Engine to Reduce Patent Office Rejections by 45% (AI Lawyer)',
+        title: 'AI Lawyer | Multi Agent, Multi LLM Shared Memory Generative System ',
         location: 'Ixana',
         services: 'Ixana',
         year: '',
@@ -222,7 +223,7 @@ export const workItems = [
         categories: [ 'products', ],
     },
     {
-        title: 'Inbuilt Gantt for managers',
+        title: 'AI PM | Customized Multi View for PM\'s',
         location: 'Ixana',
         services: 'Ixana',
         year: '',
@@ -232,7 +233,7 @@ export const workItems = [
         categories: [ 'products', ],
     },
     {
-        title: 'Teams meeting and AI ',
+        title: 'Ixana\'s "Fireflies" | Generative AI engine for taking meeting notes and answering question',
         location: '',
         services: 'Ixana',
         year: '',
@@ -242,7 +243,7 @@ export const workItems = [
         categories: [ 'products', ],
     },
     {
-        title: 'Patent tracker (ASK ANYTHING ABOUT PATENTS!) ',
+        title: 'Patent tracker | Generative AI Engine for Data Extraction ',
         location: '',
         services: 'Ixana',
         year: '',
@@ -252,7 +253,7 @@ export const workItems = [
         categories: [ 'products', ],
     },
     {
-        title: 'Clickup  document tracker (version control and more...) ',
+        title: 'Clickup  Document Tracker | Data extraction, easy visibility for doc users',
         location: '',
         services: 'Ixana',
         year: '',

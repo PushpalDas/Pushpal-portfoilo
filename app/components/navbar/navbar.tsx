@@ -23,6 +23,8 @@ export default function Navbar() {
 	const [scrolled, setScrolled] = useState(false);
 	const [mobileOpen, setMobileOpen] = useState(false);
 
+	const isCaseStudySubpage = pathname.startsWith('/work/') && pathname !== '/work';
+
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 20);
 		window.addEventListener('scroll', onScroll, { passive: true });
@@ -32,6 +34,8 @@ export default function Navbar() {
 	useEffect(() => {
 		setMobileOpen(false);
 	}, [pathname]);
+
+	if (isCaseStudySubpage) return null;
 
 	return (
 		<motion.nav

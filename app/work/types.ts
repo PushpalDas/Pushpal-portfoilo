@@ -6,6 +6,8 @@ export interface WorkItem {
 	src: string;
 	color: string;
 	url: string;
+	/** When set, the grid card links to /work/[slug] (internal case study page) */
+	slug?: string;
 	categories: string[];
 	icon?: React.ReactNode;
 }

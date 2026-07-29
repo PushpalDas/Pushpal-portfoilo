@@ -1,0 +1,77 @@
+{
+  "dsa-generative-ai-engine-for-a-guided-spiritual-path": {
+    "slug": "dsa-generative-ai-engine-for-a-guided-spiritual-path",
+    "company": "Personal ",
+    "organization": "Personal",
+    "title": "Dāsa | Generative AI Engine for a Guided Spiritual Path",
+    "dateRange": "May 31 - Present ",
+    "role": "Product Lead",
+    "teamSize": "3 people",
+    "tags": [
+      "RAG",
+      "Retrieval",
+      "LLM Evaluation",
+      "Information Retrieval",
+      "Product Strategy",
+      "System Design",
+      "Data Pipelines",
+      "Fidelity & Trust",
+      "Non-Profit Tech",
+      "Applied AI"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Śrīla Prabhupāda's teachings are scattered across ~70 books, thousands of letters, and hours of recordings — nowhere to reliably ask a question and get his actual words back, with a source, and no invention.\n\nWhat we did: Built a citation-grounded RAG engine over his books, Bhāgavatam, letters, and lectures (32,209 chunks), with a relevance gate that refuses out-of-scope questions and a deterministic guard that strips any fabricated citation — then designed and prototyped the full product experience (landing page, chat app, constellation-themed temple locator) on top of it.\n\nResult: Retrieval validated at nDCG@6 0.840 on 100 questions, 0 fabricated citations across 100 answers, and a working frontend — with one clear next step: build the API layer connecting the two, since the engine and the interface are both ready but not yet wired together.",
+    "context": "## The landscape\n\nFaithful access to Śrīla Prabhupāda's teachings today means one of three things: manually searching Vedabase (powerful but not built for \"I'm suffering, what did he say about this?\"), asking a general LLM (fluent, but it will confidently invent or soften his positions with zero accountability), or relying on devotees and secondary compilations, which introduces a human filter between the seeker and his actual words. There isn't a tool built around a single non-negotiable constraint: **return his words, or say nothing.**\n\n## The gap\n\nNothing sits at the intersection of *grounded* and *devotional*. Enterprise RAG tools are built for support tickets and internal docs — they're not designed to refuse gracefully when a teaching genuinely isn't there, or to represent one voice with total fidelity rather than blend many sources. And devotional/spiritual apps built so far are mostly content libraries or chatbots with a spiritual skin — friendly, but with no architecture guaranteeing they aren't paraphrasing or fabricating him. Dāsa sits in the gap between \"technically rigorous\" and \"reverently faithful\" — nobody had built both at once for this specific corpus and constraint.\n\n## What made it hard\n\n**Retrieval had a semantic blind spot money alone couldn't fix.** \"Why does Krishna appear in this world?\" kept surfacing Chapter 11 (the universal form) instead of the actual incarnation verses (4.7–4.8), because the embedding model read \"appear\" as *visual manifestation*, not *descend*. More data wouldn't have fixed this — it took re-ranking logic to correct the *ordering*, not just the *coverage*.\n\n**Small models lie fluently.** The first model (llama3.2:3b) mis-cited scripture and, when it didn't know something, invented an answer rather than refusing — the single most dangerous failure mode for a fidelity product. Fixing it took a real model upgrade plus a deterministic, non-negotiable citation guard — because you can't trust an LLM's promise not to hallucinate; you have to structurally prevent it.\n\n**~80% of the spoken corpus is auto-captioned**, meaning the \"his own words\" promise was, for lectures, actually \"an algorithm's best guess at his words\" — a fidelity gap invisible until you specifically go looking for it.\n\n**And the hardest part is philosophical, not technical:** once you let the model answer *in his voice*, in first person, you've quietly shifted the product from \"these are his words\" to \"this is his style, written by an AI\" — the exact thing the tool exists to prevent. Catching that required treating a UX decision as a fidelity risk, not just a feature.",
+    "roleAndApproach": "My Role and Approach\n\nWhat I owned: Product direction and the fidelity bar for Dāsa end-to-end — defining what \"faithful\" means technically (grounded retrieval, zero fabrication), curating and prioritizing the corpus, directing the UX/visual identity, and sequencing the roadmap between engineering and design.\n\n2–3 key decisions:\n\nMade refusal a feature, not a failure. Instead of asking \"how do we get the model to always answer,\" I set the bar as \"the model must say 'no teaching found' when it doesn't have one\" — a relevance gate, not a courtesy. That reframed the whole engineering problem around fidelity instead of coverage.\nCut the corpus at the point of purity, not the point of size. I chose to include Śrīmad-Bhāgavatam only through Canto 10.13 — exactly where Śrīla Prabhupāda personally stopped translating before his disciples completed the rest — even though that meant leaving real content on the table. Completeness lost to fidelity on purpose.\nRejected the \"choose a persona\" pattern. Early UI thinking leaned toward letting users pick how Dāsa \"talks to them.\" I redirected it: Dāsa doesn't perform a persona — it detects which of the four seekers (Bhagavad-gītā 7.16: Ārta, Arthārthī, Jijñāsu, Jñānī) is asking, the way he actually did, and adapts. Same truth, different door in.\n\nTradeoffs I navigated: Warmth vs. verifiability — once I approved a first-person \"his voice\" answer mode for emotional accessibility, I had to also mandate that his real, cited words stay visibly attached to every such answer, or the product's core promise quietly breaks. And build-speed vs. rigor — I chose to hold the line on validating retrieval at real scale (n=100, not n=20) before letting the team treat it as \"done,\" even though it slowed the path to a visible demo.",
+    "keyDecision": {
+      "label": "Key decision",
+      "decision": "We chose to build a custom ingestion pipeline for Śrīla Prabhupāda's books, letters, and lectures, rather than use an off-the-shelf scraper or generic document loader.",
+      "reasoning": "Off-the-shelf tools could not handle our fidelity constraints — they don't distinguish his own words from disciples' commentary, can't stop mid-book at his exact translation cutoff (Śrīmad-Bhāgavatam through Canto 10.13 only), and have no concept of \"HIM-ONLY\" speaker verification for lecture audio. A custom pipeline let us encode those rules directly: resumable, source-aware extraction (extract_sb.py, extract_letters.py), insert-only chunking so new sources never disturb already-embedded data, and per-chunk provenance tagging the retrieval and citation-guard logic depend on."
+    },
+    "whatWasBuilt": "Dāsa is a citation-grounded RAG application that returns Śrīla Prabhupāda's actual words in answer to a question — never a paraphrase, never an invention. A person asks in plain language (\"Why do I suffer?\", \"What is the soul?\"); the system retrieves the passage(s) that genuinely address it from a 32,209-chunk corpus spanning his books (Bhagavad-gītā As It Is, Śrīmad-Bhāgavatam through his own translation cutoff), letters, and verified lecture transcripts, then answers with that source cited — or explicitly refuses if no real teaching exists on the topic, rather than guessing.\n\nUnder the hood: a dense retriever (bge-m3) pulls candidates from book and lecture \"lanes\" separately so scripture is never crowded out by the much larger lecture volume, an LLM re-ranker reorders them by relevance, a calibrated distance gate blocks out-of-corpus questions before generation even runs, and a deterministic citation guard strips any verse reference the model cites that wasn't actually retrieved. The result can be delivered either as a grounded third-person answer or, optionally, in Śrīla Prabhupāda's first-person voice — with his real cited words always shown alongside, so the warmth of that voice never substitutes for verifiability.\n\nAround that engine, we designed and prototyped the full product experience: a cosmic, constellation-themed landing page and chat interface where every answer visually \"ignites\" its source among the stars, adaptive framing that detects which of four types of seeker (per Bhagavad-gītā 7.16) is asking rather than making the user pick a persona, and a temple-locator feature connecting devotees to real ISKCON centres near them.\n\nIt serves three audiences: devotees worldwide seeking guidance without always having someone to ask, newcomers who want an honest, unfiltered introduction to his teachings, and scholars or preachers who need to cite him with confidence rather than double-check every quote by hand.",
+    "media": [
+      {
+        "type": "video",
+        "src": "https://www.youtube.com/watch?v=S4G_99Yn2M4",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "Image__1_.jpg",
+        "caption": "",
+        "fullWidth": true
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      }
+    ],
+    "metrics": [
+      {
+        "value": "15,746 → 32,209 chunks (2x) ",
+        "label": "Corpus scale"
+      },
+      {
+        "value": "0.614 → 0.840 nDCG@6 (+37%)",
+        "label": "Retrieval quality (n=100, reranked)"
+      },
+      {
+        "value": "17 → 0 per 100 answers",
+        "label": "Fabricated citations eliminated"
+      },
+      {
+        "value": "20 → 100 questions (5x)",
+        "label": "Evaluation set scaled"
+      }
+    ],
+    "impactContext": "IMPACT CONTEXT\n\nFor the customer: doubling the corpus and validating retrieval at scale means a devotee asking about grief, a guru, or death — previously our weakest categories — now reliably gets a real, cited teaching instead of a near-miss or a false refusal. Eliminating fabricated citations (17→0) is what makes the product safe to actually put in front of people: a scholar or preacher can cite an answer with confidence instead of double-checking every reference by hand.\n\nFor the team: scaling the eval set from 20 to 100 questions turned \"we think retrieval is good\" into a defensible engineering claim — it caught two real problems (a hard retrieval gap, a re-ranker regression on conversational sources) that the smaller set was too small to ever surface, so we're now fixing bugs the data actually found rather than ones we guessed at.\n\nFor the business: this is the evidence base that justifies moving from \"promising prototype\" to \"ready for a private beta\" — the hardest, highest-risk technical question for a faithfulness-first product (can we trust it not to invent his words, at scale) now has a validated, board-defensible answer rather than a one confined to a handful of hand-picked examples.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  }
+}

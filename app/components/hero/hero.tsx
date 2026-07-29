@@ -24,19 +24,16 @@ export default function Hero() {
 					<ArrowDown />
 					<div className='absolute top-[20%] md:top-[40%] max-w-5xl flex-col space-y-4 justify-center px-8 md:px-24 lg:ml-14'>
 						<h1 className='text-2xl font-medium md:mr-4 md:text-4xl'>
-							Welcome to my{' '}
-							<span className='font-bold'>personal portfolio — </span>or, as I
-							like to call it, my{' '}
-							<span className='italic border-b'>playground</span> on the web.
+							Welcome to my <span className='font-bold'>portfolio</span>
 						</h1>
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
-								I am Pushpal Das — a lifelong learner. I help deep-tech teams
-								translate complex R&D into scalable products.
+								I help deep-tech teams translate complex R&amp;D into scalable
+								products.
 								<br />
 								<br />
-								Currently, in the Founders&apos; Office at Ixana, owning
-								delivery efficiency, products &amp; patents
+								Currently, working with the Founder and CTO of Ixana, owning
+								efficiency, products &amp; patents
 							</p>
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>
@@ -94,16 +91,7 @@ export default function Hero() {
 								data-skip-splash-cursor
 							>
 								<Magnetic strength={20}>
-									<Link href='/projects'>/projects</Link>
-								</Magnetic>
-								<Magnetic strength={20}>
-									<Link href='/thoughts'>/thoughts</Link>
-								</Magnetic>
-								<Magnetic strength={20}>
-									<Link href='/uses'>/uses</Link>
-								</Magnetic>
-								<Magnetic strength={20}>
-									<Link href='/stats'>/stats</Link>
+									<Link href='/work'>/projects</Link>
 								</Magnetic>
 							</div>
 						</section>

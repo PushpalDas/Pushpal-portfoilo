@@ -1007,3 +1007,216 @@
 	align-items: center;
 	gap: 0.5rem;
 }
+
+/* ── Wide modal variant for case study editor ─────────── */
+
+.admin-modal--wide {
+	max-width: 780px;
+	width: 95vw;
+}
+
+/* ── Modal tabs ──────────────────────────────────────── */
+
+.admin-modal-tabs {
+	display: flex;
+	gap: 2px;
+	background: rgba(255, 255, 255, 0.04);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	padding: 0 1.5rem;
+}
+
+.admin-modal-tab {
+	position: relative;
+	padding: 0.75rem 1.25rem;
+	background: none;
+	border: none;
+	color: rgba(255, 255, 255, 0.4);
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: color 0.2s;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.admin-modal-tab:hover {
+	color: rgba(255, 255, 255, 0.75);
+}
+
+.admin-modal-tab.active {
+	color: #ffffff;
+	border-bottom-color: #3b82f6;
+}
+
+.admin-modal-tab-badge {
+	color: #4a7aff;
+	font-size: 10px;
+	line-height: 1;
+}
+
+/* ── Case study form ────────────────────────────────── */
+
+.admin-cs-form {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.admin-cs-section-label {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #3b82f6;
+	margin-top: 20px;
+	margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.admin-cs-add-row-btn {
+	font-size: 12px;
+	font-weight: 500;
+	color: #3b82f6;
+	background: rgba(59, 130, 246, 0.1);
+	border: 1px solid rgba(59, 130, 246, 0.2);
+	border-radius: 6px;
+	padding: 2px 10px;
+	cursor: pointer;
+	transition: background 0.15s;
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.admin-cs-add-row-btn:hover {
+	background: rgba(59, 130, 246, 0.18);
+}
+
+.admin-cs-card {
+	background: rgba(255, 255, 255, 0.025);
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 10px;
+	padding: 16px;
+	margin-bottom: 8px;
+}
+
+.admin-cs-row-card {
+	background: rgba(255, 255, 255, 0.025);
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin-bottom: 8px;
+	position: relative;
+}
+
+.admin-cs-row-delete {
+	flex-shrink: 0;
+	align-self: flex-end;
+	margin-bottom: 2px;
+}
+
+/* ── Toggle checkbox row ────────────────────────────── */
+
+.admin-cs-toggle-row {
+	display: flex;
+	align-items: center;
+	margin: 8px 0 4px;
+}
+
+.admin-cs-toggle {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.7);
+	user-select: none;
+}
+
+.admin-cs-toggle input[type='checkbox'] {
+	width: 16px;
+	height: 16px;
+	accent-color: #3b82f6;
+	cursor: pointer;
+}
+
+/* ── Preview bar ────────────────────────────────────── */
+
+.admin-cs-preview-bar {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background: rgba(74, 122, 255, 0.06);
+	border: 1px solid rgba(74, 122, 255, 0.15);
+	border-radius: 8px;
+	padding: 8px 14px;
+	margin-bottom: 8px;
+}
+
+.admin-cs-preview-link {
+	color: #4a7aff;
+	font-size: 13px;
+	font-weight: 500;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	transition: opacity 0.2s;
+}
+
+.admin-cs-preview-link:hover {
+	opacity: 0.75;
+}
+
+/* ── select in admin ─────────────────────────────────── */
+
+.admin-input[type='color'] {
+	padding: 2px;
+	height: 38px;
+}
+
+select.admin-input {
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	padding-right: 30px;
+}
+
+/* ─── Drag & Drop Visual Feedback ────────────────────── */
+
+.admin-item-card.dragging,
+.admin-cs-row-card.dragging {
+	opacity: 0.4;
+	border: 1px dashed rgba(255, 255, 255, 0.2) !important;
+	background: rgba(255, 255, 255, 0.01) !important;
+}
+
+.admin-item-card.drag-over,
+.admin-cs-row-card.drag-over {
+	border-color: #3b82f6 !important;
+	background: rgba(59, 130, 246, 0.04) !important;
+	transform: scale(0.995);
+}
+
+.admin-drag-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgba(255, 255, 255, 0.35);
+	cursor: grab;
+	transition: color 0.2s;
+}
+
+.admin-drag-handle:hover {
+	color: #ffffff;
+}
+
+.admin-drag-handle:active {
+	cursor: grabbing;
+}
+

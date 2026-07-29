@@ -492,6 +492,15 @@ html:not(.dark) .work-list-col-info p {
 	transform: scale(1.05);
 }
 
+.work-tile-link--static {
+	cursor: default;
+}
+
+.work-tile-link--static .work-tile-img,
+.work-tile-link--static .work-tile-icon-display {
+	transform: none !important;
+}
+
 .work-tile-title-col {
 	margin-bottom: 0.5rem;
 }
