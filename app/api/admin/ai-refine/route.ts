@@ -4,8 +4,9 @@ import {
 	callGemini,
 	FIELD_ORDER,
 	filesToParts,
-	VOICE_RULES,
+	normalizeRole,
 	validateFiles,
+	voiceRules,
 } from '../../../lib/ai-case-study';
 
 /* Every field is optional here — the model returns ONLY what it changed,
@@ -30,11 +31,14 @@ const RESPONSE_SCHEMA = {
 	propertyOrdering: ['reply', 'updates'],
 };
 
-const SYSTEM_PROMPT = `Act as a product person revising an existing portfolio case study draft. The author will tell you what is wrong with a section, or how they want it written. Apply their instruction.
+function systemPrompt(role: string): string {
+	return `Act as a ${role} revising an existing portfolio case study draft. The author will tell you what is wrong with a section, or how they want it written. Apply their instruction.
 
 The single most important rule: change ONLY what the author asked about. Put those fields in "updates" and omit every other field. A field you do not return is left exactly as the author wrote it, which is what you want. Never rewrite a section just because you think it could be better. Never "tidy up" neighbouring fields.
 
-${VOICE_RULES}
+Leave the role field alone unless the author explicitly asks you to change it. It is what sets the voice for everything else.
+
+${voiceRules(role)}
 
 Accuracy:
 - Keep every fact, number, name, date, and URL from the current draft unless the author corrects it or a source document contradicts it.
@@ -42,6 +46,7 @@ Accuracy:
 - When the author dictates wording ("write it like this..."), follow their wording closely; tighten the phrasing but do not change their meaning.
 
 In "reply", speak to the author directly and keep it to a sentence or two.`;
+}
 
 /* ─── POST /api/admin/ai-refine ───────────────────────────── */
 
@@ -69,6 +74,7 @@ export async function POST(request: Request) {
 		).trim();
 		const draftRaw = (formData.get('draft') as string | null) ?? '{}';
 		const historyRaw = (formData.get('history') as string | null) ?? '[]';
+		const role = normalizeRole(formData.get('role') as string | null);
 		const files = formData
 			.getAll('file')
 			.filter((f): f is File => f instanceof File);
@@ -85,7 +91,7 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: invalid }, { status: 400 });
 		}
 
-		const parts: Record<string, unknown>[] = [{ text: SYSTEM_PROMPT }];
+		const parts: Record<string, unknown>[] = [{ text: systemPrompt(role) }];
 
 		// The source documents, so the author can ask for detail the draft dropped.
 		if (files.length > 0) {

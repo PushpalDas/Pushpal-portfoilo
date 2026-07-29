@@ -119,6 +119,10 @@ const emptyCaseStudy: CaseStudyForm = {
 
 const MAX_AI_FILES = 10;
 
+/* The case study's Role field sets the voice the AI writes in.
+   Falls back to the basic tab's Services / Role, then to this. */
+const DEFAULT_AI_ROLE = 'Project Manager';
+
 interface AiMessage {
 	role: 'user' | 'ai';
 	text: string;
@@ -738,6 +742,9 @@ export default function AdminPage() {
 
 	/* ─── AI fill from document ─────────────────────────── */
 
+	// What the AI writes as. Empty on both tabs means Project Manager.
+	const aiRole = csForm.role.trim() || formData.services.trim();
+
 	// Files accumulate across picks, so several trips to the file dialog
 	// (or several folders) can feed one fill.
 	const handleAiFilesChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -774,6 +781,7 @@ export default function AdminPage() {
 			const body = new FormData();
 			for (const file of aiFiles) body.append('file', file);
 			if (aiNotes.trim()) body.append('notes', aiNotes);
+			body.append('role', aiRole);
 
 			const res = await fetch('/api/admin/ai-fill', {
 				method: 'POST',
@@ -983,6 +991,7 @@ export default function AdminPage() {
 			body.append('instruction', instruction);
 			body.append('draft', JSON.stringify(csDraftPayload()));
 			body.append('history', JSON.stringify(history));
+			body.append('role', aiRole);
 			// Resend the sources so "pull the number from the deck" still works.
 			for (const file of aiFiles) body.append('file', file);
 
@@ -1937,6 +1946,20 @@ export default function AdminPage() {
 															and nothing is saved until you hit “Save Case
 															Study”.
 														</p>
+
+														<div className='admin-ai-role'>
+															<span className='admin-ai-role-label'>
+																Writing as
+															</span>
+															<span className='admin-ai-role-value'>
+																{aiRole || DEFAULT_AI_ROLE}
+															</span>
+															<span className='admin-ai-role-note'>
+																{aiRole
+																	? 'from the Role field below — every section is written from this seat'
+																	: `no Role set, so this is the default — fill in Role below to change it`}
+															</span>
+														</div>
 
 														<div className='admin-form-group'>
 															<label htmlFor='ai-notes'>

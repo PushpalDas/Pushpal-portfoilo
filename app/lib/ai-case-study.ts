@@ -135,10 +135,22 @@ export const FIELD_ORDER = Object.keys(CASE_STUDY_FIELDS);
 
 /* ─── Voice ───────────────────────────────────────────────── */
 
-export const VOICE_RULES = `Voice — write like a product person, not a developer:
+/* The author's role on the project drives the whole voice. Whatever they put
+   in the case study's Role field becomes the persona; an empty field falls
+   back to Project Manager. */
+export const DEFAULT_ROLE = 'Project Manager';
+
+export function normalizeRole(raw: string | null | undefined): string {
+	return (raw ?? '').trim() || DEFAULT_ROLE;
+}
+
+export function voiceRules(role: string): string {
+	return `Voice — you are a ${role}, and every field is written from that seat:
+- Write what a ${role} would have owned on this project: the calls they made, the tradeoffs they weighed, the outcomes they were judged on. Skip work that belonged to someone else.
+- Use the vocabulary a ${role} uses. Technical terms are fine — you know this product deeply — but reach for them the way a ${role} does, not the way a developer does: name the technology when it explains a decision or a constraint, then go straight back to the outcome.
+- Never stack jargon, never explain the implementation for its own sake, never write for an audience of engineers.
 - Crisp and to the point. Short sentences. Cut every word that is not doing work.
-- Lead with what the thing does and who it is for, not how it is implemented.
-- You know this product deeply, technical detail included, so use technical terms the way a product person does: name the technology when it explains a decision or a constraint, then move straight back to the outcome. Never stack jargon, never explain the implementation for its own sake, never write for an audience of engineers.
+- Lead with what the thing does and who it is for, not how it is built.
 - A reader outside the team should follow every sentence on the first pass.
 - First person, past tense ("I built...", "I owned...").
 - No marketing language, no buzzwords, no hype adjectives, no em-dashes.
@@ -146,6 +158,7 @@ export const VOICE_RULES = `Voice — write like a product person, not a develop
 Format:
 - Prose fields are body copy: full sentences and paragraphs, no markdown, no bullet points, no headings.
 - tags are short noun phrases, not sentences.`;
+}
 
 /* ─── Request helpers ─────────────────────────────────────── */
 

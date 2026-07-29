@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import {
 	CASE_STUDY_FIELDS,
 	callGemini,
+	DEFAULT_ROLE,
 	FIELD_ORDER,
 	filesToParts,
-	VOICE_RULES,
+	normalizeRole,
 	validateFiles,
+	voiceRules,
 } from '../../../lib/ai-case-study';
 
 const RESPONSE_SCHEMA = {
@@ -14,14 +16,23 @@ const RESPONSE_SCHEMA = {
 	propertyOrdering: FIELD_ORDER,
 };
 
-const SYSTEM_PROMPT = `Act as a product person filling out a portfolio case study from the attached documentation, text, or data source. Read the source and populate the fields in the schema.
+function systemPrompt(role: string, roleWasGiven: boolean): string {
+	return `Act as a ${role} filling out a portfolio case study from the attached documentation, text, or data source. Read the source and populate the fields in the schema.
 
-${VOICE_RULES}
+${
+	roleWasGiven
+		? `The author has already stated their role on this project: "${role}". That is fixed. Return it back in the role field exactly as written, unchanged, and write every other field to match it — the scope a ${role} would have owned, the decisions they would have made, the results they would be measured on.`
+		: `The author has not stated their role, so write as a ${DEFAULT_ROLE}. If the source clearly names the role they held, put that in the role field; otherwise leave the role field empty.`
+}
+
+${voiceRules(role)}
 
 Accuracy:
 - Ground every field in the source. Never invent facts, numbers, companies, dates, or URLs.
 - If the source does not cover a field, return an empty string (or omit the array). An empty field is correct; a plausible guess is not.
+- Writing from a ${role}'s seat changes emphasis and wording, never the facts. Do not promote the author into work the source does not credit them with.
 - metrics must only contain figures the source actually states.`;
+}
 
 /* ─── POST /api/admin/ai-fill ─────────────────────────────── */
 
@@ -48,6 +59,9 @@ export async function POST(request: Request) {
 			.getAll('file')
 			.filter((f): f is File => f instanceof File);
 		const notes = (formData.get('notes') as string | null) ?? '';
+		const rawRole = (formData.get('role') as string | null) ?? '';
+		const role = normalizeRole(rawRole);
+		const roleWasGiven = rawRole.trim().length > 0;
 
 		if (files.length === 0) {
 			return NextResponse.json(
@@ -61,7 +75,9 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: invalid }, { status: 400 });
 		}
 
-		const parts: Record<string, unknown>[] = [{ text: SYSTEM_PROMPT }];
+		const parts: Record<string, unknown>[] = [
+			{ text: systemPrompt(role, roleWasGiven) },
+		];
 
 		if (files.length > 1) {
 			parts.push({
