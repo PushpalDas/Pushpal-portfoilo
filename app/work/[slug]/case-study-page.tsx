@@ -261,12 +261,11 @@ export default function CaseStudyPage({ data }: Props) {
 
   const hasLinks = links.length > 0;
   const hasMetrics = metrics.length > 0;
-  const hasImpactSection = hasMetrics || !isEmpty(data.impactContext);
 
-  const hasKeyDecision =
-    data.keyDecision !== null &&
-    data.keyDecision !== undefined &&
-    !isEmpty(data.keyDecision.decision);
+  // Filter out empty key decisions
+  const keyDecisions = data.keyDecisions
+    ? data.keyDecisions.filter((d) => d && d.trim() !== '')
+    : [];
 
   const tags = data.tags && data.tags.length > 0 ? data.tags : [];
 
@@ -339,17 +338,7 @@ export default function CaseStudyPage({ data }: Props) {
           </div>
         )}
 
-        {/* ── SECTION 3: Context and problem ────────────────── */}
-        {!isEmpty(data.context) && (
-          <section className="cs-section cs-reveal">
-            <h2 className="cs-heading">Context and problem</h2>
-            <p className="cs-body" style={{ whiteSpace: 'pre-line' }}>
-              {data.context}
-            </p>
-          </section>
-        )}
-
-        {/* ── SECTION 4: Role and approach ──────────────────── */}
+        {/* ── SECTION 3: My role and approach ──────────────────── */}
         {!isEmpty(data.roleAndApproach) && (
           <section className="cs-section cs-reveal">
             <h2 className="cs-heading">My role and approach</h2>
@@ -357,24 +346,23 @@ export default function CaseStudyPage({ data }: Props) {
               {data.roleAndApproach}
             </p>
 
-            {/* Key Decision card */}
-            {hasKeyDecision && data.keyDecision && (
-              <div className="cs-decision-card">
-                <div className="cs-decision-label">
-                  {data.keyDecision.label ?? 'Key decision'}
-                </div>
-                <p className="cs-decision-text">
-                  {data.keyDecision.decision}
-                </p>
-                <p className="cs-decision-reasoning" style={{ whiteSpace: 'pre-line' }}>
-                  {data.keyDecision.reasoning}
-                </p>
+            {/* Bulleted list of Key Decisions */}
+            {keyDecisions.length > 0 && (
+              <div className="cs-key-decisions-wrap">
+                <h3 className="cs-decision-label">Key decisions</h3>
+                <ul className="cs-decision-bullets">
+                  {keyDecisions.map((decision, i) => (
+                    <li key={i} className="cs-decision-bullet-item" style={{ whiteSpace: 'pre-line' }}>
+                      {decision}
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </section>
         )}
 
-        {/* ── SECTION 5: What was built ─────────────────────── */}
+        {/* ── SECTION 4: What was built ─────────────────────── */}
         {!isEmpty(data.whatWasBuilt) && (
           <section className="cs-section cs-reveal">
             <h2 className="cs-heading">What was built</h2>
@@ -382,8 +370,8 @@ export default function CaseStudyPage({ data }: Props) {
               {data.whatWasBuilt}
             </p>
 
-            {data.isConfidential ? (
-              /* Confidential mode */
+            {data.isConfidential && (
+              /* Confidential NDA card (only shows here if media is blocked) */
               <div className="cs-confidential-card">
                 <div className="cs-confidential-label">CONFIDENTIAL</div>
                 <p className="cs-confidential-note">
@@ -392,57 +380,58 @@ export default function CaseStudyPage({ data }: Props) {
                     : data.confidentialNote}
                 </p>
               </div>
-            ) : (
-              /* Media grid */
-              media.length > 0 && (
-                <div className="cs-media-grid">
-                  {media.map((item, i) => (
-                    <MediaSlot key={i} item={item} />
-                  ))}
-                </div>
-              )
             )}
           </section>
         )}
 
-        {/* ── SECTION 6: Impact and outcomes ───────────────── */}
-        {hasImpactSection && (
+        {/* ── SECTION 5: Impact and outcomes (Metrics Grid) ───────────────── */}
+        {hasMetrics && (
           <section className="cs-section cs-reveal">
             <h2 className="cs-heading">Impact and outcomes</h2>
-
-            {hasMetrics && (
-              <div className="cs-metrics-grid">
-                {metrics.map((m, i) => (
-                  <div key={i} className="cs-metric-card">
-                    <div
-                      className="cs-metric-value"
-                      data-count-up={m.value}
-                    >
-                      {m.value}
-                    </div>
-                    <div className="cs-metric-label">
-                      {m.label}
-                    </div>
+            <div className="cs-metrics-grid">
+              {metrics.map((m, i) => (
+                <div key={i} className="cs-metric-card">
+                  <div
+                    className="cs-metric-value"
+                    data-count-up={m.value}
+                  >
+                    {m.value}
                   </div>
-                ))}
-              </div>
-            )}
-
-            {data.isConfidential && hasMetrics && (
+                  <div className="cs-metric-label">
+                    {m.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {data.isConfidential && (
               <p className="cs-confidential-footnote">
                 Metrics shown as relative values due to confidentiality.
               </p>
             )}
-
-            {!isEmpty(data.impactContext) && (
-              <p className="cs-body" style={{ whiteSpace: 'pre-line' }}>
-                {data.impactContext}
-              </p>
-            )}
           </section>
         )}
 
-        {/* ── SECTION 7: Reflection (optional) ─────────────── */}
+        {/* ── SECTION 6: Media Grid ─────────────────────── */}
+        {!data.isConfidential && media.length > 0 && (
+          <section className="cs-section cs-reveal">
+            <div className="cs-media-grid" style={{ marginTop: 0 }}>
+              {media.map((item, i) => (
+                <MediaSlot key={i} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ── SECTION 7: Impact context (Narrative text) ───────────────── */}
+        {!isEmpty(data.impactContext) && (
+          <section className="cs-section cs-reveal">
+            <p className="cs-body" style={{ whiteSpace: 'pre-line' }}>
+              {data.impactContext}
+            </p>
+          </section>
+        )}
+
+        {/* ── SECTION 8: Reflection (optional) ─────────────── */}
         {data.reflection !== null && data.reflection !== undefined && !isEmpty(data.reflection) && (
           <section className="cs-section cs-reveal">
             <h2 className="cs-heading">Reflection</h2>
@@ -454,7 +443,7 @@ export default function CaseStudyPage({ data }: Props) {
           </section>
         )}
 
-        {/* ── SECTION 8: Go deeper ──────────────────────────── */}
+        {/* ── SECTION 9: Go deeper ──────────────────────────── */}
         {hasLinks && (
           <section className="cs-section cs-reveal">
             <h2 className="cs-heading">Go deeper</h2>

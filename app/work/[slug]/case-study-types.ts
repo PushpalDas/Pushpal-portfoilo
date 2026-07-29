@@ -7,13 +7,13 @@ export type MediaType = 'image' | 'video' | 'gif' | 'demo';
 
 export interface MediaItem {
   type: MediaType;
-  src: string;          // empty string → shows placeholder slot
+  src: string;          // empty string → ignored on live page
   caption?: string;
   fullWidth?: boolean;  // true → spans both columns in the grid
 }
 
 export interface MetricItem {
-  value: string;   // e.g. "2x", "~40%", "00" (placeholder)
+  value: string;   // e.g. "2x", "~40%"
   label: string;   // e.g. "Speed improvement"
 }
 
@@ -21,12 +21,6 @@ export interface LinkItem {
   icon: 'github' | 'file' | 'play' | 'certificate' | 'video' | 'paper' | 'drive' | 'external';
   label: string;
   url: string;
-}
-
-export interface KeyDecision {
-  label?: string;     // defaults to "Key decision"
-  decision: string;
-  reasoning: string;
 }
 
 export interface ProjectNav {
@@ -54,17 +48,15 @@ export interface CaseStudyData {
   confidentialNote?: string;
 
   tldr: string;
-  context: string;
   roleAndApproach: string;
 
-  /** Set to null to hide the key-decision highlight card */
-  keyDecision: KeyDecision | null;
+  /** List of 2–3 key decisions, rendered as bullets */
+  keyDecisions: string[];
 
   whatWasBuilt: string;
 
   /**
    * Supports 4 types: image | video | gif | demo
-   * Leave src as "" to render a placeholder slot.
    */
   media: MediaItem[];
 

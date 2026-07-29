@@ -47,12 +47,8 @@ interface CaseStudyForm {
 	isConfidential: boolean;
 	confidentialNote: string;
 	tldr: string;
-	context: string;
 	roleAndApproach: string;
-	showKeyDecision: boolean;
-	keyDecisionLabel: string;
-	keyDecision: string;
-	keyDecisionReasoning: string;
+	keyDecisions: string[];
 	whatWasBuilt: string;
 	media: MediaRow[];
 	metrics: MetricRow[];
@@ -98,12 +94,8 @@ const emptyCaseStudy: CaseStudyForm = {
 	isConfidential: false,
 	confidentialNote: '',
 	tldr: '',
-	context: '',
 	roleAndApproach: '',
-	showKeyDecision: true,
-	keyDecisionLabel: 'Key decision',
-	keyDecision: '',
-	keyDecisionReasoning: '',
+	keyDecisions: ['', '', ''],
 	whatWasBuilt: '',
 	media: [
 		{ type: 'image', src: '', caption: '', fullWidth: false },
@@ -747,20 +739,33 @@ export default function AdminPage() {
 			setText('role', ai.role);
 			setText('teamSize', ai.teamSize);
 			setText('tldr', ai.tldr);
-			setText('context', ai.context);
 			setText('roleAndApproach', ai.roleAndApproach);
 			setText('whatWasBuilt', ai.whatWasBuilt);
 			setText('impactContext', ai.impactContext);
-			setText('keyDecision', ai.keyDecision);
-			setText('keyDecisionReasoning', ai.keyDecisionReasoning);
 			setText('reflection', ai.reflection);
 
 			if (Array.isArray(ai.tags) && ai.tags.length) {
 				setText('tags', ai.tags.join(', '));
 			}
 
-			// Reveal the optional sections the model actually produced content for.
-			if (next.keyDecision.trim()) next.showKeyDecision = true;
+			// Map key decisions from AI response
+			if (Array.isArray(ai.keyDecisions) && ai.keyDecisions.length) {
+				const kd = [...next.keyDecisions];
+				ai.keyDecisions.forEach((item: string, idx: number) => {
+					if (idx < 3 && typeof item === 'string') {
+						kd[idx] = item.trim();
+					}
+				});
+				next.keyDecisions = kd;
+				filled++;
+			} else if (typeof ai.keyDecision === 'string' && ai.keyDecision.trim()) {
+				const kd = [...next.keyDecisions];
+				kd[0] = ai.keyDecision.trim();
+				next.keyDecisions = kd;
+				filled++;
+			}
+
+			// Reveal optional sections
 			if (next.reflection.trim()) next.showReflection = true;
 
 			const metrics: MetricRow[] = Array.isArray(ai.metrics)
@@ -847,13 +852,10 @@ export default function AdminPage() {
 							isConfidential: data.isConfidential ?? false,
 							confidentialNote: data.confidentialNote ?? '',
 							tldr: data.tldr ?? '',
-							context: data.context ?? '',
 							roleAndApproach: data.roleAndApproach ?? '',
-							showKeyDecision:
-								data.keyDecision !== null && data.keyDecision !== undefined,
-							keyDecisionLabel: data.keyDecision?.label ?? 'Key decision',
-							keyDecision: data.keyDecision?.decision ?? '',
-							keyDecisionReasoning: data.keyDecision?.reasoning ?? '',
+							keyDecisions: Array.isArray(data.keyDecisions)
+								? [...data.keyDecisions, '', '', ''].slice(0, 3)
+								: ['', '', ''],
 							whatWasBuilt: data.whatWasBuilt ?? '',
 							media: data.media?.length > 0 ? data.media : emptyCaseStudy.media,
 							metrics:
@@ -956,15 +958,8 @@ export default function AdminPage() {
 				isConfidential: csForm.isConfidential,
 				confidentialNote: csForm.confidentialNote,
 				tldr: csForm.tldr,
-				context: csForm.context,
 				roleAndApproach: csForm.roleAndApproach,
-				keyDecision: csForm.showKeyDecision
-					? {
-							label: csForm.keyDecisionLabel,
-							decision: csForm.keyDecision,
-							reasoning: csForm.keyDecisionReasoning,
-						}
-					: null,
+				keyDecisions: csForm.keyDecisions.filter((d) => d && d.trim() !== ''),
 				whatWasBuilt: csForm.whatWasBuilt,
 				media: csForm.media,
 				metrics: csForm.metrics,
@@ -1923,7 +1918,6 @@ export default function AdminPage() {
 													/>
 												</div>
 											)}
-
 											{/* ── TL;DR */}
 											<div className='admin-cs-section-label'>TL;DR</div>
 											<div className='admin-form-group'>
@@ -1939,20 +1933,6 @@ export default function AdminPage() {
 												/>
 											</div>
 
-											{/* ── Context */}
-											<div className='admin-cs-section-label'>
-												Context and problem
-											</div>
-											<div className='admin-form-group'>
-												<textarea
-													className='admin-textarea'
-													rows={4}
-													placeholder='Describe the landscape. What gap existed? What made this hard?'
-													value={csForm.context}
-													onChange={(e) => csChange('context', e.target.value)}
-												/>
-											</div>
-
 											{/* ── Role and approach */}
 											<div className='admin-cs-section-label'>
 												My role and approach
@@ -1961,7 +1941,7 @@ export default function AdminPage() {
 												<textarea
 													className='admin-textarea'
 													rows={4}
-													placeholder='What did you own? 2–3 key decisions? Tradeoffs you navigated?'
+													placeholder='What did you own? Tradeoffs you navigated?'
 													value={csForm.roleAndApproach}
 													onChange={(e) =>
 														csChange('roleAndApproach', e.target.value)
@@ -1969,69 +1949,28 @@ export default function AdminPage() {
 												/>
 											</div>
 
-											<div className='admin-cs-toggle-row'>
-												<label className='admin-cs-toggle'>
-													<input
-														type='checkbox'
-														checked={csForm.showKeyDecision}
-														onChange={(e) =>
-															csChange('showKeyDecision', e.target.checked)
-														}
-													/>
-													<span>Show key decision highlight card</span>
-												</label>
+											{/* ── Key Decisions */}
+											<div className='admin-cs-section-label'>
+												2–3 key decisions (bullets)
 											</div>
-
-											{csForm.showKeyDecision && (
-												<div className='admin-cs-card'>
-													<div className='admin-form-group'>
-														<label>
-															Card label{' '}
-															<span
-																style={{
-																	color: '#6b6b7b',
-																	fontWeight: 400,
-																	fontSize: 12,
-																}}
-															>
-																(default: "Key decision")
-															</span>
-														</label>
+											<div className='admin-cs-card' style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 16 }}>
+												{csForm.keyDecisions.map((kd, idx) => (
+													<div key={idx} className='admin-form-group' style={{ margin: 0 }}>
+														<label>Decision {idx + 1}</label>
 														<input
 															type='text'
 															className='admin-input'
-															value={csForm.keyDecisionLabel}
-															onChange={(e) =>
-																csChange('keyDecisionLabel', e.target.value)
-															}
+															placeholder={`Key decision ${idx + 1}...`}
+															value={kd}
+															onChange={(e) => {
+																const newKd = [...csForm.keyDecisions];
+																newKd[idx] = e.target.value;
+																csChange('keyDecisions', newKd);
+															}}
 														/>
 													</div>
-													<div className='admin-form-group'>
-														<label>Decision</label>
-														<textarea
-															className='admin-textarea'
-															rows={2}
-															placeholder='We chose to build a custom ingestion pipeline...'
-															value={csForm.keyDecision}
-															onChange={(e) =>
-																csChange('keyDecision', e.target.value)
-															}
-														/>
-													</div>
-													<div className='admin-form-group'>
-														<label>Reasoning</label>
-														<textarea
-															className='admin-textarea'
-															rows={2}
-															placeholder='Off-the-shelf tools could not handle...'
-															value={csForm.keyDecisionReasoning}
-															onChange={(e) =>
-																csChange('keyDecisionReasoning', e.target.value)
-															}
-														/>
-													</div>
-												</div>
-											)}
+												))}
+											</div>
 
 											{/* ── What was built */}
 											<div className='admin-cs-section-label'>
@@ -2048,6 +1987,62 @@ export default function AdminPage() {
 													}
 												/>
 											</div>
+
+											{/* ── Metrics */}
+											<div className='admin-cs-section-label'>
+												Impact metrics
+												<button
+													type='button'
+													className='admin-cs-add-row-btn'
+													onClick={addMetricRow}
+												>
+													+ Add metric
+												</button>
+											</div>
+											{csForm.metrics.map((m, i) => (
+												<div key={i} className='admin-cs-row-card'>
+													<div
+														className='admin-form-row'
+														style={{ alignItems: 'flex-end' }}
+													>
+														<div
+															className='admin-form-group'
+															style={{ flex: '0 0 140px' }}
+														>
+															<label>Value</label>
+															<input
+																type='text'
+																className='admin-input'
+																placeholder='2x, ~40%, 14k+'
+																value={m.value}
+																onChange={(e) =>
+																	updateMetric(i, 'value', e.target.value)
+																}
+															/>
+														</div>
+														<div className='admin-form-group'>
+															<label>Label</label>
+															<input
+																type='text'
+																className='admin-input'
+																placeholder='Speed improvement'
+																value={m.label}
+																onChange={(e) =>
+																	updateMetric(i, 'label', e.target.value)
+																}
+															/>
+														</div>
+														<button
+															type='button'
+															className='admin-btn-icon delete admin-cs-row-delete'
+															onClick={() => removeMetric(i)}
+															title='Remove'
+														>
+															<TrashIcon />
+														</button>
+													</div>
+												</div>
+											))}
 
 											{/* ── Media */}
 											{!csForm.isConfidential && (
@@ -2151,7 +2146,7 @@ export default function AdminPage() {
 																		value={m.caption}
 																		onChange={(e) =>
 																			updateMedia(i, 'caption', e.target.value)
-																		}
+         																}
 																	/>
 																</div>
 																<label
@@ -2205,66 +2200,8 @@ export default function AdminPage() {
 												</>
 											)}
 
-											{/* ── Metrics */}
-											<div className='admin-cs-section-label'>
-												Impact metrics
-												<button
-													type='button'
-													className='admin-cs-add-row-btn'
-													onClick={addMetricRow}
-												>
-													+ Add metric
-												</button>
-											</div>
-											{csForm.metrics.map((m, i) => (
-												<div key={i} className='admin-cs-row-card'>
-													<div
-														className='admin-form-row'
-														style={{ alignItems: 'flex-end' }}
-													>
-														<div
-															className='admin-form-group'
-															style={{ flex: '0 0 140px' }}
-														>
-															<label>Value</label>
-															<input
-																type='text'
-																className='admin-input'
-																placeholder='2x, ~40%, 14k+'
-																value={m.value}
-																onChange={(e) =>
-																	updateMetric(i, 'value', e.target.value)
-																}
-															/>
-														</div>
-														<div className='admin-form-group'>
-															<label>Label</label>
-															<input
-																type='text'
-																className='admin-input'
-																placeholder='Speed improvement'
-																value={m.label}
-																onChange={(e) =>
-																	updateMetric(i, 'label', e.target.value)
-																}
-															/>
-														</div>
-														<button
-															type='button'
-															className='admin-btn-icon delete admin-cs-row-delete'
-															onClick={() => removeMetric(i)}
-															title='Remove'
-														>
-															<TrashIcon />
-														</button>
-													</div>
-												</div>
-											))}
-
-											<div
-												className='admin-form-group'
-												style={{ marginTop: 8 }}
-											>
+											{/* ── Impact Context */}
+											<div className='admin-form-group' style={{ marginTop: 16 }}>
 												<label>
 													Impact context{' '}
 													<span
@@ -2274,12 +2211,12 @@ export default function AdminPage() {
 															fontSize: 12,
 														}}
 													>
-														(narrative below metrics)
+														(narrative description of results)
 													</span>
 												</label>
 												<textarea
 													className='admin-textarea'
-													rows={3}
+													rows={4}
 													placeholder='What do the numbers mean for the business, team, or customer?'
 													value={csForm.impactContext}
 													onChange={(e) =>

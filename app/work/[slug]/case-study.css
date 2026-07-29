@@ -222,6 +222,34 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
+   SECTION 4 — Bulleted Key Decisions style
+   ═══════════════════════════════════════════════════════════ */
+.cs-decision-bullets {
+	list-style: none;
+	padding: 0;
+	margin: 20px 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.cs-decision-bullet-item {
+	position: relative;
+	padding-left: 24px;
+	font-size: 15px;
+	line-height: 1.65;
+	color: #b0b0bc;
+}
+
+.cs-decision-bullet-item::before {
+	content: "—";
+	position: absolute;
+	left: 0;
+	color: #4a7aff;
+	font-weight: bold;
+}
+
+/* ═══════════════════════════════════════════════════════════
    SECTION 5 — Media Grid
    ═══════════════════════════════════════════════════════════ */
 .cs-media-grid {
