@@ -117,6 +117,47 @@ const emptyCaseStudy: CaseStudyForm = {
 	nextTitle: '',
 };
 
+const MAX_AI_FILES = 10;
+
+interface AiMessage {
+	role: 'user' | 'ai';
+	text: string;
+	fields?: string[];
+}
+
+/* Case study fields the AI can write, and how they read in the UI. */
+const CS_FIELD_LABELS: Record<string, string> = {
+	company: 'Company',
+	organization: 'Organization',
+	title: 'Title',
+	dateRange: 'Date range',
+	role: 'Role',
+	teamSize: 'Team size',
+	tags: 'Tags',
+	tldr: 'TL;DR',
+	roleAndApproach: 'My role and approach',
+	keyDecisions: 'Key decisions',
+	whatWasBuilt: 'What was built',
+	metrics: 'Impact metrics',
+	impactContext: 'Impact context',
+	reflection: 'Reflection',
+	links: 'Links',
+};
+
+const CS_TEXT_FIELDS = [
+	'company',
+	'organization',
+	'title',
+	'dateRange',
+	'role',
+	'teamSize',
+	'tldr',
+	'roleAndApproach',
+	'whatWasBuilt',
+	'impactContext',
+	'reflection',
+] as const;
+
 const LINK_ICON_OPTIONS = [
 	'github',
 	'file',
@@ -392,7 +433,10 @@ export default function AdminPage() {
 	const [aiFilling, setAiFilling] = useState(false);
 	const [aiNotes, setAiNotes] = useState('');
 	const [aiOverwrite, setAiOverwrite] = useState(false);
-	const [aiFileName, setAiFileName] = useState('');
+	const [aiFiles, setAiFiles] = useState<File[]>([]);
+	const [aiChat, setAiChat] = useState<AiMessage[]>([]);
+	const [aiInput, setAiInput] = useState('');
+	const [aiChatting, setAiChatting] = useState(false);
 
 	const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 	const [toast, setToast] = useState<Toast | null>(null);
@@ -694,16 +738,41 @@ export default function AdminPage() {
 
 	/* ─── AI fill from document ─────────────────────────── */
 
-	const handleAiFill = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
+	// Files accumulate across picks, so several trips to the file dialog
+	// (or several folders) can feed one fill.
+	const handleAiFilesChosen = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const picked = Array.from(e.target.files ?? []);
 		e.target.value = ''; // allow re-picking the same file
-		if (!file) return;
+		if (!picked.length) return;
 
-		setAiFileName(file.name);
+		setAiFiles((prev) => {
+			const merged = [...prev];
+			let skipped = 0;
+			for (const f of picked) {
+				if (merged.some((x) => x.name === f.name && x.size === f.size))
+					continue;
+				if (merged.length >= MAX_AI_FILES) {
+					skipped++;
+					continue;
+				}
+				merged.push(f);
+			}
+			if (skipped)
+				showToast(`Only ${MAX_AI_FILES} documents at a time`, 'error');
+			return merged;
+		});
+	};
+
+	const removeAiFile = (i: number) =>
+		setAiFiles((prev) => prev.filter((_, idx) => idx !== i));
+
+	const handleAiFill = async () => {
+		if (!aiFiles.length) return;
+
 		setAiFilling(true);
 		try {
 			const body = new FormData();
-			body.append('file', file);
+			for (const file of aiFiles) body.append('file', file);
 			if (aiNotes.trim()) body.append('notes', aiNotes);
 
 			const res = await fetch('/api/admin/ai-fill', {
@@ -818,6 +887,149 @@ export default function AdminPage() {
 		}
 	};
 
+	/* ─── AI chat: rewrite only the sections asked about ─── */
+
+	// The draft in the same shape the AI returns it, so it can reason about
+	// what is already written before deciding what to touch.
+	const csDraftPayload = () => ({
+		company: csForm.company,
+		organization: csForm.organization,
+		title: csForm.title || formData.title,
+		dateRange: csForm.dateRange,
+		role: csForm.role,
+		teamSize: csForm.teamSize,
+		tags: csForm.tags
+			.split(',')
+			.map((t) => t.trim())
+			.filter(Boolean),
+		tldr: csForm.tldr,
+		roleAndApproach: csForm.roleAndApproach,
+		keyDecisions: csForm.keyDecisions.filter((d) => d.trim()),
+		whatWasBuilt: csForm.whatWasBuilt,
+		metrics: csForm.metrics.filter((m) => m.value.trim() || m.label.trim()),
+		impactContext: csForm.impactContext,
+		reflection: csForm.reflection,
+		links: csForm.links,
+	});
+
+	// Writes back only the keys the AI returned; everything else is left alone.
+	const applyAiUpdates = (updates: Record<string, unknown>): string[] => {
+		const changed: string[] = [];
+		const next = { ...csForm };
+
+		for (const key of CS_TEXT_FIELDS) {
+			const value = updates[key];
+			// An empty string means "no change" here, not "clear this field" —
+			// clearing is a manual action, so a stray blank can never wipe writing.
+			if (typeof value !== 'string' || !value.trim()) continue;
+			if (value === next[key]) continue;
+			(next[key] as string) = value;
+			changed.push(CS_FIELD_LABELS[key]);
+		}
+
+		if (Array.isArray(updates.tags) && updates.tags.length) {
+			next.tags = updates.tags.map((t: unknown) => String(t).trim()).join(', ');
+			changed.push(CS_FIELD_LABELS.tags);
+		}
+
+		// Slot-for-slot, so an untouched decision keeps its place in the list.
+		if (Array.isArray(updates.keyDecisions) && updates.keyDecisions.length) {
+			const kd = [...next.keyDecisions];
+			(updates.keyDecisions as unknown[]).forEach((item, idx) => {
+				if (idx < kd.length && typeof item === 'string' && item.trim()) {
+					kd[idx] = item.trim();
+				}
+			});
+			next.keyDecisions = kd;
+			changed.push(CS_FIELD_LABELS.keyDecisions);
+		}
+
+		if (Array.isArray(updates.metrics) && updates.metrics.length) {
+			next.metrics = (updates.metrics as MetricRow[]).map((m) => ({
+				value: m.value ?? '',
+				label: m.label ?? '',
+			}));
+			changed.push(CS_FIELD_LABELS.metrics);
+		}
+
+		if (Array.isArray(updates.links) && updates.links.length) {
+			next.links = (updates.links as LinkRow[])
+				.filter((l) => l?.url?.trim())
+				.map((l) => ({
+					icon: LINK_ICON_OPTIONS.includes(l.icon) ? l.icon : 'external',
+					label: l.label || 'Link',
+					url: l.url,
+				}));
+			changed.push(CS_FIELD_LABELS.links);
+		}
+
+		if (next.reflection.trim()) next.showReflection = true;
+
+		if (changed.length) setCsForm(next);
+		return changed;
+	};
+
+	const handleAiChat = async () => {
+		const instruction = aiInput.trim();
+		if (!instruction || aiChatting) return;
+
+		const history = aiChat;
+		setAiChat((prev) => [...prev, { role: 'user', text: instruction }]);
+		setAiInput('');
+		setAiChatting(true);
+
+		try {
+			const body = new FormData();
+			body.append('instruction', instruction);
+			body.append('draft', JSON.stringify(csDraftPayload()));
+			body.append('history', JSON.stringify(history));
+			// Resend the sources so "pull the number from the deck" still works.
+			for (const file of aiFiles) body.append('file', file);
+
+			const res = await fetch('/api/admin/ai-refine', {
+				method: 'POST',
+				headers: { 'x-admin-password': storedPassword },
+				body,
+			});
+			const json = await res.json();
+
+			if (!res.ok) {
+				setAiChat((prev) => [
+					...prev,
+					{ role: 'ai', text: json.error || 'That did not work.' },
+				]);
+				showToast(json.error || 'AI edit failed', 'error');
+				return;
+			}
+
+			const changed = applyAiUpdates(json.updates ?? {});
+			setAiChat((prev) => [
+				...prev,
+				{
+					role: 'ai',
+					text:
+						json.reply ||
+						(changed.length ? 'Updated.' : 'I did not change anything.'),
+					fields: changed,
+				},
+			]);
+			if (changed.length) {
+				showToast(
+					`Rewrote ${changed.length} section${changed.length === 1 ? '' : 's'}`,
+					'success',
+				);
+			}
+		} catch {
+			setAiChat((prev) => [
+				...prev,
+				{ role: 'ai', text: 'That request failed. Try again.' },
+			]);
+			showToast('AI edit failed', 'error');
+		} finally {
+			setAiChatting(false);
+		}
+	};
+
 	/* ─── Load case study for editing ──────────────────── */
 
 	const loadCaseStudy = useCallback(
@@ -886,12 +1098,21 @@ export default function AdminPage() {
 
 	/* ─── Open modals ───────────────────────────────────── */
 
+	const resetAiPanel = () => {
+		setAiFiles([]);
+		setAiNotes('');
+		setAiOverwrite(false);
+		setAiChat([]);
+		setAiInput('');
+	};
+
 	const openAddModal = () => {
 		setEditIndex(null);
 		setFormData({ ...emptyItem, categories: [] });
 		setCsForm(emptyCaseStudy);
 		setCsLoaded(false);
 		setModalTab('basic');
+		resetAiPanel();
 		setModalOpen(true);
 	};
 
@@ -902,6 +1123,7 @@ export default function AdminPage() {
 		setCsForm(emptyCaseStudy);
 		setCsLoaded(false);
 		setModalTab('basic');
+		resetAiPanel();
 		setModalOpen(true);
 		if (activeTab === 'works') {
 			await loadCaseStudy(item.slug ?? titleToSlug(item.title));
@@ -1708,11 +1930,12 @@ export default function AdminPage() {
 												{aiOpen && (
 													<div className='admin-ai-body'>
 														<p className='admin-ai-hint'>
-															Upload a project doc (PDF, TXT, MD, or a
-															screenshot) and Gemini drafts the written sections
-															below. Media, slug, and navigation are never
-															touched — and nothing is saved until you hit “Save
-															Case Study”.
+															Upload up to {MAX_AI_FILES} project docs (PDF,
+															TXT, MD, or screenshots) and Gemini reads them
+															together to draft the written sections below.
+															Media, slug, and navigation are never touched —
+															and nothing is saved until you hit “Save Case
+															Study”.
 														</p>
 
 														<div className='admin-form-group'>
@@ -1739,38 +1962,83 @@ export default function AdminPage() {
 															/>
 														</div>
 
+														{aiFiles.length > 0 && (
+															<ul className='admin-ai-file-list'>
+																{aiFiles.map((f, i) => (
+																	<li
+																		key={`${f.name}-${f.size}`}
+																		className='admin-ai-file'
+																	>
+																		<span className='admin-ai-file-name'>
+																			{f.name}
+																		</span>
+																		<span className='admin-ai-file-size'>
+																			{(f.size / 1024).toFixed(0)} KB
+																		</span>
+																		<button
+																			type='button'
+																			className='admin-ai-file-remove'
+																			onClick={() => removeAiFile(i)}
+																			disabled={aiFilling}
+																			title='Remove'
+																		>
+																			<CloseIcon />
+																		</button>
+																	</li>
+																))}
+															</ul>
+														)}
+
 														<div className='admin-ai-actions'>
 															<div className='admin-file-upload-btn-wrapper'>
 																<div
 																	className={`admin-ai-upload-btn${aiFilling ? ' disabled' : ''}`}
 																>
-																	{aiFilling ? (
-																		<>
-																			<span
-																				className='admin-spinner'
-																				style={{
-																					width: '0.875rem',
-																					height: '0.875rem',
-																					borderWidth: '1.5px',
-																					borderTopColor: '#a78bfa',
-																				}}
-																			/>
-																			<span>Reading {aiFileName}…</span>
-																		</>
-																	) : (
-																		<>
-																			<SparkleIcon />
-																			<span>Choose document</span>
-																		</>
-																	)}
+																	<SparkleIcon />
+																	<span>
+																		{aiFiles.length
+																			? 'Add more documents'
+																			: 'Choose documents'}
+																	</span>
 																</div>
 																<input
 																	type='file'
+																	multiple
 																	accept='.pdf,.txt,.md,.markdown,.csv,.json,.html,.htm,.rtf,.png,.jpg,.jpeg,.webp'
-																	onChange={handleAiFill}
+																	onChange={handleAiFilesChosen}
 																	disabled={aiFilling}
 																/>
 															</div>
+
+															<button
+																type='button'
+																className='admin-ai-run-btn'
+																onClick={handleAiFill}
+																disabled={aiFilling || aiFiles.length === 0}
+															>
+																{aiFilling ? (
+																	<>
+																		<span
+																			className='admin-spinner'
+																			style={{
+																				width: '0.875rem',
+																				height: '0.875rem',
+																				borderWidth: '1.5px',
+																				borderTopColor: '#fff',
+																			}}
+																		/>
+																		<span>
+																			Reading {aiFiles.length} document
+																			{aiFiles.length === 1 ? '' : 's'}…
+																		</span>
+																	</>
+																) : (
+																	<span>
+																		Fill from {aiFiles.length || 'no'} document
+																		{aiFiles.length === 1 ? '' : 's'}
+																	</span>
+																)}
+															</button>
 
 															<label className='admin-cs-toggle'>
 																<input
@@ -1784,6 +2052,81 @@ export default function AdminPage() {
 																	Overwrite fields that already have content
 																</span>
 															</label>
+														</div>
+
+														{/* ── Refine by chat */}
+														<div className='admin-ai-chat'>
+															<div className='admin-ai-chat-label'>
+																Ask for changes
+																<span className='admin-ai-chat-sub'>
+																	rewrites only the sections you name
+																</span>
+															</div>
+
+															{aiChat.length > 0 && (
+																<div className='admin-ai-chat-log'>
+																	{aiChat.map((m, i) => (
+																		<div
+																			key={`${i}-${m.role}`}
+																			className={`admin-ai-msg admin-ai-msg--${m.role}`}
+																		>
+																			<div className='admin-ai-msg-text'>
+																				{m.text}
+																			</div>
+																			{m.fields && m.fields.length > 0 && (
+																				<div className='admin-ai-msg-fields'>
+																					Updated: {m.fields.join(', ')}
+																				</div>
+																			)}
+																		</div>
+																	))}
+																	{aiChatting && (
+																		<div className='admin-ai-msg admin-ai-msg--ai'>
+																			<div className='admin-ai-msg-text admin-ai-msg-thinking'>
+																				<span
+																					className='admin-spinner'
+																					style={{
+																						width: '0.75rem',
+																						height: '0.75rem',
+																						borderWidth: '1.5px',
+																						borderTopColor: '#a78bfa',
+																					}}
+																				/>
+																				<span>Rewriting…</span>
+																			</div>
+																		</div>
+																	)}
+																</div>
+															)}
+
+															<div className='admin-ai-chat-row'>
+																<textarea
+																	className='admin-textarea admin-ai-chat-input'
+																	rows={2}
+																	placeholder="e.g. The TL;DR isn't right — say it cut onboarding from two weeks to two days."
+																	value={aiInput}
+																	onChange={(e) => setAiInput(e.target.value)}
+																	onKeyDown={(e) => {
+																		if (e.key === 'Enter' && !e.shiftKey) {
+																			e.preventDefault();
+																			handleAiChat();
+																		}
+																	}}
+																	disabled={aiChatting}
+																/>
+																<button
+																	type='button'
+																	className='admin-ai-send-btn'
+																	onClick={handleAiChat}
+																	disabled={aiChatting || !aiInput.trim()}
+																>
+																	Send
+																</button>
+															</div>
+															<div className='admin-ai-chat-hint'>
+																Enter to send, Shift+Enter for a new line. Every
+																other section stays exactly as you wrote it.
+															</div>
 														</div>
 													</div>
 												)}
@@ -1953,9 +2296,21 @@ export default function AdminPage() {
 											<div className='admin-cs-section-label'>
 												2–3 key decisions (bullets)
 											</div>
-											<div className='admin-cs-card' style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 16 }}>
+											<div
+												className='admin-cs-card'
+												style={{
+													display: 'flex',
+													flexDirection: 'column',
+													gap: 12,
+													padding: 16,
+												}}
+											>
 												{csForm.keyDecisions.map((kd, idx) => (
-													<div key={idx} className='admin-form-group' style={{ margin: 0 }}>
+													<div
+														key={idx}
+														className='admin-form-group'
+														style={{ margin: 0 }}
+													>
 														<label>Decision {idx + 1}</label>
 														<input
 															type='text'
@@ -2146,7 +2501,7 @@ export default function AdminPage() {
 																		value={m.caption}
 																		onChange={(e) =>
 																			updateMedia(i, 'caption', e.target.value)
-         																}
+																		}
 																	/>
 																</div>
 																<label
@@ -2201,7 +2556,10 @@ export default function AdminPage() {
 											)}
 
 											{/* ── Impact Context */}
-											<div className='admin-form-group' style={{ marginTop: 16 }}>
+											<div
+												className='admin-form-group'
+												style={{ marginTop: 16 }}
+											>
 												<label>
 													Impact context{' '}
 													<span
