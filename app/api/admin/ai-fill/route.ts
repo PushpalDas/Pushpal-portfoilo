@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import {
 	CASE_STUDY_FIELDS,
-	callGemini,
+	callModel,
 	DEFAULT_ROLE,
 	FIELD_ORDER,
 	filesToParts,
+	normalizeProvider,
 	normalizeRole,
 	validateFiles,
 	voiceRules,
@@ -42,17 +43,6 @@ export async function POST(request: Request) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	const apiKey = process.env.GEMINI_API_KEY;
-	if (!apiKey) {
-		return NextResponse.json(
-			{
-				error:
-					'GEMINI_API_KEY is not set. Add it to .env.local and restart the dev server.',
-			},
-			{ status: 500 },
-		);
-	}
-
 	try {
 		const formData = await request.formData();
 		const files = formData
@@ -62,6 +52,9 @@ export async function POST(request: Request) {
 		const rawRole = (formData.get('role') as string | null) ?? '';
 		const role = normalizeRole(rawRole);
 		const roleWasGiven = rawRole.trim().length > 0;
+		const provider = normalizeProvider(
+			formData.get('provider') as string | null,
+		);
 
 		if (files.length === 0) {
 			return NextResponse.json(
@@ -107,7 +100,12 @@ export async function POST(request: Request) {
 			});
 		}
 
-		const result = await callGemini(apiKey, parts, RESPONSE_SCHEMA);
+		const result = await callModel(
+			provider,
+			parts,
+			RESPONSE_SCHEMA,
+			'case_study',
+		);
 		if (!result.ok) {
 			return NextResponse.json(
 				{ error: result.error },

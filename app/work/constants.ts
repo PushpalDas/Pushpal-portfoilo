@@ -54,6 +54,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 204138.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'xana-multifile-rag-based-data-singularity-platform',
 		categories: ['products'],
 	},
 	{
@@ -80,6 +81,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_cu0wo9cu0wo9cu0w.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'quantum-circuit-simulator-interactive-10-qubit-delivering-re',
 		categories: ['products'],
 	},
 	{
@@ -91,6 +93,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
 		color: '',
 		url: '',
+		slug: 'procurement-orchestrator-procurement-process-automation-with',
 		categories: ['products'],
 	},
 	{
@@ -152,6 +155,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_r5lormr5lormr5lo.png',
 		color: '#ddd6fe',
 		url: 'https://10xar-my.sharepoint.com/my?id=%2Fpersonal%2Fpushpal%5Fdas%5Fixana%5Fai%2FDocuments%2FAnuj%20tasks%2FProject%20Management%20Agentic%20Ai%2FRoot%20Cause%20Analyse&viewid=c9c2956f%2D87bf%2D415b%2D8b2a%2D598c7b0a1b99&csf=1&FolderCTID=0x012000D839801D2B34804CB13555A64E4ECD83',
+		slug: 'ai-pm-generative-ai-engine-for-rca-report-automation',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -183,6 +187,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 204942.png',
 		color: '#fae8ff',
 		url: '',
+		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -204,6 +209,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 210159.png',
 		color: '#fae8ff',
 		url: 'https://10xar-my.sharepoint.com/my?csf=1&web=1&e=VPo0gz&id=%2Fpersonal%2Fpushpal%5Fdas%5Fixana%5Fai%2FDocuments%2FAnuj%20tasks%2FVideo%20lib%20automation&FolderCTID=0x012000D839801D2B34804CB13555A64E4ECD83',
+		slug: 'ixana-video-library-automated-company-video-library',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -215,6 +221,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_gvbkgbgvbkgbgvbk.png',
 		color: '#fae8ff',
 		url: 'https://10xar-my.sharepoint.com/my?csf=1&web=1&e=3pGPGD&id=%2Fpersonal%2Fpushpal%5Fdas%5Fixana%5Fai%2FDocuments%2FAyush%20tasks%2FProject%20%2D%20Calender%20Operations&FolderCTID=0x012000D839801D2B34804CB13555A64E4ECD83',
+		slug: 'calendar-automation-real-time-bi-directional-sync-engine-wit',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -240,6 +247,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_nb01uqnb01uqnb01.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -251,6 +259,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_id58jjid58jjid58.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		categories: ['products'],
 	},
 	{
@@ -261,6 +270,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 203527.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'ai-pm-customized-multi-view-for-pms',
 		categories: ['products'],
 	},
 	{
@@ -282,6 +292,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 205209.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'patent-tracker-generative-ai-engine-for-data-extraction',
 		categories: ['products'],
 	},
 	{
@@ -293,6 +304,7 @@ export const workItems = [
 		src: 'Screenshot 2026-07-05 205838.png',
 		color: '#dbeafe',
 		url: '',
+		slug: 'clickup-document-tracker-data-extraction-easy-visibility-for',
 		categories: ['products'],
 	},
 	{

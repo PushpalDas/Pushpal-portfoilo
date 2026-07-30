@@ -4,6 +4,20 @@
 export const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 export const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
+export const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-5.4';
+export const OPENAI_URL = 'https://api.openai.com/v1/responses';
+
+export type Provider = 'gemini' | 'openai';
+
+export function normalizeProvider(raw: string | null | undefined): Provider {
+	return raw === 'openai' ? 'openai' : 'gemini';
+}
+
+export const PROVIDER_LABELS: Record<Provider, string> = {
+	gemini: 'Gemini',
+	openai: 'OpenAI',
+};
+
 // Inline uploads share the request body, which Gemini caps at ~20MB.
 export const MAX_BYTES = 15 * 1024 * 1024;
 export const MAX_FILES = 10;
@@ -198,6 +212,8 @@ export async function filesToParts(files: File[]): Promise<GeminiPart[]> {
 				inline_data: {
 					mime_type: BINARY_MIME[ext],
 					data: buffer.toString('base64'),
+					// OpenAI's input_file wants a filename alongside the bytes.
+					filename: file.name,
 				},
 			});
 		} else {
@@ -222,11 +238,184 @@ export function validateFiles(files: File[]): string | null {
 	return null;
 }
 
-/* ─── Gemini call ─────────────────────────────────────────── */
+/* ─── Model calls ─────────────────────────────────────────── */
 
 type GeminiResult =
 	| { ok: true; data: Record<string, unknown> }
 	| { ok: false; error: string; status: number };
+
+/* Gemini takes uppercase type names and its own propertyOrdering hint;
+   OpenAI wants plain JSON Schema. Same schema object, two dialects. */
+function toJsonSchema(node: unknown): unknown {
+	if (Array.isArray(node)) return node.map(toJsonSchema);
+	if (!node || typeof node !== 'object') return node;
+
+	const out: Record<string, unknown> = {};
+	for (const [key, value] of Object.entries(node as Record<string, unknown>)) {
+		if (key === 'propertyOrdering') continue;
+		if (key === 'type' && typeof value === 'string') {
+			out.type = value.toLowerCase();
+		} else {
+			out[key] = toJsonSchema(value);
+		}
+	}
+	return out;
+}
+
+/* Gemini keeps text and inline files in one flat parts list. OpenAI's
+   Responses API wants typed content blocks, with PDFs and images differing. */
+function partsToOpenAIContent(parts: GeminiPart[]): Record<string, unknown>[] {
+	const content: Record<string, unknown>[] = [];
+
+	for (const part of parts) {
+		if (typeof part.text === 'string') {
+			content.push({ type: 'input_text', text: part.text });
+			continue;
+		}
+
+		const inline = part.inline_data as
+			| { mime_type?: string; data?: string; filename?: string }
+			| undefined;
+		if (!inline?.data || !inline.mime_type) continue;
+
+		const dataUrl = `data:${inline.mime_type};base64,${inline.data}`;
+		if (inline.mime_type === 'application/pdf') {
+			content.push({
+				type: 'input_file',
+				filename: inline.filename || 'document.pdf',
+				file_data: dataUrl,
+			});
+		} else {
+			content.push({ type: 'input_image', image_url: dataUrl });
+		}
+	}
+
+	return content;
+}
+
+export async function callOpenAI(
+	apiKey: string,
+	parts: GeminiPart[],
+	responseSchema: unknown,
+	schemaName: string,
+): Promise<GeminiResult> {
+	const res = await fetch(OPENAI_URL, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${apiKey}`,
+		},
+		body: JSON.stringify({
+			model: OPENAI_MODEL,
+			input: [{ role: 'user', content: partsToOpenAIContent(parts) }],
+			text: {
+				format: {
+					type: 'json_schema',
+					name: schemaName,
+					// Not strict: the refine flow depends on the model being able to
+					// omit fields it did not change.
+					strict: false,
+					schema: toJsonSchema(responseSchema),
+				},
+			},
+		}),
+	});
+
+	if (!res.ok) {
+		const detail = await res.text();
+		console.error('OpenAI error:', res.status, detail);
+		if (res.status === 401) {
+			return {
+				ok: false,
+				status: 502,
+				error: 'OpenAI rejected the key. Check OPENAI_API_KEY in .env.local.',
+			};
+		}
+		if (res.status === 404) {
+			return {
+				ok: false,
+				status: 502,
+				error: `Model "${OPENAI_MODEL}" is not available on this key. Set OPENAI_MODEL in .env.local.`,
+			};
+		}
+		if (res.status === 429) {
+			return {
+				ok: false,
+				status: 502,
+				error: 'OpenAI rate limit or quota hit. Try again shortly.',
+			};
+		}
+		return {
+			ok: false,
+			status: 502,
+			error: `OpenAI request failed (${res.status}).`,
+		};
+	}
+
+	const json = await res.json();
+
+	// Walk output[].content[] for the text blocks; reasoning items have none.
+	const raw: string =
+		json.output_text ??
+		(Array.isArray(json.output)
+			? json.output
+					.flatMap((item: { content?: { text?: string }[] }) =>
+						Array.isArray(item.content) ? item.content : [],
+					)
+					.map((c: { text?: string }) => c.text ?? '')
+					.join('')
+			: '');
+
+	if (!raw.trim()) {
+		return {
+			ok: false,
+			status: 502,
+			error:
+				json.status === 'incomplete'
+					? 'OpenAI ran out of output room. Try a shorter document.'
+					: 'OpenAI returned an empty response.',
+		};
+	}
+
+	try {
+		return { ok: true, data: JSON.parse(raw) };
+	} catch {
+		console.error('OpenAI returned non-JSON:', raw.slice(0, 500));
+		return { ok: false, status: 502, error: 'OpenAI returned malformed JSON.' };
+	}
+}
+
+/** Routes to whichever provider the author picked. */
+export async function callModel(
+	provider: Provider,
+	parts: GeminiPart[],
+	responseSchema: unknown,
+	schemaName: string,
+): Promise<GeminiResult> {
+	if (provider === 'openai') {
+		const key = process.env.OPENAI_API_KEY;
+		if (!key) {
+			return {
+				ok: false,
+				status: 500,
+				error:
+					'OPENAI_API_KEY is not set. Add it to .env.local and restart the dev server, or switch to Gemini.',
+			};
+		}
+		return callOpenAI(key, parts, responseSchema, schemaName);
+	}
+
+	const key = process.env.GEMINI_API_KEY;
+	if (!key) {
+		return {
+			ok: false,
+			status: 500,
+			error:
+				'GEMINI_API_KEY is not set. Add it to .env.local and restart the dev server, or switch to OpenAI.',
+		};
+	}
+	return callGemini(key, parts, responseSchema);
+}
 
 export async function callGemini(
 	apiKey: string,

@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import {
 	CASE_STUDY_FIELDS,
-	callGemini,
+	callModel,
 	FIELD_ORDER,
 	filesToParts,
+	normalizeProvider,
 	normalizeRole,
 	validateFiles,
 	voiceRules,
@@ -56,17 +57,6 @@ export async function POST(request: Request) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	const apiKey = process.env.GEMINI_API_KEY;
-	if (!apiKey) {
-		return NextResponse.json(
-			{
-				error:
-					'GEMINI_API_KEY is not set. Add it to .env.local and restart the dev server.',
-			},
-			{ status: 500 },
-		);
-	}
-
 	try {
 		const formData = await request.formData();
 		const instruction = (
@@ -75,6 +65,9 @@ export async function POST(request: Request) {
 		const draftRaw = (formData.get('draft') as string | null) ?? '{}';
 		const historyRaw = (formData.get('history') as string | null) ?? '[]';
 		const role = normalizeRole(formData.get('role') as string | null);
+		const provider = normalizeProvider(
+			formData.get('provider') as string | null,
+		);
 		const files = formData
 			.getAll('file')
 			.filter((f): f is File => f instanceof File);
@@ -133,7 +126,12 @@ export async function POST(request: Request) {
 
 		parts.push({ text: `The author's instruction now:\n${instruction}` });
 
-		const result = await callGemini(apiKey, parts, RESPONSE_SCHEMA);
+		const result = await callModel(
+			provider,
+			parts,
+			RESPONSE_SCHEMA,
+			'case_study_edit',
+		);
 		if (!result.ok) {
 			return NextResponse.json(
 				{ error: result.error },

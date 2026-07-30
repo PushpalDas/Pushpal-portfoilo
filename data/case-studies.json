@@ -143,5 +143,960 @@
     "links": [],
     "prevProject": null,
     "nextProject": null
+  },
+  "quantum-circuit-simulator-interactive-10-qubit-delivering-re": {
+    "slug": "quantum-circuit-simulator-interactive-10-qubit-delivering-re",
+    "company": "",
+    "organization": "",
+    "title": "Quantum Gate Simulator",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
+    "roleAndApproach": "What I owned: I led product scope, technical requirements, and milestone execution across backend numerical logic and frontend visualization components. I aligned system design between Python matrix operations, the drag-and-drop circuit builder grid, and the prebuilt algorithm library.\n\nTradeoffs I navigated: Simulation capacity vs. interface responsiveness. I capped the backend state vector engine at 10 qubits to keep matrix operations fast on NumPy while ensuring smooth, instant rendering of 3D Bloch spheres on client devices.",
+    "keyDecisions": [
+      "I chose a FastAPI and NumPy backend for state vector operations rather than client-side JavaScript execution to maintain fast linear algebra processing isolated from UI rendering.",
+      "I selected Three.js and React Three Fiber for state visualization to give users interactive 3D Bloch spheres instead of static 2D vector tables.",
+      "I structured a prebuilt circuit library with pre-loaded instruction sets to help users quickly verify standard quantum algorithms such as Bell and GHZ states."
+    ],
+    "whatWasBuilt": "A web application for constructing, simulating, and visualizing quantum circuits. Users can place single-qubit and multi-qubit gates on an interactive timeline grid. The system calculates complex state vectors, probabilities, measurement shot distributions, and 3D Bloch sphere coordinates for each qubit. It serves students, educators, and developers learning quantum logic.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "10",
+        "label": "Maximum qubit simulation capacity"
+      },
+      {
+        "value": "32",
+        "label": "Passed backend test cases"
+      },
+      {
+        "value": "1.34s",
+        "label": "Total test suite execution time"
+      }
+    ],
+    "impactContext": "These outcomes confirm accurate physics calculations and sub-second validation, enabling users to test circuits with reliable performance.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-pm-customized-multi-view-for-pms": {
+    "slug": "ai-pm-customized-multi-view-for-pms",
+    "company": "",
+    "organization": "",
+    "title": "ClickUp Reporting & Gantt Dashboard",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Project Management",
+      "Analytics Dashboards",
+      "ClickUp API",
+      "AI Delay Analysis",
+      "Resource Planning"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Project managers and engineering leads lacked clear visibility into team workloads, timelines, and root causes of task delays across ClickUp workspaces.\n\nWhat we did: I led the product scope and requirements for a read-only analytics platform featuring custom Gantt charts, workload bandwidth tracking, and AI-driven delay diagnostics.\n\nResult: The platform provided multi-dimensional operational visibility across projects while preventing accidental data mutations in the primary ClickUp workspace.",
+    "roleAndApproach": "What I owned: I defined the product roadmap and functional scope for a read-only analytics platform built on the ClickUp API v2. I drove alignment on core feature requirements across individual, team, and project views, focusing on workload bandwidth planning, visual timeline exports, and automated task delay analysis.\n\nTradeoffs I navigated: API rate limits vs. data freshness: I specified a 5-minute cache TTL for team task queries and a 30-minute cache for LLM delay analyses to prevent ClickUp endpoint throttling while keeping data relevant. Feature scope vs. data safety: I limited the application to read-only views to eliminate data corruption risks in active ClickUp workspaces and shorten time to launch.",
+    "keyDecisions": [
+      "Built a custom SVG Gantt engine instead of using third-party chart libraries to support dynamic scale switching and instant SVG rendering exports.",
+      "Routed all ClickUp interactions through Next.js server-side route handlers with multi-tiered caching to protect API credentials and prevent rate limiting.",
+      "Integrated OpenAI gpt-4o-mini to automatically synthesize task comment threads into technical and non-technical delay cause breakdowns."
+    ],
+    "whatWasBuilt": "A read-only reporting and visualization dashboard serving individual contributors, engineering leads, and project managers. The platform aggregates ClickUp tasks into hierarchical trees, custom SVG Gantt timelines, team bandwidth allocation grids, and Kanban status boards. An integrated AI analysis tool reads task comments to explain why tasks were delayed.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      }
+    ],
+    "impactContext": "The platform gave leaders cross-project visibility into task bottlenecks and team capacity without risking accidental edits to primary workspace data.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys": {
+    "slug": "ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys",
+    "company": "",
+    "organization": "",
+    "title": "AI Lawyer | Multi Agent, Multi LLM Shared Memory Generative System ",
+    "dateRange": "",
+    "role": "Project Manager",
+    "teamSize": "",
+    "tags": [
+      "AI agents",
+      "Patent drafting",
+      "Retrieval systems",
+      "Evaluation harness",
+      "Workflow orchestration",
+      "Governance"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Patent drafting for UI inventions needed a safer and more reliable way to turn inventor disclosures into attorney-review patent application drafts without leaking trade-secret candidates or drafting around prior art the system never found.\n\nWhat we did: I scoped the pilot to the US first, reordered the build around retrieval quality and governance, and defined a staged plan for a multi-agent system with shared memory, human gates, provenance, evaluation, and Patent Center-ready DOCX output.\n\nResult: We moved the project from research into an execution-ready plan, completed the cost, caching, and provenance core with 49 tests passing, and set measurable quality gates before downstream drafting work could ship.",
+    "roleAndApproach": "What I owned: I owned scope, build order, delivery plan, and the operating rules for the system. I set the pilot to US only through filing output, with India deferred. I prioritized foundations that would be costly to retrofit, especially provenance, cost tracking, security, and Gate 0 enforcement. I defined the milestone sequence, acceptance criteria, risk register, and the dependencies between retrieval, evaluation, drafting, review, and export. I also aligned the system around attorney-review drafts rather than autonomous filing and made DOCX the filing artifact for the US path.\n\nTradeoffs I navigated: I chose US-first over parallel US and India to avoid mixing different legal standards in the same drafting flow and to use the stronger USPTO data and filing path first. I put retrieval and evaluation ahead of most agent work because recall risk would drive downstream quality more than prompt changes would. I delayed the orchestrator until the actual control flow was known from logged runs, rather than centralizing assumptions too early. I treated Gate 0 as a containment boundary at intake, not a later strategy step, because protecting trade-secret candidates mattered more than pipeline convenience. I also balanced model quality against operating cost by reserving heavier reasoning models for high-stakes tasks and lighter models for output-heavy or mechanical work.",
+    "keyDecisions": [
+      "I scoped the pilot to the US through filing output and moved India to a later phase. This reduced legal and operational complexity and let the team build on USPTO APIs and DOCX filing instead of mixing in India's more manual path too early.",
+      "I made retrieval and evaluation the critical path ahead of most drafting agents. I did this because weak recall would undermine every downstream draft, while an early gold-set harness gave us a way to measure progress and catch regressions.",
+      "I required Gate 0 enforcement at intake and inside outbound clients, while delaying the full orchestrator until later. This protected sensitive disclosures before any external calls and avoided hard-coding workflow assumptions before the team had evidence from real runs."
+    ],
+    "whatWasBuilt": "This project defined a multi-agent system that turns UI invention disclosures into attorney-review patent application drafts for the US filing path. The planned product serves patent attorneys and internal teams who need prior-art research, claims, specification drafts, figure support, review checkpoints, and filing-ready output in one managed workflow. I structured the system around a shared memory layer, a retrieval layer, specialized drafting and review agents, and reusable human gates so legal review stays in the loop.\n\nThe system design starts with intake, controlled terminology, company templates, portfolio memory, versioned drafts, a reference numeral registry, and universal provenance. From there it moves into normalized prior-art retrieval across patent and non-patent sources, measured against a gold set before generative drafting work proceeds. Downstream agents draft claims, write the specification, generate figure descriptions, critique the draft through novelty, compliance, and examiner-style review, and then revise it within a bounded loop. The export path produces a DOCX package for specification, claims, and abstract, plus PDF drawings, ADS data, and IDS support for attorney handoff and Patent Center validation.\n\nThe current implementation status is early but concrete. The cost, caching, usage accounting, configuration, LLM client, and provenance core are built and tested. Database models, retrieval, shared memory, gates, drafting agents, and export are planned in detail but not yet started.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "49",
+        "label": "Tests passing"
+      },
+      {
+        "value": "7",
+        "label": "Planned retrieval sources in the evaluation milestone"
+      },
+      {
+        "value": "60–100",
+        "label": "Target size of the US UI patent gold set"
+      },
+      {
+        "value": "20–30",
+        "label": "Earlier gold-set estimate in the build plan"
+      },
+      {
+        "value": "4",
+        "label": "Maximum prior-art query refinement rounds"
+      },
+      {
+        "value": "2–3",
+        "label": "Maximum critic-loop iterations in the build plan"
+      },
+      {
+        "value": "3",
+        "label": "Maximum critic-loop iterations in the detailed plan"
+      },
+      {
+        "value": "±2%",
+        "label": "Target variance for computed cost reconciliation against a live invoice"
+      },
+      {
+        "value": "30m",
+        "label": "GPT-5.6 prompt cache retention window"
+      },
+      {
+        "value": "24h",
+        "label": "GPT-5.5 prompt cache retention option"
+      },
+      {
+        "value": "~$4–6",
+        "label": "Estimated cost per full draft cycle"
+      },
+      {
+        "value": "~$10–16",
+        "label": "Estimated cost per disclosure including two revision cycles"
+      }
+    ],
+    "impactContext": "These numbers set the operating guardrails before the team commits to full drafting automation. The passing test suite showed the foundation for token accounting, caching, and provenance was stable. The gold-set size and retrieval thresholds defined how we would judge whether research quality was good enough to trust later drafting steps. The iteration caps and cache rules controlled cost and latency so the review loop could stay practical for attorneys. The cost envelope showed model spend was manageable relative to outside counsel costs, which let us optimize for quality and reviewability rather than for token minimization alone.",
+    "reflection": "The main lesson was that the hard part was not the agent lineup. It was the retrieval quality, the evaluation discipline, and the governance boundaries around sensitive disclosures. I also found that several early assumptions had to be corrected before execution, including treating Red Book XML as a filing format and assuming some public patent data endpoints would work without credentials. If I were carrying this forward, I would keep the same order: prove recall early, keep the first filing path narrow, and delay orchestration until observed workflow justifies it.",
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "xana-multifile-rag-based-data-singularity-platform": {
+    "slug": "xana-multifile-rag-based-data-singularity-platform",
+    "company": "Ixana",
+    "organization": "",
+    "title": "Ixana-Wiki",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Knowledge management",
+      "Enterprise search",
+      "Document management",
+      "RAG search",
+      "Workflow integrations",
+      "Access control"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Ixana’s files, meeting records, ClickUp docs, and operational data were spread across separate systems, which made company knowledge hard to find and use.\n\nWhat we did: I led delivery of a single internal knowledge platform that pulled content from OneDrive, ClickUp, Teams, efficiency trackers, and patent records into one searchable repository with hybrid search, AI answers, secure access, and role-based content flows.\n\nResult: The team shipped an enterprise knowledge base with search, chat, video transcript navigation, analytics, and admin sync operations running in production on AWS with security controls documented and core vulnerabilities addressed.",
+    "roleAndApproach": "What I owned: I owned delivery of the product scope across ingestion, search, access, and user workflows. I aligned the platform around one goal: give internal teams one place to find documents, meeting context, task analytics, and patent records. I drove decisions on source coverage, search experience, sync operations, security requirements, and production readiness so the backend services, frontend flows, and background jobs worked as one product.\n\nTradeoffs I navigated: I balanced breadth of coverage against reliability by bringing multiple high-value systems into one platform while keeping each connector modular and schedulable. I balanced answer quality against speed by using hybrid retrieval and structured context assembly instead of relying on generation alone. I balanced ease of access against data protection by requiring Azure AD authentication, signed media URLs, and tighter endpoint controls for previews and streaming.",
+    "keyDecisions": [
+      "I prioritized a unified repository across OneDrive, ClickUp, Teams, efficiency data, and patent invoices instead of solving only for document search. That choice increased delivery scope, but it matched the real user problem of knowledge being fragmented across tools.",
+      "I chose hybrid retrieval over keyword-only or vector-only search. This gave the product a better path to handle both exact matches and semantic lookup across mixed content types.",
+      "I treated security as part of delivery, not a follow-up. Azure AD authentication, JWT validation, signed short-lived media access, and documented fixes to endpoint authentication and CORS reduced risk for an internal system serving sensitive company content."
+    ],
+    "whatWasBuilt": "I delivered an internal knowledge platform for Ixana that combined document management, enterprise search, and AI-assisted question answering in one interface. It served employees who needed to search files, browse ClickUp documentation, review meeting recordings with transcript cues, check task and efficiency analytics, and track patent invoice records. The product pulled content from OneDrive and SharePoint, ClickUp, Microsoft Teams transcripts, efficiency and task trackers, and patent data sources. Users could run general search, ask questions through a chat interface with cited source context, preview files securely, jump through meeting recordings by timestamp, and access dashboards for operational reporting. The platform also included scheduled background sync jobs and admin controls to trigger ingestion when needed.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "1000",
+        "label": "Characters per document chunk"
+      },
+      {
+        "value": "200",
+        "label": "Characters of chunk overlap"
+      },
+      {
+        "value": "768",
+        "label": "Embedding dimensions"
+      },
+      {
+        "value": "4o-mini",
+        "label": "OpenAI model used for generated answers"
+      },
+      {
+        "value": "65.0.135.176",
+        "label": "AWS EC2 deployment target"
+      },
+      {
+        "value": "3",
+        "label": "PM2 services in production"
+      }
+    ],
+    "impactContext": "These figures show the product was operationalized beyond a prototype. Content was structured for retrieval at chunk level, indexed for semantic search, and deployed as separate frontend, API, and pipeline services in production. For the business, that meant one internal system could support ongoing sync, secure access, and multiple day-to-day knowledge workflows instead of leaving teams to search across disconnected tools.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "procurement-orchestrator-procurement-process-automation-with": {
+    "slug": "procurement-orchestrator-procurement-process-automation-with",
+    "company": "Microsoft",
+    "organization": "",
+    "title": "Procurement Orchestrator Lean Pilot Product Specification",
+    "dateRange": "21 July 2026",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Procurement operations",
+      "Workflow design",
+      "Microsoft 365",
+      "Approval management",
+      "Pilot delivery",
+      "Operational controls"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Delayed procurement and poor communication meant requesters had to chase procurement for ownership, status, ETA, approvals, and tracking.\n\nWhat we did: I defined a lean Microsoft 365-native pilot for physical-goods requests that gave one source of truth, clear ownership, deterministic statuses, controlled updates, reminders, and escalation without adding a heavy custom platform.\n\nResult: The pilot was set up to support multiple organisations at fewer than 10 requests per week, with launch gates including 100% assignment within one business day and zero requests ordered without valid approval, missing owners, silent flow failures, or unresolved known incorrect status beyond one business day.",
+    "roleAndApproach": "What I owned: I owned the v1 pilot scope, the operating model, and the launch contract for a procurement request workflow across multiple internal organisations in one Microsoft 365 tenant. I set the product goals, defined the in-scope request type as physical goods only, established the status model, approval policy, reminder and escalation rules, access requirements, pilot phases, launch gates, and scale triggers. I also set the architecture direction for a lean implementation using Microsoft Lists, SharePoint, Power Automate, and an Outlook shared mailbox rather than a larger control-plane build.\n\nTradeoffs I navigated: I balanced speed to pilot against control depth by choosing short flows, daily integrity checks, and human verification over a more complex platform. I balanced requester visibility against operational risk by making the request list the source of truth while limiting requester edits to avoid status drift. I balanced automation against governance by automating routing, reminders, and approvals where rules were deterministic, while keeping supplier choice, ordering, and critical fact verification with humans. I also balanced management visibility against alert fatigue by showing all ageing work after three business days but sending direct escalations only for no progress, breached deadlines, or delivery risk.",
+    "keyDecisions": [
+      "I chose a Microsoft 365-native v1 architecture using Microsoft Lists Form, SharePoint Lists and views or a simple Power Apps interface, short Power Automate flows, and an Outlook shared mailbox. I made that call because the expected volume was fewer than 10 requests per week, so a lean setup was enough and avoided the cost and complexity of Azure SQL, Service Bus, a custom API, or AI in the critical path.",
+      "I limited v1 to physical goods, one item type per request, one financial approval stage, manual supplier selection, and manual verification of shipment and tracking. I made that call to keep the pilot focused on the main pain points of ownership, next action, delivery visibility, reminders, and escalation rather than trying to solve the full procurement lifecycle.",
+      "I made the workflow deterministic and evidence-based, with blocking rules for missing routing or approval maps and a requirement that status changes carry actor, timestamp, source, and evidence. I made that call to prevent silent failure, guessed ownership, stale dashboards, and orders progressing without valid approval."
+    ],
+    "whatWasBuilt": "I defined a lean pilot for an internal procurement workflow that let employees submit physical-goods requests and track them without chasing procurement directly. The product served requesters, procurement owners, approvers, escalation managers, and support administrators across multiple internal organisations in the same Microsoft 365 tenant.\n\nThe solution centered on a canonical Procurement Requests list, supported by routing and approver maps, a separate Shipments list, and an Activity and Exceptions list. Requesters had a submission form and a personal request view showing owner, status, next action, desired arrival date, verified ETA, approval state, shipment details, and timeline. Procurement worked from a single queue with controlled actions for assignment, information requests, quote and order updates, shipment and tracking updates, delivery, correction, cancellation, reopen, and exception handling. Managers had a grouped visibility view for ageing work, delayed requests, escalations, and unresolved exceptions.\n\nI also defined the operating rules behind the workflow. Those rules covered routing, approval thresholds, status transitions, evidence requirements, reminders, escalation, notification content, access controls, audit history, integrity checks, and failure recovery. The implementation sequence moved from decision workshop and configuration through happy-path build, controls, testing, controlled pilot, and production exit.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "1",
+        "label": "Business day to assign one accountable procurement owner"
+      },
+      {
+        "value": "3",
+        "label": "Business days before every open request appears in management visibility"
+      },
+      {
+        "value": "2",
+        "label": "Business days recommended for approval response due"
+      },
+      {
+        "value": "5",
+        "label": "Business days recommended for approval expiry"
+      },
+      {
+        "value": "100%",
+        "label": "Target for requests assigned within one business day"
+      },
+      {
+        "value": "20",
+        "label": "Minimum pilot requests for production exit"
+      },
+      {
+        "value": "50",
+        "label": "Requests per week trigger to revisit the architecture"
+      },
+      {
+        "value": "90",
+        "label": "Days after launch used for the pre-mortem assumption"
+      }
+    ],
+    "impactContext": "These targets defined whether the pilot solved the real operating problem, not just whether the workflow ran. The focus was on reducing requester chasing, making ownership visible within one business day, preventing unauthorised ordering, eliminating silent failures, and stopping teams from falling back to spreadsheets and email. The scale triggers also made clear when the lean Microsoft 365 approach should give way to a heavier architecture.",
+    "reflection": "The spec showed that the core risk was not feature breadth. It was trust. If ownership was guessed, status went stale, approvals were wrong, or failures were silent, users would return to email and spreadsheets. The design therefore favored verified facts, explicit authority boundaries, exception visibility, and daily operational review over deeper automation. It also made clear that communication quality had to be measured directly, since a technically working pilot could still fail if requesters kept chasing procurement.",
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-pm-generative-ai-engine-for-rca-report-automation": {
+    "slug": "ai-pm-generative-ai-engine-for-rca-report-automation",
+    "company": "",
+    "organization": "AMS Team",
+    "title": "AMS Monthly Performance Dashboard Workflow",
+    "dateRange": "",
+    "role": "Project Manager",
+    "teamSize": "",
+    "tags": [
+      "Workflow automation",
+      "Project reporting",
+      "ClickUp",
+      "Excel dashboards",
+      "AI-assisted RCA",
+      "Performance analytics"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: The AMS team needed a repeatable monthly way to turn completed ClickUp work into a clean performance dashboard with delay analysis, project summaries, and recommended actions.\n\nWhat we did: I structured an n8n sub-workflow that cleared prior dashboard data, pulled AMS tasks for a reporting window, split them into efficiency and delay-analysis paths, used AI to generate root cause analysis and dashboard insights, and wrote the outputs into Excel sheets.\n\nResult: The workflow now produces and refreshes six dashboard sheets automatically and returns a central spreadsheet link for the monthly AMS performance report.",
+    "roleAndApproach": "What I owned: I owned the reporting workflow from trigger to dashboard output. I defined the monthly reporting flow, the AMS team filter, the reporting window logic, the split between deterministic calculations and AI analysis, and the writeback sequence into Excel. I was accountable for getting the right completed tasks into scope, keeping the dashboard sheets in sync, and making sure the output was usable as a fresh monthly report.\n\nTradeoffs I navigated: I balanced speed against reliability by using direct ClickUp filters and pagination for task retrieval, then limiting AI to the parts that needed judgment such as root cause analysis and issue clustering. I also balanced freshness against continuity by clearing only data rows and preserving sheet headers, and balanced team specificity against maintainability by using a hardcoded AMS member list mapped to live ClickUp identities.",
+    "keyDecisions": [
+      "I separated the workflow into three parallel branches for efficiency summary, team performance, and delayed task analysis so the core reporting outputs could be calculated independently and then recombined into one dashboard.",
+      "I kept task counting and delay classification rule-based, and used AI only after the base data had been structured. That reduced ambiguity in totals and percentages while still allowing richer RCA and summary generation.",
+      "I made the dashboard AI read from the generated Excel sheets instead of raw ClickUp tasks. That created one reporting source for downstream metrics, project distribution, and critical issues, and kept later summaries aligned with the dashboard tables."
+    ],
+    "whatWasBuilt": "I built an n8n-based monthly reporting workflow for the AMS team. It starts as a sub-workflow, accepts a reporting window, clears prior dashboard rows, fetches AMS members from ClickUp, maps them to assignee IDs, and retrieves completed tasks within the selected date range with pagination. From there, the workflow merges all pages and runs three paths in parallel. One path calculates per-assignee efficiency, delayed work, on-time work, average delay, and performance rating, then writes the EFFICIENCY SUMMARY sheet. A second path reshapes that data into TEAM PERFORMANCE DISTRIBUTION. A third path detects delayed tasks, calculates delay days, fetches ClickUp comment history for each delayed item, and generates AI-based root cause analysis and summaries before writing TASK DELAY DETAILS WITH ROOT CA. Once those sheets are populated, a second AI step reads the Excel sheets and generates KEY METRICS, PROJECT DISTRIBUTION, and CRITICAL ISSUES & RECOMMENDATIONS. The workflow then writes those outputs back into the workbook and returns the spreadsheet link.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      }
+    ],
+    "impactContext": "This workflow replaced a manual monthly reporting process with a single automated run. It gave the AMS team a consistent reporting structure across six sheets, tied delay analysis to actual task context from ClickUp comments, and ensured leadership-facing summaries were generated from the same underlying dashboard data.",
+    "reflection": "The source shows a clear pattern that worked well: keep calculations deterministic where accuracy matters most, and use AI where synthesis is the real task. A notable design choice was making the second AI stage analyze the Excel outputs rather than raw task data. That likely reduced mismatch between detailed sheets and final summaries. The main constraint I would keep watching is the hardcoded AMS member list, since that is simple and controlled but adds maintenance whenever the team changes.",
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic": {
+    "slug": "ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic",
+    "company": "Ixana-Wiki",
+    "organization": "",
+    "title": "Flow Tracker",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Workflow analytics",
+      "Project tracking",
+      "Team operations",
+      "AI assistant",
+      "Data pipeline",
+      "Engineering dashboards"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Engineering leads, architects, and project managers needed one place to see live task progress across PS, AMS, and RTL teams, spot bottlenecks, and review delays over time.\n\nWhat we did: I shipped a workflow tracker inside Ixana-Wiki that combined ClickUp and bandwidth data, mapped work into team-specific stages, and added delay analysis, leaderboard views, and a grounded AI query layer.\n\nResult: The team got a single operating view for current status, historical delays, and efficiency questions across three engineering workflows, with both scheduled and manual sync paths to keep the data current.",
+    "roleAndApproach": "What I owned: I owned the delivery of a shared tracking product for engineering managers and leads. I defined the scope around three needs: current task visibility, delay analysis, and team efficiency reporting. I aligned the workflow model across PS, AMS, and RTL, set the requirements for the two main views, and made sure the data pipeline, API layer, and frontend served one clear operating workflow for project review.\n\nTradeoffs I navigated: I balanced consistency against team-specific workflow needs by keeping one product surface while allowing different stage models for PS, AMS, and RTL. I also balanced automation against trust by using AI to classify unstructured tasks into stages, while grounding downstream analysis and assistant responses in database records and structured filters.",
+    "keyDecisions": [
+      "I chose to support separate pipeline definitions for PS, AMS, and RTL instead of forcing one standard flow. That made the tracker more useful for each team and kept stage-level reporting credible.",
+      "I included both a current-state view and a historical 'What Went Wrong' view. This let the product support daily execution reviews as well as retrospective delay analysis without requiring a second tool.",
+      "I added an AI assistant that answered efficiency questions from filtered SQL-backed data rather than open-ended generation. This reduced the risk of ungrounded answers and kept the feature tied to operational data."
+    ],
+    "whatWasBuilt": "I built an internal workflow tracker in Ixana-Wiki for engineering leads, architects, and project managers. It showed where tasks sat in each team’s delivery pipeline, highlighted active, completed, and upcoming stages, and let users switch into a delay analysis mode to inspect overdue work and bottlenecks across set time ranges. The product supported PS, AMS, and RTL through separate pipeline views, exposed task details in a drill-down drawer, ranked team velocity in a leaderboard modal, and surfaced top delayed tasks in a bar chart. Behind the product, it pulled data from ClickUp and SharePoint or Excel bandwidth files, processed and classified tasks into structured stages, stored the results in PostgreSQL, and exposed them through FastAPI endpoints. It also included XANA, an AI assistant that answered natural-language questions against the efficiency data using targeted SQL filtering.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      }
+    ],
+    "impactContext": "This gave engineering leads, architects, and project managers one place to run cross-team reviews. Instead of piecing together updates from ClickUp, bandwidth files, and team-specific workflows, they could see current status, investigate delays, compare team throughput, and ask grounded questions in the same product. The outcome was faster review cycles, clearer bottleneck identification, and a more consistent way to manage delivery across PS, AMS, and RTL.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ixana-video-library-automated-company-video-library": {
+    "slug": "ixana-video-library-automated-company-video-library",
+    "company": "Ixana-Wiki",
+    "organization": "",
+    "title": "Video Library & Meeting Recordings",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Video platform",
+      "Meeting intelligence",
+      "Transcript search",
+      "AI notes",
+      "Microsoft Graph"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Teams meeting recordings and SharePoint videos were hard to browse, search, and turn into usable meeting notes.\n\nWhat we did: I managed the delivery of a unified video library and meeting recordings experience that indexed recordings, synchronized transcripts, enabled transcript-based playback, and added AI chat and auto-generated minutes.\n\nResult: We shipped a platform that combined video streaming, transcript navigation, hybrid search, and AI meeting assistance in one workflow, with support for full-transcript context up to 400K characters and a 5-minute cache to reduce unnecessary Graph API calls.",
+    "roleAndApproach": "What I owned: I owned the product scope for the end-to-end meeting recordings and video library experience. I aligned the ingestion pipeline, APIs, and user flows around a clear outcome: help teams find the right recording, jump to the right moment, and leave with usable notes. I defined the core surfaces across the library explorer, meeting recordings grid, and player workspace, and I drove decisions on transcript navigation, AI notes regeneration, and search behavior so the system served both stored video assets and Teams recordings in one model.\n\nTradeoffs I navigated: I balanced completeness against usability by keeping the player centered on three jobs: watch, navigate, and capture decisions. I also weighed AI answer quality against system complexity, choosing full-transcript context without chunking loss for meeting chat, while using caching to limit avoidable Graph API traffic in the library experience. A further tradeoff was flexibility versus reliability, where organizer and drive user resolution was handled carefully to keep playback and thumbnails dependable across Microsoft sources.",
+    "keyDecisions": [
+      "I chose to unify Teams meeting recordings and SharePoint video assets under one experience so users could search and review both from the same product surface instead of switching tools.",
+      "I prioritized transcript-linked playback in the player and AI outputs with clickable timestamps because the main user need was not just watching video, but getting to the exact moment that mattered quickly.",
+      "I backed AI meeting chat with the full meeting transcript context rather than a chunked approach because preserving the whole conversation reduced context loss for meeting-specific questions and note generation."
+    ],
+    "whatWasBuilt": "I delivered a video and meeting recordings platform for internal users in Ixana-Wiki. It pulled Microsoft Teams recordings and SharePoint video assets into a shared experience, stored transcript text and timestamped cues, and exposed that data through meeting and video library APIs. On the front end, users could browse folders, filter recorded meetings, open a player workspace, read speaker-labeled transcript blocks, and click any line to jump the video to that point. The same workspace included an AI assistant for transcript-grounded questions and a notes tab that generated structured minutes of meeting with summaries, decisions, and action items. The library also supported hybrid search across titles, descriptions, and transcript text.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "400K",
+        "label": "Characters of transcript context supported in meeting AI chat"
+      },
+      {
+        "value": "~100K",
+        "label": "Approximate token context supported in meeting AI chat"
+      },
+      {
+        "value": "5-minute",
+        "label": "TTL cache used to reduce unnecessary Graph API hits"
+      }
+    ],
+    "impactContext": "These numbers show the system was designed for long meeting recordings, not just short clips. Full-transcript context helped keep AI answers grounded in the meeting record, while the cache reduced repeat calls to Microsoft Graph and made the browsing experience more efficient.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "calendar-automation-real-time-bi-directional-sync-engine-wit": {
+    "slug": "calendar-automation-real-time-bi-directional-sync-engine-wit",
+    "company": "",
+    "organization": "",
+    "title": "Outlook Calendar → Gmail-CC Sync",
+    "dateRange": "",
+    "role": "Project Manager",
+    "teamSize": "",
+    "tags": [
+      "Calendar sync",
+      "Microsoft Graph",
+      "FastAPI backend",
+      "Google Calendar",
+      "Background jobs",
+      "Deployment operations"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: I needed a reliable way to keep Microsoft 365 calendar activity visible in Gmail and mirror Google busy time back into Outlook without exposing unnecessary details.\n\nWhat we did: I scoped a FastAPI service that synced upcoming Outlook events to a Gmail attendee, exposed a subscribable Outlook .ics feed, and mirrored Google Calendar busy blocks into Outlook with guarded background jobs.\n\nResult: We delivered a backend with dry-run controls, status endpoints, retry handling for Graph limits, and a 2-hour scheduled sync flow that could run on EC2 without overlapping jobs.",
+    "roleAndApproach": "What I owned: I owned the product scope for cross-platform calendar sync, the API surface, the operating model for scheduled runs, and the rules for when the system should modify events, forward invites, or skip them. I made the calls on dry-run safety, organizer-only behavior, recurring event handling within a time window, and how job status and deployment should work so the service was usable in day-to-day operations.\n\nTradeoffs I navigated: I balanced calendar coverage against safety by defaulting to dry-run checks, limiting attendee edits to organizer-owned meetings, and treating recurring instances as separate occurrences to keep changes predictable. I also balanced reliability against simplicity by using in-process background jobs with overlap locks and retry logic for Graph throttling instead of adding a heavier job system.",
+    "keyDecisions": [
+      "I chose Microsoft Graph application permissions with client credentials so one backend could act on a target mailbox without relying on an interactive user session. This made the service easier to automate, while the documentation called out the tenant-wide access risk and the option to restrict scope with an application access policy.",
+      "I defined two paths for Outlook to Gmail sync: patch the attendee list when the mailbox was the organizer, and forward the invite when it was not. This matched Graph permission limits and preserved meeting visibility without attempting unsupported edits.",
+      "I kept recurring event changes at the occurrence level through calendarView instead of modifying the full series master. That reduced the chance of broad unintended changes and made the sync behavior easier to reason about."
+    ],
+    "whatWasBuilt": "I delivered a FastAPI backend for people who work across Microsoft 365 and Gmail calendars. The service scanned upcoming Outlook events in a target mailbox, checked whether a configured Gmail address was already present, and either added that address as a required attendee or forwarded the invite so the event would reach Google Calendar. I also included a read-only events endpoint, a dry-run mode to preview changes, and status endpoints for operational visibility.\n\nBeyond the main attendee sync, I included two supporting flows. The first exposed Outlook events as a subscribable .ics feed so an external calendar could pull them by URL. The second pulled a public Google Calendar .ics feed, extracted busy intervals, and created placeholder busy events in Outlook when those times were not already occupied. To make the service workable in production, I set up background execution, overlap protection for scheduled jobs, retry handling for Graph rate limits and transient failures, and a deployment path on EC2 behind Nginx with cron triggering /sync-all every 2 hours.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      }
+    ],
+    "impactContext": "This work reduced the manual effort of keeping two calendar ecosystems aligned. The main value was operational: people could keep Gmail informed of Outlook meetings, subscribe to an Outlook feed when needed, and block Outlook time from Google busy slots without revealing private event names. The scheduling guard, dry-run path, and job status endpoints also made the service safer to run in a live mailbox where every calendar update can notify attendees.",
+    "reflection": "The main lesson was that calendar sync is less about moving data and more about managing side effects. Every attendee update can send emails, and recurring meetings create edge cases quickly, so I kept the scope focused on predictable behavior and explicit preview steps. If I extended the project, I would keep the same bias toward safe defaults and only widen scope where the operational impact stayed clear.",
+    "links": [
+      {
+        "icon": "external",
+        "label": "Entra admin center",
+        "url": "https://entra.microsoft.com"
+      },
+      {
+        "icon": "external",
+        "label": "Application access policy",
+        "url": "https://learn.microsoft.com/en-us/graph/auth-limit-mailbox-access"
+      },
+      {
+        "icon": "external",
+        "label": "Swagger UI",
+        "url": "http://127.0.0.1:8000/docs"
+      },
+      {
+        "icon": "external",
+        "label": "Google Calendar public basic.ics example",
+        "url": "https://calendar.google.com/calendar/ical/user%40gmail.com/public/basic.ics"
+      }
+    ],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-prd-multi-agent-multi-llm-shared-memory-generative-system": {
+    "slug": "ai-prd-multi-agent-multi-llm-shared-memory-generative-system",
+    "company": "",
+    "organization": "",
+    "title": "AI Product Planning Operating System",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "AI product planning",
+      "Workflow orchestration",
+      "Human-in-the-loop review",
+      "LLM evaluation",
+      "Task generation",
+      "Product UX"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Teams using AI for planning were getting fast but unreliable output that assumed missing facts, missed dependencies, and produced tasks that were hard to execute or verify.\n\nWhat we did: I led the delivery of an AI product planning system that moved a raw idea through five specialized agents, a distinct-model review loop, and a final human approval gate before generating an execution-ready checklist.\n\nResult: We shipped an MVP that met the spec end to end, covered 85 tests across 10 suites, kept the planning loop capped at 5 rounds, and completed a typical run to human review in 3 to 8 minutes.",
+    "roleAndApproach": "What I owned: I owned the product workflow, stage gates, review model, and user experience from intake through task generation. I defined how the system should stop on uncertainty, how human feedback should re-enter the pipeline without losing context, how approved plans should freeze before task generation, and how exports, diffs, comments, and explainability should work so users could trust and act on the output.\n\nTradeoffs I navigated: I balanced speed against rigor by batching plan generation, using retries and schema validation, and capping review iterations at 5 while still escalating unresolved issues to a human instead of forcing false approval. I also balanced transparency against usability by keeping intake data unchanged in storage, storing AI additions separately, and rendering both seamlessly in the UI so the output stayed readable without losing provenance in the data model.",
+    "keyDecisions": [
+      "I chose a gated workflow where Agent 1 paused the pipeline and asked one highest-priority question at a time. This reduced avoidable hallucinations and kept users focused on the single piece of information most needed to move planning forward.",
+      "I required the planner and reviewer to run on different models and enforced that rule in code. I made that choice to reduce shared blind spots and to make approval mean independent agreement, not self-consistency from one model.",
+      "I froze the approved plan version before task generation and routed later feedback back into revision flows instead of mutating the approved artifact. This preserved auditability, made diffs trustworthy, and kept generated tasks traceable to a specific approved plan."
+    ],
+    "whatWasBuilt": "I delivered an AI Product Planning Operating System for founders, product managers, engineering managers, CTOs, consultants, researchers, and AI-first software teams. The product took a structured project brief and turned it into an execution-ready engineering plan, then into one implementation-ready task with a checklist of concrete steps.\n\nThe workflow started with structured intake for the task title, total-day estimate, what and why, Tiger and Elephant risks, assumptions, constraints, dependencies, and optional context. Agent 1 validated that context, ran a pre-mortem, classified information as fact, assumption, or unknown, and stopped the flow whenever a critical gap needed an answer. Agent 2 identified the project type and selected the relevant sections from a 30-section PRD template. Agent 3 wrote the plan in batches, and Agent 4 reviewed it against a 10-point scorecard using a different model. If the review failed, the plan looped back for revision, up to five rounds. After approval by both the reviewer and the user, Agent 5 generated a single task overview and a flat checklist of 3 to 30 steps, each with binary completion tests, day estimates, dependencies, and LNO priority codes.\n\nI also shipped the operating surfaces around that core flow. These included plan versioning, line-level diffs, PRD export in markdown and JSON, task export in JSON, CSV, and markdown, comment-driven revision paths for either the checklist or the plan, and an Ask AI feature that could explain the whole task or propose a checklist revision when the user asked for a concrete tradeoff such as reducing duration. The UI locked prior stages once the workflow moved forward, while still allowing controlled edits that re-ran the right part of the pipeline and cleared stale approval when needed.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "5",
+        "label": "Specialized AI agents in the workflow"
+      },
+      {
+        "value": "5",
+        "label": "Maximum planner-reviewer iterations before escalation"
+      },
+      {
+        "value": "6",
+        "label": "Maximum clarification questions per intake round"
+      },
+      {
+        "value": "30",
+        "label": "PRD sections in the master template"
+      },
+      {
+        "value": "3–30",
+        "label": "Checklist steps generated for the final task"
+      },
+      {
+        "value": "0.5",
+        "label": "Day-estimate granularity used for checklist planning"
+      },
+      {
+        "value": "10",
+        "label": "Review criteria in the scorecard"
+      },
+      {
+        "value": "85",
+        "label": "Tests across the automated test suite"
+      },
+      {
+        "value": "10",
+        "label": "Test suites"
+      },
+      {
+        "value": "3–8 min",
+        "label": "Typical full run to human review"
+      },
+      {
+        "value": "~10s",
+        "label": "Clarification turn time"
+      },
+      {
+        "value": "~75s",
+        "label": "Plan draft time"
+      },
+      {
+        "value": "~30s",
+        "label": "Review time per round"
+      },
+      {
+        "value": "2 rounds",
+        "label": "Observed reject-to-approve path after review-loop fixes"
+      },
+      {
+        "value": "~3 min",
+        "label": "Observed reject-to-approve timing after review-loop fixes"
+      },
+      {
+        "value": "12 steps / 10.5d → 8 steps / 8.0d",
+        "label": "Live-verified checklist revision via actionable Ask AI proposal"
+      }
+    ],
+    "impactContext": "These numbers showed that the product was not just a concept but a controlled planning system with clear operating limits, review standards, and auditability. The five-agent structure, distinct-model review, and frozen-plan rule made the output easier to trust. The performance profile kept the end-to-end experience within a practical working session, and the test coverage reduced the risk of regressions in the workflow rules that mattered most, such as approval state, dependency validation, version history, and revision behavior.",
+    "reflection": "One lesson was that the quality of the review loop depended as much on context handoff as on the reviewer itself. Early failures came from the reviewer not seeing clarification answers and the planner revising without access to its previous draft. Once those inputs were fixed and the scoring was calibrated so TBD did not count as failure, the loop converged much faster. Another lesson was that workflow integrity mattered as much as generation quality. Freezing approved plans, preventing archive and concurrency edge cases, and resetting clarification budgets on intake edits were small rules that had a large effect on user trust.",
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "patent-tracker-generative-ai-engine-for-data-extraction": {
+    "slug": "patent-tracker-generative-ai-engine-for-data-extraction",
+    "company": "Ixana",
+    "organization": "",
+    "title": "Ixana Patent Dashboard Sync",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Project management",
+      "SharePoint automation",
+      "Portfolio reporting",
+      "Excel workflow",
+      "Microsoft Graph"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Ixana was tracking patent portfolio data across three SharePoint Excel workbooks and one master workbook, but live formulas were double-counting duplicate patent rows and manual edits could leave the master out of sync.\n\nWhat we did: I led the rollout of a FastAPI sync service that recomputed each source dashboard, rebuilt the master patents sheet from all three sources, and used Microsoft Graph change detection to refresh only when source data changed or the master drifted.\n\nResult: We moved dashboard counts to computed values, kept source sheets untouched, and set the master workbook to automatically realign to the three source files on startup and then every 60 seconds by default.",
+    "roleAndApproach": "What I owned: I owned the sync workflow across the three source workbooks and the master workbook. I defined the counting rules, set the refresh behavior, and aligned the service around the operational goal that the master must always match the source files. I also owned the decision to preserve workbook formatting by writing through the Microsoft Graph workbook API and to expose clear endpoints for health, dry-run stats, status, sync, and forced refresh.\n\nTradeoffs I navigated: I weighed accuracy against speed by using eTags as a first signal and content hashes as a second check, so we did not refresh on every minor file touch. I also balanced automation against file integrity by recomputing dashboards in place while never modifying source Patents sheets, and by adding verification retries to handle Excel Online autosave collisions and manual edits to the master.",
+    "keyDecisions": [
+      "I set the master workbook as a derived file, not a manually maintained source of truth, because the portfolio needed one reliable combined view and the source files had to remain authoritative. That let us automatically rebuild the master whenever a source changed or the master drifted.",
+      "I adopted deduplicated patent counting rules based on grouped rows and last-row status because the existing live formulas were double-counting repeated titles and continuation rows. This made the dashboard reflect patent-level counts rather than row-level counts.",
+      "I chose Microsoft Graph workbook updates over direct file rewriting because the workbooks already carried formatting, merged cells, and layout logic that needed to stay intact. That reduced disruption for the team using the Excel files day to day."
+    ],
+    "whatWasBuilt": "I delivered a backend service that kept four Excel workbooks in sync across SharePoint and OneDrive. It monitored three source patent dashboards, recalculated their dashboard values in place, and rebuilt the master workbook's Patents sheet as a combined table with a Source column. The service served the team maintaining Ixana's patent portfolio by giving them a current combined dashboard without changing the source Patents sheets they already worked in. It also exposed health, status, dry-run, sync, and force-refresh endpoints so the sync state was visible and controllable.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "3",
+        "label": "Source workbooks synchronized into the master workbook"
+      },
+      {
+        "value": "60s",
+        "label": "Default polling interval for background sync"
+      },
+      {
+        "value": "5",
+        "label": "Top notice of allowance items shown on dashboards"
+      },
+      {
+        "value": "5",
+        "label": "Top upcoming deadlines shown on dashboards"
+      },
+      {
+        "value": "3",
+        "label": "Verification retry rounds after writes"
+      }
+    ],
+    "impactContext": "These numbers show the operating model of the service. It consolidated three separate patent workbooks into one master view, checked for changes on a 60 second cadence by default, and limited dashboard lists to the top five priority items so reviewers could act quickly. The retry loop reduced the risk that Excel Online autosave behavior would leave files in an unstable state after updates.",
+    "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "clickup-document-tracker-data-extraction-easy-visibility-for": {
+    "slug": "clickup-document-tracker-data-extraction-easy-visibility-for",
+    "company": "ClickUp",
+    "organization": "Documentation Platform Team",
+    "title": "ClickUp Docs Change Intelligence Platform",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Documentation operations",
+      "Version control",
+      "Internal dashboard",
+      "Change tracking",
+      "Sync orchestration",
+      "Workflow monitoring"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Teams had no reliable way to see what changed in ClickUp documentation, compare versions, or reconcile workspace docs with the document register in SharePoint Excel.\n\nWhat we did: I managed the MVP delivery of an internal platform that synced ClickUp docs daily, stored immutable versions and diffs, enriched records with Excel metadata when available, and exposed change history and sync health through a dashboard.\n\nResult: The platform was implemented with a daily automated sync, version creation gated by real content changes, and a later production update that expanded coverage to all workspace docs with a confirmed run of 301 docs checked, 34 changed, and 278 total in the database.",
+    "roleAndApproach": "What I owned: I owned the MVP scope for an internal, read-only change intelligence platform for ClickUp Docs. I defined the operating model around a daily cron sync, a 60 second serverless budget, and a concurrency limit of 5 so the system could process tens to low hundreds of documents reliably. I aligned the product around the core user jobs: browse tracked docs, inspect version history, compare diffs, and monitor sync health. I also carried forward the post-launch change in tracking policy so the platform moved from Excel intersection only to all workspace docs, while keeping Excel metadata as optional enrichment.\n\nTradeoffs I navigated: Coverage vs. control was the main tradeoff. The original MVP used the Excel register as the tracked set so the platform matched the canonical document list, but that limited visibility. The later change favored broader workspace coverage and operational continuity, so sync could continue when Excel was missing and documents were no longer auto-pruned. Precision vs. speed was the second tradeoff. I chose a cheap last-modified check first and a content hash second so we avoided unnecessary downloads while still preventing spurious versions. Simplicity vs. access control was another tradeoff. Because the tool was internal, we kept the UI unauthenticated and protected only the sync endpoint with a Bearer secret.",
+    "keyDecisions": [
+      "I chose a two-step change detection model using ClickUp last-modified timestamps first and SHA-256 content hashes second. This cut unnecessary content fetches while ensuring a new version was created only when the document content actually changed.",
+      "I set the sync to run once per day with a concurrency limit of 5 and a 60 second serverless budget. That balanced freshness with the practical limits of Vercel execution time and external API reliability.",
+      "I supported the later shift from tracking only ClickUp docs present in Excel to tracking all workspace docs, with Excel as optional enrichment and no auto-pruning. We made that change to avoid losing visibility when the register was incomplete or unavailable and to retain document history over time."
+    ],
+    "whatWasBuilt": "I delivered an internal dashboard for teams that rely on ClickUp Docs and need a clear audit trail of document change. The product automatically syncs workspace documents on a daily schedule, captures immutable versions when content changes, computes line-level and page-level diffs, and shows those changes in a dashboard, document repository, document detail view, changes feed, and sync run history. For each document, the platform stores the latest state, version timeline, change summaries, and business metadata such as category, owner, SharePoint link, and Excel dates when those fields exist in the register. It also provides basic operational control through lock handling, stale run recovery, and a run log that shows checked and changed documents.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "5",
+        "label": "Concurrent documents processed per sync"
+      },
+      {
+        "value": "60 seconds",
+        "label": "Serverless execution budget per invocation"
+      },
+      {
+        "value": "10 minutes",
+        "label": "Stale lock timeout"
+      },
+      {
+        "value": "95%+",
+        "label": "Target sync reliability"
+      },
+      {
+        "value": "< 3 s",
+        "label": "Target dashboard and document list load time"
+      },
+      {
+        "value": "301",
+        "label": "Documents checked in confirmed live sync"
+      },
+      {
+        "value": "34",
+        "label": "Documents changed in confirmed live sync"
+      },
+      {
+        "value": "278",
+        "label": "Total documents in database after track-all update"
+      },
+      {
+        "value": "+30",
+        "label": "Additional ClickUp-only documents retained after update"
+      }
+    ],
+    "impactContext": "These numbers show the platform was designed to run as a lightweight daily operational system, not a manual reporting exercise. The sync cadence and concurrency rules kept the process inside a tight serverless window. The confirmed live run after the tracking-policy change showed the immediate business effect of broader coverage: the database grew from 248 to 278 documents because ClickUp-only records were no longer excluded or deleted. That improved visibility for internal teams without changing the schema or the user-facing workflow.",
+    "reflection": "The main lesson was that the original control model was too dependent on the Excel register. Using Excel as the gate for inclusion matched the canonical list, but it also created blind spots and made the sync brittle. The later move to track all workspace docs, keep history, and treat Excel as enrichment was a better fit for the reporting job this product had to do. I also saw the value of keeping the MVP read-only and internal. That narrowed scope, reduced approval overhead, and let the team focus on correctness, freshness, and operational reliability first.",
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
   }
 }

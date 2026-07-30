@@ -119,6 +119,13 @@ const emptyCaseStudy: CaseStudyForm = {
 
 const MAX_AI_FILES = 10;
 
+type AiProvider = 'gemini' | 'openai';
+
+const AI_PROVIDERS: { key: AiProvider; label: string; note: string }[] = [
+	{ key: 'gemini', label: 'Gemini', note: 'GEMINI_API_KEY' },
+	{ key: 'openai', label: 'OpenAI', note: 'OPENAI_API_KEY' },
+];
+
 /* The case study's Role field sets the voice the AI writes in.
    Leaving it empty falls back to this. */
 const DEFAULT_AI_ROLE = 'Project Manager';
@@ -438,6 +445,7 @@ export default function AdminPage() {
 	const [aiNotes, setAiNotes] = useState('');
 	const [aiOverwrite, setAiOverwrite] = useState(false);
 	const [aiFiles, setAiFiles] = useState<File[]>([]);
+	const [aiProvider, setAiProvider] = useState<AiProvider>('gemini');
 	const [aiChat, setAiChat] = useState<AiMessage[]>([]);
 	const [aiInput, setAiInput] = useState('');
 	const [aiChatting, setAiChatting] = useState(false);
@@ -783,6 +791,7 @@ export default function AdminPage() {
 			for (const file of aiFiles) body.append('file', file);
 			if (aiNotes.trim()) body.append('notes', aiNotes);
 			body.append('role', aiRole);
+			body.append('provider', aiProvider);
 
 			const res = await fetch('/api/admin/ai-fill', {
 				method: 'POST',
@@ -993,6 +1002,7 @@ export default function AdminPage() {
 			body.append('draft', JSON.stringify(csDraftPayload()));
 			body.append('history', JSON.stringify(history));
 			body.append('role', aiRole);
+			body.append('provider', aiProvider);
 			// Resend the sources so "pull the number from the deck" still works.
 			for (const file of aiFiles) body.append('file', file);
 
@@ -1941,12 +1951,35 @@ export default function AdminPage() {
 													<div className='admin-ai-body'>
 														<p className='admin-ai-hint'>
 															Upload up to {MAX_AI_FILES} project docs (PDF,
-															TXT, MD, or screenshots) and Gemini reads them
+															TXT, MD, or screenshots) and they are read
 															together to draft the written sections below.
 															Media, slug, and navigation are never touched —
 															and nothing is saved until you hit “Save Case
 															Study”.
 														</p>
+
+														<div className='admin-ai-provider'>
+															<span className='admin-ai-provider-label'>
+																Model
+															</span>
+															<div className='admin-ai-provider-group'>
+																{AI_PROVIDERS.map((p) => (
+																	<button
+																		key={p.key}
+																		type='button'
+																		className={`admin-ai-provider-btn${aiProvider === p.key ? ' active' : ''}`}
+																		onClick={() => setAiProvider(p.key)}
+																		disabled={aiFilling || aiChatting}
+																		title={`Uses ${p.note} from .env.local`}
+																	>
+																		{p.label}
+																	</button>
+																))}
+															</div>
+															<span className='admin-ai-provider-note'>
+																used for both the fill and the chat below
+															</span>
+														</div>
 
 														<div className='admin-ai-role'>
 															<span className='admin-ai-role-label'>
