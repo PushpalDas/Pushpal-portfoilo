@@ -120,7 +120,7 @@ const emptyCaseStudy: CaseStudyForm = {
 const MAX_AI_FILES = 10;
 
 /* The case study's Role field sets the voice the AI writes in.
-   Falls back to the basic tab's Services / Role, then to this. */
+   Leaving it empty falls back to this. */
 const DEFAULT_AI_ROLE = 'Project Manager';
 
 interface AiMessage {
@@ -742,8 +742,9 @@ export default function AdminPage() {
 
 	/* ─── AI fill from document ─────────────────────────── */
 
-	// What the AI writes as. Empty on both tabs means Project Manager.
-	const aiRole = csForm.role.trim() || formData.services.trim();
+	// What the AI writes as. Reads the case study's Role field only —
+	// an empty Role means Project Manager.
+	const aiRole = csForm.role.trim();
 
 	// Files accumulate across picks, so several trips to the file dialog
 	// (or several folders) can feed one fill.
@@ -1957,7 +1958,7 @@ export default function AdminPage() {
 															<span className='admin-ai-role-note'>
 																{aiRole
 																	? 'from the Role field below — every section is written from this seat'
-																	: `no Role set, so this is the default — fill in Role below to change it`}
+																	: 'the Role field below is empty, so this is the default — fill it in to change the voice'}
 															</span>
 														</div>
 
