@@ -71,11 +71,20 @@ export const CASE_STUDY_FIELDS = {
 	},
 	tldr: {
 		type: 'STRING',
-		description: '2–3 sentences: the problem, what was done, the result.',
+		description:
+			'A summary of the project in three sections separated by two newlines (\\n\\n). You MUST follow this exact template:\n\n' +
+			'Problem: [One-sentence description of the problem/challenge]\n\n' +
+			'What we did: [One-sentence description of the solution/work done]\n\n' +
+			'Result: [One-sentence description of the outcome/metrics/next steps]\n\n' +
+			'Do not write anything else or use other headings.',
 	},
 	roleAndApproach: {
 		type: 'STRING',
-		description: 'What the author owned, key decisions, tradeoffs navigated.',
+		description:
+			"Describe the author's role and approach in two sections separated by two newlines (\\n\\n). You MUST follow this exact template:\n\n" +
+			'What I owned: [Describe what the author specifically owned/led, including scope, roadmap, design/engineering alignment, etc.]\n\n' +
+			'Tradeoffs I navigated: [Describe the key tradeoffs navigated, e.g. "Warmth vs. verifiability — ... And build-speed vs. rigor — ..."]\n\n' +
+			'Do not write anything else or use other headings.',
 	},
 	keyDecisions: {
 		type: 'ARRAY',
@@ -156,7 +165,9 @@ export function voiceRules(role: string): string {
 - No marketing language, no buzzwords, no hype adjectives, no em-dashes.
 
 Format:
-- Prose fields are body copy: full sentences and paragraphs, no markdown, no bullet points, no headings.
+- Prose fields are body copy: full sentences and paragraphs, no markdown, no bullet points, no headings. Exceptions:
+  1. The "tldr" field MUST follow the exact format of "Problem: ...\n\nWhat we did: ...\n\nResult: ...".
+  2. The "roleAndApproach" field MUST follow the exact format of "What I owned: ...\n\nTradeoffs I navigated: ...".
 - tags are short noun phrases, not sentences.`;
 }
 

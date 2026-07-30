@@ -8,7 +8,7 @@
 	min-height: 100vh;
 	background: #050507;
 	color: #b0b0bc;
-	font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 	font-size: 16px;
 	line-height: 1.75;
 }
@@ -35,7 +35,9 @@
 	font-size: 14px;
 	font-weight: 500;
 	text-decoration: none;
-	transition: color 0.2s ease, gap 0.2s ease;
+	transition:
+		color 0.2s ease,
+		gap 0.2s ease;
 	background: none;
 	border: none;
 	cursor: pointer;
@@ -68,16 +70,10 @@
 	margin-bottom: 56px;
 }
 
-/* Fade-in-up animation (applied via JS Intersection Observer) */
+/* Initial hidden state for scroll animations (handled by GSAP) */
 .cs-reveal {
 	opacity: 0;
 	transform: translateY(20px);
-	transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.cs-reveal.is-visible {
-	opacity: 1;
-	transform: translateY(0);
 }
 
 /* ── Section heading ──────────────────────────────────────── */
@@ -410,7 +406,9 @@
 	font-size: 14px;
 	font-weight: 500;
 	text-decoration: none;
-	transition: background 0.2s ease, border-color 0.2s ease;
+	transition:
+		background 0.2s ease,
+		border-color 0.2s ease;
 	cursor: pointer;
 }
 
