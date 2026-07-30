@@ -8,8 +8,12 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { CaseStudyData, MediaItem } from './case-study-types';
 import './case-study.css';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ── Inline SVG icons ────────────────────────────────────────────────────────
 
@@ -189,55 +193,211 @@ interface Props {
 }
 
 export default function CaseStudyPage({ data }: Props) {
-  // Intersection Observer for fade-in-up
+  // GSAP Scroll Reveal and Count-up Animations
   useEffect(() => {
-    const elements = document.querySelectorAll('.cs-reveal');
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
+    const ctx = gsap.context(() => {
+      // 1. Hero Section Entrance Animation (immediate on mount)
+      const hero = document.querySelector('.cs-hero');
+      if (hero) {
+        const title = hero.querySelector('.cs-title');
+        const eyebrow = hero.querySelector('.cs-eyebrow');
+        const meta = hero.querySelector('.cs-meta-row');
+        const tags = hero.querySelectorAll('.cs-tag');
+
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        
+        tl.from(eyebrow, { opacity: 0, y: 15, duration: 0.6 })
+          .from(title, { opacity: 0, y: 20, duration: 0.8 }, '-=0.4')
+          .from(meta, { opacity: 0, y: 15, duration: 0.6 }, '-=0.5')
+          .from(tags, { opacity: 0, y: 15, duration: 0.6, stagger: 0.05 }, '-=0.4');
+      }
+
+      // 2. Reveal all general sections (.cs-section and .cs-tldr)
+      const sections = document.querySelectorAll('.cs-section:not(.cs-metrics-section):not(.cs-media-section):not(.cs-links-section), .cs-tldr');
+      sections.forEach((sec) => {
+        gsap.fromTo(sec,
+          { opacity: 0, y: 35 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: sec,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      });
+
+      // 3. Staggered Metric Cards & Count-up Animation
+      const metricsSection = document.querySelector('.cs-metrics-section');
+      if (metricsSection) {
+        const cards = metricsSection.querySelectorAll('.cs-metric-card');
+        const heading = metricsSection.querySelector('.cs-heading');
+        const footnote = metricsSection.querySelector('.cs-confidential-footnote');
+
+        // Animate metrics section heading first
+        if (heading) {
+          gsap.from(heading, {
+            opacity: 0,
+            y: 20,
+            duration: 0.6,
+            scrollTrigger: {
+              trigger: heading,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+
+        // Animate cards with stagger and trigger their count-ups
+        if (cards.length > 0) {
+          gsap.from(cards, {
+            opacity: 0,
+            y: 35,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: cards[0],
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+              onEnter: () => {
+                // Trigger counts once they begin to appear
+                cards.forEach((card) => {
+                  const countEl = card.querySelector<HTMLElement>('[data-count-up]');
+                  if (!countEl) return;
+                  const target = countEl.dataset.countUp ?? '';
+                  const numericMatch = target.match(/[\d.]+/);
+                  if (!numericMatch) return;
+                  const end = parseFloat(numericMatch[0]);
+                  const prefix = target.slice(0, numericMatch.index);
+                  const suffix = target.slice((numericMatch.index ?? 0) + numericMatch[0].length);
+                  
+                  const obj = { val: 0 };
+                  gsap.to(obj, {
+                    val: end,
+                    duration: 1.5,
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                      const current = Math.round(obj.val * 10) / 10;
+                      countEl.textContent = `${prefix}${current % 1 === 0 ? Math.round(current) : current}${suffix}`;
+                    }
+                  });
+                });
+              }
+            }
+          });
+        }
+
+        if (footnote) {
+          gsap.from(footnote, {
+            opacity: 0,
+            duration: 0.6,
+            scrollTrigger: {
+              trigger: footnote,
+              start: 'top 92%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+      }
+
+      // 4. Staggered Media Grid Reveal
+      const mediaSection = document.querySelector('.cs-media-section');
+      if (mediaSection) {
+        const slots = mediaSection.querySelectorAll('.cs-media-slot, .cs-media-caption');
+        if (slots.length > 0) {
+          gsap.from(slots, {
+            opacity: 0,
+            y: 40,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: mediaSection,
+              start: 'top 85%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+      }
+
+      // 5. Staggered Key Decision Bullet items
+      const decisionsWrap = document.querySelector('.cs-key-decisions-wrap');
+      if (decisionsWrap) {
+        const bullets = decisionsWrap.querySelectorAll('.cs-decision-bullet-item');
+        if (bullets.length > 0) {
+          gsap.from(bullets, {
+            opacity: 0,
+            x: -20,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: decisionsWrap,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+      }
+
+      // 6. Go Deeper Links row stagger
+      const linksSection = document.querySelector('.cs-links-section');
+      if (linksSection) {
+        const heading = linksSection.querySelector('.cs-heading');
+        const linkBtns = linksSection.querySelectorAll('.cs-link-btn');
+        
+        if (heading) {
+          gsap.from(heading, {
+            opacity: 0,
+            y: 15,
+            duration: 0.5,
+            scrollTrigger: {
+              trigger: heading,
+              start: 'top 90%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+
+        if (linkBtns.length > 0) {
+          gsap.from(linkBtns, {
+            opacity: 0,
+            y: 15,
+            duration: 0.6,
+            stagger: 0.08,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: linksSection,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
+          });
+        }
+      }
+
+      // 7. Bottom Navigation fade in
+      const bottomNav = document.querySelector('.cs-bottom-nav');
+      if (bottomNav) {
+        gsap.from(bottomNav, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: bottomNav,
+            start: 'top 95%',
+            toggleActions: 'play none none none'
           }
         });
-      },
-      { threshold: 0.05 }
-    );
+      }
+    }, document.body);
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  // Metric counter animation
-  useEffect(() => {
-    const metricEls = document.querySelectorAll<HTMLElement>('[data-count-up]');
-    const metricObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const el = entry.target as HTMLElement;
-          const target = el.dataset.countUp ?? '';
-          const numericMatch = target.match(/[\d.]+/);
-          if (!numericMatch) return;
-          const end = parseFloat(numericMatch[0]);
-          const prefix = target.slice(0, numericMatch.index);
-          const suffix = target.slice((numericMatch.index ?? 0) + numericMatch[0].length);
-          const duration = 1200;
-          const start = performance.now();
-          const tick = (now: number) => {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3);
-            const current = Math.round(end * eased * 10) / 10;
-            el.textContent = `${prefix}${current % 1 === 0 ? Math.round(current) : current}${suffix}`;
-            if (progress < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-          metricObserver.unobserve(el);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    metricEls.forEach((el) => metricObserver.observe(el));
-    return () => metricObserver.disconnect();
+    return () => ctx.revert();
   }, []);
 
   // ─────────────────────────────────────────────────────────────────
@@ -261,8 +421,22 @@ export default function CaseStudyPage({ data }: Props) {
 
   const hasLinks = links.length > 0;
   const hasMetrics = metrics.length > 0;
+  // Split roleAndApproach into "What I owned" and "Tradeoffs I navigated"
+  let ownedPart = data.roleAndApproach || '';
+  let tradeoffsPart = '';
 
-  // Filter out empty key decisions
+  const tradeoffsIndex = ownedPart.indexOf('Tradeoffs I navigated:');
+  if (tradeoffsIndex !== -1) {
+    tradeoffsPart = ownedPart.slice(tradeoffsIndex).trim();
+    ownedPart = ownedPart.slice(0, tradeoffsIndex).trim();
+  }
+
+  // Also strip any "Key decisions:" block from the text if it was generated there
+  const keyDecisionsIndex = ownedPart.indexOf('Key decisions:');
+  if (keyDecisionsIndex !== -1) {
+    ownedPart = ownedPart.slice(0, keyDecisionsIndex).trim();
+  }
+
   const keyDecisions = data.keyDecisions
     ? data.keyDecisions.filter((d) => d && d.trim() !== '')
     : [];
@@ -284,7 +458,7 @@ export default function CaseStudyPage({ data }: Props) {
       <div className="cs-content">
 
         {/* ── SECTION 1: Hero ───────────────────────────────── */}
-        <header className="cs-hero cs-reveal">
+        <header className="cs-hero">
           <p className="cs-eyebrow">
             {isEmpty(data.company) ? (
               <span className="cs-placeholder">[Company] · [Organization]</span>
@@ -340,15 +514,19 @@ export default function CaseStudyPage({ data }: Props) {
 
         {/* ── SECTION 3: My role and approach ──────────────────── */}
         {!isEmpty(data.roleAndApproach) && (
-          <section className="cs-section cs-reveal">
+          <section className="cs-section cs-reveal cs-role-section">
             <h2 className="cs-heading">My role and approach</h2>
-            <p className="cs-body" style={{ whiteSpace: 'pre-line' }}>
-              {data.roleAndApproach}
-            </p>
+            
+            {/* What I owned */}
+            {!isEmpty(ownedPart) && (
+              <p className="cs-body cs-owned-text" style={{ whiteSpace: 'pre-line', marginBottom: 24 }}>
+                {ownedPart}
+              </p>
+            )}
 
             {/* Bulleted list of Key Decisions */}
             {keyDecisions.length > 0 && (
-              <div className="cs-key-decisions-wrap">
+              <div className="cs-key-decisions-wrap" style={{ marginBottom: 24 }}>
                 <h3 className="cs-decision-label">Key decisions</h3>
                 <ul className="cs-decision-bullets">
                   {keyDecisions.map((decision, i) => (
@@ -358,6 +536,13 @@ export default function CaseStudyPage({ data }: Props) {
                   ))}
                 </ul>
               </div>
+            )}
+
+            {/* Tradeoffs I navigated */}
+            {!isEmpty(tradeoffsPart) && (
+              <p className="cs-body cs-tradeoffs-text" style={{ whiteSpace: 'pre-line' }}>
+                {tradeoffsPart}
+              </p>
             )}
           </section>
         )}
@@ -386,7 +571,7 @@ export default function CaseStudyPage({ data }: Props) {
 
         {/* ── SECTION 5: Impact and outcomes (Metrics Grid) ───────────────── */}
         {hasMetrics && (
-          <section className="cs-section cs-reveal">
+          <section className="cs-section cs-metrics-section">
             <h2 className="cs-heading">Impact and outcomes</h2>
             <div className="cs-metrics-grid">
               {metrics.map((m, i) => (
@@ -413,7 +598,7 @@ export default function CaseStudyPage({ data }: Props) {
 
         {/* ── SECTION 6: Media Grid ─────────────────────── */}
         {!data.isConfidential && media.length > 0 && (
-          <section className="cs-section cs-reveal">
+          <section className="cs-section cs-media-section">
             <div className="cs-media-grid" style={{ marginTop: 0 }}>
               {media.map((item, i) => (
                 <MediaSlot key={i} item={item} />
@@ -445,7 +630,7 @@ export default function CaseStudyPage({ data }: Props) {
 
         {/* ── SECTION 9: Go deeper ──────────────────────────── */}
         {hasLinks && (
-          <section className="cs-section cs-reveal">
+          <section className="cs-section cs-links-section">
             <h2 className="cs-heading">Go deeper</h2>
             <div className="cs-links-row">
               {links.map((link, i) => (

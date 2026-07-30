@@ -68,16 +68,10 @@
 	margin-bottom: 56px;
 }
 
-/* Fade-in-up animation (applied via JS Intersection Observer) */
+/* Initial hidden state for scroll animations (handled by GSAP) */
 .cs-reveal {
 	opacity: 0;
 	transform: translateY(20px);
-	transition: opacity 0.55s ease, transform 0.55s ease;
-}
-
-.cs-reveal.is-visible {
-	opacity: 1;
-	transform: translateY(0);
 }
 
 /* ── Section heading ──────────────────────────────────────── */

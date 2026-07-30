@@ -40,6 +40,7 @@ export const workItems = [
         src: 'Gemini_Generated_Image_o3s30wo3s30wo3s3.png',
         color: '#dbeafe',
         url: 'https://drive.google.com/drive/u/0/folders/1B0mtA9-xkNbbo6ZUXztuHZiMmlovNtLw',
+        slug: 'neuroadapt-agentic-rag-engine-for-neuroscience-research',
         categories: [ 'product management', 'project management', 'ai', 'products', ],
     },
     {

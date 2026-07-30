@@ -23,7 +23,12 @@
     "confidentialNote": "",
     "tldr": "Problem: Śrīla Prabhupāda's teachings are scattered across ~70 books, thousands of letters, and hours of recordings — nowhere to reliably ask a question and get his actual words back, with a source, and no invention.\n\nWhat we did: Built a citation-grounded RAG engine over his books, Bhāgavatam, letters, and lectures (32,209 chunks), with a relevance gate that refuses out-of-scope questions and a deterministic guard that strips any fabricated citation — then designed and prototyped the full product experience (landing page, chat app, constellation-themed temple locator) on top of it.\n\nResult: Retrieval validated at nDCG@6 0.840 on 100 questions, 0 fabricated citations across 100 answers, and a working frontend — with one clear next step: build the API layer connecting the two, since the engine and the interface are both ready but not yet wired together.",
     "context": "## The landscape\n\nFaithful access to Śrīla Prabhupāda's teachings today means one of three things: manually searching Vedabase (powerful but not built for \"I'm suffering, what did he say about this?\"), asking a general LLM (fluent, but it will confidently invent or soften his positions with zero accountability), or relying on devotees and secondary compilations, which introduces a human filter between the seeker and his actual words. There isn't a tool built around a single non-negotiable constraint: **return his words, or say nothing.**\n\n## The gap\n\nNothing sits at the intersection of *grounded* and *devotional*. Enterprise RAG tools are built for support tickets and internal docs — they're not designed to refuse gracefully when a teaching genuinely isn't there, or to represent one voice with total fidelity rather than blend many sources. And devotional/spiritual apps built so far are mostly content libraries or chatbots with a spiritual skin — friendly, but with no architecture guaranteeing they aren't paraphrasing or fabricating him. Dāsa sits in the gap between \"technically rigorous\" and \"reverently faithful\" — nobody had built both at once for this specific corpus and constraint.\n\n## What made it hard\n\n**Retrieval had a semantic blind spot money alone couldn't fix.** \"Why does Krishna appear in this world?\" kept surfacing Chapter 11 (the universal form) instead of the actual incarnation verses (4.7–4.8), because the embedding model read \"appear\" as *visual manifestation*, not *descend*. More data wouldn't have fixed this — it took re-ranking logic to correct the *ordering*, not just the *coverage*.\n\n**Small models lie fluently.** The first model (llama3.2:3b) mis-cited scripture and, when it didn't know something, invented an answer rather than refusing — the single most dangerous failure mode for a fidelity product. Fixing it took a real model upgrade plus a deterministic, non-negotiable citation guard — because you can't trust an LLM's promise not to hallucinate; you have to structurally prevent it.\n\n**~80% of the spoken corpus is auto-captioned**, meaning the \"his own words\" promise was, for lectures, actually \"an algorithm's best guess at his words\" — a fidelity gap invisible until you specifically go looking for it.\n\n**And the hardest part is philosophical, not technical:** once you let the model answer *in his voice*, in first person, you've quietly shifted the product from \"these are his words\" to \"this is his style, written by an AI\" — the exact thing the tool exists to prevent. Catching that required treating a UX decision as a fidelity risk, not just a feature.",
-    "roleAndApproach": "My Role and Approach\n\nWhat I owned: Product direction and the fidelity bar for Dāsa end-to-end — defining what \"faithful\" means technically (grounded retrieval, zero fabrication), curating and prioritizing the corpus, directing the UX/visual identity, and sequencing the roadmap between engineering and design.\n\n2–3 key decisions:\n\nMade refusal a feature, not a failure. Instead of asking \"how do we get the model to always answer,\" I set the bar as \"the model must say 'no teaching found' when it doesn't have one\" — a relevance gate, not a courtesy. That reframed the whole engineering problem around fidelity instead of coverage.\nCut the corpus at the point of purity, not the point of size. I chose to include Śrīmad-Bhāgavatam only through Canto 10.13 — exactly where Śrīla Prabhupāda personally stopped translating before his disciples completed the rest — even though that meant leaving real content on the table. Completeness lost to fidelity on purpose.\nRejected the \"choose a persona\" pattern. Early UI thinking leaned toward letting users pick how Dāsa \"talks to them.\" I redirected it: Dāsa doesn't perform a persona — it detects which of the four seekers (Bhagavad-gītā 7.16: Ārta, Arthārthī, Jijñāsu, Jñānī) is asking, the way he actually did, and adapts. Same truth, different door in.\n\nTradeoffs I navigated: Warmth vs. verifiability — once I approved a first-person \"his voice\" answer mode for emotional accessibility, I had to also mandate that his real, cited words stay visibly attached to every such answer, or the product's core promise quietly breaks. And build-speed vs. rigor — I chose to hold the line on validating retrieval at real scale (n=100, not n=20) before letting the team treat it as \"done,\" even though it slowed the path to a visible demo.",
+    "roleAndApproach": "What I owned: Product direction and the fidelity bar for Dāsa end-to-end — defining what \"faithful\" means technically (grounded retrieval, zero fabrication), curating and prioritizing the corpus, directing the UX/visual identity, and sequencing the roadmap between engineering and design.\n\nTradeoffs I navigated: Warmth vs. verifiability — once I approved a first-person \"his voice\" answer mode for emotional accessibility, I had to also mandate that his real, cited words stay visibly attached to every such answer, or the product's core promise quietly breaks. And build-speed vs. rigor — I chose to hold the line on validating retrieval at real scale (n=100, not n=20) before letting the team treat it as \"done,\" even though it slowed the path to a visible demo.",
+    "keyDecisions": [
+      "Made refusal a feature, not a failure. Instead of asking \"how do we get the model to always answer,\" I set the bar as \"the model must say 'no teaching found' when it doesn't have one\" — a relevance gate, not a courtesy. That reframed the whole engineering problem around fidelity instead of coverage.",
+      "Cut the corpus at the point of purity, not the point of size. I chose to include Śrīmad-Bhāgavatam only through Canto 10.13 — exactly where Śrīla Prabhupāda personally stopped translating before his disciples completed the rest — even though that meant leaving real content on the table. Completeness lost to fidelity on purpose.",
+      "Rejected the \"choose a persona\" pattern. Early UI thinking leaned toward letting users pick how Dāsa \"talks to them.\" I redirected it: Dāsa doesn't perform a persona — it detects which of the four seekers (Bhagavad-gītā 7.16: Ārta, Arthārthī, Jijñāsu, Jñānī) is asking, the way he actually did, and adapts. Same truth, different door in."
+    ],
     "keyDecision": {
       "label": "Key decision",
       "decision": "We chose to build a custom ingestion pipeline for Śrīla Prabhupāda's books, letters, and lectures, rather than use an off-the-shelf scraper or generic document loader.",
@@ -70,6 +75,71 @@
     ],
     "impactContext": "IMPACT CONTEXT\n\nFor the customer: doubling the corpus and validating retrieval at scale means a devotee asking about grief, a guru, or death — previously our weakest categories — now reliably gets a real, cited teaching instead of a near-miss or a false refusal. Eliminating fabricated citations (17→0) is what makes the product safe to actually put in front of people: a scholar or preacher can cite an answer with confidence instead of double-checking every reference by hand.\n\nFor the team: scaling the eval set from 20 to 100 questions turned \"we think retrieval is good\" into a defensible engineering claim — it caught two real problems (a hard retrieval gap, a re-ranker regression on conversational sources) that the smaller set was too small to ever surface, so we're now fixing bugs the data actually found rather than ones we guessed at.\n\nFor the business: this is the evidence base that justifies moving from \"promising prototype\" to \"ready for a private beta\" — the hardest, highest-risk technical question for a faithfulness-first product (can we trust it not to invent his words, at scale) now has a validated, board-defensible answer rather than a one confined to a handful of hand-picked examples.",
     "reflection": null,
+    "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "neuroadapt-agentic-rag-engine-for-neuroscience-research": {
+    "slug": "neuroadapt-agentic-rag-engine-for-neuroscience-research",
+    "company": "",
+    "organization": "IISc Bangalore",
+    "title": "NeuroAdapt: A Standardized Spike-Train Feature Extraction Module for a Science Compiler",
+    "dateRange": "",
+    "role": "NeuroAdapt, IISc Bangalore",
+    "teamSize": "",
+    "tags": [
+      "Electrophysiology",
+      "Spike Train Analysis",
+      "Feature Extraction",
+      "Neuroscience",
+      "Retrieval-Augmented Generation"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: The lack of standardization in spike train analysis leads to inconsistent definitions, ad-hoc custom scripts, and poor reproducibility across neuroscientific studies.\n\nWhat we did: I developed NeuroAdapt, a modular feature extraction pipeline and science compiler framework that ingests sorted spike trains to extract standardized unit-level and population-level metrics.\n\nResult: On simulated validation data, the pipeline accurately captured key neural dynamics, explaining 87% of population variance in two principal components and identifying synchronous firing with a peak cross-correlation of 0.85.",
+    "roleAndApproach": "What I owned: I led the design and implementation of NeuroAdapt, defining the pipeline architecture for ingesting sorted spike trains, computing standardized unit- and population-level metrics, and delivering automated analysis via multimodal RAG and LangChain agent frameworks.\n\nKey decisions:\nAdopted a two-tiered feature extraction model: Separated single-unit analysis from population-level dynamics to allow modular metric additions without disrupting existing workflows.\nCombined automated report generation with multimodal RAG: Generated standardized PDF summaries interpreted by GPT-4o-mini and indexed them into Weaviate using text-embedding-3-large to enable natural language querying.\nStandardized storage via Neurodata Without Borders (NWB): Formatted outputs into NWB and open formats to ensure direct integration into existing neuroscience data pipelines.\n\nTradeoffs I navigated: Automated coverage vs. specialized flexibility — focused on providing a comprehensive baseline of standardized metrics while allowing researchers to export structured tables and NWB modules for custom downstream hypothesis testing.",
+    "keyDecisions": [
+      "Adopted a two-tiered feature extraction model to separate single-neuron statistics from population dynamics, ensuring modularity and seamless pipeline extension.",
+      "Integrated automated PDF report generation with multimodal Retrieval-Augmented Generation (RAG) using GPT-4o and Weaviate, enabling domain experts to query complex electrophysiology results through natural language.",
+      "Standardized output formats around Neurodata Without Borders (NWB) and structured CSV/JSON, guaranteeing end-to-end traceability and reproducibility across experiments."
+    ],
+    "whatWasBuilt": "NeuroAdapt is a standardized spike-train feature extraction pipeline and science compiler module designed for neuroscientists and data analysts. It ingests sorted spike trains from sources like Kilosort or SpikeInterface and computes unit-level metrics (such as firing rate, ISI coefficient of variation, burst index, and Fano factor) alongside population-level metrics (such as pairwise cross-correlations, synchrony indices, and principal component analysis). The solution automates visualization generation, uses GPT-4o-mini to interpret figures, compiles multi-page PDF reports, and provides natural language query interfaces using a multimodal RAG system built on Weaviate and LangChain.",
+    "media": [
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "87%",
+        "label": "Population variance explained by top two principal components"
+      },
+      {
+        "value": "0.85",
+        "label": "Peak cross-correlation for synchronous neuron pair"
+      },
+      {
+        "value": "102",
+        "label": "Coincident spike pairs detected at zero lag"
+      }
+    ],
+    "impactContext": "The quantitative outputs validate NeuroAdapt's ability to accurately detect ground-truth spiking patterns, such as distinguishing bursty from regular firing and isolating low-dimensional population dynamics. By standardizing these metrics and embedding them directly into NWB files or searchable vector databases, NeuroAdapt eliminates custom ad-hoc scripts and enables reproducible hypothesis testing across neuroscientific studies.",
+    "reflection": "Standardizing the feature extraction layer fills a critical gap between raw spike sorting and downstream hypothesis testing. Moving forward, integrating standardized spike metrics directly with AI-driven behavioral modeling will allow full automation of the science compiler vision.",
     "links": [],
     "prevProject": null,
     "nextProject": null
