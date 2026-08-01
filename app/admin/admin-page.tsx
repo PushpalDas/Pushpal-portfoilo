@@ -783,7 +783,7 @@ export default function AdminPage() {
 		setAiFiles((prev) => prev.filter((_, idx) => idx !== i));
 
 	const handleAiFill = async () => {
-		if (!aiFiles.length) return;
+		if (!aiFiles.length && !aiNotes.trim()) return;
 
 		setAiFilling(true);
 		try {
@@ -2073,7 +2073,7 @@ export default function AdminPage() {
 																onClick={handleAiFill}
 																disabled={aiFilling || aiFiles.length === 0}
 															>
-																{aiFilling ? (
+																{aiFilling && aiFiles.length > 0 ? (
 																	<>
 																		<span
 																			className='admin-spinner'
@@ -2096,6 +2096,35 @@ export default function AdminPage() {
 																	</span>
 																)}
 															</button>
+
+															{aiFiles.length === 0 && aiNotes.trim().length > 0 && (
+																<button
+																	type='button'
+																	className='admin-ai-run-btn admin-ai-run-pasted-btn'
+																	style={{
+																		background: 'linear-gradient(135deg, #ec4899 0%, #d946ef 100%)',
+																	}}
+																	onClick={handleAiFill}
+																	disabled={aiFilling}
+																>
+																	{aiFilling ? (
+																		<>
+																			<span
+																				className='admin-spinner'
+																				style={{
+																					width: '0.875rem',
+																					height: '0.875rem',
+																					borderWidth: '1.5px',
+																					borderTopColor: '#fff',
+																				}}
+																			/>
+																			<span>Reading pasted text…</span>
+																		</>
+																	) : (
+																		<span>Fill from pasted text</span>
+																	)}
+																</button>
+															)}
 
 															<label className='admin-cs-toggle'>
 																<input

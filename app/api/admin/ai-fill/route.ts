@@ -56,43 +56,47 @@ export async function POST(request: Request) {
 			formData.get('provider') as string | null,
 		);
 
-		if (files.length === 0) {
+		if (files.length === 0 && !notes.trim()) {
 			return NextResponse.json(
-				{ error: 'No document uploaded' },
+				{ error: 'Please upload a document or paste source text context.' },
 				{ status: 400 },
 			);
 		}
 
-		const invalid = validateFiles(files);
-		if (invalid) {
-			return NextResponse.json({ error: invalid }, { status: 400 });
+		if (files.length > 0) {
+			const invalid = validateFiles(files);
+			if (invalid) {
+				return NextResponse.json({ error: invalid }, { status: 400 });
+			}
 		}
 
 		const parts: Record<string, unknown>[] = [
 			{ text: systemPrompt(role, roleWasGiven) },
 		];
 
-		if (files.length > 1) {
-			parts.push({
-				text: `There are ${files.length} documents below. Read all of them and merge what they say into one case study. Where they overlap, prefer the more specific detail; where they conflict, prefer the document that reads as more recent or more authoritative.`,
-			});
-		}
+		if (files.length > 0) {
+			if (files.length > 1) {
+				parts.push({
+					text: `There are ${files.length} documents below. Read all of them and merge what they say into one case study. Where they overlap, prefer the more specific detail; where they conflict, prefer the document that reads as more recent or more authoritative.`,
+				});
+			}
 
-		let docParts: Record<string, unknown>[];
-		try {
-			docParts = await filesToParts(files);
-		} catch (err) {
-			const message = err instanceof Error ? err.message : 'Unsupported file';
-			return NextResponse.json({ error: message }, { status: 400 });
-		}
+			let docParts: Record<string, unknown>[];
+			try {
+				docParts = await filesToParts(files);
+			} catch (err) {
+				const message = err instanceof Error ? err.message : 'Unsupported file';
+				return NextResponse.json({ error: message }, { status: 400 });
+			}
 
-		if (docParts.length === 0) {
-			return NextResponse.json(
-				{ error: 'Those documents are empty.' },
-				{ status: 400 },
-			);
+			if (docParts.length === 0) {
+				return NextResponse.json(
+					{ error: 'Those documents are empty.' },
+					{ status: 400 },
+				);
+			}
+			parts.push(...docParts);
 		}
-		parts.push(...docParts);
 
 		if (notes.trim()) {
 			parts.push({
