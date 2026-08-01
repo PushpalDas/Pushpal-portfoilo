@@ -325,7 +325,9 @@ function MediaSlot({ item }: { item: MediaItem }) {
 	}
 
 	return (
-		<div className={item.fullWidth ? 'cs-media-slot--full' : undefined}>
+		<div
+			className={item.fullWidth || isImg ? 'cs-media-slot--full' : undefined}
+		>
 			<div className={wrapperClass}>{inner}</div>
 			{item.type === 'demo' && (
 				<div style={{ marginTop: 8 }}>
