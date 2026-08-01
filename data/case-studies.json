@@ -146,13 +146,7 @@
     "dateRange": "",
     "role": "",
     "teamSize": "",
-    "tags": [
-      "Quantum Computing",
-      "FastAPI",
-      "Next.js",
-      "Three.js",
-      "NumPy"
-    ],
+    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
@@ -399,21 +393,21 @@
     "media": [
       {
         "type": "image",
-        "src": "",
-        "caption": "",
-        "fullWidth": false
+        "src": "mermaid-diagram.png",
+        "caption": "architecture of data storing",
+        "fullWidth": true
       },
       {
         "type": "image",
-        "src": "",
-        "caption": "",
-        "fullWidth": false
+        "src": "mermaid-diagram__1_.png",
+        "caption": "architecture of vector search",
+        "fullWidth": true
       },
       {
         "type": "video",
         "src": "",
         "caption": "",
-        "fullWidth": true
+        "fullWidth": false
       }
     ],
     "metrics": [
