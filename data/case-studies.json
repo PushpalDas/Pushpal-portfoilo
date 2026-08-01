@@ -44,7 +44,7 @@
       },
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__5_.png",
         "caption": "",
         "fullWidth": false
       }
@@ -160,7 +160,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__6_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -225,7 +225,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__14_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -291,7 +291,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__12_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -471,7 +471,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__7_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -557,7 +557,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__8_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -623,7 +623,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__3_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -754,7 +754,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__13_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -841,7 +841,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__11_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -958,7 +958,7 @@
     "media": [
       {
         "type": "image",
-        "src": "",
+        "src": "mermaid-diagram__4_.png",
         "caption": "",
         "fullWidth": false
       },
@@ -1090,6 +1090,148 @@
     "impactContext": "These numbers show the platform was designed to run as a lightweight daily operational system, not a manual reporting exercise. The sync cadence and concurrency rules kept the process inside a tight serverless window. The confirmed live run after the tracking-policy change showed the immediate business effect of broader coverage: the database grew from 248 to 278 documents because ClickUp-only records were no longer excluded or deleted. That improved visibility for internal teams without changing the schema or the user-facing workflow.",
     "reflection": "The main lesson was that the original control model was too dependent on the Excel register. Using Excel as the gate for inclusion matched the canonical list, but it also created blind spots and made the sync brittle. The later move to track all workspace docs, keep history, and treat Excel as enrichment was a better fit for the reporting job this product had to do. I also saw the value of keeping the MVP read-only and internal. That narrowed scope, reduced approval overhead, and let the team focus on correctness, freshness, and operational reliability first.",
     "links": [],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "ai-pm-generative-ai-engine-for-resource-allocation": {
+    "slug": "ai-pm-generative-ai-engine-for-resource-allocation",
+    "company": "Ixana",
+    "organization": "",
+    "title": "Automated Engineering Bandwidth Reporting System",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "30 people",
+    "tags": [
+      "Workflow Automation",
+      "Resource Planning",
+      "ClickUp Integration",
+      "Process Optimization"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Manual tracking of engineering capacity across multiple project lists was inefficient and prone to reporting errors.\n\nWhat we did: I led the development of an automated n8n workflow to pull task data from ClickUp, calculate working days and bandwidth availability, and sync reporting directly into Excel.\n\nResult: The system automated routine progress tracking and delivered clear visibility into capacity and commitments across three engineering teams.",
+    "roleAndApproach": "What I owned: I defined the reporting specifications for engineering capacity tracking, designed the data transformation logic across team rosters, and managed the delivery of the automated n8n workflow connecting ClickUp to Microsoft Excel.\n\nTradeoffs I navigated: Automated speed vs. rate limits: I chose batch iteration across list IDs rather than continuous real-time polling. Raw timeline tracking vs. actual availability: I enforced working-day calculation rules to exclude weekends and added date offset logic to maintain accurate schedule data across time zones.",
+    "keyDecisions": [
+      "I decided to calculate capacity based strictly on working days rather than calendar days to give leadership accurate availability forecasts.",
+      "I structured the workflow into parallel branches per sub-team to maintain distinct reporting tabs for RTL, AMS, and PS groups in Excel.",
+      "I implemented a date offset correction step in the transformation logic to prevent timezone shifts from changing task due dates."
+    ],
+    "whatWasBuilt": "An automated workflow pipeline using n8n that queries 58 ClickUp project lists, maps assigned tasks to 30 team members across RTL, AMS, and PS groups, calculates tentative and committed bandwidth timelines, and appends formatted reports directly into Microsoft Excel spreadsheets.",
+    "media": [
+      {
+        "type": "image",
+        "src": "mermaid-diagram__9_.png",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "58",
+        "label": "ClickUp project lists integrated"
+      },
+      {
+        "value": "30",
+        "label": "Team members tracked across 3 departments"
+      }
+    ],
+    "impactContext": "The automated pipeline provides engineering leadership with accurate, real-time availability forecasts and task status reporting without requiring manual updates from developers.",
+    "reflection": "Standardizing task parameters like start dates, due dates, and parent task linkages in project management tools is essential before automating downstream operational reporting.",
+    "links": [
+      {
+        "icon": "file",
+        "label": "Phase 2 Final Report Excel Workbook",
+        "url": "https://10xar-my.sharepoint.com/personal/anuj_dubey_ixana_ai/_layouts/15/Doc.aspx?sourcedoc=%7B21EED6CA-F88E-4DCB-A97C-86FCC1D045CE%7D&file=Phase%202%20Final%20report-1%20month-anuj.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+      },
+      {
+        "icon": "file",
+        "label": "AMS Bandwidth Report Excel Workbook",
+        "url": "https://10xar-my.sharepoint.com/personal/anuj_dubey_ixana_ai/_layouts/15/Doc.aspx?sourcedoc=%7BAED1F0DE-8F16-4109-AFCA-975253AF20C6%7D&file=[Ai_Controlled]%20AMS%20BW%20report-anuj.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+      }
+    ],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "github-for-clickup-automation-on-the-changes-going-outside-p": {
+    "slug": "github-for-clickup-automation-on-the-changes-going-outside-p",
+    "company": "",
+    "organization": "",
+    "title": "ClickUp Activity View Tracker",
+    "dateRange": "",
+    "role": "",
+    "teamSize": "",
+    "tags": [
+      "Audit Logging",
+      "Webhook Integration",
+      "ClickUp API",
+      "System Design",
+      "Data Pipelines"
+    ],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: Teams struggle to extract clear, structured task change histories from ClickUp's native feed for compliance and audit reporting.\n\nWhat we did: I led the product scope and delivery of an activity tracking service that processes ClickUp webhooks into human-readable timeline records.\n\nResult: Delivered a reliable, real-time activity timeline that logs task updates with deduplication and replay capabilities.",
+    "roleAndApproach": "What I owned: I owned the product roadmap, MVP scope, and functional design. I defined the single-space filtering rules, webhook signature verification standards, schema requirements, and user interface features for filtering and searching activity logs.\n\nTradeoffs I navigated: Launch speed vs. feature breadth — I limited the initial release to primary task fields while excluding attachments, time tracking, and checklists. I also prioritized storing raw payloads before processing, accepting extra database storage to guarantee replayability and data integrity.",
+    "keyDecisions": [
+      "Stored raw webhook payloads in a dedicated database table prior to processing, enabling data replay and logic updates without losing event history.",
+      "Enforced strict single-space filtering and history ID deduplication at the ingestion boundary to stop duplicate records and irrelevant space noise.",
+      "Excluded automated bot edits and secondary entities from the initial MVP to keep audit records clear and focused on human actions."
+    ],
+    "whatWasBuilt": "A Next.js 16 and PostgreSQL application that converts ClickUp webhook events into human-readable task history records. It authenticates incoming updates, computes snapshot diffs across status, assignee, priority, due date, and custom field changes, and presents them in a searchable, filterable timeline UI for project compliance and auditing.",
+    "media": [
+      {
+        "type": "image",
+        "src": "mermaid-diagram__10_.png",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "image",
+        "src": "",
+        "caption": "",
+        "fullWidth": false
+      },
+      {
+        "type": "video",
+        "src": "",
+        "caption": "",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      },
+      {
+        "value": "",
+        "label": ""
+      }
+    ],
+    "impactContext": "Gave team leads and managers immediate visibility into task modifications, providing an audit trail of who changed what, when, and previous values across tracked workflows.",
+    "reflection": "Capturing raw payloads from day one proved essential for pipeline resilience, allowing us to tweak parsing rules and reprocess events without relying on upstream API calls.",
+    "links": [
+      {
+        "icon": "external",
+        "label": "Activity View UI",
+        "url": "http://localhost:3000/activity"
+      }
+    ],
     "prevProject": null,
     "nextProject": null
   }

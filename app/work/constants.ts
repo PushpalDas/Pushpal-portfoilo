@@ -182,6 +182,7 @@ export const workItems = [
 		src: 'Gemini_Generated_Image_gqlkm8gqlkm8gqlk.png',
 		color: '#fae8ff',
 		url: 'https://10xar-my.sharepoint.com/personal/pushpal_das_ixana_ai/_layouts/15/onedrive.aspx?csf=1&web=1&e=f1nILS&CID=94ad2e4c-6d67-4625-91bf-23a89e96df3d&id=%2fpersonal%2fpushpal_das_ixana_ai%2fDocuments%2fAnuj+tasks%2fProject+Management+Agentic+Ai%2fResource+allocation&FolderCTID=0x012000D839801D2B34804CB13555A64E4ECD83&view=0',
+		slug: 'ai-pm-generative-ai-engine-for-resource-allocation',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
@@ -215,6 +216,7 @@ export const workItems = [
 		src: 'Image__16_.jpg',
 		color: '#fae8ff',
 		url: 'https://10xar-my.sharepoint.com/personal/pushpal_das_ixana_ai/_layouts/15/onedrive.aspx?csf=1&web=1&e=f1nILS&CID=94ad2e4c-6d67-4625-91bf-23a89e96df3d&id=%2fpersonal%2fpushpal_das_ixana_ai%2fDocuments%2fAnuj+tasks%2fProject+Management+Agentic+Ai%2fResource+allocation&FolderCTID=0x012000D839801D2B34804CB13555A64E4ECD83&view=0',
+		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
 		categories: ['product management', 'project management', 'ai', 'products'],
 	},
 	{
