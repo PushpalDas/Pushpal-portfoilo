@@ -37,6 +37,11 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 								</span>
 							</span>
 						</h1>
+						<div className='work-header-subline-wrap'>
+							<p className='work-header-subline'>
+								Product manager with an engineering background — body area network silicon, RAG platforms, and internal tools. Three shipped commercially.
+							</p>
+						</div>
 					</div>
 					{filters && <div className='work-header-filters'>{filters}</div>}
 				</div>

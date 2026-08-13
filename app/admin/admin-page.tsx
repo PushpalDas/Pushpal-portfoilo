@@ -7,14 +7,26 @@ import './admin.css';
 
 interface ItemData {
 	title: string;
-	location: string;
-	services: string;
-	year: string;
-	src: string;
-	color: string;
-	url: string;
+	color?: string;
 	slug?: string;
-	categories: string[];
+
+	// Old Certification fields
+	location?: string;
+	services?: string;
+	year?: string;
+	src?: string;
+	url?: string;
+	categories?: string[];
+
+	// New Work fields
+	company?: string;
+	domain?: string;
+	category?: string;
+	status?: 'production' | 'testing' | 'killed' | null;
+	outcome?: string;
+	image?: string;
+	href?: string;
+	demoUrl?: string;
 }
 
 interface MediaRow {
@@ -72,14 +84,22 @@ interface Toast {
 
 const emptyItem: ItemData = {
 	title: '',
+	color: '#dbeafe',
+	slug: '',
 	location: '',
 	services: '',
 	year: '',
 	src: '',
-	color: '#dbeafe',
 	url: '',
-	slug: '',
 	categories: [],
+	company: '',
+	domain: '',
+	category: 'product',
+	status: null,
+	outcome: '',
+	image: '',
+	href: '',
+	demoUrl: '',
 };
 
 const emptyCaseStudy: CaseStudyForm = {
@@ -556,7 +576,7 @@ export default function AdminPage() {
 			if (res.ok) {
 				const data = await res.json();
 				if (data.success && data.filename) {
-					handleFormChange('src', data.filename);
+					handleFormChange(activeTab === 'works' ? 'image' : 'src', data.filename);
 					showToast('Image uploaded!', 'success');
 				} else {
 					showToast(data.error || 'Upload failed', 'error');
@@ -647,7 +667,7 @@ export default function AdminPage() {
 
 	/* ─── Basic form helpers ────────────────────────────── */
 
-	const handleFormChange = (field: keyof ItemData, value: string) => {
+	const handleFormChange = (field: keyof ItemData, value: any) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 		// Auto-generate slug when title changes (if slug is empty or was auto-generated)
 		if (field === 'title' && activeTab === 'works') {
@@ -659,12 +679,13 @@ export default function AdminPage() {
 
 	const handleCategoryToggle = (categoryKey: string) => {
 		setFormData((prev) => {
-			const hasCat = prev.categories.includes(categoryKey);
+			const cats = prev.categories || [];
+			const hasCat = cats.includes(categoryKey);
 			return {
 				...prev,
 				categories: hasCat
-					? prev.categories.filter((c) => c !== categoryKey)
-					: [...prev.categories, categoryKey],
+					? cats.filter((c) => c !== categoryKey)
+					: [...cats, categoryKey],
 			};
 		});
 	};
@@ -1322,7 +1343,7 @@ export default function AdminPage() {
 	/* ─── Group items ───────────────────────────────────── */
 
 	const CERT_GROUPS = ['management', 'skills', 'achievements'];
-	const WORK_GROUPS = ['products', 'core'];
+	const WORK_GROUPS = ['product', 'engineering'];
 	const categoryGroups =
 		activeTab === 'certifications' ? CERT_GROUPS : WORK_GROUPS;
 
@@ -1336,9 +1357,10 @@ export default function AdminPage() {
 		for (const catKey of categoryGroups) {
 			const groupItems: { item: ItemData; globalIndex: number }[] = [];
 			currentItems.forEach((item, i) => {
+				const cats = item.categories || (item.category ? [item.category] : []);
 				if (
 					!seen.has(i) &&
-					item.categories.some((c) => c.toLowerCase() === catKey)
+					cats.some((c) => c.toLowerCase() === catKey)
 				) {
 					groupItems.push({ item, globalIndex: i });
 					seen.add(i);
@@ -1528,9 +1550,25 @@ export default function AdminPage() {
 										<div className='admin-item-info'>
 											<div className='admin-item-title'>{item.title}</div>
 											<div className='admin-item-meta'>
-												<span>{item.services}</span>
-												<span>•</span>
-												<span>{item.year}</span>
+												{activeTab === 'works' ? (
+													<>
+														<span>{item.company}</span>
+														<span>•</span>
+														<span>{item.year}</span>
+														{item.domain && (
+															<>
+																<span>•</span>
+																<span>{item.domain}</span>
+															</>
+														)}
+													</>
+												) : (
+													<>
+														<span>{item.services}</span>
+														<span>•</span>
+														<span>{item.year}</span>
+													</>
+												)}
 												{item.slug && (
 													<>
 														<span>•</span>
@@ -1543,7 +1581,7 @@ export default function AdminPage() {
 												)}
 											</div>
 											<div className='admin-item-categories'>
-												{item.categories.map((cat) => (
+												{(item.categories || (item.category ? [item.category] : [])).map((cat) => (
 													<span key={cat} className='admin-category-tag'>
 														{cat}
 													</span>
@@ -1662,247 +1700,360 @@ export default function AdminPage() {
 							{/* ── BASIC TAB ──────────────────────────────── */}
 							{modalTab === 'basic' && (
 								<>
-									{formData.src && (
-										<div className='admin-modal-image-preview'>
-											{uploading ? (
-												<div
-													style={{
-														display: 'flex',
-														alignItems: 'center',
-														justifyContent: 'center',
-														height: '180px',
-														background: 'rgba(255,255,255,0.02)',
-														borderRadius: '0.75rem',
-														border: '1px dashed rgba(255,255,255,0.08)',
-													}}
-												>
-													<span className='admin-spinner' />
+									{activeTab === 'works' ? (
+										<>
+											{formData.image && (
+												<div className='admin-modal-image-preview'>
+													{uploading ? (
+														<div className='admin-spinner' />
+													) : (
+														<img
+															key={formData.image}
+															src={`/static/images/project/${formData.image}?t=${Date.now()}`}
+															alt='Preview'
+															style={{ display: 'block' }}
+															onError={(e) => {
+																(e.target as HTMLImageElement).style.display = 'none';
+															}}
+														/>
+													)}
 												</div>
-											) : (
-												/* eslint-disable-next-line @next/next/no-img-element */
-												<img
-													key={formData.src}
-													src={`/static/images/project/${formData.src}?t=${Date.now()}`}
-													alt='Preview'
-													style={{ display: 'block' }}
-													onError={(e) => {
-														(e.target as HTMLImageElement).style.display =
-															'none';
-													}}
-												/>
 											)}
-										</div>
-									)}
 
-									<div className='admin-form-group'>
-										<label htmlFor='form-title'>Title</label>
-										<textarea
-											id='form-title'
-											className='admin-textarea'
-											placeholder='Item title...'
-											value={formData.title}
-											onChange={(e) =>
-												handleFormChange('title', e.target.value)
-											}
-										/>
-									</div>
-
-									<div className='admin-form-row'>
-										<div className='admin-form-group'>
-											<label htmlFor='form-location'>Location</label>
-											<input
-												id='form-location'
-												type='text'
-												className='admin-input'
-												placeholder='Location...'
-												value={formData.location}
-												onChange={(e) =>
-													handleFormChange('location', e.target.value)
-												}
-											/>
-										</div>
-										<div className='admin-form-group'>
-											<label htmlFor='form-year'>Year</label>
-											<input
-												id='form-year'
-												type='text'
-												className='admin-input'
-												placeholder='e.g. 2024-2025'
-												value={formData.year}
-												onChange={(e) =>
-													handleFormChange('year', e.target.value)
-												}
-											/>
-										</div>
-									</div>
-
-									<div className='admin-form-group'>
-										<label htmlFor='form-services'>Services / Role</label>
-										<input
-											id='form-services'
-											type='text'
-											className='admin-input'
-											placeholder='Role or services...'
-											value={formData.services}
-											onChange={(e) =>
-												handleFormChange('services', e.target.value)
-											}
-										/>
-									</div>
-
-									{activeTab === 'works' && (
-										<div className='admin-form-group'>
-											<label htmlFor='form-slug'>
-												Slug
-												<span
-													style={{
-														color: '#6b6b7b',
-														fontWeight: 400,
-														fontSize: '12px',
-														marginLeft: 8,
-													}}
-												>
-													URL: /work/
-													<strong>
-														{formData.slug ||
-															titleToSlug(formData.title) ||
-															'...'}
-													</strong>
-												</span>
-											</label>
-											<input
-												id='form-slug'
-												type='text'
-												className='admin-input'
-												placeholder='auto-generated-from-title'
-												value={formData.slug ?? titleToSlug(formData.title)}
-												onChange={(e) => {
-													setFormData((p) => ({ ...p, slug: e.target.value }));
-													setCsForm((p) => ({ ...p, slug: e.target.value }));
-												}}
-											/>
-										</div>
-									)}
-
-									<div className='admin-form-row'>
-										<div className='admin-form-group'>
-											<label htmlFor='form-src'>Image Filename</label>
-											<input
-												id='form-src'
-												type='text'
-												className='admin-input'
-												placeholder='image.png'
-												value={formData.src}
-												onChange={(e) =>
-													handleFormChange('src', e.target.value)
-												}
-											/>
-										</div>
-										<div className='admin-form-group'>
-											<label htmlFor='form-color'>Card Color</label>
-											<div className='admin-color-preview'>
-												<input
-													type='color'
-													className='admin-color-swatch'
-													value={formData.color}
-													onChange={(e) =>
-														handleFormChange('color', e.target.value)
-													}
+											<div className='admin-form-group'>
+												<label htmlFor='form-title'>Title</label>
+												<textarea
+													id='form-title'
+													className='admin-textarea'
+													placeholder='Item title...'
+													value={formData.title}
+													onChange={(e) => handleFormChange('title', e.target.value)}
 												/>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-slug'>
+													Slug
+													<span style={{ color: '#6b6b7b', fontWeight: 400, fontSize: '12px', marginLeft: 8 }}>
+														URL: /work/<strong>{formData.slug || titleToSlug(formData.title) || '...'}</strong>
+													</span>
+												</label>
 												<input
-													id='form-color'
+													id='form-slug'
 													type='text'
 													className='admin-input'
-													placeholder='#dbeafe'
-													value={formData.color}
-													onChange={(e) =>
-														handleFormChange('color', e.target.value)
-													}
+													placeholder='auto-generated-from-title'
+													value={formData.slug ?? titleToSlug(formData.title)}
+													onChange={(e) => {
+														setFormData((p) => ({ ...p, slug: e.target.value }));
+														setCsForm((p) => ({ ...p, slug: e.target.value }));
+													}}
 												/>
 											</div>
-										</div>
-									</div>
 
-									<div className='admin-form-group'>
-										<label>Upload Image</label>
-										<div className='admin-file-upload-container'>
-											<div className='admin-file-upload-btn-wrapper'>
-												<div className='admin-file-upload-btn'>
-													{uploading
-														? 'Processing...'
-														: 'Choose Image (PNG, JPG, HEIC…)'}
+											<div className='admin-form-row'>
+												<div className='admin-form-group'>
+													<label htmlFor='form-company'>Company</label>
+													<input
+														id='form-company'
+														type='text'
+														className='admin-input'
+														placeholder='Company Name'
+														value={formData.company || ''}
+														onChange={(e) => handleFormChange('company', e.target.value)}
+													/>
 												</div>
-												<input
-													type='file'
-													accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
-													onChange={handleImageUpload}
-													disabled={uploading}
+												<div className='admin-form-group'>
+													<label htmlFor='form-year'>Year</label>
+													<input
+														id='form-year'
+														type='text'
+														className='admin-input'
+														placeholder='e.g. 2024'
+														value={formData.year || ''}
+														onChange={(e) => handleFormChange('year', e.target.value)}
+													/>
+												</div>
+											</div>
+
+											<div className='admin-form-row'>
+												<div className='admin-form-group'>
+													<label htmlFor='form-domain'>Domain</label>
+													<input
+														id='form-domain'
+														type='text'
+														className='admin-input'
+														placeholder='e.g. HealthTech'
+														value={formData.domain || ''}
+														onChange={(e) => handleFormChange('domain', e.target.value)}
+													/>
+												</div>
+												<div className='admin-form-group'>
+													<label htmlFor='form-category'>Category</label>
+													<select
+														id='form-category'
+														className='admin-input'
+														value={formData.category || 'product'}
+														onChange={(e) => handleFormChange('category', e.target.value)}
+													>
+														<option value="product">Product</option>
+														<option value="engineering">Engineering</option>
+													</select>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-status'>Status</label>
+												<select
+													id='form-status'
+													className='admin-input'
+													value={formData.status || ''}
+													onChange={(e) => handleFormChange('status', e.target.value || null)}
+												>
+													<option value="">None</option>
+													<option value="production">In production</option>
+													<option value="internal">Shipped internally</option>
+													<option value="customer-testing">In customer testing</option>
+													<option value="prototype">Prototype</option>
+													<option value="research">Research</option>
+												</select>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-outcome'>Outcome</label>
+												<textarea
+													id='form-outcome'
+													className='admin-textarea'
+													placeholder='Outcome...'
+													value={formData.outcome || ''}
+													onChange={(e) => handleFormChange('outcome', e.target.value)}
 												/>
 											</div>
-											{uploading && (
-												<div className='admin-uploading-text'>
-													<span
-														className='admin-spinner'
-														style={{
-															width: '0.875rem',
-															height: '0.875rem',
-															borderWidth: '1.5px',
-															borderTopColor: '#60a5fa',
-														}}
+
+											<div className='admin-form-row'>
+												<div className='admin-form-group'>
+													<label htmlFor='form-image'>Image Filename</label>
+													<input
+														id='form-image'
+														type='text'
+														className='admin-input'
+														placeholder='image.png'
+														value={formData.image || ''}
+														onChange={(e) => handleFormChange('image', e.target.value)}
 													/>
-													<span>Converting and uploading…</span>
+												</div>
+												<div className='admin-form-group'>
+													<label htmlFor='form-color'>Card Color</label>
+													<div className='admin-color-preview'>
+														<input
+															type='color'
+															className='admin-color-swatch'
+															value={formData.color || '#ffffff'}
+															onChange={(e) => handleFormChange('color', e.target.value)}
+														/>
+														<input
+															id='form-color'
+															type='text'
+															className='admin-input'
+															placeholder='#dbeafe'
+															value={formData.color || ''}
+															onChange={(e) => handleFormChange('color', e.target.value)}
+														/>
+													</div>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label>Upload Image</label>
+												<div className='admin-file-upload-container'>
+													<div className='admin-file-upload-btn-wrapper'>
+														<div className='admin-file-upload-btn'>
+															{uploading ? 'Processing...' : 'Choose Image'}
+														</div>
+														<input
+															type='file'
+															accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
+															onChange={handleImageUpload}
+															disabled={uploading}
+														/>
+													</div>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-href'>External URL</label>
+												<input
+													id='form-href'
+													type='text'
+													className='admin-input'
+													placeholder='https://...'
+													value={formData.href || ''}
+													onChange={(e) => handleFormChange('href', e.target.value)}
+												/>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-demo'>Demo URL</label>
+												<input
+													id='form-demo'
+													type='text'
+													className='admin-input'
+													placeholder='https://...'
+													value={formData.demoUrl || ''}
+													onChange={(e) => handleFormChange('demoUrl', e.target.value)}
+												/>
+											</div>
+										</>
+									) : (
+										<>
+											{formData.src && (
+												<div className='admin-modal-image-preview'>
+													{uploading ? (
+														<div className='admin-spinner' />
+													) : (
+														<img
+															key={formData.src}
+															src={`/static/images/project/${formData.src}?t=${Date.now()}`}
+															alt='Preview'
+															style={{ display: 'block' }}
+															onError={(e) => {
+																(e.target as HTMLImageElement).style.display = 'none';
+															}}
+														/>
+													)}
 												</div>
 											)}
-										</div>
-									</div>
 
-									<div className='admin-form-group'>
-										<label htmlFor='form-url'>
-											External URL
-											<span
-												style={{
-													color: '#6b6b7b',
-													fontWeight: 400,
-													fontSize: '12px',
-													marginLeft: 8,
-												}}
-											>
-												(used when no case study exists)
-											</span>
-										</label>
-										<input
-											id='form-url'
-											type='text'
-											className='admin-input'
-											placeholder='https://...'
-											value={formData.url}
-											onChange={(e) => handleFormChange('url', e.target.value)}
-										/>
-									</div>
+											<div className='admin-form-group'>
+												<label htmlFor='form-title-cert'>Title</label>
+												<textarea
+													id='form-title-cert'
+													className='admin-textarea'
+													placeholder='Item title...'
+													value={formData.title}
+													onChange={(e) => handleFormChange('title', e.target.value)}
+												/>
+											</div>
 
-									<div className='admin-form-group'>
-										<label>Categories</label>
-										<div className='admin-category-selector'>
-											{(activeTab === 'works'
-												? workCategories
-												: certCategories
-											).map((cat) => {
-												const isSelected = formData.categories.includes(
-													cat.key,
-												);
-												return (
-													<button
-														key={cat.key}
-														type='button'
-														className={`admin-category-btn ${isSelected ? 'selected' : ''}`}
-														onClick={() => handleCategoryToggle(cat.key)}
-													>
-														{cat.label}
-													</button>
-												);
-											})}
-										</div>
-									</div>
+											<div className='admin-form-row'>
+												<div className='admin-form-group'>
+													<label htmlFor='form-location'>Location</label>
+													<input
+														id='form-location'
+														type='text'
+														className='admin-input'
+														placeholder='Location...'
+														value={formData.location || ''}
+														onChange={(e) => handleFormChange('location', e.target.value)}
+													/>
+												</div>
+												<div className='admin-form-group'>
+													<label htmlFor='form-year-cert'>Year</label>
+													<input
+														id='form-year-cert'
+														type='text'
+														className='admin-input'
+														placeholder='e.g. 2024'
+														value={formData.year || ''}
+														onChange={(e) => handleFormChange('year', e.target.value)}
+													/>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-services'>Services / Role</label>
+												<input
+													id='form-services'
+													type='text'
+													className='admin-input'
+													placeholder='Role or services...'
+													value={formData.services || ''}
+													onChange={(e) => handleFormChange('services', e.target.value)}
+												/>
+											</div>
+
+											<div className='admin-form-row'>
+												<div className='admin-form-group'>
+													<label htmlFor='form-src'>Image Filename</label>
+													<input
+														id='form-src'
+														type='text'
+														className='admin-input'
+														placeholder='image.png'
+														value={formData.src || ''}
+														onChange={(e) => handleFormChange('src', e.target.value)}
+													/>
+												</div>
+												<div className='admin-form-group'>
+													<label htmlFor='form-color-cert'>Card Color</label>
+													<div className='admin-color-preview'>
+														<input
+															type='color'
+															className='admin-color-swatch'
+															value={formData.color || '#ffffff'}
+															onChange={(e) => handleFormChange('color', e.target.value)}
+														/>
+														<input
+															id='form-color-cert'
+															type='text'
+															className='admin-input'
+															placeholder='#dbeafe'
+															value={formData.color || ''}
+															onChange={(e) => handleFormChange('color', e.target.value)}
+														/>
+													</div>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label>Upload Image</label>
+												<div className='admin-file-upload-container'>
+													<div className='admin-file-upload-btn-wrapper'>
+														<div className='admin-file-upload-btn'>
+															{uploading ? 'Processing...' : 'Choose Image'}
+														</div>
+														<input
+															type='file'
+															accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
+															onChange={handleImageUpload}
+															disabled={uploading}
+														/>
+													</div>
+												</div>
+											</div>
+
+											<div className='admin-form-group'>
+												<label htmlFor='form-url'>External URL</label>
+												<input
+													id='form-url'
+													type='text'
+													className='admin-input'
+													placeholder='https://...'
+													value={formData.url || ''}
+													onChange={(e) => handleFormChange('url', e.target.value)}
+												/>
+											</div>
+
+											<div className='admin-form-group'>
+												<label>Categories</label>
+												<div className='admin-category-selector'>
+													{certCategories.map((cat) => {
+														const isSelected = (formData.categories || []).includes(cat.key);
+														return (
+															<button
+																key={cat.key}
+																type='button'
+																className={`admin-category-btn ${isSelected ? 'selected' : ''}`}
+																onClick={() => handleCategoryToggle(cat.key)}
+															>
+																{cat.label}
+															</button>
+														);
+													})}
+												</div>
+											</div>
+										</>
+									)}
 								</>
 							)}
 

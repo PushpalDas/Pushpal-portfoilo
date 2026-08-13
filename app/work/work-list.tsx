@@ -72,10 +72,10 @@ export default function WorkList({ items, setModal }: WorkListProps) {
 						<h5>Client</h5>
 					</div>
 					<div className='work-list-sub-col'>
-						<h5>Location</h5>
+						<h5>Domain</h5>
 					</div>
 					<div className='work-list-sub-col'>
-						<h5>Services</h5>
+						<h5>Category</h5>
 					</div>
 					<div className='work-list-sub-col'>
 						<h5>Year</h5>
@@ -90,7 +90,7 @@ export default function WorkList({ items, setModal }: WorkListProps) {
 						>
 							<div className='work-list-stripe' />
 							<a
-								href={item.url}
+								href={item.href || '#'}
 								target='_blank'
 								rel='noopener noreferrer'
 								className='work-list-item'
@@ -103,10 +103,10 @@ export default function WorkList({ items, setModal }: WorkListProps) {
 									</h4>
 								</div>
 								<div className='work-list-col work-list-col-info'>
-									<p>{item.location}</p>
+									<p>{item.company}</p>
 								</div>
 								<div className='work-list-col work-list-col-info'>
-									<p>{item.services}</p>
+									<p>{item.domain}</p>
 								</div>
 								<div className='work-list-col work-list-col-info'>
 									<p>{item.year}</p>

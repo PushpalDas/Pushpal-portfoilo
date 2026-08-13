@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface WorkGridProps {
 	items: WorkItem[];
-	gridColumns?: 2 | 4;
+	gridColumns?: 2 | 3 | 4;
 }
 
 export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
@@ -44,6 +44,15 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 			<div className='work-grid-container'>
 				<ul className={`work-grid-items work-grid-${gridColumns}`}>
 					{items.map((item) => {
+						const statusConfig: Record<string, { label: string; colorClass: string }> = {
+							production:        { label: 'In production',        colorClass: 'status-green' },
+							internal:          { label: 'Shipped internally',   colorClass: 'status-green' },
+							'customer-testing': { label: 'In customer testing', colorClass: 'status-amber' },
+							prototype:         { label: 'Prototype',            colorClass: 'status-muted' },
+							research:          { label: 'Research',             colorClass: 'status-muted' },
+						};
+						const badge = item.status ? statusConfig[item.status] ?? null : null;
+
 						const cardInner = (
 							<>
 								<div className='work-tile-image-col'>
@@ -52,35 +61,38 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 											className='work-tile-image-bg'
 											style={{ backgroundColor: item.color }}
 										/>
-										{item.icon ? (
-											<div className='work-tile-icon-display'>
-												{item.icon}
-											</div>
-										) : (
-											<Image
-												src={`/static/images/project/${item.src}`}
-												alt={item.title}
-												fill
-												className='work-tile-img'
-												sizes='(max-width: 768px) 100vw, 50vw'
-											/>
-										)}
+										<Image
+											src={`/static/images/project/${item.image}`}
+											alt={item.title}
+											fill
+											className='work-tile-img'
+											sizes='(max-width: 768px) 100vw, 50vw'
+										/>
 									</div>
 								</div>
 								<div className='work-tile-title-col'>
-									<h4>
+									{badge && (
+										<span className={`work-status-badge ${badge.colorClass}`}>
+											{badge.label}
+										</span>
+									)}
+									<h4 className='work-tile-title-clamp'>
 										<span>{item.title}</span>
 									</h4>
-									<div className='work-tile-stripe' />
+									<p className='work-tile-outcome'>
+										{item.outcome}
+									</p>
 								</div>
-								<div className='work-tile-info-col'>
-									<p>{item.services}</p>
-								</div>
-								{gridColumns === 2 && (
-									<div className='work-tile-info-col'>
-										<p>{item.year}</p>
+								
+								<div className='work-tile-meta-col'>
+									<div className='work-tile-stripe' style={{ marginBottom: '0.75rem' }} />
+									<div className='work-tile-info-col' style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+										<p style={{ margin: 0 }}>
+											{item.company} &middot; {item.year} &middot; {item.domain}
+										</p>
+										{item.demoUrl && <span className='work-demo-marker'>Demo</span>}
 									</div>
-								)}
+								</div>
 							</>
 						);
 
@@ -102,12 +114,12 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 						}
 
 						// Case 2: has an external URL → open in new tab
-						if (item.url) {
+						if (item.href) {
 							return (
 								<li key={item.title} className='work-tile'>
 									<div className='work-tile-wrap'>
 										<a
-											href={item.url}
+											href={item.href}
 											target='_blank'
 											rel='noopener noreferrer'
 											className='work-tile-link'

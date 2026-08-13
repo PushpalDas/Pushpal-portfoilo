@@ -26,40 +26,40 @@ function generateConstantsFile(items: typeof workItems): string {
 	const savedSlugs = getSavedSlugs();
 
 	const itemsStr = items
-		.map((item) => {
-			const categories = item.categories
-				.filter((c: unknown): c is string => typeof c === 'string')
-				.map((c: string) => `'${c.replace(/'/g, "\\'")}'`)
-				.join(', ');
-			const itemSlug = (item as { slug?: string }).slug;
+		.map((item: any) => {
+			const itemSlug = item.slug;
 			const hasCaseStudy = itemSlug && savedSlugs.has(itemSlug);
 			const slugLine = hasCaseStudy
 				? `\n        slug: '${itemSlug.replace(/'/g, "\\'")}',`
 				: '';
+			
+			const hrefLine = item.href ? `\n        href: '${item.href.replace(/'/g, "\\'")}',` : '';
+			const demoUrlLine = item.demoUrl ? `\n        demoUrl: '${item.demoUrl.replace(/'/g, "\\'")}',` : '';
+
 			return `    {
         title: '${item.title.replace(/'/g, "\\'")}',
-        location: '${item.location.replace(/'/g, "\\'")}',
-        services: '${item.services.replace(/'/g, "\\'")}',
-        year: '${item.year.replace(/'/g, "\\'")}',
-        src: '${item.src.replace(/'/g, "\\'")}',
-        color: '${item.color}',
-        url: '${item.url.replace(/'/g, "\\'")}',${slugLine}
-        categories: [ ${categories}, ],
+        company: '${(item.company || '').replace(/'/g, "\\'")}',
+        year: '${(item.year || '').replace(/'/g, "\\'")}',
+        domain: '${(item.domain || '').replace(/'/g, "\\'")}',
+        category: '${item.category || 'product'}',
+        status: ${item.status ? `'${item.status}'` : 'null'},
+        outcome: '${(item.outcome || '').replace(/'/g, "\\'")}',
+        image: '${(item.image || '').replace(/'/g, "\\'")}',${hrefLine}${demoUrlLine}${slugLine}
+        color: '${item.color || ''}',
     }`;
 		})
 		.join(',\n');
 
 	return `import type { WorkItem } from './types';
 
-export const workItems = [
+export const workItems: WorkItem[] = [
 ${itemsStr},
 ];
 
 export const filters = [
     { key: 'all', label: 'All' },
-    { key: 'products', label: 'Product' },
-    { key: 'core', label: 'Core' },
-    { key: 'others', label: 'Others' },
+    { key: 'product', label: 'Product' },
+    { key: 'engineering', label: 'Engineering' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];

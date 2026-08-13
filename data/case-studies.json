@@ -40,7 +40,7 @@
         "type": "image",
         "src": "Image__1_.jpg",
         "caption": "",
-        "fullWidth": true
+        "fullWidth": false
       },
       {
         "type": "image",
@@ -146,7 +146,13 @@
     "dateRange": "",
     "role": "",
     "teamSize": "",
-    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
+    "tags": [
+      "Quantum Computing",
+      "FastAPI",
+      "Next.js",
+      "Three.js",
+      "NumPy"
+    ],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
@@ -193,7 +199,13 @@
     ],
     "impactContext": "These outcomes confirm accurate physics calculations and sub-second validation, enabling users to test circuits with reliable performance.",
     "reflection": null,
-    "links": [],
+    "links": [
+      {
+        "icon": "github",
+        "label": "Github",
+        "url": "https://github.com/PushpalDas/Quantum-Gate-Simulator"
+      }
+    ],
     "prevProject": null,
     "nextProject": null
   },
@@ -438,7 +450,13 @@
     ],
     "impactContext": "These figures show the product was operationalized beyond a prototype. Content was structured for retrieval at chunk level, indexed for semantic search, and deployed as separate frontend, API, and pipeline services in production. For the business, that meant one internal system could support ongoing sync, secure access, and multiple day-to-day knowledge workflows instead of leaving teams to search across disconnected tools.",
     "reflection": null,
-    "links": [],
+    "links": [
+      {
+        "icon": "github",
+        "label": "Github",
+        "url": "https://github.com/PushpalDas/Ixana-Wiki"
+      }
+    ],
     "prevProject": null,
     "nextProject": null
   },

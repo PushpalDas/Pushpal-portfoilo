@@ -1,15 +1,16 @@
 export interface WorkItem {
-	title: string;
-	location: string;
-	services: string;
-	year: string;
-	src: string;
-	color: string;
-	url: string;
-	/** When set, the grid card links to /work/[slug] (internal case study page) */
 	slug?: string;
-	categories: string[];
-	icon?: React.ReactNode;
+	title: string;
+	company: string;
+	year: string;
+	domain: string;
+	category: 'product' | 'engineering';
+	status: 'production' | 'internal' | 'customer-testing' | 'prototype' | 'research' | null;
+	outcome: string;
+	image: string;
+	href?: string;
+	demoUrl?: string;
+	color?: string; // Optional if we want to keep tile color mappings
 }
 
 export interface WorkModal {
