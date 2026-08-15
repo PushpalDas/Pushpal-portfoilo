@@ -7,16 +7,19 @@
  * the next visit (no code changes needed).
  */
 
-import { notFound } from 'next/navigation';
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Metadata } from 'next';
-import type { CaseStudyData } from './case-study-types';
-import CaseStudyPage from './case-study-page';
+import { notFound } from 'next/navigation';
+import { workItems } from '../constants';
+import type { AnyCaseStudyData } from './case-study-types';
+import { isEditorialCaseStudy } from './case-study-types';
+import EditorialCaseStudyPage from './editorial-case-study-page';
+import { legacyToEditorial } from './legacy-to-editorial';
 
 const DATA_PATH = path.join(process.cwd(), 'data', 'case-studies.json');
 
-function getAllCaseStudies(): Record<string, CaseStudyData> {
+function getAllCaseStudies(): Record<string, AnyCaseStudyData> {
 	try {
 		if (!fs.existsSync(DATA_PATH)) return {};
 		return JSON.parse(fs.readFileSync(DATA_PATH, 'utf-8'));
@@ -37,7 +40,9 @@ export async function generateMetadata({
 
 	return {
 		title: `${project.title || slug} — Pushpal Das`,
-		description: project.tldr || `Case study: ${project.title || slug}`,
+		description:
+			(isEditorialCaseStudy(project) ? project.deck : project.tldr) ||
+			`Case study: ${project.title || slug}`,
 	};
 }
 
@@ -52,5 +57,10 @@ export default async function WorkSlugPage({
 
 	if (!project) notFound();
 
-	return <CaseStudyPage data={project} />;
+	const workItem = workItems.find((item) => item.slug === slug);
+	const editorialProject = isEditorialCaseStudy(project)
+		? project
+		: legacyToEditorial(project, workItem?.status ?? null);
+
+	return <EditorialCaseStudyPage data={editorialProject} />;
 }

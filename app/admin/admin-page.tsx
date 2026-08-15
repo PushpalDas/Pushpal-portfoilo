@@ -22,7 +22,13 @@ interface ItemData {
 	company?: string;
 	domain?: string;
 	category?: string;
-	status?: 'production' | 'testing' | 'killed' | null;
+	status?:
+		| 'production'
+		| 'internal'
+		| 'customer-testing'
+		| 'prototype'
+		| 'research'
+		| null;
 	outcome?: string;
 	image?: string;
 	href?: string;
@@ -45,6 +51,32 @@ interface LinkRow {
 	icon: string;
 	label: string;
 	url: string;
+}
+
+interface EditorialForm {
+	deck: string;
+	stage: string;
+	whyNow: string;
+	problemExperience: string;
+	evidenceJson: string;
+	shipped: string;
+	deferred: string;
+	cut: string;
+	hardestCut: string;
+	alignment: string;
+	calloutsJson: string;
+	tradeoffsJson: string;
+	threshold: string;
+	guardrail: string;
+	metricDefinition: string;
+	limitation: string;
+	chartTitle: string;
+	chartCaption: string;
+	chartSeriesJson: string;
+	architectureSummary: string;
+	architectureVisualsJson: string;
+	technicalConfiguration: string;
+	footerNote: string;
 }
 
 interface CaseStudyForm {
@@ -72,6 +104,7 @@ interface CaseStudyForm {
 	prevTitle: string;
 	nextSlug: string;
 	nextTitle: string;
+	editorial: EditorialForm;
 }
 
 type TabKey = 'works' | 'certifications';
@@ -101,6 +134,124 @@ const emptyItem: ItemData = {
 	href: '',
 	demoUrl: '',
 };
+
+const emptyEditorial: EditorialForm = {
+	deck: '',
+	stage: '',
+	whyNow: '',
+	problemExperience: '',
+	evidenceJson: '[]',
+	shipped: '',
+	deferred: '',
+	cut: '',
+	hardestCut: '',
+	alignment: '',
+	calloutsJson: '[]',
+	tradeoffsJson: '[]',
+	threshold: '',
+	guardrail: '',
+	metricDefinition: '',
+	limitation: '',
+	chartTitle: '',
+	chartCaption: '',
+	chartSeriesJson: '[]',
+	architectureSummary: '',
+	architectureVisualsJson: '[]',
+	technicalConfiguration: '',
+	footerNote: '',
+};
+
+const EDITORIAL_FIELDS: {
+	key: keyof EditorialForm;
+	label: string;
+	hint?: string;
+	placeholder?: string;
+	rows?: number;
+}[] = [
+	{ key: 'deck', label: 'Header — outcome deck', rows: 2 },
+	{ key: 'stage', label: 'Header — stage', rows: 2 },
+	{
+		key: 'whyNow',
+		label: '01 — Why this, and why now',
+		hint: 'separate paragraphs with a blank line',
+		rows: 6,
+	},
+	{
+		key: 'problemExperience',
+		label: '02 — Problem as people experienced it',
+		hint: 'separate paragraphs with a blank line',
+		rows: 6,
+	},
+	{
+		key: 'evidenceJson',
+		label: '02 — Evidence table',
+		hint: 'JSON: action, breakdown, evidence',
+		placeholder:
+			'[{"action":"Searched several tools","breakdown":"No reliable starting point","evidence":"Observed in 8 interviews"}]',
+		rows: 7,
+	},
+	{ key: 'shipped', label: '04 — Shipped', hint: 'one item per line', rows: 5 },
+	{
+		key: 'deferred',
+		label: '04 — Deferred',
+		hint: 'one item per line',
+		rows: 5,
+	},
+	{ key: 'cut', label: '04 — Cut', hint: 'one item per line', rows: 5 },
+	{ key: 'hardestCut', label: '04 — Hardest cut and rationale', rows: 4 },
+	{
+		key: 'alignment',
+		label: '05 — Stakeholder disagreement and concession',
+		hint: 'separate paragraphs with a blank line',
+		rows: 6,
+	},
+	{
+		key: 'calloutsJson',
+		label: '06 — Annotated product callouts',
+		hint: 'JSON: title, detail',
+		placeholder:
+			'[{"title":"Citations stay inline.","detail":"Users needed to verify an answer before acting."}]',
+		rows: 7,
+	},
+	{
+		key: 'tradeoffsJson',
+		label: '07 — Tradeoff table',
+		hint: 'JSON: tension, choice, cost',
+		placeholder:
+			'[{"tension":"Breadth vs reliability","choice":"Two sources first","cost":"Narrower initial coverage"}]',
+		rows: 7,
+	},
+	{ key: 'threshold', label: '08 — Success threshold', rows: 3 },
+	{ key: 'guardrail', label: '08 — Guardrail metric', rows: 3 },
+	{ key: 'metricDefinition', label: '08 — Metric definition', rows: 4 },
+	{ key: 'limitation', label: '08 — Evidence limitation', rows: 4 },
+	{ key: 'chartTitle', label: '08 — Graph title', rows: 2 },
+	{ key: 'chartCaption', label: '08 — Graph caption', rows: 3 },
+	{
+		key: 'chartSeriesJson',
+		label: '08 — Graph series',
+		hint: 'JSON: label, numeric value, displayValue',
+		placeholder:
+			'[{"label":"Weekly active users","value":118,"displayValue":"118 of 140"}]',
+		rows: 7,
+	},
+	{ key: 'architectureSummary', label: '09 — Architecture summary', rows: 2 },
+	{
+		key: 'architectureVisualsJson',
+		label: '09 — Architecture visuals',
+		hint: 'JSON; maximum two: src, alt, caption, type',
+		placeholder:
+			'[{"src":"diagram.png","alt":"Ingestion flow","caption":"How documents enter the index.","type":"diagram"}]',
+		rows: 7,
+	},
+	{
+		key: 'technicalConfiguration',
+		label: 'Technical configuration',
+		placeholder: 'Never include IPs, hosts, endpoints, tokens, or secrets.',
+		rows: 4,
+	},
+	{ key: 'footerNote', label: 'Footer and confidentiality note', rows: 4 },
+];
 
 const emptyCaseStudy: CaseStudyForm = {
 	slug: '',
@@ -135,9 +286,138 @@ const emptyCaseStudy: CaseStudyForm = {
 	prevTitle: '',
 	nextSlug: '',
 	nextTitle: '',
+	editorial: emptyEditorial,
+};
+
+const textBlock = (value: unknown) =>
+	Array.isArray(value)
+		? value
+				.filter((item): item is string => typeof item === 'string')
+				.join('\n\n')
+		: '';
+
+const lineBlock = (value: unknown) =>
+	Array.isArray(value)
+		? value
+				.filter((item): item is string => typeof item === 'string')
+				.join('\n')
+		: '';
+
+const jsonBlock = (value: unknown) =>
+	JSON.stringify(Array.isArray(value) ? value : [], null, 2);
+
+const linesFromEditor = (value: string) =>
+	value
+		.split('\n')
+		.map((item) => item.trim())
+		.filter(Boolean);
+
+const paragraphsFromEditor = (value: string) =>
+	value
+		.split(/\n\s*\n/)
+		.map((item) => item.trim())
+		.filter(Boolean);
+
+const jsonArrayFromEditor = (value: string, label: string): unknown[] => {
+	if (!value.trim()) return [];
+	const parsed: unknown = JSON.parse(value);
+	if (!Array.isArray(parsed)) throw new Error(`${label} must be a JSON array.`);
+	return parsed;
+};
+
+const editorialFormFromStored = (
+	data: Record<string, unknown>,
+): EditorialForm => {
+	const overrides = (data.editorialOverrides ?? {}) as Record<string, unknown>;
+	const meta = (overrides.meta ?? {}) as Record<string, unknown>;
+	const whyNow = (overrides.whyNow ?? {}) as Record<string, unknown>;
+	const problem = (overrides.problemExperience ?? {}) as Record<
+		string,
+		unknown
+	>;
+	const scope = (overrides.scope ?? {}) as Record<string, unknown>;
+	const built = (overrides.built ?? {}) as Record<string, unknown>;
+	const outcomes = (overrides.outcomes ?? {}) as Record<string, unknown>;
+	const chart = (outcomes.chart ?? {}) as Record<string, unknown>;
+	const architecture = (overrides.architecture ?? {}) as Record<
+		string,
+		unknown
+	>;
+
+	return {
+		deck: typeof overrides.deck === 'string' ? overrides.deck : '',
+		stage: typeof meta.stage === 'string' ? meta.stage : '',
+		whyNow: textBlock(whyNow.body),
+		problemExperience: textBlock(problem.body),
+		evidenceJson: jsonBlock(problem.evidence),
+		shipped: lineBlock(scope.shipped),
+		deferred: lineBlock(scope.deferred),
+		cut: lineBlock(scope.cut),
+		hardestCut: typeof scope.hardestCut === 'string' ? scope.hardestCut : '',
+		alignment: textBlock(overrides.alignment),
+		calloutsJson: jsonBlock(built.callouts),
+		tradeoffsJson: jsonBlock(overrides.tradeoffs),
+		threshold: typeof outcomes.threshold === 'string' ? outcomes.threshold : '',
+		guardrail: typeof outcomes.guardrail === 'string' ? outcomes.guardrail : '',
+		metricDefinition:
+			typeof outcomes.metricDefinition === 'string'
+				? outcomes.metricDefinition
+				: '',
+		limitation:
+			typeof outcomes.limitation === 'string' ? outcomes.limitation : '',
+		chartTitle: typeof chart.title === 'string' ? chart.title : '',
+		chartCaption: typeof chart.caption === 'string' ? chart.caption : '',
+		chartSeriesJson: jsonBlock(chart.series),
+		architectureSummary:
+			typeof architecture.summary === 'string' ? architecture.summary : '',
+		architectureVisualsJson: jsonBlock(architecture.visuals),
+		technicalConfiguration:
+			typeof overrides.technicalConfiguration === 'string'
+				? overrides.technicalConfiguration
+				: '',
+		footerNote:
+			typeof overrides.footerNote === 'string' ? overrides.footerNote : '',
+	};
 };
 
 const MAX_AI_FILES = 10;
+
+function EditorialTextarea({
+	label,
+	value,
+	onChange,
+	placeholder,
+	rows = 4,
+	hint,
+}: {
+	label: string;
+	value: string;
+	onChange: (value: string) => void;
+	placeholder?: string;
+	rows?: number;
+	hint?: string;
+}) {
+	return (
+		<div className='admin-form-group'>
+			<label>
+				{label}
+				{hint && (
+					<span style={{ color: '#6b6b7b', fontWeight: 400, fontSize: 12 }}>
+						{' '}
+						— {hint}
+					</span>
+				)}
+			</label>
+			<textarea
+				className='admin-textarea'
+				rows={rows}
+				placeholder={placeholder}
+				value={value}
+				onChange={(event) => onChange(event.target.value)}
+			/>
+		</div>
+	);
+}
 
 type AiProvider = 'gemini' | 'openai';
 
@@ -445,7 +725,7 @@ export default function AdminPage() {
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 
-	const [workCategories, setWorkCategories] = useState<
+	const [_workCategories, setWorkCategories] = useState<
 		{ key: string; label: string }[]
 	>([]);
 	const [certCategories, setCertCategories] = useState<
@@ -576,7 +856,10 @@ export default function AdminPage() {
 			if (res.ok) {
 				const data = await res.json();
 				if (data.success && data.filename) {
-					handleFormChange(activeTab === 'works' ? 'image' : 'src', data.filename);
+					handleFormChange(
+						activeTab === 'works' ? 'image' : 'src',
+						data.filename,
+					);
 					showToast('Image uploaded!', 'success');
 				} else {
 					showToast(data.error || 'Upload failed', 'error');
@@ -667,13 +950,16 @@ export default function AdminPage() {
 
 	/* ─── Basic form helpers ────────────────────────────── */
 
-	const handleFormChange = (field: keyof ItemData, value: any) => {
+	const handleFormChange = <K extends keyof ItemData>(
+		field: K,
+		value: ItemData[K],
+	) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 		// Auto-generate slug when title changes (if slug is empty or was auto-generated)
 		if (field === 'title' && activeTab === 'works') {
-			const auto = titleToSlug(value);
-			setFormData((prev) => ({ ...prev, title: value, slug: auto }));
-			setCsForm((prev) => ({ ...prev, slug: auto, title: value }));
+			const auto = titleToSlug(value as string);
+			setFormData((prev) => ({ ...prev, title: value as string, slug: auto }));
+			setCsForm((prev) => ({ ...prev, slug: auto, title: value as string }));
 		}
 	};
 
@@ -697,6 +983,16 @@ export default function AdminPage() {
 		value: CaseStudyForm[K],
 	) => {
 		setCsForm((prev) => ({ ...prev, [field]: value }));
+	};
+
+	const editorialChange = <K extends keyof EditorialForm>(
+		field: K,
+		value: EditorialForm[K],
+	) => {
+		setCsForm((prev) => ({
+			...prev,
+			editorial: { ...prev.editorial, [field]: value },
+		}));
 	};
 
 	// Media rows
@@ -1124,6 +1420,7 @@ export default function AdminPage() {
 							prevTitle: data.prevProject?.title ?? '',
 							nextSlug: data.nextProject?.slug ?? '',
 							nextTitle: data.nextProject?.title ?? '',
+							editorial: editorialFormFromStored(data),
 						});
 					} else {
 						setCsForm({ ...emptyCaseStudy, slug });
@@ -1205,6 +1502,106 @@ export default function AdminPage() {
 
 		setCsSaving(true);
 		try {
+			const editorial = csForm.editorial;
+			const evidence = jsonArrayFromEditor(
+				editorial.evidenceJson,
+				'Evidence rows',
+			);
+			const callouts = jsonArrayFromEditor(editorial.calloutsJson, 'Callouts');
+			const tradeoffs = jsonArrayFromEditor(
+				editorial.tradeoffsJson,
+				'Tradeoffs',
+			);
+			const chartSeries = jsonArrayFromEditor(
+				editorial.chartSeriesJson,
+				'Chart series',
+			);
+			const architectureVisuals = jsonArrayFromEditor(
+				editorial.architectureVisualsJson,
+				'Architecture visuals',
+			);
+			const whyNow = paragraphsFromEditor(editorial.whyNow);
+			const problemExperience = paragraphsFromEditor(
+				editorial.problemExperience,
+			);
+			const shipped = linesFromEditor(editorial.shipped);
+			const deferred = linesFromEditor(editorial.deferred);
+			const cut = linesFromEditor(editorial.cut);
+			const alignment = paragraphsFromEditor(editorial.alignment);
+
+			const editorialOverrides: Record<string, unknown> = {};
+			if (editorial.deck.trim())
+				editorialOverrides.deck = editorial.deck.trim();
+			if (editorial.stage.trim()) {
+				editorialOverrides.meta = { stage: editorial.stage.trim() };
+			}
+			if (whyNow.length) editorialOverrides.whyNow = { body: whyNow };
+			if (problemExperience.length || evidence.length) {
+				editorialOverrides.problemExperience = {
+					...(problemExperience.length ? { body: problemExperience } : {}),
+					...(evidence.length ? { evidence } : {}),
+				};
+			}
+			if (
+				shipped.length ||
+				deferred.length ||
+				cut.length ||
+				editorial.hardestCut.trim()
+			) {
+				editorialOverrides.scope = {
+					...(shipped.length ? { shipped } : {}),
+					...(deferred.length ? { deferred } : {}),
+					...(cut.length ? { cut } : {}),
+					...(editorial.hardestCut.trim()
+						? { hardestCut: editorial.hardestCut.trim() }
+						: {}),
+				};
+			}
+			if (alignment.length) editorialOverrides.alignment = alignment;
+			if (callouts.length) editorialOverrides.built = { callouts };
+			if (tradeoffs.length) editorialOverrides.tradeoffs = tradeoffs;
+
+			const outcomeOverrides: Record<string, unknown> = {};
+			if (editorial.threshold.trim()) {
+				outcomeOverrides.threshold = editorial.threshold.trim();
+			}
+			if (editorial.guardrail.trim()) {
+				outcomeOverrides.guardrail = editorial.guardrail.trim();
+			}
+			if (editorial.metricDefinition.trim()) {
+				outcomeOverrides.metricDefinition = editorial.metricDefinition.trim();
+			}
+			if (editorial.limitation.trim()) {
+				outcomeOverrides.limitation = editorial.limitation.trim();
+			}
+			if (chartSeries.length) {
+				outcomeOverrides.chart = {
+					title: editorial.chartTitle.trim() || 'Project evidence',
+					caption:
+						editorial.chartCaption.trim() ||
+						'Static evidence chart edited in the portfolio admin.',
+					series: chartSeries,
+				};
+			}
+			if (Object.keys(outcomeOverrides).length) {
+				editorialOverrides.outcomes = outcomeOverrides;
+			}
+			if (editorial.architectureSummary.trim() || architectureVisuals.length) {
+				editorialOverrides.architecture = {
+					summary:
+						editorial.architectureSummary.trim() ||
+						'Architecture and delivery flow',
+					visuals: architectureVisuals,
+				};
+			}
+			if (editorial.technicalConfiguration.trim()) {
+				editorialOverrides.technicalConfiguration =
+					editorial.technicalConfiguration.trim();
+			}
+			if (editorial.footerNote.trim()) {
+				editorialOverrides.footerNote = editorial.footerNote.trim();
+			}
+
 			// Build the CaseStudyData object
 			const payload = {
 				slug,
@@ -1235,6 +1632,10 @@ export default function AdminPage() {
 				nextProject: csForm.nextSlug
 					? { slug: csForm.nextSlug, title: csForm.nextTitle }
 					: null,
+				editorialOverrides:
+					Object.keys(editorialOverrides).length > 0
+						? editorialOverrides
+						: undefined,
 			};
 
 			const res = await fetch('/api/admin/case-study', {
@@ -1261,8 +1662,11 @@ export default function AdminPage() {
 			} else {
 				showToast('Failed to save case study', 'error');
 			}
-		} catch {
-			showToast('Failed to save case study', 'error');
+		} catch (error) {
+			showToast(
+				error instanceof Error ? error.message : 'Failed to save case study',
+				'error',
+			);
 		} finally {
 			setCsSaving(false);
 		}
@@ -1358,10 +1762,7 @@ export default function AdminPage() {
 			const groupItems: { item: ItemData; globalIndex: number }[] = [];
 			currentItems.forEach((item, i) => {
 				const cats = item.categories || (item.category ? [item.category] : []);
-				if (
-					!seen.has(i) &&
-					cats.some((c) => c.toLowerCase() === catKey)
-				) {
+				if (!seen.has(i) && cats.some((c) => c.toLowerCase() === catKey)) {
 					groupItems.push({ item, globalIndex: i });
 					seen.add(i);
 				}
@@ -1581,7 +1982,10 @@ export default function AdminPage() {
 												)}
 											</div>
 											<div className='admin-item-categories'>
-												{(item.categories || (item.category ? [item.category] : [])).map((cat) => (
+												{(
+													item.categories ||
+													(item.category ? [item.category] : [])
+												).map((cat) => (
 													<span key={cat} className='admin-category-tag'>
 														{cat}
 													</span>
@@ -1698,364 +2102,419 @@ export default function AdminPage() {
 
 						<div className='admin-modal-body'>
 							{/* ── BASIC TAB ──────────────────────────────── */}
-							{modalTab === 'basic' && (
-								<>
-									{activeTab === 'works' ? (
-										<>
-											{formData.image && (
-												<div className='admin-modal-image-preview'>
-													{uploading ? (
-														<div className='admin-spinner' />
-													) : (
-														<img
-															key={formData.image}
-															src={`/static/images/project/${formData.image}?t=${Date.now()}`}
-															alt='Preview'
-															style={{ display: 'block' }}
-															onError={(e) => {
-																(e.target as HTMLImageElement).style.display = 'none';
-															}}
-														/>
-													)}
-												</div>
-											)}
-
-											<div className='admin-form-group'>
-												<label htmlFor='form-title'>Title</label>
-												<textarea
-													id='form-title'
-													className='admin-textarea'
-													placeholder='Item title...'
-													value={formData.title}
-													onChange={(e) => handleFormChange('title', e.target.value)}
-												/>
+							{modalTab === 'basic' &&
+								(activeTab === 'works' ? (
+									<>
+										{formData.image && (
+											<div className='admin-modal-image-preview'>
+												{uploading ? (
+													<div className='admin-spinner' />
+												) : (
+													<img
+														key={formData.image}
+														src={`/static/images/project/${formData.image}?t=${Date.now()}`}
+														alt='Preview'
+														style={{ display: 'block' }}
+														onError={(e) => {
+															(e.target as HTMLImageElement).style.display =
+																'none';
+														}}
+													/>
+												)}
 											</div>
+										)}
 
+										<div className='admin-form-group'>
+											<label htmlFor='form-title'>Title</label>
+											<textarea
+												id='form-title'
+												className='admin-textarea'
+												placeholder='Item title...'
+												value={formData.title}
+												onChange={(e) =>
+													handleFormChange('title', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-group'>
+											<label htmlFor='form-slug'>
+												Slug
+												<span
+													style={{
+														color: '#6b6b7b',
+														fontWeight: 400,
+														fontSize: '12px',
+														marginLeft: 8,
+													}}
+												>
+													URL: /work/
+													<strong>
+														{formData.slug ||
+															titleToSlug(formData.title) ||
+															'...'}
+													</strong>
+												</span>
+											</label>
+											<input
+												id='form-slug'
+												type='text'
+												className='admin-input'
+												placeholder='auto-generated-from-title'
+												value={formData.slug ?? titleToSlug(formData.title)}
+												onChange={(e) => {
+													setFormData((p) => ({ ...p, slug: e.target.value }));
+													setCsForm((p) => ({ ...p, slug: e.target.value }));
+												}}
+											/>
+										</div>
+
+										<div className='admin-form-row'>
 											<div className='admin-form-group'>
-												<label htmlFor='form-slug'>
-													Slug
-													<span style={{ color: '#6b6b7b', fontWeight: 400, fontSize: '12px', marginLeft: 8 }}>
-														URL: /work/<strong>{formData.slug || titleToSlug(formData.title) || '...'}</strong>
-													</span>
-												</label>
+												<label htmlFor='form-company'>Company</label>
 												<input
-													id='form-slug'
+													id='form-company'
 													type='text'
 													className='admin-input'
-													placeholder='auto-generated-from-title'
-													value={formData.slug ?? titleToSlug(formData.title)}
-													onChange={(e) => {
-														setFormData((p) => ({ ...p, slug: e.target.value }));
-														setCsForm((p) => ({ ...p, slug: e.target.value }));
-													}}
+													placeholder='Company Name'
+													value={formData.company || ''}
+													onChange={(e) =>
+														handleFormChange('company', e.target.value)
+													}
 												/>
 											</div>
-
-											<div className='admin-form-row'>
-												<div className='admin-form-group'>
-													<label htmlFor='form-company'>Company</label>
-													<input
-														id='form-company'
-														type='text'
-														className='admin-input'
-														placeholder='Company Name'
-														value={formData.company || ''}
-														onChange={(e) => handleFormChange('company', e.target.value)}
-													/>
-												</div>
-												<div className='admin-form-group'>
-													<label htmlFor='form-year'>Year</label>
-													<input
-														id='form-year'
-														type='text'
-														className='admin-input'
-														placeholder='e.g. 2024'
-														value={formData.year || ''}
-														onChange={(e) => handleFormChange('year', e.target.value)}
-													/>
-												</div>
-											</div>
-
-											<div className='admin-form-row'>
-												<div className='admin-form-group'>
-													<label htmlFor='form-domain'>Domain</label>
-													<input
-														id='form-domain'
-														type='text'
-														className='admin-input'
-														placeholder='e.g. HealthTech'
-														value={formData.domain || ''}
-														onChange={(e) => handleFormChange('domain', e.target.value)}
-													/>
-												</div>
-												<div className='admin-form-group'>
-													<label htmlFor='form-category'>Category</label>
-													<select
-														id='form-category'
-														className='admin-input'
-														value={formData.category || 'product'}
-														onChange={(e) => handleFormChange('category', e.target.value)}
-													>
-														<option value="product">Product</option>
-														<option value="engineering">Engineering</option>
-													</select>
-												</div>
-											</div>
-
 											<div className='admin-form-group'>
-												<label htmlFor='form-status'>Status</label>
-												<select
-													id='form-status'
+												<label htmlFor='form-year'>Year</label>
+												<input
+													id='form-year'
+													type='text'
 													className='admin-input'
-													value={formData.status || ''}
-													onChange={(e) => handleFormChange('status', e.target.value || null)}
+													placeholder='e.g. 2024'
+													value={formData.year || ''}
+													onChange={(e) =>
+														handleFormChange('year', e.target.value)
+													}
+												/>
+											</div>
+										</div>
+
+										<div className='admin-form-row'>
+											<div className='admin-form-group'>
+												<label htmlFor='form-domain'>Domain</label>
+												<input
+													id='form-domain'
+													type='text'
+													className='admin-input'
+													placeholder='e.g. HealthTech'
+													value={formData.domain || ''}
+													onChange={(e) =>
+														handleFormChange('domain', e.target.value)
+													}
+												/>
+											</div>
+											<div className='admin-form-group'>
+												<label htmlFor='form-category'>Category</label>
+												<select
+													id='form-category'
+													className='admin-input'
+													value={formData.category || 'product'}
+													onChange={(e) =>
+														handleFormChange('category', e.target.value)
+													}
 												>
-													<option value="">None</option>
-													<option value="production">In production</option>
-													<option value="internal">Shipped internally</option>
-													<option value="customer-testing">In customer testing</option>
-													<option value="prototype">Prototype</option>
-													<option value="research">Research</option>
+													<option value='product'>Product</option>
+													<option value='engineering'>Engineering</option>
 												</select>
 											</div>
+										</div>
 
+										<div className='admin-form-group'>
+											<label htmlFor='form-status'>Status</label>
+											<select
+												id='form-status'
+												className='admin-input'
+												value={formData.status || ''}
+												onChange={(e) =>
+													handleFormChange('status', e.target.value || null)
+												}
+											>
+												<option value=''>None</option>
+												<option value='production'>In production</option>
+												<option value='internal'>Shipped internally</option>
+												<option value='customer-testing'>
+													In customer testing
+												</option>
+												<option value='prototype'>Prototype</option>
+												<option value='research'>Research</option>
+											</select>
+										</div>
+
+										<div className='admin-form-group'>
+											<label htmlFor='form-outcome'>Outcome</label>
+											<textarea
+												id='form-outcome'
+												className='admin-textarea'
+												placeholder='Outcome...'
+												value={formData.outcome || ''}
+												onChange={(e) =>
+													handleFormChange('outcome', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-row'>
 											<div className='admin-form-group'>
-												<label htmlFor='form-outcome'>Outcome</label>
-												<textarea
-													id='form-outcome'
-													className='admin-textarea'
-													placeholder='Outcome...'
-													value={formData.outcome || ''}
-													onChange={(e) => handleFormChange('outcome', e.target.value)}
-												/>
-											</div>
-
-											<div className='admin-form-row'>
-												<div className='admin-form-group'>
-													<label htmlFor='form-image'>Image Filename</label>
-													<input
-														id='form-image'
-														type='text'
-														className='admin-input'
-														placeholder='image.png'
-														value={formData.image || ''}
-														onChange={(e) => handleFormChange('image', e.target.value)}
-													/>
-												</div>
-												<div className='admin-form-group'>
-													<label htmlFor='form-color'>Card Color</label>
-													<div className='admin-color-preview'>
-														<input
-															type='color'
-															className='admin-color-swatch'
-															value={formData.color || '#ffffff'}
-															onChange={(e) => handleFormChange('color', e.target.value)}
-														/>
-														<input
-															id='form-color'
-															type='text'
-															className='admin-input'
-															placeholder='#dbeafe'
-															value={formData.color || ''}
-															onChange={(e) => handleFormChange('color', e.target.value)}
-														/>
-													</div>
-												</div>
-											</div>
-
-											<div className='admin-form-group'>
-												<label>Upload Image</label>
-												<div className='admin-file-upload-container'>
-													<div className='admin-file-upload-btn-wrapper'>
-														<div className='admin-file-upload-btn'>
-															{uploading ? 'Processing...' : 'Choose Image'}
-														</div>
-														<input
-															type='file'
-															accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
-															onChange={handleImageUpload}
-															disabled={uploading}
-														/>
-													</div>
-												</div>
-											</div>
-
-											<div className='admin-form-group'>
-												<label htmlFor='form-href'>External URL</label>
+												<label htmlFor='form-image'>Image Filename</label>
 												<input
-													id='form-href'
+													id='form-image'
 													type='text'
 													className='admin-input'
-													placeholder='https://...'
-													value={formData.href || ''}
-													onChange={(e) => handleFormChange('href', e.target.value)}
+													placeholder='image.png'
+													value={formData.image || ''}
+													onChange={(e) =>
+														handleFormChange('image', e.target.value)
+													}
 												/>
 											</div>
-
 											<div className='admin-form-group'>
-												<label htmlFor='form-demo'>Demo URL</label>
-												<input
-													id='form-demo'
-													type='text'
-													className='admin-input'
-													placeholder='https://...'
-													value={formData.demoUrl || ''}
-													onChange={(e) => handleFormChange('demoUrl', e.target.value)}
-												/>
-											</div>
-										</>
-									) : (
-										<>
-											{formData.src && (
-												<div className='admin-modal-image-preview'>
-													{uploading ? (
-														<div className='admin-spinner' />
-													) : (
-														<img
-															key={formData.src}
-															src={`/static/images/project/${formData.src}?t=${Date.now()}`}
-															alt='Preview'
-															style={{ display: 'block' }}
-															onError={(e) => {
-																(e.target as HTMLImageElement).style.display = 'none';
-															}}
-														/>
-													)}
-												</div>
-											)}
-
-											<div className='admin-form-group'>
-												<label htmlFor='form-title-cert'>Title</label>
-												<textarea
-													id='form-title-cert'
-													className='admin-textarea'
-													placeholder='Item title...'
-													value={formData.title}
-													onChange={(e) => handleFormChange('title', e.target.value)}
-												/>
-											</div>
-
-											<div className='admin-form-row'>
-												<div className='admin-form-group'>
-													<label htmlFor='form-location'>Location</label>
+												<label htmlFor='form-color'>Card Color</label>
+												<div className='admin-color-preview'>
 													<input
-														id='form-location'
-														type='text'
-														className='admin-input'
-														placeholder='Location...'
-														value={formData.location || ''}
-														onChange={(e) => handleFormChange('location', e.target.value)}
+														type='color'
+														className='admin-color-swatch'
+														value={formData.color || '#ffffff'}
+														onChange={(e) =>
+															handleFormChange('color', e.target.value)
+														}
 													/>
-												</div>
-												<div className='admin-form-group'>
-													<label htmlFor='form-year-cert'>Year</label>
 													<input
-														id='form-year-cert'
+														id='form-color'
 														type='text'
 														className='admin-input'
-														placeholder='e.g. 2024'
-														value={formData.year || ''}
-														onChange={(e) => handleFormChange('year', e.target.value)}
+														placeholder='#dbeafe'
+														value={formData.color || ''}
+														onChange={(e) =>
+															handleFormChange('color', e.target.value)
+														}
 													/>
 												</div>
 											</div>
+										</div>
 
-											<div className='admin-form-group'>
-												<label htmlFor='form-services'>Services / Role</label>
-												<input
-													id='form-services'
-													type='text'
-													className='admin-input'
-													placeholder='Role or services...'
-													value={formData.services || ''}
-													onChange={(e) => handleFormChange('services', e.target.value)}
-												/>
-											</div>
-
-											<div className='admin-form-row'>
-												<div className='admin-form-group'>
-													<label htmlFor='form-src'>Image Filename</label>
+										<div className='admin-form-group'>
+											<label>Upload Image</label>
+											<div className='admin-file-upload-container'>
+												<div className='admin-file-upload-btn-wrapper'>
+													<div className='admin-file-upload-btn'>
+														{uploading ? 'Processing...' : 'Choose Image'}
+													</div>
 													<input
-														id='form-src'
-														type='text'
-														className='admin-input'
-														placeholder='image.png'
-														value={formData.src || ''}
-														onChange={(e) => handleFormChange('src', e.target.value)}
+														type='file'
+														accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
+														onChange={handleImageUpload}
+														disabled={uploading}
 													/>
 												</div>
-												<div className='admin-form-group'>
-													<label htmlFor='form-color-cert'>Card Color</label>
-													<div className='admin-color-preview'>
-														<input
-															type='color'
-															className='admin-color-swatch'
-															value={formData.color || '#ffffff'}
-															onChange={(e) => handleFormChange('color', e.target.value)}
-														/>
-														<input
-															id='form-color-cert'
-															type='text'
-															className='admin-input'
-															placeholder='#dbeafe'
-															value={formData.color || ''}
-															onChange={(e) => handleFormChange('color', e.target.value)}
-														/>
-													</div>
-												</div>
 											</div>
+										</div>
 
-											<div className='admin-form-group'>
-												<label>Upload Image</label>
-												<div className='admin-file-upload-container'>
-													<div className='admin-file-upload-btn-wrapper'>
-														<div className='admin-file-upload-btn'>
-															{uploading ? 'Processing...' : 'Choose Image'}
-														</div>
-														<input
-															type='file'
-															accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
-															onChange={handleImageUpload}
-															disabled={uploading}
-														/>
-													</div>
-												</div>
+										<div className='admin-form-group'>
+											<label htmlFor='form-href'>External URL</label>
+											<input
+												id='form-href'
+												type='text'
+												className='admin-input'
+												placeholder='https://...'
+												value={formData.href || ''}
+												onChange={(e) =>
+													handleFormChange('href', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-group'>
+											<label htmlFor='form-demo'>Demo URL</label>
+											<input
+												id='form-demo'
+												type='text'
+												className='admin-input'
+												placeholder='https://...'
+												value={formData.demoUrl || ''}
+												onChange={(e) =>
+													handleFormChange('demoUrl', e.target.value)
+												}
+											/>
+										</div>
+									</>
+								) : (
+									<>
+										{formData.src && (
+											<div className='admin-modal-image-preview'>
+												{uploading ? (
+													<div className='admin-spinner' />
+												) : (
+													<img
+														key={formData.src}
+														src={`/static/images/project/${formData.src}?t=${Date.now()}`}
+														alt='Preview'
+														style={{ display: 'block' }}
+														onError={(e) => {
+															(e.target as HTMLImageElement).style.display =
+																'none';
+														}}
+													/>
+												)}
 											</div>
+										)}
 
+										<div className='admin-form-group'>
+											<label htmlFor='form-title-cert'>Title</label>
+											<textarea
+												id='form-title-cert'
+												className='admin-textarea'
+												placeholder='Item title...'
+												value={formData.title}
+												onChange={(e) =>
+													handleFormChange('title', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-row'>
 											<div className='admin-form-group'>
-												<label htmlFor='form-url'>External URL</label>
+												<label htmlFor='form-location'>Location</label>
 												<input
-													id='form-url'
+													id='form-location'
 													type='text'
 													className='admin-input'
-													placeholder='https://...'
-													value={formData.url || ''}
-													onChange={(e) => handleFormChange('url', e.target.value)}
+													placeholder='Location...'
+													value={formData.location || ''}
+													onChange={(e) =>
+														handleFormChange('location', e.target.value)
+													}
 												/>
 											</div>
-
 											<div className='admin-form-group'>
-												<label>Categories</label>
-												<div className='admin-category-selector'>
-													{certCategories.map((cat) => {
-														const isSelected = (formData.categories || []).includes(cat.key);
-														return (
-															<button
-																key={cat.key}
-																type='button'
-																className={`admin-category-btn ${isSelected ? 'selected' : ''}`}
-																onClick={() => handleCategoryToggle(cat.key)}
-															>
-																{cat.label}
-															</button>
-														);
-													})}
+												<label htmlFor='form-year-cert'>Year</label>
+												<input
+													id='form-year-cert'
+													type='text'
+													className='admin-input'
+													placeholder='e.g. 2024'
+													value={formData.year || ''}
+													onChange={(e) =>
+														handleFormChange('year', e.target.value)
+													}
+												/>
+											</div>
+										</div>
+
+										<div className='admin-form-group'>
+											<label htmlFor='form-services'>Services / Role</label>
+											<input
+												id='form-services'
+												type='text'
+												className='admin-input'
+												placeholder='Role or services...'
+												value={formData.services || ''}
+												onChange={(e) =>
+													handleFormChange('services', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-row'>
+											<div className='admin-form-group'>
+												<label htmlFor='form-src'>Image Filename</label>
+												<input
+													id='form-src'
+													type='text'
+													className='admin-input'
+													placeholder='image.png'
+													value={formData.src || ''}
+													onChange={(e) =>
+														handleFormChange('src', e.target.value)
+													}
+												/>
+											</div>
+											<div className='admin-form-group'>
+												<label htmlFor='form-color-cert'>Card Color</label>
+												<div className='admin-color-preview'>
+													<input
+														type='color'
+														className='admin-color-swatch'
+														value={formData.color || '#ffffff'}
+														onChange={(e) =>
+															handleFormChange('color', e.target.value)
+														}
+													/>
+													<input
+														id='form-color-cert'
+														type='text'
+														className='admin-input'
+														placeholder='#dbeafe'
+														value={formData.color || ''}
+														onChange={(e) =>
+															handleFormChange('color', e.target.value)
+														}
+													/>
 												</div>
 											</div>
-										</>
-									)}
-								</>
-							)}
+										</div>
+
+										<div className='admin-form-group'>
+											<label>Upload Image</label>
+											<div className='admin-file-upload-container'>
+												<div className='admin-file-upload-btn-wrapper'>
+													<div className='admin-file-upload-btn'>
+														{uploading ? 'Processing...' : 'Choose Image'}
+													</div>
+													<input
+														type='file'
+														accept='image/png,image/jpeg,image/jpg,image/gif,image/heic,.heic,.HEIC'
+														onChange={handleImageUpload}
+														disabled={uploading}
+													/>
+												</div>
+											</div>
+										</div>
+
+										<div className='admin-form-group'>
+											<label htmlFor='form-url'>External URL</label>
+											<input
+												id='form-url'
+												type='text'
+												className='admin-input'
+												placeholder='https://...'
+												value={formData.url || ''}
+												onChange={(e) =>
+													handleFormChange('url', e.target.value)
+												}
+											/>
+										</div>
+
+										<div className='admin-form-group'>
+											<label>Categories</label>
+											<div className='admin-category-selector'>
+												{certCategories.map((cat) => {
+													const isSelected = (
+														formData.categories || []
+													).includes(cat.key);
+													return (
+														<button
+															key={cat.key}
+															type='button'
+															className={`admin-category-btn ${isSelected ? 'selected' : ''}`}
+															onClick={() => handleCategoryToggle(cat.key)}
+														>
+															{cat.label}
+														</button>
+													);
+												})}
+											</div>
+										</div>
+									</>
+								))}
 
 							{/* ── CASE STUDY TAB ─────────────────────────── */}
 							{modalTab === 'casestudy' && activeTab === 'works' && (
@@ -2248,34 +2707,36 @@ export default function AdminPage() {
 																)}
 															</button>
 
-															{aiFiles.length === 0 && aiNotes.trim().length > 0 && (
-																<button
-																	type='button'
-																	className='admin-ai-run-btn admin-ai-run-pasted-btn'
-																	style={{
-																		background: 'linear-gradient(135deg, #ec4899 0%, #d946ef 100%)',
-																	}}
-																	onClick={handleAiFill}
-																	disabled={aiFilling}
-																>
-																	{aiFilling ? (
-																		<>
-																			<span
-																				className='admin-spinner'
-																				style={{
-																					width: '0.875rem',
-																					height: '0.875rem',
-																					borderWidth: '1.5px',
-																					borderTopColor: '#fff',
-																				}}
-																			/>
-																			<span>Reading pasted text…</span>
-																		</>
-																	) : (
-																		<span>Fill from pasted text</span>
-																	)}
-																</button>
-															)}
+															{aiFiles.length === 0 &&
+																aiNotes.trim().length > 0 && (
+																	<button
+																		type='button'
+																		className='admin-ai-run-btn admin-ai-run-pasted-btn'
+																		style={{
+																			background:
+																				'linear-gradient(135deg, #ec4899 0%, #d946ef 100%)',
+																		}}
+																		onClick={handleAiFill}
+																		disabled={aiFilling}
+																	>
+																		{aiFilling ? (
+																			<>
+																				<span
+																					className='admin-spinner'
+																					style={{
+																						width: '0.875rem',
+																						height: '0.875rem',
+																						borderWidth: '1.5px',
+																						borderTopColor: '#fff',
+																					}}
+																				/>
+																				<span>Reading pasted text…</span>
+																			</>
+																		) : (
+																			<span>Fill from pasted text</span>
+																		)}
+																	</button>
+																)}
 
 															<label className='admin-cs-toggle'>
 																<input
@@ -2848,6 +3309,35 @@ export default function AdminPage() {
 													/>
 												</div>
 											)}
+
+											<div className='admin-cs-section-label'>
+												Editorial page — all `/work/[slug]` details
+												<span
+													style={{
+														color: '#6b6b7b',
+														fontWeight: 400,
+														fontSize: 12,
+													}}
+												>
+													Leave empty to keep the generated value. Invalid JSON
+													is blocked when saving.
+												</span>
+											</div>
+											<div className='admin-cs-card'>
+												{EDITORIAL_FIELDS.map((field) => (
+													<EditorialTextarea
+														key={field.key}
+														label={field.label}
+														hint={field.hint}
+														placeholder={field.placeholder}
+														rows={field.rows}
+														value={csForm.editorial[field.key]}
+														onChange={(value) =>
+															editorialChange(field.key, value)
+														}
+													/>
+												))}
+											</div>
 
 											{/* ── Links */}
 											<div className='admin-cs-section-label'>

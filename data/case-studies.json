@@ -146,13 +146,7 @@
     "dateRange": "",
     "role": "",
     "teamSize": "",
-    "tags": [
-      "Quantum Computing",
-      "FastAPI",
-      "Next.js",
-      "Three.js",
-      "NumPy"
-    ],
+    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
@@ -440,15 +434,11 @@
         "label": "OpenAI model used for generated answers"
       },
       {
-        "value": "65.0.135.176",
-        "label": "AWS EC2 deployment target"
-      },
-      {
         "value": "3",
         "label": "PM2 services in production"
       }
     ],
-    "impactContext": "These figures show the product was operationalized beyond a prototype. Content was structured for retrieval at chunk level, indexed for semantic search, and deployed as separate frontend, API, and pipeline services in production. For the business, that meant one internal system could support ongoing sync, secure access, and multiple day-to-day knowledge workflows instead of leaving teams to search across disconnected tools.",
+    "impactContext": "The current record documents a production architecture but does not include verified adoption, time-saved, or business-outcome measurements. Technical configuration is presented separately rather than being described as product impact.",
     "reflection": null,
     "links": [
       {
@@ -1177,6 +1167,42 @@
         "icon": "file",
         "label": "AMS Bandwidth Report Excel Workbook",
         "url": "https://10xar-my.sharepoint.com/personal/anuj_dubey_ixana_ai/_layouts/15/Doc.aspx?sourcedoc=%7BAED1F0DE-8F16-4109-AFCA-975253AF20C6%7D&file=[Ai_Controlled]%20AMS%20BW%20report-anuj.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
+      }
+    ],
+    "prevProject": null,
+    "nextProject": null
+  },
+  "wi-r-body-area-network-yr23": {
+    "slug": "wi-r-body-area-network-yr23",
+    "company": "Ixana",
+    "organization": "Wi-R product program",
+    "title": "Wi-R Body Area Network — YR23",
+    "dateRange": "2024–2026",
+    "role": "",
+    "teamSize": "",
+    "tags": ["Silicon", "Body Area Networks"],
+    "isConfidential": false,
+    "confidentialNote": "",
+    "tldr": "Problem: The project addressed on-body connectivity through Ixana's Wi-R body area network product work.\n\nWhat I did: The current portfolio record identifies YR23 as a production silicon project, but does not yet document a reliable ownership boundary.\n\nResult: YR23 is listed as in production; no verified outcome metrics are stored in the current project record.",
+    "roleAndApproach": "What I owned: The existing record does not yet provide enough evidence to state a narrower ownership claim.\n\nTradeoffs I navigated: Product-level tradeoffs have not yet been documented for publication.",
+    "keyDecisions": [],
+    "whatWasBuilt": "YR23 is part of Ixana's Wi-R body area network silicon product work for on-body connectivity.",
+    "media": [
+      {
+        "type": "image",
+        "src": "Image__3_.jpg",
+        "caption": "YR23 project image from the existing portfolio record.",
+        "fullWidth": true
+      }
+    ],
+    "metrics": [],
+    "impactContext": "The current record confirms production status but does not contain verified customer or business outcome measurements.",
+    "reflection": "The next revision should document the customer stake, team, decision history, and measurable outcome using material cleared for publication.",
+    "links": [
+      {
+        "icon": "external",
+        "label": "Ixana Wi-R BAN product page",
+        "url": "https://www.ixana.ai/products/chips/wi-r-ban"
       }
     ],
     "prevProject": null,

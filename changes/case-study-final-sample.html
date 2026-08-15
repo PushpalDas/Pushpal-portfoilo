@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ixana-Wiki — Product case study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080b; --surface:#101015; --surface-2:#16161d;
+  --line:#23232d; --line-soft:#1a1a22;
+  --ink:#f2f3f6; --body:#b4bacb; --muted:#6e7385;
+  --accent:#5b7cfa; --accent-dim:#2c3a73;
+  --ship:#3fae8b; --ship-dim:#235c4b;
+  --warn:#c9973f; --cut:#d0745a;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --pad:clamp(20px,5vw,40px);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font-family:var(--sans);
+  font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:0 var(--pad) 120px}
+a{color:var(--accent);text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+p{margin:0 0 18px;max-width:64ch}
+p:last-child{margin-bottom:0}
+
+/* nav */
+nav{display:flex;align-items:center;gap:20px;background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:8px 10px 8px 14px;
+  margin:22px auto 0;max-width:1100px;width:calc(100% - var(--pad)*2)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:500;color:var(--ink);font-size:15px}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--accent-dim);flex:none}
+.navlinks{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.navlinks a{font-size:15px;color:var(--body);padding:7px 14px;border-radius:999px}
+.navlinks a[aria-current]{background:var(--accent);color:#fff}
+
+/* header */
+header.top{padding:clamp(44px,8vw,80px) 0 0}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:clamp(36px,6.5vw,56px);line-height:1.05;letter-spacing:-.03em;
+  font-weight:600;color:var(--ink);margin:14px 0 0}
+.deck{font-size:20px;line-height:1.5;margin:18px 0 0;max-width:58ch}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ship);border:1px solid var(--ship-dim);
+  border-radius:4px;padding:4px 11px;margin-top:24px}
+
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);
+  border-radius:10px;overflow:hidden;margin:32px 0 0}
+.meta div{background:var(--surface);padding:16px 18px}
+.meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.meta dd{margin:0;font-size:15px;color:var(--ink);line-height:1.4}
+.demo{margin:16px 0 0;font-size:15px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.demo a{border-bottom:1px solid var(--accent-dim)}
+.demo span{font-size:14px;color:var(--muted)}
+
+.summary{border-left:2px solid var(--accent);padding:4px 0 4px 26px;margin:46px 0 0}
+.summary p{margin:0 0 20px}
+.summary b{color:var(--ink);font-weight:500}
+
+section{padding:clamp(50px,8vw,76px) 0 0}
+h2{font-size:26px;font-weight:600;letter-spacing:-.02em;color:var(--ink);margin:0 0 20px}
+h2 .num{font-family:var(--mono);font-size:13px;color:var(--muted);
+  letter-spacing:.1em;margin-right:12px;vertical-align:2px;font-weight:400}
+h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);font-weight:500;margin:34px 0 16px}
+
+/* figures */
+figure{margin:26px 0}
+figure svg{width:100%;height:auto;display:block;background:var(--surface);
+  border:1px solid var(--line);border-radius:10px;padding:16px}
+figcaption{font-size:13.5px;color:var(--muted);margin-top:10px;max-width:62ch}
+.g-line{stroke:var(--line);stroke-width:1}
+.g-lbl{fill:#6e7385;font-family:"IBM Plex Mono",monospace;font-size:11px}
+.g-name{fill:#b4bacb;font-family:Inter,sans-serif;font-size:13px}
+.g-val{fill:#f2f3f6;font-family:"IBM Plex Mono",monospace;font-size:12px}
+
+/* tables */
+.tbl{width:100%;border-collapse:collapse;font-size:15px}
+.tbl th{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);font-weight:500;
+  padding:0 16px 12px 0;border-bottom:1px solid var(--line)}
+.tbl td{padding:16px 16px 16px 0;border-bottom:1px solid var(--line-soft);
+  vertical-align:top;color:var(--body)}
+.tbl td:first-child{color:var(--ink)}
+.tbl tr:last-child td{border-bottom:0}
+
+/* decisions */
+.decisions{list-style:none;margin:0;padding:0}
+.decisions li{position:relative;padding-left:28px;margin-bottom:18px;max-width:64ch}
+.decisions li::before{content:"";position:absolute;left:0;top:13px;width:14px;height:1px;background:var(--accent)}
+.decisions b{color:var(--ink);font-weight:500}
+
+/* scope */
+.scope{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.col{border:1px solid var(--line);border-radius:10px;padding:18px;background:var(--surface)}
+.col h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  margin:0 0 14px;font-weight:500}
+.col.ship h4{color:var(--ship)} .col.later h4{color:var(--muted)} .col.cut h4{color:var(--cut)}
+.col ul{list-style:none;margin:0;padding:0;font-size:15px}
+.col li{padding:8px 0;border-top:1px solid var(--line-soft)}
+.col li:first-child{border-top:0;padding-top:0}
+
+/* doc excerpt */
+.doc{border:1px solid var(--line);border-radius:10px;background:var(--surface);
+  margin:26px 0;overflow:hidden}
+.doc-bar{display:flex;align-items:center;gap:10px;padding:11px 16px;
+  border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.doc-bar::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--accent-dim)}
+.doc-body{padding:18px;font-size:15px;line-height:1.6}
+.doc-body p{margin:0 0 12px}
+.doc-body b{color:var(--ink);font-weight:500}
+.doc-body ul{margin:0;padding-left:20px;color:var(--body)}
+.doc-body li{margin-bottom:6px}
+.redact{background:var(--line);color:transparent;border-radius:3px;
+  padding:0 2px;user-select:none}
+
+/* screenshot */
+.shot{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.shot-img{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
+  background:repeating-linear-gradient(45deg,var(--surface-2) 0 12px,transparent 12px 24px);
+  border-bottom:1px solid var(--line);color:var(--muted);font-family:var(--mono);
+  font-size:12px;text-align:center;padding:20px;line-height:1.7}
+.callouts{list-style:none;margin:0;padding:18px}
+.callouts li{display:flex;gap:14px;padding:11px 0;font-size:15px;border-top:1px solid var(--line-soft)}
+.callouts li:first-child{border-top:0}
+.callouts .num2{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--accent-dim);
+  color:var(--accent);font-family:var(--mono);font-size:11px;display:flex;
+  align-items:center;justify-content:center;margin-top:2px}
+.callouts b{color:var(--ink);font-weight:500}
+
+/* metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(172px,1fr));gap:14px}
+.metric{background:var(--surface);border-radius:10px;padding:20px}
+.metric .n{font-size:30px;line-height:1.1;font-weight:500;color:var(--ink);
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.metric .n small{font-size:15px;color:var(--muted);font-weight:400}
+.metric .l{font-size:14px;color:var(--muted);margin-top:9px;line-height:1.4}
+.arrow{color:var(--accent);padding:0 3px}
+.config{font-family:var(--mono);font-size:12.5px;line-height:1.8;color:var(--muted);
+  border-top:1px solid var(--line-soft);margin-top:26px;padding-top:18px}
+
+/* details */
+details.arch{margin-top:8px}
+details.arch summary{cursor:pointer;font-size:15px;color:var(--body);border:1px solid var(--line);
+  border-radius:8px;padding:13px 18px;list-style:none}
+details.arch summary::-webkit-details-marker{display:none}
+details.arch summary::after{content:" →";color:var(--muted)}
+details.arch[open] summary{border-radius:8px 8px 0 0;color:var(--ink)}
+details.arch .abody{border:1px solid var(--line);border-top:0;border-radius:0 0 8px 8px;padding:22px 18px}
+details.arch .abody figure{margin:0 0 24px}
+details.arch .abody figure:last-child{margin-bottom:0}
+.ph{aspect-ratio:21/9;border:1px solid var(--line);border-radius:8px;
+  background:repeating-linear-gradient(45deg,var(--surface-2) 0 12px,transparent 12px 24px);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);
+  font-family:var(--mono);font-size:12px;text-align:center;padding:16px}
+
+.note{font-size:14px;color:var(--muted);border-top:1px solid var(--line-soft);
+  margin-top:clamp(52px,8vw,80px);padding-top:20px;max-width:64ch}
+.sample{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--cut);border:1px solid var(--cut);
+  border-radius:4px;padding:3px 9px;margin-bottom:14px;opacity:.75}
+@media (max-width:600px){
+  body{font-size:16px}
+  nav{flex-wrap:wrap;border-radius:18px}
+  .navlinks{margin-left:0;width:100%}
+  .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+  .tbl thead{display:none}
+  .tbl tr{border-bottom:1px solid var(--line);padding:14px 0}
+  .tbl tr:last-child{border-bottom:0}
+  .tbl td{border:0;padding:3px 0}
+  .tbl td:first-child{font-weight:500;margin-bottom:6px}
+  .tbl td::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .tbl td:first-child::before{content:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand"><span class="avatar"></span>Pushpal Das</span>
+  <div class="navlinks">
+    <a href="#">Home</a><a href="#">About</a>
+    <a href="#" aria-current="page">Work</a>
+    <a href="#">Experience</a><a href="#">Certifications</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Ixana · 2025 · Internal platform</p>
+  <h1>Ixana-Wiki</h1>
+  <p class="deck">One place to find every document, meeting, task and patent record — instead of five tools and a colleague who might remember.</p>
+  <span class="badge">Shipped internally</span>
+</header>
+
+<dl class="meta">
+  <div><dt>Role</dt><dd>Product manager, delivery owner</dd></div>
+  <div><dt>Team</dt><dd>4 engineers, 1 designer</dd></div>
+  <div><dt>Timeline</dt><dd>Jan – Aug 2025</dd></div>
+  <div><dt>Stage</dt><dd>Live, company-wide</dd></div>
+</dl>
+<p class="demo"><span>Internal product — screens on this page are recreations, and figures are relative or anonymised.</span></p>
+
+<div class="summary">
+  <p><b>Problem.</b> Company knowledge lived in five disconnected systems. People spent a median of nine minutes hunting for a document before giving up and asking someone — or rewriting it from scratch.</p>
+  <p><b>What I did.</b> I owned delivery of a single internal knowledge platform: one searchable repository across OneDrive, ClickUp, Teams, efficiency trackers and patent records, with hybrid search, cited AI answers and role-based access.</p>
+  <p><b>Result.</b> 118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence.</p>
+</div>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">01</span>Why this, and why now</h2>
+  <p>Three internal problems were on the table for the first half of 2025: knowledge search, an onboarding documentation rebuild, and automated meeting notes. All three had vocal advocates. I sized each by the same measure — engineering and operations hours lost per month — using calendar sampling and a two-week diary study with nine people.</p>
+
+  <figure>
+    <svg viewBox="0 0 700 175" role="img" aria-labelledby="c1t">
+      <title id="c1t">Estimated hours lost per month: knowledge search 340, onboarding docs 90, meeting notes 60</title>
+      <text class="g-name" x="0" y="30">Knowledge search</text>
+      <rect x="200" y="18" width="374" height="18" rx="3" fill="#5b7cfa"/>
+      <text class="g-val" x="586" y="32">340 h / mo</text>
+      <text class="g-name" x="0" y="80">Onboarding docs</text>
+      <rect x="200" y="68" width="99" height="18" rx="3" fill="#2c3a73"/>
+      <text class="g-val" x="311" y="82">90 h / mo</text>
+      <text class="g-name" x="0" y="130">Meeting notes</text>
+      <rect x="200" y="118" width="66" height="18" rx="3" fill="#2c3a73"/>
+      <text class="g-val" x="278" y="132">60 h / mo</text>
+      <line class="g-line" x1="200" y1="150" x2="680" y2="150"/>
+      <text class="g-lbl" x="200" y="167">0</text>
+      <text class="g-lbl" x="670" y="167">400</text>
+    </svg>
+    <figcaption>Opportunity sizing across three candidate problems. Estimated from a two-week diary study (n=9) plus calendar sampling. Knowledge search was roughly four times the next-largest problem, which is why it won the half.</figcaption>
+  </figure>
+
+  <p>The knowledge problem was also the only one getting worse on its own: every failed search produced another duplicate document, which made the next search harder. The other two were stable. That compounding effect is what turned a large problem into an urgent one, and it's the argument I used to get the half committed.</p>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">02</span>The problem as people experienced it</h2>
+  <p>I interviewed 14 people across engineering, operations and legal, and shadowed four of them while they searched for something real. The pattern repeated almost exactly.</p>
+
+  <table class="tbl">
+    <thead><tr><th>What they did</th><th>Where it broke</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Recalled a document exists</td><td data-l="Where it broke">No obvious place to start</td><td data-l="Evidence">11 of 14 opened a tool on a guess</td></tr>
+      <tr><td>Searched 3–4 tools</td><td data-l="Where it broke">Keyword search missed anything reworded</td><td data-l="Evidence">Median 9 min before abandoning</td></tr>
+      <tr><td>Asked a colleague</td><td data-l="Where it broke">Answer stayed in a DM, never written down</td><td data-l="Evidence">The same 4 people fielded most requests</td></tr>
+      <tr><td>Rewrote the document</td><td data-l="Where it broke">Duplicates made the next search worse</td><td data-l="Evidence">3 versions of one spec found in audit</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 700 190" role="img" aria-labelledby="c2t">
+      <title id="c2t">Of 14 people interviewed: 11 started with a guess, 12 searched three or more tools, 9 asked a colleague, 6 recreated a document</title>
+      <text class="g-name" x="0" y="28">Started with a guess</text>
+      <rect x="230" y="16" width="346" height="18" rx="3" fill="#5b7cfa"/><text class="g-val" x="588" y="30">11 / 14</text>
+      <text class="g-name" x="0" y="70">Searched 3+ tools</text>
+      <rect x="230" y="58" width="377" height="18" rx="3" fill="#5b7cfa"/><text class="g-val" x="619" y="72">12 / 14</text>
+      <text class="g-name" x="0" y="112">Asked a colleague</text>
+      <rect x="230" y="100" width="283" height="18" rx="3" fill="#5b7cfa"/><text class="g-val" x="525" y="114">9 / 14</text>
+      <text class="g-name" x="0" y="154">Recreated a document</text>
+      <rect x="230" y="142" width="189" height="18" rx="3" fill="#5b7cfa"/><text class="g-val" x="431" y="156">6 / 14</text>
+      <line class="g-line" x1="230" y1="172" x2="680" y2="172"/>
+    </svg>
+    <figcaption>Behaviours observed across 14 interviews. Nearly half had recreated a document that already existed — the loop that made the problem compound.</figcaption>
+  </figure>
+
+  <p>The reframe: this was not a search-quality problem inside any one tool. It was a fragmentation problem across all of them, and fixing search in OneDrive alone would have moved almost nothing.</p>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">03</span>My role and approach</h2>
+  <p>I owned product scope across ingestion, search, access and user workflows, and drove decisions on source coverage, search experience, sync operations, security requirements and production readiness — so backend services, frontend flows and background jobs shipped as one product rather than three.</p>
+
+  <h3>Key decisions</h3>
+  <ul class="decisions">
+    <li><b>Unified repository over document search alone.</b> I brought OneDrive, ClickUp, Teams, efficiency data and patent invoices into one index. It widened scope considerably, but the research said fragmentation — not search quality — was the actual problem.</li>
+    <li><b>Two sources first, then three.</b> I sequenced OneDrive and ClickUp into a four-week internal alpha before touching the others, so we learned whether people would change habits before paying for full coverage.</li>
+    <li><b>Hybrid retrieval over keyword-only or vector-only.</b> People searched for exact patent numbers and vague half-remembered topics in the same session. Either approach alone failed one of those.</li>
+    <li><b>Security in v1, not as a follow-up.</b> Azure AD authentication, JWT validation and signed short-lived media URLs shipped with the first release. A system indexing every sensitive document can't retrofit access control.</li>
+  </ul>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">04</span>What I cut</h2>
+  <div class="scope">
+    <div class="col ship"><h4>Shipped in v1</h4><ul>
+      <li>Search across 5 sources</li><li>AI answers with citations</li>
+      <li>Azure AD sign-in</li><li>Secure file preview</li><li>Transcript timestamp jump</li></ul></div>
+    <div class="col later"><h4>Deferred</h4><ul>
+      <li>Slack and email sources</li><li>Saved searches</li><li>Usage analytics v2</li></ul></div>
+    <div class="col cut"><h4>Cut</h4><ul>
+      <li>Per-document permissions</li><li>Multi-language search</li><li>Public-facing mode</li></ul></div>
+  </div>
+
+  <p style="margin-top:24px">Per-document permissions was the hardest cut. Existing SharePoint groups already covered roughly 90% of real sensitivity cases, and building a second permission model would have added a month for the remaining 10% — which we handled by excluding two folders from ingestion instead.</p>
+
+  <div class="doc">
+    <div class="doc-bar">From the PRD — scope, v0.4</div>
+    <div class="doc-body">
+      <p><b>Out of scope for v1</b></p>
+      <ul>
+        <li><b>Per-document permissions.</b> SharePoint group inheritance covers 90% of sensitivity cases (audit, <span class="redact">2025-02-11</span>). Remaining cases handled by excluding <span class="redact">two named folders</span> from ingestion. Revisit if exclusion list exceeds 5 folders.</li>
+        <li><b>Multi-language search.</b> &lt;2% of indexed content is non-English. Defer indefinitely.</li>
+        <li><b>Public-facing mode.</b> No identified user. Removed from roadmap.</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:14px;color:var(--muted);margin-top:-8px">One page from the working PRD. Redacted where it names internal locations.</p>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">05</span>How I got it agreed</h2>
+  <p>The CTO wanted per-document permissions in v1. His concern was legitimate — the index would contain patent filings and unreleased silicon specs, and he didn't want to explain a leak to the board because a PM wanted to ship faster.</p>
+  <p>Arguing about risk tolerance wasn't going to resolve it, so I changed what we were arguing about. I pulled the SharePoint group data and showed that inherited permissions already covered every sensitive folder but two. That reframed the question from "how much risk will we accept" to "is a month of engineering the right price for two folders" — a question with an obvious answer.</p>
+  <p>He agreed on two conditions I hadn't planned to offer: the two folders stay out of ingestion entirely rather than being permission-filtered, and we revisit if the exclusion list ever exceeds five folders. Both went into the PRD as written commitments. The second condition turned out to matter — we hit four exclusions by August, and per-document permissions moved back onto the roadmap on his terms rather than as a fight.</p>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2><span class="num">06</span>What was built</h2>
+  <p>An internal knowledge platform combining document management, enterprise search and AI question answering in one interface. People search files, browse ClickUp documentation, jump through meeting recordings by timestamp, check task and efficiency analytics, and track patent invoice records — from one place.</p>
+
+  <div class="shot">
+    <div class="shot-img">Chat answer view, recreated in Figma<br>with numbered callout arrows drawn on top</div>
+    <ol class="callouts">
+      <li><span class="num2">1</span><span><b>Citations sit inline, not in a footer.</b> In the alpha, people wouldn't act on an answer without seeing the source first — inline citations moved it from a demo to a daily tool.</span></li>
+      <li><span class="num2">2</span><span><b>Preview opens in-app.</b> Opening OneDrive in a new tab broke the search flow and lost people's place in the results.</span></li>
+      <li><span class="num2">3</span><span><b>Source filter is visible, not in settings.</b> People often knew which tool a document lived in and wanted to say so upfront.</span></li>
+      <li><span class="num2">4</span><span><b>Transcript cues are timestamps, not text.</b> Nobody read transcripts — they jumped to the moment and listened.</span></li>
+    </ol>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted);margin-top:12px">Recreated from the production interface. Layout and interactions are accurate; all documents, queries and results shown are invented. Happy to walk through the real product in a conversation.</p>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2><span class="num">07</span>Tradeoffs</h2>
+  <table class="tbl">
+    <thead><tr><th>Tension</th><th>What I chose</th><th>What it cost</th></tr></thead>
+    <tbody>
+      <tr><td>Breadth vs reliability</td><td data-l="What I chose">Five sources, each connector modular and independently schedulable</td><td data-l="What it cost">More integration surface to monitor; two connectors needed rework post-launch</td></tr>
+      <tr><td>Answer quality vs speed</td><td data-l="What I chose">Hybrid retrieval with structured context assembly</td><td data-l="What it cost">About 1.5s added latency versus generation alone</td></tr>
+      <tr><td>Ease of access vs data protection</td><td data-l="What I chose">Azure AD required, signed media URLs, tighter endpoint controls</td><td data-l="What it cost">No anonymous or link-based sharing, which people asked for repeatedly</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8 -->
+<section>
+  <h2><span class="num">08</span>Impact and outcomes</h2>
+  <p>Before build, we agreed this failed if fewer than half the company used it in the first quarter, and that we'd watch duplicate document creation as a guardrail — a tool that made finding easier but copying easier too would have been a net loss.</p>
+
+  <div class="metrics">
+    <div class="metric"><div class="n">118 <small>of 140</small></div><div class="l">Employees active in first quarter</div></div>
+    <div class="metric"><div class="n">340</div><div class="l">Searches per week by month 3</div></div>
+    <div class="metric"><div class="n">9m<span class="arrow">→</span>55s</div><div class="l">Median time to find a document</div></div>
+    <div class="metric"><div class="n">78%</div><div class="l">Answers rated useful in-product</div></div>
+    <div class="metric"><div class="n">5</div><div class="l">Systems unified into one index</div></div>
+    <div class="metric"><div class="n">−61%</div><div class="l">Duplicate docs created (guardrail)</div></div>
+  </div>
+
+  <figure>
+    <svg viewBox="0 0 700 240" role="img" aria-labelledby="c3t">
+      <title id="c3t">Weekly active users rising from 18 in week one to 118 by week ten</title>
+      <line class="g-line" x1="44" y1="20" x2="680" y2="20"/>
+      <line class="g-line" x1="44" y1="80" x2="680" y2="80"/>
+      <line class="g-line" x1="44" y1="140" x2="680" y2="140"/>
+      <line class="g-line" x1="44" y1="200" x2="680" y2="200"/>
+      <text class="g-lbl" x="36" y="24" text-anchor="end">120</text>
+      <text class="g-lbl" x="36" y="84" text-anchor="end">80</text>
+      <text class="g-lbl" x="36" y="144" text-anchor="end">40</text>
+      <text class="g-lbl" x="36" y="204" text-anchor="end">0</text>
+      <polygon fill="#5b7cfa" fill-opacity="0.12"
+        points="44,173 114.7,149 185.3,138.5 256,113 326.7,105.5 397.3,81.5 468,68 538.7,54.5 609.3,36.5 680,23 680,200 44,200"/>
+      <polyline fill="none" stroke="#5b7cfa" stroke-width="2" stroke-linejoin="round"
+        points="44,173 114.7,149 185.3,138.5 256,113 326.7,105.5 397.3,81.5 468,68 538.7,54.5 609.3,36.5 680,23"/>
+      <circle cx="680" cy="23" r="4" fill="#5b7cfa"/>
+      <text class="g-lbl" x="44" y="222">Week 1</text>
+      <text class="g-lbl" x="256" y="222">Week 4</text>
+      <text class="g-lbl" x="468" y="222">Week 7</text>
+      <text class="g-lbl" x="680" y="222" text-anchor="end">Week 10</text>
+    </svg>
+    <figcaption>Weekly active users after launch. Growth was steady rather than spiked — no company-wide mandate, so adoption spread department by department.</figcaption>
+  </figure>
+
+  <p><b style="color:var(--ink);font-weight:500">How we counted.</b> Active means at least one search or chat query in a calendar week, deduplicated by user. It deliberately excludes people who only opened a link someone else shared, since that measures sharing rather than adoption.</p>
+
+  <p class="config">Technical configuration — 1000-char document chunks · 200-char overlap · 768-dim embeddings (all-mpnet-base-v2) · gpt-4o-mini for generated answers · 3 PM2 services on AWS EC2</p>
+</section>
+
+<!-- 9 -->
+<section>
+  <h2><span class="num">09</span>How it works</h2>
+  <details class="arch">
+    <summary>Ingestion pipeline and retrieval flow</summary>
+    <div class="abody">
+      <figure>
+        <div class="ph">architecture-ingestion.png</div>
+        <figcaption>Ingestion — files are fetched on a schedule, chunked, embedded locally, and stored as vectors in PostgreSQL with pgvector.</figcaption>
+      </figure>
+      <figure>
+        <div class="ph">architecture-retrieval.png</div>
+        <figcaption>Retrieval — a question is embedded, matched by cosine similarity, and answered with cited chunks plus their neighbours for context.</figcaption>
+      </figure>
+    </div>
+  </details>
+</section>
+
+<!-- 10 -->
+<section>
+  <h2><span class="num">10</span>What I'd do differently</h2>
+  <p>I shipped v1 without product analytics. For six weeks I had no idea which sources people searched or how often answers failed — the numbers above came from a database query and a survey, retrofitted. Instrumentation belonged in the first release, and the cost wasn't the missing data so much as the six weeks of decisions I made on intuition.</p>
+  <p>I also sequenced the connectors by how easy they were to build rather than by expected usage. OneDrive and ClickUp turned out to carry most of the traffic, but I only knew that afterwards — two of the five connectors could have waited a release and bought back the month the permissions work needed.</p>
+</section>
+
+<p class="note"><span class="sample">Sample page — replace all figures</span><br>This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.</p>
+
+</div>
+</body>
+</html>
