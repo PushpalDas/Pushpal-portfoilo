@@ -2233,10 +2233,13 @@ export default function AdminPage() {
 											<select
 												id='form-status'
 												className='admin-input'
-												value={formData.status || ''}
-												onChange={(e) =>
-													handleFormChange('status', e.target.value || null)
-												}
+											value={formData.status || ''}
+											onChange={(e) =>
+												handleFormChange(
+													'status',
+													(e.target.value || null) as ItemData['status'],
+												)
+											}
 											>
 												<option value=''>None</option>
 												<option value='production'>In production</option>
