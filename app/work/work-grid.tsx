@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { WORK_STATUSES } from './status';
 import type { WorkItem } from './types';
+import { workSlug } from './slug';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -101,13 +102,12 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 						);
 
 						// Case 1: has a slug → internal case study page
-						if (item.slug) {
+						if (item.slug || workSlug(item)) {
 							return (
 								<li key={item.title} className='work-tile'>
 									<div className='work-tile-wrap'>
 										<Link
-											href={`/work/${item.slug}`}
-											target='_blank'
+										href={`/work/${item.slug ?? workSlug(item)}`}
 											className='work-tile-link'
 										>
 											{cardInner}
