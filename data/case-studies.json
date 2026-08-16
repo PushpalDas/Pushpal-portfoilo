@@ -374,10 +374,10 @@
     "slug": "xana-multifile-rag-based-data-singularity-platform",
     "company": "Ixana",
     "organization": "",
-    "title": "Ixana-Wiki",
-    "dateRange": "",
-    "role": "",
-    "teamSize": "",
+    "title": "XANA — Multifile RAG based Data Singularity Platform",
+    "dateRange": "Internal platform",
+    "role": "Product delivery owner",
+    "teamSize": "Team details not published",
     "tags": [
       "Knowledge management",
       "Enterprise search",
@@ -386,8 +386,8 @@
       "Workflow integrations",
       "Access control"
     ],
-    "isConfidential": false,
-    "confidentialNote": "",
+    "isConfidential": true,
+    "confidentialNote": "Internal product — screens are recreations or diagrams, and figures are limited to material cleared for this portfolio.",
     "tldr": "Problem: Ixana’s files, meeting records, ClickUp docs, and operational data were spread across separate systems, which made company knowledge hard to find and use.\n\nWhat we did: I led delivery of a single internal knowledge platform that pulled content from OneDrive, ClickUp, Teams, efficiency trackers, and patent records into one searchable repository with hybrid search, AI answers, secure access, and role-based content flows.\n\nResult: The team shipped an enterprise knowledge base with search, chat, video transcript navigation, analytics, and admin sync operations running in production on AWS with security controls documented and core vulnerabilities addressed.",
     "roleAndApproach": "What I owned: I owned delivery of the product scope across ingestion, search, access, and user workflows. I aligned the platform around one goal: give internal teams one place to find documents, meeting context, task analytics, and patent records. I drove decisions on source coverage, search experience, sync operations, security requirements, and production readiness so the backend services, frontend flows, and background jobs worked as one product.\n\nTradeoffs I navigated: I balanced breadth of coverage against reliability by bringing multiple high-value systems into one platform while keeping each connector modular and schedulable. I balanced answer quality against speed by using hybrid retrieval and structured context assembly instead of relying on generation alone. I balanced ease of access against data protection by requiring Azure AD authentication, signed media URLs, and tighter endpoint controls for previews and streaming.",
     "keyDecisions": [
@@ -438,8 +438,8 @@
         "label": "PM2 services in production"
       }
     ],
-    "impactContext": "The current record documents a production architecture but does not include verified adoption, time-saved, or business-outcome measurements. Technical configuration is presented separately rather than being described as product impact.",
-    "reflection": null,
+    "impactContext": "The team shipped an internal knowledge base with search, chat, transcript navigation, operational views, and admin sync controls. The current record does not include verified adoption, time-saved, or business-outcome measurements. Technical configuration is presented separately rather than being described as product impact.",
+    "reflection": "Instrumentation should be defined in the first release so future product decisions can be made from adoption, search-success, and source-coverage evidence. The current record documents delivery but not a formal retrospective, so this page does not invent one.",
     "links": [
       {
         "icon": "github",
@@ -448,7 +448,77 @@
       }
     ],
     "prevProject": null,
-    "nextProject": null
+    "nextProject": null,
+    "editorialOverrides": {
+      "deck": "A secure internal workspace that brings documents, meeting context, task data, and patent records into one searchable, cited AI experience.",
+      "meta": { "stage": "Live internally" },
+      "whyNow": {
+        "body": [
+          "The issue was not simply that one search box performed poorly. Company knowledge was fragmented across separate systems, so finding an answer often required knowing where it had been created first.",
+          "A unified internal workspace was prioritised because it could make documents, meeting context, delivery data, and patent records discoverable through one product rather than asking people to maintain a manual map of tools."
+        ]
+      },
+      "problemExperience": {
+        "body": [
+          "Employees needed to move between file storage, ClickUp documentation, Teams meeting records, operational trackers, and patent data to reconstruct an answer or locate the source material behind it.",
+          "The available project record establishes the fragmentation problem but does not preserve a formal interview sample, diary study, or baseline time-to-find. This page does not manufacture discovery statistics."
+        ],
+        "evidence": [
+          {
+            "action": "Locate and verify company knowledge",
+            "breakdown": "Relevant content was distributed across multiple systems with separate search and access paths.",
+            "evidence": "Documented product scope; no formal research sample was retained in the current record."
+          }
+        ]
+      },
+      "scope": {
+        "shipped": ["Unified search and AI answers with cited source context", "Secure file preview and role-based access flows", "Meeting transcript navigation and operational reporting views", "Scheduled ingestion and admin controls for sync operations"],
+        "deferred": ["Additional connectors and feedback workflows", "Finer-grained permissions and configurable retrieval policies"],
+        "cut": ["Uncited answers that users could not independently verify", "Platform features outside the internal knowledge workflow"],
+        "hardestCut": "The current project record does not preserve a specific scope-cut decision or its approval history. The lists above state the documented product boundary and should be refined if the original roadmap becomes available."
+      },
+      "alignment": [
+        "The available record does not document a specific stakeholder disagreement or concession. Rather than invent one, this case study keeps that evidence gap visible.",
+        "Security requirements were treated as a delivery constraint: internal access, signed media URLs, and endpoint hardening were included in the product boundary rather than deferred as post-launch work."
+      ],
+      "built": {
+        "body": [
+          "XANA is an internal knowledge platform combining document management, enterprise search, and AI-assisted question answering in one interface.",
+          "Users can search documents, browse ClickUp material, review meeting recordings through timestamped transcripts, inspect task and efficiency views, and track patent records. The platform ingests content from OneDrive and SharePoint, ClickUp, Microsoft Teams transcripts, operational trackers, and patent data sources."
+        ],
+        "visual": {
+          "src": "mermaid-diagram.png",
+          "alt": "XANA information architecture",
+          "caption": "System architecture from the project record. Replace with a recreated product screen before publishing a final portfolio version.",
+          "type": "diagram"
+        },
+        "callouts": [
+          { "title": "One search surface.", "detail": "The product joins sources that previously required separate search habits." },
+          { "title": "Cited answers.", "detail": "AI responses are grounded in source context so users can verify an answer." },
+          { "title": "Secure preview.", "detail": "Access controls stay part of the product flow when sensitive material is retrieved." }
+        ]
+      },
+      "tradeoffs": [
+        { "tension": "Source breadth vs reliability", "choice": "Integrated multiple high-value systems while keeping connectors modular and schedulable.", "cost": "More connector behaviour and sync operations to monitor; a verified operational cost was not retained in the record." },
+        { "tension": "Answer quality vs speed", "choice": "Used hybrid retrieval and structured context assembly instead of generation alone.", "cost": "The record does not preserve a measured latency comparison." },
+        { "tension": "Ease of access vs data protection", "choice": "Required Azure AD authentication, JWT validation, and signed short-lived media access.", "cost": "The product does not support anonymous access to sensitive internal content." }
+      ],
+      "outcomes": {
+        "body": [
+          "XANA shipped as an internal platform with search, chat, transcript navigation, operational views, and admin sync controls.",
+          "The current record does not contain verified adoption, time-saved, or business-outcome measurements. Technical configuration is intentionally shown separately and is not presented as product impact."
+        ],
+        "limitation": "No reliable post-launch adoption or outcome instrumentation is available in the current project record."
+      },
+      "architecture": {
+        "summary": "Ingestion and retrieval architecture",
+        "visuals": [
+          { "src": "mermaid-diagram.png", "alt": "XANA data storage architecture", "caption": "Ingestion and storage architecture from the project record.", "type": "diagram" },
+          { "src": "mermaid-diagram__1_.png", "alt": "XANA vector search architecture", "caption": "Vector search architecture from the project record.", "type": "diagram" }
+        ]
+      },
+      "footerNote": "This is an internal product. Architecture diagrams are shown from the project record; screens should be recreated with illustrative content before public publication. Sensitive figures are omitted rather than estimated."
+    }
   },
   "procurement-orchestrator-procurement-process-automation-with": {
     "slug": "procurement-orchestrator-procurement-process-automation-with",

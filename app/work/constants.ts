@@ -27,11 +27,12 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'XANA — Multifile RAG based Data Singularity Platform',
 		company: 'Ixana',
-		year: 'TODO: year',
-		domain: 'TODO: domain',
+		year: 'Internal platform',
+		domain: 'Enterprise knowledge',
 		category: 'product',
 		status: 'internal',
-		outcome: 'TODO: outcome line',
+		outcome:
+			'Unified company documents, meeting context, task data, and patent records in one secure search and AI workspace.',
 		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
 		href: 'https://github.com/PushpalDas/Ixana-Wiki',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
