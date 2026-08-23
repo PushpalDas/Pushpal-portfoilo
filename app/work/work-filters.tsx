@@ -25,9 +25,7 @@ export default function WorkFilters({
 							aria-pressed={activeFilter === f.key}
 						>
 							<span className='work-filter-btn-fill' />
-							<span className='work-filter-btn-text'>
-								{f.label}
-							</span>
+							<span className='work-filter-btn-text'>{f.label}</span>
 						</button>
 					</Magnetic>
 				))}

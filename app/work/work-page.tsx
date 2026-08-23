@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useMemo, useState } from 'react';
 import useBreakpoint from 'use-breakpoint';
 import Contact from '../components/contact';
-import { type FilterKey, workItems } from './constants';
+import { type FilterKey, STATUS_ORDER, workItems } from './constants';
 import './work.css';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
@@ -18,9 +18,10 @@ function WorkPageInner() {
 	const searchParams = useSearchParams();
 
 	const filterParam = searchParams.get('filter') as FilterKey | null;
-	const initialFilter: FilterKey = filterParam && ['all', 'product', 'engineering'].includes(filterParam) 
-		? filterParam 
-		: 'all';
+	const initialFilter: FilterKey =
+		filterParam && ['all', 'product', 'engineering'].includes(filterParam)
+			? filterParam
+			: 'all';
 
 	const [activeFilter, setActiveFilter] = useState<FilterKey>(initialFilter);
 
@@ -35,32 +36,23 @@ function WorkPageInner() {
 		router.replace(`?${params.toString()}`, { scroll: false });
 	};
 
-	const STATUS_ORDER: Record<string, number> = {
-		'production': 1,
-		'internal': 2,
-		'customer-testing': 3,
-		'prototype': 4,
-		'research': 5,
-		'null': 6,
-	};
-
 	const sortedItems = useMemo(() => {
 		const withIndex = workItems.map((item, index) => ({ item, index }));
-		
+
 		withIndex.sort((a, b) => {
 			const aStatus = a.item.status || 'null';
 			const bStatus = b.item.status || 'null';
-			
+
 			const aStatusRank = STATUS_ORDER[aStatus as keyof typeof STATUS_ORDER];
 			const bStatusRank = STATUS_ORDER[bStatus as keyof typeof STATUS_ORDER];
-			
+
 			if (aStatusRank !== bStatusRank) {
 				return aStatusRank - bStatusRank;
 			}
 
-			const aYear = parseInt(a.item.year.replace(/\D/g, '')) || 0;
-			const bYear = parseInt(b.item.year.replace(/\D/g, '')) || 0;
-			
+			const aYear = Number.parseInt(a.item.year.replace(/\D/g, '')) || 0;
+			const bYear = Number.parseInt(b.item.year.replace(/\D/g, '')) || 0;
+
 			if (aYear !== bYear) {
 				return bYear - aYear;
 			}

@@ -1,220 +1,161 @@
 'use client';
 
-import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
-import SectionContainer from '../components/layouts/section-container';
-import { merryWeather } from '../fonts';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useEffect, useRef } from 'react';
+import Contact from '../components/contact';
+import './about.css';
+import AboutHeader from './about-header';
 
+gsap.registerPlugin(ScrollTrigger);
+
+// Roles, companies and dates deliberately live on /experience, not here.
 export default function AboutPage() {
-	const [isVisible, setIsVisible] = useState(false);
+	const pageRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		setIsVisible(true);
+		const ctx = gsap.context(() => {
+			for (const block of gsap.utils.toArray<HTMLElement>('.about-reveal')) {
+				gsap.from(block, {
+					y: 24,
+					opacity: 0,
+					duration: 0.9,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: block,
+						start: 'top 88%',
+						toggleActions: 'play none none reset',
+					},
+				});
+			}
+		}, pageRef);
+
+		return () => ctx.revert();
 	}, []);
 
 	return (
-		<div className='min-h-screen'>
-			<SectionContainer>
-				<div className='py-16 md:py-24'>
-					{/* Hero Section */}
-					<motion.div
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
-						transition={{ duration: 0.8, ease: 'easeOut' }}
-						className='mb-20'
-					>
-						<div className='max-w-4xl mx-auto text-center'>
-							<h1
-								className={`text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400 bg-clip-text text-transparent ${merryWeather.className}`}
+		<div ref={pageRef} className='about-page'>
+			<AboutHeader />
+
+			<div className='about-content-wrap'>
+				<div className='about-container'>
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>Curiosity came first</p>
+						<p>
+							As a child I wanted to know how each person builds a whole reality
+							out of their own thoughts. I reasoned my way around that question
+							for years and kept arriving back where I started.
+						</p>
+						<p>
+							A camera helped. Through a lens I could borrow someone else&apos;s
+							way of seeing, one frame at a time. I wanted to be a
+							cinematographer.
+						</p>
+						<p>
+							I chose engineering instead. In a lower-middle-class home the
+							daily bread decides, and I made the choice with open eyes. What I
+							kept was the lens. It turned out you can point it at circuits, and
+							at people.
+						</p>
+					</section>
+
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>Learning what to build</p>
+						<p>
+							In college I fell for electronics — the plain fact of electrons
+							moving, and what a person can make them do. I went looking for
+							someone who loved this from the other side, the artistic side, and
+							found Steve Jobs. One thing from his story stayed: he trusted his
+							read of what people would want before they could say it. I
+							recognised that instinct. I have run on it since — across ideas,
+							design, business, and people.
+						</p>
+						<p>
+							Then came the years with boards on a bench. Troubleshooting, the
+							patience of finding out why a thing does not work, the first
+							product that was mine end to end: what it should do, why, and
+							whether it was good enough to ship.
+						</p>
+					</section>
+
+					<p className='about-pull about-reveal'>
+						I liked building. I love deciding what gets built, and why.
+					</p>
+
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>How I work</p>
+						<p>
+							Hardware, embedded systems, semiconductors, AI — and today,
+							wearable silicon and the Internet of Bodies at Ixana.
+						</p>
+						<p>
+							The work is deciding what matters and what can wait, holding the
+							line between engineering and the business, and staying with a
+							product until it ships. I own efficiency, our AI programs,
+							products, and patents.
+						</p>
+						<p>
+							The rigour comes from two places: a Six Sigma Black Belt, and time
+							in a lab learning that a board tells the truth even when the plan
+							doesn&apos;t.
+						</p>
+					</section>
+
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>What I keep going back to</p>
+						<p>
+							Christensen&apos;s <em>The Innovator&apos;s Dilemma</em> explains
+							why careful companies, doing everything right for their best
+							customers, still get overtaken. I think about it whenever a
+							roadmap starts to feel safe. Miller&apos;s <em>Chip War</em> is
+							the other one — a useful reminder that in deep tech, the thing you
+							are building is also the thing countries are counting.
+						</p>
+					</section>
+
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>The other lens</p>
+						<p>
+							I still photograph. The year I graduated I trained under Asit
+							Poddar, a Kolkata artist. Satyajit Ray taught me how to see: a
+							small, ordinary detail carries more than a speech.
+						</p>
+						<p>
+							So I got the cinematographer&apos;s life sideways. The lens is
+							mine. The frame holds people and problems instead of film.
+						</p>
+					</section>
+
+					<section className='about-section about-reveal'>
+						<p className='about-section-label'>If any of this resonates</p>
+						<p>
+							I want to keep building things that solve problems that actually
+							matter, with people who care how it&apos;s done. Electrons, and a
+							frame. That is still all it is.
+						</p>
+						<p>
+							If you&apos;re working on something in that direction, write to me
+							— I&apos;d like to hear about it.
+						</p>
+						<div className='about-close-links'>
+							<a className='about-link' href='mailto:pushpaldas2001@gmail.com'>
+								pushpaldas2001@gmail.com
+							</a>
+							<span className='about-link-sep'>/</span>
+							<a
+								className='about-link'
+								href='https://www.linkedin.com/in/pushpaldas/'
+								target='_blank'
+								rel='noopener noreferrer'
 							>
-								About Me
-							</h1>
-							<p className='text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed'>
-								Crafting digital experiences at the intersection of technology
-								and human-centered design
-							</p>
+								LinkedIn
+							</a>
 						</div>
-					</motion.div>
-
-					{/* Main Content Grid */}
-					<div className='grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20'>
-						{/* Left Column - Story */}
-						<motion.div
-							initial={{ opacity: 0, x: -30 }}
-							animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -30 }}
-							transition={{ duration: 0.8, delay: 0.2 }}
-							className='space-y-8'
-						>
-							<div className='space-y-6'>
-								<h2 className='text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100'>
-									The Journey
-								</h2>
-								<div className='space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed'>
-									<p>
-										My journey began in the vibrant tech ecosystem of Bangalore,
-										where I first discovered the magic of turning ideas into
-										reality through code. What started as curiosity about how
-										websites work evolved into a deep passion for creating
-										meaningful digital experiences.
-									</p>
-									<p>
-										Today, I blend my engineering expertise with product
-										management insights and AI innovation to build solutions
-										that matter. Whether it's developing scalable web
-										applications, architecting AI-powered platforms, or leading
-										cross-functional teams, I approach each challenge with the
-										same meticulous attention to detail that defines great
-										design.
-									</p>
-								</div>
-							</div>
-
-							<div className='space-y-6'>
-								<h2 className='text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100'>
-									Design Philosophy
-								</h2>
-								<div className='space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed'>
-									<p>
-										I believe great design is invisible. It's the seamless user
-										experience that feels natural, the code that runs
-										flawlessly, and the solutions that solve real problems
-										without unnecessary complexity.
-									</p>
-									<p>
-										Drawing inspiration from Apple's design principles, I focus
-										on simplicity, elegance, and human-centered thinking. Every
-										pixel, every interaction, every line of code serves a
-										purpose in creating something beautiful and functional.
-									</p>
-								</div>
-							</div>
-						</motion.div>
-
-						{/* Right Column - Skills & Values */}
-						<motion.div
-							initial={{ opacity: 0, x: 30 }}
-							animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 30 }}
-							transition={{ duration: 0.8, delay: 0.4 }}
-							className='space-y-8'
-						>
-							{/* Skills */}
-							<div className='space-y-6'>
-								<h2 className='text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100'>
-									Expertise
-								</h2>
-								<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-									{[
-										'Full-Stack Development',
-										'Product Management',
-										'AI/ML Engineering',
-										'UI/UX Design',
-										'System Architecture',
-										'Team Leadership',
-									].map((skill, index) => (
-										<motion.div
-											key={skill}
-											initial={{ opacity: 0, scale: 0.9 }}
-											animate={{
-												opacity: isVisible ? 1 : 0,
-												scale: isVisible ? 1 : 0.9,
-											}}
-											transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-											className='bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-300'
-										>
-											<span className='text-sm font-medium text-gray-900 dark:text-gray-100'>
-												{skill}
-											</span>
-										</motion.div>
-									))}
-								</div>
-							</div>
-
-							{/* Values */}
-							<div className='space-y-6'>
-								<h2 className='text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100'>
-									Values
-								</h2>
-								<div className='space-y-4'>
-									{[
-										{
-											title: 'Innovation',
-											description:
-												'Constantly exploring new technologies and methodologies to push boundaries',
-										},
-										{
-											title: 'Excellence',
-											description:
-												'Delivering high-quality work that stands the test of time',
-										},
-										{
-											title: 'Collaboration',
-											description:
-												'Building strong relationships and working effectively with diverse teams',
-										},
-										{
-											title: 'Impact',
-											description:
-												'Creating solutions that make a meaningful difference',
-										},
-									].map((value, index) => (
-										<motion.div
-											key={value.title}
-											initial={{ opacity: 0, y: 20 }}
-											animate={{
-												opacity: isVisible ? 1 : 0,
-												y: isVisible ? 0 : 20,
-											}}
-											transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-											className='bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800'
-										>
-											<h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'>
-												{value.title}
-											</h3>
-											<p className='text-sm text-gray-600 dark:text-gray-400 leading-relaxed'>
-												{value.description}
-											</p>
-										</motion.div>
-									))}
-								</div>
-							</div>
-						</motion.div>
-					</div>
-
-					{/* Call to Action */}
-					<motion.div
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 30 }}
-						transition={{ duration: 0.8, delay: 1.2 }}
-						className='text-center'
-					>
-						<div className='max-w-2xl mx-auto'>
-							<h2 className='text-2xl md:text-3xl font-semibold text-gray-900 dark:text-gray-100 mb-4'>
-								Let's Create Something Amazing
-							</h2>
-							<p className='text-gray-600 dark:text-gray-400 mb-8 leading-relaxed'>
-								I'm always excited to collaborate on projects that challenge
-								conventions and create exceptional user experiences. Whether
-								you're looking to build something new or improve something
-								existing, I'd love to hear about it.
-							</p>
-							<div className='flex flex-col sm:flex-row gap-4 justify-center'>
-								<a
-									href='/work'
-									className='inline-flex items-center px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors duration-300'
-								>
-									View My Work
-								</a>
-								<a
-									href='/contact'
-									className='inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-full font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-300'
-								>
-									Get In Touch
-								</a>
-							</div>
-						</div>
-					</motion.div>
+					</section>
 				</div>
-			</SectionContainer>
+			</div>
+
+			<Contact />
 		</div>
 	);
 }

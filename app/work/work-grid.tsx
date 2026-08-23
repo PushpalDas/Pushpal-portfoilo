@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { STATUS_CONFIG } from './constants';
 import type { WorkItem } from './types';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -44,14 +45,9 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 			<div className='work-grid-container'>
 				<ul className={`work-grid-items work-grid-${gridColumns}`}>
 					{items.map((item) => {
-						const statusConfig: Record<string, { label: string; colorClass: string }> = {
-							production:        { label: 'In production',        colorClass: 'status-green' },
-							internal:          { label: 'Shipped internally',   colorClass: 'status-green' },
-							'customer-testing': { label: 'In customer testing', colorClass: 'status-amber' },
-							prototype:         { label: 'Prototype',            colorClass: 'status-muted' },
-							research:          { label: 'Research',             colorClass: 'status-muted' },
-						};
-						const badge = item.status ? statusConfig[item.status] ?? null : null;
+						const badge = item.status
+							? (STATUS_CONFIG[item.status] ?? null)
+							: null;
 
 						const cardInner = (
 							<>
@@ -79,18 +75,28 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 									<h4 className='work-tile-title-clamp'>
 										<span>{item.title}</span>
 									</h4>
-									<p className='work-tile-outcome'>
-										{item.outcome}
-									</p>
+									<p className='work-tile-outcome'>{item.outcome}</p>
 								</div>
-								
+
 								<div className='work-tile-meta-col'>
-									<div className='work-tile-stripe' style={{ marginBottom: '0.75rem' }} />
-									<div className='work-tile-info-col' style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+									<div
+										className='work-tile-stripe'
+										style={{ marginBottom: '0.75rem' }}
+									/>
+									<div
+										className='work-tile-info-col'
+										style={{
+											display: 'flex',
+											alignItems: 'center',
+											flexWrap: 'wrap',
+										}}
+									>
 										<p style={{ margin: 0 }}>
 											{item.company} &middot; {item.year} &middot; {item.domain}
 										</p>
-										{item.demoUrl && <span className='work-demo-marker'>Demo</span>}
+										{item.demoUrl && (
+											<span className='work-demo-marker'>Demo</span>
+										)}
 									</div>
 								</div>
 							</>

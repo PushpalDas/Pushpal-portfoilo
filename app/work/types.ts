@@ -5,7 +5,13 @@ export interface WorkItem {
 	year: string;
 	domain: string;
 	category: 'product' | 'engineering';
-	status: 'production' | 'internal' | 'customer-testing' | 'prototype' | 'research' | null;
+	status:
+		| 'production'
+		| 'internal'
+		| 'customer-testing'
+		| 'prototype'
+		| 'research'
+		| null;
 	outcome: string;
 	image: string;
 	href?: string;

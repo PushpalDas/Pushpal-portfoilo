@@ -4,7 +4,7 @@ import AboutPage from './about-page';
 export const metadata: Metadata = {
 	title: 'About',
 	description:
-		'Learn more about Pushpal Das - Software Engineer, Product Manager, and AI enthusiast',
+		"Pushpal Das, Principal PM in Ixana's CTO office. Electronics, embedded systems and product — built at the intersection of art and science.",
 };
 
 export default function Page() {

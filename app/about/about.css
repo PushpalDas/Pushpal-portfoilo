@@ -1,0 +1,227 @@
+/* ============================================
+   ABOUT PAGE — Dennis Snellenberg Style
+   ============================================ */
+
+/* Page wrapper */
+.about-page {
+	position: relative;
+	width: 100%;
+	min-height: 100vh;
+}
+
+/* Hide the semicircle divider on the contact section within about page */
+.about-page .contact-rounded-div {
+	display: none;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.about-header-section {
+	position: relative;
+	width: 100%;
+	padding-top: clamp(8rem, 18vh, 14rem);
+	padding-bottom: clamp(2rem, 5vh, 4rem);
+	background: transparent;
+}
+
+.about-header-container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
+}
+
+.about-header-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.about-header-col {
+	flex: 1;
+}
+
+.about-header-title {
+	font-size: clamp(2.5rem, 7vw, 5.5rem);
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: -0.03em;
+	margin: 0;
+	color: #fff;
+}
+
+html:not(.dark) .about-header-title {
+	color: #1c1d20;
+}
+
+.about-header-line {
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+.about-header-line-inner {
+	display: block;
+	will-change: transform;
+}
+
+.about-header-subline {
+	font-size: clamp(1rem, 1.5vw, 1.25rem);
+	font-weight: 300;
+	color: rgba(255, 255, 255, 0.7);
+	margin: 1rem 0 0;
+	max-width: 800px;
+	line-height: 1.5;
+}
+
+html:not(.dark) .about-header-subline {
+	color: rgba(0, 0, 0, 0.6);
+}
+
+.about-header-note {
+	font-size: 0.8rem;
+	font-weight: 300;
+	letter-spacing: 0.01em;
+	color: rgba(255, 255, 255, 0.4);
+	margin: 0.75rem 0 0;
+	max-width: 640px;
+	line-height: 1.5;
+}
+
+html:not(.dark) .about-header-note {
+	color: rgba(0, 0, 0, 0.45);
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+.about-content-wrap {
+	position: relative;
+	width: 100%;
+	padding: 1rem 0 4rem;
+}
+
+.about-container {
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
+}
+
+.about-section {
+	max-width: 62ch;
+	margin: 0 0 clamp(3rem, 7vh, 5.5rem);
+}
+
+.about-section:last-child {
+	margin-bottom: 0;
+}
+
+.about-section-label {
+	font-size: 0.85rem;
+	font-weight: 500;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	margin: 0 0 1.75rem;
+	color: rgba(255, 255, 255, 0.45);
+}
+
+html:not(.dark) .about-section-label {
+	color: rgba(0, 0, 0, 0.45);
+}
+
+.about-section p {
+	font-size: clamp(1rem, 1.5vw, 1.25rem);
+	font-weight: 300;
+	line-height: 1.7;
+	margin: 0 0 1.5rem;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+html:not(.dark) .about-section p {
+	color: rgba(0, 0, 0, 0.6);
+}
+
+.about-section p:last-child {
+	margin-bottom: 0;
+}
+
+.about-section em {
+	font-style: italic;
+}
+
+/* the one pulled-out line — the turn in the story */
+.about-pull {
+	max-width: 30ch;
+	margin: clamp(3rem, 7vh, 5rem) 0;
+	font-size: clamp(1.75rem, 4vw, 3rem);
+	font-weight: 400;
+	line-height: 1.15;
+	letter-spacing: -0.03em;
+	color: #fff;
+}
+
+html:not(.dark) .about-pull {
+	color: #1c1d20;
+}
+
+/* ============================================
+   CLOSE
+   ============================================ */
+.about-close-links {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem 1.5rem;
+	margin-top: 2.25rem;
+}
+
+.about-link {
+	position: relative;
+	font-size: clamp(1rem, 1.5vw, 1.25rem);
+	font-weight: 400;
+	color: #fff;
+	text-decoration: none;
+	padding-bottom: 0.2rem;
+}
+
+html:not(.dark) .about-link {
+	color: #1c1d20;
+}
+
+.about-link::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 1px;
+	background: currentColor;
+	opacity: 0.35;
+	transform-origin: right center;
+	transition:
+		transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+		opacity 0.3s ease;
+}
+
+.about-link:hover::after {
+	opacity: 1;
+	transform: scaleX(0);
+	transform-origin: left center;
+}
+
+.about-link-sep {
+	color: rgba(255, 255, 255, 0.3);
+}
+
+html:not(.dark) .about-link-sep {
+	color: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 640px) {
+	.about-section,
+	.about-pull {
+		max-width: none;
+	}
+}

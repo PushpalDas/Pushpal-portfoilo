@@ -697,6 +697,21 @@ html:not(.dark) .work-header-subline {
 	color: rgba(0, 0, 0, 0.6);
 }
 
+/* Sample-portfolio disclosure — figures across the grid are invented */
+.work-header-sample-note {
+	font-size: 0.8rem;
+	font-weight: 300;
+	letter-spacing: 0.01em;
+	color: rgba(255, 255, 255, 0.4);
+	margin: 0.75rem 0 0;
+	max-width: 640px;
+	line-height: 1.5;
+}
+
+html:not(.dark) .work-header-sample-note {
+	color: rgba(0, 0, 0, 0.45);
+}
+
 /* Meta Col push to bottom */
 .work-tile-meta-col {
 	margin-top: auto;
@@ -798,4 +813,3 @@ html:not(.dark) .work-section-divider-text {
 html:not(.dark) .work-section-divider-line {
 	background: rgba(0, 0, 0, 0.1);
 }
-

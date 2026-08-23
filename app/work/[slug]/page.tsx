@@ -1,29 +1,39 @@
 /**
  * Dynamic route: /work/[slug]
  *
- * Reads case study data from `data/case-studies.json` at request time.
- * To add a case study, go to /admin → edit a work item → fill in the
- * "Case Study" tab → Save. The page will reflect changes immediately on
- * the next visit (no code changes needed).
+ * Two data sources, checked in order:
+ *
+ *   1. data/case-studies-v2.json — the 10-section format. Held in
+ *      its own file because the admin endpoint replaces whole
+ *      entries in case-studies.json (`store[slug] = body`), which
+ *      would silently drop a nested v2 block on the next save.
+ *
+ *   2. data/case-studies.json — the older layout, still editable
+ *      from /admin → work item → Case Study tab.
  */
 
-import { notFound } from 'next/navigation';
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Metadata } from 'next';
-import type { CaseStudyData } from './case-study-types';
+import { notFound } from 'next/navigation';
 import CaseStudyPage from './case-study-page';
+import type { CaseStudyData, CaseStudyV2 } from './case-study-types';
+import CaseStudyV2Page from './case-study-v2';
 
 const DATA_PATH = path.join(process.cwd(), 'data', 'case-studies.json');
+const V2_PATH = path.join(process.cwd(), 'data', 'case-studies-v2.json');
 
-function getAllCaseStudies(): Record<string, CaseStudyData> {
+function readJson<T>(file: string): Record<string, T> {
 	try {
-		if (!fs.existsSync(DATA_PATH)) return {};
-		return JSON.parse(fs.readFileSync(DATA_PATH, 'utf-8'));
+		if (!fs.existsSync(file)) return {};
+		return JSON.parse(fs.readFileSync(file, 'utf-8'));
 	} catch {
 		return {};
 	}
 }
+
+const getAllCaseStudies = () => readJson<CaseStudyData>(DATA_PATH);
+const getAllV2 = () => readJson<CaseStudyV2>(V2_PATH);
 
 export async function generateMetadata({
 	params,
@@ -31,8 +41,13 @@ export async function generateMetadata({
 	params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
 	const { slug } = await params;
-	const store = getAllCaseStudies();
-	const project = store[slug];
+
+	const v2 = getAllV2()[slug];
+	if (v2) {
+		return { title: `${v2.title} — Pushpal Das`, description: v2.deck };
+	}
+
+	const project = getAllCaseStudies()[slug];
 	if (!project) return { title: 'Work — Pushpal Das' };
 
 	return {
@@ -47,9 +62,11 @@ export default async function WorkSlugPage({
 	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
-	const store = getAllCaseStudies();
-	const project = store[slug];
 
+	const v2 = getAllV2()[slug];
+	if (v2) return <CaseStudyV2Page data={v2} />;
+
+	const project = getAllCaseStudies()[slug];
 	if (!project) notFound();
 
 	return <CaseStudyPage data={project} />;

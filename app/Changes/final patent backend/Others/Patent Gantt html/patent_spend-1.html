@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Patent spend by patent</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{color-scheme:light}
+body{margin:0;background:var(--plane);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.5;
+ -webkit-font-smoothing:antialiased}
+.viz-root{
+ color-scheme:light;
+ --plane:#f9f9f7; --surface-1:#fcfcfb;
+ --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+ --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,0.10);
+ --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+ --good:#0ca30c; --ghost:rgba(11,11,11,0.04);
+}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{
+ color-scheme:dark;
+ --plane:#0d0d0d; --surface-1:#1a1a19;
+ --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+ --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,0.10);
+ --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+ --good:#0ca30c; --ghost:rgba(255,255,255,0.06);
+}}
+:root[data-theme="dark"] .viz-root{
+ color-scheme:dark;
+ --plane:#0d0d0d; --surface-1:#1a1a19;
+ --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+ --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,0.10);
+ --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+ --good:#0ca30c; --ghost:rgba(255,255,255,0.06);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 24px 72px}
+header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:28px}
+h1{font-size:21px;font-weight:600;margin:0 0 4px;letter-spacing:-0.01em}
+.sub{color:var(--ink-2);font-size:13px;margin:0}
+.card{background:var(--surface-1);border:1px solid var(--ring);border-radius:10px}
+.hero-row{display:grid;grid-template-columns:minmax(240px,1.3fr) 2fr;gap:14px;margin-bottom:14px}
+.hero{padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+.hero .label{color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.hero .value{font-size:48px;font-weight:600;letter-spacing:-0.02em;line-height:1.05}
+.hero .note{color:var(--muted);font-size:12px;margin-top:8px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr)}
+.kpi{padding:18px 18px;border-right:1px solid var(--ring)}
+.kpi:last-child{border-right:none}
+.kpi .label{color:var(--ink-2);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;
+ line-height:1.3;height:2.6em;overflow:hidden}
+.kpi .value{font-size:24px;font-weight:600;margin-top:6px;letter-spacing:-0.01em}
+.kpi .note{color:var(--muted);font-size:11.5px;margin-top:3px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:22px 0 6px}
+.seg{display:inline-flex;background:var(--surface-1);border:1px solid var(--ring);border-radius:8px;padding:2px}
+.seg button{appearance:none;background:none;border:none;font:inherit;font-size:12.5px;color:var(--ink-2);
+ padding:6px 11px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ghost);color:var(--ink);font-weight:600}
+.seg button:hover{color:var(--ink)}
+select{font:inherit;font-size:12.5px;color:var(--ink);background:var(--surface-1);
+ border:1px solid var(--ring);border-radius:8px;padding:7px 10px;cursor:pointer}
+.spacer{flex:1}
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:14px 0 18px;font-size:12.5px;color:var(--ink-2)}
+.legend button{appearance:none;background:none;border:none;font:inherit;color:inherit;cursor:pointer;
+ display:inline-flex;align-items:center;gap:7px;padding:3px 6px;border-radius:6px}
+.legend button:hover{background:var(--ghost)}
+.legend button[aria-pressed="false"]{opacity:.4}
+.sw{width:11px;height:11px;border-radius:3px;flex:none}
+.chart{padding:20px 22px 8px;position:relative;overflow:hidden}
+.axis-top{position:relative;height:20px;margin-left:var(--lw);margin-right:74px;margin-bottom:6px}
+.tick{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+.plot{position:relative;margin-left:var(--lw);margin-right:74px}
+.gridlines{position:absolute;inset:0;pointer-events:none}
+.gl{position:absolute;top:0;bottom:0;width:1px;background:var(--grid)}
+.gl.zero{background:var(--axis)}
+.row{display:flex;align-items:center;height:26px;position:relative;margin-left:calc(-1*var(--lw));
+ padding-right:74px;border-radius:5px}
+.row:hover{background:var(--ghost)}
+.rlab{width:var(--lw);flex:none;padding-right:12px;font-size:12px;color:var(--ink-2);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.rlab .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--good);
+ margin-right:5px;vertical-align:middle}
+.barbox{flex:1;position:relative;height:26px;display:flex;align-items:center}
+.bar{display:flex;gap:2px;height:16px;min-width:0}
+.seg-m{height:100%;min-width:1px;cursor:pointer}
+.seg-m:first-child{border-radius:2px 0 0 2px}
+.seg-m:last-child{border-radius:0 4px 4px 0}
+.seg-m:only-child{border-radius:2px 4px 4px 2px}
+.seg-m:hover{filter:brightness(1.12)}
+.vlab{position:absolute;top:50%;transform:translateY(-50%);
+ font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.vlab.zero{color:var(--muted)}
+.note{color:var(--muted);font-size:12px;margin:16px 2px 0;line-height:1.55}
+.tip{position:fixed;z-index:50;pointer-events:none;background:var(--surface-1);color:var(--ink);
+ border:1px solid var(--ring);border-radius:9px;padding:11px 13px;font-size:12.5px;
+ box-shadow:0 6px 22px rgba(0,0,0,.16);max-width:330px;opacity:0;transition:opacity .09s}
+.tip.on{opacity:1}
+.tip h4{margin:0 0 7px;font-size:12.5px;font-weight:600;line-height:1.35}
+.tip .trow{display:flex;justify-content:space-between;gap:18px;padding:2px 0;color:var(--ink-2)}
+.tip .trow b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.tip .tsep{height:1px;background:var(--ring);margin:7px 0}
+.tip .items{color:var(--muted);font-size:11.5px;margin-top:5px}
+.tip .items div{display:flex;justify-content:space-between;gap:14px;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--ring);font-variant-numeric:tabular-nums}
+th{color:var(--ink-2);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;
+ position:sticky;top:0;background:var(--surface-1);cursor:pointer;white-space:nowrap}
+th:hover{color:var(--ink)}
+th:first-child,td:first-child{text-align:left;font-variant-numeric:normal}
+td:first-child{max-width:420px}
+tbody tr:hover{background:var(--ghost)}
+tfoot td{font-weight:600;color:var(--ink);border-top:1px solid var(--axis);border-bottom:none}
+.tablewrap{max-height:640px;overflow:auto;padding:4px 6px}
+.hide{display:none!important}
+
+/* ---- changes view ---- */
+.cpad{padding:20px 22px 18px}
+.sect{margin-top:22px}
+.sect:first-child{margin-top:2px}
+.sect h3{margin:0 0 3px;font-size:13px;font-weight:600}
+.sect .lede{margin:0 0 12px;font-size:12px;color:var(--muted);line-height:1.5}
+.att{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;
+ padding:11px 12px;border:1px solid var(--ring);border-radius:9px;margin-bottom:8px}
+.att .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+ padding:4px 9px;border-radius:20px;white-space:nowrap;letter-spacing:.01em}
+.att .badge svg{width:12px;height:12px;flex:none}
+.att .body{min-width:0}
+.att .body b{display:block;font-size:12.5px;font-weight:600;color:var(--ink);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.att .body span{font-size:11.5px;color:var(--ink-2)}
+.att .age{text-align:right;font-size:12.5px;font-weight:600;color:var(--ink);
+ font-variant-numeric:tabular-nums;white-space:nowrap}
+.att .age i{display:block;font-size:11px;font-weight:400;color:var(--muted);font-style:normal}
+.chg{display:grid;grid-template-columns:74px 1fr auto;gap:12px;align-items:baseline;
+ padding:6px 8px;border-radius:6px;font-size:12.5px}
+.chg:hover{background:var(--ghost)}
+.chg .d{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11.5px}
+.chg .t{color:var(--ink);min-width:0;display:flex;align-items:baseline;gap:7px}
+.chg .t i{width:8px;height:8px;border-radius:50%;flex:none;transform:translateY(-1px)}
+.chg .t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chg .t em{font-style:normal;color:var(--ink-2)}
+.chg .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+.grp{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+ padding:14px 0 6px;border-bottom:1px solid var(--ring);margin-bottom:2px}
+.grp h4{margin:0;font-size:12.5px;font-weight:600}
+.grp span{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.delta{font-size:11.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.hero .delta{font-size:12px;margin-top:6px}
+.snapnote{margin-top:20px;padding:13px 15px;border:1px dashed var(--ring);border-radius:9px;
+ font-size:12px;color:var(--ink-2);line-height:1.55}
+.snapnote b{color:var(--ink);font-weight:600}
+
+/* ---- gantt view ---- */
+.gpad{padding:20px 22px 18px}
+.gaxis{position:relative;height:20px;margin-left:var(--glw);margin-right:14px}
+.gaxis .tick{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+.glanes{position:relative;margin-left:var(--glw);margin-right:14px}
+.ggrid{position:absolute;inset:0;pointer-events:none}
+.ggrid .gl{position:absolute;top:0;bottom:0;width:1px;background:var(--grid)}
+.ggrid .now{position:absolute;top:0;bottom:0;width:1px;background:var(--axis)}
+.lane{display:flex;align-items:center;height:24px;margin-left:calc(-1*var(--glw));
+ padding-right:14px;border-radius:5px;position:relative}
+.lane:hover{background:var(--ghost)}
+.llab{width:var(--glw);flex:none;padding-right:12px;font-size:12px;color:var(--ink-2);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.llab .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--good);
+ margin-right:5px;vertical-align:middle}
+.ltrack{flex:1;position:relative;height:24px}
+.lline{position:absolute;top:50%;height:2px;background:var(--grid);transform:translateY(-50%);border-radius:1px}
+.gdot{position:absolute;top:50%;width:9px;height:9px;border-radius:50%;
+ transform:translate(-50%,-50%);box-shadow:0 0 0 2px var(--surface-1);cursor:pointer}
+.gdot.multi{width:12px;height:12px}
+.gdot:hover{box-shadow:0 0 0 2px var(--surface-1),0 0 0 4px var(--ring)}
+.gscroll{max-height:720px;overflow-y:auto;overflow-x:hidden;padding-top:2px}
+.gsticky{position:sticky;top:0;z-index:3;background:var(--surface-1);padding-bottom:2px}
+
+/* ---- timeline view ---- */
+.tl-pad{padding:20px 22px 18px}
+.actx{position:relative;height:18px;margin-top:6px}
+.actx .tick{position:absolute;top:0;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+.cols{display:flex;align-items:flex-end;gap:3px;height:150px;position:relative;padding-bottom:1px;
+ border-bottom:1px solid var(--axis)}
+.colwrap{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+ height:100%;position:relative;cursor:pointer;border-radius:4px 4px 0 0}
+.colwrap:hover{background:var(--ghost)}
+.col{width:100%;max-width:24px;display:flex;flex-direction:column-reverse;gap:2px}
+.cseg{width:100%;min-height:2px}
+.col>.cseg:last-child{border-radius:4px 4px 0 0}
+.ygrid{position:absolute;left:0;right:0;height:1px;background:var(--grid)}
+.ylab{position:absolute;left:-34px;transform:translateY(-50%);font-size:11px;color:var(--muted);
+ font-variant-numeric:tabular-nums}
+.actwrap{position:relative;margin-left:36px;margin-top:28px}
+.feed{margin-top:6px}
+.mhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+ padding:16px 0 7px;border-bottom:1px solid var(--ring);margin-bottom:2px;position:sticky;top:0;
+ background:var(--surface-1);z-index:2}
+.mhead h3{margin:0;font-size:13px;font-weight:600;letter-spacing:-0.005em}
+.mhead span{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ev{display:grid;grid-template-columns:74px 212px 1fr 96px;gap:12px;align-items:baseline;
+ padding:6px 8px;border-radius:6px;font-size:12.5px}
+.ev:hover{background:var(--ghost)}
+.ev .d{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11.5px}
+.ev .k{color:var(--ink);display:flex;align-items:baseline;gap:7px;min-width:0}
+.ev .k span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev .k i{width:8px;height:8px;border-radius:50%;flex:none;transform:translateY(-1px)}
+.ev .p{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev .a{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+.ev .a.none{color:var(--muted);font-weight:400}
+.feedwrap{max-height:620px;overflow:auto;padding:0 4px 8px}
+.empty{padding:44px 10px;text-align:center;color:var(--muted);font-size:13px}
+.tlnote{color:var(--muted);font-size:12px;margin:14px 2px 0;line-height:1.55}
+@media (max-width:760px){
+ .hero-row{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}
+ .kpi:nth-child(2){border-right:none}.kpi:nth-child(1),.kpi:nth-child(2){border-bottom:1px solid var(--ring)}
+ .wrap{padding:20px 14px 56px}
+ .ev{grid-template-columns:66px 1fr 84px;row-gap:2px}
+ .ev .p{grid-column:2/4;font-size:11.5px}
+}
+@media print{.controls,.seg,#tip{display:none!important}}
+</style></head>
+<body class="viz-root"><div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>Patent portfolio — spend &amp; timeline</h1>
+    <p class="sub">46 patents · $179,297.94 paid across 136 payments · 243 dated events, Nov 2023 – Aug 2026</p>
+  </div>
+  <div class="seg"><button id="theme" aria-pressed="false">Light / dark</button></div>
+</header>
+
+<div class="hero-row">
+  <div class="card hero">
+    <div class="label" id="herolab">Total paid to date</div>
+    <div class="value" id="heroval">—</div>
+    <div class="note" id="heronote"></div>
+    <div class="delta hide" id="herodelta"></div>
+  </div>
+  <div class="card kpis">
+    <div class="kpi"><div class="label" id="k1l">With spend</div><div class="value" id="k1">—</div><div class="note" id="k1n"></div></div>
+    <div class="kpi"><div class="label" id="k2l">Median</div><div class="value" id="k2">—</div><div class="note" id="k2n"></div></div>
+    <div class="kpi"><div class="label" id="k3l">Mean</div><div class="value" id="k3">—</div><div class="note" id="k3n"></div></div>
+    <div class="kpi"><div class="label" id="k4l">Most expensive</div><div class="value" id="k4">—</div><div class="note" id="k4n"></div></div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="seg" id="sortseg" role="group" aria-label="Sort">
+    <button data-sort="total" aria-pressed="true">Total</button>
+    <button data-sort="name" aria-pressed="false">Name</button>
+    <button data-sort="firm" aria-pressed="false">Firm</button>
+    <button data-sort="count" aria-pressed="false">Payments</button>
+  </div>
+  <div class="seg hide" id="gsortseg" role="group" aria-label="Lane order">
+    <button data-gsort="start" aria-pressed="true">Start</button>
+    <button data-gsort="recent" aria-pressed="false">Recent</button>
+    <button data-gsort="spend" aria-pressed="false">Spend</button>
+    <button data-gsort="name" aria-pressed="false">Name</button>
+  </div>
+  <div class="seg hide" id="rangeseg" role="group" aria-label="Time range">
+    <button data-range="1m" aria-pressed="false">Last month</button>
+    <button data-range="3m" aria-pressed="true">3 months</button>
+    <button data-range="6m" aria-pressed="false">6 months</button>
+    <button data-range="1y" aria-pressed="false">1 year</button>
+    <button data-range="3y" aria-pressed="false">3 years</button>
+    <button data-range="all" aria-pressed="false">All</button>
+  </div>
+  <select id="firm" aria-label="Filter by firm">
+    <option value="all">All firms</option>
+    <option value="pip">PIP</option>
+    <option value="metayage">Metayage</option>
+    <option value="k&amp;k">K&amp;K</option>
+  </select>
+  <div class="spacer"></div>
+  <div class="seg" role="group" aria-label="View">
+    <button data-view="chart" aria-pressed="true">Spend</button>
+    <button data-view="table" aria-pressed="false">Table</button>
+    <button data-view="timeline" aria-pressed="false">Timeline</button>
+    <button data-view="gantt" aria-pressed="false">Gantt</button>
+    <button data-view="changes" aria-pressed="false">Changes</button>
+  </div>
+</div>
+
+<div class="legend" id="costlegend">
+  <button data-cat="Draft" aria-pressed="true"><span class="sw" style="background:var(--s1)"></span>Draft</button>
+  <button data-cat="Filing" aria-pressed="true"><span class="sw" style="background:var(--s2)"></span>Filing</button>
+  <button data-cat="Office Action" aria-pressed="true"><span class="sw" style="background:var(--s3)"></span>Office action</button>
+  <span style="color:var(--muted)">·</span>
+  <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted)">
+    <span style="width:5px;height:5px;border-radius:50%;background:var(--good);display:inline-block"></span>patent granted</span>
+</div>
+
+<div class="legend hide" id="evlegend">
+  <button data-eg="filing" aria-pressed="true"><span class="sw" style="background:var(--s1)"></span>Filing</button>
+  <button data-eg="pub" aria-pressed="true"><span class="sw" style="background:var(--s2)"></span>Publication</button>
+  <button data-eg="uspto" aria-pressed="true"><span class="sw" style="background:var(--s3)"></span>USPTO action</button>
+  <button data-eg="resp" aria-pressed="true"><span class="sw" style="background:var(--s4)"></span>Response filed</button>
+  <button data-eg="pay" aria-pressed="true"><span class="sw" style="background:var(--s5)"></span>Payment</button>
+  <button data-eg="grant" aria-pressed="true"><span class="sw" style="background:var(--s6)"></span>Allowance &amp; grant</button>
+</div>
+
+<div class="card cpad hide" id="ccard">
+  <div class="sect">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+      <h3>Needs attention</h3>
+      <span style="font-size:11.5px;color:var(--muted)" id="attncount"></span>
+    </div>
+    <p class="lede">Derived from the tracker, not from a calendar: a USPTO action with no response dated after it,
+    or an allowance with no issue fee recorded. Ages are days elapsed, shown against the ordinary three-month
+    response period as a rough marker only — the real due date depends on the notice and any extensions, so confirm with counsel.
+    This section ignores the period selector.</p>
+    <div id="attn"></div>
+  </div>
+  <div class="sect">
+    <h3>What changed in this period</h3>
+    <p class="lede">Every event dated inside the selected window, ordered by significance then recency.
+    The tiles above compare it against the immediately preceding window of equal length.</p>
+    <div id="changes"></div>
+  </div>
+  <div class="snapnote"><b>Reading this as a true diff.</b> This build sees one spreadsheet, so "changed"
+  means <b>dated inside the window</b> — it cannot yet tell a newly typed row from a back-dated correction,
+  nor show a value that was edited or deleted. Cell-level diffing against the previous upload is specified in
+  the PRD (snapshot store + diff engine); once that lands, this tab gains added / edited / removed markers and a
+  "since you last looked" default.</div>
+</div>
+
+<div class="card gpad hide" id="gcard" style="--glw:300px">
+  <div class="gsticky"><div class="gaxis" id="gaxis"></div></div>
+  <div class="gscroll">
+    <div class="glanes" id="glanes"><div class="ggrid" id="ggrid"></div></div>
+    <div class="empty hide" id="gempty">No patent had any activity in this window.</div>
+  </div>
+  <p class="tlnote" id="gnote"></p>
+  <p class="tlnote">One lane per patent; each dot is a date, coloured by the most significant event on it —
+  a larger dot means several events landed the same day. The connector spans first to last activity inside the
+  selected window, so it shortens as you narrow the range. Hover any dot for that day's detail.</p>
+</div>
+
+<div class="card tl-pad hide" id="tlcard">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px">
+    <h2 style="margin:0;font-size:13px;font-weight:600">Activity <span style="color:var(--muted);font-weight:400" id="bmode"></span></h2>
+    <span style="font-size:11.5px;color:var(--muted)">events, stacked by type</span>
+  </div>
+  <div class="actwrap">
+    <div style="position:relative"><div id="ygrid" style="position:absolute;inset:0;pointer-events:none"></div>
+      <div class="cols" id="cols"></div></div>
+    <div class="actx" id="actx"></div>
+  </div>
+  <div class="feedwrap"><div class="feed" id="feed"></div></div>
+  <p class="tlnote">Every dated cell in the tracker, newest first — 243 events in all, from 11-04-23 to 08-03-26.
+  "Patented case" is omitted as a separate event because it repeats the issue-notification date in all six granted cases.
+  Hover a column for that period's breakdown; click a legend chip to hide an event type.</p>
+</div>
+
+<div class="card chart" id="chartcard" style="--lw:300px">
+  <div class="axis-top" id="axis"></div>
+  <div class="plot" id="plot"><div class="gridlines" id="gridlines"></div></div>
+  <p class="note">Hover any bar for the itemised payment history. Bars are ranked highest to lowest;
+  the scale is linear from zero, so the Smartglass filing — which carries a $24,661.94 international
+  filing payment on 06-01-26 — sets the axis and compresses everything else.</p>
+</div>
+
+<div class="card tablewrap hide" id="tablecard">
+  <table>
+    <thead><tr>
+      <th data-k="ref">Patent</th><th data-k="appno" style="text-align:left">Application #</th>
+      <th data-k="firm" style="text-align:left">Firm</th>
+      <th data-k="Draft">Draft</th><th data-k="Filing">Filing</th><th data-k="Office Action">Office action</th>
+      <th data-k="count">Payments</th><th data-k="total">Total paid</th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+    <tfoot id="tfoot"></tfoot>
+  </table>
+</div>
+
+<p class="note">Source: combined_patent_tracker.xlsx — columns AA/AB (draft), AC/AD (filing), AE/AF (office action).
+Multi-line cells were split into their individual itemised payments; every one of the 136 payments carries a date.
+Four patents have no payment recorded in the tracker.</p>
+
+<div class="tip" id="tip"></div>
+</div>
+<script>
+const DATA = [{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","title":"WEARABLE DEVICE FOR ELECTRO-QUASISTATIC HUMAN BODY COMMUNICATION AND AMETHOD THEREOF, Optimum ground plane configurations for Electro-quasistatic Human Body Communication capable smart eyewear devices","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"06-06-24"}],"Filing":[{"amount":1164.0,"date":"06-06-24"},{"amount":3646.0,"date":"12-25-24"},{"amount":300.0,"date":"03-11-26"},{"amount":866.0,"date":"03-24-26"},{"amount":24661.94,"date":"06-01-26"}],"Office Action":[{"amount":1350.0,"date":"04-30-25"},{"amount":1350.0,"date":"10-26-25"},{"amount":1350.0,"date":"11-25-25"}]},"totals":{"Draft":650.0,"Filing":30637.94,"Office Action":4050.0},"total":35337.94,"patented":true},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","title":"A POWERING SYSTEM AND METHOD FOR POWERING DEVICES UTILIZING HUMAN WHOLE BODY POWERING (HWBP) VIA CAPACITIVE ELECTRO-QUASISTATIC FIELDS","appno":"19/066,474","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"02-28-25"}],"Filing":[{"amount":1230.0,"date":"02-28-25"},{"amount":6029.0,"date":"01-28-26"}],"Office Action":[{"amount":200.0,"date":"04-24-26"}]},"totals":{"Draft":650.0,"Filing":7259.0,"Office Action":200.0},"total":8109.0,"patented":false},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","title":"POWERING SYSTEMS AND METHODS FOR SERIES RESONANT CAPACITIVE ELECTRO-QUASISTATIC HUMAN BODY POWERING (EQS-HBP)","appno":"19/066,198","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"02-28-25"}],"Filing":[{"amount":1630.0,"date":"02-28-25"},{"amount":4019.0,"date":"01-28-26"}],"Office Action":[{"amount":200.0,"date":"04-24-26"},{"amount":1350.0,"date":"07-01-26"}]},"totals":{"Draft":650.0,"Filing":5649.0,"Office Action":1550.0},"total":7849.0,"patented":false},{"row":20,"ref":"Touch Screen Communicaion","title":"A SYSTEM AND METHOD FOR TOUCH-BASED DATA COMMUNICATION USING HUMAN BODY","appno":"18/806,753","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"08-24-24"}],"Filing":[{"amount":1164.0,"date":"08-24-24"},{"amount":3438.0,"date":"08-18-25"},{"amount":1046.0,"date":"11-25-25"}],"Office Action":[{"amount":1350.0,"date":"07-10-25"}]},"totals":{"Draft":650.0,"Filing":5648.0,"Office Action":1350.0},"total":7648.0,"patented":true},{"row":16,"ref":"Video Streaming","title":"SYSTEM AND METHOD FOR MULTIMEDIA COMMUNICATION USING HUMAN BODY AS A MEDIUM","appno":"18/655,403","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"02-07-24"}],"Filing":[{"amount":864.0,"date":"02-07-24"},{"amount":3435.0,"date":"04-30-25"}],"Office Action":[{"amount":200.0,"date":"07-10-25"},{"amount":1350.0,"date":"07-01-26"}]},"totals":{"Draft":650.0,"Filing":4299.0,"Office Action":1550.0},"total":6499.0,"patented":false},{"row":22,"ref":"Car Body Communication","title":"SYSTEM AND METHOD FOR PROVIDING COMMUNICATION BETWEEN DEVICES OF VEHICLE USING INTRA-VEHICULAR NETWORK","appno":"18/936,233","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"10-27-24"},{"amount":80.0,"date":"11-29-24"}],"Filing":[{"amount":1164.0,"date":"10-27-24"},{"amount":3456.0,"date":"10-26-25"},{"amount":36.0,"date":"12-21-25"},{"amount":866.0,"date":"05-20-26"}],"Office Action":[{"amount":200.0,"date":"01-28-26"}]},"totals":{"Draft":730.0,"Filing":5522.0,"Office Action":200.0},"total":6452.0,"patented":true},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","title":"COMMUNICATION SYSTEMS AND METHODS FOR ENERGY EFFICIENT CLOCKLESS WAKE-UP RECEIVER BODY AREA NETWORKS","appno":"19/053,727","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"01-30-25"}],"Filing":[{"amount":1164.0,"date":"01-30-25"},{"amount":266.0,"date":"02-28-25"},{"amount":3848.0,"date":"01-28-26"}],"Office Action":[{"amount":200.0,"date":"04-24-26"}]},"totals":{"Draft":650.0,"Filing":5278.0,"Office Action":200.0},"total":6128.0,"patented":false},{"row":19,"ref":"Step2Charge","title":"MACHINE TO WEARABLE POWER TRANSFER SYSTEM AND METHOD FOR POWERING WEARABLE DEVICES THROUGH A HUMAN BODY","appno":"18/783,729","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"08-24-24"}],"Filing":[{"amount":1364.0,"date":"08-24-24"},{"amount":750.0,"date":"07-10-25"},{"amount":3030.0,"date":"08-18-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":5144.0,"Office Action":0},"total":5794.0,"patented":false},{"row":35,"ref":"Time-domain Neural Network, Feature extraction","title":"SYSTEMS AND METHODS FOR TIME-DOMAIN IN-SENSOR FEATURE EXTRACTION USING PHASE-LOCKED LOOP CONVOLUTION","appno":"19/215,854","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"04-30-25"}],"Filing":[{"amount":1230.0,"date":"04-30-25"},{"amount":3829.0,"date":"05-20-26"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":5059.0,"Office Action":0},"total":5709.0,"patented":false},{"row":24,"ref":"TV Body Comm","title":"QUASISTATIC AND RESONANT COMMUNICATION SYSTEM AND METHOD THROUGH A DISPLAY CHASSIS","appno":"18/948,583","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"10-27-24"}],"Filing":[{"amount":1164.0,"date":"10-27-24"},{"amount":3636.0,"date":"10-26-25"},{"amount":18.0,"date":"12-21-25"}],"Office Action":[{"amount":200.0,"date":"01-28-26"}]},"totals":{"Draft":650.0,"Filing":4818.0,"Office Action":200.0},"total":5668.0,"patented":false},{"row":23,"ref":"Human Structure Interaction","title":"A COMMUNICATION SYSTEM FOR AUGMENTED HUMAN-OBJECT INTERACTION","appno":"18/901,578","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"10-10-24"}],"Filing":[{"amount":1164.0,"date":"10-10-24"},{"amount":750.0,"date":"08-31-25"},{"amount":2742.0,"date":"09-20-25"}],"Office Action":[{"amount":200.0,"date":"12-21-25"}]},"totals":{"Draft":650.0,"Filing":4656.0,"Office Action":200.0},"total":5506.0,"patented":false},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","title":"Direct Analog to MPEG conversion METHOD FOR DIRECT ANALOG TO JPEG COMPRESSION","appno":"63/461,279, 18/402,813","firm":"pip","payments":{"Draft":[{"amount":700.0,"date":"11-04-23"}],"Filing":[{"amount":550.0,"date":"11-04-23"},{"amount":364.0,"date":"02-02-24"},{"amount":866.0,"date":"03-11-26"},{"amount":300.0,"date":"03-24-26"}],"Office Action":[{"amount":1350.0,"date":"09-20-25"},{"amount":1350.0,"date":"11-25-25"}]},"totals":{"Draft":700.0,"Filing":2080.0,"Office Action":2700.0},"total":5480.0,"patented":true},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","title":"A COMMUNICATION SYSTEM FOR DATA TRANSFER USING HUMAN BODY RESONANCE","appno":"18/738,328","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"06-06-24"}],"Filing":[{"amount":1164.0,"date":"06-06-24"},{"amount":3595.0,"date":"03-04-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":4759.0,"Office Action":0},"total":5409.0,"patented":false},{"row":14,"ref":"Approximate JPEG Dig","title":"Approximate Computing for MPEG conversion METHOD FOR ENERGY-EFFICIENT APPROXIMATE DIGITAL JPEG and MJPEG-COMPRESSION","appno":"18/138,042","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"06-06-24"}],"Filing":[{"amount":1164.0,"date":"06-06-24"},{"amount":866.0,"date":"06-10-26"}],"Office Action":[{"amount":1350.0,"date":"12-21-25"},{"amount":1350.0,"date":"04-24-26"}]},"totals":{"Draft":650.0,"Filing":2030.0,"Office Action":2700.0},"total":5380.0,"patented":true},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","title":"METHOD AND SYSTEM FOR PULSE SHAPING OF BASEBAND SIGNALS IN COMMUNICATION NETWORKS USING ELECTROQUASISATIC SIGNALS","appno":"18/911,470","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"10-10-24"}],"Filing":[{"amount":1304.0,"date":"10-10-24"}],"Office Action":[{"amount":200.0,"date":"10-27-24"},{"amount":1350.0,"date":"04-24-26"}]},"totals":{"Draft":650.0,"Filing":1304.0,"Office Action":1550.0},"total":3504.0,"patented":false},{"row":11,"ref":"Distributed Comp + Headset Video","title":"Distributed body area network computing system, method and computer program products","appno":"18/591,043","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"03-24-24"}],"Filing":[{"amount":1310.0,"date":"03-24-24"},{"amount":1046.0,"date":"08-31-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":2356.0,"Office Action":0},"total":3006.0,"patented":true},{"row":5,"ref":"NFE mp1: Multi-Human interaciton with NFE (Physical social network)","title":"DEVICE AND METHOD FOR TOUCH-QUALIFIED PAIRING-FREE PHYSICAL SOCIAL NETWORKING USING ELECTRO-QUASISTATIC HUMAN BODY COMMUNICATION","appno":"19/465,468","firm":"metayage","payments":{"Draft":[{"amount":1120.0,"date":"11-11-25"}],"Filing":[{"amount":1755.0,"date":"12-16-25"}],"Office Action":[]},"totals":{"Draft":1120.0,"Filing":1755.0,"Office Action":0},"total":2875.0,"patented":false},{"row":6,"ref":"Drone-Drone","title":"SYSTEM AND METHOD FOR DATA TRANSFER AND DISTRIBUTED PROCESSING AMONG FLYING OBJECTS USING NEAR-FIELD ELECTRIC COMMUNICATION","appno":"19/561,264","firm":"metayage","payments":{"Draft":[{"amount":1120.0,"date":"12-16-25"}],"Filing":[{"amount":1755.0,"date":"02-13-26"}],"Office Action":[]},"totals":{"Draft":1120.0,"Filing":1755.0,"Office Action":0},"total":2875.0,"patented":false},{"row":7,"ref":"Dead Drop -Defense (File-transfer by touch)","title":"SYSTEM, DEVICE AND METHOD FOR DISCRETE LOCALIZED DATA TRANSFER USING ELECTRO-QUASISTATIC HUMAN BODY COMMUNICATION","appno":"19/637,740","firm":"metayage","payments":{"Draft":[{"amount":1120.0,"date":"03-04-26"}],"Filing":[{"amount":1755.0,"date":"03-16-26"}],"Office Action":[]},"totals":{"Draft":1120.0,"Filing":1755.0,"Office Action":0},"total":2875.0,"patented":false},{"row":8,"ref":"TD-BC","title":"COMMUNICATION RECEIVER FOR RECOVERING DATA ENCODED IN TEMPORAL CHARACTERISTICS OF A SIGNAL, AND METHOD THEREOF","appno":"19/650,662","firm":"metayage","payments":{"Draft":[{"amount":1120.0,"date":"04-13-26"}],"Filing":[{"amount":1630.0,"date":"04-17-26"}],"Office Action":[]},"totals":{"Draft":1120.0,"Filing":1630.0,"Office Action":0},"total":2750.0,"patented":false},{"row":9,"ref":"Synchronized Multi-Device Sensing","title":"MULTI-DEVICE SYSTEM FOR DETERMINISTIC, TIME-SYNCHRONIZED SENSOR DATAACQUISITION VIA BAN COMMUNICATION CHANNEL, AND METHOD THEREOF","appno":"19/727,485","firm":"metayage","payments":{"Draft":[{"amount":1270.0,"date":"06-03-26"}],"Filing":[{"amount":1480.0,"date":"06-03-26"}],"Office Action":[]},"totals":{"Draft":1270.0,"Filing":1480.0,"Office Action":0},"total":2750.0,"patented":false},{"row":10,"ref":"In-Brain to Out of Brain Comm","title":"IMPLANTABLE NEURAL-INTERFACE SYSTEM FOR WIRELESS TRANSMISSION OF AN IN-TISSUE SIGNAL, AND METHOD THEREOF","appno":"19/750,990","firm":"metayage","payments":{"Draft":[{"amount":1120.0,"date":"06-25-26"}],"Filing":[{"amount":1630.0,"date":"06-25-26"}],"Office Action":[]},"totals":{"Draft":1120.0,"Filing":1630.0,"Office Action":0},"total":2750.0,"patented":false},{"row":30,"ref":"Wideband IQ transceiver for near field (proximity) communication - 1.5x data rate/carrier ratio (proximity communication with iq modulation)","title":"A COMMUNICATION SYSTEM AND METHOD FOR COMMUNICATING BANDLIMITED MODULATED SIGNALS OVER A WIDEBAND CHANNEL","appno":"19/346,903","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"02-28-25"}],"Filing":[{"amount":1570.0,"date":"02-28-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1570.0,"Office Action":0},"total":2220.0,"patented":false},{"row":25,"ref":"CDMA-HBC (Walch & SB mode)","title":"A COMMUNICATION SYSTEM AND METHOD FOR SPREAD SPECTRUM AND MULTIPLE ACCESS USING HUMAN BODY COMMUNICATION","appno":"19/045,740","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"11-29-24"}],"Filing":[{"amount":1304.0,"date":"11-29-24"},{"amount":246.0,"date":"03-04-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1550.0,"Office Action":0},"total":2200.0,"patented":false},{"row":27,"ref":"Interference-Cancelling Differential LNA with simultaneous Supply and Gnd isolation","title":"COMMUNICATION SYSTEM FOR SIMULTANEOUS INTERFERENCE CANCELLATION, SUPPLY AND GROUND NOISE REJECTION USING HUMAN BODY","appno":"18/988,987","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"11-29-24"}],"Filing":[{"amount":1164.0,"date":"11-29-24"},{"amount":340.0,"date":"12-25-24"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1504.0,"Office Action":0},"total":2154.0,"patented":false},{"row":40,"ref":"Pendant Electrode Optimization","title":"APPAREL APPARATUS AND METHOD FOR DATA COMMUNICATION BETWEEN DEVICES USING ELECTRO-QUASISTATIC HUMAN BODY NETWORK","appno":"19/377,455","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"07-10-25"}],"Filing":[{"amount":1230.0,"date":"07-10-25"},{"amount":140.0,"date":"08-18-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1370.0,"Office Action":0},"total":2020.0,"patented":false},{"row":46,"ref":"Pulse shortening + CDR take middle.. oversampling","title":"COMMUNICATION SYSTEM AND METHOD FOR DATA TRANSMISSION USING PULSE SHORTENING AND WINDOWED CLOCK DATA RECOVERY","appno":"19/668,522","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"12-21-25"}],"Filing":[{"amount":1230.0,"date":"12-21-25"},{"amount":138.0,"date":"03-24-26"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1368.0,"Office Action":0},"total":2018.0,"patented":false},{"row":26,"ref":"Energy-proportional RS encoder-decoder","title":"A COMMUNICATION SYSTEM AND METHOD FOR ERROR-PROPORTIONAL ENERGY SAVING IN ENCODING AND DECODING IN BODY AREA NETWORKS USING HUMAN BODY COMMUNICATION","appno":"18/973,246","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"11-29-24"}],"Filing":[{"amount":1304.0,"date":"11-29-24"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1304.0,"Office Action":0},"total":1954.0,"patented":false},{"row":28,"ref":"DAC + Class AB buffer driving a capacitive load -SB,AC","title":"COMMUNICATION SYSTEMS AND METHODS FOR DRIVING CAPACITIVE LOAD USING A HUMAN BODY COMMUNICATION NETWORK","appno":"19/049,182","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"01-30-25"}],"Filing":[{"amount":1304.0,"date":"01-30-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1304.0,"Office Action":0},"total":1954.0,"patented":false},{"row":34,"ref":"Time-Domain JPEG","title":"SYSTEMS AND METHODS FOR PERFORMING ANALOG TO MJPEG COMPRESSION USINGTIME DOMAIN MIXED SIGNAL PROCESSING TECHNIQUES","appno":"19/179,229","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"04-03-25"}],"Filing":[{"amount":1280.0,"date":"04-03-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1280.0,"Office Action":0},"total":1930.0,"patented":false},{"row":33,"ref":"ATC-VSN","title":"COMMUNICATION SYSTEMS AND METHODS FOR OPTIMIZING POWER USING ANALOG VOLTAGE-TO-TIME CONVERTER BASED SENSOR NODES","appno":"19/183,298","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"04-03-25"}],"Filing":[{"amount":1230.0,"date":"04-03-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":36,"ref":"Time-domain Body Comm","title":"SYSTEMS AND METHODS FOR PERFORMING A TIME-DOMAIN BODY-COMMUNICATION (TD-BC) IN A BODY AREA NETWORK (BAN)","appno":"19/237,061","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"05-31-25"}],"Filing":[{"amount":1230.0,"date":"05-31-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":37,"ref":"Underwater (+ Pacemaker/Implantable)","title":"SYSTEMS AND METHODS FOR MAGNETIC RESONANT COUPLING-BASED WIDEBAND COMMUNICATION AND POWER TRANSFER IN A CONDUCTIVE- MEDIUM","appno":"19/238,380","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"05-31-25"}],"Filing":[{"amount":1230.0,"date":"05-31-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":38,"ref":"EQS-UWB Coupler: EQS coupler + UWB + 24 GHz combined antenna (system automatically switching between the 3)","title":"A DUAL-MODE ELECTRO-QUASISTATICS AND RADIO-FREQUENCY COMMUNICATION SYSTEM WITH A COMMON ELECTRODE ANTENNA AND METHOD THEREOF","appno":"19/254,260","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"05-31-25"}],"Filing":[{"amount":1230.0,"date":"05-31-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":39,"ref":"IDC (HS-eNFC), Body assisted NFE","title":"SYSTEM AND METHOD FOR DATA COMMUNICATION BETWEEN PLURALITY OF DEVICESUSING NEAR-FIELD ELECTRIC (NFE) NETWORK","appno":"19/312,457","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"07-10-25"}],"Filing":[{"amount":1230.0,"date":"07-10-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":41,"ref":"BC p1: SMART IMPLANTED PACEMAKER SYSTEM","title":"MEDICAL DIAGNOSTIC SYSTEM AND METHOD FOR CONTINUOUS CARDIAC MONITORING USING TISSUE-COUPLED COMMUNICATION","appno":"19/436,003","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"09-20-25"}],"Filing":[{"amount":1230.0,"date":"09-20-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":42,"ref":"BC p2: JOINT COMMUNICATION AND SENSING","title":"COMMUNICATION AND SENSING SYSTEMS FOR BIOMEDICAL AND WEARABLE DEVICES USING ELECTRO-QUASISTATIC (EQS) BASED TISSUE-COUPLED","appno":"19/439,384","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"09-20-25"}],"Filing":[{"amount":1230.0,"date":"09-20-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":43,"ref":"PQC","title":"A COMPUTING SYSTEM FOR OPTIMIZING ENERGY IN EXECUTION OF POST-QUANTUM CRYPTOGRAPHIC OPERATIONS AND METHOD THEREOF","appno":"19/434,130","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"10-26-25"}],"Filing":[{"amount":1230.0,"date":"10-26-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":44,"ref":"NFE p2: Phone to Phone NFE Phone/Laptop","title":"ELECTRONIC DEVICE AND METHOD FOR COMMUNICATING DATA BETWEEN ELECTRONIC DEVICES USING NEAR-FIELD ELECTRIC (NFE) COMMUNICATION","appno":"19/441,968","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"11-25-25"}],"Filing":[{"amount":1230.0,"date":"11-25-25"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":47,"ref":"Roy low power HBC transmitter (1)","title":"SYSTEMS AND METHODS FOR COMMUNICATING AND TRANSFERRING POWER BETWEEN DEVICES USING MEDIUM-INTEGRATED RESONANT NETWORKS","appno":"19/651,620","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"04-24-26"}],"Filing":[{"amount":1230.0,"date":"04-24-26"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":48,"ref":"NFE p5: 10 Ring -> 2 watch (type, gesture) (3) Ring to glass (2)","title":"A COMMUNICATION SYSTEM AND METHOD FOR COMMUNICATION AND CONTROL OF NETWORK DEVICES USING A SINGLE WEARABLE DEVICE","appno":"19/744,007","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"08-03-26"}],"Filing":[{"amount":1230.0,"date":"08-03-26"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1230.0,"Office Action":0},"total":1880.0,"patented":false},{"row":17,"ref":"Time-Sync Network for HBC","title":"Synchronized TDMA network, with body communicated signals to achieve low latency and low power","appno":"63/614,491,  18/676,789","firm":"pip","payments":{"Draft":[{"amount":650.0,"date":"04-04-24"}],"Filing":[{"amount":500.0,"date":"04-04-24"},{"amount":664.0,"date":"08-24-24"}],"Office Action":[]},"totals":{"Draft":650.0,"Filing":1164.0,"Office Action":0},"total":1814.0,"patented":false},{"row":3,"ref":"Touch-based credential sharing system and method Using Electro QuasiStatic Human Body Communication (Wi-R)","title":"SYSTEM AND METHOD FOR SHARING CREDENTIALS USING ELECTRO QUASISTATIC HUMAN BODY COMMUNICATION (Wi-R) PROTOCOL","appno":"19/312,765","firm":"k&k","payments":{"Draft":[],"Filing":[],"Office Action":[]},"totals":{"Draft":0,"Filing":0,"Office Action":0},"total":0,"patented":false},{"row":4,"ref":"Pendant-Based Low-Power Wireless Earbud System","title":"ENABLING HUMAN BODY COMMUNICATION MEDIUM FOR AUDIO SIGNALS TRANSMISSION BETWEEN VARIOUS DEVICES","appno":"19/238,872","firm":"k&k","payments":{"Draft":[],"Filing":[],"Office Action":[]},"totals":{"Draft":0,"Filing":0,"Office Action":0},"total":0,"patented":false},{"row":12,"ref":"Adiabatic Tx (from Purdue project Year 1)","title":"ADIABATIC COMMUNICATION AND COMBINATORIAL PULSE-POSITION MODULATION METHOD AND DEVICE","appno":"","firm":"pip","payments":{"Draft":[],"Filing":[],"Office Action":[]},"totals":{"Draft":0,"Filing":0,"Office Action":0},"total":0,"patented":false},{"row":45,"ref":"Samya dME IBoB","title":"WIRELESS COMMUNICATION AND POWERING SYSTEM USING BODY- RESONANCE-GUIDED MAGNETIC EXCITATION AND CAPACITIVE RECEPTION AND METHOD THEREOF","appno":"19/419,154","firm":"pip","payments":{"Draft":[],"Filing":[],"Office Action":[]},"totals":{"Draft":0,"Filing":0,"Office Action":0},"total":0,"patented":false}];
+const EV = [{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2023-11-04","g":"pay","kind":"Draft fee","amt":700.0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2023-11-04","g":"pay","kind":"Filing fee","amt":550.0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2024-01-03","g":"filing","kind":"Filing (provisional)","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2024-02-02","g":"pay","kind":"Filing fee","amt":364.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2024-02-07","g":"pay","kind":"Draft fee","amt":650.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2024-02-07","g":"pay","kind":"Filing fee","amt":864.0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2024-02-29","g":"filing","kind":"Filing (provisional)","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2024-03-24","g":"pay","kind":"Draft fee","amt":650.0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2024-03-24","g":"pay","kind":"Filing fee","amt":1310.0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2024-04-04","g":"pay","kind":"Draft fee","amt":650.0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2024-04-04","g":"pay","kind":"Filing fee","amt":500.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2024-04-22","g":"filing","kind":"Filing (provisional)","amt":0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2024-05-06","g":"filing","kind":"Filing (provisional)","amt":0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2024-05-29","g":"filing","kind":"Filing (provisional)","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2024-06-06","g":"pay","kind":"Draft fee","amt":650.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2024-06-06","g":"pay","kind":"Filing fee","amt":1164.0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2024-06-06","g":"pay","kind":"Draft fee","amt":650.0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2024-06-06","g":"pay","kind":"Filing fee","amt":1164.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2024-06-06","g":"pay","kind":"Draft fee","amt":650.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2024-06-06","g":"pay","kind":"Filing fee","amt":1164.0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2024-06-10","g":"filing","kind":"Filing (provisional)","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2024-06-11","g":"filing","kind":"Filing (provisional)","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2024-06-20","g":"pub","kind":"Published","amt":0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2024-07-25","g":"filing","kind":"Filing (provisional)","amt":0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2024-08-16","g":"filing","kind":"Filing (provisional)","amt":0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2024-08-24","g":"pay","kind":"Draft fee","amt":650.0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2024-08-24","g":"pay","kind":"Filing fee","amt":1364.0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2024-08-24","g":"pay","kind":"Filing fee","amt":664.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2024-08-24","g":"pay","kind":"Draft fee","amt":650.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2024-08-24","g":"pay","kind":"Filing fee","amt":1164.0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2024-09-30","g":"filing","kind":"Filing (provisional)","amt":0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2024-10-10","g":"pay","kind":"Draft fee","amt":650.0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2024-10-10","g":"pay","kind":"Filing fee","amt":1164.0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2024-10-10","g":"filing","kind":"Filing (provisional)","amt":0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2024-10-10","g":"pay","kind":"Draft fee","amt":650.0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2024-10-10","g":"pay","kind":"Filing fee","amt":1304.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2024-10-27","g":"pay","kind":"Draft fee","amt":650.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2024-10-27","g":"pay","kind":"Filing fee","amt":1164.0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2024-10-27","g":"pay","kind":"Office action fee","amt":200.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2024-10-27","g":"pay","kind":"Draft fee","amt":650.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2024-10-27","g":"pay","kind":"Filing fee","amt":1164.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2024-11-04","g":"filing","kind":"Filing (provisional)","amt":0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2024-11-15","g":"filing","kind":"Filing (provisional)","amt":0},{"row":25,"ref":"CDMA-HBC (Walch & SB mode)","appno":"19/045,740","firm":"pip","date":"2024-11-29","g":"pay","kind":"Draft fee","amt":650.0},{"row":25,"ref":"CDMA-HBC (Walch & SB mode)","appno":"19/045,740","firm":"pip","date":"2024-11-29","g":"pay","kind":"Filing fee","amt":1304.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2024-11-29","g":"pay","kind":"Draft fee","amt":80.0},{"row":26,"ref":"Energy-proportional RS encoder-decoder","appno":"18/973,246","firm":"pip","date":"2024-11-29","g":"pay","kind":"Draft fee","amt":650.0},{"row":26,"ref":"Energy-proportional RS encoder-decoder","appno":"18/973,246","firm":"pip","date":"2024-11-29","g":"pay","kind":"Filing fee","amt":1304.0},{"row":27,"ref":"Interference-Cancelling Differential LNA with simultaneous Supply and Gnd isolation","appno":"18/988,987","firm":"pip","date":"2024-11-29","g":"pay","kind":"Draft fee","amt":650.0},{"row":27,"ref":"Interference-Cancelling Differential LNA with simultaneous Supply and Gnd isolation","appno":"18/988,987","firm":"pip","date":"2024-11-29","g":"pay","kind":"Filing fee","amt":1164.0},{"row":26,"ref":"Energy-proportional RS encoder-decoder","appno":"18/973,246","firm":"pip","date":"2024-12-09","g":"filing","kind":"Filing (provisional)","amt":0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2024-12-18","g":"resp","kind":"Replacement drawings","amt":0},{"row":27,"ref":"Interference-Cancelling Differential LNA with simultaneous Supply and Gnd isolation","appno":"18/988,987","firm":"pip","date":"2024-12-25","g":"pay","kind":"Filing fee","amt":340.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2024-12-25","g":"pay","kind":"Filing fee","amt":3646.0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2025-01-30","g":"pay","kind":"Draft fee","amt":650.0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2025-01-30","g":"pay","kind":"Filing fee","amt":1164.0},{"row":28,"ref":"DAC + Class AB buffer driving a capacitive load -SB,AC","appno":"19/049,182","firm":"pip","date":"2025-01-30","g":"pay","kind":"Draft fee","amt":650.0},{"row":28,"ref":"DAC + Class AB buffer driving a capacitive load -SB,AC","appno":"19/049,182","firm":"pip","date":"2025-01-30","g":"pay","kind":"Filing fee","amt":1304.0},{"row":25,"ref":"CDMA-HBC (Walch & SB mode)","appno":"19/045,740","firm":"pip","date":"2025-02-05","g":"filing","kind":"Filing (provisional)","amt":0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2025-02-14","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-02-27","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","appno":"19/066,474","firm":"pip","date":"2025-02-28","g":"filing","kind":"Non-provisional filed","amt":0},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","appno":"19/066,474","firm":"pip","date":"2025-02-28","g":"pay","kind":"Draft fee","amt":650.0},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","appno":"19/066,474","firm":"pip","date":"2025-02-28","g":"pay","kind":"Filing fee","amt":1230.0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2025-02-28","g":"pay","kind":"Filing fee","amt":266.0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2025-02-28","g":"filing","kind":"Priority application","amt":0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2025-02-28","g":"pay","kind":"Draft fee","amt":650.0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2025-02-28","g":"pay","kind":"Filing fee","amt":1630.0},{"row":30,"ref":"Wideband IQ transceiver for near field (proximity) communication - 1.5x data rate/carrier ratio (proximity communication with iq modulation)","appno":"19/346,903","firm":"pip","date":"2025-02-28","g":"pay","kind":"Draft fee","amt":650.0},{"row":30,"ref":"Wideband IQ transceiver for near field (proximity) communication - 1.5x data rate/carrier ratio (proximity communication with iq modulation)","appno":"19/346,903","firm":"pip","date":"2025-02-28","g":"pay","kind":"Filing fee","amt":1570.0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2025-03-04","g":"pay","kind":"Filing fee","amt":3595.0},{"row":25,"ref":"CDMA-HBC (Walch & SB mode)","appno":"19/045,740","firm":"pip","date":"2025-03-04","g":"pay","kind":"Filing fee","amt":246.0},{"row":33,"ref":"ATC-VSN","appno":"19/183,298","firm":"pip","date":"2025-04-03","g":"pay","kind":"Draft fee","amt":650.0},{"row":33,"ref":"ATC-VSN","appno":"19/183,298","firm":"pip","date":"2025-04-03","g":"pay","kind":"Filing fee","amt":1230.0},{"row":34,"ref":"Time-Domain JPEG","appno":"19/179,229","firm":"pip","date":"2025-04-03","g":"pay","kind":"Draft fee","amt":650.0},{"row":34,"ref":"Time-Domain JPEG","appno":"19/179,229","firm":"pip","date":"2025-04-03","g":"pay","kind":"Filing fee","amt":1280.0},{"row":34,"ref":"Time-Domain JPEG","appno":"19/179,229","firm":"pip","date":"2025-04-15","g":"filing","kind":"Non-provisional filed","amt":0},{"row":33,"ref":"ATC-VSN","appno":"19/183,298","firm":"pip","date":"2025-04-18","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-04-30","g":"pay","kind":"Office action fee","amt":1350.0},{"row":35,"ref":"Time-domain Neural Network, Feature extraction","appno":"19/215,854","firm":"pip","date":"2025-04-30","g":"pay","kind":"Draft fee","amt":650.0},{"row":35,"ref":"Time-domain Neural Network, Feature extraction","appno":"19/215,854","firm":"pip","date":"2025-04-30","g":"pay","kind":"Filing fee","amt":1230.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2025-04-30","g":"pay","kind":"Filing fee","amt":3435.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-05-07","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-05-22","g":"resp","kind":"Response to OA","amt":0},{"row":35,"ref":"Time-domain Neural Network, Feature extraction","appno":"19/215,854","firm":"pip","date":"2025-05-22","g":"filing","kind":"Non-provisional filed","amt":0},{"row":38,"ref":"EQS-UWB Coupler: EQS coupler + UWB + 24 GHz combined antenna (system automatically switching between the 3)","appno":"19/254,260","firm":"pip","date":"2025-05-31","g":"pay","kind":"Draft fee","amt":650.0},{"row":38,"ref":"EQS-UWB Coupler: EQS coupler + UWB + 24 GHz combined antenna (system automatically switching between the 3)","appno":"19/254,260","firm":"pip","date":"2025-05-31","g":"pay","kind":"Filing fee","amt":1230.0},{"row":36,"ref":"Time-domain Body Comm","appno":"19/237,061","firm":"pip","date":"2025-05-31","g":"pay","kind":"Draft fee","amt":650.0},{"row":36,"ref":"Time-domain Body Comm","appno":"19/237,061","firm":"pip","date":"2025-05-31","g":"pay","kind":"Filing fee","amt":1230.0},{"row":37,"ref":"Underwater (+ Pacemaker/Implantable)","appno":"19/238,380","firm":"pip","date":"2025-05-31","g":"pay","kind":"Draft fee","amt":650.0},{"row":37,"ref":"Underwater (+ Pacemaker/Implantable)","appno":"19/238,380","firm":"pip","date":"2025-05-31","g":"pay","kind":"Filing fee","amt":1230.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-06-12","g":"pub","kind":"Published","amt":0},{"row":26,"ref":"Energy-proportional RS encoder-decoder","appno":"18/973,246","firm":"pip","date":"2025-06-13","g":"pub","kind":"Published","amt":0},{"row":36,"ref":"Time-domain Body Comm","appno":"19/237,061","firm":"pip","date":"2025-06-13","g":"filing","kind":"Non-provisional filed","amt":0},{"row":37,"ref":"Underwater (+ Pacemaker/Implantable)","appno":"19/238,380","firm":"pip","date":"2025-06-14","g":"filing","kind":"Non-provisional filed","amt":0},{"row":4,"ref":"Pendant-Based Low-Power Wireless Earbud System","appno":"19/238,872","firm":"k&k","date":"2025-06-16","g":"filing","kind":"Non-provisional filed","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2025-06-24","g":"grant","kind":"Allowance notification","amt":0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2025-06-27","g":"pub","kind":"Published","amt":0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2025-06-27","g":"pub","kind":"Published","amt":0},{"row":38,"ref":"EQS-UWB Coupler: EQS coupler + UWB + 24 GHz combined antenna (system automatically switching between the 3)","appno":"19/254,260","firm":"pip","date":"2025-06-30","g":"filing","kind":"Non-provisional filed","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-07-03","g":"pub","kind":"Published","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-07-09","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":39,"ref":"IDC (HS-eNFC), Body assisted NFE","appno":"19/312,457","firm":"pip","date":"2025-07-10","g":"pay","kind":"Draft fee","amt":650.0},{"row":39,"ref":"IDC (HS-eNFC), Body assisted NFE","appno":"19/312,457","firm":"pip","date":"2025-07-10","g":"pay","kind":"Filing fee","amt":1230.0},{"row":40,"ref":"Pendant Electrode Optimization","appno":"19/377,455","firm":"pip","date":"2025-07-10","g":"pay","kind":"Draft fee","amt":650.0},{"row":40,"ref":"Pendant Electrode Optimization","appno":"19/377,455","firm":"pip","date":"2025-07-10","g":"pay","kind":"Filing fee","amt":1230.0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2025-07-10","g":"pay","kind":"Filing fee","amt":750.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-07-10","g":"pay","kind":"Office action fee","amt":1350.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2025-07-10","g":"pay","kind":"Office action fee","amt":200.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-07-28","g":"resp","kind":"Response to allowance notice","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-08-08","g":"uspto","kind":"Final OA issued","amt":0},{"row":40,"ref":"Pendant Electrode Optimization","appno":"19/377,455","firm":"pip","date":"2025-08-18","g":"pay","kind":"Filing fee","amt":140.0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2025-08-18","g":"pay","kind":"Filing fee","amt":3030.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-08-18","g":"pay","kind":"Filing fee","amt":3438.0},{"row":39,"ref":"IDC (HS-eNFC), Body assisted NFE","appno":"19/312,457","firm":"pip","date":"2025-08-28","g":"filing","kind":"Non-provisional filed","amt":0},{"row":3,"ref":"Touch-based credential sharing system and method Using Electro QuasiStatic Human Body Communication (Wi-R)","appno":"19/312,765","firm":"k&k","date":"2025-08-29","g":"filing","kind":"Non-provisional filed","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2025-08-31","g":"pay","kind":"Filing fee","amt":1046.0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2025-08-31","g":"pay","kind":"Filing fee","amt":750.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-09-11","g":"grant","kind":"Allowance notification","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2025-09-18","g":"grant","kind":"Issue fee paid","amt":0},{"row":41,"ref":"BC p1: SMART IMPLANTED PACEMAKER SYSTEM","appno":"19/436,003","firm":"pip","date":"2025-09-20","g":"pay","kind":"Draft fee","amt":650.0},{"row":41,"ref":"BC p1: SMART IMPLANTED PACEMAKER SYSTEM","appno":"19/436,003","firm":"pip","date":"2025-09-20","g":"pay","kind":"Filing fee","amt":1230.0},{"row":42,"ref":"BC p2: JOINT COMMUNICATION AND SENSING","appno":"19/439,384","firm":"pip","date":"2025-09-20","g":"pay","kind":"Draft fee","amt":650.0},{"row":42,"ref":"BC p2: JOINT COMMUNICATION AND SENSING","appno":"19/439,384","firm":"pip","date":"2025-09-20","g":"pay","kind":"Filing fee","amt":1230.0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-09-20","g":"pay","kind":"Office action fee","amt":1350.0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2025-09-20","g":"pay","kind":"Filing fee","amt":2742.0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2025-09-24","g":"grant","kind":"Issue notification","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2025-10-01","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":30,"ref":"Wideband IQ transceiver for near field (proximity) communication - 1.5x data rate/carrier ratio (proximity communication with iq modulation)","appno":"19/346,903","firm":"pip","date":"2025-10-01","g":"filing","kind":"Non-provisional filed","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-10-07","g":"resp","kind":"Response to OA","amt":0},{"row":11,"ref":"Distributed Comp + Headset Video","appno":"18/591,043","firm":"pip","date":"2025-10-07","g":"grant","kind":"E-grant notification","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-10-22","g":"uspto","kind":"Final OA issued","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2025-10-26","g":"pay","kind":"Filing fee","amt":3456.0},{"row":43,"ref":"PQC","appno":"19/434,130","firm":"pip","date":"2025-10-26","g":"pay","kind":"Draft fee","amt":650.0},{"row":43,"ref":"PQC","appno":"19/434,130","firm":"pip","date":"2025-10-26","g":"pay","kind":"Filing fee","amt":1230.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-10-26","g":"pay","kind":"Office action fee","amt":1350.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2025-10-26","g":"pay","kind":"Filing fee","amt":3636.0},{"row":40,"ref":"Pendant Electrode Optimization","appno":"19/377,455","firm":"pip","date":"2025-11-03","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-11-06","g":"resp","kind":"Final OA response","amt":0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2025-11-06","g":"pub","kind":"Published","amt":0},{"row":5,"ref":"NFE mp1: Multi-Human interaciton with NFE (Physical social network)","appno":"19/465,468","firm":"metayage","date":"2025-11-11","g":"pay","kind":"Draft fee","amt":1120.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2025-11-13","g":"pub","kind":"Published","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-11-13","g":"uspto","kind":"Advisory action","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-11-25","g":"pay","kind":"Office action fee","amt":1350.0},{"row":44,"ref":"NFE p2: Phone to Phone NFE Phone/Laptop","appno":"19/441,968","firm":"pip","date":"2025-11-25","g":"pay","kind":"Draft fee","amt":650.0},{"row":44,"ref":"NFE p2: Phone to Phone NFE Phone/Laptop","appno":"19/441,968","firm":"pip","date":"2025-11-25","g":"pay","kind":"Filing fee","amt":1230.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-11-25","g":"pay","kind":"Office action fee","amt":1350.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-11-25","g":"pay","kind":"Filing fee","amt":1046.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-12-04","g":"grant","kind":"Issue fee paid","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2025-12-08","g":"resp","kind":"Response to advisory action","amt":0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2025-12-11","g":"pub","kind":"Published","amt":0},{"row":45,"ref":"Samya dME IBoB","appno":"19/419,154","firm":"pip","date":"2025-12-15","g":"filing","kind":"Non-provisional filed","amt":0},{"row":6,"ref":"Drone-Drone","appno":"19/561,264","firm":"metayage","date":"2025-12-16","g":"pay","kind":"Draft fee","amt":1120.0},{"row":5,"ref":"NFE mp1: Multi-Human interaciton with NFE (Physical social network)","appno":"19/465,468","firm":"metayage","date":"2025-12-16","g":"pay","kind":"Filing fee","amt":1755.0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-12-17","g":"grant","kind":"Issue notification","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2025-12-21","g":"pay","kind":"Office action fee","amt":1350.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2025-12-21","g":"pay","kind":"Filing fee","amt":36.0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2025-12-21","g":"pay","kind":"Office action fee","amt":200.0},{"row":46,"ref":"Pulse shortening + CDR take middle.. oversampling","appno":"19/668,522","firm":"pip","date":"2025-12-21","g":"pay","kind":"Draft fee","amt":650.0},{"row":46,"ref":"Pulse shortening + CDR take middle.. oversampling","appno":"19/668,522","firm":"pip","date":"2025-12-21","g":"pay","kind":"Filing fee","amt":1230.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2025-12-21","g":"pay","kind":"Filing fee","amt":18.0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-12-22","g":"resp","kind":"Final OA response","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2025-12-29","g":"resp","kind":"Response to OA","amt":0},{"row":43,"ref":"PQC","appno":"19/434,130","firm":"pip","date":"2025-12-29","g":"filing","kind":"Non-provisional filed","amt":0},{"row":41,"ref":"BC p1: SMART IMPLANTED PACEMAKER SYSTEM","appno":"19/436,003","firm":"pip","date":"2025-12-30","g":"filing","kind":"Non-provisional filed","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2025-12-30","g":"grant","kind":"Allowance notification","amt":0},{"row":20,"ref":"Touch Screen Communicaion","appno":"18/806,753","firm":"pip","date":"2025-12-30","g":"grant","kind":"E-grant notification","amt":0},{"row":42,"ref":"BC p2: JOINT COMMUNICATION AND SENSING","appno":"19/439,384","firm":"pip","date":"2026-01-04","g":"filing","kind":"Non-provisional filed","amt":0},{"row":44,"ref":"NFE p2: Phone to Phone NFE Phone/Laptop","appno":"19/441,968","firm":"pip","date":"2026-01-07","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-01-23","g":"grant","kind":"Allowance notification","amt":0},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","appno":"19/066,474","firm":"pip","date":"2026-01-28","g":"pay","kind":"Filing fee","amt":6029.0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-01-28","g":"pay","kind":"Office action fee","amt":200.0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2026-01-28","g":"pay","kind":"Filing fee","amt":3848.0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2026-01-28","g":"pay","kind":"Filing fee","amt":4019.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2026-01-28","g":"pay","kind":"Office action fee","amt":200.0},{"row":19,"ref":"Step2Charge","appno":"18/783,729","firm":"pip","date":"2026-01-29","g":"pub","kind":"Published","amt":0},{"row":5,"ref":"NFE mp1: Multi-Human interaciton with NFE (Physical social network)","appno":"19/465,468","firm":"metayage","date":"2026-01-30","g":"filing","kind":"Non-provisional filed","amt":0},{"row":6,"ref":"Drone-Drone","appno":"19/561,264","firm":"metayage","date":"2026-02-13","g":"pay","kind":"Filing fee","amt":1755.0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2026-02-26","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2026-02-26","g":"filing","kind":"PCT filed","amt":0},{"row":7,"ref":"Dead Drop -Defense (File-transfer by touch)","appno":"19/637,740","firm":"metayage","date":"2026-03-04","g":"pay","kind":"Draft fee","amt":1120.0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2026-03-05","g":"grant","kind":"Issue fee paid","amt":0},{"row":6,"ref":"Drone-Drone","appno":"19/561,264","firm":"metayage","date":"2026-03-09","g":"filing","kind":"Non-provisional filed","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2026-03-11","g":"pay","kind":"Filing fee","amt":866.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-03-11","g":"pay","kind":"Filing fee","amt":300.0},{"row":7,"ref":"Dead Drop -Defense (File-transfer by touch)","appno":"19/637,740","firm":"metayage","date":"2026-03-16","g":"pay","kind":"Filing fee","amt":1755.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-03-17","g":"grant","kind":"Allowance notification","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2026-03-18","g":"grant","kind":"Issue notification","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2026-03-24","g":"pay","kind":"Filing fee","amt":300.0},{"row":46,"ref":"Pulse shortening + CDR take middle.. oversampling","appno":"19/668,522","firm":"pip","date":"2026-03-24","g":"pay","kind":"Filing fee","amt":138.0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-03-24","g":"pay","kind":"Filing fee","amt":866.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2026-03-25","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-03-27","g":"grant","kind":"Allowance notification","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-03-29","g":"uspto","kind":"Spec objection issued","amt":0},{"row":13,"ref":"Direct Analog to MPEG conversion (Analog)","appno":"63/461,279, 18/402,813","firm":"pip","date":"2026-03-31","g":"grant","kind":"E-grant notification","amt":0},{"row":7,"ref":"Dead Drop -Defense (File-transfer by touch)","appno":"19/637,740","firm":"metayage","date":"2026-04-02","g":"filing","kind":"Non-provisional filed","amt":0},{"row":23,"ref":"Human Structure Interaction","appno":"18/901,578","firm":"pip","date":"2026-04-02","g":"pub","kind":"Published","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-04-06","g":"grant","kind":"Issue fee paid","amt":0},{"row":8,"ref":"TD-BC","appno":"19/650,662","firm":"metayage","date":"2026-04-13","g":"pay","kind":"Draft fee","amt":1120.0},{"row":8,"ref":"TD-BC","appno":"19/650,662","firm":"metayage","date":"2026-04-17","g":"filing","kind":"Non-provisional filed","amt":0},{"row":8,"ref":"TD-BC","appno":"19/650,662","firm":"metayage","date":"2026-04-17","g":"pay","kind":"Filing fee","amt":1630.0},{"row":47,"ref":"Roy low power HBC transmitter (1)","appno":"19/651,620","firm":"pip","date":"2026-04-18","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-04-22","g":"grant","kind":"Issue notification","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-04-24","g":"pay","kind":"Office action fee","amt":1350.0},{"row":32,"ref":"Capacitive Electro-Quasistatic Human Body Powering (0237)","appno":"19/066,474","firm":"pip","date":"2026-04-24","g":"pay","kind":"Office action fee","amt":200.0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2026-04-24","g":"pay","kind":"Office action fee","amt":200.0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2026-04-24","g":"pay","kind":"Office action fee","amt":1350.0},{"row":47,"ref":"Roy low power HBC transmitter (1)","appno":"19/651,620","firm":"pip","date":"2026-04-24","g":"pay","kind":"Draft fee","amt":650.0},{"row":47,"ref":"Roy low power HBC transmitter (1)","appno":"19/651,620","firm":"pip","date":"2026-04-24","g":"pay","kind":"Filing fee","amt":1230.0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2026-04-24","g":"pay","kind":"Office action fee","amt":200.0},{"row":26,"ref":"Energy-proportional RS encoder-decoder","appno":"18/973,246","firm":"pip","date":"2026-05-04","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":46,"ref":"Pulse shortening + CDR take middle.. oversampling","appno":"19/668,522","firm":"pip","date":"2026-05-05","g":"filing","kind":"Non-provisional filed","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-05-05","g":"grant","kind":"E-grant notification","amt":0},{"row":17,"ref":"Time-Sync Network for HBC","appno":"63/614,491,  18/676,789","firm":"pip","date":"2026-05-06","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-05-07","g":"pub","kind":"Published","amt":0},{"row":29,"ref":"Clockless Human Body Communication Wake Up Receiver and Clock Generation (0239)","appno":"19/053,727","firm":"pip","date":"2026-05-11","g":"uspto","kind":"NFOA issued","amt":0},{"row":18,"ref":"Body-Resonance (Worldwide filing before Jun 11)","appno":"18/738,328","firm":"pip","date":"2026-05-15","g":"uspto","kind":"Non-final OA issued","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-05-15","g":"grant","kind":"Issue fee paid","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-05-20","g":"resp","kind":"Response submitted","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-05-20","g":"pay","kind":"Filing fee","amt":866.0},{"row":35,"ref":"Time-domain Neural Network, Feature extraction","appno":"19/215,854","firm":"pip","date":"2026-05-20","g":"pay","kind":"Filing fee","amt":3829.0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2026-05-21","g":"pub","kind":"Published","amt":0},{"row":21,"ref":"Pulse-Shaped HBC transmitter for Spectrum Compliance (132 Tx)","appno":"18/911,470","firm":"pip","date":"2026-05-25","g":"resp","kind":"Response to allowance notice","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-05-27","g":"grant","kind":"Issue notification","amt":0},{"row":15,"ref":"Smartglass design with Wi-R for lowest channel loss","appno":"Priority: 63/608,259,  Application Number : 18/739,634","firm":"pip","date":"2026-06-01","g":"pay","kind":"Filing fee","amt":24661.94},{"row":9,"ref":"Synchronized Multi-Device Sensing","appno":"19/727,485","firm":"metayage","date":"2026-06-03","g":"pay","kind":"Draft fee","amt":1270.0},{"row":9,"ref":"Synchronized Multi-Device Sensing","appno":"19/727,485","firm":"metayage","date":"2026-06-03","g":"pay","kind":"Filing fee","amt":1480.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-06-04","g":"grant","kind":"Issue fee paid","amt":0},{"row":22,"ref":"Car Body Communication","appno":"18/936,233","firm":"pip","date":"2026-06-09","g":"grant","kind":"E-grant notification","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-06-10","g":"pay","kind":"Filing fee","amt":866.0},{"row":10,"ref":"In-Brain to Out of Brain Comm","appno":"19/750,990","firm":"metayage","date":"2026-06-25","g":"pay","kind":"Draft fee","amt":1120.0},{"row":10,"ref":"In-Brain to Out of Brain Comm","appno":"19/750,990","firm":"metayage","date":"2026-06-25","g":"pay","kind":"Filing fee","amt":1630.0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2026-06-25","g":"resp","kind":"Response to OA","amt":0},{"row":24,"ref":"TV Body Comm","appno":"18/948,583","firm":"pip","date":"2026-06-29","g":"uspto","kind":"Restriction requirement","amt":0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-07-01","g":"grant","kind":"Issue notification","amt":0},{"row":31,"ref":"Series Resonant Capacitive Electro-Quasistatic Human Body Powering (0238)","appno":"19/066,198","firm":"pip","date":"2026-07-01","g":"pay","kind":"Office action fee","amt":1350.0},{"row":9,"ref":"Synchronized Multi-Device Sensing","appno":"19/727,485","firm":"metayage","date":"2026-07-01","g":"filing","kind":"Non-provisional filed","amt":0},{"row":16,"ref":"Video Streaming","appno":"18/655,403","firm":"pip","date":"2026-07-01","g":"pay","kind":"Office action fee","amt":1350.0},{"row":14,"ref":"Approximate JPEG Dig","appno":"18/138,042","firm":"pip","date":"2026-07-14","g":"grant","kind":"E-grant notification","amt":0},{"row":48,"ref":"NFE p5: 10 Ring -> 2 watch (type, gesture) (3) Ring to glass (2)","appno":"19/744,007","firm":"pip","date":"2026-07-16","g":"filing","kind":"Non-provisional filed","amt":0},{"row":10,"ref":"In-Brain to Out of Brain Comm","appno":"19/750,990","firm":"metayage","date":"2026-07-22","g":"filing","kind":"Non-provisional filed","amt":0},{"row":48,"ref":"NFE p5: 10 Ring -> 2 watch (type, gesture) (3) Ring to glass (2)","appno":"19/744,007","firm":"pip","date":"2026-08-03","g":"pay","kind":"Draft fee","amt":650.0},{"row":48,"ref":"NFE p5: 10 Ring -> 2 watch (type, gesture) (3) Ring to glass (2)","appno":"19/744,007","firm":"pip","date":"2026-08-03","g":"pay","kind":"Filing fee","amt":1230.0}];
+const CATS = [["Draft","--s1"],["Filing","--s2"],["Office Action","--s3"]];
+const EGROUPS = [["filing","Filing","--s1"],["pub","Publication","--s2"],["uspto","USPTO action","--s3"],
+                 ["resp","Response filed","--s4"],["pay","Payment","--s5"],["grant","Allowance & grant","--s6"]];
+const EMAP = Object.fromEntries(EGROUPS.map(g=>[g[0],g]));
+const TODAY = "2026-08-17";
+const RANGES = {"1m":30,"3m":91,"6m":182,"1y":365,"3y":1096,"all":null};
+const FIRM = {"pip":"PIP","k&k":"K&K","metayage":"Metayage"};
+const $ = s => document.querySelector(s);
+const money = n => "$" + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const money0 = n => "$" + Math.round(n).toLocaleString("en-US");
+const compact = n => { if(n>=1e6) return "$"+(n/1e6).toFixed(n%1e6?2:0)+"M";
+  if(n>=1e3) return "$"+(n/1e3).toFixed(n%1e3?1:0)+"K"; return "$"+n.toFixed(0); };
+
+let state = {sort:"total", firm:"all", view:"chart", off:new Set(),
+             tsort:{k:"total",dir:-1}, range:"3m", eoff:new Set(), gsort:"start"};
+
+const D = s => new Date(s+"T00:00:00");
+const dayShift = (iso,n) => { const d=D(iso); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); };
+const fmtDay = iso => D(iso).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+const fmtDayY = iso => D(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+const fmtMon = iso => D(iso).toLocaleDateString("en-US",{month:"long",year:"numeric"});
+const fmtMonShort = iso => D(iso).toLocaleDateString("en-US",{month:"short",year:"2-digit"});
+
+function windowStart(){
+  const days = RANGES[state.range];
+  if(days===null) return EV[0].date;
+  return dayShift(TODAY, -days+1);
+}
+function evInWindow(){
+  const from = windowStart();
+  return EV.filter(e => e.date>=from && e.date<=TODAY
+      && (state.firm==="all" || e.firm===state.firm)
+      && !state.eoff.has(e.g));
+}
+
+function visibleCats(){ return CATS.filter(([c])=>!state.off.has(c)); }
+function subtotal(d){ return visibleCats().reduce((s,[c])=>s+d.totals[c],0); }
+
+function filtered(){
+  let r = DATA.filter(d => state.firm==="all" || d.firm===state.firm);
+  const s = state.sort;
+  if(s==="total") r=[...r].sort((a,b)=>subtotal(b)-subtotal(a));
+  else if(s==="name") r=[...r].sort((a,b)=>a.ref.localeCompare(b.ref));
+  else if(s==="firm") r=[...r].sort((a,b)=>(a.firm||"").localeCompare(b.firm||"")||subtotal(b)-subtotal(a));
+  else if(s==="count") r=[...r].sort((a,b)=>nPay(b)-nPay(a));
+  return r;
+}
+function nPay(d){ return visibleCats().reduce((s,[c])=>s+d.payments[c].length,0); }
+
+function niceTicks(max){
+  const targets=[250,500,1000,2000,2500,5000,10000,20000,25000,50000];
+  let step=targets.find(t=>max/t<=6)||100000;
+  const out=[]; for(let v=0; v<=max+1e-6; v+=step) out.push(v);
+  if(out[out.length-1] < max) out.push(out[out.length-1]+step);
+  return out;
+}
+
+function renderChart(rows){
+  const max = Math.max(...rows.map(subtotal), 1);
+  const ticks = niceTicks(max);
+  const scaleMax = ticks[ticks.length-1];
+  const ax=$("#axis"), plot=$("#plot"), gl=$("#gridlines");
+  ax.innerHTML = ticks.map(t=>`<span class="tick" style="left:${t/scaleMax*100}%">${t===0?"$0":compact(t)}</span>`).join("");
+  gl.innerHTML = ticks.map(t=>`<span class="gl${t===0?" zero":""}" style="left:${t/scaleMax*100}%"></span>`).join("");
+  plot.querySelectorAll(".row").forEach(n=>n.remove());
+  const frag=document.createDocumentFragment();
+  rows.forEach((d,i)=>{
+    const tot=subtotal(d);
+    const row=document.createElement("div"); row.className="row";
+    const segs = visibleCats().filter(([c])=>d.totals[c]>0)
+      .map(([c,v])=>`<span class="seg-m" style="background:var(${v});flex:${d.totals[c]}" data-i="${d.row}" data-c="${c}"></span>`).join("");
+    row.innerHTML =
+      `<div class="rlab" title="${esc(d.ref)}">${d.patented?'<span class="dot" title="Patent granted"></span>':""}${esc(d.ref)}</div>`+
+      `<div class="barbox" data-i="${d.row}">`+
+        `<div class="bar" style="width:${tot/scaleMax*100}%">${segs}</div>`+
+        `<span class="vlab${tot===0?" zero":""}" style="left:calc(${tot/scaleMax*100}% + 8px)">${tot===0?"no cost recorded":money0(tot)}</span>`+
+      `</div>`;
+    frag.appendChild(row);
+  });
+  plot.appendChild(frag);
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function renderTable(rows){
+  const tb=$("#tbody"); const cats=visibleCats();
+  tb.innerHTML = rows.map(d=>`<tr>
+    <td title="${esc(d.title)}">${d.patented?'<span class="dot" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--good);margin-right:6px;vertical-align:middle"></span>':""}${esc(d.ref)}</td>
+    <td style="text-align:left;color:var(--muted)">${esc(d.appno||"—")}</td>
+    <td style="text-align:left;color:var(--muted)">${FIRM[d.firm]||d.firm||"—"}</td>
+    ${CATS.map(([c])=>`<td${state.off.has(c)?' style="opacity:.35"':""}>${d.totals[c]?money(d.totals[c]):"—"}</td>`).join("")}
+    <td>${nPay(d)}</td><td><b>${money(subtotal(d))}</b></td></tr>`).join("");
+  const sums = CATS.map(([c])=>rows.reduce((s,d)=>s+d.totals[c],0));
+  $("#tfoot").innerHTML = `<tr><td>Total — ${rows.length} patents</td><td></td><td></td>`+
+    sums.map((v,i)=>`<td${state.off.has(CATS[i][0])?' style="opacity:.35"':""}>${money(v)}</td>`).join("")+
+    `<td>${rows.reduce((s,d)=>s+nPay(d),0)}</td><td>${money(rows.reduce((s,d)=>s+subtotal(d),0))}</td></tr>`;
+}
+
+function renderStats(rows){
+  const tots = rows.map(subtotal), paid = tots.filter(v=>v>0).sort((a,b)=>a-b);
+  const sum = tots.reduce((a,b)=>a+b,0);
+  const med = paid.length ? (paid.length%2 ? paid[(paid.length-1)/2] : (paid[paid.length/2-1]+paid[paid.length/2])/2) : 0;
+  $("#heroval").textContent = money(sum);
+  $("#herolab").textContent = "Total paid to date";
+  $("#heronote").textContent = `${rows.length} patents · ${rows.reduce((s,d)=>s+nPay(d),0)} individual payments`;
+  const top = rows.reduce((a,b)=>subtotal(b)>subtotal(a)?b:a, rows[0]||{ref:"—",totals:{}});
+  setKpi(1,"With spend", paid.length, `${rows.length-paid.length} with no cost recorded yet`);
+  setKpi(2,"Median", money0(med), "typical cost per patent");
+  setKpi(3,"Mean", money0(paid.length? sum/paid.length : 0), "skewed by the top filing");
+  setKpi(4,"Most expensive", money0(subtotal(top)), top.ref ? top.ref.slice(0,32)+(top.ref.length>32?"…":"") : "—");
+}
+
+function bucketize(rows, from, to){
+  const span = (D(to)-D(from))/864e5 + 1;
+  const mode = span<=200 ? "week" : "month";
+  const key = iso => {
+    if(mode==="month") return iso.slice(0,7)+"-01";
+    const d=D(iso); d.setDate(d.getDate()-d.getDay());   // week starts Sunday
+    return d.toISOString().slice(0,10);
+  };
+  const buckets=[]; const idx={};
+  let cur = key(from);
+  const stop = key(to);
+  let guard=0;
+  while(guard++<400){
+    idx[cur]=buckets.length;
+    buckets.push({k:cur, n:0, amt:0, g:Object.fromEntries(EGROUPS.map(x=>[x[0],0]))});
+    if(cur===stop) break;
+    const d=D(cur);
+    if(mode==="month") d.setMonth(d.getMonth()+1); else d.setDate(d.getDate()+7);
+    cur=d.toISOString().slice(0,10);
+  }
+  rows.forEach(e=>{ const b=buckets[idx[key(e.date)]]; if(b){ b.n++; b.amt+=e.amt; b.g[e.g]++; } });
+  return {buckets, mode};
+}
+
+function renderTimeline(){
+  const from = windowStart(), rows = evInWindow();
+  const {buckets, mode} = bucketize(rows, from, TODAY);
+  const max = Math.max(...buckets.map(b=>b.n), 1);
+  const step = max<=5?1 : max<=12?3 : max<=30?5 : max<=60?10 : 20;
+  const top = Math.ceil(max/step)*step;
+
+  // y gridlines + labels
+  let ygrid="";
+  for(let v=0; v<=top; v+=step)
+    ygrid += `<div class="ygrid" style="bottom:${v/top*100}%"></div><span class="ylab" style="bottom:${v/top*100}%">${v}</span>`;
+  $("#ygrid").innerHTML = ygrid;
+
+  $("#cols").innerHTML = buckets.map((b,i)=>{
+    const segs = EGROUPS.filter(([k])=>b.g[k]>0)
+      .map(([k,l,v])=>`<span class="cseg" style="background:var(${v});height:${b.g[k]/top*100}%"></span>`).join("");
+    return `<div class="colwrap" data-b="${i}"><div class="col" style="height:${b.n/top*100}%">${segs}</div></div>`;
+  }).join("");
+
+  // x ticks: label ~8 evenly spaced buckets
+  const every = Math.max(1, Math.round(buckets.length/8));
+  const last = buckets.length-1, lastLabelled = Math.floor(last/every)*every;
+  const show = i => i%every===0 || (i===last && last-lastLabelled > every/2);
+  $("#actx").innerHTML = buckets.map((b,i)=> show(i)
+    ? `<span class="tick" style="left:${(i+0.5)/buckets.length*100}%">${mode==="month"?fmtMonShort(b.k):fmtDay(b.k)}</span>` : "").join("");
+  $("#bmode").textContent = mode==="week" ? "per week" : "per month";
+  window.__buckets = {buckets, mode};
+
+  // feed, newest first, grouped by month
+  const feed = [...rows].sort((a,b)=> a.date<b.date?1 : a.date>b.date?-1 : a.ref.localeCompare(b.ref));
+  if(!feed.length){ $("#feed").innerHTML = `<div class="empty">No events in this window.${state.eoff.size?" Some event types are hidden.":""}</div>`; }
+  else {
+    let out="", curM="";
+    feed.forEach(e=>{
+      const m=e.date.slice(0,7);
+      if(m!==curM){
+        curM=m;
+        const inM=feed.filter(x=>x.date.slice(0,7)===m);
+        const paid=inM.reduce((s,x)=>s+x.amt,0);
+        out += `<div class="mhead"><h3>${fmtMon(m+"-01")}</h3><span>${inM.length} event${inM.length>1?"s":""}${paid?" · "+money(paid):""}</span></div>`;
+      }
+      const g=EMAP[e.g];
+      out += `<div class="ev"><span class="d">${fmtDay(e.date)}</span>`+
+             `<span class="k"><i style="background:var(${g[2]})"></i><span title="${esc(g[1])}">${esc(e.kind)}</span></span>`+
+             `<span class="p" title="${esc(e.ref)}${e.appno?" · "+esc(e.appno):""}">${esc(e.ref)}</span>`+
+             `<span class="a${e.amt?"":" none"}">${e.amt?money(e.amt):"—"}</span></div>`;
+    });
+    $("#feed").innerHTML = out;
+  }
+
+  // window stats
+  const paid = rows.reduce((s,e)=>s+e.amt,0);
+  const cnt = k => rows.filter(e=>e.g===k).length;
+  $("#heroval").textContent = money(paid);
+  $("#herolab").textContent = "Paid in this window";
+  $("#heronote").textContent = `${rows.length} event${rows.length===1?"":"s"} · ${fmtDayY(from)} – ${fmtDayY(TODAY)}`;
+  setKpi(1,"Filings", cnt("filing"), "provisional, non-provisional, PCT");
+  setKpi(2,"USPTO actions", cnt("uspto"), "office actions & objections issued");
+  setKpi(3,"Responses", cnt("resp"), "filed by counsel");
+  setKpi(4,"Allowance & grant", cnt("grant"), "notices, issue fees, e-grants");
+}
+function setKpi(i,label,val,note){
+  $("#k"+i+"l").textContent=label; $("#k"+i).textContent=val; $("#k"+i+"n").textContent=note;
+}
+
+const GPRIO = ["grant","uspto","resp","filing","pub","pay"];
+const USPTO_ACT = ["Restriction requirement","Non-final OA issued","Final OA issued",
+                   "Advisory action","Spec objection issued","NFOA issued"];
+const RESPONSE  = ["Response to allowance notice","Response to OA","Final OA response",
+                   "Response to advisory action","Response submitted","Replacement drawings"];
+const ICON = {
+  critical:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5 15 14H1L8 1.5Zm0 4.2a.8.8 0 0 0-.8.85l.25 3.2a.55.55 0 0 0 1.1 0l.25-3.2A.8.8 0 0 0 8 5.7Zm0 5.3a.85.85 0 1 0 0 1.7.85.85 0 0 0 0-1.7Z"/></svg>',
+  serious :'<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="6.8"/><path d="M8 4.2a.8.8 0 0 0-.8.85l.25 3.2a.55.55 0 0 0 1.1 0l.25-3.2A.8.8 0 0 0 8 4.2Zm0 6.1a.85.85 0 1 0 0 1.7.85.85 0 0 0 0-1.7Z" fill="var(--surface-1)"/></svg>',
+  warning :'<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="6.8"/><path d="M8 4.4a.75.75 0 0 0-.75.75v3.1a.75.75 0 0 0 1.5 0v-3.1A.75.75 0 0 0 8 4.4Zm0 5.6a.85.85 0 1 0 0 1.7.85.85 0 0 0 0-1.7Z" fill="var(--surface-1)"/></svg>'};
+const SEV = {critical:{bg:"rgba(208,59,59,.13)",fg:"#b62f2f",label:"Past 3-month mark"},
+             serious :{bg:"rgba(236,131,90,.15)",fg:"#b8592f",label:"Approaching"},
+             warning :{bg:"rgba(250,178,25,.16)",fg:"#8a6100",label:"In window"}};
+const SEVD= {critical:{bg:"rgba(208,59,59,.20)",fg:"#e88b8b"},
+             serious :{bg:"rgba(236,131,90,.20)",fg:"#f0a888"},
+             warning :{bg:"rgba(250,178,25,.20)",fg:"#f5c65e"}};
+
+function byPatent(){
+  const m=new Map();
+  EV.forEach(e=>{ if(!m.has(e.row)) m.set(e.row,[]); m.get(e.row).push(e); });
+  m.forEach(v=>v.sort((a,b)=>a.date<b.date?-1:1));
+  return m;
+}
+function openItems(){
+  const out=[]; const days = iso => Math.round((D(TODAY)-D(iso))/864e5);
+  byPatent().forEach((evs,row)=>{
+    const p = DATA.find(d=>d.row===row) || {};
+    if(state.firm!=="all" && p.firm!==state.firm) return;
+    const granted = evs.some(e=>["Issue notification","E-grant notification"].includes(e.kind));
+    const acts = evs.filter(e=>USPTO_ACT.includes(e.kind));
+    const resp = evs.filter(e=>RESPONSE.includes(e.kind));
+    if(acts.length && !granted){
+      const last = acts[acts.length-1];
+      if(!resp.some(r=>r.date>last.date)){
+        const age = days(last.date);
+        out.push({ref:last.ref, appno:last.appno, kind:last.kind, date:last.date, age,
+                  sev: age>91?"critical" : age>60?"serious" : "warning",
+                  what:"No response recorded"});
+      }
+    }
+    const allow = evs.filter(e=>e.kind==="Allowance notification").pop();
+    const fee   = evs.filter(e=>e.kind==="Issue fee paid").pop();
+    if(allow && !(fee && fee.date>=allow.date)){
+      const age = days(allow.date);
+      out.push({ref:allow.ref, appno:allow.appno, kind:"Allowance notification", date:allow.date, age,
+                sev: age>91?"critical" : age>60?"serious" : "warning", what:"Issue fee not recorded"});
+    }
+  });
+  return out.sort((a,b)=>b.age-a.age);
+}
+
+function renderChanges(){
+  const days = RANGES[state.range] || Math.round((D(TODAY)-D(EV[0].date))/864e5)+1;
+  const from = dayShift(TODAY,-days+1), pFrom = dayShift(TODAY,-2*days+1);
+  const inRange=(a,b)=> EV.filter(e=>e.date>=a && e.date<b
+      && (state.firm==="all"||e.firm===state.firm) && !state.eoff.has(e.g));
+  const cur = inRange(from, dayShift(TODAY,1)), prv = inRange(pFrom, from);
+  const sum = a => a.reduce((s,e)=>s+e.amt,0);
+  const cnt = (a,k) => a.filter(e=>e.g===k).length;
+  const dstr = (c,p,money_) => {
+    if(state.range==="all") return "full history — no prior period to compare";
+    const d=c-p; if(!p && !c) return "no activity either period";
+    if(!p) return `nothing in the prior ${days}\u2011day period`;
+    const pct = Math.round(Math.abs(d)/p*100);
+    return `${d>0?"▲":d<0?"▼":"■"} ${money_?money0(Math.abs(d)):Math.abs(d)} (${pct}%) vs prior ${days}\u2011day period`;
+  };
+
+  $("#herolab").textContent = "Paid in this period";
+  $("#heroval").textContent = money(sum(cur));
+  $("#heronote").textContent = `${fmtDayY(from)} – ${fmtDayY(TODAY)}`;
+  $("#herodelta").textContent = dstr(sum(cur), sum(prv), true);
+  $("#herodelta").classList.remove("hide");
+  setKpi(1,"Events", cur.length, dstr(cur.length, prv.length));
+  setKpi(2,"New filings", cnt(cur,"filing"), dstr(cnt(cur,"filing"), cnt(prv,"filing")));
+  setKpi(3,"USPTO actions", cnt(cur,"uspto"), dstr(cnt(cur,"uspto"), cnt(prv,"uspto")));
+  setKpi(4,"Allowance & grant", cnt(cur,"grant"), dstr(cnt(cur,"grant"), cnt(prv,"grant")));
+
+  // needs attention
+  const items = openItems();
+  const dark = document.documentElement.getAttribute("data-theme")==="dark" ||
+    (!document.documentElement.getAttribute("data-theme") && matchMedia("(prefers-color-scheme:dark)").matches);
+  const pal = dark?SEVD:SEV;
+  $("#attn").innerHTML = items.length ? items.map(i=>{
+    const c=pal[i.sev];
+    return `<div class="att"><span class="badge" style="background:${c.bg};color:${c.fg}">${ICON[i.sev]}${SEV[i.sev].label}</span>`+
+      `<span class="body"><b title="${esc(i.ref)}">${esc(i.ref)}</b>`+
+      `<span>${esc(i.kind)} on ${fmtDayY(i.date)} · ${esc(i.appno||"—")} · ${esc(i.what)}</span></span>`+
+      `<span class="age">${i.age} days<i>outstanding</i></span></div>`;
+  }).join("") : `<div class="empty">Nothing outstanding — every USPTO action has a response recorded after it.</div>`;
+  $("#attncount").textContent = items.length ? `${items.length} open` : "all clear";
+
+  // what changed, grouped by significance
+  const GRP = [
+    ["Granted",            e=>["Issue notification","E-grant notification"].includes(e.kind)],
+    ["Allowed",            e=>e.kind==="Allowance notification"],
+    ["USPTO actions received", e=>USPTO_ACT.includes(e.kind)],
+    ["Responses filed",    e=>RESPONSE.includes(e.kind)],
+    ["New filings",        e=>e.g==="filing"],
+    ["Published",          e=>e.g==="pub"],
+    ["Payments",           e=>e.g==="pay"],
+    ["Other",              e=>e.kind==="Issue fee paid"],
+  ];
+  let seen=new Set(), out="";
+  GRP.forEach(([label,test])=>{
+    const rows = cur.filter(e=>!seen.has(e) && test(e));
+    rows.forEach(e=>seen.add(e));
+    if(!rows.length) return;
+    rows.sort((a,b)=>a.date<b.date?1:-1);
+    const paid=sum(rows);
+    out += `<div class="grp"><h4>${label}</h4><span>${rows.length}${paid?" · "+money(paid):""}</span></div>`;
+    out += rows.map(e=>`<div class="chg"><span class="d">${fmtDay(e.date)}</span>`+
+      `<span class="t"><i style="background:var(${EMAP[e.g][2]})"></i><span title="${esc(e.ref)}">${esc(e.ref)}</span>`+
+      `<em>· ${esc(e.kind)}</em></span>`+
+      `<span class="v">${e.amt?money(e.amt):""}</span></div>`).join("");
+  });
+  $("#changes").innerHTML = out || `<div class="empty">Nothing changed in this period.</div>`;
+}
+function renderGantt(){
+  const from = windowStart(), rows = evInWindow();
+  const span = Math.max(1,(D(TODAY)-D(from))/864e5);
+  const pos = iso => (D(iso)-D(from))/864e5/span*100;
+
+  // cluster events per patent per date
+  const lanes = new Map();
+  rows.forEach(e=>{
+    if(!lanes.has(e.row)) lanes.set(e.row, {row:e.row, ref:e.ref, appno:e.appno, firm:e.firm,
+        patented:(DATA.find(d=>d.row===e.row)||{}).patented, days:new Map(), first:e.date, last:e.date, amt:0});
+    const L=lanes.get(e.row);
+    if(!L.days.has(e.date)) L.days.set(e.date, []);
+    L.days.get(e.date).push(e);
+    if(e.date<L.first) L.first=e.date;
+    if(e.date>L.last) L.last=e.date;
+    L.amt += e.amt;
+  });
+  let L = [...lanes.values()];
+  const spend = r => (DATA.find(d=>d.row===r)||{total:0}).total;
+  if(state.gsort==="start")  L.sort((a,b)=> a.first<b.first?-1: a.first>b.first?1 : a.ref.localeCompare(b.ref));
+  if(state.gsort==="recent") L.sort((a,b)=> a.last>b.last?-1: a.last<b.last?1 : a.ref.localeCompare(b.ref));
+  if(state.gsort==="spend")  L.sort((a,b)=> spend(b.row)-spend(a.row));
+  if(state.gsort==="name")   L.sort((a,b)=> a.ref.localeCompare(b.ref));
+
+  // month/quarter ticks
+  const months = Math.round(span/30.4);
+  const stepM = months<=14 ? 1 : months<=30 ? 3 : 6;
+  let ticks=[], gl="";
+  if(span<=200){                                   // short window -> weekly ticks
+    let d=D(from); d.setDate(d.getDate()-d.getDay()+7);
+    while(d<=D(TODAY)){ const iso=d.toISOString().slice(0,10); ticks.push([pos(iso), fmtDay(iso)]); d.setDate(d.getDate()+ (span<=45?7:14)); }
+  } else {
+    let d=D(from.slice(0,7)+"-01"); d.setMonth(d.getMonth()+1);
+    while(d<=D(TODAY)){ const iso=d.toISOString().slice(0,10);
+      if((d.getMonth())%stepM===0) ticks.push([pos(iso), fmtMonShort(iso)]);
+      d.setMonth(d.getMonth()+1); }
+  }
+  ticks = ticks.filter(([x])=> x < 93);
+  ticks.forEach(([x])=> gl += `<span class="gl" style="left:${x}%"></span>`);
+  gl += `<span class="now" style="left:100%"></span>`;
+  $("#gaxis").innerHTML = ticks.map(([x,l])=>`<span class="tick" style="left:${x}%">${l}</span>`).join("")
+    + `<span class="tick" style="left:100%;transform:translateX(-100%);color:var(--ink-2)">today</span>`;
+  $("#ggrid").innerHTML = gl;
+
+  $("#glanes").querySelectorAll(".lane").forEach(n=>n.remove());
+  const frag=document.createDocumentFragment();
+  L.forEach(l=>{
+    const a=pos(l.first), b=pos(l.last);
+    const dots=[...l.days.entries()].map(([date,evs])=>{
+      const g = GPRIO.find(k=>evs.some(e=>e.g===k));
+      return `<span class="gdot${evs.length>1?" multi":""}" style="left:${pos(date)}%;background:var(${EMAP[g][2]})" data-r="${l.row}" data-d="${date}"></span>`;
+    }).join("");
+    const el=document.createElement("div"); el.className="lane";
+    el.innerHTML = `<div class="llab" title="${esc(l.ref)}">${l.patented?'<span class="dot"></span>':""}${esc(l.ref)}</div>`+
+      `<div class="ltrack">${b>a?`<span class="lline" style="left:${a}%;width:${b-a}%"></span>`:""}${dots}</div>`;
+    frag.appendChild(el);
+  });
+  $("#glanes").appendChild(frag);
+  window.__lanes = lanes;
+
+  const hidden = DATA.filter(d=>(state.firm==="all"||d.firm===state.firm)).length - L.length;
+  $("#gnote").textContent = `${L.length} patent${L.length===1?"":"s"} with activity between ${fmtDayY(from)} and ${fmtDayY(TODAY)}`
+    + (hidden>0 ? ` · ${hidden} with none in this window (hidden)` : "") + ".";
+  $("#gempty").classList.toggle("hide", L.length>0);
+
+  const paid = rows.reduce((s,e)=>s+e.amt,0);
+  const cnt = k => rows.filter(e=>e.g===k).length;
+  $("#heroval").textContent = money(paid);
+  $("#herolab").textContent = "Paid in this window";
+  $("#heronote").textContent = `${rows.length} event${rows.length===1?"":"s"} across ${L.length} patent${L.length===1?"":"s"}`;
+  setKpi(1,"Filings", cnt("filing"), "provisional, non-provisional, PCT");
+  setKpi(2,"USPTO actions", cnt("uspto"), "office actions & objections issued");
+  setKpi(3,"Responses", cnt("resp"), "filed by counsel");
+  setKpi(4,"Allowance & grant", cnt("grant"), "notices, issue fees, e-grants");
+}
+
+function render(){
+  const v = state.view, tl = v==="timeline", gt = v==="gantt", ch = v==="changes";
+  $("#chartcard").classList.toggle("hide", v!=="chart");
+  $("#tablecard").classList.toggle("hide", v!=="table");
+  $("#tlcard").classList.toggle("hide", !tl);
+  $("#gcard").classList.toggle("hide", !gt);
+  $("#ccard").classList.toggle("hide", !ch);
+  $("#sortseg").classList.toggle("hide", tl||gt||ch);
+  $("#gsortseg").classList.toggle("hide", !gt);
+  $("#rangeseg").classList.toggle("hide", !(tl||gt||ch));
+  $("#costlegend").classList.toggle("hide", tl||gt||ch);
+  $("#evlegend").classList.toggle("hide", !(tl||gt||ch));
+  $("#herodelta").classList.toggle("hide", !ch);
+  if(tl){ renderTimeline(); return; }
+  if(gt){ renderGantt(); return; }
+  if(ch){ renderChanges(); return; }
+  const rows = filtered();
+  renderStats(rows);
+  const chart = v==="chart";
+  if(chart) renderChart(rows);
+  else renderTable([...rows].sort((a,b)=>{
+      const k=state.tsort.k, d=state.tsort.dir;
+      const get = o => k==="total" ? subtotal(o) : k==="count" ? nPay(o)
+                     : (k==="ref"||k==="firm"||k==="appno") ? (o[k]||"") : (o.totals[k]||0);
+      const va=get(a), vb=get(b);
+      return (typeof va==="string" ? va.localeCompare(vb) : va-vb) * d;
+  }));
+}
+
+/* tooltip */
+const tip=$("#tip");
+function showTip(e, d, hl){
+  const rowsHtml = CATS.map(([c,v])=>{
+    if(state.off.has(c)) return "";
+    const amt=d.totals[c]; if(!amt) return "";
+    const items=d.payments[c];
+    return `<div class="trow"><span><span class="sw" style="display:inline-block;background:var(${v});margin-right:7px"></span>${c==="Office Action"?"Office action":c}</span><b>${money(amt)}</b></div>`+
+      (items.length>1||hl===c ? `<div class="items">${items.map(p=>`<div><span>${p.date||"—"}</span><span>${money(p.amount)}</span></div>`).join("")}</div>` : "");
+  }).join("");
+  tip.innerHTML = `<h4>${esc(d.ref)}</h4>`+
+    `<div style="color:var(--muted);font-size:11.5px;margin:-3px 0 7px">${esc(d.appno||"not yet filed")} · ${FIRM[d.firm]||d.firm||"—"}${d.patented?" · granted":""}</div>`+
+    (rowsHtml || `<div class="trow"><span>No payments recorded</span></div>`)+
+    `<div class="tsep"></div><div class="trow"><span>Total paid</span><b>${money(subtotal(d))}</b></div>`;
+  tip.classList.add("on"); moveTip(e);
+}
+function moveTip(e){
+  const r=tip.getBoundingClientRect();
+  let x=e.clientX+16, y=e.clientY+16;
+  if(x+r.width>innerWidth-10) x=e.clientX-r.width-16;
+  if(y+r.height>innerHeight-10) y=Math.max(10, e.clientY-r.height-16);
+  tip.style.left=x+"px"; tip.style.top=y+"px";
+}
+$("#plot").addEventListener("mousemove", e=>{
+  const box=e.target.closest(".barbox"); 
+  if(!box){ tip.classList.remove("on"); return; }
+  const d=DATA.find(x=>x.row==+box.dataset.i);
+  const seg=e.target.closest(".seg-m");
+  showTip(e, d, seg?seg.dataset.c:null);
+});
+$("#plot").addEventListener("mouseleave", ()=>tip.classList.remove("on"));
+
+$("#cols").addEventListener("mousemove", e=>{
+  const c=e.target.closest(".colwrap");
+  if(!c){ tip.classList.remove("on"); return; }
+  const {buckets, mode} = window.__buckets;
+  const b = buckets[+c.dataset.b];
+  const end = (()=>{ const d=D(b.k); if(mode==="month"){d.setMonth(d.getMonth()+1);} else {d.setDate(d.getDate()+6); return d;} d.setDate(d.getDate()-1); return d; })();
+  const endIso = end.toISOString().slice(0,10);
+  const head = mode==="month" ? fmtMon(b.k) : `${fmtDay(b.k)} – ${fmtDayY(endIso>TODAY?TODAY:endIso)}`;
+  const lines = EGROUPS.filter(([k])=>b.g[k]>0).map(([k,l,v])=>
+    `<div class="trow"><span><span class="sw" style="display:inline-block;background:var(${v});margin-right:7px"></span>${l}</span><b>${b.g[k]}</b></div>`).join("");
+  tip.innerHTML = `<h4>${head}</h4>`+
+    (lines || `<div class="trow"><span>No events</span></div>`)+
+    `<div class="tsep"></div><div class="trow"><span>Events</span><b>${b.n}</b></div>`+
+    (b.amt ? `<div class="trow"><span>Paid</span><b>${money(b.amt)}</b></div>` : "");
+  tip.classList.add("on"); moveTip(e);
+});
+$("#cols").addEventListener("mouseleave", ()=>tip.classList.remove("on"));
+
+$("#glanes").addEventListener("mousemove", e=>{
+  const d=e.target.closest(".gdot");
+  if(!d){ tip.classList.remove("on"); return; }
+  const L=window.__lanes.get(+d.dataset.r), evs=L.days.get(d.dataset.d);
+  const paid=evs.reduce((s,x)=>s+x.amt,0);
+  tip.innerHTML = `<h4>${esc(L.ref)}</h4>`+
+    `<div style="color:var(--muted);font-size:11.5px;margin:-3px 0 7px">${fmtDayY(d.dataset.d)} · ${esc(L.appno||"not yet filed")}</div>`+
+    evs.map(x=>`<div class="trow"><span><span class="sw" style="display:inline-block;background:var(${EMAP[x.g][2]});margin-right:7px"></span>${esc(x.kind)}</span><b>${x.amt?money(x.amt):""}</b></div>`).join("")+
+    (paid? `<div class="tsep"></div><div class="trow"><span>Paid that day</span><b>${money(paid)}</b></div>`:"");
+  tip.classList.add("on"); moveTip(e);
+});
+$("#glanes").addEventListener("mouseleave", ()=>tip.classList.remove("on"));
+document.querySelectorAll("[data-gsort]").forEach(b=>b.onclick=()=>{
+  state.gsort=b.dataset.gsort;
+  document.querySelectorAll("[data-gsort]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+document.querySelectorAll("[data-range]").forEach(b=>b.onclick=()=>{
+  state.range=b.dataset.range;
+  document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+document.querySelectorAll("[data-eg]").forEach(b=>b.onclick=()=>{
+  const g=b.dataset.eg;
+  if(state.eoff.has(g)) state.eoff.delete(g); else state.eoff.add(g);
+  b.setAttribute("aria-pressed", !state.eoff.has(g));
+  render();
+});
+
+/* controls */
+document.querySelectorAll("[data-sort]").forEach(b=>b.onclick=()=>{
+  state.sort=b.dataset.sort;
+  document.querySelectorAll("[data-sort]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{
+  state.view=b.dataset.view;
+  document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render();
+});
+$("#firm").onchange=e=>{ state.firm=e.target.value; render(); };
+document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{
+  const c=b.dataset.cat;
+  if(state.off.has(c)){ state.off.delete(c); } else if(state.off.size<CATS.length-1){ state.off.add(c); }
+  b.setAttribute("aria-pressed", !state.off.has(c));
+  render();
+});
+document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{
+  const k=th.dataset.k;
+  state.tsort = {k, dir: state.tsort.k===k ? -state.tsort.dir : (k==="ref"||k==="firm"||k==="appno"?1:-1)};
+  render();
+});
+$("#theme").onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme:dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark?"light":"dark");
+};
+render();
+</script>
+</body></html>

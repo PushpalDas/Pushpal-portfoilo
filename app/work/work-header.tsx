@@ -39,7 +39,13 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 						</h1>
 						<div className='work-header-subline-wrap'>
 							<p className='work-header-subline'>
-								Product manager with an engineering background — body area network silicon, RAG platforms, and internal tools. Three shipped commercially.
+								Product manager with an engineering background — body area
+								network silicon, RAG platforms, and internal tools. Three
+								shipped commercially.
+							</p>
+							<p className='work-header-sample-note'>
+								Sample portfolio — figures on the cards and case study pages are
+								invented placeholders, and screens are recreations.
 							</p>
 						</div>
 					</div>

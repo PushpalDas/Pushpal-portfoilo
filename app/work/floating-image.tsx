@@ -98,7 +98,7 @@ export default function FloatingImage({ modal, items }: FloatingImageProps) {
 							style={{ backgroundColor: item.color }}
 						>
 							<Image
-								src={`/static/images/project/${item.src}`}
+								src={`/static/images/project/${item.image}`}
 								alt={item.title}
 								width={300}
 								height={300}

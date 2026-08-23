@@ -9,6 +9,8 @@
     "lint": "biome check --write .",
     "format": "biome format --write .",
     "check": "biome check .",
+    "verify:work": "node scripts/verify-cards.js && node scripts/verify-case-studies.js",
+    "work:status": "node scripts/work-by-status.js",
     "prepare": "husky",
     "google:auth": "node scripts/google-auth-setup.mjs"
   },

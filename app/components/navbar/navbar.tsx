@@ -23,7 +23,8 @@ export default function Navbar() {
 	const [scrolled, setScrolled] = useState(false);
 	const [mobileOpen, setMobileOpen] = useState(false);
 
-	const isCaseStudySubpage = pathname.startsWith('/work/') && pathname !== '/work';
+	const isCaseStudySubpage =
+		pathname.startsWith('/work/') && pathname !== '/work';
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 20);
@@ -78,6 +79,7 @@ export default function Navbar() {
 							<Magnetic key={href} strength={15}>
 								<Link
 									href={href}
+									aria-current={isActive ? 'page' : undefined}
 									className={classNames(
 										'relative px-3.5 py-1.5 text-sm rounded-full transition-colors duration-200',
 										isActive ? 'text-white' : 'text-gray-400 hover:text-white',
@@ -161,6 +163,7 @@ export default function Navbar() {
 								<Link
 									key={href}
 									href={href}
+									aria-current={isActive ? 'page' : undefined}
 									className={classNames(
 										'px-3 py-2 text-sm rounded-lg transition-colors duration-200',
 										isActive
