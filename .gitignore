@@ -44,3 +44,4 @@ yarn-error.log*
 # Secrets and booking store
 public/client_secret_*.json
 .data/
+app/Changes/ixana-staging
