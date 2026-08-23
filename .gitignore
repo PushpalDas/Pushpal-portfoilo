@@ -45,3 +45,6 @@ yarn-error.log*
 public/client_secret_*.json
 .data/
 app/Changes/ixana-staging
+
+# TypeScript incremental build cache
+*.tsbuildinfo

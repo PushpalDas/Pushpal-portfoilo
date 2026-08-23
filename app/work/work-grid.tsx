@@ -5,8 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
-import { STATUS_CONFIG } from './constants';
+import { WORK_STATUSES } from './status';
 import type { WorkItem } from './types';
+import { workSlug } from './slug';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,16 +39,14 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 		}, gridRef);
 
 		return () => ctx.revert();
-	}, [items]);
+	}, []);
 
 	return (
 		<section className='work-grid-section' ref={gridRef}>
 			<div className='work-grid-container'>
 				<ul className={`work-grid-items work-grid-${gridColumns}`}>
 					{items.map((item) => {
-						const badge = item.status
-							? (STATUS_CONFIG[item.status] ?? null)
-							: null;
+						const badge = item.status ? WORK_STATUSES[item.status] : null;
 
 						const cardInner = (
 							<>
@@ -103,13 +102,12 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 						);
 
 						// Case 1: has a slug → internal case study page
-						if (item.slug) {
+						if (item.slug || workSlug(item)) {
 							return (
 								<li key={item.title} className='work-tile'>
 									<div className='work-tile-wrap'>
 										<Link
-											href={`/work/${item.slug}`}
-											target='_blank'
+										href={`/work/${item.slug ?? workSlug(item)}`}
 											className='work-tile-link'
 										>
 											{cardInner}

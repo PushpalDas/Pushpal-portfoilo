@@ -1,23 +1,34 @@
 /**
  * Dynamic route: /work/[slug]
  *
- * Two data sources, checked in order:
+ * Three renderers, checked in order:
  *
- *   1. data/case-studies-v2.json — the 10-section format. Held in
- *      its own file because the admin endpoint replaces whole
+ *   1. data/case-studies-v2.json — the authored 10-section format.
+ *      Held in its own file because the admin endpoint replaces whole
  *      entries in case-studies.json (`store[slug] = body`), which
  *      would silently drop a nested v2 block on the next save.
  *
- *   2. data/case-studies.json — the older layout, still editable
- *      from /admin → work item → Case Study tab.
+ *   2. CaseStudyFinalPage — the generated template, driven by the
+ *      work item plus whatever legacy record exists. Figures here are
+ *      reconstructed, not authored; it is the fallback for grid items
+ *      that have no v2 write-up yet.
+ *
+ *   3. notFound — the slug matches neither a v2 entry nor a work item.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import CaseStudyPage from './case-study-page';
-import type { CaseStudyData, CaseStudyV2 } from './case-study-types';
+import { workItems } from '../constants';
+import { workSlug } from '../slug';
+import CaseStudyFinalPage from './case-study-final-page';
+import type {
+	AnyCaseStudyData,
+	CaseStudyData,
+	CaseStudyV2,
+} from './case-study-types';
+import { isEditorialCaseStudy } from './case-study-types';
 import CaseStudyV2Page from './case-study-v2';
 
 const DATA_PATH = path.join(process.cwd(), 'data', 'case-studies.json');
@@ -32,8 +43,21 @@ function readJson<T>(file: string): Record<string, T> {
 	}
 }
 
-const getAllCaseStudies = () => readJson<CaseStudyData>(DATA_PATH);
+const getAllCaseStudies = () => readJson<AnyCaseStudyData>(DATA_PATH);
 const getAllV2 = () => readJson<CaseStudyV2>(V2_PATH);
+
+function findWorkItem(slug: string) {
+	return workItems.find(
+		(item) => item.slug === slug || workSlug(item) === slug,
+	);
+}
+
+/** Legacy records render through the template; editorial ones do not. */
+function legacyFor(slug: string): CaseStudyData | undefined {
+	const record = getAllCaseStudies()[slug];
+	if (!record || isEditorialCaseStudy(record)) return undefined;
+	return record as CaseStudyData;
+}
 
 export async function generateMetadata({
 	params,
@@ -43,17 +67,17 @@ export async function generateMetadata({
 	const { slug } = await params;
 
 	const v2 = getAllV2()[slug];
-	if (v2) {
-		return { title: `${v2.title} — Pushpal Das`, description: v2.deck };
+	if (v2) return { title: `${v2.title} — Pushpal Das`, description: v2.deck };
+
+	const item = findWorkItem(slug);
+	if (item) {
+		return {
+			title: `${item.title} — Pushpal Das`,
+			description: item.outcome || `Product case study: ${item.title}`,
+		};
 	}
 
-	const project = getAllCaseStudies()[slug];
-	if (!project) return { title: 'Work — Pushpal Das' };
-
-	return {
-		title: `${project.title || slug} — Pushpal Das`,
-		description: project.tldr || `Case study: ${project.title || slug}`,
-	};
+	return { title: 'Work — Pushpal Das' };
 }
 
 export default async function WorkSlugPage({
@@ -66,8 +90,8 @@ export default async function WorkSlugPage({
 	const v2 = getAllV2()[slug];
 	if (v2) return <CaseStudyV2Page data={v2} />;
 
-	const project = getAllCaseStudies()[slug];
-	if (!project) notFound();
+	const item = findWorkItem(slug);
+	if (!item) notFound();
 
-	return <CaseStudyPage data={project} />;
+	return <CaseStudyFinalPage item={item} legacy={legacyFor(slug)} />;
 }

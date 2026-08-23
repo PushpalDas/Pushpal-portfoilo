@@ -2,18 +2,15 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useMemo, useState } from 'react';
-import useBreakpoint from 'use-breakpoint';
 import Contact from '../components/contact';
-import { type FilterKey, STATUS_ORDER, workItems } from './constants';
+import { type FilterKey, workItems } from './constants';
 import './work.css';
+import { WORK_STATUS_ORDER } from './status';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
 
-const BREAKPOINTS = { mobile: 0, tablet: 768, desktop: 1280 };
-
 function WorkPageInner() {
-	const { breakpoint } = useBreakpoint(BREAKPOINTS);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
@@ -40,18 +37,18 @@ function WorkPageInner() {
 		const withIndex = workItems.map((item, index) => ({ item, index }));
 
 		withIndex.sort((a, b) => {
-			const aStatus = a.item.status || 'null';
-			const bStatus = b.item.status || 'null';
+			const aStatus = a.item.status || 'none';
+			const bStatus = b.item.status || 'none';
 
-			const aStatusRank = STATUS_ORDER[aStatus as keyof typeof STATUS_ORDER];
-			const bStatusRank = STATUS_ORDER[bStatus as keyof typeof STATUS_ORDER];
+			const aStatusRank = WORK_STATUS_ORDER[aStatus];
+			const bStatusRank = WORK_STATUS_ORDER[bStatus];
 
 			if (aStatusRank !== bStatusRank) {
 				return aStatusRank - bStatusRank;
 			}
 
-			const aYear = Number.parseInt(a.item.year.replace(/\D/g, '')) || 0;
-			const bYear = Number.parseInt(b.item.year.replace(/\D/g, '')) || 0;
+			const aYear = Number.parseInt(a.item.year.replace(/\D/g, ''), 10) || 0;
+			const bYear = Number.parseInt(b.item.year.replace(/\D/g, ''), 10) || 0;
 
 			if (aYear !== bYear) {
 				return bYear - aYear;

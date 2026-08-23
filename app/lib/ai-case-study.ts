@@ -98,12 +98,12 @@ export const CASE_STUDY_FIELDS = {
 			"Describe the author's role and approach in two sections separated by two newlines (\\n\\n). You MUST follow this exact template:\n\n" +
 			'What I owned: [Describe what the author specifically owned/led, including scope, roadmap, design/engineering alignment, etc.]\n\n' +
 			'Tradeoffs I navigated: [Describe the key tradeoffs navigated, e.g. "Warmth vs. verifiability — ... And build-speed vs. rigor — ..."]\n\n' +
-			'Do not write anything else or use other headings.',
+			'Name the alternative considered and the cost of the chosen direction when the source supports them. Do not write anything else or use other headings.',
 	},
 	keyDecisions: {
 		type: 'ARRAY',
 		description:
-			'Up to 3 key decisions, most consequential first. Each is one or two sentences covering the decision and why it was made over the alternatives. Return fewer than 3 if the source only supports fewer.',
+			'Up to 4 key decisions, most consequential first. Each is one or two sentences covering the call, alternative rejected, why, and cost when supported. Return fewer if the source supports fewer.',
 		items: { type: 'STRING' },
 	},
 	whatWasBuilt: {
@@ -113,7 +113,7 @@ export const CASE_STUDY_FIELDS = {
 	metrics: {
 		type: 'ARRAY',
 		description:
-			'Quantified outcomes stated in the source. Omit entirely if the source has no numbers.',
+			'Quantified user or business outcomes stated in the source. Configuration such as model names, dimensions, chunk sizes, service counts, and cache settings is not an outcome and must be omitted.',
 		items: {
 			type: 'OBJECT',
 			properties: {
