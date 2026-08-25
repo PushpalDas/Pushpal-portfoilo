@@ -3467,7 +3467,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 ### Summary
 
-- **Problem.** Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025." -->
+- **Problem.** Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (this page says ~75, the Wiki and Video Library pages say 140); e.g. "~75 in 2024, ~140 by mid-2025." -->
 - **What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
 - **Result.** Fifty-plus filings across six product lines, median disclosure-to-filing down from about fourteen weeks to six, and inventor time per disclosure falling rather than rising. No date we have shown has ever disagreed with counsel’s docket.
 
