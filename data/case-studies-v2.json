@@ -29,7 +29,7 @@
       },
       {
         "lead": "Result.",
-        "text": "118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence."
+        "text": "118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. \"~75 in 2024, ~140 by mid-2025.\" -->"
       }
     ],
     "sections": [
@@ -744,7 +744,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen."
+            "text": "Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen. The 34 evaluations are kit-mediated only, a narrower population than the NFE-line design-in figures, which include direct silicon engagements."
           },
           {
             "kind": "config",
@@ -772,10 +772,10 @@
     "meta": {
       "role": "Product manager, delivery owner",
       "team": "3 engineers, 1 data engineer",
-      "timeline": "Feb – Sep 2026",
+      "timeline": "Feb 2026 – present",
       "stage": "Live across three engineering teams"
     },
-    "confidentiality": "Internal product — the screen described in section 06 is a recreation with invented task data, and figures are relative or anonymised.",
+    "confidentiality": "Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.",
     "summary": [
       {
         "lead": "Problem.",
@@ -1135,10 +1135,10 @@
     "meta": {
       "role": "Product manager, delivery owner",
       "team": "3 engineers",
-      "timeline": "Mar – Oct 2026",
+      "timeline": "Mar 2026 – present",
       "stage": "Live, company-wide"
     },
-    "confidentiality": "Internal product — the player screen described in section 06 is a recreation with invented meeting content, and figures are relative or anonymised. No recording, transcript or attendee name appears on this page.",
+    "confidentiality": "Internal product — the player screen described in section 06 is a recreation with invented meeting content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -1462,12 +1462,12 @@
                 }
               ]
             },
-            "caption": "The same funnel as section 02, six months after launch, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written."
+            "caption": "The same funnel as section 02, six months after launch <!-- TODO(pushpal): launch is Mar 2026, so six months of logs do not exist yet at 2026-08-25; give the real observation window -->, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it."
+            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. \"~75 in 2024, ~140 by mid-2025.\" -->"
           },
           {
             "kind": "config",
@@ -1498,7 +1498,7 @@
       "timeline": "Apr – Aug 2025",
       "stage": "Live for the affected group"
     },
-    "confidentiality": "Internal service — figures are relative or anonymised, no calendar content is shown, and the endpoints referenced are internal only.",
+    "confidentiality": "Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.",
     "summary": [
       {
         "lead": "Problem.",
@@ -2208,7 +2208,7 @@
                 }
               ]
             },
-            "caption": "Reported count before the rule change against the deduplicated count after, per source workbook, Nov 2025. The portfolio did not shrink by 41 filings — it was never that large. Publishing that correction was the least comfortable and most necessary part of the project."
+            "caption": "Reported count before the rule change against the deduplicated count after, per source workbook, Nov 2025. The portfolio did not shrink by 41 filings — it was never that large. Publishing that correction was the least comfortable and most necessary part of the project. <!-- TODO(pushpal): 0.9 — one sentence bridging this 207-patent deduplicated portfolio (79+71+57) to Patent Ops' 52 filings and 54 active matters. -->"
           },
           {
             "kind": "definition",
@@ -2244,7 +2244,7 @@
       "timeline": "May – Aug 2025",
       "stage": "Live, running monthly across three teams"
     },
-    "confidentiality": "Internal reporting. Figures are relative or anonymised; no individual's name, allocation or performance data appears on this page.",
+    "confidentiality": "Internal reporting. All figures on this page are invented placeholders for this sample; no individual's name, allocation or performance data appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -2604,7 +2604,7 @@
       "timeline": "Jan – May 2026",
       "stage": "Live, running monthly"
     },
-    "confidentiality": "Internal reporting. Figures are relative or anonymised; no task, customer or individual's performance data appears on this page.",
+    "confidentiality": "Internal reporting. All figures on this page are invented placeholders for this sample; no task, customer or individual's performance data appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -2962,10 +2962,10 @@
     "meta": {
       "role": "Product manager, delivery owner",
       "team": "2 engineers",
-      "timeline": "Apr – Oct 2026",
+      "timeline": "Apr 2026 – present",
       "stage": "Live for leads, architects and PMs"
     },
-    "confidentiality": "Internal product — the screen described in section 06 is a recreation with invented task data, and figures are relative or anonymised.",
+    "confidentiality": "Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.",
     "summary": [
       {
         "lead": "Problem.",
@@ -3289,7 +3289,7 @@
                 }
               ]
             },
-            "caption": "Weekly sessions by role, Jul–Sep 2026, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points."
+            "caption": "Weekly sessions by role, Jul–Sep 2026 <!-- TODO(pushpal): this ten-week session series runs past 2026-08-25; give the weeks that actually have log data -->, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points."
           },
           {
             "kind": "definition",
@@ -3322,10 +3322,10 @@
     "meta": {
       "role": "Product manager, delivery owner",
       "team": "2 engineers",
-      "timeline": "May – Sep 2026",
+      "timeline": "May 2026 – present",
       "stage": "Live for one workspace space"
     },
-    "confidentiality": "Internal tooling. Figures are relative or anonymised; no task, customer or individual's activity appears on this page.",
+    "confidentiality": "Internal tooling. All figures on this page are invented placeholders for this sample; no task, customer or individual's activity appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -3665,7 +3665,7 @@
                 }
               ]
             },
-            "caption": "Median answer time by week, Aug–Sep 2026, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly."
+            "caption": "Median answer time by week, Aug–Sep 2026 <!-- TODO(pushpal): this seven-week series runs past 2026-08-25; give the real launch week and how many weeks have data, or drop the weeks that have not happened -->, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly."
           },
           {
             "kind": "definition",
@@ -3701,7 +3701,7 @@
       "timeline": "Feb – Aug 2026",
       "stage": "Live, syncing daily"
     },
-    "confidentiality": "Internal tooling. Figures are relative or anonymised; no document title, content or author appears on this page.",
+    "confidentiality": "Internal tooling. All figures on this page are invented placeholders for this sample; no document title, content or author appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -4061,7 +4061,7 @@
       "timeline": "Jan – Aug 2026",
       "stage": "Live for internal planning"
     },
-    "confidentiality": "Internal product — the screen described in section 06 is a recreation with an invented brief, and figures are relative or anonymised.",
+    "confidentiality": "Internal product — the screen described in section 06 is a recreation with an invented brief, and all figures on this page are invented placeholders for this sample.",
     "summary": [
       {
         "lead": "Problem.",
@@ -4429,7 +4429,7 @@
       "timeline": "Apr 2026 – present",
       "stage": "Controlled pilot across three internal organisations"
     },
-    "confidentiality": "Internal pilot — the screen in section 06 is a recreation with invented requests, figures are relative or anonymised, and no supplier, price or requester appears on this page.",
+    "confidentiality": "Internal pilot — the screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price or requester appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -6298,7 +6298,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went."
+            "text": "An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts."
           },
           {
             "kind": "config",
@@ -6695,7 +6695,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator."
+            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->"
           },
           {
             "kind": "config",
@@ -7706,7 +7706,7 @@
                 }
               ]
             },
-            "caption": "Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput."
+            "caption": "Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->"
           }
         ],
         "after": [
@@ -7927,7 +7927,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested."
+            "text": "Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1, drawn from the same NFE-line population as the gen-1 page's 7 of 26 rather than being a separate cohort. <!-- TODO(pushpal): confirm the fourteen are a subset of that 26 and not a later intake. -->"
           },
           {
             "kind": "config",
@@ -12155,7 +12155,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Ixana files 25-plus applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided."
+        "text": "Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. \"~75 in 2024, ~140 by mid-2025.\" -->"
       },
       {
         "lead": "What I did.",
@@ -12208,11 +12208,11 @@
                 }
               ]
             },
-            "caption": "Options sizing, Jan 2024, costed against the 25-plus applications a year the company files. All four buy docketing, which counsel already does properly and is not the thing that was missing — so the cheapest option won on the same argument that would have won at any price: none of them links a filing to the tapeout that makes it possible."
+            "caption": "Options sizing, Jan 2024, costed against the ~25 applications a year the company files. All four buy docketing, which counsel already does properly and is not the thing that was missing — so the cheapest option won on the same argument that would have won at any price: none of them links a filing to the tapeout that makes it possible."
           }
         ],
         "after": [
-          "Twenty-five-plus applications a year is large for seventy-five people, nearly all of it landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade here — which is why the guardrail is inventor time."
+          "About twenty-five applications a year is large for seventy-five people, nearly all of it landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade here — which is why the guardrail is inventor time."
         ]
       },
       {
@@ -12362,7 +12362,7 @@
                   "values": [0, 1, 0, 3, 2, 1]
                 },
                 {
-                  "name": "H2 '26",
+                  "name": "H2 '26 (to date)",
                   "values": [0, 0, 0, 1, 1, 1]
                 }
               ],

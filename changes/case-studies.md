@@ -370,7 +370,7 @@ Before tooling was committed we agreed the program failed on two conditions: few
 
 > Cumulative kits shipped, Q3 2024 – Q4 2025, from order records. The steps are real: kits leave in batches tied to module builds, not continuously. The floor was crossed in Q2 2025, one quarter later than planned, because the NFE kit slipped behind BAN.
 
-> **How we counted.** Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen.
+> **How we counted.** Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen. The 34 evaluations are kit-mediated only, a narrower population than the NFE-line design-in figures, which include direct silicon engagements.
 
 `Kit configuration — YR23 BAN transceiver module rev C · XA-NFE2001 NFE module rev B · STM32U5 host board · dry and gel electrode pairs at fixed spacing · USB-C console at 921600 baud · kit firmware 2.4.1`
 
@@ -407,7 +407,7 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 
 - **Problem.** Company knowledge lived in five disconnected systems. People spent a median of nine minutes hunting for a document before giving up and asking someone — or rewriting it from scratch.
 - **What I did.** I owned delivery of a single internal knowledge platform: one searchable repository across OneDrive, ClickUp, Teams, efficiency trackers and patent records, with hybrid search, cited AI answers and role-based access.
-- **Result.** 118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence.
+- **Result.** 118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025." -->
 
 ### 01 — Why this, and why now
 
@@ -527,8 +527,7 @@ Before build, we agreed this failed if fewer than half the company used it in th
 **Figure — Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70**  
 *Chart: `lineArea`*
 
-- Points: Week 1 18, Week 4 36, Week 7 44, Week 10 62, 68, 84, 94, 104, 112, 118
-- X axis: Week 1, Week 4, Week 7, Week 10
+- Points: Week 1 18, 36, 44, Week 4 62, 68, 84, Week 7 94, 104, 112, Week 10 118
 
 - Threshold: value 70, label Pre-agreed floor: 70 of 140
 
@@ -728,6 +727,14 @@ Rather than ask engineers how bring-up went, I audited the bench logs from the f
 **Figure — Days from board build to first stable on-body link across 24 evaluation boards, clustered between 7 and 14 days against a 14-day gate**  
 *Chart: `histogram` · x: days to first stable on-body link*
 
+| Bin | Count |
+| --- | --- |
+| 3–6 | 3 |
+| 7–10 | 7 |
+| 11–14 | 8 |
+| 15–20 | 4 |
+| 20+ | 2 |
+
 - Ceiling: index 3, label 14-day gate
 
 > Bring-up time across the first 24 evaluation boards, Sep–Dec 2023, coded from bench logs. Median 11 days. The six boards past the gate are the finding: they were not worse silicon, they were boards whose trim drifted furthest from the reference — a characterisation gap, not a die defect.
@@ -822,7 +829,7 @@ Before tapeout we agreed first silicon failed on one condition: if it could not 
 
 > Escapes by category, Sep 2023 – Feb 2024, from the bring-up defect log. Three categories carry 80%, and all three are addressable in firmware or documentation rather than in the die — which is the whole reason a respin was avoidable rather than merely avoided.
 
-> **How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went.
+> **How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts.
 
 `Part configuration — YR23 Wi-R BAN transceiver · 100 kbit/s – 5 Mbit/s · 0.12 nJ/bit at 5 Mbit/s · up to 16 devices per network · sub-1 ms link latency · 10–15 m along-body, ~0.1 m off-body containment · physical-layer security by E-field confinement · host interface with reference driver`
 
@@ -1030,7 +1037,7 @@ Fourteen evaluations had supplied a written requirement sheet before stalling, s
 | Range at 5 cm | met · value: 1 · target: 1 · max: 1.2 · targetLabel: required · pass: true |
 | Sealed-wall operation | met · value: 1 · target: 1 · max: 1.2 · targetLabel: required · pass: true |
 
-> Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput.
+> Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->
 
 The reframe: we had been reading these as separate objections and answering them separately. They were one number. Nobody wanted a faster link for its own sake; they wanted a payload moved inside a window a technician would stand still for.
 
@@ -1116,7 +1123,7 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 
 > Transfer time by payload, computed from published goodput for both parts and confirmed on partner benches, Jan 2026. The shaded band is the window the requirement sheets specified. Gen-1 exits it before 50 MB; gen-2 reaches 100 MB with a second to spare, which is thin on purpose — the sheets asked for a minute, not for headroom.
 
-> **How we counted.** Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested.
+> **How we counted.** Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1, drawn from the same NFE-line population as the gen-1 page's 7 of 26 rather than being a separate cohort. <!-- TODO(pushpal): confirm the fourteen are a subset of that 26 and not a later intake. -->
 
 `Part configuration — XA-NFE3001 Wi-R NFE transceiver · 20 Mbit/s PHY, ~13.5 Mbit/s goodput · under 6 mW active at full rate · 1–15 cm operating range · sub-0.2 ms latency · RF-silent electric-field coupling · not intended to couple out of a fully enclosed conductive shield · host interface and reference driver shared with XA-NFE2001`
 
@@ -1275,16 +1282,18 @@ Before the build plan was committed we agreed the line failed on one condition: 
 **Figure — Interop pass rate across four host platforms and three range profiles: 11 of 12 configurations above 85 percent, with the 25 cm profile on the low-power MCU the single weak cell at 62 percent**  
 *Chart: `heatmap` · unit %*
 
-| Item | Value |
-| --- | --- |
-| Cortex-M4 host |  |
-| Cortex-M33 secure |  |
-| Linux SoC |  |
-| Low-power MCU |  |
+|  | 5 cm profile | 15 cm profile | 25 cm profile |
+| --- | --- | --- | --- |
+| Cortex-M4 host | 100 | 98 | 94 |
+| Cortex-M33 secure | 100 | 96 | 91 |
+| Linux SoC | 98 | 97 | 89 |
+| Low-power MCU | 96 | 88 | 62 |
+
+- Pass rate per configuration, 40 link attempts each, Oct–Nov 2025
 
 > Interop matrix at launch qualification, Oct–Nov 2025, 40 link attempts per cell on partner-supplied hardware. Eleven of twelve cells clear 85%. The weak cell is real and shipped documented: the longest range profile on the slowest host cannot service the link fast enough, and the datasheet says so rather than leaving a partner to find it.
 
-> **How we counted.** A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator.
+> **How we counted.** A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->
 
 `Part configuration — XA-NFE2001 Wi-R NFE transceiver · up to 5 Mbit/s · under 1 mW at full rate · three provisioning-time range profiles across 5–25 cm, up to 1 m at reduced rate · sub-1 ms end-to-end latency · RF-silent electric-field coupling · host interface and reference driver shared with the BAN line`
 
@@ -1420,7 +1429,7 @@ I would also have measured the qubit ceiling first. It shaped every other decisi
 | Status | In customer testing |
 | Slug | `procurement-orchestrator-procurement-process-automation-with` |
 
-> **Confidentiality.** Internal pilot — the screen in section 06 is a recreation with invented requests, figures are relative or anonymised, and no supplier, price or requester appears on this page.
+> **Confidentiality.** Internal pilot — the screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price or requester appears on this page.
 
 ### Summary
 
@@ -1636,6 +1645,15 @@ I interviewed facility managers and the installers who service their sites, then
 
 **Figure — Days between a key being issued and a return being recorded, from twelve months of paper register pages: 41 percent same day, 8 percent never recorded**  
 *Chart: `histogram` · x: Days from issue to a recorded return*
+
+| Bin | Count |
+| --- | --- |
+| 0–1 | 41 |
+| 2–3 | 22 |
+| 4–7 | 14 |
+| 8–14 | 9 |
+| 15–30 | 6 |
+| never | 8 |
 
 - Ceiling: index 5, label no return ever written
 
@@ -2092,7 +2110,7 @@ I also accepted the charging cradle. The teardowns told me a proprietary connect
 | Status | Shipped internally |
 | Slug | `ai-pm-generative-ai-engine-for-rca-report-automation` |
 
-> **Confidentiality.** Internal reporting. Figures are relative or anonymised; no task, customer or individual's performance data appears on this page.
+> **Confidentiality.** Internal reporting. All figures on this page are invented placeholders for this sample; no task, customer or individual's performance data appears on this page.
 
 ### Summary
 
@@ -2246,7 +2264,7 @@ I also never tested whether the generated causes are right. Coverage went from 2
 | Status | Shipped internally |
 | Slug | `ai-pm-generative-ai-engine-for-resource-allocation` |
 
-> **Confidentiality.** Internal reporting. Figures are relative or anonymised; no individual's name, allocation or performance data appears on this page.
+> **Confidentiality.** Internal reporting. All figures on this page are invented placeholders for this sample; no individual's name, allocation or performance data appears on this page.
 
 ### Summary
 
@@ -2395,12 +2413,12 @@ I would also push harder on the undated tasks rather than routing around them. R
 | --- | --- |
 | Role | Product manager, delivery owner |
 | Team | 3 engineers, 1 data engineer |
-| Timeline | Feb – Sep 2026 |
+| Timeline | Feb 2026 – present |
 | Stage | Live across three engineering teams |
 | Status | Shipped internally |
 | Slug | `ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic` |
 
-> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with invented task data, and figures are relative or anonymised.
+> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.
 
 ### Summary
 
@@ -2549,12 +2567,12 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 | --- | --- |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers |
-| Timeline | May – Sep 2026 |
+| Timeline | May 2026 – present |
 | Stage | Live for one workspace space |
 | Status | Shipped internally |
 | Slug | `github-for-clickup-automation-on-the-changes-going-outside-p` |
 
-> **Confidentiality.** Internal tooling. Figures are relative or anonymised; no task, customer or individual's activity appears on this page.
+> **Confidentiality.** Internal tooling. All figures on this page are invented placeholders for this sample; no task, customer or individual's activity appears on this page.
 
 ### Summary
 
@@ -2673,7 +2691,7 @@ We agreed before build that this failed if answering a change question still too
 
 - Threshold: value 5, label Pre-agreed threshold: 5 minutes
 
-> Median answer time by week, Aug–Sep 2026, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly.
+> Median answer time by week, Aug–Sep 2026 <!-- TODO(pushpal): this seven-week series runs past 2026-08-25; give the real launch week and how many weeks have data, or drop the weeks that have not happened -->, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly.
 
 > **How we counted.** Answer time runs from the request arriving to the answer being sent, including queue time, because that queue is what made the previous process feel like an afternoon. It is timed on every request rather than sampled, since fourteen a month is small enough to measure exhaustively.
 
@@ -2699,12 +2717,12 @@ I would also start the retention conversation earlier. The service holds every r
 | --- | --- |
 | Role | Product manager, delivery owner |
 | Team | 3 engineers |
-| Timeline | Mar – Oct 2026 |
+| Timeline | Mar 2026 – present |
 | Stage | Live, company-wide |
 | Status | Shipped internally |
 | Slug | `ixana-video-library-automated-company-video-library` |
 
-> **Confidentiality.** Internal product — the player screen described in section 06 is a recreation with invented meeting content, and figures are relative or anonymised. No recording, transcript or attendee name appears on this page.
+> **Confidentiality.** Internal product — the player screen described in section 06 is a recreation with invented meeting content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name appears on this page.
 
 ### Summary
 
@@ -2828,9 +2846,9 @@ Before build we agreed this failed if fewer than a quarter of re-opened recordin
 | Entered by transcript jump | 171 · value: 171 |
 | Produced published minutes | 78 · value: 78 |
 
-> The same funnel as section 02, six months after launch, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written.
+> The same funnel as section 02, six months after launch <!-- TODO(pushpal): launch is Mar 2026, so six months of logs do not exist yet at 2026-08-25; give the real observation window -->, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written.
 
-> **How we counted.** Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it.
+> **How we counted.** Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025." -->
 
 `Technical configuration — Microsoft Graph ingestion for recordings and stored video · transcript cues stored per utterance with speaker label · full-transcript context to roughly 100K tokens · 5-minute response cache on library listings · gpt-4o-mini for minutes and question answering`
 
@@ -2859,7 +2877,7 @@ I would also set the cache differently. Five minutes was chosen to protect an AP
 | Status | Shipped internally |
 | Slug | `calendar-automation-real-time-bi-directional-sync-engine-wit` |
 
-> **Confidentiality.** Internal service — figures are relative or anonymised, no calendar content is shown, and the endpoints referenced are internal only.
+> **Confidentiality.** Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.
 
 ### Summary
 
@@ -3016,7 +3034,7 @@ I would also not have built the subscribable feed. It was easy, it is used by tw
 | Status | Shipped internally |
 | Slug | `ai-prd-multi-agent-multi-llm-shared-memory-generative-system` |
 
-> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with an invented brief, and figures are relative or anonymised.
+> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with an invented brief, and all figures on this page are invented placeholders for this sample.
 
 ### Summary
 
@@ -3132,6 +3150,14 @@ We agreed before build that this failed if humans approved fewer than half of pl
 
 **Figure — Distribution of 41 run times to human review, concentrated between four and eight minutes with three runs beyond the ten-minute ceiling**  
 *Chart: `histogram` · x: minutes to human review*
+
+| Bin | Count |
+| --- | --- |
+| 2–4 | 6 |
+| 4–6 | 13 |
+| 6–8 | 12 |
+| 8–10 | 7 |
+| 10+ | 3 |
 
 - Ceiling: index 4, label 10 min ceiling
 
@@ -3276,12 +3302,12 @@ I would also have set the bar with the attorney rather than for him. 90% at rank
 | --- | --- |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers |
-| Timeline | Apr – Oct 2026 |
+| Timeline | Apr 2026 – present |
 | Stage | Live for leads, architects and PMs |
 | Status | Shipped internally |
 | Slug | `ai-pm-customized-multi-view-for-pms` |
 
-> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with invented task data, and figures are relative or anonymised.
+> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.
 
 ### Summary
 
@@ -3402,7 +3428,7 @@ Before build we agreed this failed if any lead was still hand-building a timelin
 - *Architects* — 6, 14, 22, 31, 41
 - *Project managers* — 4, 9, 16, 24, 30
 
-> Weekly sessions by role, Jul–Sep 2026, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points.
+> Weekly sessions by role, Jul–Sep 2026 <!-- TODO(pushpal): this ten-week session series runs past 2026-08-25; give the weeks that actually have log data -->, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points.
 
 > **How we counted.** A weekly user opened a timeline, bandwidth grid or delay analysis in a calendar week. Opening the status board alone does not count — it is the view people land on from a link, and counting it would measure link-following rather than use of the product.
 
@@ -3439,7 +3465,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 ### Summary
 
-- **Problem.** Ixana files 25-plus applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided.
+- **Problem.** Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025." -->
 - **What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
 - **Result.** Fifty-plus filings across six product lines, median disclosure-to-filing down from about fourteen weeks to six, and inventor time per disclosure falling rather than rising. No date we have shown has ever disagreed with counsel’s docket.
 
@@ -3459,9 +3485,9 @@ I sat on both sides of it. Over the tenure I owned 50-plus filings end to end �
 | Commercial IP suite | $48k / yr · value: 48 |
 | Build on our own stack | $12k / yr · value: 12 |
 
-> Options sizing, Jan 2024, costed against the 25-plus applications a year the company files. All four buy docketing, which counsel already does properly and is not the thing that was missing — so the cheapest option won on the same argument that would have won at any price: none of them links a filing to the tapeout that makes it possible.
+> Options sizing, Jan 2024, costed against the ~25 applications a year the company files. All four buy docketing, which counsel already does properly and is not the thing that was missing — so the cheapest option won on the same argument that would have won at any price: none of them links a filing to the tapeout that makes it possible.
 
-Twenty-five-plus applications a year is large for seventy-five people, nearly all of it landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade here — which is why the guardrail is inventor time.
+About twenty-five applications a year is large for seventy-five people, nearly all of it landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade here — which is why the guardrail is inventor time.
 
 ### 02 — The problem as people experienced it
 
@@ -3508,7 +3534,7 @@ I was the interface. The founder/CTO wanted to know what was protected before a 
 | H1 '25 | 1 | 4 | 3 | 2 | 1 | 1 |
 | H2 '25 | 1 | 2 | 2 | 4 | 2 | 1 |
 | H1 '26 | 0 | 1 | 0 | 3 | 2 | 1 |
-| H2 '26 | 0 | 0 | 0 | 1 | 1 | 1 |
+| H2 '26 (to date) | 0 | 0 | 0 | 1 | 1 | 1 |
 
 > Filings I owned, by product line and half-year, Feb 2024 – Aug 2026 (n=52). Markers are each line’s first public disclosure, taken from the product pages themselves. Filings cluster in the half before a line goes public — clearest on the two NFE parts, where the run-up is unmistakable. YR23 is the exception for a mundane reason: it shipped three months into this window, so most of its protection was already filed before the chart starts. That is the calendar working as the strategy, and I could only run it that way because I was in both rooms.
 
@@ -3784,7 +3810,7 @@ Before build we agreed the service failed if the master ever disagreed with its 
 | Workbook B | from: 84 · to: 71 |
 | Workbook C | from: 68 · to: 57 |
 
-> Reported count before the rule change against the deduplicated count after, per source workbook, Nov 2025. The portfolio did not shrink by 41 filings — it was never that large. Publishing that correction was the least comfortable and most necessary part of the project.
+> Reported count before the rule change against the deduplicated count after, per source workbook, Nov 2025. The portfolio did not shrink by 41 filings — it was never that large. Publishing that correction was the least comfortable and most necessary part of the project. <!-- TODO(pushpal): 0.9 — one sentence bridging this 207-patent deduplicated portfolio (79+71+57) to Patent Ops' 52 filings and 54 active matters. -->
 
 > **How we counted.** One patent means one family group, taking the status of its most recent row. A continuation, a divisional and a re-titled refiling are one patent for dashboard purposes and separate rows in the source. Counsel bills against rows and the board asks about patents, so both numbers must exist and must be labelled differently.
 
@@ -3815,7 +3841,7 @@ I would also have polled less often. Sixty seconds felt responsive and nothing h
 | Status | Shipped internally |
 | Slug | `clickup-document-tracker-data-extraction-easy-visibility-for` |
 
-> **Confidentiality.** Internal tooling. Figures are relative or anonymised; no document title, content or author appears on this page.
+> **Confidentiality.** Internal tooling. All figures on this page are invented placeholders for this sample; no document title, content or author appears on this page.
 
 ### Summary
 
@@ -4260,6 +4286,11 @@ We agreed before build that this failed if it could not reproduce the twenty mos
 
 **Figure — Fault-signature coverage: 55 of the 56 catalogued field fault modes reproduce on the bench, one does not**  
 *Chart: `waffle`*
+
+| Item | Value |
+| --- | --- |
+| Reproduced within tolerance (55) | 55 of 56 |
+| Not reproducible open-loop (1) | 1 |
 
 - Total: 56
 
@@ -4798,13 +4829,18 @@ We agreed before build that this failed if a non-contact channel disagreed with 
 **Figure — Which parameters a non-contact channel could obtain, by condition: temperature and respiration usable when still, oxygen saturation and blood pressure unreachable in every condition**  
 *Chart: `statusGrid`*
 
-| Item | Value |
-| --- | --- |
-| Skin temperature |  |
-| Respiration rate |  |
-| Pulse rate |  |
-| Oxygen saturation |  |
-| Blood pressure |  |
+|  | Still, 1.2 m | Small movement | Repositioning | Beyond 2 m |
+| --- | --- | --- | --- | --- |
+| Skin temperature | pass | pass | marginal | marginal |
+| Respiration rate | pass | marginal | fail | fail |
+| Pulse rate | marginal | fail | fail | fail |
+| Oxygen saturation | none | none | none | none |
+| Blood pressure | none | none | none | none |
+
+- *pass* — within the agreed margin
+- *marginal* — outside the margin, still tracking
+- *fail* — no usable agreement
+- *none* — no non-contact path we could build
 
 > Bench sessions with healthy volunteers, Q4 2021 to Q1 2022. The two dashed rows are the result. They are not a measurement that came out badly — there was nothing to measure, because neither oxygen saturation nor blood pressure has a route to it that does not involve touching the person.
 
@@ -4965,6 +5001,14 @@ We agreed before build that this failed if the false-positive rate was high enou
 
 **Figure — Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two**  
 *Chart: `confusion`*
+
+| Ground truth ↓ / Model said → | 1 rider | 2 riders | 3 or more |
+| --- | --- | --- | --- |
+| 1 rider | 624 | 12 | 3 |
+| 2 riders | 20 | 956 | 64 |
+| 3 or more | 1 | 14 | 146 |
+
+- Diagonal: correct
 
 > Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy.
 
