@@ -10,6 +10,8 @@ interface CarouselImage {
 	width: number;
 	height: number;
 	title?: string;
+	/** Alt text, kept separate from the caption printed under the image. */
+	alt?: string;
 }
 
 interface WorkCarouselProps {
@@ -56,7 +58,7 @@ export default function WorkCarousel({
 								<div className='work-carousel-slide-content'>
 									<Image
 										src={img.src}
-										alt={img.title || `Slide ${idx + 1}`}
+										alt={img.alt || img.title || `Slide ${idx + 1}`}
 										width={img.width}
 										height={img.height}
 										className='work-carousel-img'

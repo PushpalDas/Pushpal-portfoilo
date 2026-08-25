@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import WorkCarousel from './work-carousel';
 import './work-right-sections.css';
 import { WorkContainer } from './work-container';
@@ -15,7 +16,18 @@ interface WorkContentProps {
 }
 
 export default function WorkContent({ work, progress = 0 }: WorkContentProps) {
-	const { title, description, image, carousel, features, interested } = work;
+	const {
+		title,
+		description,
+		image,
+		carousel,
+		features,
+		interested,
+		panelLabel,
+		links,
+		caseStudy,
+		strip,
+	} = work;
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	const activeSlide = carousel ? carousel[currentIndex] : null;
@@ -23,6 +35,12 @@ export default function WorkContent({ work, progress = 0 }: WorkContentProps) {
 		activeSlide && activeSlide.features ? activeSlide.features : features;
 	const displayInterested =
 		activeSlide && activeSlide.interested ? activeSlide.interested : interested;
+	// The patent slide labels its second panel "Proof" and fills it with the
+	// public record instead of a customer list.
+	const displayPanelLabel =
+		activeSlide?.panelLabel ?? panelLabel ?? "Who's interested?";
+	const displayLinks = activeSlide?.links ?? links;
+	const displayCaseStudy = activeSlide?.caseStudy ?? caseStudy;
 
 	const hasRightSections = carousel || displayFeatures || displayInterested;
 
@@ -80,13 +98,14 @@ export default function WorkContent({ work, progress = 0 }: WorkContentProps) {
 									</div>
 								</div>
 							)}
-							{displayInterested && displayInterested.length > 0 && (
+							{Boolean(displayInterested?.length || displayLinks?.length) && (
 								<div className='work-right-section'>
 									<h3 className='work-right-section-title'>
-										Who&apos;s interested?
+										{displayPanelLabel}
 									</h3>
 									<div className='work-right-interested'>
-										{displayInterested.length > 1 ? (
+										{!displayInterested?.length ? null : displayInterested.length >
+											1 ? (
 											<>
 												{/* Left Column: Research Partners (0) and Industry Partners (2) */}
 												<div className='work-right-interested-col'>
@@ -156,9 +175,49 @@ export default function WorkContent({ work, progress = 0 }: WorkContentProps) {
 											</div>
 										)}
 									</div>
+									{displayLinks && displayLinks.length > 0 && (
+										<ul className='work-right-links'>
+											{displayLinks.map((link) => (
+												<li key={link.href}>
+													<a
+														href={link.href}
+														target='_blank'
+														rel='noopener noreferrer'
+														className='work-right-link'
+													>
+														{link.label}
+													</a>
+												</li>
+											))}
+										</ul>
+									)}
 								</div>
 							)}
 						</div>
+
+						{(displayCaseStudy || strip) && (
+							<div className='work-right-footer'>
+								{displayCaseStudy && (
+									<Link
+										href={displayCaseStudy.href}
+										className='work-right-case-link'
+									>
+										{displayCaseStudy.label}
+									</Link>
+								)}
+								{strip && (
+									<p className='work-right-strip'>
+										{strip.items.join(' · ')}{' '}
+										<Link
+											href={strip.link.href}
+											className='work-right-case-link'
+										>
+											{strip.link.label}
+										</Link>
+									</p>
+								)}
+							</div>
+						)}
 					</div>
 				) : (
 					<div className='drop-shadow-2xl sm:mt-10 md:mt-24'>
