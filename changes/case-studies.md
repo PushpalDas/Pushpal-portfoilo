@@ -33,7 +33,7 @@ Generated from `data/case-studies-v2.json` · 35 case studies · 2026-08-25
 25. [Document change intelligence](#25-document-change-intelligence) — Ixana · 2026 · Documentation ops
 26. [Condenser microphone](#26-condenser-microphone) — EEGRAB · 2024 · Audio hardware
 27. [Sensor signal generator](#27-sensor-signal-generator) — SLB · 2023 · Test engineering
-28. [Ornithopter for surveillance](#28-ornithopter-for-surveillance) — SRM UAV · 2021–2023 · Aerial robotics
+28. [Ornithopter for surveillance](#28-ornithopter-for-surveillance) — SRM UAV · 2021–2022 · Aerial robotics
 29. [Carbon positive e-car](#29-carbon-positive-e-car) — Ricky Kids · 2020 · Sustainable mobility
 30. [UAV-aided weather radar calibration](#30-uav-aided-weather-radar-calibration) — NIT Tiruchirappalli & SRM University · 2022 · Weather instrumentation
 31. [Non-contact COVID patient monitoring](#31-non-contact-covid-patient-monitoring) — Ricky Kids · 2021 · Health sensing
@@ -115,7 +115,7 @@ I collected every change request, field issue and evaluation complaint against Y
 
 - Threshold: value 5, label cut line
 
-> The 63 requests grouped and ranked, May 2024. Value is evaluations the change would unblock; n is the validation weeks it would cost. Three items sit above the cut line, and the long tail is the danger — individually cheap, collectively a second first-generation programme.
+> The 63 requests grouped and ranked, May 2024. Value is evaluations the change would unblock; n is the validation weeks it would cost. Three items sit above the cut line, and the long tail is the danger — individually cheap, collectively a second first-generation programme. <!-- TODO(pushpal): 0.11 — these six categories sum to 67 (17+9+6+4+3+28) against 63 requests, and each category's "evaluations unblocked" equals its request count. Give the true split summing to 63 and the true unblock counts, or confirm the coincidence so it can be footnoted. -->
 
 The reframe: the loudest request was not the most valuable. Rate had executive attention because it appeared in competitive comparisons; on-die trim was raised nearly twice as often by the people actually building boards, and cost a third as much.
 
@@ -148,7 +148,7 @@ The test lead objected to cutting the ATE program, and his was the strongest obj
 
 I had opened by asking for a test-time target, which invited exactly the argument we were having. So I withdrew it and asked which tests had actually failed a unit across every YR23 lot we had run. Roughly a third had never fired once. That moved the conversation from how much test we could afford to which tests had earned their seconds — a question he was better placed to answer than I was.
 
-He agreed to cut the tests that had never fired, on a condition I had not planned to carry. Every removed test is re-run as a periodic audit on a sample of lots, so if one starts failing we hear it from our own sampling rather than a customer. That process is permanent, and it is why I can quote a test-escape figure.
+He agreed to cut the tests that had never fired, on a condition I had not planned to carry. Every removed test is re-run as a periodic audit on a sample of lots, so if one starts failing we hear it from our own sampling rather than a customer. That process is permanent.
 
 ### 06 — What was built
 
@@ -170,7 +170,7 @@ The higher-rate part on the BAN line: 20 Mbit/s at sub-0.2 ms across the same up
 | Tension | What I chose | What it cost |
 | --- | --- | --- |
 | Rate vs energy per bit | 20 Mbit/s at 0.20 nJ/bit | Gen-1 remains the better part for anything not rate-bound, permanently |
-| Scope vs schedule | Three ranked changes; 60 requests declined in public | A standing queue of reasonable asks with no home until the next spin |
+| Scope vs schedule | Three ranked changes; 31 requests declined in public | A standing queue of reasonable asks with no home until the next spin |
 | Test coverage vs per-unit cost | Cut only tests that had never failed a unit | A lot-sampling audit process that must run forever to stay honest |
 | Clean succession vs customer disruption | Keep YR23 in production alongside | Two parts, two inventories, two datasheets, one small team |
 
@@ -200,7 +200,7 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 
 > Gen-1 to gen-2 change by measure, Nov 2025, from production lot data and bring-up records. Link rate is excluded: at +300% it would compress everything else to nothing, and it is in the tiles above. The single red bar is the point of the page — one measure was spent, deliberately, and a page that hid it would be describing a different chip.
 
-> **How we counted.** Yield is wafer-level probe yield at production release, excluding lots scrapped for assembly or handling defects, which are a packaging problem and would flatter the die. Test escapes count units that passed the reduced ATE program and later failed at a customer or in the lot-sampling audit — the audit is included deliberately, since finding our own escapes is the only reason cutting the program was defensible.
+> **How we counted.** Yield is wafer-level probe yield at production release, excluding lots scrapped for assembly or handling defects, which are a packaging problem and would flatter the die. <!-- TODO(pushpal): name what the failing 6% of the interop guardrail is — which hosts or which link attempts fail, and whether they are documented. -->
 
 `Part configuration — YR31 Wi-R BAN transceiver · up to 20 Mbit/s · 0.20 nJ/bit at 20 Mbit/s, under 6 mW · sub-0.2 ms link latency · up to 16 devices per network · 10–15 m along-body, ~0.1 m off-body containment · on-die per-unit trim storage · package, pin-out and reference driver shared with YR23`
 
@@ -235,9 +235,9 @@ I would also have published the declined list earlier. Ranking in public is what
 
 ### Summary
 
-- **Problem.** Wi-R worked in our lab and almost nowhere else. Every partner evaluation began with their engineer reproducing a body-coupled link from a datasheet, and the first six took a median of 26 days — most of it spent on electrode placement and grounding rather than on evaluating the technology.
+- **Problem.** Wi-R worked in our lab and almost nowhere else. Every partner evaluation began with their engineer reproducing a body-coupled link from a datasheet, and the first six took a median of 28.5 days — most of it spent on electrode placement and grounding rather than on evaluating the technology.
 - **What I did.** I owned the dev kit program across both Wi-R families, defining the kit as the smallest object that produces a working link on day one, sequencing BAN before NFE, and trading configurability away for a fixed electrode geometry a partner could not get wrong.
-- **Result.** 62 kits shipped over six quarters against a pre-agreed floor of 40. Median time to first link fell from 26 days to about 6 hours, support tickets per kit from 4.1 to 1.3, and 9 of 34 evaluations converted into design-ins.
+- **Result.** 62 kits shipped over six quarters against a pre-agreed floor of 40. Median time to first link fell from 28.5 days to about 6 hours, support tickets per kit from 4.1 to 1.3, and 9 of 34 evaluations converted into design-ins.
 
 ### 01 — Why this, and why now
 
@@ -254,7 +254,7 @@ I sized the three against the constraint that actually bound us: applications en
 | Reference design | 4 per quarter · value: 4 |
 | Onsite bring-up | 2 per quarter · value: 2 |
 
-> Opportunity sizing, Feb 2024. Estimated from the six evaluations we had run to that point, holding applications engineering headcount fixed at three. The dev kit was the only option that scaled evaluation without scaling the team, which is what decided the year.
+> Opportunity sizing, Feb 2024. Estimated from the six evaluations we had run to that point, holding applications engineering headcount fixed at three. The dev kit was the only option that scaled evaluation without scaling the team, which is what decided the year. <!-- TODO(pushpal): 0.13 — this sizing holds applications engineering at three, but the team roster on this page lists one applications engineer. State the real structure (kit team vs company applications team) in one clause. -->
 
 The reference design lost on timing rather than merit — it answers "how do I productise this", and nobody reaches that question before believing the link works.
 
@@ -265,7 +265,7 @@ I timed the first six partner evaluations end to end, from silicon delivery to f
 | What they did | Where it broke | Evidence |
 | --- | --- | --- |
 | Wired the transceiver to their own MCU | Clock and supply noise coupled into the electrode path | 5 of 6 evaluations; 11 tickets |
-| Improvised electrodes from copper tape | Contact area and spacing off by enough to kill the link | 6 of 6; the single largest time sink |
+| Improvised electrodes from copper tape | Contact area and spacing off by enough to kill the link | 6 of 6; the single largest time sink <!-- TODO(pushpal): this row has no ticket count while the other three do. If the four clusters partition the 41 audited tickets it is 15 (41 − 11 − 9 − 6); otherwise give the count, or mark the cluster un-ticketed. --> |
 | Grounded the board to bench earth | Return path through the bench, not the body | 4 of 6; 9 tickets, all filed as "no link" |
 | Measured with a scope probe on the electrode | Probe capacitance loaded the node and hid the signal | 3 of 6; 6 tickets |
 
@@ -355,7 +355,7 @@ Before tooling was committed we agreed the program failed on two conditions: few
 | Metric | Value |
 | --- | --- |
 | Kits shipped over six quarters | 62 (of 40 target) |
-| Median time to first on-body link | 26d → 6h |
+| Median time to first on-body link | 28.5d → 6h |
 | Evaluations that became design-ins | 9 (of 34) |
 | Support tickets per kit, first 90 days | 1.3 (from 4.1) |
 | Kits passing the out-of-box link test at final QA | 96% |
@@ -368,7 +368,7 @@ Before tooling was committed we agreed the program failed on two conditions: few
 
 - Threshold: value 40, label Pre-agreed floor: 40 kits
 
-> Cumulative kits shipped, Q3 2024 – Q4 2025, from order records. The steps are real: kits leave in batches tied to module builds, not continuously. The floor was crossed in Q2 2025, one quarter later than planned, because the NFE kit slipped behind BAN.
+> Cumulative kits shipped, Q3 2024 – Q4 2025, from order records. The steps are real: kits leave in batches tied to module builds, not continuously. The floor was crossed in Q3 2025, one quarter later than planned, because the NFE kit slipped behind BAN.
 
 > **How we counted.** Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen. The 34 evaluations are kit-mediated only, a narrower population than the NFE-line design-in figures, which include direct silicon engagements.
 
@@ -488,7 +488,7 @@ The CTO wanted per-document permissions in v1. His concern was legitimate — th
 
 Arguing about risk tolerance wasn't going to resolve it, so I changed what we were arguing about. I pulled the SharePoint group data and showed that inherited permissions already covered every sensitive folder but two. That reframed the question from "how much risk will we accept" to "is a month of engineering the right price for two folders" — a question with an obvious answer.
 
-He agreed on two conditions I hadn't planned to offer: the two folders stay out of ingestion entirely rather than being permission-filtered, and we revisit if the exclusion list ever exceeds five folders. Both went into the PRD as written commitments. The second condition turned out to matter — we hit four exclusions by August, and per-document permissions moved back onto the roadmap on his terms rather than as a fight.
+He agreed on two conditions I hadn't planned to offer: the two folders stay out of ingestion entirely rather than being permission-filtered, and we revisit if the exclusion list ever exceeds five folders. Both went into the PRD as written commitments. The second condition turned out to matter — we hit four of the five, and per-document permissions moved back onto the roadmap pre-emptively, on his terms rather than as a fight.
 
 ### 06 — What was built
 
@@ -595,7 +595,7 @@ We collected 100 real questions from community forums rather than writing our ow
 
 | What people did | Where it broke | Evidence |
 | --- | --- | --- |
-| Asked a general model | Fluent paraphrase attributed to him | Reproduced in 34 of 40 spot checks |
+| Asked a general model | Fluent paraphrase attributed to him | Reproduced in 34 of 40 spot checks <!-- TODO(pushpal): say whether these 40 spot checks are the same 40 deliberately out-of-scope questions used in §01, or a separate set. --> |
 | Searched the books by keyword | Missed anything phrased differently | Weakest on grief, guru and death questions |
 | Asked a knowledgeable person | Not always available, answer unrecorded | The default for most in the community |
 | Gave up on the question | No visibility into what was never asked | Unmeasurable, and probably the largest case |
@@ -692,7 +692,7 @@ I would also have set the evaluation at 100 questions from the start. The 20-que
 
 - **Problem.** Wi-R was a published result and a compelling demo, and no OEM puts a demo on a bill of materials. Turning it into a part meant committing to numbers across a whole data-rate ladder, on a date, against a specification an engineer could draw a schematic from before the silicon existed.
 - **What I did.** I ran delivery of first silicon across five functions and two sites. The founder owned the product bets; I owned the system that turned them into a shippable part on a date — the scope of first silicon, what shipped as errata against what forced a respin, and the launch gates.
-- **Result.** YR23 reached production without a respin, holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network. 41 escapes were found after tapeout, three blocking; all three closed in firmware. Four OEM programs designed the part in before the dev kit existed.
+- **Result.** YR23 reached production without a respin, holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network. 41 escapes were found after tapeout, three initially classed blocking; all three ultimately closed in firmware. Four OEM programs designed the part in before the dev kit existed.
 
 ### 01 — Why this, and why now
 
@@ -752,7 +752,7 @@ That system is where delivery reality fed back into product decisions. Validatio
 - **Scope first silicon to what an OEM can commit to, not what demos best.** Scope arguments were settled by asking what an engineer needs before drawing our part into a schematic.
 - **One data-rate ladder fully characterised, not two modes half-characterised.** A second mode would have doubled the validation matrix against fixed capacity, and produced two sets of figures with caveats on both.
 - **Validation capacity set the tapeout date.** Design was never the binding constraint; the bench hours to prove the part were. Scheduling backwards from validation is why the date held.
-- **Run the program on instrumented data, not status meetings.** Stage timing and delay causes came from the delivery tooling built for it — Flow Tracker, bandwidth reporting. Across nine time zones a shared record beats a meeting half the room attends asleep.
+- **Run the program on instrumented data, not status meetings.** Stage timing and delay causes came from the delivery tooling built for it — instrumented stage and capacity data. Across nine time zones a shared record beats a meeting half the room attends asleep.
 
 ### 04 — What I cut
 
@@ -811,7 +811,7 @@ Before tapeout we agreed first silicon failed on one condition: if it could not 
 | Median board build to first stable on-body link | 11 days |
 | Escapes found after tapeout | 41 (3 blocking) |
 | OEM programs designed in before the dev kit existed | 4 |
-| Interop pass rate across host platforms (guardrail) | 94% (of 7 hosts) |
+| Interop pass rate across host platforms (guardrail) | 94% (of link attempts across 7 host platforms) |
 
 **Figure — The 41 post-tapeout escapes by category: analogue front-end trim 15, link state machine 11, host interface timing 7, power sequencing 5, clock lock 2, other 1 — three categories carry 80 percent**  
 *Chart: `pareto` · unit escapes*
@@ -829,7 +829,7 @@ Before tapeout we agreed first silicon failed on one condition: if it could not 
 
 > Escapes by category, Sep 2023 – Feb 2024, from the bring-up defect log. Three categories carry 80%, and all three are addressable in firmware or documentation rather than in the die — which is the whole reason a respin was avoidable rather than merely avoided.
 
-> **How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts.
+> **How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround at the time of triage. <!-- TODO(pushpal): confirm the three were classed blocking at triage and closed in firmware later; if they were never firmware-closable, the summary is what needs changing. --> Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts.
 
 `Part configuration — YR23 Wi-R BAN transceiver · 100 kbit/s – 5 Mbit/s · 0.12 nJ/bit at 5 Mbit/s · up to 16 devices per network · sub-1 ms link latency · 10–15 m along-body, ~0.1 m off-body containment · physical-layer security by E-field confinement · host interface with reference driver`
 
@@ -880,7 +880,7 @@ The obvious contribution here is a better analysis method. We chose the less int
 | Ambiguous metric name | 11 / 22 · value: 11 |
 | Published their code | 4 / 22 · value: 4 |
 
-> Literature audit, 22 spike-train analyses published 2019–2023, coded for reproducibility and definitional clarity. The bottom bar decided the project: with four of 22 publishing code, a standard depending on people sharing implementations was never going to work — it had to travel inside the data format.
+> Literature audit, 22 spike-train analyses published 2019–2023, coded for reproducibility and definitional clarity. The bottom bar decided the project: with four of 22 publishing code, a standard depending on people sharing implementations was never going to work — it had to travel inside the data format. <!-- TODO(pushpal): 0.15 — 19 "used a private script" plus 4 "published their code" is 23 of 22. Give the exclusive counts. -->
 
 ### 02 — The problem as people experienced it
 
@@ -889,7 +889,7 @@ Rather than survey researchers about reproducibility, which produces agreement a
 | What the analysis did | Where it broke | Evidence |
 | --- | --- | --- |
 | Reported a burst index | Four incompatible definitions in use | 11 of 22 did not state which |
-| Reported synchrony | Three definitions, different normalisations | 7 of 22 ambiguous |
+| Reported synchrony | Three definitions, different normalisations | 7 of 22 ambiguous <!-- TODO(pushpal): 0.15 — say whether these 7 ambiguous-on-synchrony analyses are a subset of §01's 11 with an ambiguous metric name. --> |
 | Described the pipeline in prose | Preprocessing choices omitted | 14 of 22 not reproducible |
 | Released data without features | Next lab recomputes from scratch | 19 of 22 used a private script |
 
@@ -993,7 +993,7 @@ I would also have started the definitional conversation with more than two group
 
 - **Problem.** XA-NFE2001 opened the near-field line and then kept losing the same argument. Fourteen evaluations reached a requirement sheet and stopped, and reading those sheets against our characterisation data showed why: partners were sizing real payloads, and at gen-1 throughput a 100 MB firmware image took nearly four minutes.
 - **What I did.** I ran the review that turned those requirement sheets into the gen-2 specification. This spin was pulled by a pipeline we could name rather than pushed by a roadmap, so the requirements were somebody else's document and my job was to hold scope to what those documents actually said.
-- **Result.** Real throughput went from about 3.4 to 13.5 Mbit/s, which puts a 100 MB payload inside a one-minute service window. Nine of the fourteen stalled evaluations converted, all six missed requirement lines are met, and no gen-1 socket was lost to the upgrade.
+- **Result.** Real throughput went from about 3.4 to 13.5 Mbit/s, which puts a 100 MB payload inside a one-minute service window. Nine of the fourteen stalled evaluations converted, all six requirement lines are now met, including the three gen-1 missed, and no gen-1 socket was lost to the upgrade.
 
 ### 01 — Why this, and why now
 
@@ -1109,7 +1109,7 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 | Real throughput, gen-1 to gen-2 | 3.4 → 13.5 (Mbit/s goodput) |
 | Largest payload inside the one-minute window | 100 MB (in 59 s) |
 | Stalled evaluations converted to a socket | 9 of 14 |
-| Missed requirement lines now met | 6 of 6 |
+| Requirement lines now met | 6 of 6 |
 | Operating range, tightened to buy throughput | 1–15 cm (from 5–25 cm) |
 | Gen-1 sockets lost or forced to requalify (guardrail) | 0 |
 
@@ -1203,7 +1203,7 @@ I did not run a study for this one. I coded eighteen months of inbound evaluatio
 | Required no radio emissions | 14 / 96 · value: 14 |
 | Genuinely body-worn | 42 / 96 · value: 42 |
 
-> Inbound evaluation requests, Jul 2022 – Dec 2023, coded by intended use rather than by the part requested. More than half the people asking for our body-area part did not have a body-area problem — and the top bar is not a marketing miss, it is a product line that did not exist yet.
+> Inbound evaluation requests, Jul 2022 – Dec 2023, coded by intended use rather than by the part requested. More than half the people asking for our body-area part did not have a body-area problem — and the top bar is not a marketing miss, it is a product line that did not exist yet. The 22, 19 and 14 are attributes of the same requests and overlap within the 54; they are not a partition of it.
 
 The reframe: we had been reading this as poor qualification by the sales team. It was demand for a different part, arriving in the only vocabulary available to people who had seen one page of our website.
 
@@ -1236,7 +1236,7 @@ The COO would not commit a build plan for a second line on gen-1 demand signal. 
 
 I had been arguing that the demand was real, which is unfalsifiable and therefore useless. So I offered to make it falsifiable. We converted the 96 coded requests into a sample-request commitment: before any long-lead spend, we would ask that population to formally request samples against a spec sheet with a price on it. Interest that survives a form and a price is a different signal.
 
-104 requests came back. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter.
+104 requests came back. <!-- TODO(pushpal): 0.14 — 104 responses from a coded population of 96 needs its mechanics stated in one clause: did the form travel beyond the coded population, or did some companies send more than one respondent? --> He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter.
 
 ### 06 — What was built
 
@@ -1403,6 +1403,8 @@ We agreed before building that the interaction failed if state-vector computatio
 The second thing learned is what the prototype cannot tell us. It was built to test a claim about intuition, and because it never reached a learner that claim is exactly as unproven as it was in December. Everything above is a statement about the software, not about whether watching a Bloch sphere move teaches anyone anything.
 
 `Prototype configuration — FastAPI and NumPy state vector engine · 10-qubit cap · Next.js front end with React Three Fiber Bloch rendering · prebuilt Bell and GHZ circuit library · 32 backend tests, 1.34 second suite`
+
+By the letter of that bar, ten qubits fails it: the honest cap was nine, and we kept ten because the overshoot was imperceptible in use — a revision of the budget we made silently and should have made out loud.
 
 ### 06 — What I'd do differently
 
@@ -1743,9 +1745,9 @@ We agreed before build that this failed if any key could leave a cabinet without
 | Commercial estates (620 keys) | 81.1 | 13 | 5.4 | 0.5 |
 | Utility substations (200 keys) | 69.2 | 22 | 7.7 | 1.1 |
 
-> All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it.
+> All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it. The last band merges emergency overrides with unattributed removals, which the tiles above and "How we counted" report separately. <!-- TODO(pushpal): give the split values per site class so the band can be separated, or say that the merge is deliberate here. -->
 
-> **How we counted.** Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing.
+> **How we counted.** Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing. <!-- TODO(pushpal): 0.1 — 22 cabinets at 30 slots each is 660 key positions, against "3,400+ keys under management" and the marimekko's 3,420 (1,450+1,150+620+200). Give the true cabinet count, slot configuration and keys figure; the metric tiles, the marimekko column widths and its caption all follow from it and are unswept until then. --> <!-- TODO(pushpal): add one sentence saying mechanically what an unattributed removal is — what physically happens at the slot for an event to end up in the 0.3%. -->
 
 `Cabinet configuration — 30 key slots per cabinet, each with an electromagnetic lock, individual FET drive, feedback line and status LED · sixteen lock channels per slot board, two boards to a 30-key cabinet · slot readers on a shared RS-485 pair with a per-reader enable line · four quad optocouplers isolating the 12 V lock rail from 5 V logic · slot controller board designed in EasyEDA, 1.6 mm two-layer, ENIG finish, LCSC parts and JLCPCB fabrication · controller module on Arduino Mega-form headers · 7-inch Android operator terminal · RFID smart key tags carrying a unique-ID microchip on a semi-circular slot contact · employee RFID card plus PIN at the reader area · one-time anti-smash seal binding tag to key · two mechanical override keys per cabinet, door and lining door, commissioning and emergency only · optional backup battery · optional on-premises Ubuntu server, 4 core / 8 GB / 500 GB, with directory synchronisation, SSO and SMTP · wall or desk mount in 1.5 × 1.5 ft`
 
@@ -1812,7 +1814,7 @@ I took every evaluation that had gone quiet for more than sixty days — 27 of t
 | Link working on a kit or eval board | Nothing — this stage almost never failed | 24 of 27 got this far |
 | Designing their own board | Electrode layout with no antenna to copy | 13 of 27 died here |
 | First board built | Worked on the bench, not on a person | 6 of 27 |
-| Mechanical integration | No guidance on electrode placement in a real enclosure | 5 of 27 |
+| Mechanical integration | No guidance on electrode placement in a real enclosure | 5 of 27 <!-- TODO(pushpal): 0.2 — the table and the funnel cannot both be right. The table's deaths (3 before the link + 13 designing + 6 first board + 5 mechanical) account for all 27, leaving nobody at "working on a person", while the funnel ends with 2. Give the true stage counts and each stage's definition. --> |
 
 **Figure — Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 started their own board, 5 built one, 2 got it working on a person**  
 *Chart: `funnel`*
@@ -1825,7 +1827,7 @@ I took every evaluation that had gone quiet for more than sixty days — 27 of t
 | Own board built | 5 · value: 5 |
 | Working on a person | 2 · value: 2 |
 
-> Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have.
+> Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have. <!-- TODO(pushpal): 0.2 — the table and the funnel cannot both be right. The table's deaths (3 before the link + 13 designing + 6 first board + 5 mechanical) account for all 27, leaving nobody at "working on a person", while the funnel ends with 2. Give the true stage counts and each stage's definition. -->
 
 The reframe: we had been treating this as a sales conversion problem and staffing it with more contact. It was an engineering capability problem in the partner’s building, and no amount of attention transfers a skill — only a design they can copy does.
 
@@ -2218,7 +2220,7 @@ We agreed before build that this failed if a leadership report ever went out con
 | --- | --- |
 | Time to produce the monthly report | 2 days → 12m |
 | Delayed tasks with a stated root cause | 21% → 84% |
-| Published causes signed by a named owner (gate) | 100% |
+| Published causes carrying a signature | 100% (unconfirmed items publish as 'cause not confirmed') |
 | Versions of the report in circulation (guardrail) | 3 → 1 |
 | Dashboard sheets refreshed per run | 6 |
 | Counts or percentages computed by a model | 0 |
@@ -2397,7 +2399,7 @@ We agreed before build that this failed if the report still needed a manual edit
 
 I automated a report and never asked whether a monthly cadence was right. It is monthly because the manual version was, and that was because nine hours is too expensive to spend weekly. Once the cost fell to minutes the constraint disappeared and I did not revisit it.
 
-I would also push harder on the undated tasks rather than routing around them. Reporting them separately turned an unknown into a known unknown, which is where it has stayed for a year — thirty tasks a cycle still sit outside every capacity figure the company plans with. Making the number visible was meant to be the first step towards making it smaller, and I never took the second.
+I would also push harder on the undated tasks rather than routing around them. Reporting them separately turned an unknown into a known unknown, which is where it has stayed for a year — 34 tasks a cycle still sit outside every capacity figure the company plans with. Making the number visible was meant to be the first step towards making it smaller, and I never took the second.
 
 > **Note.** This is internal reporting. The report described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No individual's name, allocation or performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
@@ -2541,9 +2543,9 @@ Before build we agreed this failed if fewer than half of the 31 leads were runni
 | AMS | before: 38 · after: 10 |
 | RTL | before: 41 · after: 16 |
 
-> Review preparation time by team. Before figures are the timed observations from Jan–Feb 2026; after figures are self-reported over four weeks in month three. RTL improved least, which is the visible cost of cutting automatic stage inference for that team — the manual stage field is exactly those extra minutes.
+> Review preparation time by team. Before figures are the timed observations from Jan–Feb 2026; after figures are self-reported over four weeks in month three. RTL improved least, which is the visible cost of cutting automatic stage inference for that team — the manual stage field is exactly those extra minutes. The 12-minute figure in the tiles is the median across all leads; it is not the median of these three team medians, which is 11.
 
-> **How we counted.** A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create.
+> **How we counted.** A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create. <!-- TODO(pushpal): 0.3 — define the three populations on this page once and make every denominator use the right one: the three leads running the flagship Monday reviews, the 31 leads in the adoption denominator, and the 11 people in the calendar sample. --> <!-- TODO(pushpal): 0.3 — one sentence closing the gap between a 4.2% correction rate and 71% classification accuracy: where the other ~25% of misclassifications go if leads never correct them. -->
 
 `Technical configuration — 3 pipeline definitions · task-tool v2 API and SharePoint bandwidth ingest · PostgreSQL store · FastAPI endpoints · gpt-4o-mini for stage classification and assistant filter selection`
 
@@ -2728,7 +2730,7 @@ I would also start the retention conversation earlier. The service holds every r
 
 - **Problem.** Recordings accumulated in two places and were effectively write-only. Of 212 recordings in one month, log analysis showed 38 were ever opened again, and whoever did scrubbed for nearly six minutes before finding the passage they wanted — or gave up and asked the organiser.
 - **What I did.** I owned an experience that indexes both sources, stores timestamped transcript cues, and makes the transcript the primary way to navigate a recording, with grounded question answering and generated minutes in the same workspace.
-- **Result.** Median time to the relevant moment fell from 5m 50s to about 90 seconds, 64% of opened recordings are now entered by transcript jump, and published minutes rose from 8% to 31% of recorded meetings.
+- **Result.** Median time to the relevant moment fell from 5m 50s to about 90 seconds, 70% of opened recordings are now entered by transcript jump, and published minutes reached 11% of recorded meetings.
 
 ### 01 — Why this, and why now
 
@@ -2830,9 +2832,9 @@ Before build we agreed this failed if fewer than a quarter of re-opened recordin
 | Metric | Value |
 | --- | --- |
 | Median time to reach the relevant moment | 5m50s → 90s |
-| Re-opened recordings entered by transcript jump | 64% |
+| Re-opened recordings entered by transcript jump | 70% |
 | Recordings indexed, month 1 to month 6 | 212 → 690 |
-| Recorded meetings with published minutes | 8% → 31% |
+| Recorded meetings with published minutes <!-- TODO(pushpal): 0.4 — this read "8% → 31%"; 31% matched nothing and 11% is 78 of 690 from the funnel. The before-side 8% maps to nothing in 212/38/14/6 either (6 of 212 is 2.8%), so give the true before figure if this should read as a before→after. --> | 11% |
 | Employees using it weekly by month 3 | 47 (of 140) |
 | Recordings served outside attendee list (guardrail) | 0 |
 
@@ -2988,10 +2990,10 @@ We agreed two failure conditions before build, one absolute: if any private even
 | Event titles crossing tenants (guardrail) | 0 |
 | Events synced per week by month 2 | 118 |
 | Weekly manual tidying removed | ~2h (per person) |
-| Mailboxes reachable by the service credential | 12 → 1 |
+| Mailboxes reachable by the service credential <!-- TODO(pushpal): 0.5 — does the tenant hold 12 mailboxes? "Every mailbox in the tenant" and "12 → 1" only agree if it does. --> | 12 → 1 |
 | Scheduled runs completing without overlap | 99.1% |
 
-**Figure — Weekly sync outcomes over six weeks, split between attendee patches, forwarded invites and deliberate skips, rising from 71 to 129 events**  
+**Figure — Weekly sync outcomes over six weeks, split between attendee patches, forwarded invites and deliberate skips, rising from 71 to 116 events**  
 *Chart: `stackedBars`*
 
 | Column | Attendee patched | Invite forwarded | Skipped deliberately |
@@ -3005,7 +3007,7 @@ We agreed two failure conditions before build, one absolute: if any private even
 
 > Sync outcomes by week, Jun–Jul 2025, from job status records. The forwarded share stays near a third throughout, which is the practical measure of how often these people attend meetings they do not organise — and the reason the two-path decision in section 03 was worth the extra code.
 
-> **How we counted.** A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported.
+> **How we counted.** A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported. <!-- TODO(pushpal): 0.5 — the headline is 6 double-bookings a month while the diary logged 11 in a fortnight across six people. If the 6 is the externally visible rate (as the §01 row label says) and the 11 counts every clash, say so here. -->
 
 `Technical configuration — Graph application permissions narrowed by an IT-managed application access policy · occurrence-level writes through calendarView · subscribable .ics feed · dry-run default on every path · overlap lock with retry on throttling · scheduled every 2 hours on EC2 behind Nginx`
 
@@ -3417,7 +3419,7 @@ Before build we agreed this failed if any lead was still hand-building a timelin
 | Leads and architects using it weekly | 22 (of 31) |
 | Time to produce a timeline for a review | 5m20s → 40s |
 | Delay questions answered without opening a task | 63% |
-| Personal tracking spreadsheets still maintained | 4 → 0 |
+| Distinct tracking spreadsheets still maintained | 4 → 0 |
 | Median dashboard load | 1.9s |
 | Writes to the source workspace (guardrail) | 0 |
 
@@ -3428,7 +3430,7 @@ Before build we agreed this failed if any lead was still hand-building a timelin
 - *Architects* — 6, 14, 22, 31, 41
 - *Project managers* — 4, 9, 16, 24, 30
 
-> Weekly sessions by role, Jul–Sep 2026 <!-- TODO(pushpal): this ten-week session series runs past 2026-08-25; give the weeks that actually have log data -->, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points.
+> Weekly sessions by role, sampled fortnightly over ten weeks, Jul–Sep 2026 <!-- TODO(pushpal): this ten-week session series runs past 2026-08-25; give the weeks that actually have log data -->, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points.
 
 > **How we counted.** A weekly user opened a timeline, bandwidth grid or delay analysis in a calendar week. Opening the status board alone does not count — it is the view people land on from a link, and counting it would measure link-following rather than use of the product.
 
@@ -3847,7 +3849,7 @@ I would also have polled less often. Sixty seconds felt responsive and nothing h
 
 - **Problem.** Nobody could say what had changed in the documentation. The register listed 248 documents, the workspace held 301, and a document could be rewritten between two readings with no record of it. Reconciling the two lists by hand found 53 documents tracked nowhere.
 - **What I did.** I owned an MVP that syncs daily, creates an immutable version only when content genuinely changed, and computes diffs. Halfway through I reversed my own scoping decision: the register stopped gating what gets tracked and became optional enrichment.
-- **Result.** 301 documents are checked each night against 248 before, versions are created only on real change — 34 on the confirmed run — and no document has been dropped from history since the policy change, including the 30 that exist only in the workspace.
+- **Result.** 301 documents are checked each night against 248 before, versions are created only on real change — 34 on the confirmed run — and no document has been dropped from history since the policy change, including the 30 that exist only in the workspace — the 53 untracked less the 23 orphaned.
 
 ### 01 — Why this, and why now
 
@@ -3887,7 +3889,7 @@ I reconciled the register against the workspace document by document — 301 aga
 | Orphaned by a deleted row | 23 · value: 23 |
 | With any version history | 0 · value: 0 |
 
-> Register reconciliation, Jan 2026, all 301 workspace documents checked individually. The last bar is the whole problem in one number: not a single document in the estate had a retrievable history, so no question about what changed had an answer anywhere.
+> Register reconciliation, Jan 2026, all 301 workspace documents checked individually. The last bar is the whole problem in one number: not a single document in the estate had a retrievable history, so no question about what changed had an answer anywhere. The 23 orphaned documents sit inside the 53 untracked rather than beside them; the bars are attributes of the same 301, not a partition.
 
 The reframe: the register was being treated as the estate, and it is a description of the estate maintained by hand — therefore always behind it. Tracking that trusted the register would inherit exactly that gap, which is the mistake I made first.
 
@@ -4002,7 +4004,7 @@ I would also have built owner notifications before the dashboard. The eleven doc
 
 ### 01 — Why this, and why now
 
-This tier is defined by one printed figure. Under about 17 dBA of self-noise a microphone is stocked as usable for voice work; above it, dealers file it with the toys. So the entry ticket is a noise number, and the question is which engineering lever actually buys one.
+This tier is defined by one printed figure. At or under about 17 dBA of self-noise a microphone is stocked as usable for voice work; above it, dealers file it with the toys. So the entry ticket is a noise number, and the question is which engineering lever actually buys one.
 
 I scored three of them in the only unit that matters here — decibels of self-noise, not rupees — because a lever that improves the number by half a decibel is not a cheaper option, it is not an option.
 
@@ -4093,7 +4095,7 @@ A cardioid condenser whose gain happens before any active device sees the signal
 
 ![image](/static/images/project/eegrab-condenser-mic-gain-simulation.png)
 
-> **** The transient run at 1 kHz: input in yellow at about ±4.9 V, output in cyan at about ±9.3 V, in phase and symmetrical across the sweep. Symmetry is what is being checked — an asymmetric output means the transformer is heading toward saturation, which is audible as distortion long before it is visible as clipping.
+> **** The transient run at 1 kHz: input in yellow at about ±4.9 V, output in cyan at about ±9.3 V, in phase and symmetrical across the sweep. Symmetry is what is being checked — an asymmetric output means the transformer is heading toward saturation, which is audible as distortion long before it is visible as clipping. Source amplitude is scaled for visibility rather than drawn at a capsule level; the gain is set by the turns ratio and the loading, which is why the output is under 5× on a 1:5 transformer. Real capsule signals are millivolts.
 
 ### 07 — Tradeoffs
 
@@ -4312,7 +4314,7 @@ I would also have designed the contribution path on day one. Forty labs see faul
 
 ## 28. Ornithopter for surveillance
 
-*SRM UAV · 2021–2023 · Aerial robotics*
+*SRM UAV · 2021–2022 · Aerial robotics*
 
 **It read as a bird to two thirds of observers at forty metres, and it stayed airborne for forty-one seconds. Only one of those numbers was ever going to be the problem.**
 
@@ -4356,7 +4358,7 @@ The prospective customer class is defence R&D — people who fund micro air vehi
 
 So we tested the disguise before the aircraft: flew it past people who had not been told what they would see, and asked what they were looking at.
 
-| What we asked | What observers said | Across 24 sightings |
+| What we asked | What observers said | Across 24 sightings <!-- TODO(pushpal): 0.16 — "17 of 24" and "16 of 24" are single-distance counts, but the header and caption say 24 sightings across all four distances. Say whether 24 is the total or the count per distance; the bird-rate curve then needs recomputing (at 20 m it is currently 31% where 24 − 17 = 7 of 24 is 29%). --> |
 | --- | --- | --- |
 | "What are you looking at?" at 20 m | A machine, a drone, or some kind of toy | 17 of 24 |
 | The same question at 40 m | A bird — often a specific one | 16 of 24 |
@@ -4370,7 +4372,7 @@ So we tested the disguise before the aircraft: flew it past people who had not b
 
 - Ceiling: value 60, label the level we needed to claim it hides in plain sight
 
-> Twenty-four sightings across four distances, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on.
+> Twenty-four sightings across four distances, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on. <!-- TODO(pushpal): 0.16 — "17 of 24" and "16 of 24" are single-distance counts, but the header and caption say 24 sightings across all four distances. Say whether 24 is the total or the count per distance; the bird-rate curve then needs recomputing (at 20 m it is currently 31% where 24 − 17 = 7 of 24 is 29%). -->
 
 The reframe: we had been building a bird and testing an aircraft. The property worth protecting was the one nobody was working on.
 
@@ -4485,7 +4487,7 @@ So before modelling anything we sized where a car's lifetime carbon actually sit
 | Battery and vehicle manufacture | 31% — set by suppliers, not by us · value: 31 |
 | Onboard generation and filtration | 2% — the part the concept was built around · value: 2 |
 
-> Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station.
+> Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station. The three bars are the levers we scored and not an exhaustive split: the remaining ~5% sits in levers too small to chart. <!-- TODO(pushpal): confirm the remainder is ~5% and what it contains, if it is not simply the unscored tail. -->
 
 The beneficiaries are early small-EV buyers in Indian cities and the people breathing the air around them. There is no customer here — in 2020 there was barely a market.
 
@@ -4598,7 +4600,7 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 | Field | Detail |
 | --- | --- |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
-| Team | 8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC |
+| Team | 8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC <!-- TODO(pushpal): 0.18 — the header says three campuses and §03 says four. Give the true count. --> |
 | Timeline | Q1 2022 – Q2 2022 |
 | Stage | Research — submitted as an ISRO YUKTI-Sanchita proposal. No flights were conducted. |
 | Status | Research |
@@ -4662,7 +4664,7 @@ The reframe: this is not a drone project with a positioning requirement attached
 
 I founded Ricky Kids and led this study; the faculty investigators owned the ISRO relationship and the funding case, and I owned what we would try to find out. The judgment shows in one place only — deciding the interesting question was not the aircraft.
 
-Eight students across four campuses wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that.
+Eight students across four campuses <!-- TODO(pushpal): 0.18 — the header says three campuses and §03 says four. Give the true count. --> wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that.
 
 **Key decisions**
 
@@ -4917,7 +4919,7 @@ We hand-labelled a sample of survey clips frame by frame to establish ground tru
 
 | What we expected | What the footage and the gate showed | Evidence |
 | --- | --- | --- |
-| Gate checks are broadly effective | Riders dismount before the gate and remount inside | 31% of gate approaches |
+| Gate checks are broadly effective | Riders dismount before the gate and remount inside | 31% of gate approaches — a different denominator from §01's 12%, which is a share of all observed triple-riding instances |
 | The hard part is detecting a third rider | The hard part is lighting, not counting | Night accuracy 41% |
 | Occlusion would be the main error | Two-up flagged as three-up dominates errors | 64 of 105 errors |
 | Footage would be usable throughout | 38% of a survey week is after dark | 1,840 clips reviewed |
@@ -5010,7 +5012,7 @@ We agreed before build that this failed if the false-positive rate was high enou
 
 - Diagonal: correct
 
-> Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy.
+> Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones and not the whole error set. <!-- TODO(pushpal): 0.19 — §02 cites 105 errors; 64 two-up-called-three and 14 three-up-called-two account for 78. Say what the remaining 27 are. -->
 
 > **How we counted.** Rider-count agreement is the share of clips where the model's count matches a hand label agreed by two people, over daylight and overcast footage only. It excludes dusk and night, which are reported separately and used in no survey figure. False-positive rate is two-rider clips reported as three or more, as a share of all two-rider clips.
 
@@ -5274,7 +5276,7 @@ We agreed before build that this failed if the vehicle could not get itself out 
 
 - Boundary: value 1.15, label traction limit — below this, a track fluidises what it stands on
 
-> Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis.
+> Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis. <!-- TODO(pushpal): 0.17 — the tracked band starts at 1.15 g/cm³, but the part-settled analogue at 1.18 sank the tracks 74 mm against a 60 mm track height and did not complete the lane. Give the true threshold, or the density and margin that separate 1.18 from the settled analogue. -->
 
 | Metric | Value |
 | --- | --- |
@@ -5293,7 +5295,7 @@ What this could not tell us is how any of it behaves in a real sewer. We tested 
 
 ### 06 — What we'd do differently
 
-We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy that happened to sort three samples correctly.
+We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy that happened to sort three samples correctly. <!-- TODO(pushpal): 0.17 — this says the density threshold "happened to sort three samples correctly", but the part-settled analogue at 1.18 sits above 1.15 and still failed. Resolve with the §05 band and state the same threshold in both places. -->
 
 We also kept the project name after the finding contradicted it. Calling it a sludge-traversing ROV and then building something that floats over the sludge made every later conversation start in the wrong place.
 

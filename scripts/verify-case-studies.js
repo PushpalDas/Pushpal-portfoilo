@@ -28,7 +28,10 @@ const DROPPED = {
   research: ['What I cut', 'How I got it agreed', 'Tradeoffs'],
 };
 
-const words = (s) => (s || '').trim().split(/\s+/).filter(Boolean).length;
+// HTML comments carry open TODOs against the audit, not prose, so they are
+// stripped before counting rather than pushing a page out of its word band.
+const words = (s) =>
+  (s || '').replace(/<!--[\s\S]*?-->/g, ' ').trim().split(/\s+/).filter(Boolean).length;
 
 /**
  * Narrative prose only — the body copy a reviewer reads as writing.
