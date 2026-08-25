@@ -1,3 +1,126 @@
+# Home page — PM profile pass
+
+Branch `home/pm-profile`, three commits (one per step) off
+`audit/numeric-corrections` — that branch carries the corrected case-study data
+this page's numbers are checked against. The earlier report for that pass is
+kept below, under "Numeric corrections pass".
+
+## Components touched
+
+| File | What changed |
+| --- | --- |
+| `app/components/hero/hero.tsx` | positioning line, role line, `/projects` label; two TODOs |
+| `app/components/work/workTiles.ts` | four slides, new optional fields, the strip |
+| `app/components/work/work-content.tsx` | case-study link, per-slide panel label, public-links list, strip row |
+| `app/components/work/work-carousel.tsx` | optional `alt` field (2 lines) |
+| `app/components/work/work-right-sections.css` | styles for the links list, footer row and strip |
+| `app/layout.tsx` | meta description |
+| `app/components/contact.tsx` | footer year, GitHub href, TODO |
+
+Untouched, and confirmed by the branch diff: `ScrollProvider`, `Magnetic`,
+`SplashCursor`, `intro.tsx`, `works.tsx`, the `tiles/*` scroll machinery,
+`work-left/right/container/background`, `arrow-down`, the navbar, every GSAP
+block in `contact.tsx`, and every image asset.
+
+## STEP 0 — blanks detected
+
+All six arrived unfilled. What I could settle from the repo or the open web, I
+settled; the rest is held at its current value behind a TODO.
+
+| # | Status |
+| --- | --- |
+| 0.1 | **Part-settled.** GitHub verified — `github.com/PushpalDas` is a real active account and GitHub usernames are case-insensitive, so the hero and footer spellings were always the same account; canonicalised to `/PushpalDas`. LinkedIn and X **cannot** be verified from here (LinkedIn answers HTTP 999, X answers 402) and the two pages use genuinely different handles. Both left as they are, TODO at each spot. |
+| 0.2 | **Default applied.** Role phrasing pulled verbatim from the About page: "Principal PM in the CTO's office at Ixana". |
+| 0.3 | **Unfilled → every name removed.** Purdue, NSF, U.S. Army, USSOCOM, Defense Innovation Unit, U.S. Air Force and the three Tier-1 descriptors are all replaced with generic forms. |
+| 0.4 | **Unfilled → both names removed.** State Bank of India and Accenture replaced with "Banking and enterprise facilities across India". |
+| 0.5 | **Unfilled → proof strip not built.** The three candidate figures are all sourced in-repo; what is missing is clearance to publish them. TODO sits where the strip would go. |
+| 0.6 | **Default applied.** Four slides — Wi-R · Patents · XANA · WishKey — plus the strip. |
+
+## STEP 1 — Hero
+
+- Positioning line → "I help deep-tech teams turn complex R&D into products that ship." Chose the prompt's revision over the existing line: "products that ship" echoes the About page's "staying with a product until it ships", where "scalable products" is a register the About page never uses.
+- Role line → "Principal PM in the CTO's office at Ixana — I run the Wi-R silicon programs from spec to production, the patent program (50+ filings, first grants issued), and the internal tools the company plans and delivers with." Option A, with the 0.2 substitution.
+- "/projects" → "See the work →". Href unchanged.
+- Intro section untouched — the optional line-swap is gated on 0.2 being filled, and it was not.
+
+**Two judgment calls worth your eye.** The About page's title is *Principal* PM, which reads more senior than this brief's "senior/mid-level product manager" framing; I followed the About page because it is source of truth (a), but say the word and both pages change together. And the draft's "internal AI tools" became "internal tools" — of the 14 internal Ixana items in the work index, several are automation rather than AI (calendar sync, audit trail), so "AI tools" would have overstated the set.
+
+## STEP 2 — Work section
+
+**Wi-R** keeps its image and headline; the five bullets are replaced with the exact copy given. Links to `/work/wi-r-ban-yr23` — there is no hub page, and YR23 is the foundational production part ("the part under the BAN dev kit and every on-body reference design since"), so it carries the family best.
+
+**Patents** is new, and is the slide a stranger can check. Headline, the four features, and a second panel labelled **Proof** carrying the three Google Patents links from the patent case study. Per-slide panel labels turned out to be straightforward to support, so the links did not have to be folded into Features. Its image is the existing `ixana-patent-tracker.png` — no new asset was created or edited.
+
+**XANA** is rewritten to the given copy. Dropped "the Google of Ixana" as a subline: the About page never reaches for a comparison like that, and the slide already says what the thing is. Adoption is stated exactly as the case study states it.
+
+**WishKey** keeps image, headline and bullets, and gains its two public EEGRAB links.
+
+Each slide carries "Read the case study →" to a route resolved from the repo. The strip under the carousel reads: *35 written-up case studies across 56 projects · silicon to production · developer kits & reference designs · a patent estate · 14 internal tools at Ixana · consumer & industrial hardware → See all work*. I changed the draft's "35 case studies" because the work index holds 56 items of which 35 have written case studies — both numbers are true and the pair is more useful than either alone.
+
+### Confidentiality gate
+
+Nothing named survived, because nothing was confirmed. Restoring any of it is a one-line edit at the TODO:
+
+| Slide | Was | Now |
+| --- | --- | --- |
+| Wi-R | Purdue University, NSF | University and federal research partners |
+| Wi-R | U.S. Army, USSOCOM, Defense Innovation Unit, U.S. Air Force | U.S. defense programs (public engagements via Ixana) — phrasing needs confirming |
+| Wi-R | Tier-1 Smartphone OEM / Wearables / Platform Partner | Defense & Tier-1 consumer programs under NDA |
+| WishKey | State Bank of India, Accenture | Banking and enterprise facilities across India |
+
+## STEP 3 — Hygiene
+
+- Meta description → "Product manager for deep tech — Wi-R silicon programs, a patent estate, and the AI tools that run delivery at Ixana." (116 characters.)
+- Footer edition year now reads `new Date().getFullYear()` rather than being pinned — it renders 2026 today and needs no edit next January.
+- GitHub canonicalised in both places. LinkedIn and X untouched, TODO in both.
+- Alt text landed with STEP 2 as a separate `alt` field, so it no longer doubles as the printed caption: "Wi-R body-area and near-field devices", "Patent matter lifecycle tracker", "XANA — Ixana's internal AI operating system", "WishKey electronic key cabinet". File paths unchanged.
+- The empty tile-level `image.src` is intentional and now says so in a comment: `WorkContent` falls back to it only for a tile with no carousel, so the field is live code, not dead.
+
+## STEP 4 — Verification
+
+**Number-to-source table.** Every figure on the page:
+
+| Figure, as it appears | Source |
+| --- | --- |
+| 50+ filings across six product lines | Patent case study summary — "Fifty-plus filings across six product lines"; the filings chart sums to 52 |
+| First grants issued — US12619308B2 | Patent case-study evidence link; Google Patents returns 200 |
+| Disclosure-to-filing ~14 weeks → 6 | Patent case study metric tile "14w → 6w" |
+| 5–20 Mbit/s across the family | YR23 (5 Mbit/s) and YR31 (20 Mbit/s) case studies |
+| Sub-millisecond links | YR31 "sub-0.2 ms"; NFE2001 tile 0.6 ms |
+| Up to 16 devices on one body | YR23 and YR31 — "16-device on-body network" |
+| 0.1–0.2 nJ/bit | YR23 0.12 nJ/bit, YR31 0.20 nJ/bit |
+| ~50× NFC's efficiency | NFE2001 case study — "over 50× NFC's energy efficiency and ten times its throughput", Ixana's own launch comparison |
+| An order of magnitude beyond Bluetooth | YR23 figure — Bluetooth LE energy per bit 83× higher; the page states it conservatively |
+| One search across five systems | Ixana-Wiki case study — OneDrive, ClickUp, Teams, efficiency trackers, patent records |
+| Adopted company-wide within a quarter | Ixana-Wiki case study — 118 of 140 employees in a quarter |
+| 35 written-up case studies | `data/case-studies-v2.json` — 35 entries |
+| across 56 projects | `app/work/constants.ts` — 56 work items |
+| 14 internal tools at Ixana | `app/work/constants.ts` — 14 Ixana items with status `internal` |
+| silicon to production | `app/work/constants.ts` — 4 Silicon items, all status `production` |
+| WishKey feature bullets | Unchanged; EEGRAB brochure linked on the slide |
+
+**Greps, all zero hits** across `page.tsx`, `layout.tsx`, `hero/`, `intro.tsx`, `work/`, `contact.tsx`, `navbar/`: "data singularity" · "third party babies" · "I build things for the web" · "self adapting" · "10x" · "the smarter it gets" · "2025 © Edition" · "/projects". One thing to know: the XANA case-study route is `/work/xana-multifile-rag-based-data-singularity-platform`, so the hyphenated form of a banned phrase does sit inside that URL. The grep is clean because the phrase never appears as words, it is never displayed to a reader, and renaming routes is out of scope — but it is there, and renaming that slug would be the way to remove it.
+
+**Links, all resolving.** Internal (dev server): `/`, `/work`, `/work/wi-r-ban-yr23`, `/work/ixana-patent-program`, `/work/xana-multifile-rag-based-data-singularity-platform`, `/work/eegrab-wishkey`, plus every navbar route — 200. External: the three Google Patents pages, the EEGRAB brochure, the WishKey demo, `github.com/PushpalDas` — 200. No link outside STEPs 2 and 3 was altered; LinkedIn and X were deliberately not touched.
+
+**Motion untouched.** The branch diff covers seven files, none of them an animation, provider or layout component. The carousel change is two lines and adds an optional field.
+
+`tsc --noEmit` clean.
+
+## Still needed from you
+
+| # | What |
+| --- | --- |
+| 0.1 | The current LinkedIn and X handles. Hero and footer disagree and neither host will answer a machine, so I left both rather than guess and risk a dead link on the front page. |
+| 0.2 | Confirm "Principal PM in the CTO's office at Ixana" is what you want on the home page — it is the About page's wording, and it reads more senior than this brief's framing. |
+| 0.3 | The keep-list for Wi-R partners, and whether "U.S. defense programs (public engagements via Ixana)" is phrasing you are comfortable with. |
+| 0.4 | Whether EEGRAB has published State Bank of India and Accenture as customers. |
+| 0.5 | Clearance for the proof strip: "4 parts in production", "50+ patent filings", "internal tools used company-wide". All three are sourced; the question is only whether you can show them. Note the filings figure is already in the hero role line and on the Patents slide — if it is not cleared, three places change together. |
+
+A note on the TODO markers: unlike the case-study pass, these are `{/* … */}` and `//` comments in TSX and TS, so they compile away and nothing shows on the page.
+
+---
+
 # Numeric corrections pass — audit response
 
 Branch `audit/numeric-corrections`, three commits (one per step) against `main`.
