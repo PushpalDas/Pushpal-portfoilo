@@ -28,18 +28,34 @@ export default function Hero() {
 						</h1>
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
-								I help deep-tech teams translate complex R&amp;D into scalable
-								products.
+								I help deep-tech teams turn complex R&amp;D into products that
+								ship.
 								<br />
 								<br />
-								Currently, working with the Founder and CTO of Ixana, owning
-								efficiency, products &amp; patents
+								Principal PM in the CTO&apos;s office at Ixana — I run the Wi-R
+								silicon programs from spec to production, the patent program
+								(50+ filings, first grants issued), and the internal tools the
+								company plans and delivers with.
 							</p>
+							{/* TODO(pushpal): 0.5 — proof strip held back pending clearance.
+							    Candidates, all sourced in-repo: "4 parts in production"
+							    (the four Silicon items in app/work/constants.ts, all status
+							    production) · "50+ patent filings" (patent case study, "Fifty-plus
+							    filings across six product lines") · "internal tools used
+							    company-wide" (Ixana-Wiki case study, 118 of 140 employees in a
+							    quarter). Say which are cleared and this becomes one quiet row. */}
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>
 							<div>
 								<p>More about me: </p>
 								<div className='flex -ml-2'>
+									{/* TODO(pushpal): 0.1 — LinkedIn and X could not be verified
+									    (LinkedIn returns HTTP 999, X returns 402 to unauthenticated
+									    fetches), and this page and the footer use different handles:
+									    hero /in/pushpal-das-98485a1b5/ + x.com/Pushpal_D against
+									    footer /in/pushpaldas/ + twitter.com/pushpaldas. Say which set
+									    is current and both places get it. GitHub is settled: both
+									    spellings resolve to the same verified account. */}
 									<Magnetic strength={25}>
 										<Link
 											href='https://www.linkedin.com/in/pushpal-das-98485a1b5/'
@@ -91,7 +107,7 @@ export default function Hero() {
 								data-skip-splash-cursor
 							>
 								<Magnetic strength={20}>
-									<Link href='/work'>/projects</Link>
+									<Link href='/work'>See the work →</Link>
 								</Magnetic>
 							</div>
 						</section>
