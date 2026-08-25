@@ -359,26 +359,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Ingestion pipeline and retrieval flow",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram.png",
-                "caption": "Ingestion — files are fetched on a schedule, chunked, embedded locally, and stored as vectors in PostgreSQL with pgvector."
-              },
-              {
-                "image": "/static/images/project/mermaid-diagram__1_.png",
-                "caption": "Retrieval — a question is embedded, matched by cosine similarity, and answered with cited chunks plus their neighbours for context."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I shipped v1 without product analytics. For six weeks I had no idea which sources people searched or how often answers failed — the numbers above came from a database query and a survey, retrofitted. Instrumentation belonged in the first release, and the cost wasn't the missing data so much as the six weeks of decisions I made on intuition.",
@@ -774,26 +754,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Kit signal chain and evaluation flow",
-            "figures": [
-              {
-                "placeholder": "wi-r-devkit-signal-chain.png — host board, transceiver module, electrode interface and return path, drawn at datasheet level of abstraction",
-                "caption": "Signal chain — the host board clocks the transceiver over SPI, the transceiver drives the electrode pair, and the return path closes through the body rather than through bench earth. The grounding arrangement is the part every failed evaluation got wrong."
-              },
-              {
-                "placeholder": "wi-r-devkit-bringup-flow.png — unbox, mount electrodes, connect console, establish link, run worked example",
-                "caption": "Bring-up flow — five steps from sealed box to a sustained link, each with a console readout that says which step failed. The flow is what the one-day acceptance criterion is measured against."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I measured the kit and never measured the evaluation. Time to first link was right for the hardware and wrong for the business: it tells you the box works and nothing about whether the partner reached a decision. Nine of 34 converted, and I cannot say cleanly why the other 25 stopped — we instrumented the first hour thoroughly and the following two months not at all.",
@@ -1157,22 +1117,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Ingestion, stage classification and the query path",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__3_.png",
-                "caption": "Ingestion and classification — tasks and bandwidth files are pulled on a schedule, classified into per-team stages, and stored with entry and exit timestamps so history survives a change in the source."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I treated the stage model as a data problem and it was a political one. Two of the three teams changed how they name stages once they saw them rendered publicly, quietly invalidating a month of classifier tuning. I would now freeze stage vocabularies with each lead in writing first, and treat a change as a schema change with notice rather than a mysterious drop in accuracy.",
@@ -1533,22 +1477,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Recording ingestion, transcript storage and the player data path",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__2_.png",
-                "caption": "Ingestion and playback — recordings and transcripts are pulled from both sources on a schedule, cues are stored per utterance, and the player resolves a timestamp to a seek position without re-fetching the media."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I built minutes generation before I understood who was supposed to send them. The number moved, but 31% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.",
@@ -1931,22 +1859,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Sync paths, guards and the scheduled run",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__13_.png",
-                "caption": "Sync flow — the scheduled run enumerates upcoming occurrences, chooses the patch or forward path by organiser, and passes every write through the dry-run guard and the overlap lock before it touches a calendar."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I scoped this as a sync problem for a month before the diary told me it was a disclosure problem, and spent that month designing category filters, selective sync and a preferences page — all assuming people wanted to choose what crossed over. They wanted to be confident nothing did. I only got there because one line in one log mentioned they had stopped sharing calendar links.",
@@ -2311,22 +2223,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Change detection, recomputation and master rebuild",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__4_.png",
-                "caption": "Sync flow — each source is checked by eTag then content hash, dashboards are recomputed in place, and the master's combined sheet is rebuilt with a source column while the notes column is read and restored untouched."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I fixed the counting before agreeing who owned the number. When the corrected total went out, the first three conversations were about which figure had been in last quarter's board pack. That was predictable and I had not prepared for it — a one-page note circulated a week earlier would have turned an awkward discovery into an unremarkable correction.",
@@ -2687,22 +2583,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "List ingestion, capacity calculation and report writeback",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__9_.png",
-                "caption": "Workflow — lists are read in batches, tasks are mapped to team rosters, capacity is calculated in working days with the undated set held aside, and each team's tab is appended in a separate branch."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I automated a report and never asked whether a monthly cadence was right. It is monthly because the manual version was, and that was because nine hours is too expensive to spend weekly. Once the cost fell to minutes the constraint disappeared and I did not revisit it.",
@@ -3064,22 +2944,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Reporting window, parallel branches and the two-stage generation",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__8_.png",
-                "caption": "Workflow — prior rows are cleared, tasks for the window are fetched with pagination, three branches compute efficiency, distribution and delay detail, and a second generation stage reads the resulting sheets rather than the raw tasks."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I built the signature gate as a spreadsheet column, which works and is the wrong shape. Signing forty causes a month means opening a workbook, reading a thread in another tab and typing a name — and the one in seven that ships unconfirmed is nearly always one where the owner was travelling. A notification with the thread inline would have cost a day and taken that to near zero.",
@@ -3440,22 +3304,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Request path, cache tiers and the analysis call",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__14_.png",
-                "caption": "Request path — the browser never holds a credential; route handlers serve cached task data on a short lifetime and generated delay analysis on a long one, so an expensive call is never on the interactive path."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I designed for leads and architects arrived through a different door. Delay analysis was scoped as a supporting feature for the timeline; for architects it is the product — they open it directly, ignore the Gantt, and have been asking for depth in the one place I resourced least. Segmenting the 22 survey responses by role would have caught this; I read them in aggregate.",
@@ -3832,22 +3680,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Event ingestion, raw storage and diff computation",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__10_.png",
-                "caption": "Ingestion — events are verified, rejected if they fall outside the tracked space, written raw, then deduplicated and diffed into timeline records. The raw table is what makes a parsing change replayable rather than a migration."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I shipped search that matched field names before anyone had tried to use it. The first three weeks of answer times were dominated by that one mistake, and watching a single person attempt a real query would have caught it — which is exactly what fixed it in week four.",
@@ -4208,22 +4040,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Nightly sync, change detection and version creation",
-            "figures": [
-              {
-                "placeholder": "docs-change-sync-flow.png — enumerate, cheap modification check, conditional fetch, hash comparison, version write, register enrichment",
-                "caption": "Sync flow — the cheap modification check is what keeps a 301-document run inside a 60-second execution budget, and the hash comparison is what stops a save being recorded as an edit."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I let a canonical-list argument decide an availability question. The register-as-gate design was defensible on governance grounds and it made a hand-maintained spreadsheet a hard dependency of an automated system — a mistake I would have spotted immediately in any other kind of dependency. It took a three-day outage to see it.",
@@ -4592,22 +4408,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Stage sequence, the review loop and the freeze boundary",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__11_.png",
-                "caption": "Workflow — intake validation gates on unknowns, drafting runs in batches, review by a distinct model loops up to five rounds, and the freeze boundary sits between human approval and task generation so every task traces to one plan version."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "The review loop's early failures were about context handoff, not reviewing. The reviewer could not see the clarification answers and the planner revised without its own previous draft, so the loop spent 3.2 rounds converging on things both sides knew. A plumbing bug that presented as a quality problem, and it sent me looking at prompts for three weeks.",
@@ -5022,22 +4822,6 @@
       },
       {
         "num": "10",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Request lifecycle, routing and the integrity check",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__7_.png",
-                "caption": "Lifecycle — submission validates against the routing and approver maps and blocks on a gap, status transitions require evidence, and a daily integrity check compares the list against the flow run history to surface anything that failed without telling anyone."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "11",
         "heading": "What I'd do differently",
         "body": [
           "I built the approver map as configuration and treated it as settled. Both assignment-gate failures trace to one organisation whose map had a gap nobody noticed until a Friday request fell through it — a wrong map is indistinguishable from a right one until that moment.",
@@ -5299,22 +5083,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Intended system, with the built and unbuilt parts marked",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__12_.png",
-                "caption": "Intended architecture — intake, containment, shared memory, retrieval, drafting and review agents, and the export path. Only intake, containment, provenance, cost accounting and the retrieval evaluation harness were built; everything downstream of retrieval remained a specification."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What I'd do differently",
         "body": [
           "I would build the gold set in month one rather than month four. Everything that mattered was decided by a measurement that took three weeks to construct, and I spent the preceding months on foundations that could have run in parallel with it.",
@@ -5545,22 +5313,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Engine, API boundary and the rendering path",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__6_.png",
-                "caption": "Split — the numerical engine computes state vectors, probabilities and Bloch coordinates server-side and returns geometry; the client renders and never performs linear algebra in the frame loop."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What I'd do differently",
         "body": [
           "I built the whole thing before showing it to a single learner. A paper prototype of one Bloch sphere responding to one gate would have tested the core claim in an afternoon, and I spent five months on an engine, a renderer and a circuit library in order to test it properly. The completeness is why it never shipped — it kept being nearly ready.",
@@ -5880,22 +5632,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Ingestion, two-tier extraction and the report path",
-            "figures": [
-              {
-                "placeholder": "neuroadapt-pipeline.png — sorted spike train ingestion, unit-level and population-level extraction, standard-container output, report generation and indexing",
-                "caption": "Pipeline — sorted spike trains are ingested, the two tiers are computed independently, and results are written to the standard container before any report is generated, so the report is always downstream of the stored features rather than a parallel computation."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We validated on simulated data because it gives an unambiguous answer, and that quietly deferred the harder question for two years. A parallel track against one real recording with an independently sorted reference would have cost weeks and told us whether the metrics survive sorting error — the thing anyone adopting them wants to know first.",
@@ -6172,22 +5908,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Retrieval lanes, the refusal gate and the citation guard",
-            "figures": [
-              {
-                "image": "/static/images/project/mermaid-diagram__5_.png",
-                "caption": "Query path — the question is embedded and run against the book and lecture lanes separately, candidates are re-ranked, the distance gate refuses out-of-corpus questions before generation, and the citation guard removes any reference in the output that was not in the retrieved set."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We built an engine and an interface and never connected them, which is the fact that defines where this project stands. Both halves are good and neither has met a user, because each was sequenced to be finished rather than to meet the other early. A crude API between two half-built halves would have produced worse demos and far better information.",
@@ -6451,6 +6171,15 @@
               }
             ],
             "note": "Ixana YR23 package, from Ixana's published product photography. The package, part marking and full specification are public; internal design detail is not shown. Happy to walk through the real program in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/wi-r-ban-yr23-network-topology.png",
+                "caption": "The network YR23 serves — up to 16 devices on one body, from head-worn to foot, linked along the surface rather than through the air. Range along the body is 10–15 m; off the body it stops at roughly 0.1 m, which is what makes the link private without encryption."
+              }
+            ]
           }
         ]
       },
@@ -6579,26 +6308,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "On-body network topology and the delivery pipeline behind the part",
-            "figures": [
-              {
-                "image": "/static/images/project/wi-r-ban-yr23-network-topology.png",
-                "caption": "The network YR23 serves — up to 16 devices on one body, from head-worn to foot, linked along the surface rather than through the air. Range along the body is 10–15 m; off the body it stops at roughly 0.1 m, which is what makes the link private without encryption."
-              },
-              {
-                "placeholder": "wi-r-ban-yr23-signal-chain.png — host interface, link controller, analogue front end and electrode interface, drawn at datasheet level of abstraction",
-                "caption": "Signal chain at datasheet abstraction. The electrode interface at the right-hand edge is the block the 24-board audit implicated: characterising it was the difference between a part that behaved consistently and one that appeared not to."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I scheduled the die and left the interface around it to look after itself. Every expensive surprise in section 02 came from the electrode interface rather than the silicon, and it was the one part of the system with no owner and no line on the schedule — not a design deliverable, not a validation deliverable, so it belonged to nobody.",
@@ -6877,6 +6586,15 @@
               }
             ],
             "note": "Ixana XA-NFE2001 package, from Ixana's published product photography. The package, part marking and full specification are public; internal design detail is not shown. Happy to walk through the real program in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/wi-r-nfe-xa-nfe2001-coupling-model.png",
+                "caption": "The NFE link modelled as a four-node capacitive network, from Ixana's published technical material. Differential and asymmetric coupling are the two regimes the three range profiles sit in — and the reason range is a design-time characterisation rather than a register a host can write."
+              }
+            ]
           }
         ]
       },
@@ -6987,26 +6705,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Coupling model and the two-line delivery pipeline",
-            "figures": [
-              {
-                "image": "/static/images/project/wi-r-nfe-xa-nfe2001-coupling-model.png",
-                "caption": "The NFE link modelled as a four-node capacitive network, from Ixana's published technical material. Differential and asymmetric coupling are the two regimes the three range profiles sit in — and the reason range is a design-time characterisation rather than a register a host can write."
-              },
-              {
-                "placeholder": "wi-r-nfe-two-line-validation.png — one validation pool feeding two silicon programs, with BAN gates holding priority and NFE scheduled into the gaps",
-                "caption": "How the two programs shared one bench. This is the diagram that mattered most operationally: it made the priority rule visible to both teams, and it is what the delivery tooling — Flow Tracker for stage state, the bandwidth reporting for capacity — was pointed at."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I let the interop matrix size be decided by what we could afford rather than by where risk was. Twelve configurations was a capacity number, not an analysis, and the cell that failed was predictable from first principles — slowest host, longest range. An hour of thinking before booking bench time would have spent the same twelve slots on the twelve riskiest combinations instead of a tidy four-by-three grid.",
@@ -7274,6 +6972,15 @@
               }
             ],
             "note": "Ixana all-day video streaming smartglasses reference design, from Ixana's published product imagery. The design's existence and description are public and a demonstration video is linked above; schematic, layout and BOM are not shown. Happy to walk through the real program in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/wi-r-refdesign-tactical.png",
+                "caption": "The tactical headset design — headset to body-worn radio over the body rather than the air, which is the property that matters when a radiated link is what locates you. It is the ruggedized end of the bracket described in section 01."
+              }
+            ]
           }
         ]
       },
@@ -7403,26 +7110,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "The two designs, and what they share",
-            "figures": [
-              {
-                "image": "/static/images/project/wi-r-refdesign-tactical.png",
-                "caption": "The tactical headset design — headset to body-worn radio over the body rather than the air, which is the property that matters when a radiated link is what locates you. It is the ruggedized end of the bracket described in section 01."
-              },
-              {
-                "placeholder": "wi-r-refdesign-shared-stack.png — common firmware tree, electrode interface and host abstraction shared by both designs, with the per-vertical build flags marked",
-                "caption": "What the two designs share and where they diverge. Everything above the electrode interface is common; the flags are the whole of the difference, which is what makes one tree maintainable by a team this size."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I gated release on an outside rebuild, then chose the outside team from people who already liked us. Both first rebuilds succeeded, which felt like validation and was closer to a formality — a team already invested pushes through ambiguity a neutral one would file as a defect. The gate was right and the sample was flattering; I would now insist the rebuild come from an evaluation that had not yet committed.",
@@ -7835,26 +7522,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "What changed from gen-1, and the loop that decided it",
-            "figures": [
-              {
-                "placeholder": "wi-r-ban-yr31-block-delta.png — YR23 and YR31 block diagrams side by side, with the changed blocks marked: front-end retune for rate, on-die trim store, reduced test access path",
-                "caption": "The delta rather than the whole part. Three blocks changed; everything else is carried across, which is what made interop parity a design property rather than a testing result."
-              },
-              {
-                "placeholder": "wi-r-ban-yr31-feedback-loop.png — field issues, evaluation complaints and ATE lot data routed into one ranked change list with cost and unblock scoring",
-                "caption": "The routing loop from section 03, running on the delivery tooling — Flow Tracker for stage state, the bandwidth reporting for capacity. Three inbound channels, one queue, one ranking that everyone argued about instead of arguing about their own item."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I ranked by evaluations unblocked and validation weeks, and never scored anything by revenue at risk. Those proxies favour the loud and the cheap, and they are why the package variant sat just under the cut line — it would have unblocked four evaluations, two of them the largest by volume on the line.",
@@ -8147,6 +7814,15 @@
               }
             ],
             "note": "Ixana XA-NFE3001 package, from Ixana's published product photography. The package, part marking and specification are public; internal design detail is not shown. Happy to walk through the real programme in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/wi-r-nfe-xa-nfe3001-sealed-transfer.png",
+                "caption": "The workflow the part exists for — a handheld against a sealed enclosure, moving a firmware image and pulling logs back without a connector. The enclosure stays closed, which is the commercial argument; throughput is what makes it a workflow rather than a demonstration."
+              }
+            ]
           }
         ]
       },
@@ -8261,26 +7937,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "The sealed-service path, and what gen-2 changed",
-            "figures": [
-              {
-                "image": "/static/images/project/wi-r-nfe-xa-nfe3001-sealed-transfer.png",
-                "caption": "The workflow the part exists for — a handheld against a sealed enclosure, moving a firmware image and pulling logs back without a connector. The enclosure stays closed, which is the commercial argument; throughput is what makes it a workflow rather than a demonstration."
-              },
-              {
-                "placeholder": "wi-r-nfe-xa-nfe3001-gen-delta.png — gen-1 and gen-2 signal chains side by side, with the retuned coupling front end and tightened range envelope marked against the shared host interface",
-                "caption": "The delta rather than the whole part. The host interface and driver carry across unchanged, which is what let the guardrail hold; the coupling front end is where the range-for-throughput trade physically lives."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I treated the requirement sheets as a specification and never asked what was missing from them. They told me precisely what the fourteen wanted and nothing about partners who never got as far as writing one — and the metal-enclosure request in section 04 came from exactly that population, late, by which point it was a physics answer rather than a design question.",
@@ -8529,6 +8185,19 @@
               }
             ],
             "note": "My own photograph of the bench in an SLB failure-analysis lab — a shared high-voltage and current station, hence the signage. Instruments shown are commercial products and the panels shown are channel-emulation VIs. No tool identity, fault-library content or customer data is visible. Happy to walk through the real bench in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/slb-sensor-pack-can-interface.jpg",
+                "caption": "The tool-bus side — a CAN HS/FD interface carrying sensor traffic to the tool electronics under test, alongside the analogue channels. Sensor faults arrive on a downhole tool through both paths, so a bench that only drove analogue signals would miss the bus-level fault modes entirely."
+              },
+              {
+                "image": "/static/images/project/slb-sensor-pack-bench.jpg",
+                "caption": "One channel, closer in: an accelerometer emulation VI on the left and a handheld meter reading the current it is putting out on the right. Most downhole sensors report as a current rather than a voltage, so the generator sinks and sources current directly instead of driving a voltage into an assumed load."
+              }
+            ]
           }
         ]
       },
@@ -8628,30 +8297,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Signal path, tool bus and the verification loop",
-            "figures": [
-              {
-                "image": "/static/images/project/slb-sensor-pack-can-interface.jpg",
-                "caption": "The tool-bus side — a CAN HS/FD interface carrying sensor traffic to the tool electronics under test, alongside the analogue channels. Sensor faults arrive on a downhole tool through both paths, so a bench that only drove analogue signals would miss the bus-level fault modes entirely."
-              },
-              {
-                "image": "/static/images/project/slb-sensor-pack-bench.jpg",
-                "caption": "One channel, closer in: an accelerometer emulation VI on the left and a handheld meter reading the current it is putting out on the right. Most downhole sensors report as a current rather than a voltage, so the generator sinks and sources current directly instead of driving a voltage into an assumed load."
-              },
-              {
-                "placeholder": "slb-sensor-pack-signal-path.png — fault library, LabVIEW channel definitions, DAQ analogue output and CAN bus into the tool electronics, with the reference meter and scope tapped across every channel",
-                "caption": "Signal path and the verification tap. The reference instruments sit across the same channels the tool sees, which is what makes the session check a measurement of the bench rather than a separate calibration exercise."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I built the library from documented fault reports, which means it inherits the biases of what people bothered to write down. Frequent, dramatic faults are richly described and the quiet intermittent ones are a line of text — and the one mode the bench cannot reproduce is exactly that kind. A sampling pass over raw field logs would have caught the shape of what was missing before the library was frozen.",
@@ -8925,6 +8570,15 @@
               }
             ],
             "note": "My own photograph of a bare slot controller board, before assembly, with the EEGRAB silkscreen visible. No customer site, key list or configuration is shown. Happy to walk through the assembled cabinet in a conversation."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/eegrab-wishkey-pcb-3d-view.png",
+                "caption": "The same slot board in the layout tool. Lock connectors run down one edge and reader connectors down the other, deliberately opposite each other, so the 12 V drive harness and the reader bus run up separate sides of the cabinet instead of crossing behind the slots."
+              }
+            ]
           }
         ]
       },
@@ -9064,26 +8718,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Slot board, controller and where the audit record lives",
-            "figures": [
-              {
-                "image": "/static/images/project/eegrab-wishkey-pcb-3d-view.png",
-                "caption": "The same slot board in the layout tool. Lock connectors run down one edge and reader connectors down the other, deliberately opposite each other, so the 12 V drive harness and the reader bus run up separate sides of the cabinet instead of crossing behind the slots."
-              },
-              {
-                "placeholder": "eegrab-wishkey-record-path.png — card and PIN at the terminal, entitlement check, slot release, feedback read back, event written to the local store, then optional push to a server, directory and mail relay",
-                "caption": "The record path. Everything left of the dashed boundary happens inside the cabinet and is what the acceptance report is generated from; everything right of it is optional and added after commissioning."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I treated late returns as somebody else's problem because the guardrail was attribution, and the chart above is the bill for that. The cabinet knows who holds every overdue key and does nothing with it beyond a report a manager has to go and read. A nudge at the point the key is due was a small piece of work I never scheduled, because it did not fit the metric I had chosen.",
@@ -9350,6 +8984,15 @@
               }
             ],
             "note": "My own board view from the project's EasyEDA workspace, rev 1.0, January 2024. Component placement and the parts visible are real; every cost and performance figure on this page is invented."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/eegrab-smartwatch-schematic.png",
+                "caption": "The final sheet. Almost everything on it is either the processor or a consequence of not using a radio module: the two crystals, the matching network at the antenna pin, and the regulator. The sensors, display and temperature channel are each a short branch off one bus."
+              }
+            ]
           }
         ]
       },
@@ -9484,26 +9127,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "One processor, the sensors hung off it, and where the current goes",
-            "figures": [
-              {
-                "image": "/static/images/project/eegrab-smartwatch-schematic.png",
-                "caption": "The final sheet. Almost everything on it is either the processor or a consequence of not using a radio module: the two crystals, the matching network at the antenna pin, and the regulator. The sensors, display and temperature channel are each a short branch off one bus."
-              },
-              {
-                "placeholder": "eegrab-smartwatch-power-budget.png — current draw by state: sleeping with the display retaining its image, motion sampling, a heart-rate measurement, a notification received, and the radio connecting",
-                "caption": "Where the nine days come from. The watch is asleep for almost all of it, and a reflective display costs nothing to keep showing the time, so the interesting question is not the display at all — it is how rarely the radio has to wake up."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I made warranty returns the guardrail and then built no way to read a watch that came back. There is no cycle count, no reset counter, nothing stored on the unit, so return analysis is a spreadsheet of what customers wrote in a form and what a technician guessed. A few bytes of flash would have turned the number I chose to be judged on into something I could act on.",
@@ -9757,6 +9380,15 @@
               }
             ],
             "note": "My own schematic from the project's EasyEDA workspace, rev 1.0, February 2024, with the simulation instruments still placed. The circuit and its component values are real. The capsule specification and every performance figure on this page are invented."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/eegrab-condenser-mic-gain-simulation.png",
+                "caption": "The transient run at 1 kHz: input in yellow at about ±4.9 V, output in cyan at about ±9.3 V, in phase and symmetrical across the sweep. Symmetry is what is being checked — an asymmetric output means the transformer is heading toward saturation, which is audible as distortion long before it is visible as clipping."
+              }
+            ]
           }
         ]
       },
@@ -9889,26 +9521,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Signal path and the transient that sized it",
-            "figures": [
-              {
-                "image": "/static/images/project/eegrab-condenser-mic-gain-simulation.png",
-                "caption": "The transient run at 1 kHz: input in yellow at about ±4.9 V, output in cyan at about ±9.3 V, in phase and symmetrical across the sweep. Symmetry is what is being checked — an asymmetric output means the transformer is heading toward saturation, which is audible as distortion long before it is visible as clipping."
-              },
-              {
-                "placeholder": "eegrab-condenser-mic-acceptance-path.png — capsule and its integral impedance converter, the specified load, the step-up transformer, the parallel network, the output trim, and the five-frequency envelope test that decides acceptance",
-                "caption": "The chain, with the acceptance test drawn where it actually sits. The trim is the last thing in the signal path and the envelope test surrounds all of it, which is the arrangement section 05 argued into existence."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "The envelope test checks five frequencies, and I chose them because they were the ones our rig could sweep quickly. A capsule can pass all five and misbehave between them, which is precisely the failure the envelope was introduced to catch — so the test samples the argument rather than making it. A continuous sweep against a mask would have cost seconds per unit on a bench already running.",
@@ -10228,26 +9840,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "From two position fixes to a radar constant",
-            "figures": [
-              {
-                "placeholder": "ricky-kids-uav-radar-chain.png — airframe GNSS and sphere GNSS resolving to a sphere position, that position converted to azimuth and elevation relative to the antenna, the return isolated in the range-Doppler domain, and the radar constant computed from the known cross section",
-                "caption": "The sphere's return has to be picked out of clutter before it means anything, which is done in the range-Doppler domain rather than by looking at the raw return. Everything upstream of that is geometry, and geometry is where the error we found lives."
-              },
-              {
-                "placeholder": "ricky-kids-uav-radar-flight-pattern.png — the horizontal and vertical zigzag tracks that intercept the antenna gain pattern, with the intercept points marked",
-                "caption": "The flight pattern is the sampling plan. Each pass crosses the gain pattern at points chosen in advance, so a second calibration months later can be compared with the first rather than merely repeated."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We decomposed four experiments because four was what we could get full enough error reporting from, and that is a thin base for a conclusion we let redirect the whole programme. Three of the four came from the same research lineage, so their agreement is weaker evidence than it looks — a point we did not press, because the answer was one we liked.",
@@ -10568,26 +10160,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "From a sensing element to a dashboard nobody has to enter a room to read",
-            "figures": [
-              {
-                "placeholder": "ricky-kids-covid-telemetry-path.png — sensing elements on the stand, the microcontroller publishing over MQTT to an IoT gateway, the cloud database behind it, and the browser dashboard staff read from outside the room",
-                "caption": "The telemetry half was never the hard part, and it is the half that worked. Publish-subscribe messaging to a cloud database is a solved problem; what the study found is that two of the fields in that database cannot be filled without a cuff and a finger probe."
-              },
-              {
-                "placeholder": "ricky-kids-covid-bench-geometry.png — volunteer seated at a measured standoff, the non-contact channels and the contact reference logging simultaneously, and the four scripted conditions",
-                "caption": "The bench geometry, including the standoff that turned out to matter. Both instruments see the same person at the same instant, which is the only arrangement in which a disagreement is attributable to the sensing rather than to the person."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We should have run the parameter feasibility question first, on paper, before designing a stand and writing an architecture around four numbers. A morning's reading would have told us oxygen saturation has no non-contact route.",
@@ -10798,6 +10370,15 @@
               }
             ],
             "note": "Our own SolidWorks model, from the project paper. This is a design, not a photograph of hardware: the vehicle was modelled and costed, and no version of it was ever put into a live sewer."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ricky-kids-sludge-rov-top-view.jpg",
+                "caption": "Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ring and never bears on the medium. The four thrusters sit outboard on the loop, where they push without disturbing what is beneath."
+              }
+            ]
           }
         ]
       },
@@ -10906,26 +10487,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Why the frame is a loop of pipe",
-            "figures": [
-              {
-                "image": "/static/images/project/ricky-kids-sludge-rov-top-view.jpg",
-                "caption": "Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ring and never bears on the medium. The four thrusters sit outboard on the loop, where they push without disturbing what is beneath."
-              },
-              {
-                "placeholder": "ricky-kids-sludge-rov-tank-lane.png — the test lane, the three graded media, the sinkage measurement, and the stall-and-recovery protocol",
-                "caption": "The tank, which is the part of this project that actually produced a result. The lane is straight and the medium is uniform, and both of those choices are why the limitation above is as broad as it is."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy that happened to sort three samples correctly.",
@@ -11134,6 +10695,15 @@
               }
             ],
             "note": "Our own system diagram from the project deck. This is a concept drawing: no vehicle, subsystem or filter stack was ever built, and nothing in it was measured."
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ricky-kids-carbon-positive-ev-solar.jpg",
+                "caption": "The solar path, which is the part that holds up. Panels across roof, bonnet and boot into a charge controller and the pack — real generation from a source the vehicle is not itself paying for. It is also capped by the area of a car, which is why it contributes about 2% of lifetime energy and cannot be scaled by wanting it more."
+              }
+            ]
           }
         ]
       },
@@ -11251,26 +10821,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "The half of the concept that survived the model",
-            "figures": [
-              {
-                "image": "/static/images/project/ricky-kids-carbon-positive-ev-solar.jpg",
-                "caption": "The solar path, which is the part that holds up. Panels across roof, bonnet and boot into a charge controller and the pack — real generation from a source the vehicle is not itself paying for. It is also capped by the area of a car, which is why it contributes about 2% of lifetime energy and cannot be scaled by wanting it more."
-              },
-              {
-                "placeholder": "ricky-kids-carbon-positive-ev-carbon-model.png — the model's boundaries: embodied carbon in vehicle and pack, grid electricity across three intensities, solar generation, turbine drag penalty, filter load, and the excluded end-of-life credits",
-                "caption": "Where the model's edges are drawn, since that is what decides the answer. The excluded box on the right is end-of-life recycling: leaving it out makes our number worse than it might be, which is the direction an honest exclusion should push."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "The conservation-of-energy check took an afternoon and should have happened in the first week, before the diagrams, the component list and the name. We ran it late because the concept was already something we were presenting, and by then the check was a threat rather than a tool.",
@@ -11596,26 +11146,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Three utilities, one boundary",
-            "figures": [
-              {
-                "placeholder": "ricky-kids-envi-city-loop.png — the block boundary, with power, potable water and solid waste entering, greywater recovery and waste-to-energy returning inside the boundary, and the hourly demand profiles that decide whether the returns land when anything needs them",
-                "caption": "The loop, drawn at the boundary that makes it checkable. Everything inside the box has a meter on it in a real block, which is the entire reason for choosing this scale over a city."
-              },
-              {
-                "placeholder": "ricky-kids-envi-city-profiles.png — hourly demand for the four block archetypes against the timing of recovered heat and water",
-                "caption": "Why the finding splits by block type. The residential profile puts demand where the recovery happens; the industrial one does not, and no amount of efficiency in the conversion stages fixes a timing mismatch."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "The audit should have come before the paper. Everything here would have improved the publication rather than qualifying it, and dropping a claim in a draft costs nothing while dropping one you have already presented costs a page like this.",
@@ -11926,26 +11456,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Three interactions, one controller, and where the review stopped it",
-            "figures": [
-              {
-                "placeholder": "ricky-kids-autism-toys-interactions.png — the teacher tablet assigning content over the local network, the controller driving visual and audio prompts, and the motion path to the gantry marked as not built past review",
-                "caption": "The kit as designed, with the branch the review closed drawn in rather than deleted. Everything left of the gantry is a child acting and a device responding; the gantry is the one path where that direction reverses."
-              },
-              {
-                "placeholder": "ricky-kids-autism-toys-criteria.png — the fourteen classroom criteria grouped into the six dimensions used in the radar, showing which criteria fed which axis",
-                "caption": "How fourteen criteria became six axes. The grouping is ours and it is a simplification, which is worth stating because the two axes the gantry fails on carry four criteria between them and the averaging makes that look gentler than the teachers were."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What we'd do differently",
         "body": [
           "We designed for eight months and reviewed for two weeks, and the review changed more than the design work did. Bringing the teachers in at the sketch stage would have cost two afternoons and redirected the project before we had anything to defend.",
@@ -12304,26 +11814,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Clip in, two numbers out",
-            "figures": [
-              {
-                "placeholder": "ricky-kids-triple-riding-pipeline.png — a stored clip entering, motorcycle detection, the crop, rider and helmet counting within the crop, and a counts row written to the survey sheet, with the plate-recognition and database branches drawn as removed",
-                "caption": "The shipped path, with the removed branches shown rather than deleted so the shape of the decision stays visible. Nothing in this path retains a frame after it has been counted."
-              },
-              {
-                "placeholder": "ricky-kids-triple-riding-labelling.png — the hand-labelling protocol: two labellers per clip, disagreements resolved by review, and the resulting evaluation set held separate from anything the models were trained on",
-                "caption": "The labelling protocol, which is the part that makes the accuracy figure mean anything. Two people counting riders in the same frame disagree more often than you would expect, and the rate at which they disagree is the floor on what any model can be measured to."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "We never measured how often our two labellers disagreed with each other, so we have no floor to compare 94% against. If humans agree only 95% of the time on a dusk clip, the model is already at the ceiling and the rest is not a modelling problem. That number would have cost an afternoon.",
@@ -12626,26 +12116,6 @@
       },
       {
         "num": "06",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Rotary motion in, flapping out, and where the weight has to sit",
-            "figures": [
-              {
-                "placeholder": "srm-uav-ornithopter-driveline.png — motor into the gear reduction, the crank driving both wing spars symmetrically, the tail servos, and the centre of gravity band the camera has to sit inside",
-                "caption": "The driveline. The gearbox is the whole aircraft: it has to survive the flapping loads and weigh almost nothing, and every gram it gains comes out of the payload margin, which was six grams."
-              },
-              {
-                "placeholder": "srm-uav-ornithopter-cg-band.png — the usable centre-of-gravity window against camera position, showing the nose mounting outside it and the aft mounting inside",
-                "caption": "Why moving the camera mattered more than anything mechanical. The usable centre-of-gravity window on a tail-controlled flapping wing is narrow, and a camera in the nose sits outside it — which is visible in the flight log as five attempts that did not finish."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "07",
         "heading": "What I'd do differently",
         "body": [
           "I would have put load cells on the bench rig before the first airframe, not after the fourth. We read the rig by eye, so the gearbox was tuned by whether it sounded right — and four structural failures are what that cost.",
@@ -13056,6 +12526,10 @@
                 "image": "/static/images/project/ixana-patent-approval.png",
                 "label": "Invoice approval",
                 "caption": "Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has confirmed it."
+              },
+              {
+                "image": "/static/images/project/ixana-patent-pipeline.png",
+                "caption": "Pipeline — a document arriving by mail is extracted, resolved to one internal matter identity across three firms, given a lifecycle stage and a technology category, and written into the single record every surface reads. Anything the match cannot place lands in an explicit unclassified stage rather than defaulting into the pipeline, and the firm’s docket enters as a mirrored authority that the system never recomputes."
               }
             ],
             "note": "Recreations of the four remaining surfaces, built from the real layouts and states and filled with the same invented dataset as the screen above."
@@ -13218,22 +12692,6 @@
       },
       {
         "num": "09",
-        "heading": "How it works",
-        "blocks": [
-          {
-            "kind": "arch",
-            "summary": "Mail-triggered extraction, matter routing and categorisation",
-            "figures": [
-              {
-                "image": "/static/images/project/ixana-patent-pipeline.png",
-                "caption": "Pipeline — a document arriving by mail is extracted, resolved to one internal matter identity across three firms, given a lifecycle stage and a technology category, and written into the single record every surface reads. Anything the match cannot place lands in an explicit unclassified stage rather than defaulting into the pipeline, and the firm’s docket enters as a mirrored authority that the system never recomputes."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "num": "10",
         "heading": "What I'd do differently",
         "body": [
           "I built the mechanism before I wrote down the strategy. For a year the filing decisions lived in my head and in a conversation with the founder, while what got documented was the plumbing beneath them. How a tapeout maps to a filing decision is still the part I cannot hand over.",
@@ -13241,6 +12699,6 @@
         ]
       }
     ],
-    "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts, and the pipeline in section 09 is drawn from scratch. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation."
+    "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation."
   }
 }

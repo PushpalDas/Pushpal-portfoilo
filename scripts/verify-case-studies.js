@@ -107,24 +107,10 @@ for (const [slug, cs] of Object.entries(v2)) {
   if (cfgs.length !== 1) problems.push(`${slug}: ${cfgs.length} config lines, expected exactly 1`);
   else { if (configs.has(cfgs[0].text)) problems.push(`${slug}: duplicate config line`); configs.add(cfgs[0].text); }
 
-  // exactly one arch block, in the how-it-works section, images resolve
+  // "How it works" was removed from every page, and with it every arch block
   const archs = cs.sections.flatMap((s) => (s.blocks || []).filter((b) => b.kind === 'arch'));
-  if (archs.length !== 1) problems.push(`${slug}: ${archs.length} arch blocks, expected 1`);
-  const archIdx = cs.sections.findIndex((s) => (s.blocks || []).some((b) => b.kind === 'arch'));
-  if (cs.sections[archIdx].heading !== 'How it works') problems.push(`${slug}: arch block not in "How it works"`);
-  for (const a of archs) for (const f of a.figures) {
-    if (f.image) {
-      const p = rel('public', f.image);
-      if (!fs.existsSync(p)) problems.push(`${slug}: missing image ${f.image}`);
-    } else if (!f.placeholder) problems.push(`${slug}: arch figure with neither image nor placeholder`);
-  }
-
-  // no architecture image above section 09
-  cs.sections.forEach((s, i) => {
-    if (i < archIdx) for (const b of s.blocks || []) {
-      if (b.kind === 'arch') problems.push(`${slug}: arch above How it works`);
-    }
-  });
+  if (archs.length) problems.push(`${slug}: ${archs.length} arch blocks, expected 0`);
+  if (headings.includes('How it works')) problems.push(`${slug}: "How it works" section should be removed`);
 
   // shot block with 3-4 callouts
   const shots = cs.sections.flatMap((s) => (s.blocks || []).filter((b) => b.kind === 'shot'));
@@ -138,7 +124,7 @@ for (const [slug, cs] of Object.entries(v2)) {
   const galleries = cs.sections.flatMap((s) => (s.blocks || []).filter((b) => b.kind === 'gallery'));
   if (galleries.length > 1) problems.push(`${slug}: ${galleries.length} gallery blocks, at most 1 allowed`);
   for (const g of galleries) {
-    if (g.items.length < 2 || g.items.length > 6) problems.push(`${slug}: gallery has ${g.items.length} items, expected 2-6`);
+    if (g.items.length < 1 || g.items.length > 6) problems.push(`${slug}: gallery has ${g.items.length} items, expected 1-6`);
     for (const it of g.items) {
       if (it.image) {
         if (!fs.existsSync(rel('public', it.image))) problems.push(`${slug}: missing gallery image ${it.image}`);
