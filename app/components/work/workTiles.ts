@@ -62,6 +62,8 @@ export const workTiles: WorkTile[] = [
 	{
 		description: `Here are things`,
 		title: `I've worked on`,
+		// Intentionally empty: this tile renders through the carousel below.
+		// `image` is the fallback WorkContent uses for a tile without one.
 		image: {
 			src: '',
 			width: 600,

@@ -177,7 +177,9 @@ export default function Contact() {
 					<div className='contact-bottom-col'>
 						<div className='contact-bottom-group'>
 							<h5 className='contact-bottom-label'>Version</h5>
-							<p className='contact-bottom-value'>2025 © Edition</p>
+							<p className='contact-bottom-value'>
+								{new Date().getFullYear()} © Edition
+							</p>
 						</div>
 						<div className='contact-bottom-group'>
 							<h5 className='contact-bottom-label'>Local time</h5>
@@ -189,11 +191,16 @@ export default function Contact() {
 					<div className='contact-bottom-col'>
 						<div className='contact-bottom-socials'>
 							<h5 className='contact-bottom-label'>Socials</h5>
+							{/* TODO(pushpal): 0.1 — LinkedIn and X still differ from the hero
+							    (/in/pushpaldas/ + twitter.com/pushpaldas here against
+							    /in/pushpal-das-98485a1b5/ + x.com/Pushpal_D there) and neither
+							    could be verified from here. GitHub is canonicalised: both
+							    spellings resolve to the same verified account. */}
 							<ul className='contact-socials-list'>
 								<li>
 									<Magnetic strength={15}>
 										<a
-											href='https://github.com/pushpaldas'
+											href='https://github.com/PushpalDas'
 											target='_blank'
 											rel='noopener noreferrer'
 											className='contact-social-link'

@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 		template: '%s | Pushpal Das',
 		default: 'Pushpal Das',
 	},
-	description: 'I build things for the web.',
+	description:
+		'Product manager for deep tech — Wi-R silicon programs, a patent estate, and the AI tools that run delivery at Ixana.',
 	metadataBase: new URL('https://pushpaldas.com'),
 };
 
