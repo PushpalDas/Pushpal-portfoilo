@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import Magnetic from './Magnetic';
-import { LINKEDIN_URL } from '../lib/social';
+import { LINKEDIN_URL, X_URL } from '../lib/social';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -192,11 +192,9 @@ export default function Contact() {
 					<div className='contact-bottom-col'>
 						<div className='contact-bottom-socials'>
 							<h5 className='contact-bottom-label'>Socials</h5>
-							{/* TODO(pushpal): 0.1 — X still differs from the hero
-							    (twitter.com/pushpaldas here against x.com/Pushpal_D there) and
-							    could not be verified from here. LinkedIn is settled: both places
-							    now read LINKEDIN_URL. GitHub is canonicalised: both spellings
-							    resolve to the same verified account. */}
+							{/* X now reads X_URL, the same constant the hero and the contact
+							    page use. TODO(pushpal): 0.1 — confirm the handle in
+							    app/lib/social.ts. */}
 							<ul className='contact-socials-list'>
 								<li>
 									<Magnetic strength={15}>
@@ -225,7 +223,7 @@ export default function Contact() {
 								<li>
 									<Magnetic strength={15}>
 										<a
-											href='https://twitter.com/pushpaldas'
+											href={X_URL}
 											target='_blank'
 											rel='noopener noreferrer'
 											className='contact-social-link'

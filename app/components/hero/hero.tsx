@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import Link from 'next/link';
-import { LINKEDIN_URL } from '../../lib/social';
+import { LINKEDIN_URL, X_URL } from '../../lib/social';
 import { merryWeather } from '../../fonts';
 import { AtSignIcon } from '../layouts/icons/at-sign-icon';
 import { GithubIcon } from '../layouts/icons/github-icon';
@@ -50,12 +50,9 @@ export default function Hero() {
 							<div>
 								<p>More about me: </p>
 								<div className='flex -ml-2'>
-									{/* TODO(pushpal): 0.1 — X still differs between this page
-									    (x.com/Pushpal_D) and the footer (twitter.com/pushpaldas), and
-									    X answers 402 to unauthenticated fetches so neither could be
-									    verified from here. Say which is current. LinkedIn is settled:
-									    both places now read LINKEDIN_URL. GitHub is settled too —
-									    both spellings resolve to the same verified account. */}
+									{/* Every profile link on the site now reads one constant.
+									    TODO(pushpal): 0.1 — X_URL still needs confirming; see
+									    app/lib/social.ts. */}
 									<Magnetic strength={25}>
 										<Link
 											href={LINKEDIN_URL}
@@ -80,7 +77,7 @@ export default function Hero() {
 									</Magnetic>
 									<Magnetic strength={25}>
 										<Link
-											href='https://x.com/Pushpal_D'
+											href={X_URL}
 											target='_blank'
 											rel='noreferrer'
 											aria-label='twitter'
