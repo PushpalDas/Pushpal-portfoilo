@@ -45,9 +45,7 @@ export type Highlight = {
 	status: string;
 	years: string;
 	/** 'number' shows metrics[0] at display size instead of an image. */
-	media:
-		| { kind: 'image'; src: string; alt: string }
-		| { kind: 'number' };
+	media: { kind: 'image'; src: string; alt: string } | { kind: 'number' };
 	proof?: { text: string; href: string };
 	/** The patent tile sits on its own, below both tracks. */
 	pinned?: boolean;
@@ -66,8 +64,16 @@ const IXANA_TECH = 'https://www.ixana.ai/technology';
 const IXANA_DEV_KITS = 'https://www.ixana.ai/products/dev-kits';
 
 export const highlightGroups: HighlightGroup[] = [
-	{ track: 'silicon', label: 'Silicon & systems', more: { href: '/work?domain=silicon' } },
-	{ track: 'ai', label: 'AI programs & platforms', more: { href: '/work?domain=ai' } },
+	{
+		track: 'silicon',
+		label: 'Silicon & systems',
+		more: { href: '/work?domain=silicon' },
+	},
+	{
+		track: 'ai',
+		label: 'AI programs & platforms',
+		more: { href: '/work?domain=ai' },
+	},
 	{ track: 'ip', label: 'Patents, across both' },
 ];
 

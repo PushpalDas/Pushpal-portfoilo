@@ -1,24 +1,22 @@
-import { Tile } from '../tiles/tile';
-import TileBackground from '../tiles/tile-background';
-import { TileContent } from '../tiles/tile-content';
-import TileWrapper from '../tiles/tile-wrapper';
-import { WorkBackground } from './work-background';
-import WorkContent from './work-content';
-import { workTiles } from './workTiles';
+import { moreInTrack, portfolioTotals } from '../../work/tracks';
+import WorkHighlights from './work-highlights';
+import { workHighlights } from './workHighlights';
 
+/**
+ * Server half of the Work section: every count on the page is derived from
+ * app/work/constants.ts here, at build time, and handed down as numbers.
+ * Nothing downstream is allowed to carry its own copy of a figure.
+ */
 export default function Works() {
+	const featured = workHighlights.map((highlight) => highlight.slug);
+
 	return (
-		<TileWrapper numOfPages={workTiles.length}>
-			<TileBackground>
-				<WorkBackground />
-			</TileBackground>
-			<TileContent>
-				{workTiles.map((work, i) => (
-					<Tile page={i} key={work.title}>
-						<WorkContent work={work} />
-					</Tile>
-				))}
-			</TileContent>
-		</TileWrapper>
+		<WorkHighlights
+			moreCounts={{
+				silicon: moreInTrack('silicon', featured),
+				ai: moreInTrack('ai', featured),
+			}}
+			totals={portfolioTotals()}
+		/>
 	);
 }
