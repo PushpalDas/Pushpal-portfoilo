@@ -7,7 +7,6 @@ import Contact from '../components/contact';
 import { LINKEDIN_URL } from '../lib/social';
 import './about.css';
 import AboutHeader from './about-header';
-import SelectedWork from './selected-work-section';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,9 +111,6 @@ export default function AboutPage() {
 					<p className='about-pull about-reveal'>
 						I liked building. I love deciding what gets built, and why.
 					</p>
-
-					{/* The claim, then the proof. */}
-					<SelectedWork />
 
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>How I work</p>

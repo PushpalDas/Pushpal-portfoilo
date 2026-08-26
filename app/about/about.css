@@ -280,11 +280,6 @@ html:not(.dark) .about-figure figcaption {
 	.about-container > .about-pull {
 		grid-column: 1 / -1;
 	}
-
-	/* so does the proof that follows it */
-	.about-container > .selected-work {
-		grid-column: 1 / -1;
-	}
 }
 
 /* Portrait stills ran ~800px tall on a phone; cap them without touching the
