@@ -13,6 +13,7 @@ const navLinks = [
 	{ href: '/', label: 'Home' },
 	{ href: '/about', label: 'About' },
 	{ href: '/work', label: 'Work' },
+	{ href: '/hoobie', label: 'Hobby' },
 	{ href: '/experience', label: 'Experience' },
 	{ href: '/certifications', label: 'Certifications' },
 	{ href: '/book-a-meeting', label: 'Book a meeting' },
@@ -32,10 +33,6 @@ export default function Navbar() {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, []);
 
-	useEffect(() => {
-		setMobileOpen(false);
-	}, [pathname]);
-
 	if (isCaseStudySubpage) return null;
 
 	return (
@@ -44,7 +41,7 @@ export default function Navbar() {
 			animate={{ y: 0, opacity: 1 }}
 			transition={{ duration: 0.6, ease: 'easeOut' }}
 			className={classNames(
-				'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl',
+				'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-6xl',
 				'rounded-full border border-white/15 backdrop-blur-2xl',
 				'transition-all duration-300',
 				scrolled ? 'bg-white/10 shadow-lg shadow-black/10' : 'bg-white/5',
@@ -163,6 +160,7 @@ export default function Navbar() {
 								<Link
 									key={href}
 									href={href}
+									onClick={() => setMobileOpen(false)}
 									aria-current={isActive ? 'page' : undefined}
 									className={classNames(
 										'px-3 py-2 text-sm rounded-lg transition-colors duration-200',
@@ -177,6 +175,7 @@ export default function Navbar() {
 						})}
 						<Link
 							href='/contact'
+							onClick={() => setMobileOpen(false)}
 							className='mt-2 text-center px-4 py-2 text-sm font-medium rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors duration-200'
 						>
 							Let&apos;s Connect
