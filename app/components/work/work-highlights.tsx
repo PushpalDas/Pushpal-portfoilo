@@ -504,10 +504,7 @@ export default function WorkHighlights({
 
 					<p className='wh-strip' style={{ order: 999 }}>
 						{totals.caseStudies} case studies across {totals.projects} projects
-						·{' '}
-						<Magnetic strength={12}>
-							<Link href='/work'>See all work →</Link>
-						</Magnetic>
+						· <Link href='/work'>See all work →</Link>
 					</p>
 				</div>
 

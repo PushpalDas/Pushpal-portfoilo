@@ -22,7 +22,10 @@
 
 .wh-grid {
 	display: grid;
-	grid-template-columns: 1fr;
+	/* minmax(0, 1fr) rather than 1fr: a grid item defaults to min-width:auto,
+	   and a wide image or a long feature line would otherwise push the track
+	   past the viewport at 390. */
+	grid-template-columns: minmax(0, 1fr);
 	width: 100%;
 }
 
@@ -109,6 +112,7 @@
 }
 
 .wh-row-title {
+	min-width: 0;
 	font-size: 0.95rem;
 	font-weight: 500;
 	line-height: 1.3;
@@ -186,6 +190,7 @@
 .wh-panel {
 	background: #fff;
 	color: #000;
+	min-width: 0;
 	opacity: 0;
 	visibility: hidden;
 }
@@ -480,6 +485,9 @@
 	/* Collapsed cards cost no height and animate open without JS measurement. */
 	.wh-panel {
 		display: grid;
+		/* An implicit auto column would size to the panel's min-content and
+		   overflow the viewport at 390. */
+		grid-template-columns: minmax(0, 1fr);
 		grid-template-rows: 0fr;
 		overflow: hidden;
 		transition: grid-template-rows 0.35s cubic-bezier(0.76, 0, 0.24, 1);
@@ -499,6 +507,10 @@
 		order: 999;
 		padding: 2rem 1.5rem 0;
 	}
+
+	.wh-features {
+		column-gap: 0.9rem;
+	}
 }
 
 /* --- Desktop: two columns, panels share one cell ---------------------- */
@@ -511,7 +523,7 @@
 	}
 
 	.wh-grid {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 		align-items: stretch;
 	}
 
