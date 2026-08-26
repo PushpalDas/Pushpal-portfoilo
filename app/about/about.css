@@ -280,6 +280,21 @@ html:not(.dark) .about-figure figcaption {
 	.about-container > .about-pull {
 		grid-column: 1 / -1;
 	}
+
+	/* so does the proof that follows it */
+	.about-container > .selected-work {
+		grid-column: 1 / -1;
+	}
+}
+
+/* Portrait stills ran ~800px tall on a phone; cap them without touching the
+   desktop rail, which is bounded by its column instead. */
+@media (max-width: 899.98px) {
+	.about-figure img {
+		width: 100%;
+		max-height: 70svh;
+		object-fit: cover;
+	}
 }
 
 @media (max-width: 640px) {

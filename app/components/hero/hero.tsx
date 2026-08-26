@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import Link from 'next/link';
+import { LINKEDIN_URL } from '../../lib/social';
 import { merryWeather } from '../../fonts';
 import { AtSignIcon } from '../layouts/icons/at-sign-icon';
 import { GithubIcon } from '../layouts/icons/github-icon';
@@ -49,16 +50,15 @@ export default function Hero() {
 							<div>
 								<p>More about me: </p>
 								<div className='flex -ml-2'>
-									{/* TODO(pushpal): 0.1 — LinkedIn and X could not be verified
-									    (LinkedIn returns HTTP 999, X returns 402 to unauthenticated
-									    fetches), and this page and the footer use different handles:
-									    hero /in/pushpal-das-98485a1b5/ + x.com/Pushpal_D against
-									    footer /in/pushpaldas/ + twitter.com/pushpaldas. Say which set
-									    is current and both places get it. GitHub is settled: both
-									    spellings resolve to the same verified account. */}
+									{/* TODO(pushpal): 0.1 — X still differs between this page
+									    (x.com/Pushpal_D) and the footer (twitter.com/pushpaldas), and
+									    X answers 402 to unauthenticated fetches so neither could be
+									    verified from here. Say which is current. LinkedIn is settled:
+									    both places now read LINKEDIN_URL. GitHub is settled too —
+									    both spellings resolve to the same verified account. */}
 									<Magnetic strength={25}>
 										<Link
-											href='https://www.linkedin.com/in/pushpal-das-98485a1b5/'
+											href={LINKEDIN_URL}
 											target='_blank'
 											rel='noreferrer'
 											aria-label='linkedin'

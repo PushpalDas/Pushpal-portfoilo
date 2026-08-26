@@ -4,8 +4,10 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
 import Contact from '../components/contact';
+import { LINKEDIN_URL } from '../lib/social';
 import './about.css';
 import AboutHeader from './about-header';
+import SelectedWork from './selected-work-section';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -111,6 +113,9 @@ export default function AboutPage() {
 						I liked building. I love deciding what gets built, and why.
 					</p>
 
+					{/* The claim, then the proof. */}
+					<SelectedWork />
+
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>How I work</p>
 						<p>
@@ -213,7 +218,7 @@ export default function AboutPage() {
 							<span className='about-link-sep'>/</span>
 							<a
 								className='about-link'
-								href='https://www.linkedin.com/in/pushpaldas/'
+								href={LINKEDIN_URL}
 								target='_blank'
 								rel='noopener noreferrer'
 							>
