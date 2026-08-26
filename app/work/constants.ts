@@ -44,6 +44,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - present',
 		domain: 'Silicon',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Second-generation body-area silicon that holds an on-body link in the single-digit milliwatt class, roughly a tenth of the radio budget it replaces.',
@@ -58,6 +59,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - present',
 		domain: 'Developer hardware',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Turned Wi-R eval silicon into a shipping dev kit — partner teams bring up a working on-body link in under a day instead of weeks of RF debugging.',
@@ -72,6 +74,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 ',
 		domain: 'Internal platform',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
@@ -86,6 +89,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 - present',
 		domain: 'Applied AI',
 		category: 'product',
+		track: 'ai',
 		status: 'research',
 		outcome:
 			'Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, up from 17.',
@@ -99,6 +103,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - present',
 		domain: 'Silicon',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'The first Wi-R body-area part to reach customer hardware — the silicon under the BAN dev kit and every on-body reference design that followed.',
@@ -113,6 +118,7 @@ export const workItems: WorkItem[] = [
 		year: '2023 - present',
 		domain: 'Research tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'research',
 		outcome:
 			'Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.',
@@ -127,6 +133,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - present',
 		domain: 'Silicon',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Successor near-field part that widened usable coupling range without raising the transmit power budget partners had already designed around.',
@@ -141,6 +148,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - 2026',
 		domain: 'Silicon',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'The near-field electric part that moved Wi-R from a lab demonstration to a component a partner could design into a product.',
@@ -155,6 +163,7 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Remote sensing',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Hyperspectral workflow that estimated surface mineral abundance from satellite bands, taking a field-sampling round out of the survey loop.',
@@ -168,6 +177,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 - present',
 		domain: 'Learning tools',
 		category: 'product',
+		track: 'ai',
 		status: 'prototype',
 		outcome:
 			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.',
@@ -181,6 +191,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 ',
 		domain: 'Procurement ops',
 		category: 'product',
+		track: 'ai',
 		status: 'customer-testing',
 		outcome:
 			'In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.',
@@ -194,6 +205,7 @@ export const workItems: WorkItem[] = [
 		year: '2023',
 		domain: 'Access control',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Replaced a paper key register with an audited electronic cabinet, shipped as a catalogue product with per-key accountability.',
@@ -208,6 +220,7 @@ export const workItems: WorkItem[] = [
 		year: '2024 - 2026',
 		domain: 'Wearable systems',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Reference designs proving Wi-R carries live video to smartglasses and voice to a tactical radio over the body rather than the air.',
@@ -222,6 +235,7 @@ export const workItems: WorkItem[] = [
 		year: '2023',
 		domain: 'Consumer wearable',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Cut the smartwatch bill of materials to a price Indian retail could carry while keeping heart-rate sensing and phone notifications.',
@@ -235,6 +249,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 ',
 		domain: 'Delivery reporting',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Monthly AMS performance report went from a two-day manual compile to one automated run that produces six dashboard sheets.',
@@ -248,6 +263,7 @@ export const workItems: WorkItem[] = [
 		year: '2025',
 		domain: 'Resource planning',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Capacity forecasts across 58 task lists and 30 engineers stopped depending on developers remembering to file an update.',
@@ -261,6 +277,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Agile tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Standup, backlog and burndown now read from the same task data instead of three separately maintained views.',
@@ -273,6 +290,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Engineering ops',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'One live view across the PS, AMS and RTL pipelines — leads stopped assembling the weekly review deck from three sources.',
@@ -286,6 +304,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Audit tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Turned a raw activity feed into a searchable who-changed-what timeline, so audit questions get answered in seconds not hours.',
@@ -299,6 +318,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Meeting intelligence',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Made every recording searchable by transcript, so people jump to the minute that matters instead of scrubbing an hour of video.',
@@ -312,6 +332,7 @@ export const workItems: WorkItem[] = [
 		year: '2025',
 		domain: 'Workplace automation',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Ended the double-booking that came from living in two tenants, without exposing a single private event title across them.',
@@ -325,6 +346,7 @@ export const workItems: WorkItem[] = [
 		year: '2026 - present',
 		domain: 'HR tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'customer-testing',
 		outcome:
 			'In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.',
@@ -338,6 +360,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Planning tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Turns a raw brief into a reviewed, execution-ready plan in 3–8 minutes, with a second model required to approve the first one.',
@@ -351,6 +374,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Legal tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'prototype',
 		outcome:
 			'Built and tested the provenance, cost and containment core, then stopped before the drafting agents because prior-art recall was not proven.',
@@ -364,6 +388,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'PM tooling',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.',
@@ -377,6 +402,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Meeting intelligence',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Kept transcripts and minutes inside the tenant instead of routing every internal meeting through a third-party bot.',
@@ -389,6 +415,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Patent operations',
 		category: 'product',
+		track: 'ip',
 		status: 'internal',
 		outcome:
 			'Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.',
@@ -402,6 +429,7 @@ export const workItems: WorkItem[] = [
 		year: '2025',
 		domain: 'Portfolio ops',
 		category: 'product',
+		track: 'ip',
 		status: 'internal',
 		outcome:
 			'Stopped the patent dashboard double-counting continuation rows, and made the master workbook rebuild itself from its three sources.',
@@ -415,6 +443,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Documentation ops',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'A daily sync that versions and diffs every workspace doc, so the 34 of 301 that changed last night are visible without asking.',
@@ -428,6 +457,7 @@ export const workItems: WorkItem[] = [
 		year: '2024',
 		domain: 'Audio hardware',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Brought a studio-class condenser capsule to a shippable price by redesigning the preamp around a cheaper JFET front end.',
@@ -455,6 +485,7 @@ export const workItems: WorkItem[] = [
 		year: '2023',
 		domain: 'Test engineering',
 		category: 'product',
+		track: 'silicon',
 		status: 'production',
 		outcome:
 			'Bench instrument that synthesised downhole sensor signals, so tool electronics could be tested without waiting on a well.',
@@ -467,6 +498,7 @@ export const workItems: WorkItem[] = [
 		year: '2021 - 2023',
 		domain: 'Aerial robotics',
 		category: 'product',
+		track: 'silicon',
 		status: 'prototype',
 		outcome:
 			'Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.',
@@ -481,6 +513,7 @@ export const workItems: WorkItem[] = [
 		year: '2020',
 		domain: 'Sustainable mobility',
 		category: 'product',
+		track: 'silicon',
 		status: 'research',
 		outcome:
 			'Feasibility study on whether a small EV could offset more carbon than it embodied — the answer turned entirely on grid mix.',
@@ -495,6 +528,7 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Weather instrumentation',
 		category: 'product',
+		track: 'silicon',
 		status: 'research',
 		outcome:
 			'Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.',
@@ -509,6 +543,7 @@ export const workItems: WorkItem[] = [
 		year: '2021',
 		domain: 'Health sensing',
 		category: 'product',
+		track: 'silicon',
 		status: 'research',
 		outcome:
 			'Measured respiration rate at a distance with a thermal and radar pair, so isolation wards could monitor without contact.',
@@ -523,6 +558,7 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Road safety',
 		category: 'product',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.',
@@ -537,6 +573,7 @@ export const workItems: WorkItem[] = [
 		year: '2021 - 2023',
 		domain: 'Assistive play',
 		category: 'product',
+		track: 'silicon',
 		status: 'prototype',
 		outcome:
 			'Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.',
@@ -551,6 +588,7 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Field robotics',
 		category: 'product',
+		track: 'silicon',
 		status: 'research',
 		outcome:
 			'Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.',
@@ -772,6 +810,7 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Urban concept',
 		category: 'product',
+		track: 'silicon',
 		status: 'research',
 		outcome:
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
