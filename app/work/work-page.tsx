@@ -6,6 +6,8 @@ import Contact from '../components/contact';
 import { type FilterKey, workItems } from './constants';
 import './work.css';
 import { WORK_STATUS_ORDER } from './status';
+import { isTrackFilterKey, type TrackFilterKey } from './tracks';
+import WorkDomainFilters from './work-domain-filters';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
@@ -21,6 +23,23 @@ function WorkPageInner() {
 			: 'all';
 
 	const [activeFilter, setActiveFilter] = useState<FilterKey>(initialFilter);
+
+	// The domain pills are deep-linked from the home page, so the URL is the
+	// source of truth rather than a second copy of it in component state.
+	const domainParam = searchParams.get('domain');
+	const activeTrack: TrackFilterKey = isTrackFilterKey(domainParam)
+		? domainParam
+		: 'all';
+
+	const setTrackWithUrl = (track: TrackFilterKey) => {
+		const params = new URLSearchParams(searchParams.toString());
+		if (track === 'all') {
+			params.delete('domain');
+		} else {
+			params.set('domain', track);
+		}
+		router.replace(`?${params.toString()}`, { scroll: false });
+	};
 
 	const setFilterWithUrl = (filter: FilterKey) => {
 		setActiveFilter(filter);
@@ -61,11 +80,15 @@ function WorkPageInner() {
 	}, []);
 
 	const filteredItems = useMemo(() => {
+		let items = sortedItems;
 		if (activeFilter !== 'all') {
-			return sortedItems.filter((w) => w.category === activeFilter);
+			items = items.filter((w) => w.category === activeFilter);
 		}
-		return sortedItems;
-	}, [activeFilter, sortedItems]);
+		if (activeTrack !== 'all') {
+			items = items.filter((w) => w.track === activeTrack);
+		}
+		return items;
+	}, [activeFilter, activeTrack, sortedItems]);
 
 	return (
 		<div className='work-page'>
@@ -78,11 +101,23 @@ function WorkPageInner() {
 				}
 			/>
 			<div className='work-content-wrap'>
-				<div className='work-section-divider'>
-					<span className='work-section-divider-text'>CASE STUDIES</span>
-					<div className='work-section-divider-line'></div>
-				</div>
-				<WorkGrid items={filteredItems} gridColumns={3} />
+				<WorkDomainFilters
+					activeTrack={activeTrack}
+					setActiveTrack={setTrackWithUrl}
+				/>
+				{filteredItems.length > 0 ? (
+					<>
+						<div className='work-section-divider'>
+							<span className='work-section-divider-text'>CASE STUDIES</span>
+							<div className='work-section-divider-line'></div>
+						</div>
+						<WorkGrid items={filteredItems} gridColumns={3} />
+					</>
+				) : (
+					<p className='work-empty'>
+						Nothing in this combination — try another filter.
+					</p>
+				)}
 			</div>
 			<Contact />
 		</div>

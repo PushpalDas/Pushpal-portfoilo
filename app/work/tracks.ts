@@ -18,7 +18,9 @@ export const TRACK_FILTERS: { key: TrackFilterKey; label: string }[] = [
 	{ key: 'ip', label: 'Patents & IP' },
 ];
 
-export function isTrackFilterKey(value: string | null): value is TrackFilterKey {
+export function isTrackFilterKey(
+	value: string | null,
+): value is TrackFilterKey {
 	return TRACK_FILTERS.some((f) => f.key === value);
 }
 

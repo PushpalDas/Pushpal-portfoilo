@@ -813,3 +813,32 @@ html:not(.dark) .work-section-divider-text {
 html:not(.dark) .work-section-divider-line {
 	background: rgba(0, 0, 0, 0.1);
 }
+
+/* ============================================
+   DOMAIN PILLS — deep-linked from the home page +n rows
+   ============================================ */
+.work-domain-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto 2rem;
+}
+
+.work-domain-row .work-filter-btn {
+	font-size: 0.8rem;
+	padding: 0.5em 1.25em;
+	min-height: 44px;
+}
+
+.work-empty {
+	width: 100%;
+	max-width: 1200px;
+	margin: 3rem auto 6rem;
+	font-size: 0.9rem;
+	color: rgba(255, 255, 255, 0.5);
+}
+html:not(.dark) .work-empty {
+	color: rgba(0, 0, 0, 0.5);
+}
