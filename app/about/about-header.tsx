@@ -8,6 +8,9 @@ export default function AboutHeader() {
 	const line1Ref = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
+		// No motion means no motion: the headline is already in place.
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
 		const ctx = gsap.context(() => {
 			gsap.from([line1Ref.current], {
 				y: '100%',

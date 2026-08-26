@@ -14,6 +14,9 @@ export default function AboutPage() {
 	const pageRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		// No motion means no motion: leave the page as rendered.
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
 		const ctx = gsap.context(() => {
 			for (const block of gsap.utils.toArray<HTMLElement>('.about-reveal')) {
 				gsap.from(block, {
@@ -52,12 +55,23 @@ export default function AboutPage() {
 							cinematographer.
 						</p>
 						<p>
-							I chose engineering instead. In a lower-middle-class home the
-							daily bread decides, and I made the choice with open eyes. What I
-							kept was the lens. It turned out you can point it at circuits, and
-							at people.
+							What I kept was the lens. It turned out you can point it at
+							circuits, and at people.
 						</p>
 					</section>
+
+					<figure className='about-figure about-figure-plane about-reveal'>
+						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
+						<img
+							src='/about/plane.webp'
+							width={768}
+							height={1024}
+							loading='lazy'
+							decoding='async'
+							alt="A yellow paper plane resting against a wall of sticky notes, above one handwritten with Steve Jobs's line that simple can be harder than complex."
+						/>
+						<figcaption>a paper plane, over a note I kept</figcaption>
+					</figure>
 
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>Learning what to build</p>
@@ -78,6 +92,21 @@ export default function AboutPage() {
 						</p>
 					</section>
 
+					<figure className='about-figure about-reveal'>
+						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
+						<img
+							src='/about/desk.webp'
+							width={768}
+							height={1024}
+							loading='lazy'
+							decoding='async'
+							alt='A home desk with a monitor of code, a laptop showing a PCB layout, a bare green circuit board, an open notebook of handwritten circuit notes, and a wall of sticky notes above.'
+						/>
+						<figcaption>
+							a desk, a bare board, and the wall it was worked out on
+						</figcaption>
+					</figure>
+
 					<p className='about-pull about-reveal'>
 						I liked building. I love deciding what gets built, and why.
 					</p>
@@ -94,12 +123,20 @@ export default function AboutPage() {
 							product until it ships. I own efficiency, our AI programs,
 							products, and patents.
 						</p>
-						<p>
-							The rigour comes from two places: a Six Sigma Black Belt, and time
-							in a lab learning that a board tells the truth even when the plan
-							doesn&apos;t.
-						</p>
 					</section>
+
+					<figure className='about-figure about-reveal'>
+						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
+						<img
+							src='/about/bench.webp'
+							width={1024}
+							height={768}
+							loading='lazy'
+							decoding='async'
+							alt='A laboratory bench under a high-voltage station sign, with four multimeters in a row, a power supply, and boards wired for test.'
+						/>
+						<figcaption>a test bench, mid-measurement</figcaption>
+					</figure>
 
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>What I keep going back to</p>
@@ -107,18 +144,38 @@ export default function AboutPage() {
 							Christensen&apos;s <em>The Innovator&apos;s Dilemma</em> explains
 							why careful companies, doing everything right for their best
 							customers, still get overtaken. I think about it whenever a
-							roadmap starts to feel safe. Miller&apos;s <em>Chip War</em> is
-							the other one — a useful reminder that in deep tech, the thing you
-							are building is also the thing countries are counting.
+							roadmap starts to feel safe. Grove&apos;s{' '}
+							<em>Only the Paranoid Survive</em> named something I had already
+							met: a strategic inflection point arrives quietly, and the 10X
+							force behind it does not announce itself. A venture of mine that
+							went nowhere taught me the rest — not everyone is paying that kind
+							of attention, and the ones who do are worth building with.
+							Miller&apos;s <em>Chip War</em> is the third, a reminder that in
+							deep tech the thing you are building is also the thing countries
+							are counting.
 						</p>
 					</section>
+
+					<figure className='about-figure about-reveal'>
+						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
+						<img
+							src='/about/book.webp'
+							width={768}
+							height={1024}
+							loading='lazy'
+							decoding='async'
+							alt="A hand holding a copy of Clayton Christensen's The Innovator's Dilemma on a plane, a boarding pass used as a bookmark."
+						/>
+						<figcaption>the Christensen, read in transit</figcaption>
+					</figure>
 
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>The other lens</p>
 						<p>
 							I still photograph. The year I graduated I trained under Asit
-							Poddar, a Kolkata artist. Satyajit Ray taught me how to see: a
-							small, ordinary detail carries more than a speech.
+							Poddar, an artist from Satyajit Ray&apos;s cinematography team. Ray
+							taught me how to see: a small, ordinary detail carries more than a
+							speech.
 						</p>
 						<p>
 							So I got the cinematographer&apos;s life sideways. The lens is
@@ -126,12 +183,24 @@ export default function AboutPage() {
 						</p>
 					</section>
 
+					<figure className='about-figure about-reveal'>
+						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
+						<img
+							src='/about/frame.webp'
+							width={602}
+							height={1024}
+							loading='lazy'
+							decoding='async'
+							alt='An open book beside a cup of hot chocolate with a toasted marshmallow, on a wooden table.'
+						/>
+						<figcaption>an open book, a cup, a table</figcaption>
+					</figure>
+
 					<section className='about-section about-reveal'>
 						<p className='about-section-label'>If any of this resonates</p>
 						<p>
 							I want to keep building things that solve problems that actually
-							matter, with people who care how it&apos;s done. Electrons, and a
-							frame. That is still all it is.
+							matter, with people who care how it&apos;s done.
 						</p>
 						<p>
 							If you&apos;re working on something in that direction, write to me

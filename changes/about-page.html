@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — Pushpal Das</title>
+<meta name="description" content="Pushpal Das, Principal PM in Ixana's CTO office. Electronics, embedded systems and product — built at the intersection of art and science.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0c;
+    --title:#ffffff;
+    --body:rgba(255,255,255,.7);
+    --label:rgba(255,255,255,.45);
+    --note:rgba(255,255,255,.4);
+    --sep:rgba(255,255,255,.3);
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#ffffff;
+      --title:#1c1d20;
+      --body:rgba(0,0,0,.6);
+      --label:rgba(0,0,0,.45);
+      --note:rgba(0,0,0,.45);
+      --sep:rgba(0,0,0,.3);
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--body);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(1.5rem,4vw,4rem)}
+
+  /* Header */
+  header{padding:clamp(8rem,18vh,14rem) 0 clamp(2rem,5vh,4rem)}
+  h1{
+    font-size:clamp(2.5rem,7vw,5.5rem);
+    font-weight:400;line-height:1.1;letter-spacing:-.03em;
+    margin:0;color:var(--title);
+  }
+  .subline{
+    font-size:clamp(1rem,1.5vw,1.25rem);font-weight:300;
+    margin:1rem 0 0;max-width:800px;line-height:1.5;color:var(--body);
+  }
+  .note{
+    font-size:.8rem;font-weight:300;letter-spacing:.01em;
+    margin:.75rem 0 0;max-width:640px;line-height:1.5;color:var(--note);
+  }
+
+  /* Content */
+  main{padding:1rem 0 4rem}
+  section{max-width:62ch;margin:0 0 clamp(3rem,7vh,5.5rem)}
+  section:last-child{margin-bottom:0}
+  .label{
+    font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+    margin:0 0 1.75rem;color:var(--label);
+  }
+  section p{
+    font-size:clamp(1rem,1.5vw,1.25rem);font-weight:300;line-height:1.7;
+    margin:0 0 1.5rem;color:var(--body);
+  }
+  section p:last-of-type{margin-bottom:0}
+  em{font-style:italic}
+
+  /* The one pulled-out line — the turn in the story */
+  .pull{
+    max-width:30ch;margin:clamp(3rem,7vh,5rem) 0;
+    font-size:clamp(1.75rem,4vw,3rem);font-weight:400;
+    line-height:1.15;letter-spacing:-.03em;color:var(--title);
+  }
+
+  /* The rail — photographs sit in the right-hand column, one per section */
+  figure{margin:0 0 clamp(3rem,7vh,5.5rem)}
+  figure img{display:block;width:100%;height:auto;border-radius:1px}
+  figcaption{
+    font-size:.8rem;font-weight:300;letter-spacing:.01em;
+    margin:.75rem 0 0;line-height:1.5;color:var(--note);
+  }
+  /* they sit on near-black; a touch of restraint keeps them from shouting */
+  figure img{filter:saturate(.92) brightness(.97)}
+  @media (prefers-color-scheme: light){
+    figure img{filter:none}
+  }
+
+  @media (min-width:900px){
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,62ch) minmax(240px,360px);
+      column-gap:clamp(2rem,4vw,4rem);
+      align-items:start;
+    }
+    .grid > section{grid-column:1}
+    .grid > figure{grid-column:2;align-self:start}
+    .grid > .pull{grid-column:1 / -1}   /* the full stop spans the page */
+  }
+
+  /* Close */
+  .links{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.5rem;margin-top:2.25rem}
+  .links a{
+    position:relative;font-size:clamp(1rem,1.5vw,1.25rem);font-weight:400;
+    color:var(--title);text-decoration:none;padding-bottom:.2rem;
+  }
+  .links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;
+    background:currentColor;opacity:.35;transform-origin:right center;
+    transition:transform .4s cubic-bezier(.19,1,.22,1),opacity .3s ease;
+  }
+  .links a:hover::after{opacity:1;transform:scaleX(0);transform-origin:left center}
+  .links a:focus-visible{outline:1px solid currentColor;outline-offset:.35rem}
+  .sep{color:var(--sep)}
+
+  @media (prefers-reduced-motion: reduce){
+    .links a::after{transition:none}
+  }
+
+  @media (max-width:640px){ section,.pull{max-width:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Electrons and a frame</h1>
+    <p class="subline">I'm Pushpal Das. I build products where electronics meets people — currently Principal PM in the CTO's office at Ixana.</p>
+    <p class="note">The roles, dates and credentials live on the experience page. This one is about how I see.</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap grid">
+
+    <section>
+      <p class="label">Curiosity came first</p>
+      <p>As a child I wanted to know how each person builds a whole reality out of their own thoughts. I reasoned my way around that question for years and kept arriving back where I started.</p>
+      <p>A camera helped. Through a lens I could borrow someone else's way of seeing, one frame at a time. I wanted to be a cinematographer.</p>
+      <p>What I kept was the lens. It turned out you can point it at circuits, and at people.</p>
+    </section>
+
+    <section>
+      <p class="label">Learning what to build</p>
+      <p>In college I fell for electronics — the plain fact of electrons moving, and what a person can make them do. I went looking for someone who loved this from the other side, the artistic side, and found Steve Jobs. One thing from his story stayed: he trusted his read of what people would want before they could say it. I recognised that instinct. I have run on it since — across ideas, design, business, and people.</p>
+      <p>Then came the years with boards on a bench. Troubleshooting, the patience of finding out why a thing does not work, the first product that was mine end to end: what it should do, why, and whether it was good enough to ship.</p>
+    </section>
+
+    <figure>
+      <img src="assets/about/desk.webp" width="768" height="1024" loading="lazy" decoding="async"
+           alt="A home desk with a monitor of code, a laptop showing a PCB layout, a bare green circuit board, an open notebook of handwritten circuit notes, and a wall of sticky notes above.">
+      <figcaption>a desk, a bare board, and the wall it was worked out on</figcaption>
+    </figure>
+
+    <p class="pull">I liked building. I love deciding what gets built, and why.</p>
+
+    <section>
+      <p class="label">How I work</p>
+      <p>Hardware, embedded systems, semiconductors, AI — and today, wearable silicon and the Internet of Bodies at Ixana.</p>
+      <p>The work is deciding what matters and what can wait, holding the line between engineering and the business, and staying with a product until it ships. I own efficiency, our AI programs, products, and patents.</p>
+    </section>
+
+    <figure>
+      <img src="assets/about/bench.webp" width="1024" height="768" loading="lazy" decoding="async"
+           alt="A laboratory bench under a high-voltage station sign, with four multimeters in a row, a power supply, and boards wired for test.">
+      <figcaption>a test bench, mid-measurement</figcaption>
+    </figure>
+
+    <section>
+      <p class="label">What I keep going back to</p>
+      <p>Christensen's <em>The Innovator's Dilemma</em> explains why careful companies, doing everything right for their best customers, still get overtaken. I think about it whenever a roadmap starts to feel safe. Grove's <em>Only the Paranoid Survive</em> named something I had already met: a strategic inflection point arrives quietly, and the 10X force behind it does not announce itself. A venture of mine that went nowhere taught me the rest — not everyone is paying that kind of attention, and the ones who do are worth building with. Miller's <em>Chip War</em> is the third, a reminder that in deep tech the thing you are building is also the thing countries are counting.</p>
+    </section>
+
+    <figure>
+      <img src="assets/about/book.webp" width="768" height="1024" loading="lazy" decoding="async"
+           alt="A hand holding a copy of Clayton Christensen's The Innovator's Dilemma on a plane, a boarding pass used as a bookmark.">
+      <figcaption>the Christensen, read in transit</figcaption>
+    </figure>
+
+    <section>
+      <p class="label">The other lens</p>
+      <p>I still photograph. The year I graduated I trained under Asit Poddar, an artist from Satyajit Ray's cinematography team. Ray taught me how to see: a small, ordinary detail carries more than a speech.</p>
+      <p>So I got the cinematographer's life sideways. The lens is mine. The frame holds people and problems instead of film.</p>
+    </section>
+
+    <figure>
+      <img src="assets/about/frame.webp" width="602" height="1024" loading="lazy" decoding="async"
+           alt="An open book beside a cup of hot chocolate with a toasted marshmallow, on a wooden table.">
+      <figcaption>an open book, a cup, a table</figcaption>
+    </figure>
+
+    <section>
+      <p class="label">If any of this resonates</p>
+      <p>I want to keep building things that solve problems that actually matter, with people who care how it's done.</p>
+      <p>If you're working on something in that direction, write to me — I'd like to hear about it.</p>
+      <div class="links">
+        <a href="mailto:pushpaldas2001@gmail.com">pushpaldas2001@gmail.com</a>
+        <span class="sep">/</span>
+        <a href="https://www.linkedin.com/in/pushpaldas/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>

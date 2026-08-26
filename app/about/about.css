@@ -219,6 +219,69 @@ html:not(.dark) .about-link-sep {
 	color: rgba(0, 0, 0, 0.3);
 }
 
+/* ============================================
+   THE RAIL — photographs beside the text
+   ============================================ */
+.about-figure {
+	margin: 0 0 clamp(3rem, 7vh, 5.5rem);
+}
+
+.about-figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 1px;
+	/* they sit on near-black; a touch of restraint keeps them from shouting */
+	filter: saturate(0.92) brightness(0.97);
+}
+
+html:not(.dark) .about-figure img {
+	filter: none;
+}
+
+.about-figure figcaption {
+	font-size: 0.8rem;
+	font-weight: 300;
+	letter-spacing: 0.01em;
+	line-height: 1.5;
+	margin: 0.75rem 0 0;
+	color: rgba(255, 255, 255, 0.4);
+}
+
+html:not(.dark) .about-figure figcaption {
+	color: rgba(0, 0, 0, 0.45);
+}
+
+/* Desktop: text keeps its measure on the left, photographs to the right */
+@media (min-width: 900px) {
+	.about-container {
+		display: grid;
+		grid-template-columns: minmax(0, 62ch) minmax(240px, 360px);
+		column-gap: clamp(2rem, 4vw, 4rem);
+		align-items: start;
+	}
+
+	.about-container > .about-section {
+		grid-column: 1;
+	}
+
+	.about-container > .about-figure {
+		grid-column: 2;
+		align-self: start;
+	}
+
+	/* the plane belongs beside the opening section, not below it */
+	.about-container > .about-figure-plane {
+		grid-row: 1;
+		margin-top: 0.35rem;
+	}
+
+	/* the full stop spans the page */
+	.about-container > .about-pull {
+		grid-column: 1 / -1;
+	}
+}
+
 @media (max-width: 640px) {
 	.about-section,
 	.about-pull {
