@@ -357,7 +357,7 @@ export default function WorkHighlights({
 											className='work-tile-link wh-more-card'
 										>
 											<div className='work-tile-image-col'>
-												<div className='work-tile-image wh-more-image'>
+												<div className='work-tile-image'>
 													<div className='work-tile-image-bg wh-more-bg' />
 													<span className='work-tile-icon-display wh-more-display'>
 														<span className='wh-more-count'>

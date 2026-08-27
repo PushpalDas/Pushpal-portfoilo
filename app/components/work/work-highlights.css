@@ -341,38 +341,22 @@ html:not(.dark) .wh-card-role {
 
 /* The tile is a /work tile: .work-tile-link, .work-tile-image and
    .work-tile-icon-display come from work.css, which means the hover zoom is
-   the same rule the project cards use, not a copy of it. Only the dashed
-   plate and the count are ours. */
+   the same rule the project cards use, not a copy of it. Only the black
+   plate and the accent count are ours. */
 .wh-more-card {
 	cursor: pointer;
 }
 
-.wh-more-image {
-	border: 1px dashed rgba(255, 255, 255, 0.24);
-	transition: border-color 0.4s cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-html:not(.dark) .wh-more-image {
-	border-color: rgba(0, 0, 0, 0.2);
-}
-
-.wh-more-card:hover .wh-more-image,
-.wh-more-card:focus-visible .wh-more-image {
-	border-color: #455ce9;
-}
-
+/* No border: the plate is a black box like every other tile image on the
+   grid, and the count is the only thing on it. */
 .wh-more-bg {
-	background: rgba(255, 255, 255, 0.02);
+	background: #000;
 	transition: background-color 0.4s cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-html:not(.dark) .wh-more-bg {
-	background: rgba(0, 0, 0, 0.02);
 }
 
 .wh-more-card:hover .wh-more-bg,
 .wh-more-card:focus-visible .wh-more-bg {
-	background: rgba(69, 92, 233, 0.1);
+	background: #0b0f2a;
 }
 
 /* Overrides work.css's 3rem glyph size — this holds two lines, not an icon. */
