@@ -13,7 +13,7 @@ const navLinks = [
 	{ href: '/', label: 'Home' },
 	{ href: '/about', label: 'About' },
 	{ href: '/work', label: 'Work' },
-	{ href: '/hoobie', label: 'Hobby' },
+	{ href: '/hobby', label: 'Hobby' },
 	{ href: '/experience', label: 'Experience' },
 	{ href: '/certifications', label: 'Certifications' },
 	{ href: '/book-a-meeting', label: 'Book a meeting' },

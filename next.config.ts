@@ -8,6 +8,17 @@ const nextConfig: NextConfig = {
 	pageExtensions: ['ts', 'tsx'],
 	transpilePackages: ['next-mdx-remote'],
 	reactCompiler: true,
+	// /hoobie was the route until the spelling was fixed. Kept permanently so
+	// existing links and anything already indexed still land.
+	async redirects() {
+		return [
+			{
+				source: '/hoobie',
+				destination: '/hobby',
+				permanent: true,
+			},
+		];
+	},
 	async rewrites() {
 		return [
 			{

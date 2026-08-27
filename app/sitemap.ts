@@ -13,7 +13,7 @@ export default async function sitemap() {
 		'work',
 		'experience',
 		'certifications',
-		'hoobie',
+		'hobby',
 		'about',
 		'uses',
 	].map((route) => ({
