@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { merryWeather } from '../../fonts';
 import { LINKEDIN_URL, X_URL } from '../../lib/social';
-import { workItems } from '../../work/constants';
 import { AtSignIcon } from '../layouts/icons/at-sign-icon';
 import { GithubIcon } from '../layouts/icons/github-icon';
 import { LinkedinIcon } from '../layouts/icons/linkedin-icon';
@@ -10,39 +9,6 @@ import { XIcon } from '../layouts/icons/x-icon';
 import Magnetic from '../Magnetic';
 import SplashCursor from '../splash-cursor';
 import ArrowDown from './arrow-down';
-
-/**
- * The proof strip. Every item traces to a page Ixana has published or to a
- * figure counted out of app/work/constants.ts — the same standing rule the
- * work section runs on. INTERNAL_TOOLS is computed rather than typed.
- */
-const INTERNAL_TOOLS = workItems.filter(
-	(item) =>
-		item.company === 'Ixana' &&
-		item.category === 'product' &&
-		item.status === 'internal',
-).length;
-
-const PROOF = [
-	{
-		text: '4 Wi-R parts in production',
-		// YR23 and YR31 on /products/chips/wi-r-ban; XA-NFE2001 and XA-NFE3001
-		// on /products/chips/wi-r-nfe. The /products index lists the two
-		// families rather than the parts, so the part count comes off the two
-		// chip pages.
-		source: 'https://www.ixana.ai/products/chips/wi-r-ban + /wi-r-nfe',
-	},
-	{
-		text: '50+ patent filings, first grants issued',
-		source:
-			'case-studies-v2.json#ixana-patent-program › "Fifty-plus filings across six product lines" · https://patents.google.com/patent/US12619308B2/en',
-	},
-	{
-		text: `${INTERNAL_TOOLS} internal tools in daily use at Ixana`,
-		source:
-			'app/work/constants.ts › company Ixana · category product · status internal',
-	},
-];
 
 /** One line to revert if this reads as overclaiming. */
 const HERO_H1 = 'I turn deep-tech R&D into products that ship.';
@@ -68,14 +34,9 @@ export default function Hero() {
 							<p className='text-base text-justify'>
 								Principal PM in the CTO&apos;s office at Ixana — I run the Wi-R
 								silicon programs from spec to production, the patent program
-								(50+ filings, first grants issued), and the internal tools the
-								company plans and delivers with.
+								around them, and the AI platforms the company plans, delivers
+								and searches with.
 							</p>
-							<ul className='mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[0.68rem] uppercase tracking-[0.1em] text-neutral-400'>
-								{PROOF.map((item) => (
-									<li key={item.text}>{item.text}</li>
-								))}
-							</ul>
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>
 							<div>
