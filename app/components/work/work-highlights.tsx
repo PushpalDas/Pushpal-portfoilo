@@ -58,6 +58,28 @@ function buildPlan() {
 	return { groups, panelOrder };
 }
 
+function Features({ features }: { features: string[] }) {
+	// Two interleaved columns, so list order reads across rather than down.
+	return (
+		<div className='wh-features'>
+			<ul className='wh-features-col'>
+				{features
+					.filter((_, i) => i % 2 === 0)
+					.map((feature) => (
+						<li key={feature}>{feature}</li>
+					))}
+			</ul>
+			<ul className='wh-features-col'>
+				{features
+					.filter((_, i) => i % 2 === 1)
+					.map((feature) => (
+						<li key={feature}>{feature}</li>
+					))}
+			</ul>
+		</div>
+	);
+}
+
 function Panel({
 	highlight,
 	index,
@@ -73,6 +95,9 @@ function Panel({
 }) {
 	const href = `/work/${highlight.slug}${FROM_HOME}`;
 	const headingId = `wh-headline-${highlight.slug}`;
+	// Every multi-item panel here is one line per item — the shared partner
+	// headings and the patent record both read as a list, not a run-on.
+	const stacked = highlight.panelItems.length > 1;
 
 	return (
 		<article
@@ -108,16 +133,12 @@ function Panel({
 				</div>
 
 				<div className='wh-panel-body'>
-					{/* The soWhat line lives on the active row, where it does the work
-					    of showing the row is open. Repeating it here put the same
-					    sentence on screen twice. */}
-					<div className='wh-panel-head'>
-						<h3 id={headingId} className='wh-headline'>
-							<Link href={href}>{highlight.headline}</Link>
-						</h3>
-					</div>
+					<h3 id={headingId} className='wh-headline'>
+						<Link href={href}>{highlight.headline}</Link>
+					</h3>
+					<p className='wh-sowhat'>{highlight.soWhat}</p>
 
-					<dl className='wh-metric-strip'>
+					<dl className='wh-metrics'>
 						{highlight.metrics.map((metric) => (
 							<div className='wh-metric' key={metric.label}>
 								<dt className='wh-metric-value'>
@@ -132,35 +153,31 @@ function Panel({
 						))}
 					</dl>
 
-					<div className='wh-panel-cols'>
-						<div className='wh-col'>
-							<h4>What it does</h4>
-							<ul className='wh-features'>
-								{highlight.features.map((feature) => (
-									<li key={feature}>{feature}</li>
-								))}
-							</ul>
-						</div>
-						<div className='wh-col'>
-							<h4>{highlight.panelLabel ?? "Who's interested?"}</h4>
-							<ul className='wh-panel-items'>
-								{highlight.panelItems.map((item) => (
-									<li key={item.text}>
-										{item.href ? (
-											<a
-												href={item.href}
-												target='_blank'
-												rel='noopener noreferrer'
-											>
-												{item.text}
-											</a>
-										) : (
-											item.text
-										)}
-									</li>
-								))}
-							</ul>
-						</div>
+					<div className='wh-divider' />
+
+					<Features features={highlight.features} />
+
+					<div className='wh-panel-list'>
+						<h4>{highlight.panelLabel ?? "Who's interested?"}</h4>
+						<ul
+							className={`wh-panel-items${stacked ? ' wh-panel-items--stacked' : ''}`}
+						>
+							{highlight.panelItems.map((item) => (
+								<li key={item.text}>
+									{item.href ? (
+										<a
+											href={item.href}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											{item.text}
+										</a>
+									) : (
+										item.text
+									)}
+								</li>
+							))}
+						</ul>
 					</div>
 
 					<div className='wh-panel-foot'>
@@ -198,7 +215,7 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 
 	const rootRef = useRef<HTMLElement>(null);
 	const navRef = useRef<HTMLElement>(null);
-	const bandRef = useRef<HTMLSpanElement>(null);
+	const ruleRef = useRef<HTMLSpanElement>(null);
 	const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 	const panelRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -234,25 +251,20 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 		return () => window.clearTimeout(id);
 	}, [lenis]);
 
-	/** Slides the inverted band. Rows are measured before the tween, never inside it. */
-	const positionBand = useCallback((instant: boolean) => {
-		const band = bandRef.current;
+	/** Slides the active rule. Rows are measured before the tween, never inside it. */
+	const positionRule = useCallback((instant: boolean) => {
+		const rule = ruleRef.current;
 		const row = rowRefs.current[activeRef.current];
-		if (!band || !row || !motion.current.isDesktop) return;
+		if (!rule || !row || !motion.current.isDesktop) return;
 
 		const top = row.offsetTop;
 		const height = row.offsetHeight;
+		gsap.set(rule, { height });
 
 		if (instant || motion.current.reduced) {
-			gsap.set(band, { y: top, height, autoAlpha: 1 });
+			gsap.set(rule, { y: top });
 		} else {
-			gsap.to(band, {
-				y: top,
-				height,
-				autoAlpha: 1,
-				duration: 0.35,
-				ease: 'power4.out',
-			});
+			gsap.to(rule, { y: top, duration: 0.35, ease: 'power4.out' });
 		}
 	}, []);
 
@@ -334,10 +346,7 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 
 				motion.current.isDesktop = desktop;
 				motion.current.reduced = reduced;
-				if (!desktop && bandRef.current) {
-					gsap.set(bandRef.current, { autoAlpha: 0 });
-				}
-				positionBand(true);
+				positionRule(true);
 
 				const onEnter = () => {
 					motion.current.entered = true;
@@ -393,13 +402,12 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 		return () => {
 			mm.revert();
 		};
-	}, [positionBand, runCountUp]);
+	}, [positionRule, runCountUp]);
 
-	// The active row reveals its soWhat, which changes row heights the moment
-	// React commits — measure after layout, before paint.
+	// Measure after layout, before paint, so the rule never lands a frame late.
 	useLayoutEffect(() => {
-		positionBand(prevActive.current === null);
-	}, [positionBand]);
+		positionRule(prevActive.current === null);
+	}, [positionRule]);
 
 	useEffect(() => {
 		const previous = prevActive.current;
@@ -500,7 +508,7 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 					</header>
 
 					<nav className='wh-nav' ref={navRef} aria-label='Highlighted work'>
-						<span className='wh-band' ref={bandRef} aria-hidden='true' />
+						<span className='wh-rule' ref={ruleRef} aria-hidden='true' />
 
 						{groups.map(({ group, eyebrowOrder, rows, moreOrder }) => (
 							<div className='wh-group' key={group.track}>
@@ -526,13 +534,7 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 										onFocus={() => setActive(index)}
 										onClick={handleClick(index)}
 									>
-										<span className='wh-row-main'>
-											<span className='wh-row-eyebrow'>
-												{highlight.eyebrow}
-											</span>
-											<span className='wh-row-title'>{highlight.title}</span>
-											<span className='wh-row-sowhat'>{highlight.soWhat}</span>
-										</span>
+										<span className='wh-row-title'>{highlight.title}</span>
 										<span className='wh-row-metric'>
 											{highlight.metrics[0].value}
 										</span>
