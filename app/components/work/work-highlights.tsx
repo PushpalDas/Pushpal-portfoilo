@@ -321,9 +321,6 @@ export default function WorkHighlights({
 			<div className='wh-shell'>
 				<header className='wh-head'>
 					<h2 className='wh-title wh-reveal'>Selected work.</h2>
-					<p className='wh-subhead wh-reveal'>
-						{workHighlights.length} programs in production or daily use.
-					</p>
 				</header>
 
 				{highlightGroups.map((group) => {
@@ -389,9 +386,11 @@ export default function WorkHighlights({
 					);
 				})}
 
+				{/* Lands on Products with the track pills already open, which is
+				    what this section is a slice of. */}
 				<p className='wh-all wh-reveal'>
 					<Magnetic strength={12}>
-						<Link href='/work' className='wh-all-link'>
+						<Link href='/work?filter=product' className='wh-all-link'>
 							See all work →
 						</Link>
 					</Magnetic>

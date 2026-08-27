@@ -44,9 +44,6 @@
 
 .work-header-filters {
 	flex-shrink: 0;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
 }
 
 .work-header-title {
@@ -793,6 +790,9 @@ html:not(.dark) .work-tile-outcome {
 	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
+	/* Same inset as .work-header-container, so CASE STUDIES starts on the
+	   same line as the heading above it. */
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
 .work-section-divider-text {
@@ -838,13 +838,22 @@ html:not(.dark) .work-section-divider-line {
 .work-domain-reveal-inner {
 	overflow: hidden;
 	min-height: 0;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	/* Matches .work-grid-container, so the pills line up with the cards. */
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
+
+/* Under the CASE STUDIES line, in the grid container, aligned right to
+   the Products toggle that reveals them. */
 
 .work-domain-row {
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: flex-end;
 	gap: 0.45rem;
-	padding-top: 0.7rem;
+	padding-bottom: 1.75rem;
 }
 
 /* One size step down from the Products / Engineering toggle above it. */

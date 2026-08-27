@@ -340,11 +340,6 @@ export const workHighlights: Highlight[] = [
 				source:
 					'https://eegrab.com/wp-content/uploads/2021/brochure/Wishkey_brochure.pdf',
 			},
-			{
-				text: 'WishKey product demo — EEGRAB',
-				href: 'https://www.youtube.com/watch?v=8etIl_0wj0I',
-				source: 'https://www.youtube.com/watch?v=8etIl_0wj0I',
-			},
 		],
 		role: 'Senior Embedded Design Engineer, end to end',
 		status: 'In production',
@@ -353,6 +348,10 @@ export const workHighlights: Highlight[] = [
 			kind: 'image',
 			src: '/static/images/wishkey.jpg',
 			alt: 'WishKey electronic key cabinet',
+		},
+		proof: {
+			text: 'WishKey demo — EEGRAB',
+			href: 'https://www.youtube.com/watch?v=8etIl_0wj0I',
 		},
 	},
 	{

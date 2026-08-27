@@ -108,32 +108,31 @@ function WorkPageInner() {
 		<div className='work-page'>
 			<WorkHeader
 				filters={
-					<>
-						<WorkFilters
-							activeFilter={activeFilter}
-							setActiveFilter={setFilterWithUrl}
-						/>
-						<WorkDomainFilters
-							activeTrack={activeTrack}
-							setActiveTrack={setTrackWithUrl}
-							open={showTracks}
-						/>
-					</>
+					<WorkFilters
+						activeFilter={activeFilter}
+						setActiveFilter={setFilterWithUrl}
+					/>
 				}
 			/>
 			<div className='work-content-wrap'>
+				<div className='work-section-divider'>
+					<span className='work-section-divider-text'>CASE STUDIES</span>
+					<div className='work-section-divider-line'></div>
+				</div>
+				{/* The track pills belong to the case studies below them, not to
+				    the header — so they sit under the line, aligned with the toggle
+				    that reveals them. */}
+				<WorkDomainFilters
+					activeTrack={activeTrack}
+					setActiveTrack={setTrackWithUrl}
+					open={showTracks}
+				/>
 				{filteredItems.length > 0 ? (
-					<>
-						<div className='work-section-divider'>
-							<span className='work-section-divider-text'>CASE STUDIES</span>
-							<div className='work-section-divider-line'></div>
-						</div>
-						<WorkGrid
-							items={filteredItems}
-							gridColumns={3}
-							domain={activeTrack === 'all' ? undefined : activeTrack}
-						/>
-					</>
+					<WorkGrid
+						items={filteredItems}
+						gridColumns={3}
+						domain={activeTrack === 'all' ? undefined : activeTrack}
+					/>
 				) : (
 					<p className='work-empty'>
 						Nothing in this combination — try another filter.

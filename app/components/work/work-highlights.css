@@ -26,7 +26,7 @@
 /* --- heading -------------------------------------------------------- */
 
 .wh-head {
-	margin-bottom: clamp(2.5rem, 6vw, 4rem);
+	margin-bottom: clamp(2rem, 5vw, 3.25rem);
 }
 
 .wh-title {
@@ -35,16 +35,6 @@
 	line-height: 1.1;
 	letter-spacing: -0.03em;
 	margin: 0;
-}
-
-.wh-subhead {
-	margin: 0.75rem 0 0;
-	font-size: 0.9rem;
-	color: rgba(255, 255, 255, 0.5);
-}
-
-html:not(.dark) .wh-subhead {
-	color: rgba(0, 0, 0, 0.5);
 }
 
 /* --- groups --------------------------------------------------------- */
@@ -351,12 +341,6 @@ html:not(.dark) .wh-card-role {
    grid, and the count is the only thing on it. */
 .wh-more-bg {
 	background: #000;
-	transition: background-color 0.4s cubic-bezier(0.76, 0, 0.24, 1);
-}
-
-.wh-more-card:hover .wh-more-bg,
-.wh-more-card:focus-visible .wh-more-bg {
-	background: #0b0f2a;
 }
 
 /* Overrides work.css's 3rem glyph size — this holds two lines, not an icon. */
@@ -401,19 +385,27 @@ html:not(.dark) .wh-more-word {
 	display: inline-flex;
 	align-items: center;
 	min-height: 44px;
-	font-size: 0.8rem;
+	padding: 0.7rem 1.75rem;
+	border: 1px solid #455ce9;
+	border-radius: 100px;
+	background: #455ce9;
+	color: #fff;
+	font-size: 0.82rem;
 	font-weight: 500;
-	color: rgba(255, 255, 255, 0.85);
 	text-decoration: none;
-	transition: color 0.3s ease;
-}
-
-html:not(.dark) .wh-all-link {
-	color: rgba(0, 0, 0, 0.8);
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 }
 
 .wh-all-link:hover,
 .wh-all-link:focus-visible {
+	background: transparent;
+	color: #7d90ff;
+}
+
+html:not(.dark) .wh-all-link:hover,
+html:not(.dark) .wh-all-link:focus-visible {
 	color: #455ce9;
 }
 
