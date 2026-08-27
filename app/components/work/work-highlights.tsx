@@ -2,12 +2,14 @@
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLenis } from 'lenis/dist/lenis-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
 	type MouseEvent,
 	useCallback,
 	useEffect,
+	useLayoutEffect,
 	useRef,
 	useState,
 } from 'react';
@@ -22,11 +24,12 @@ import {
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Every link out of this section tells the case study where the reader came from. */
+const FROM_HOME = '?from=home';
+
 interface WorkHighlightsProps {
 	/** Products on each track the home page is not already showing. */
 	moreCounts: Partial<Record<HighlightTrack, number>>;
-	/** Both numbers are counted from app/work/constants.ts, never typed. */
-	totals: { caseStudies: number; projects: number };
 }
 
 /**
@@ -48,33 +51,11 @@ function buildPlan() {
 				panelOrder[entry.index] = cursor++;
 				return { ...entry, rowOrder };
 			});
-		const moreOrder = group.more ? cursor++ : undefined;
+		const moreOrder = cursor++;
 		return { group, eyebrowOrder, rows, moreOrder };
 	});
 
 	return { groups, panelOrder };
-}
-
-function Features({ features }: { features: string[] }) {
-	// Two interleaved columns, so list order reads across rather than down.
-	return (
-		<div className='wh-features'>
-			<ul className='wh-features-col'>
-				{features
-					.filter((_, i) => i % 2 === 0)
-					.map((feature) => (
-						<li key={feature}>{feature}</li>
-					))}
-			</ul>
-			<ul className='wh-features-col'>
-				{features
-					.filter((_, i) => i % 2 === 1)
-					.map((feature) => (
-						<li key={feature}>{feature}</li>
-					))}
-			</ul>
-		</div>
-	);
 }
 
 function Panel({
@@ -90,9 +71,8 @@ function Panel({
 	order: number;
 	panelRef: (el: HTMLElement | null) => void;
 }) {
-	const href = `/work/${highlight.slug}`;
+	const href = `/work/${highlight.slug}${FROM_HOME}`;
 	const headingId = `wh-headline-${highlight.slug}`;
-	const linked = highlight.panelItems.some((item) => item.href);
 
 	return (
 		<article
@@ -118,8 +98,8 @@ function Panel({
 								priority={index === 0}
 							/>
 						) : (
-							/* No product shot exists for this one, so the number is
-							   the picture rather than a filler image. */
+							/* No product shot exists for this one, so the number is the
+							   picture rather than a filler image. */
 							<span className='wh-media-number'>
 								{highlight.metrics[0].value}
 							</span>
@@ -128,12 +108,16 @@ function Panel({
 				</div>
 
 				<div className='wh-panel-body'>
-					<h3 id={headingId} className='wh-headline'>
-						<Link href={href}>{highlight.headline}</Link>
-					</h3>
-					<p className='wh-sowhat'>{highlight.soWhat}</p>
+					{/* The soWhat line lives on the active row, where it does the work
+					    of showing the row is open. Repeating it here put the same
+					    sentence on screen twice. */}
+					<div className='wh-panel-head'>
+						<h3 id={headingId} className='wh-headline'>
+							<Link href={href}>{highlight.headline}</Link>
+						</h3>
+					</div>
 
-					<dl className='wh-metrics'>
+					<dl className='wh-metric-strip'>
 						{highlight.metrics.map((metric) => (
 							<div className='wh-metric' key={metric.label}>
 								<dt className='wh-metric-value'>
@@ -148,71 +132,73 @@ function Panel({
 						))}
 					</dl>
 
-					<div className='wh-divider' />
-
-					<Features features={highlight.features} />
-
-					<div className='wh-panel-list'>
-						<h4>{highlight.panelLabel ?? "Who's interested?"}</h4>
-						<ul
-							className={`wh-panel-items${linked ? ' wh-panel-items--stacked' : ''}`}
-						>
-							{highlight.panelItems.map((item) => (
-								<li key={item.text}>
-									{item.href ? (
-										<a
-											href={item.href}
-											target='_blank'
-											rel='noopener noreferrer'
-										>
-											{item.text}
-										</a>
-									) : (
-										item.text
-									)}
-								</li>
-							))}
-						</ul>
+					<div className='wh-panel-cols'>
+						<div className='wh-col'>
+							<h4>What it does</h4>
+							<ul className='wh-features'>
+								{highlight.features.map((feature) => (
+									<li key={feature}>{feature}</li>
+								))}
+							</ul>
+						</div>
+						<div className='wh-col'>
+							<h4>{highlight.panelLabel ?? "Who's interested?"}</h4>
+							<ul className='wh-panel-items'>
+								{highlight.panelItems.map((item) => (
+									<li key={item.text}>
+										{item.href ? (
+											<a
+												href={item.href}
+												target='_blank'
+												rel='noopener noreferrer'
+											>
+												{item.text}
+											</a>
+										) : (
+											item.text
+										)}
+									</li>
+								))}
+							</ul>
+						</div>
 					</div>
 
-					<p className='wh-meta'>
-						{highlight.role} · {highlight.status} · {highlight.years}
-					</p>
-
-					<p className='wh-panel-links'>
-						<Magnetic strength={12}>
-							<Link href={href} className='wh-case-link'>
-								Read the case study →
-							</Link>
-						</Magnetic>
-						{highlight.proof && (
-							<a
-								href={highlight.proof.href}
-								target='_blank'
-								rel='noopener noreferrer'
-								className='wh-proof-link'
-							>
-								{highlight.proof.text} ↗
-							</a>
-						)}
-					</p>
+					<div className='wh-panel-foot'>
+						<p className='wh-meta'>
+							{highlight.role} · {highlight.status} · {highlight.years}
+						</p>
+						<p className='wh-panel-links'>
+							<Magnetic strength={12}>
+								<Link href={href} className='wh-case-link'>
+									Read the case study →
+								</Link>
+							</Magnetic>
+							{highlight.proof && (
+								<a
+									href={highlight.proof.href}
+									target='_blank'
+									rel='noopener noreferrer'
+									className='wh-proof-link'
+								>
+									{highlight.proof.text} ↗
+								</a>
+							)}
+						</p>
+					</div>
 				</div>
 			</div>
 		</article>
 	);
 }
 
-export default function WorkHighlights({
-	moreCounts,
-	totals,
-}: WorkHighlightsProps) {
+export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 	const { groups, panelOrder } = buildPlan();
 
 	const [active, setActive] = useState(0);
 
 	const rootRef = useRef<HTMLElement>(null);
 	const navRef = useRef<HTMLElement>(null);
-	const ruleRef = useRef<HTMLSpanElement>(null);
+	const bandRef = useRef<HTMLSpanElement>(null);
 	const rowRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 	const panelRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -223,22 +209,39 @@ export default function WorkHighlights({
 	const finePointer = useRef(false);
 	const motion = useRef({ isDesktop: false, reduced: false, entered: false });
 
+	// Hover selection is only honoured when the pointer actually moved. Rows
+	// sliding under a stationary cursor during a scroll fire mouseenter too,
+	// and that is what used to change the active project mid-scroll.
+	const lastPointerMove = useRef(-1);
+	const scrollQuietAt = useRef(-1);
+
 	activeRef.current = active;
 
-	/** Slides the active rule. Rows are measured before the tween, never inside it. */
-	const positionRule = useCallback((instant: boolean) => {
-		const rule = ruleRef.current;
+	useLenis(() => {
+		// Lenis reports on every frame it moves; hold hover off until 150 ms
+		// after the last one.
+		scrollQuietAt.current = performance.now() + 150;
+	});
+
+	/** Slides the inverted band. Rows are measured before the tween, never inside it. */
+	const positionBand = useCallback((instant: boolean) => {
+		const band = bandRef.current;
 		const row = rowRefs.current[activeRef.current];
-		if (!rule || !row || !motion.current.isDesktop) return;
+		if (!band || !row || !motion.current.isDesktop) return;
 
 		const top = row.offsetTop;
 		const height = row.offsetHeight;
-		gsap.set(rule, { height });
 
 		if (instant || motion.current.reduced) {
-			gsap.set(rule, { y: top });
+			gsap.set(band, { y: top, height, autoAlpha: 1 });
 		} else {
-			gsap.to(rule, { y: top, duration: 0.35, ease: 'power4.out' });
+			gsap.to(band, {
+				y: top,
+				height,
+				autoAlpha: 1,
+				duration: 0.35,
+				ease: 'power4.out',
+			});
 		}
 	}, []);
 
@@ -273,12 +276,13 @@ export default function WorkHighlights({
 		}
 	}, []);
 
-	// Once JS is running, GSAP owns panel visibility — the CSS [data-active]
+	// Once JS is running GSAP owns panel visibility; the CSS [data-active]
 	// rules are the no-JS and first-paint fallback.
 	useEffect(() => {
 		panelRefs.current.forEach((panel, index) => {
-			if (panel)
+			if (panel) {
 				gsap.set(panel, { autoAlpha: index === activeRef.current ? 1 : 0 });
+			}
 		});
 	}, []);
 
@@ -289,7 +293,16 @@ export default function WorkHighlights({
 		};
 		sync();
 		query.addEventListener('change', sync);
-		return () => query.removeEventListener('change', sync);
+
+		const onPointerMove = () => {
+			lastPointerMove.current = performance.now();
+		};
+		window.addEventListener('pointermove', onPointerMove, { passive: true });
+
+		return () => {
+			query.removeEventListener('change', sync);
+			window.removeEventListener('pointermove', onPointerMove);
+		};
 	}, []);
 
 	useEffect(() => {
@@ -310,7 +323,10 @@ export default function WorkHighlights({
 
 				motion.current.isDesktop = desktop;
 				motion.current.reduced = reduced;
-				positionRule(true);
+				if (!desktop && bandRef.current) {
+					gsap.set(bandRef.current, { autoAlpha: 0 });
+				}
+				positionBand(true);
 
 				const onEnter = () => {
 					motion.current.entered = true;
@@ -354,7 +370,7 @@ export default function WorkHighlights({
 							y: 24,
 							duration: 0.6,
 							ease: 'power3.out',
-							stagger: 0.04,
+							stagger: 0.03,
 						},
 						'-=0.35',
 					);
@@ -366,13 +382,18 @@ export default function WorkHighlights({
 		return () => {
 			mm.revert();
 		};
-	}, [positionRule, runCountUp]);
+	}, [positionBand, runCountUp]);
+
+	// The active row reveals its soWhat, which changes row heights the moment
+	// React commits — measure after layout, before paint.
+	useLayoutEffect(() => {
+		positionBand(prevActive.current === null);
+	}, [positionBand]);
 
 	useEffect(() => {
 		const previous = prevActive.current;
 		prevActive.current = active;
 
-		positionRule(previous === null);
 		runCountUp(active);
 
 		if (previous === null || previous === active) return;
@@ -420,7 +441,7 @@ export default function WorkHighlights({
 		return () => {
 			tl.kill();
 		};
-	}, [active, positionRule, runCountUp]);
+	}, [active, runCountUp]);
 
 	const clearHover = useCallback(() => {
 		if (hoverTimer.current !== null) {
@@ -431,11 +452,23 @@ export default function WorkHighlights({
 
 	useEffect(() => clearHover, [clearHover]);
 
-	/** 80 ms of intent, so crossing rows on the way to the panel doesn't flash it. */
+	/**
+	 * 80 ms of intent, so crossing rows on the way to the panel doesn't flash
+	 * it — and only when the pointer genuinely moved onto the row while the
+	 * page was still.
+	 */
 	const handleEnter = (index: number) => {
 		if (!finePointer.current) return;
+
+		const now = performance.now();
+		if (now < scrollQuietAt.current) return;
+		if (now - lastPointerMove.current > 100) return;
+
 		clearHover();
-		hoverTimer.current = window.setTimeout(() => setActive(index), 80);
+		hoverTimer.current = window.setTimeout(() => {
+			if (performance.now() < scrollQuietAt.current) return;
+			setActive(index);
+		}, 80);
 	};
 
 	const handleClick = (index: number) => (event: MouseEvent) => {
@@ -451,12 +484,12 @@ export default function WorkHighlights({
 			<div className='wh-grid'>
 				<div className='wh-left'>
 					<header className='wh-intro' style={{ order: 0 }}>
-						<h2>Silicon to AI.</h2>
-						<p>Six programs, owned end to end. The rest is one click away.</p>
+						<h2>Selected work.</h2>
+						<p>{workHighlights.length} programs in production or daily use.</p>
 					</header>
 
 					<nav className='wh-nav' ref={navRef} aria-label='Highlighted work'>
-						<span className='wh-rule' ref={ruleRef} aria-hidden='true' />
+						<span className='wh-band' ref={bandRef} aria-hidden='true' />
 
 						{groups.map(({ group, eyebrowOrder, rows, moreOrder }) => (
 							<div className='wh-group' key={group.track}>
@@ -467,7 +500,7 @@ export default function WorkHighlights({
 								{rows.map(({ highlight, index, rowOrder }) => (
 									<Link
 										key={highlight.slug}
-										href={`/work/${highlight.slug}`}
+										href={`/work/${highlight.slug}${FROM_HOME}`}
 										className='wh-row'
 										style={{ order: rowOrder }}
 										ref={(el) => {
@@ -482,29 +515,36 @@ export default function WorkHighlights({
 										onFocus={() => setActive(index)}
 										onClick={handleClick(index)}
 									>
-										<span className='wh-row-title'>{highlight.title}</span>
+										<span className='wh-row-main'>
+											<span className='wh-row-eyebrow'>
+												{highlight.eyebrow}
+											</span>
+											<span className='wh-row-title'>{highlight.title}</span>
+											<span className='wh-row-sowhat'>{highlight.soWhat}</span>
+										</span>
 										<span className='wh-row-metric'>
 											{highlight.metrics[0].value}
 										</span>
 									</Link>
 								))}
 
-								{group.more && moreOrder !== undefined && (
-									<span className='wh-more-wrap' style={{ order: moreOrder }}>
-										<Magnetic strength={12}>
-											<Link href={group.more.href} className='wh-more'>
-												+{moreCounts[group.track] ?? 0} more →
-											</Link>
-										</Magnetic>
-									</span>
-								)}
+								<span className='wh-more-wrap' style={{ order: moreOrder }}>
+									<Magnetic strength={12}>
+										<Link href={group.more.href} className='wh-more'>
+											+{moreCounts[group.track] ?? 0} more →
+										</Link>
+									</Magnetic>
+								</span>
 							</div>
 						))}
 					</nav>
 
-					<p className='wh-strip' style={{ order: 999 }}>
-						{totals.caseStudies} case studies across {totals.projects} projects
-						· <Link href='/work'>See all work →</Link>
+					<p className='wh-all' style={{ order: 999 }}>
+						<Magnetic strength={12}>
+							<Link href='/work' className='wh-more'>
+								See all work →
+							</Link>
+						</Magnetic>
 					</p>
 				</div>
 

@@ -1,4 +1,4 @@
-import { moreInTrack, portfolioTotals } from '../../work/tracks';
+import { moreInTrack } from '../../work/tracks';
 import WorkHighlights from './work-highlights';
 import { workHighlights } from './workHighlights';
 
@@ -16,7 +16,6 @@ export default function Works() {
 				silicon: moreInTrack('silicon', featured),
 				ai: moreInTrack('ai', featured),
 			}}
-			totals={portfolioTotals()}
 		/>
 	);
 }
