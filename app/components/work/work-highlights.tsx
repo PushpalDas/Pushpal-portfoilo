@@ -217,11 +217,22 @@ export default function WorkHighlights({ moreCounts }: WorkHighlightsProps) {
 
 	activeRef.current = active;
 
-	useLenis(() => {
+	const lenis = useLenis(() => {
 		// Lenis reports on every frame it moves; hold hover off until 150 ms
 		// after the last one.
 		scrollQuietAt.current = performance.now() + 150;
 	});
+
+	// The case study's "Back to home" points at /#work. The browser's own hash
+	// jump happens before fonts and images settle, which can leave the reader
+	// somewhere else entirely — so land it again once Lenis is running.
+	useEffect(() => {
+		if (!lenis || window.location.hash !== '#work') return;
+		const id = window.setTimeout(() => {
+			lenis.scrollTo('#work', { immediate: true });
+		}, 0);
+		return () => window.clearTimeout(id);
+	}, [lenis]);
 
 	/** Slides the inverted band. Rows are measured before the tween, never inside it. */
 	const positionBand = useCallback((instant: boolean) => {
