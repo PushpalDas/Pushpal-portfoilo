@@ -419,7 +419,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.',
-		image: 'ixana-patent-program-card.png',
+		image: 'Gemini_Generated_Image_strjxvstrjxvstrj.png',
 		slug: 'ixana-patent-program',
 		color: '#dbeafe',
 	},
