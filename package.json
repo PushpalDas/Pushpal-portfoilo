@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/photo-manifest.mjs",
     "build": "next build",
     "serve": "next start",
     "lint": "biome check --write .",
     "format": "biome format --write .",
     "check": "biome check .",
     "verify:work": "node scripts/verify-cards.js && node scripts/verify-case-studies.js",
+    "verify:photos": "node scripts/verify-photos.mjs",
     "work:status": "node scripts/work-by-status.js",
     "prepare": "husky",
     "google:auth": "node scripts/google-auth-setup.mjs"
@@ -40,6 +42,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "rehype-pretty-code": "0.14.1",
+    "sharp": "^0.34.5",
     "shiki": "3.15.0",
     "swr": "2.3.6",
     "tailwindcss": "^4.0.15",
