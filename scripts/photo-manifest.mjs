@@ -72,5 +72,5 @@ for (const file of files) {
 	manifest[file] = await entry(file);
 }
 
-await writeFile(OUT, `${JSON.stringify(manifest, null, '\t')}\n`);
+await writeFile(OUT, `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(`photo-manifest: ${files.length} entries → ${OUT}`);

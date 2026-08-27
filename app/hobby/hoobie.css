@@ -1,687 +1,735 @@
+/* ============================================================
+   PHOTOGRAPHY — /hobby
+
+   A dark room on a light site. The page paints its own ground
+   regardless of next-themes: gallery lighting is a decision here,
+   not an inheritance.
+
+   Order: tokens · base · type · hero · statement · hang · ring ·
+   sheet · viewer · chapter index · motion · breakpoints ·
+   reduced motion.
+
+   Every photograph in this archive is 1179px wide, so no box on
+   this page is allowed past that — see --h-native.
+   ============================================================ */
+
+/* --- tokens ------------------------------------------------- */
+
 .hoobie-page {
+	/* ground */
 	--h-bg: #080808;
 	--h-surface: #111210;
-	--h-line: rgba(241, 239, 231, 0.18);
 	--h-text: #f1efe7;
-	--h-muted: #9f9e98;
-	--h-accent: #9eaeff;
-	min-height: 100vh;
+	--h-muted: #a8a7a1;
+	--h-line: rgba(241, 239, 231, 0.18);
+
+	/* the one brand colour, and the tint small text can use.
+	   #455ce9 is ~3.8:1 on #080808 and fails for captions;
+	   #7d90ff is ~7:1 and passes. */
+	--h-accent: #455ce9;
+	--h-accent-text: #7d90ff;
+
+	/* type */
+	--display: var(--font-fraunces), Georgia, serif;
+	--t-display-xl: clamp(2.75rem, 7vw, 5.5rem);
+	--t-display-l: clamp(2rem, 4.5vw, 3.25rem);
+	--t-heading: clamp(1.5rem, 2.5vw, 2rem);
+	--t-lead: 1.25rem;
+	--t-body: 1rem;
+	--t-small: 0.8125rem;
+	--t-caption: 0.6875rem;
+	--track-display: -0.03em;
+	--track-heading: -0.02em;
+	--track-caps: 0.12em;
+
+	/* motion — the house contract */
+	--ease: cubic-bezier(0.76, 0, 0.24, 1);
+	--fast: 0.2s;
+	--base: 0.4s;
+	--slow: 0.6s;
+
+	/* layout */
+	--h-container: 1200px;
+	--h-gutter: clamp(1.25rem, 4vw, 2.5rem);
+	--h-native: 1179px;
+}
+
+/* --- base --------------------------------------------------- */
+
+.hoobie-page {
+	position: relative;
+	min-height: 100svh;
 	background:
 		radial-gradient(
-			circle at 72% 8%,
-			rgba(69, 92, 233, 0.12),
-			transparent 24rem
+			110% 60% at 50% 0%,
+			rgba(69, 92, 233, 0.12) 0%,
+			transparent 60%
 		),
 		var(--h-bg);
 	color: var(--h-text);
+	overflow-x: hidden;
+}
+
+.hoobie-page *:focus-visible {
+	outline: 2px solid var(--h-accent);
+	outline-offset: 3px;
+}
+
+.hoobie-shell {
+	width: 100%;
+	max-width: var(--h-container);
+	margin: 0 auto;
+	padding-inline: var(--h-gutter);
+}
+
+/* Photographs are prints: square corners, no shadow, no card. */
+.hoobie-plate {
+	position: relative;
+	display: block;
+	width: 100%;
+	max-width: var(--h-native);
 	overflow: hidden;
+	background: var(--h-surface);
+	border-radius: 0;
 }
 
-.hoobie-page button,
-.hoobie-page a {
-	-webkit-tap-highlight-color: transparent;
+.hoobie-plate img {
+	object-fit: cover;
 }
 
-.hoobie-hero,
-.hoobie-selected-section,
-.hoobie-archive,
-.hoobie-footer {
-	width: min(100% - 48px, 1420px);
-	margin-inline: auto;
+/* Hover scales the wrapper, never the <img>. */
+.hoobie-plate-hover {
+	transition: transform var(--base) var(--ease);
 }
 
-.hoobie-hero {
-	padding-top: clamp(9rem, 16vw, 14rem);
+@media (hover: hover) and (pointer: fine) {
+	.hoobie-plate-hover:hover,
+	.hoobie-plate-hover:focus-visible {
+		transform: scale(1.02);
+		will-change: transform;
+	}
 }
 
-.hoobie-hero-copy {
-	display: grid;
-	grid-template-columns: minmax(0, 2.1fr) minmax(17rem, 0.8fr);
-	gap: clamp(2rem, 7vw, 8rem);
-	align-items: end;
-	padding-bottom: clamp(3rem, 6vw, 6rem);
+.hoobie-frame-button {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
 }
 
-.hoobie-hero-copy > * {
-	min-width: 0;
-}
+/* --- type --------------------------------------------------- */
 
-.hoobie-kicker,
-.hoobie-section-label,
-.hoobie-stage-index,
-.hoobie-image-number,
-.hoobie-contact-frame span,
-.hoobie-lightbox-meta span {
-	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-	font-size: 0.68rem;
-	font-weight: 500;
-	line-height: 1.4;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-}
-
-.hoobie-kicker {
-	grid-column: 1 / -1;
-	color: var(--h-accent);
-	margin: 0 0 -1rem;
-}
-
-.hoobie-hero h1 {
-	max-width: 960px;
+.hoobie-eyebrow {
 	margin: 0;
-	font-size: clamp(3.8rem, 8.7vw, 9.5rem);
-	font-weight: 400;
-	line-height: 0.86;
-	letter-spacing: -0.065em;
-	text-wrap: balance;
+	font-size: var(--t-caption);
+	font-weight: 600;
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
+	color: var(--h-accent-text);
 }
 
-.hoobie-intro {
-	padding-left: 1.5rem;
-	border-left: 1px solid var(--h-line);
+.hoobie-display-xl,
+.hoobie-display-l,
+.hoobie-heading {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-weight: 400;
+	margin: 0;
+}
+
+.hoobie-display-xl {
+	font-size: var(--t-display-xl);
+	line-height: 1.02;
+	letter-spacing: var(--track-display);
+}
+
+.hoobie-display-l {
+	font-size: var(--t-display-l);
+	line-height: 1.08;
+	letter-spacing: var(--track-display);
+}
+
+.hoobie-heading {
+	font-size: var(--t-heading);
+	line-height: 1.15;
+	letter-spacing: var(--track-heading);
+}
+
+.hoobie-lead {
+	margin: 0;
+	font-size: var(--t-lead);
+	line-height: 1.5;
+	color: var(--h-muted);
+	max-width: 58ch;
+}
+
+.hoobie-body {
+	margin: 0;
+	font-size: var(--t-body);
+	line-height: 1.65;
+	color: var(--h-muted);
+	max-width: 62ch;
+}
+
+.hoobie-caption {
+	margin: 0;
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
 	color: var(--h-muted);
 }
 
-.hoobie-intro p {
-	margin: 0 0 2rem;
-	font-size: clamp(1rem, 1.25vw, 1.2rem);
-	line-height: 1.6;
-}
-
-.hoobie-intro a,
-.hoobie-footer a {
+/* The house button: a panel fills from below, text held above it. */
+.hoobie-cta {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
-	gap: 0.7rem;
+	gap: 0.5rem;
+	min-height: 44px;
+	padding: 0.75rem 1.6rem;
+	border: 1px solid var(--h-line);
+	border-radius: 100px;
+	overflow: hidden;
 	color: var(--h-text);
-	font-size: 0.9rem;
+	font-size: var(--t-small);
 	text-decoration: none;
+	background: none;
+	cursor: pointer;
+	transition: color var(--base) var(--ease);
 }
 
-.hoobie-intro svg,
-.hoobie-footer svg,
-.hoobie-view-cue svg,
-.hoobie-open-icon svg {
-	width: 1.1rem;
-	fill: none;
-	stroke: currentColor;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-	stroke-width: 1.5;
-	transition: transform 250ms ease;
+.hoobie-cta-fill {
+	position: absolute;
+	inset: 0;
+	background: var(--h-accent);
+	transform: translateY(100%);
+	transition: transform var(--base) var(--ease);
 }
 
-.hoobie-intro a:hover svg,
-.hoobie-footer a:hover svg,
-.hoobie-photo-frame:hover .hoobie-open-icon svg {
-	transform: translateX(0.3rem);
+.hoobie-cta-label {
+	position: relative;
+	z-index: 2;
 }
 
-.hoobie-hero-stage {
-	margin-left: clamp(0px, 10vw, 9rem);
+.hoobie-cta:hover .hoobie-cta-fill,
+.hoobie-cta:focus-visible .hoobie-cta-fill {
+	transform: translateY(0);
+}
+
+.hoobie-cta:hover,
+.hoobie-cta:focus-visible {
+	color: #fff;
+	border-color: var(--h-accent);
+}
+
+/* --- hero --------------------------------------------------- */
+
+.hoobie-hero {
+	display: flex;
+	align-items: center;
+	min-height: 100svh;
+	padding-block: clamp(6rem, 14vh, 9rem) clamp(3rem, 8vh, 5rem);
+}
+
+.hoobie-hero-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: clamp(2.5rem, 6vw, 4rem);
+	width: 100%;
+}
+
+.hoobie-hero-copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1.25rem;
+}
+
+.hoobie-hero-copy .hoobie-display-xl {
+	max-width: 14ch;
+}
+
+.hoobie-hero-deck {
+	max-width: 62ch;
+}
+
+/* The stage: three prints hung together. */
+.hoobie-stage {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	min-width: 0;
 }
 
 .hoobie-stage-index {
 	display: flex;
-	justify-content: space-between;
-	gap: 1rem;
-	padding: 0 0 0.8rem;
-	color: var(--h-muted);
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+	padding-bottom: 0.75rem;
 	border-bottom: 1px solid var(--h-line);
 }
 
-.hoobie-hero-image {
-	position: relative;
-	display: flex;
-	gap: 1px;
-	width: 100%;
-	height: min(72vh, 820px);
-	padding: 0;
-	overflow: hidden;
-	background: var(--h-line);
-}
-
-.hoobie-cover {
-	object-fit: cover;
-	transition:
-		transform 900ms cubic-bezier(0.2, 0.75, 0.25, 1),
-		filter 500ms ease;
-}
-
-.hoobie-hero-panel {
-	position: relative;
-	min-width: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-	background: var(--h-surface);
-	cursor: zoom-in;
-}
-
-.hoobie-hero-side {
-	flex: 1 1 0;
-}
-
-.hoobie-hero-main {
-	flex: 0 1 auto;
-	height: 100%;
-	aspect-ratio: 1179 / 1628;
-}
-
-.hoobie-hero-main .hoobie-cover {
-	object-fit: contain;
-	object-position: center 39%;
-}
-
-.hoobie-hero-side .hoobie-cover {
-	filter: saturate(0.78) brightness(0.82);
-}
-
-.hoobie-hero-panel:hover .hoobie-cover,
-.hoobie-photo-frame:hover .hoobie-cover {
-	transform: scale(1.025);
-}
-
-.hoobie-hero-side:hover .hoobie-cover {
-	filter: saturate(1) brightness(1);
-}
-
-.hoobie-image-number,
-.hoobie-view-cue {
-	position: absolute;
-	z-index: 2;
-	bottom: 1.25rem;
-	color: white;
-	filter: drop-shadow(0 1px 4px black);
-}
-
-.hoobie-image-number {
-	left: 1.25rem;
-}
-
-.hoobie-view-cue {
-	right: 1.25rem;
-	display: flex;
-	align-items: center;
-	gap: 0.6rem;
-	font-size: 0.78rem;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-}
-
-.hoobie-statement {
+.hoobie-triptych {
 	display: grid;
-	grid-template-columns: minmax(10rem, 0.65fr) minmax(0, 2fr);
-	gap: 2rem;
-	width: min(100% - 48px, 1140px);
-	margin: clamp(8rem, 16vw, 15rem) auto;
-	padding-top: 1.25rem;
-	border-top: 1px solid var(--h-line);
-}
-
-.hoobie-section-label {
-	margin: 0;
-	color: var(--h-muted);
-}
-
-.hoobie-statement-copy {
-	max-width: 840px;
-	margin: 0;
-	font-size: clamp(2rem, 4.2vw, 4.4rem);
-	font-weight: 300;
-	line-height: 1.12;
-	letter-spacing: -0.035em;
-}
-
-.hoobie-selected-section,
-.hoobie-archive {
-	padding-top: 1.25rem;
-	border-top: 1px solid var(--h-line);
-}
-
-.hoobie-section-heading {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
-	gap: 3rem;
-	margin-bottom: clamp(4rem, 8vw, 8rem);
-}
-
-.hoobie-section-heading h2 {
-	margin: 0.8rem 0 0;
-	font-size: clamp(2.5rem, 5.2vw, 5.6rem);
-	font-weight: 400;
-	line-height: 0.95;
-	letter-spacing: -0.055em;
-}
-
-.hoobie-section-heading > p {
-	max-width: 18rem;
-	margin: 0;
-	color: var(--h-muted);
-	font-size: 0.95rem;
-	line-height: 1.5;
-}
-
-.hoobie-editorial-grid {
-	display: grid;
-	grid-template-columns: repeat(12, minmax(0, 1fr));
-	column-gap: clamp(1rem, 2.3vw, 2.5rem);
-	row-gap: clamp(6rem, 12vw, 12rem);
-}
-
-.hoobie-photo-card {
-	margin: 0;
-}
-
-.hoobie-photo-2 {
-	grid-column: 1 / span 5;
-}
-.hoobie-photo-3 {
-	grid-column: 8 / -1;
-	margin-top: 11rem;
-}
-.hoobie-photo-4 {
-	grid-column: 3 / span 4;
-}
-.hoobie-photo-5 {
-	grid-column: 9 / -1;
-	margin-top: -2rem;
-}
-.hoobie-photo-6 {
-	grid-column: 1 / span 6;
-}
-.hoobie-photo-7 {
-	grid-column: 8 / span 4;
-	margin-top: 9rem;
-}
-.hoobie-photo-8 {
-	grid-column: 2 / span 4;
-}
-.hoobie-photo-9 {
-	grid-column: 7 / -1;
-	margin-top: 8rem;
-}
-.hoobie-photo-10 {
-	grid-column: 1 / span 5;
-}
-.hoobie-photo-11 {
-	grid-column: 7 / -1;
-	margin-top: 6rem;
-}
-.hoobie-photo-12 {
-	grid-column: 3 / span 5;
-}
-
-.hoobie-photo-frame {
-	position: relative;
-	display: block;
-	width: 100%;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-	background: var(--h-surface);
-	cursor: zoom-in;
-}
-
-.hoobie-photo-frame.is-portrait {
-	aspect-ratio: 4 / 5;
-}
-.hoobie-photo-frame.is-tall {
-	aspect-ratio: 3 / 4;
-}
-.hoobie-photo-frame.is-square {
-	aspect-ratio: 1;
-}
-.hoobie-photo-frame.is-landscape {
-	aspect-ratio: 4 / 3;
-}
-
-.hoobie-open-icon {
-	position: absolute;
-	right: 0.8rem;
-	bottom: 0.8rem;
-	display: grid;
-	width: 2.5rem;
-	height: 2.5rem;
-	place-items: center;
-	border-radius: 50%;
-	background: rgba(8, 8, 8, 0.72);
-	color: white;
-	opacity: 0;
-	transform: translateY(0.5rem);
-	transition:
-		opacity 250ms ease,
-		transform 250ms ease;
-	backdrop-filter: blur(8px);
-}
-
-.hoobie-photo-frame:hover .hoobie-open-icon,
-.hoobie-photo-frame:focus-visible .hoobie-open-icon {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-.hoobie-photo-card figcaption {
-	display: grid;
-	grid-template-columns: 2.5rem 1fr;
-	gap: 0.8rem;
-	padding-top: 0.9rem;
-	border-top: 1px solid var(--h-line);
-}
-
-.hoobie-photo-card figcaption > span,
-.hoobie-photo-card small {
-	color: var(--h-muted);
-	font-size: 0.72rem;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
-}
-
-.hoobie-photo-card figcaption div {
-	display: flex;
-	justify-content: space-between;
+	grid-template-columns: 1fr;
 	gap: 1rem;
+	align-items: start;
+	min-width: 0;
 }
 
-.hoobie-photo-card strong {
-	font-size: 0.85rem;
-	font-weight: 400;
-}
-
-.hoobie-photo-card small {
-	font-weight: 400;
-}
-
-.hoobie-archive {
-	margin-top: clamp(10rem, 18vw, 20rem);
-	padding-bottom: clamp(8rem, 14vw, 13rem);
-}
-
-.hoobie-contact-sheet {
-	display: grid;
-	grid-template-columns: repeat(8, minmax(0, 1fr));
-	gap: 1px;
-	background: var(--h-line);
-	border: 1px solid var(--h-line);
-}
-
-.hoobie-contact-frame {
-	position: relative;
-	aspect-ratio: 1;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-	background: var(--h-surface);
-	cursor: zoom-in;
-}
-
-.hoobie-contact-frame .hoobie-cover {
-	filter: saturate(0.72) brightness(0.88);
-	transition-duration: 450ms;
-}
-
-.hoobie-contact-frame:hover .hoobie-cover,
-.hoobie-contact-frame:focus-visible .hoobie-cover {
-	filter: saturate(1) brightness(1);
-	transform: scale(1.05);
-}
-
-.hoobie-contact-frame span {
-	position: absolute;
-	right: 0.45rem;
-	bottom: 0.35rem;
-	color: rgba(255, 255, 255, 0.76);
-	font-size: 0.55rem;
-	filter: drop-shadow(0 1px 3px black);
-}
-
-.hoobie-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 2rem;
-	padding: 2.5rem 0 6rem;
-	border-top: 1px solid var(--h-line);
-}
-
-.hoobie-footer p {
+.hoobie-plate-figure {
 	margin: 0;
-	color: var(--h-muted);
+	min-width: 0;
 }
 
-.hoobie-lightbox {
-	position: fixed;
-	z-index: 100;
-	inset: 0;
-	display: grid;
-	grid-template-rows: 1fr auto;
-	padding: 4.5rem clamp(1rem, 4vw, 4rem) 1.5rem;
-	background: rgba(5, 5, 5, 0.97);
-	backdrop-filter: blur(20px);
-	animation: hoobie-lightbox-in 220ms ease-out both;
+.hoobie-plate-caption {
+	margin-top: 0.6rem;
+	opacity: 1;
+	transition: opacity var(--base) var(--ease);
 }
 
-@keyframes hoobie-lightbox-in {
-	from {
+/* On a fine pointer the caption is a reward for looking; on touch it
+   is always there, because there is no hover to give. */
+@media (hover: hover) and (pointer: fine) {
+	.hoobie-plate-figure .hoobie-plate-caption {
 		opacity: 0;
 	}
-	to {
+
+	.hoobie-plate-figure:hover .hoobie-plate-caption,
+	.hoobie-plate-figure:focus-within .hoobie-plate-caption {
 		opacity: 1;
 	}
 }
 
-.hoobie-lightbox-image {
-	position: relative;
-	min-height: 0;
+/* --- statement ---------------------------------------------- */
+
+.hoobie-statement {
+	padding-block: clamp(4rem, 12vh, 8rem);
 }
 
-.hoobie-contain {
-	object-fit: contain;
-}
-
-.hoobie-lightbox-close {
-	position: absolute;
-	z-index: 2;
-	top: 1rem;
-	right: 1rem;
+.hoobie-statement-grid {
 	display: grid;
-	width: 2.8rem;
-	height: 2.8rem;
-	place-items: center;
-	padding: 0;
-	border: 1px solid rgba(255, 255, 255, 0.24);
-	border-radius: 50%;
-	background: transparent;
-	color: white;
-	cursor: pointer;
+	grid-template-columns: 1fr;
+	gap: clamp(1.5rem, 4vw, 3rem);
 }
 
-.hoobie-lightbox-close svg {
-	width: 1.1rem;
-	fill: none;
-	stroke: currentColor;
-	stroke-width: 1.5;
-}
-
-.hoobie-lightbox-meta {
-	display: flex;
-	align-items: baseline;
-	gap: 1.5rem;
-	min-width: 0;
-	padding-top: 1.2rem;
-}
-
-.hoobie-lightbox-meta span {
-	color: var(--h-muted);
-}
-
-.hoobie-lightbox-meta strong {
-	overflow: hidden;
-	font-size: 0.88rem;
+.hoobie-statement-quote {
+	font-family: var(--display);
+	font-optical-sizing: auto;
 	font-weight: 400;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	font-size: var(--t-display-l);
+	line-height: 1.15;
+	letter-spacing: var(--track-display);
+	color: var(--h-text);
+	margin: 0 0 1.5rem;
+	max-width: 24ch;
 }
 
-.hoobie-lightbox-controls {
+/* --- the hang ----------------------------------------------- */
+
+.hoobie-hang-section {
+	padding-block: clamp(3rem, 8vh, 6rem) clamp(4rem, 12vh, 8rem);
+}
+
+.hoobie-section-head {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	margin-bottom: clamp(3rem, 8vw, 5rem);
+	max-width: 46ch;
+}
+
+.hoobie-hang {
+	display: grid;
+	grid-template-columns: 1fr;
+	column-gap: 1rem;
+	row-gap: clamp(2rem, 5vw, 6rem);
+	align-items: start;
+}
+
+.hoobie-hang-figure {
+	margin: 0;
+	min-width: 0;
+}
+
+.hoobie-hang-caption {
+	margin-top: 0.75rem;
+}
+
+.hoobie-wall-text {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-size: var(--t-heading);
+	line-height: 1.3;
+	letter-spacing: var(--track-heading);
+	color: var(--h-muted);
+	margin: 0;
+	text-align: center;
+}
+
+/* --- ring --------------------------------------------------- */
+
+.hoobie-ring-section {
+	padding-block: clamp(3rem, 8vh, 6rem);
+}
+
+.hoobie-ring-stagearea {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1.5rem;
+	min-height: 60svh;
+}
+
+.hoobie-ring-scene {
+	position: relative;
+	width: 100%;
+	height: clamp(220px, 34svh, 320px);
+	perspective: 1400px;
+	touch-action: pan-y;
+	cursor: grab;
+}
+
+.hoobie-ring-scene:active {
+	cursor: grabbing;
+}
+
+.hoobie-ring-stage {
 	position: absolute;
-	right: clamp(1rem, 4vw, 4rem);
-	bottom: 1rem;
+	inset: 0;
+	transform-style: preserve-3d;
+	will-change: transform;
+}
+
+.hoobie-ring-cell {
+	position: absolute;
+	inset: 0;
+	margin: auto;
+	backface-visibility: hidden;
+}
+
+.hoobie-ring-controls {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.hoobie-nudge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 1px solid var(--h-line);
+	border-radius: 100px;
+	background: none;
+	color: var(--h-text);
+	font-size: 1rem;
+	cursor: pointer;
+	transition:
+		border-color var(--base) var(--ease),
+		color var(--base) var(--ease);
+}
+
+.hoobie-nudge:hover,
+.hoobie-nudge:focus-visible {
+	border-color: var(--h-accent);
+	color: var(--h-accent-text);
+}
+
+/* Reduced motion swaps the drum for a strip of the same frames. */
+.hoobie-ring-strip {
+	display: flex;
+	gap: 1px;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	padding-bottom: 1rem;
+}
+
+.hoobie-ring-strip > * {
+	flex: 0 0 auto;
+	scroll-snap-align: start;
+}
+
+/* --- contact sheet ------------------------------------------ */
+
+.hoobie-sheet-section {
+	padding-block: clamp(4rem, 12vh, 8rem);
+}
+
+.hoobie-sheet {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1px;
+	background: var(--h-line);
+	width: 100%;
+}
+
+.hoobie-sheet-cell {
+	position: relative;
+	flex: 0 0 auto;
+	background: var(--h-surface);
+	padding: 0;
+	border: 0;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.hoobie-sheet-number {
+	position: absolute;
+	left: 0.35rem;
+	bottom: 0.3rem;
+	z-index: 2;
+	font-size: var(--t-caption);
+	letter-spacing: 0.06em;
+	color: var(--h-muted);
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+	pointer-events: none;
+}
+
+/* --- viewer -------------------------------------------------- */
+
+.hoobie-viewer {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	background: rgba(8, 8, 8, 0.97);
+}
+
+.hoobie-viewer-stage {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 0;
+	padding: clamp(3rem, 8vh, 5rem) clamp(1rem, 6vw, 5rem);
+}
+
+.hoobie-viewer-stage img {
+	object-fit: contain;
+	max-width: min(100%, var(--h-native));
+	max-height: 100svh;
+	height: auto;
+	width: auto;
+}
+
+.hoobie-viewer-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem clamp(1rem, 4vw, 2rem) clamp(1rem, 4vh, 2rem);
+}
+
+.hoobie-viewer-nav {
 	display: flex;
 	gap: 0.5rem;
 }
 
-.hoobie-lightbox-controls button {
-	padding: 0.55rem 0.9rem;
-	border: 1px solid rgba(255, 255, 255, 0.18);
-	background: transparent;
-	color: white;
-	font: inherit;
-	font-size: 0.75rem;
-	cursor: pointer;
+.hoobie-viewer-close {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	z-index: 2;
 }
 
-.hoobie-lightbox-controls button:hover,
-.hoobie-lightbox-close:hover {
-	border-color: rgba(255, 255, 255, 0.7);
-	background: rgba(255, 255, 255, 0.08);
+/* --- chapter index ------------------------------------------ */
+
+.hoobie-chapters {
+	display: none;
 }
 
-@media (max-width: 900px) {
-	.hoobie-hero-copy {
-		grid-template-columns: 1fr;
+/* --- motion -------------------------------------------------- */
+
+.reveal {
+	will-change: transform, opacity;
+}
+
+/* --- breakpoints: 640 · 900 · 1200 --------------------------- */
+
+@media (min-width: 640px) {
+	.hoobie-triptych {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
-	.hoobie-kicker {
-		grid-column: auto;
+	.hoobie-triptych .hoobie-plate-centre {
+		grid-column: 1 / -1;
 	}
 
-	.hoobie-intro {
-		max-width: 32rem;
+	.hoobie-hang {
+		grid-template-columns: repeat(12, minmax(0, 1fr));
 	}
 
-	.hoobie-hero-stage {
-		margin-left: 0;
+	/* The hang, placed by the real ratios rather than the labels the old
+	   code carried. There is no landscape frame among the twelve — eight
+	   of them sit between 0.57 and 0.58 — so the rhythm comes from span
+	   and offset, not from shape. No two consecutive frames share a span
+	   or a side. */
+	.hoobie-hang-figure[data-frame="2"] {
+		grid-column: 2 / 8;
 	}
 
-	.hoobie-contact-sheet {
-		grid-template-columns: repeat(5, minmax(0, 1fr));
+	.hoobie-hang-figure[data-frame="3"] {
+		grid-column: 9 / 13;
+		margin-top: 8rem;
+	}
+
+	.hoobie-hang-figure[data-frame="4"] {
+		grid-column: 1 / 6;
+		margin-top: 2rem;
+	}
+
+	.hoobie-hang-figure[data-frame="5"] {
+		grid-column: 9 / 12;
+		margin-top: 6rem;
+	}
+
+	.hoobie-hang-figure[data-frame="6"] {
+		grid-column: 2 / 9;
+	}
+
+	.hoobie-hang-figure[data-frame="7"] {
+		grid-column: 9 / 13;
+		margin-top: 10rem;
+	}
+
+	.hoobie-hang-figure[data-frame="8"] {
+		grid-column: 1 / 6;
+		margin-top: -2rem;
+	}
+
+	.hoobie-hang-figure[data-frame="9"] {
+		grid-column: 7 / 13;
+		margin-top: 6rem;
+	}
+
+	.hoobie-hang-figure[data-frame="10"] {
+		grid-column: 2 / 6;
+		margin-top: 2rem;
+	}
+
+	.hoobie-hang-figure[data-frame="11"] {
+		grid-column: 6 / 13;
+		margin-top: 4rem;
+	}
+
+	.hoobie-hang-figure[data-frame="12"] {
+		grid-column: 4 / 10;
+	}
+
+	.hoobie-wall-text {
+		grid-column: 1 / -1;
+		padding-block: clamp(1rem, 4vw, 3rem);
 	}
 }
 
-@media (max-width: 700px) {
-	.hoobie-hero,
-	.hoobie-selected-section,
-	.hoobie-archive,
-	.hoobie-footer,
-	.hoobie-statement {
-		width: min(100% - 32px, 1420px);
+@media (min-width: 900px) {
+	.hoobie-hero-grid {
+		grid-template-columns: 5fr 7fr;
+		align-items: center;
 	}
 
-	.hoobie-hero {
-		padding-top: 8.5rem;
+	/* Three prints hung together. Both side plates share one height and
+	   derive their widths from their own ratios, because the ratios are
+	   fixed and cropping is not allowed — so the sides cannot also share a
+	   width. Right hangs highest, centre in the middle, left lowest. */
+	/* Three prints hung together, sized by width so the centre plate
+	   dominates — it is the subject and the LCP. The two side shares are
+	   tuned to these two photographs: Morning pages is nearly square
+	   (0.93) and The traveller is tall (0.58), so equal widths would give
+	   wildly unequal heights. At these shares both sides land near 42% of
+	   the centre's height, which is the balance the hang wants. */
+	.hoobie-triptych {
+		display: flex;
+		align-items: flex-start;
+		gap: clamp(0.75rem, 1.5vw, 1.25rem);
 	}
 
-	.hoobie-hero-copy {
-		gap: 2.5rem;
-		padding-bottom: 3.5rem;
+	.hoobie-triptych .hoobie-plate-centre {
+		flex: 0 1 50%;
+		min-width: 0;
+		margin-top: 1.75rem;
 	}
 
-	.hoobie-hero h1 {
-		font-size: clamp(3.15rem, 13.2vw, 4.6rem);
-		line-height: 0.9;
-		letter-spacing: -0.05em;
+	.hoobie-triptych .hoobie-plate-left {
+		flex: 0 1 26%;
+		min-width: 0;
+		margin-top: 4rem;
 	}
 
-	.hoobie-hero-image {
-		height: 68svh;
-	}
-
-	.hoobie-hero-side {
-		display: none;
-	}
-
-	.hoobie-hero-main {
-		flex: 1 1 auto;
-		width: 100%;
-		aspect-ratio: auto;
-	}
-
-	.hoobie-intro p {
-		overflow-wrap: anywhere;
-	}
-
-	.hoobie-stage-index span:last-child,
-	.hoobie-view-cue {
-		display: none;
-	}
-
-	.hoobie-statement {
-		grid-template-columns: 1fr;
-		gap: 2.5rem;
-		margin-block: 8rem;
-	}
-
-	.hoobie-section-heading {
-		display: block;
-		margin-bottom: 4rem;
-	}
-
-	.hoobie-section-heading > p {
-		margin-top: 1.5rem;
-	}
-
-	.hoobie-editorial-grid {
-		grid-template-columns: 1fr;
-		row-gap: 5rem;
-	}
-
-	.hoobie-photo-card[class*="hoobie-photo-"] {
-		grid-column: auto;
+	.hoobie-triptych .hoobie-plate-right {
+		flex: 0 1 17%;
+		min-width: 0;
 		margin-top: 0;
 	}
 
-	.hoobie-photo-card:nth-child(even) {
-		margin-left: 12vw;
-	}
-
-	.hoobie-photo-card:nth-child(odd) {
-		margin-right: 12vw;
-	}
-
-	.hoobie-photo-card figcaption div {
-		align-items: flex-start;
-		flex-direction: column;
-		gap: 0.2rem;
-	}
-
-	.hoobie-contact-sheet {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-
-	.hoobie-footer {
-		align-items: flex-start;
-		flex-direction: column;
-	}
-
-	.hoobie-lightbox {
-		padding: 4rem 0.75rem 4.5rem;
-	}
-
-	.hoobie-lightbox-controls {
-		right: 0.75rem;
-		bottom: 0.65rem;
+	.hoobie-statement-grid {
+		grid-template-columns: 3fr 8fr;
+		gap: clamp(2rem, 5vw, 4rem);
 	}
 }
+
+/* The rail needs gutter to live in. The container is 1200px, so below
+   about 1400 there is none and it lands on top of the hang. */
+@media (min-width: 1400px) {
+	.hoobie-chapters {
+		position: fixed;
+		top: 50%;
+		left: clamp(1rem, 2vw, 2rem);
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		transform: translateY(-50%);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.hoobie-chapter-link {
+		display: block;
+		font-size: var(--t-caption);
+		letter-spacing: var(--track-caps);
+		text-transform: uppercase;
+		color: var(--h-muted);
+		text-decoration: none;
+		transition: color var(--base) var(--ease);
+	}
+
+	.hoobie-chapter-link[data-active="true"],
+	.hoobie-chapter-link:hover,
+	.hoobie-chapter-link:focus-visible {
+		color: var(--h-accent-text);
+	}
+}
+
+/* --- reduced motion ----------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
 	.hoobie-page *,
 	.hoobie-page *::before,
 	.hoobie-page *::after {
-		scroll-behavior: auto;
 		transition-duration: 0.01ms;
 		animation-duration: 0.01ms;
 		animation-iteration-count: 1;
+		scroll-behavior: auto;
+	}
+
+	.hoobie-plate-hover:hover,
+	.hoobie-plate-hover:focus-visible {
+		transform: none;
+	}
+
+	.hoobie-plate-figure .hoobie-plate-caption {
+		opacity: 1;
 	}
 }

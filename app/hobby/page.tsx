@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import HoobieGallery from './hoobie-gallery';
+import HobbyPage from './hobby-page';
 import './hoobie.css';
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 		'A personal photography archive by Pushpal Das — people, wildlife, places and passing light.',
 };
 
-export default function HoobiePage() {
-	return <HoobieGallery />;
+export default function Page() {
+	return <HobbyPage />;
 }

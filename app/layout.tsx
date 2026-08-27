@@ -5,7 +5,7 @@ import LenisProvider from 'app/components/providers/LenisProvider';
 import ThemeProvider from 'app/components/providers/ThemeProvider';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { mukta } from './fonts';
+import { fraunces, mukta } from './fonts';
 import './tailwind.css';
 
 export const metadata: Metadata = {
@@ -24,7 +24,11 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
 	return (
-		<html lang='en' suppressHydrationWarning className={mukta.className}>
+		<html
+			lang='en'
+			suppressHydrationWarning
+			className={`${mukta.className} ${fraunces.variable}`}
+		>
 			<head>
 				<link
 					rel='apple-touch-icon'
