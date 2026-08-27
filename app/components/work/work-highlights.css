@@ -1,310 +1,263 @@
 /* ============================================
-   WORK HIGHLIGHTS — Spotlight split-list
-   Left: a persistent index of six named highlights, grouped by track.
-   Right: the active highlight's panel. All six panels are in the DOM;
-   only one is visible, and they share one grid cell so switching cannot
-   shift the layout.
+   SELECTED WORK — the home page's slice of /work
 
-   The section is theme-invariant, exactly as the carousel it replaces was:
-   black left, white right in both themes.
+   The tile system itself comes from app/work/work.css, imported by the
+   component, so a card here and a card there are the same object. What
+   lives in this file is only what the home page adds: the section frame,
+   the per-group heading and divider, the metric row that keeps the
+   numbers on the face of the card, and the disclosure that holds
+   everything the old detail panel used to.
    ============================================ */
 
 .work-highlights {
 	position: relative;
 	z-index: 10;
-	display: flex;
-	align-items: center;
 	width: 100%;
-	background: #000;
-	color: #fff;
-	padding: 4rem 0;
+	padding: clamp(4rem, 10vh, 7rem) 0 clamp(3rem, 8vh, 5rem);
 }
 
-.wh-grid {
-	display: grid;
-	/* minmax(0, 1fr) rather than 1fr: a grid item defaults to min-width:auto,
-	   and a wide image or a long feature line would otherwise push the track
-	   past the viewport at 390. */
-	grid-template-columns: minmax(0, 1fr);
+.wh-shell {
 	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
-/* --- Left column ------------------------------------------------------ */
+/* --- heading -------------------------------------------------------- */
 
-.wh-left {
-	display: flex;
-	flex-direction: column;
-	gap: 2rem;
-	padding: 0 1.5rem;
+.wh-head {
+	margin-bottom: clamp(2.5rem, 6vw, 4rem);
 }
 
-.wh-intro h2 {
-	font-size: clamp(2rem, 6vw, 3.25rem);
-	font-weight: 700;
-	letter-spacing: -0.02em;
-	line-height: 1.05;
+.wh-title {
+	font-size: clamp(2.5rem, 7vw, 5.5rem);
+	font-weight: 400;
+	line-height: 1.1;
+	letter-spacing: -0.03em;
 	margin: 0;
 }
 
-.wh-intro p {
+.wh-subhead {
 	margin: 0.75rem 0 0;
 	font-size: 0.9rem;
-	line-height: 1.5;
-	color: rgba(255, 255, 255, 0.6);
-	max-width: 34ch;
+	color: rgba(255, 255, 255, 0.5);
 }
 
-.wh-nav {
-	display: flex;
-	flex-direction: column;
-	gap: 1.75rem;
-	position: relative;
+html:not(.dark) .wh-subhead {
+	color: rgba(0, 0, 0, 0.5);
 }
 
-.wh-eyebrow {
-	font-size: 0.7rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	color: rgba(255, 255, 255, 0.4);
-	margin: 0 0 0.5rem;
-}
+/* --- groups --------------------------------------------------------- */
 
 .wh-group {
-	display: flex;
-	flex-direction: column;
+	margin-bottom: clamp(3rem, 8vw, 5rem);
 }
 
-/* --- Rows ------------------------------------------------------------- */
-
-.wh-row {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 1rem;
-	min-height: 44px;
-	padding: 0.55rem 0.25rem 0.55rem 0.85rem;
-	text-decoration: none;
-	color: rgba(255, 255, 255, 0.55);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-	transition:
-		color 0.3s ease,
-		background-color 0.3s ease;
+.wh-group:last-of-type {
+	margin-bottom: 0;
 }
 
-.wh-row:last-of-type {
-	border-bottom: none;
-}
-
-.wh-row[data-active="true"] {
-	color: #fff;
-}
-
-.wh-row:hover,
-.wh-row:focus-visible {
-	color: #fff;
-}
-
-.wh-row:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: 2px;
-	border-radius: 2px;
-}
-
-.wh-row-title {
-	min-width: 0;
-	font-size: 0.95rem;
-	font-weight: 500;
+/* Sits where /work puts its subline, and says which half of the work
+   the cards below belong to. */
+.wh-group-line {
+	font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+	font-weight: 400;
 	line-height: 1.3;
+	letter-spacing: -0.02em;
+	color: rgba(255, 255, 255, 0.85);
+	margin: 0 0 clamp(1.5rem, 4vw, 2.5rem);
 }
 
-.wh-row-metric {
-	font-size: 0.78rem;
-	font-variant-numeric: tabular-nums;
-	color: rgba(255, 255, 255, 0.4);
-	white-space: nowrap;
-	flex-shrink: 0;
+html:not(.dark) .wh-group-line {
+	color: rgba(0, 0, 0, 0.8);
 }
 
-.wh-row[data-active="true"] .wh-row-metric {
-	color: rgba(255, 255, 255, 0.7);
-}
+/* --- the card's own additions --------------------------------------- */
 
-/* The one moving decoration in the index. */
-.wh-rule {
-	display: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 2px;
-	background: currentColor;
-	pointer-events: none;
-}
-
-.wh-more-wrap {
-	display: block;
-}
-
-.wh-more {
-	display: inline-flex;
-	align-items: center;
-	min-height: 44px;
-	padding: 0.5rem 0.85rem;
-	font-size: 0.78rem;
-	color: rgba(255, 255, 255, 0.45);
-	text-decoration: none;
-	transition: color 0.3s ease;
-}
-
-.wh-more:hover,
-.wh-more:focus-visible {
-	color: #455ce9;
-}
-
-.wh-more:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: 2px;
-	border-radius: 2px;
-}
-
-.wh-all {
-	margin: 0;
-}
-
-.wh-all .wh-more {
-	color: #fff;
-}
-
-/* --- Panels ----------------------------------------------------------- */
-
-.wh-panel {
-	background: #fff;
-	color: #000;
-	min-width: 0;
-	opacity: 0;
-	visibility: hidden;
-}
-
-.wh-panel[data-active="true"] {
-	opacity: 1;
-	visibility: visible;
-}
-
-.wh-panel-inner {
-	min-width: 0;
-}
-
-.wh-media {
-	position: relative;
-	width: 100%;
-	aspect-ratio: 16 / 10;
-	max-height: min(38vh, 340px);
-	overflow: hidden;
-	background: #f4f4f4;
-	margin-bottom: 1.25rem;
-}
-
-.wh-media-link {
+.wh-card-media {
 	position: absolute;
 	inset: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	text-decoration: none;
+	/* Photographs cover this; a number-as-picture sits on it. */
+	background: rgba(255, 255, 255, 0.05);
 }
 
-.wh-media-link:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: -2px;
+html:not(.dark) .wh-card-media {
+	background: rgba(0, 0, 0, 0.04);
 }
 
-.wh-media-img {
-	object-fit: cover;
-}
-
-/* The number is the picture. */
-.wh-media-number {
-	font-size: clamp(2.5rem, 7vw, 5rem);
-	font-weight: 700;
-	letter-spacing: -0.03em;
+/* The number is the picture where no product shot exists. */
+.wh-card-number {
+	font-size: clamp(1.5rem, 4vw, 2.5rem);
+	font-weight: 600;
+	letter-spacing: -0.02em;
 	font-variant-numeric: tabular-nums;
-	color: #000;
-	line-height: 1;
+	color: #fff;
 	text-align: center;
 	padding: 0 1rem;
 }
 
-.wh-headline {
-	font-size: clamp(1.35rem, 2.4vw, 1.9rem);
-	font-weight: 600;
-	letter-spacing: -0.015em;
-	line-height: 1.15;
-	margin: 0;
-	max-width: 28ch;
+html:not(.dark) .wh-card-number {
+	color: #000;
 }
 
-.wh-headline a {
+.wh-card-title-link {
 	color: inherit;
 	text-decoration: none;
 }
 
-.wh-headline a:hover {
+.wh-card-title-link:hover {
 	color: #455ce9;
 }
 
-.wh-headline a:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: 3px;
-}
-
-.wh-sowhat {
-	margin: 0.6rem 0 0;
-	font-size: 0.85rem;
-	line-height: 1.5;
-	color: rgba(0, 0, 0, 0.6);
-	max-width: 52ch;
-}
-
-.wh-metrics {
+/* Numbers stay on the face of the card. */
+.wh-card-metrics {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1.5rem;
-	margin: 1.25rem 0 0;
+	gap: 0.75rem 1.25rem;
+	margin: 1rem 0 0;
 }
 
-.wh-metric {
+.wh-card-metric {
 	display: flex;
 	flex-direction: column;
-	gap: 0.15rem;
+	gap: 0.1rem;
 	min-width: 0;
 }
 
-.wh-metric-value {
-	font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+.wh-card-metric-value {
+	font-size: 0.95rem;
 	font-weight: 600;
 	letter-spacing: -0.01em;
 	font-variant-numeric: tabular-nums;
 	line-height: 1.1;
+	color: rgba(255, 255, 255, 0.92);
 }
 
-.wh-metric-label {
-	font-size: 0.7rem;
-	line-height: 1.35;
+html:not(.dark) .wh-card-metric-value {
+	color: rgba(0, 0, 0, 0.88);
+}
+
+.wh-card-metric-label {
+	font-size: 0.66rem;
+	line-height: 1.3;
+	margin: 0;
+	max-width: 16ch;
+	color: rgba(255, 255, 255, 0.45);
+}
+
+html:not(.dark) .wh-card-metric-label {
 	color: rgba(0, 0, 0, 0.5);
-	max-width: 22ch;
 }
 
-.wh-divider {
-	height: 1px;
-	background: rgba(0, 0, 0, 0.08);
-	margin: 1.25rem 0;
+.wh-card-proof {
+	margin-left: 0;
+	background: transparent;
+	color: #455ce9;
+	padding: 0;
+	white-space: nowrap;
 }
 
-/* Two interleaved columns — list order reads across, not down. */
+html:not(.dark) .wh-card-proof {
+	color: #455ce9;
+}
+
+/* --- disclosure ------------------------------------------------------ */
+
+.wh-card-foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem 1rem;
+	margin-top: 0.9rem;
+}
+
+.wh-card-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	min-height: 44px;
+	padding: 0.35rem 0;
+	border: 0;
+	background: none;
+	color: rgba(255, 255, 255, 0.6);
+	font: inherit;
+	font-size: 0.75rem;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+html:not(.dark) .wh-card-toggle {
+	color: rgba(0, 0, 0, 0.55);
+}
+
+.wh-card-toggle:hover,
+.wh-card-toggle:focus-visible {
+	color: #455ce9;
+}
+
+.wh-card-toggle span {
+	display: inline-block;
+	transition: transform 0.3s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.wh-card-toggle span[data-open="true"] {
+	transform: rotate(180deg);
+}
+
+.wh-card-case {
+	font-size: 0.75rem;
+	font-weight: 500;
+	color: #455ce9;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.wh-card-case:hover {
+	text-decoration: underline;
+}
+
+/* Opens the card in place: no measurement, no second reading surface. */
+.wh-card-details {
+	display: grid;
+	grid-template-rows: 0fr;
+	overflow: hidden;
+	transition: grid-template-rows 0.35s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.wh-card-details[data-open="true"] {
+	grid-template-rows: 1fr;
+}
+
+.wh-card-details-inner {
+	min-height: 0;
+	overflow: hidden;
+}
+
+.wh-card-details[data-open="true"] .wh-card-details-inner {
+	padding-top: 1rem;
+}
+
+.wh-card-sub {
+	font-size: 0.64rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.11em;
+	color: #455ce9;
+	margin: 0 0 0.5rem;
+}
+
+.wh-card-sub + * {
+	margin-bottom: 1rem;
+}
+
 .wh-features {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	column-gap: 1.2rem;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	column-gap: 1.1rem;
 }
 
 .wh-features-col {
@@ -313,42 +266,34 @@
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0.6rem;
+	gap: 0.45rem;
 }
 
-.wh-features-col li {
-	font-size: 0.78rem;
-	font-weight: 400;
-	color: rgba(0, 0, 0, 0.65);
+.wh-features-col li,
+.wh-panel-items li {
+	font-size: 0.72rem;
 	line-height: 1.4;
-	padding-left: 0.9rem;
+	color: rgba(255, 255, 255, 0.6);
+	padding-left: 0.85rem;
 	position: relative;
 	margin: 0;
+}
+
+html:not(.dark) .wh-features-col li,
+html:not(.dark) .wh-panel-items li {
+	color: rgba(0, 0, 0, 0.6);
 }
 
 .wh-features-col li::before {
 	content: "";
 	position: absolute;
 	left: 0;
-	top: 0.4em;
+	top: 0.42em;
 	width: 4px;
 	height: 4px;
 	border-radius: 50%;
 	background: #455ce9;
 	opacity: 0.6;
-}
-
-.wh-panel-list {
-	margin-top: 1.25rem;
-}
-
-.wh-panel-list h4 {
-	font-size: 0.7rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	color: #455ce9;
-	margin: 0 0 0.5rem;
 }
 
 .wh-panel-items {
@@ -357,19 +302,11 @@
 	margin: 0;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.3rem 0.75rem;
-	font-size: 0.75rem;
-	line-height: 1.4;
-	color: rgba(0, 0, 0, 0.6);
+	gap: 0.3rem 0.7rem;
 }
 
 .wh-panel-items li {
-	margin: 0;
-}
-
-.wh-panel-items li + li::before {
-	content: "· ";
-	color: rgba(0, 0, 0, 0.3);
+	padding-left: 0;
 }
 
 .wh-panel-items--stacked {
@@ -377,12 +314,8 @@
 	flex-wrap: nowrap;
 }
 
-.wh-panel-items--stacked li + li::before {
-	content: none;
-}
-
 .wh-panel-items a {
-	color: rgba(0, 0, 0, 0.6);
+	color: inherit;
 	text-decoration: none;
 	border-bottom: 1px solid rgba(69, 92, 233, 0.35);
 	transition:
@@ -395,221 +328,61 @@
 	border-color: #455ce9;
 }
 
-.wh-panel-items a:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: 2px;
+.wh-card-role {
+	margin: 1rem 0 0;
+	font-size: 0.68rem;
+	color: rgba(255, 255, 255, 0.4);
 }
 
-.wh-meta {
-	margin: 1.25rem 0 0;
-	padding-top: 0.9rem;
-	border-top: 1px solid rgba(0, 0, 0, 0.08);
-	font-size: 0.72rem;
+html:not(.dark) .wh-card-role {
 	color: rgba(0, 0, 0, 0.45);
 }
 
-.wh-panel-links {
+/* --- "+n more" and "See all work" ------------------------------------ */
+
+.wh-more-row {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 0.35rem 1.25rem;
-	margin: 0.5rem 0 0;
-	font-size: 0.75rem;
+	justify-content: center;
+	margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.wh-more-row .work-filter-btn {
+	text-decoration: none;
+}
+
+.wh-all {
+	margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+	text-align: center;
+}
+
+.wh-all-link {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	font-size: 0.8rem;
 	font-weight: 500;
-}
-
-.wh-case-link {
-	color: #455ce9;
+	color: rgba(255, 255, 255, 0.85);
 	text-decoration: none;
-	white-space: nowrap;
+	transition: color 0.3s ease;
 }
 
-.wh-case-link:hover {
-	text-decoration: underline;
+html:not(.dark) .wh-all-link {
+	color: rgba(0, 0, 0, 0.8);
 }
 
-.wh-case-link:focus-visible {
-	outline: 2px solid #455ce9;
-	outline-offset: 3px;
-}
-
-.wh-proof-link {
-	color: rgba(0, 0, 0, 0.45);
-	text-decoration: none;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-.wh-proof-link:hover {
+.wh-all-link:hover,
+.wh-all-link:focus-visible {
 	color: #455ce9;
-	border-color: #455ce9;
 }
 
-/* --- Mobile: the index and its panels interleave into one accordion ---- */
-
-@media screen and (max-width: 1023px) {
-	.wh-left,
-	.wh-nav,
-	.wh-group {
-		display: contents;
-	}
-
-	.wh-grid {
-		row-gap: 0;
-	}
-
-	.wh-intro {
-		order: 0;
-		padding: 0 1.5rem 1.5rem;
-	}
-
-	.wh-eyebrow,
-	.wh-row,
-	.wh-more-wrap {
-		margin-left: 1.5rem;
-		margin-right: 1.5rem;
-	}
-
-	.wh-eyebrow {
-		padding-top: 1.25rem;
-	}
-
-	/* Collapsed cards cost no height and animate open without JS measurement. */
-	.wh-panel {
-		display: grid;
-		/* An implicit auto column would size to the panel's min-content and
-		   overflow the viewport at 390. */
-		grid-template-columns: minmax(0, 1fr);
-		grid-template-rows: 0fr;
-		overflow: hidden;
-		transition: grid-template-rows 0.35s cubic-bezier(0.76, 0, 0.24, 1);
-	}
-
-	.wh-panel[data-active="true"] {
-		grid-template-rows: 1fr;
-	}
-
-	.wh-panel-inner {
-		overflow: hidden;
-		min-height: 0;
-		padding: 1.5rem;
-	}
-
-	.wh-all {
-		order: 999;
-		padding: 2rem 1.5rem 0;
-	}
-
-	.wh-features {
-		column-gap: 0.9rem;
-	}
-}
-
-/* --- Desktop: two columns, panels share one cell ---------------------- */
-
-@media screen and (min-width: 1024px) {
-	.work-highlights {
-		min-height: 100vh;
-		padding: 0;
-		background: linear-gradient(to right, #000 0 50%, #fff 50% 100%);
-	}
-
-	.wh-grid {
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		align-items: stretch;
-	}
-
-	.wh-left {
-		grid-column: 1;
-		grid-row: 1;
-		justify-content: center;
-		gap: 2.5rem;
-		padding: 4rem 3rem 4rem clamp(2rem, 6vw, 6rem);
-	}
-
-	/* Every panel in the same cell — the cell sizes to the tallest, so
-	   switching highlights can never move anything. */
-	.wh-panel {
-		grid-column: 2;
-		grid-row: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		padding: 4rem clamp(2rem, 5vw, 5rem) 4rem 3rem;
-	}
-
-	.wh-rule {
-		display: block;
-	}
-
-	.wh-nav {
-		padding-left: 0.85rem;
-	}
-
-	.wh-eyebrow,
-	.wh-row,
-	.wh-more-wrap,
-	.wh-all {
-		margin-left: 0;
-	}
-}
-
-/* Short desktop viewports. Eleven rows, two "+n" rows and See all work set
-   a hard minimum for the index, and the index sizes the grid row the panel
-   sits in — so this cuts padding to the floor and lets the section run past
-   100vh rather than cutting content. */
-@media screen and (min-width: 1024px) and (max-height: 900px) {
-	.wh-left,
-	.wh-panel {
-		padding-top: 1.75rem;
-		padding-bottom: 1.75rem;
-	}
-
-	.wh-left {
-		gap: 1.25rem;
-	}
-
-	.wh-intro h2 {
-		font-size: clamp(1.6rem, 3vw, 2.2rem);
-	}
-
-	.wh-nav {
-		gap: 1rem;
-	}
-
-	.wh-row {
-		padding-top: 0.3rem;
-		padding-bottom: 0.3rem;
-	}
-
-	.wh-media {
-		max-height: 30vh;
-	}
-
-	.wh-metrics {
-		margin-top: 1rem;
-	}
-
-	.wh-divider {
-		margin: 1rem 0;
-	}
-}
-
-@media screen and (min-width: 1280px) {
-	.wh-row-title {
-		font-size: 1.05rem;
-	}
-}
-
-/* --- Reduced motion --------------------------------------------------- */
+/* --- reduced motion --------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
-	.wh-panel {
+	.wh-card-details,
+	.wh-card-toggle span,
+	.wh-card-toggle,
+	.wh-panel-items a,
+	.wh-all-link {
 		transition-duration: 0.01ms;
-	}
-
-	.wh-row,
-	.wh-more,
-	.wh-panel-items a {
-		transition: none;
 	}
 }
