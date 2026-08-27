@@ -13,8 +13,8 @@
  * data/case-studies-v2.json.
  */
 
-import Link from 'next/link';
 import { STATUS_CONFIG } from '../constants';
+import CaseStudyBack from './case-study-back';
 import Chart from './case-study-charts';
 import type { CaseStudyBlock, CaseStudyV2 } from './case-study-types';
 import './case-study-v2.css';
@@ -247,9 +247,7 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 		<div className='cs2'>
 			<nav className='cs2-topbar'>
 				<div className='cs2-topbar-inner'>
-					<Link href='/work' className='cs2-back'>
-						<span aria-hidden='true'>←</span> Back to work
-					</Link>
+					<CaseStudyBack />
 				</div>
 			</nav>
 
