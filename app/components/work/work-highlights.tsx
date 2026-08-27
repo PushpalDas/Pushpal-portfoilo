@@ -21,16 +21,23 @@ gsap.registerPlugin(ScrollTrigger);
 /** Every link out of this section tells the case study where the reader came from. */
 const FROM_HOME = '?from=home';
 
-export interface Badge {
+interface Badge {
 	label: string;
 	colorClass: string;
+}
+
+/** Everything the card borrows from the work item /work renders. */
+export interface CardMeta {
+	badge: Badge | null;
+	image: string;
+	color?: string;
 }
 
 interface WorkHighlightsProps {
 	/** Products on each track the home page is not already showing. */
 	moreCounts: Partial<Record<HighlightTrack, number>>;
-	/** Status badge per slug, read off app/work/constants.ts upstream. */
-	badges: Record<string, Badge | null>;
+	/** Badge, image and tile colour per slug, from app/work/constants.ts. */
+	cards: Record<string, CardMeta>;
 }
 
 function Features({ features }: { features: string[] }) {
@@ -65,10 +72,10 @@ function Features({ features }: { features: string[] }) {
  */
 function HighlightCard({
 	highlight,
-	badge,
+	card,
 }: {
 	highlight: Highlight;
-	badge: Badge | null;
+	card: CardMeta;
 }) {
 	const [open, setOpen] = useState(false);
 	const detailsId = useId();
@@ -128,40 +135,38 @@ function HighlightCard({
 	}, []);
 
 	return (
-		<li className='work-tile wh-card' ref={cardRef}>
+		<li className='work-tile wh-card' ref={cardRef} data-open={open}>
 			<div className='work-tile-wrap'>
 				<div className='work-tile-link'>
 					<div className='work-tile-image-col'>
 						<div className='work-tile-image'>
+							{/* The same image the /work grid renders for this item, off the
+							    same field, so the two grids cannot show different things. */}
+							<div
+								className='work-tile-image-bg'
+								style={{ backgroundColor: card.color }}
+							/>
 							<Link
 								href={href}
 								className='wh-card-media'
 								aria-hidden='true'
 								tabIndex={-1}
 							>
-								{highlight.media.kind === 'image' ? (
-									<Image
-										src={highlight.media.src}
-										alt=''
-										fill
-										className='work-tile-img'
-										sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
-									/>
-								) : (
-									/* No product shot exists for this one, so the number is
-									   the picture rather than a filler image. */
-									<span className='wh-card-number'>
-										{highlight.metrics[0].value}
-									</span>
-								)}
+								<Image
+									src={`/static/images/project/${card.image}`}
+									alt=''
+									fill
+									className='work-tile-img'
+									sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+								/>
 							</Link>
 						</div>
 					</div>
 
 					<div className='work-tile-title-col'>
-						{badge && (
-							<span className={`work-status-badge ${badge.colorClass}`}>
-								{badge.label}
+						{card.badge && (
+							<span className={`work-status-badge ${card.badge.colorClass}`}>
+								{card.badge.label}
 							</span>
 						)}
 						<h4 className='work-tile-title-clamp'>
@@ -212,8 +217,14 @@ function HighlightCard({
 							aria-controls={detailsId}
 							onClick={() => setOpen((v) => !v)}
 						>
-							{open ? 'Hide details' : 'Details'}
-							<span aria-hidden='true' data-open={open}>
+							<span className='wh-card-toggle-label'>
+								{open ? 'Hide details' : 'Details'}
+							</span>
+							<span
+								className='wh-card-chevron'
+								aria-hidden='true'
+								data-open={open}
+							>
 								⌄
 							</span>
 						</button>
@@ -263,7 +274,7 @@ function HighlightCard({
 
 export default function WorkHighlights({
 	moreCounts,
-	badges,
+	cards,
 }: WorkHighlightsProps) {
 	const rootRef = useRef<HTMLElement>(null);
 
@@ -331,21 +342,25 @@ export default function WorkHighlights({
 									<HighlightCard
 										key={highlight.slug}
 										highlight={highlight}
-										badge={badges[highlight.slug] ?? null}
+										card={cards[highlight.slug]}
 									/>
 								))}
-							</ul>
 
-							<div className='wh-more-row wh-reveal'>
-								<Magnetic strength={15}>
-									<Link href={group.more.href} className='work-filter-btn'>
-										<span className='work-filter-btn-fill' />
-										<span className='work-filter-btn-text'>
-											+{moreCounts[group.track] ?? 0} more →
+								{/* The rest of the track, as a tile rather than a button
+								    under the grid — it belongs to the same row of work. */}
+								<li className='work-tile wh-more-tile'>
+									<Link href={group.more.href} className='wh-more-card'>
+										<span className='wh-more-plate'>
+											<span className='wh-more-count'>
+												+{moreCounts[group.track] ?? 0}
+											</span>
+											<span className='wh-more-word'>more</span>
 										</span>
+										<span className='wh-more-title'>{group.label}</span>
+										<span className='wh-more-go'>See the rest →</span>
 									</Link>
-								</Magnetic>
-							</div>
+								</li>
+							</ul>
 						</section>
 					);
 				})}

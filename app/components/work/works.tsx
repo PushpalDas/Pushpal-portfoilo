@@ -1,7 +1,7 @@
 import { workItems } from '../../work/constants';
 import { WORK_STATUSES } from '../../work/status';
 import { moreInTrack } from '../../work/tracks';
-import WorkHighlights, { type Badge } from './work-highlights';
+import WorkHighlights, { type CardMeta } from './work-highlights';
 import { workHighlights } from './workHighlights';
 
 /**
@@ -13,10 +13,19 @@ import { workHighlights } from './workHighlights';
 export default function Works() {
 	const featured = workHighlights.map((highlight) => highlight.slug);
 
-	const badges: Record<string, Badge | null> = {};
+	// Badge, image and tile colour all come off the same work item the
+	// /work grid renders, so a card here and a card there cannot drift.
+	const cards: Record<string, CardMeta> = {};
 	for (const highlight of workHighlights) {
 		const item = workItems.find((w) => w.slug === highlight.slug);
-		badges[highlight.slug] = item?.status ? WORK_STATUSES[item.status] : null;
+		if (!item) {
+			throw new Error(`No work item for highlighted slug ${highlight.slug}`);
+		}
+		cards[highlight.slug] = {
+			badge: item.status ? WORK_STATUSES[item.status] : null,
+			image: item.image,
+			color: item.color,
+		};
 	}
 
 	return (
@@ -25,7 +34,7 @@ export default function Works() {
 				silicon: moreInTrack('silicon', featured),
 				ai: moreInTrack('ai', featured),
 			}}
-			badges={badges}
+			cards={cards}
 		/>
 	);
 }
