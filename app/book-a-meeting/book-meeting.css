@@ -368,3 +368,43 @@
 		grid-template-columns: 1fr;
 	}
 }
+
+/* ============================================
+   The page opens the way /contact does — one line saying what this is
+   for — and closes with the message card, so a visitor who would rather
+   write than book never has to go looking for a second page.
+   ============================================ */
+.booking-intro {
+	width: 100%;
+	max-width: 1080px;
+	margin: 0 auto;
+	padding: clamp(7rem, 16vh, 10rem) clamp(1.5rem, 4vw, 2.5rem) 0;
+	text-align: center;
+}
+
+.booking-intro-title {
+	font-size: clamp(2rem, 5vw, 3.25rem);
+	font-weight: 500;
+	letter-spacing: -0.03em;
+	line-height: 1.1;
+	margin: 0;
+	color: #f1efe7;
+}
+
+.booking-intro-sub {
+	margin: 1rem auto 0;
+	max-width: 52ch;
+	font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+	line-height: 1.6;
+	color: rgba(241, 239, 231, 0.62);
+}
+
+/* The shared form keeps its own two-column layout; this only gives it
+   the same gutter and rhythm as the booking card above it. */
+.booking-connect {
+	width: 100%;
+	max-width: 1080px;
+	margin: 0 auto;
+	padding: clamp(2rem, 6vh, 4rem) clamp(1.5rem, 4vw, 2.5rem)
+		clamp(3rem, 8vh, 5rem);
+}

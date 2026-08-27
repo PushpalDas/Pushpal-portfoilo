@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Navbar from '../components/navbar/navbar';
+import ConnectForm from '../components/connect-form';
 import Footer from '../components/contact';
 import './book-meeting.css';
 
@@ -197,7 +197,14 @@ export default function BookMeetingPage() {
 
 	return (
 		<main className='booking-page-container'>
-			<Navbar />
+			<header className='booking-intro'>
+				<h1 className='booking-intro-title'>Let&apos;s work together</h1>
+				<p className='booking-intro-sub'>
+					Have a project in mind, want to collaborate, or just want to say
+					hello? I&apos;d love to hear from you.
+				</p>
+			</header>
+
 			<div className='booking-wrapper'>
 				{/* Unconfigured Notice */}
 				{!isConfigured ? (
@@ -453,6 +460,11 @@ export default function BookMeetingPage() {
 					</form>
 				)}
 			</div>
+
+			<div className='booking-connect'>
+				<ConnectForm />
+			</div>
+
 			<Footer />
 		</main>
 	);
