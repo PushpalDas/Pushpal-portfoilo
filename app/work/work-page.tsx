@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo } from 'react';
 import Contact from '../components/contact';
 import { type FilterKey, workItems } from './constants';
 import './work.css';
@@ -12,24 +12,47 @@ import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
 
+const FILTER_KEYS: FilterKey[] = ['all', 'product', 'engineering'];
+
 function WorkPageInner() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
+	// The URL is the single source of truth for both levels. The home page's
+	// "+n" rows deep-link straight in, so a pasted link and a click have to
+	// land in exactly the same state.
 	const filterParam = searchParams.get('filter') as FilterKey | null;
-	const initialFilter: FilterKey =
-		filterParam && ['all', 'product', 'engineering'].includes(filterParam)
-			? filterParam
-			: 'all';
-
-	const [activeFilter, setActiveFilter] = useState<FilterKey>(initialFilter);
-
-	// The domain pills are deep-linked from the home page, so the URL is the
-	// source of truth rather than a second copy of it in component state.
 	const domainParam = searchParams.get('domain');
-	const activeTrack: TrackFilterKey = isTrackFilterKey(domainParam)
+	const trackFromUrl: TrackFilterKey = isTrackFilterKey(domainParam)
 		? domainParam
 		: 'all';
+
+	// ?domain= with no ?filter= reads as Products plus that track — which is
+	// what the "+n" rows mean.
+	const activeFilter: FilterKey =
+		filterParam && FILTER_KEYS.includes(filterParam)
+			? filterParam
+			: trackFromUrl !== 'all'
+				? 'product'
+				: 'all';
+
+	// Tracks only exist under Products, so they are the sub-level of it.
+	const showTracks = activeFilter === 'product';
+	const activeTrack: TrackFilterKey = showTracks ? trackFromUrl : 'all';
+
+	const setFilterWithUrl = (filter: FilterKey) => {
+		const params = new URLSearchParams(searchParams.toString());
+		if (filter === 'all') {
+			params.delete('filter');
+		} else {
+			params.set('filter', filter);
+		}
+		// Leaving Products takes the track with it.
+		if (filter !== 'product') {
+			params.delete('domain');
+		}
+		router.replace(`?${params.toString()}`, { scroll: false });
+	};
 
 	const setTrackWithUrl = (track: TrackFilterKey) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -38,17 +61,8 @@ function WorkPageInner() {
 		} else {
 			params.set('domain', track);
 		}
-		router.replace(`?${params.toString()}`, { scroll: false });
-	};
-
-	const setFilterWithUrl = (filter: FilterKey) => {
-		setActiveFilter(filter);
-		const params = new URLSearchParams(searchParams.toString());
-		if (filter === 'all') {
-			params.delete('filter');
-		} else {
-			params.set('filter', filter);
-		}
+		// A track always implies Products; keep the two levels consistent.
+		params.set('filter', 'product');
 		router.replace(`?${params.toString()}`, { scroll: false });
 	};
 
@@ -94,24 +108,31 @@ function WorkPageInner() {
 		<div className='work-page'>
 			<WorkHeader
 				filters={
-					<WorkFilters
-						activeFilter={activeFilter}
-						setActiveFilter={setFilterWithUrl}
-					/>
+					<>
+						<WorkFilters
+							activeFilter={activeFilter}
+							setActiveFilter={setFilterWithUrl}
+						/>
+						<WorkDomainFilters
+							activeTrack={activeTrack}
+							setActiveTrack={setTrackWithUrl}
+							open={showTracks}
+						/>
+					</>
 				}
 			/>
 			<div className='work-content-wrap'>
-				<WorkDomainFilters
-					activeTrack={activeTrack}
-					setActiveTrack={setTrackWithUrl}
-				/>
 				{filteredItems.length > 0 ? (
 					<>
 						<div className='work-section-divider'>
 							<span className='work-section-divider-text'>CASE STUDIES</span>
 							<div className='work-section-divider-line'></div>
 						</div>
-						<WorkGrid items={filteredItems} gridColumns={3} />
+						<WorkGrid
+							items={filteredItems}
+							gridColumns={3}
+							domain={activeTrack === 'all' ? undefined : activeTrack}
+						/>
 					</>
 				) : (
 					<p className='work-empty'>

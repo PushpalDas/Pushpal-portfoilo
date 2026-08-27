@@ -8,7 +8,7 @@ export interface WorkItem {
 	domain: string;
 	category: 'product' | 'engineering';
 	/** Highlight track — also the /work ?domain= filter. Products only. */
-	track?: 'silicon' | 'ai' | 'ip';
+	track?: 'silicon' | 'ai';
 	status: WorkStatus | null;
 	outcome: string;
 	image: string;

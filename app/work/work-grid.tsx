@@ -14,10 +14,17 @@ gsap.registerPlugin(ScrollTrigger);
 interface WorkGridProps {
 	items: WorkItem[];
 	gridColumns?: 2 | 3 | 4;
+	/** Rides along to the case study so its back link returns to this list. */
+	domain?: string;
 }
 
-export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
+export default function WorkGrid({
+	items,
+	gridColumns = 2,
+	domain,
+}: WorkGridProps) {
 	const gridRef = useRef<HTMLDivElement>(null);
+	const carry = domain ? `?domain=${domain}` : '';
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
@@ -107,7 +114,7 @@ export default function WorkGrid({ items, gridColumns = 2 }: WorkGridProps) {
 								<li key={item.title} className='work-tile'>
 									<div className='work-tile-wrap'>
 										<Link
-										href={`/work/${item.slug ?? workSlug(item)}`}
+											href={`/work/${item.slug ?? workSlug(item)}${carry}`}
 											className='work-tile-link'
 										>
 											{cardInner}

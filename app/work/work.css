@@ -44,6 +44,9 @@
 
 .work-header-filters {
 	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
 .work-header-title {
@@ -817,19 +820,44 @@ html:not(.dark) .work-section-divider-line {
 /* ============================================
    DOMAIN PILLS — deep-linked from the home page +n rows
    ============================================ */
+/* The row is the sub-level of Products, so it reveals rather than appearing. */
+.work-domain-reveal {
+	display: grid;
+	grid-template-rows: 0fr;
+	opacity: 0;
+	transition:
+		grid-template-rows 0.25s cubic-bezier(0.76, 0, 0.24, 1),
+		opacity 0.25s ease;
+}
+
+.work-domain-reveal[data-open="true"] {
+	grid-template-rows: 1fr;
+	opacity: 1;
+}
+
+.work-domain-reveal-inner {
+	overflow: hidden;
+	min-height: 0;
+}
+
 .work-domain-row {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.6rem;
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto 2rem;
+	gap: 0.45rem;
+	padding-top: 0.7rem;
 }
 
-.work-domain-row .work-filter-btn {
-	font-size: 0.8rem;
-	padding: 0.5em 1.25em;
-	min-height: 44px;
+/* One size step down from the Products / Engineering toggle above it. */
+.work-domain-btn {
+	font-size: 0.72rem;
+	padding: 0.42em 1em;
+	min-height: 34px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.work-domain-reveal {
+		transition-duration: 0.01ms;
+	}
 }
 
 .work-empty {

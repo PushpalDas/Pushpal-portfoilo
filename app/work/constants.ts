@@ -415,7 +415,7 @@ export const workItems: WorkItem[] = [
 		year: '2026',
 		domain: 'Patent operations',
 		category: 'product',
-		track: 'ip',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.',
@@ -429,7 +429,7 @@ export const workItems: WorkItem[] = [
 		year: '2025',
 		domain: 'Portfolio ops',
 		category: 'product',
-		track: 'ip',
+		track: 'ai',
 		status: 'internal',
 		outcome:
 			'Stopped the patent dashboard double-counting continuation rows, and made the master workbook rebuild itself from its three sources.',
