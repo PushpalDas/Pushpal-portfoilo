@@ -9,11 +9,6 @@
 	min-height: 100vh;
 }
 
-/* Hide the semicircle divider on the contact section within work page */
-.work-page .contact-rounded-div {
-	display: none;
-}
-
 /* ============================================
    HEADER
    ============================================ */

@@ -409,18 +409,6 @@ html:not(.dark) .wh-all-link:focus-visible {
 	color: #455ce9;
 }
 
-/* --- the seam into Contact ------------------------------------------- */
-
-/* Contact opens with a 10vh #1c1d20 ellipse that every other route hides
-   — .about-page, .certifications-page, .experience-page and .work-page all
-   set it to display:none. The home page was the last one still drawing it,
-   so a black section met a grey half-circle instead of the flat seam the
-   rest of the site has. Same treatment here, scoped to the one place the
-   two sections meet. */
-.work-highlights + .contact-section .contact-rounded-div {
-	display: none;
-}
-
 /* --- reduced motion --------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {

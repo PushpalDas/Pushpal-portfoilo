@@ -11,7 +11,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Contact() {
 	const sectionRef = useRef<HTMLElement>(null);
-	const roundedDivRef = useRef<HTMLDivElement>(null);
 	const headingRef = useRef<HTMLHeadingElement>(null);
 	const line1Ref = useRef<HTMLSpanElement>(null);
 	const line2Ref = useRef<HTMLSpanElement>(null);
@@ -22,18 +21,6 @@ export default function Contact() {
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
-			// KEY ANIMATION: Rounded divider shrinks to 0 height as you scroll (like Dennis Snellenberg)
-			gsap.to(roundedDivRef.current, {
-				height: 0,
-				ease: 'none',
-				scrollTrigger: {
-					trigger: sectionRef.current,
-					start: '0% 100%',
-					end: '50% 100%',
-					scrub: 0,
-				},
-			});
-
 			// Animate heading lines sliding up
 			gsap.from([line1Ref.current, line2Ref.current], {
 				y: '100%',
@@ -107,11 +94,6 @@ export default function Contact() {
 
 	return (
 		<section ref={sectionRef} className='contact-section'>
-			{/* Rounded divider — height animates to 0 on scroll */}
-			<div className='contact-rounded-div' ref={roundedDivRef}>
-				<div className='contact-rounded-div-inner' />
-			</div>
-
 			<div className='contact-wrapper'>
 				<div className='contact-container'>
 					{/* Main heading */}
@@ -243,38 +225,6 @@ export default function Contact() {
 					position: relative;
 					width: 100%;
 					overflow: hidden;
-				}
-
-				/* Rounded divider — starts at 10vh, animates to 0 on scroll */
-				.contact-rounded-div {
-					width: 100%;
-					position: relative;
-					height: 10vh;
-					overflow: hidden;
-					z-index: 2;
-					will-change: height;
-				}
-
-				.contact-rounded-div-inner {
-					width: 150%;
-					display: block;
-					position: absolute;
-					height: 750%;
-					left: 50%;
-					border-radius: 50%;
-					transform: translate(-50%, -86.666%);
-					z-index: 1;
-					box-shadow: 0 0 2px 1px #1c1d20;
-					-webkit-backface-visibility: hidden;
-					backface-visibility: hidden;
-				}
-
-				:is(.dark) .contact-rounded-div-inner {
-					background: #1c1d20;
-				}
-
-				:is(:not(.dark)) .contact-rounded-div-inner {
-					background: #1c1d20;
 				}
 
 				/* Main wrapper — dark background matching original footer */
@@ -539,10 +489,6 @@ export default function Contact() {
 
 				/* Responsive */
 				@media screen and (max-width: 768px) {
-					.contact-rounded-div {
-						height: 7.5vh;
-					}
-
 					.contact-heading {
 						font-size: clamp(2rem, 10vw, 3.5rem);
 					}
