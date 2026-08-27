@@ -347,18 +347,42 @@ export default function WorkHighlights({
 								))}
 
 								{/* The rest of the track, as a tile rather than a button
-								    under the grid — it belongs to the same row of work. */}
+								    under the grid — it belongs to the same row of work.
+								    Built from /work's own tile parts, so it inherits the
+								    same hover zoom rather than imitating it. */}
 								<li className='work-tile wh-more-tile'>
-									<Link href={group.more.href} className='wh-more-card'>
-										<span className='wh-more-plate'>
-											<span className='wh-more-count'>
-												+{moreCounts[group.track] ?? 0}
-											</span>
-											<span className='wh-more-word'>more</span>
-										</span>
-										<span className='wh-more-title'>{group.label}</span>
-										<span className='wh-more-go'>See the rest →</span>
-									</Link>
+									<div className='work-tile-wrap'>
+										<Link
+											href={group.more.href}
+											className='work-tile-link wh-more-card'
+										>
+											<div className='work-tile-image-col'>
+												<div className='work-tile-image wh-more-image'>
+													<div className='work-tile-image-bg wh-more-bg' />
+													<span className='work-tile-icon-display wh-more-display'>
+														<span className='wh-more-count'>
+															+{moreCounts[group.track] ?? 0}
+														</span>
+														<span className='wh-more-word'>more</span>
+													</span>
+												</div>
+											</div>
+											<div className='work-tile-title-col'>
+												<h4 className='work-tile-title-clamp'>
+													<span>{group.label}</span>
+												</h4>
+												<p className='work-tile-outcome'>
+													The rest of the track, on the work page.
+												</p>
+											</div>
+											<div className='work-tile-meta-col'>
+												<div className='work-tile-stripe' />
+												<div className='work-tile-info-col'>
+													<p>See the rest →</p>
+												</div>
+											</div>
+										</Link>
+									</div>
 								</li>
 							</ul>
 						</section>
