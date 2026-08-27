@@ -10,6 +10,9 @@ import Magnetic from '../Magnetic';
 import SplashCursor from '../splash-cursor';
 import ArrowDown from './arrow-down';
 
+/** One line to revert if this reads as overclaiming. */
+const HERO_H1 = 'I turn deep-tech R&D into products that ship.';
+
 export default function Hero() {
 	return (
 		<main className='relative min-h-svh w-screen overflow-hidden'>
@@ -25,14 +28,10 @@ export default function Hero() {
 					<ArrowDown />
 					<div className='absolute top-[20%] md:top-[40%] max-w-5xl flex-col space-y-4 justify-center px-8 md:px-24 lg:ml-14'>
 						<h1 className='text-2xl font-medium md:mr-4 md:text-4xl'>
-							Welcome to my <span className='font-bold'>portfolio</span>
+							{HERO_H1}
 						</h1>
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
-								I help deep-tech teams turn complex R&amp;D into products that
-								ship.
-								<br />
-								<br />
 								Principal PM in the CTO&apos;s office at Ixana — I run the Wi-R
 								silicon programs from spec to production, the patent program
 								(50+ filings, first grants issued), and the internal tools the
