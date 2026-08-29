@@ -14,8 +14,8 @@
     "confidentiality": "Internal product — screens on this page are recreations, and figures are relative or anonymised.",
     "evidence": [
       {
-        "label": "Repository",
-        "url": "https://github.com/PushpalDas/Ixana-Wiki"
+        "label": "Open the working demo — search it yourself, on an invented workspace",
+        "url": "https://xana-nine.vercel.app/?q=YR31%20power%20budget"
       }
     ],
     "summary": [
@@ -243,11 +243,11 @@
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Chat answer view, recreated in Figma — with numbered callout arrows drawn on top",
+            "alt": "Searching XANA for “YR31 power budget”: the answer sits above the results with numbered citation chips inside its sentences, and the three sources beneath name a PDF page, a spreadsheet row range and a meeting timestamp",
             "callouts": [
               {
                 "lead": "Citations sit inline, not in a footer.",
-                "text": "In the alpha, people wouldn't act on an answer without seeing the source first — inline citations moved it from a demo to a daily tool."
+                "text": "In the alpha people wouldn't act on an answer without seeing the source first, so the marker sits in the clause it supports and opens that exact passage. A meeting citation carries a timestamp and seeks the recording to the second it was said."
               },
               {
                 "lead": "Preview opens in-app.",
@@ -258,11 +258,48 @@
                 "text": "People often knew which tool a document lived in and wanted to say so upfront."
               },
               {
-                "lead": "Transcript cues are timestamps, not text.",
-                "text": "Nobody read transcripts — they jumped to the moment and listened."
+                "lead": "Superseded copies are flagged, never hidden.",
+                "text": "The February audit found three versions of one spec. A superseded copy still appears in the results, ranked under the current one and labelled — and the answer refuses to quote from it. Hiding duplicates would have made the guardrail this shipped against impossible to read."
               }
             ],
-            "note": "Recreated from the production interface. Layout and interactions are accurate; all documents, queries and results shown are invented. Happy to walk through the real product in a conversation."
+            "note": "The running demo rather than a mock-up — same code, same layout, on an invented corpus. Ten documents, four recordings and three videos stand in for the five connected sources, and every document, name, part number and figure is made up for publication. The two folders excluded from ingestion are absent from it by construction rather than filtered.",
+            "image": "/static/images/project/ixana-wiki-search.jpg",
+            "href": "https://xana-nine.vercel.app/?q=YR31%20power%20budget",
+            "hrefLabel": "Search this in the demo — opens the screen above"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-wiki-video.jpg",
+                "href": "https://xana-nine.vercel.app/myfiles/view/doc-walkthrough-video",
+                "hrefLabel": "Open the video and ask it something",
+                "label": "A video, opened in place",
+                "caption": "The prompts belong to this file, not to the product — clicking one answers from this recording alone, and the citation is a timestamp, so checking it means landing on the second somebody said it rather than on an hour of audio. Every file in My Files carries its own prompts."
+              },
+              {
+                "image": "/static/images/project/ixana-wiki-sheet.jpg",
+                "href": "https://xana-nine.vercel.app/myfiles/view/doc-adoption-sheet",
+                "hrefLabel": "Open the spreadsheet",
+                "label": "A spreadsheet, opened as a grid",
+                "caption": "Column letters and row numbers, because a citation reading “Sheet 1, rows 2–13” is only checkable against something a reader can count to. One markdown pane for every file type made every locator land in the same undifferentiated wall of text."
+              },
+              {
+                "image": "/static/images/project/ixana-wiki-pdf.jpg",
+                "href": "https://xana-nine.vercel.app/myfiles/view/doc-alpha-readout",
+                "hrefLabel": "Open the PDF",
+                "label": "A PDF, opened by page",
+                "caption": "Each page stamped with the number its citations quote, so “p. 2” lands on page two. Word documents and decks read the same way, by section and by slide."
+              },
+              {
+                "image": "/static/images/project/ixana-wiki-myfiles.jpg",
+                "href": "https://xana-nine.vercel.app/myfiles",
+                "hrefLabel": "Open My Files",
+                "label": "My Files",
+                "caption": "The OneDrive and SharePoint surface — a video, a PDF, a spreadsheet, a document and a deck, each opening in a reader that looks like what it is. ClickUp is not mixed in; it is a separate source with its own route, and folding both into one list was counting one index as two. The two folders excluded from ingestion are absent entirely rather than filtered."
+              }
+            ],
+            "note": "Every file type in My Files opens inside the app rather than bouncing out to OneDrive in a new tab, which lost people their place in the results. Each opens in a reader shaped like the file, because a locator only means something if the surface has pages, or rows, or a timeline."
           }
         ]
       },
@@ -775,7 +812,13 @@
       "timeline": "Feb 2026 – present",
       "stage": "Live across three engineering teams"
     },
-    "confidentiality": "Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.",
+    "confidentiality": "Internal product — the screens in section 06 are a running recreation with invented task data, and all figures on this page are invented placeholders for this sample. Every task name, owner, comment and date in the demo is made up for publication; owners are roles rather than people, for the same reason the leaderboard ranks teams.",
+    "evidence": [
+      {
+        "label": "Open the working demo — three pipelines, their delays and the reasons behind them",
+        "url": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong"
+      }
+    ],
     "summary": [
       {
         "lead": "Problem.",
@@ -983,26 +1026,63 @@
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Pipeline view with the delay drawer open, recreated in Figma — numbered callout arrows drawn on top",
             "callouts": [
               {
                 "lead": "Stage names are the team's own words.",
-                "text": "Normalising them into a shared vocabulary was the thing the RTL lead refused, and he was right — a stage nobody recognises is a stage nobody corrects."
+                "text": "Request intake, bench setup, characterisation, sign-off — PS's vocabulary, not a normalised one. That was the thing the RTL lead refused, and he was right: a stage nobody recognises is a stage nobody corrects."
               },
               {
                 "lead": "The correction control sits on the stage itself.",
-                "text": "Classification will be wrong some of the time. Putting the fix where the error appears is what turned the correction rate into a metric we actually receive."
+                "text": "The open panel names what put the work there and how sure it was, then offers one move. Classification will be wrong some of the time; putting the fix where the error appears is what turned the correction rate into a metric we actually receive."
               },
               {
-                "lead": "Delay reasons show the source comment, not a summary alone.",
-                "text": "In the observations, leads did not trust a delay explanation they could not trace back to who wrote it."
+                "lead": "The correction rate is on the header, not in a report.",
+                "text": "Two of 48 stages corrected, 4.2%, beside the line saying stages are model-classified. The guardrail on automatic classification is only a guardrail if the people relying on it can see it without asking."
               },
               {
-                "lead": "The leaderboard ranks teams, never individuals.",
-                "text": "The same data ranked by person would have changed how tasks get written within a week, and the tracker would have started measuring the writing rather than the work."
+                "lead": "A delay is three numbers, not one.",
+                "text": "Every row splits into start, length and completion delay against the planned window. Leads argued about different things once they could see which of the three had moved."
               }
             ],
-            "note": "Recreated from the internal interface. Layout and interactions are accurate; all task names, teams and figures shown are invented. Happy to walk through the real product in a conversation."
+            "note": "The running demo, on an invented set of 48 tasks across three pipelines. Layout and interactions are the real ones; every task name, owner, comment and date is made up for publication.",
+            "image": "/static/images/project/ixana-flow-pipeline.jpg",
+            "alt": "The PS delay view: an eleven-stage test flow in the team's own words, one stage panel open showing its classification confidence and a control to move the work to another stage, and every late task decomposed into start, length and completion delay beside it.",
+            "href": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong",
+            "hrefLabel": "Open this screen in the demo"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-flow-rtl.jpg",
+                "href": "https://xana-nine.vercel.app/efficiency?view=tracker&team=rtl&mode=wrong&stage=9",
+                "hrefLabel": "Open RTL on the stage that is holding it",
+                "label": "Three pipelines, three vocabularies",
+                "caption": "RTL's eleven stages are verification stages, and nothing maps them onto the eleven test-flow stages in the shot above. The header says stages here are set by the team: automatic inference for RTL reached 54% on a sample of 200 and was cut, so this team types the stage in. The link opens the bug-triage stage already selected."
+              },
+              {
+                "image": "/static/images/project/ixana-flow-delay.jpg",
+                "href": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&stage=3",
+                "hrefLabel": "Open the stage this drawer belongs to",
+                "label": "Delay reasons show the source comment",
+                "caption": "Planned window against what actually happened, the delay split three ways, and under it the comment thread the reason came from, attributed and dated. In the observations leads would not carry an explanation into a review that they could not trace back to whoever wrote it."
+              },
+              {
+                "image": "/static/images/project/ixana-flow-standings.jpg",
+                "href": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&board=1",
+                "hrefLabel": "Open the leaderboard",
+                "label": "The leaderboard ranks teams, never individuals",
+                "caption": "Three pipelines compared on stage timestamps — the one field they share — and a line saying the per-person view was never built. The same data ranked by person would have changed how tasks get written within a week, and the tracker would have started measuring the writing rather than the work."
+              },
+              {
+                "image": "/static/images/project/ixana-flow-assistant.jpg",
+                "href": "https://xana-nine.vercel.app/efficiency?q=Why%20is%20the%20AMS%20layout%20behind%3F",
+                "hrefLabel": "Ask this question in the demo",
+                "label": "The assistant shows the filter, not just the answer",
+                "caption": "A question becomes a filter over stored records, and the filter is printed under the answer. A wrong answer is then a wrong filter — visible, and fixable — rather than a fluent invention. Ask it who the best engineer is and it says the ranking does not exist. The link opens this question already asked."
+              }
+            ],
+            "note": "Four screens from the same invented dataset as the shot above. Each link opens that screen in the demo rather than its front page."
           }
         ]
       },
@@ -1124,7 +1204,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation."
   },
   "ixana-video-library-automated-company-video-library": {
     "slug": "ixana-video-library-automated-company-video-library",
@@ -1139,6 +1219,12 @@
       "stage": "Live, company-wide"
     },
     "confidentiality": "Internal product — the player screen described in section 06 is a recreation with invented meeting content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name appears on this page.",
+    "evidence": [
+      {
+        "label": "Open the working demo — a recording, its transcript and its minutes",
+        "url": "https://xana-nine.vercel.app/videolibrary"
+      }
+    ],
     "summary": [
       {
         "lead": "Problem.",
@@ -1337,31 +1423,62 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A library pulling recordings and stored video into one browsable space, storing transcript text with timestamped cues, and opening each recording in a workspace where the transcript is the primary control. People search across titles and what was said, click any line to jump the video there, ask questions grounded in the full transcript, and generate structured minutes."
+          "A company video library that fills itself: a call ends, the recording and transcript are pulled from Teams or SharePoint, a channel is chosen, and cues, minutes and questions are built before anyone opens it.",
+          "What makes it worth having is opening one. Every item carries its own transcript, suggested questions and minutes, and an answer comes back as the line a person actually said, timestamped."
         ],
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Player workspace with transcript, question panel and notes tab, recreated in Figma — with numbered callout arrows drawn on top",
+            "alt": "The library shelf: an ingest strip across the top tracing a call from ending to appearing, and beneath it a grid of recordings and stored video with duration and source badges, one item marked excluded by the organiser",
             "callouts": [
               {
-                "lead": "The transcript sits beside the video at equal weight.",
-                "text": "Making it a collapsed panel tested badly — people did not discover that lines were clickable, and without that the product is just a video player with extra text."
+                "lead": "Nothing on this shelf was put here by a person.",
+                "text": "Ingestion pulls the recording and its transcript, picks a channel and builds the cues, minutes and prompts before anyone opens it. The archive reached 690 recordings without anybody filing one."
               },
               {
-                "lead": "Generated minutes cite the timestamp of each claim.",
-                "text": "In the alpha, nobody circulated a generated minute they could not spot-check. A citation to the moment turned it from a draft into something people sent."
+                "lead": "Every item on it can be asked a question.",
+                "text": "Any item opens with its transcript, questions written for it, and answers returned as the line somebody said and the second they said it."
               },
               {
-                "lead": "Search results show the matching line, not the meeting title.",
-                "text": "The unit people are looking for is a sentence. Returning a title makes them start the scrub over again."
+                "lead": "Every item leaves you with minutes.",
+                "text": "Summary, decisions and actions per item, timestamped claim by claim. Nobody circulated a minute they could not spot-check."
               },
               {
                 "lead": "Excluded meetings show as excluded, not as absent.",
-                "text": "Silently hiding a recording makes people think the system lost it and go asking. Naming the exclusion ends the search."
+                "text": "Third along the top row. The organiser marks it before the meeting, irreversibly — the condition that made indexing the rest acceptable."
               }
             ],
-            "note": "Recreated from the internal interface. Layout and interactions are accurate; all meeting titles, transcript lines and results shown are invented. Happy to walk through the real product in a conversation."
+            "note": "The running demo, on an invented archive of eight items across five channels. Every title, transcript line, name and figure is made up for publication, and the thumbnails are generated title cards — inventing a poster frame would be a picture of a meeting that never happened.",
+            "image": "/static/images/project/ixana-library-shelf.jpg",
+            "href": "https://xana-nine.vercel.app/videolibrary",
+            "hrefLabel": "Open the library — the shelf above, live"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-library-search.jpg",
+                "href": "https://xana-nine.vercel.app/videolibrary?q=milliwatts",
+                "hrefLabel": "Run this search in the demo",
+                "label": "A hit is a line, not a title",
+                "caption": "Searching “milliwatts” returns the sentence that matched and the second it was said, across a recording and a stored video at once. Titles are calendar invites rather than contents. The link opens this search already run."
+              },
+              {
+                "image": "/static/images/project/ixana-library-ask.jpg",
+                "href": "https://xana-nine.vercel.app/videolibrary?v=meeting-integration&ask=1",
+                "hrefLabel": "Open this video with the question already asked",
+                "label": "Ask any video",
+                "caption": "The prompts belong to this recording rather than to the product, so the first click lands on a real answer. The reply is the line that was said, attributed and timestamped. The link opens this video with that question already asked."
+              },
+              {
+                "image": "/static/images/project/ixana-library-notes.jpg",
+                "href": "https://xana-nine.vercel.app/videolibrary?v=meeting-integration&tab=notes",
+                "hrefLabel": "Open the same video on its minutes",
+                "label": "Minutes, on the same video",
+                "caption": "Summary, decisions and actions for the item on screen, each claim carrying the moment it came from. Published minutes reached 11% of recorded meetings."
+              }
+            ],
+            "note": "Three moments from the same invented archive as the shelf above."
           }
         ]
       },
@@ -2806,7 +2923,8 @@
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Delay detail sheet with generated root causes and signature column, recreated with invented tasks — with numbered callout arrows drawn on top",
+            "image": "/static/images/project/ixana-ams-delay-detail.jpg",
+            "alt": "The delay detail sheet: 38 delayed tasks sorted by days late, each with a root cause and the name of the person who signed it. The worst four carry a model-written draft; one row reads 'cause not confirmed'.",
             "callouts": [
               {
                 "lead": "The signature column sits beside the cause, not at the end of the row.",
@@ -2825,7 +2943,50 @@
                 "text": "A blank cell reads as no delay to explain. The previous report was 79% blank cells, and that is exactly how it was misread."
               }
             ],
-            "note": "Recreated from the internal workbook. Structure and columns are accurate; all tasks, causes and figures shown are invented. Happy to walk through the real report in a conversation."
+            "note": "Recreated from the internal workbook as a working demo. Structure, columns, rules and the signature gate are accurate; all tasks, names, comment threads, causes and figures shown are invented. Happy to walk through the real report in a conversation.",
+            "href": "/demo/ams-dashboard?sheet=delay",
+            "hrefLabel": "Open this sheet in the demo and sign a cause"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-ams-run.jpg",
+                "label": "The run.",
+                "caption": "Every step carries a rule or model badge, because the split between counting and synthesis is the decision the whole design rests on. Two of the eight steps are the model, and neither of them touches a number.",
+                "href": "/demo/ams-dashboard?fresh=1",
+                "hrefLabel": "Run the report yourself"
+              },
+              {
+                "image": "/static/images/project/ixana-ams-root-cause-thread.jpg",
+                "label": "A generated cause, beside the thread it came from.",
+                "caption": "The analysis names the comments it drew on and they are marked in the thread underneath. Signing is refused unless the person signing owns the affected work.",
+                "href": "/demo/ams-dashboard?sheet=delay&task=T-2214&signed=0",
+                "hrefLabel": "Open this task and try to sign it"
+              },
+              {
+                "image": "/static/images/project/ixana-ams-key-metrics.jpg",
+                "label": "The second pass.",
+                "caption": "Key metrics are computed from the sheets already written, and each tile names the column it came from. The paragraph beneath is the model’s; the figures above it are not.",
+                "href": "/demo/ams-dashboard?sheet=metrics",
+                "hrefLabel": "Open the metrics sheet"
+              },
+              {
+                "image": "/static/images/project/ixana-ams-published.jpg",
+                "label": "What leadership receives.",
+                "caption": "One version, 32 of 38 causes signed, and six rows that say \"cause not confirmed\" with the reason attached rather than an empty cell.",
+                "href": "/demo/ams-dashboard?sheet=publish&state=published",
+                "hrefLabel": "Open the published report"
+              },
+              {
+                "image": "/static/images/project/ixana-ams-before.jpg",
+                "label": "The same month, as the report used to read.",
+                "caption": "Thirty of 38 delayed tasks arrive with no stated cause and six say \"pending\", which counts as none. There is no signature column because there was nothing to sign.",
+                "href": "/demo/ams-dashboard?sheet=delay&view=before",
+                "hrefLabel": "Compare it with this run"
+              }
+            ],
+            "note": "The demo runs on invented data and a simulated run. It exists so the argument in this page can be checked rather than taken on trust: sign a cause, try to sign someone else’s, or publish with six rows unconfirmed and watch the coverage figure move."
           }
         ]
       },
@@ -3703,6 +3864,12 @@
       "stage": "Live, syncing daily"
     },
     "confidentiality": "Internal tooling. All figures on this page are invented placeholders for this sample; no document title, content or author appears on this page.",
+    "evidence": [
+      {
+        "label": "Open the working demo — ClickUp under My Files, where the versions live",
+        "url": "https://xana-nine.vercel.app/myfiles"
+      }
+    ],
     "summary": [
       {
         "lead": "Problem.",
@@ -3913,26 +4080,49 @@
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Document detail with version timeline and diff, recreated in Figma — with numbered callout arrows drawn on top",
+            "alt": "Comparing version 1 to version 2 of a document: a What changed panel carrying a sentence about the change, the page list beneath it and two modified page chips, and under that the line-by-line diff with the removed line in red and the two added lines in green",
             "callouts": [
               {
                 "lead": "The change summary sits above the diff, not inside it.",
-                "text": "This is what replaced the semantic diff. Most readers need to know whether a change matters; only some need to see it line by line."
+                "text": "This is what replaced the semantic diff. Most readers need to know whether a change matters; only some need to see it line by line, so the sentence comes first and the diff waits underneath it."
               },
               {
                 "lead": "Registered and unregistered counts are shown separately.",
-                "text": "The condition from section 05 — the tool tracks more than the register lists, and must never be mistaken for the canonical inventory."
+                "text": "On the repository view: seven in the register, three tracked but unregistered, never summed. The tool follows more than the register lists and must not be read as the canonical inventory."
               },
               {
                 "lead": "The run history shows checked and changed, not just success.",
-                "text": "A sync that checks nothing and reports success looks identical to a healthy one, which is exactly the failure we had for three days."
+                "text": "Four nightly runs across the top, each with both numbers. The 27th reported completed having checked nothing — identical to a healthy run on status alone, which is how the same failure went unnoticed for three days."
               },
               {
                 "lead": "Versions carry no edit button anywhere.",
-                "text": "An immutable record with an affordance for changing it is not an immutable record, however well the permissions are configured."
+                "text": "There is no control on this screen that alters a version. An immutable record with an affordance for changing it is not an immutable record, however well the permissions are configured."
               }
             ],
-            "note": "Recreated from the internal interface. Layout and interactions are accurate; all document titles, content and authors shown are invented. Happy to walk through the real product in a conversation."
+            "note": "The running demo rather than a mock-up — same code, same layout, on an invented workspace of ten documents, fourteen versions and four nightly runs. Every title, author and line of content is made up for publication; the version model, the register distinction and the sync accounting are the real ones.",
+            "image": "/static/images/project/ixana-vc-diff.jpg",
+            "href": "https://xana-nine.vercel.app/documents/doc_onboarding?tab=compare",
+            "hrefLabel": "Open this comparison in the demo"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-vc-repository.jpg",
+                "href": "https://xana-nine.vercel.app/myfiles",
+                "hrefLabel": "Open ClickUp under My Files",
+                "label": "The repository",
+                "caption": "Reached from My Files, under ClickUp — the documents that carry a history rather than only a current copy. The two register counts sit apart from each other above the table, and the nightly runs sit above them with what each one checked and changed."
+              },
+              {
+                "image": "/static/images/project/ixana-vc-timeline.jpg",
+                "href": "https://xana-nine.vercel.app/documents/doc_onboarding",
+                "hrefLabel": "Open a document and its versions",
+                "label": "A version timeline",
+                "caption": "One document, its versions down the left, and a comparison between any two of them. A version exists only where the content hash genuinely moved, so the timeline is a record of real change rather than of how often the sync ran."
+              }
+            ],
+            "note": "Two surfaces on the same invented workspace as the comparison above."
           }
         ]
       },
@@ -12144,16 +12334,8 @@
     "confidentiality": "Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, and figures are invented or relative.",
     "evidence": [
       {
-        "label": "Granted — wearable EQS-HBC device (US12619308B2)",
-        "url": "https://patents.google.com/patent/US12619308B2/en"
-      },
-      {
-        "label": "Published — human-body-resonance data transfer (US20250379663A1)",
-        "url": "https://patents.google.com/patent/US20250379663A1/en"
-      },
-      {
-        "label": "Published — error-proportional encoding for body area networks (US20250192915A1)",
-        "url": "https://patents.google.com/patent/US20250192915A1/en"
+        "label": "Open the working demo — five surfaces on an invented portfolio",
+        "url": "https://xana-nine.vercel.app/patents"
       }
     ],
     "summary": [
@@ -12481,12 +12663,12 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A mail-triggered spine and four surfaces over it. Documents from any of the three firms are extracted, matched to one matter identity, given a stage and a category, and written into one record — four views of it, not four tools."
+          "A mail-triggered spine and five surfaces over it. Documents from any of the three firms are extracted, matched to one matter identity, given a stage and a category, and written into one record — five views of it, not five tools."
         ],
         "blocks": [
           {
             "kind": "shot",
-            "alt": "Patent portfolio spend and milestone timeline, one lane per matter across 2024 to 2026",
+            "alt": "The spend and milestone timeline: eighteen lanes, one per matter, running from April 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane",
             "callouts": [
               {
                 "lead": "Deadline triage is a policy, not a colour.",
@@ -12505,38 +12687,51 @@
                 "text": "Draft, filing, office action. That makes an invoice checkable against the engagement, and keeps everyone out of arguing about what any single matter is worth."
               }
             ],
-            "note": "The real interface, re-rendered on an invented dataset — same code, same layout, same stage model, with matters, firms, application numbers and amounts that belong to no real filing.",
-            "image": "/static/images/project/ixana-patent-gantt.png"
+            "note": "The running demo rather than a mock-up — same code, same layout, on an invented portfolio of 18 matters across 3 firms, $61,900 across 70 payments and 115 dated events. Matter names, application numbers, firms and fees are invented for publication; the stage model, the category set and the payment breakdown are the real ones.",
+            "image": "/static/images/project/ixana-patent-timeline.jpg",
+            "href": "https://xana-nine.vercel.app/patents/spend",
+            "hrefLabel": "Open the timeline in the demo"
           },
           {
             "kind": "gallery",
             "items": [
               {
-                "image": "/static/images/project/ixana-patent-tracker.png",
-                "label": "Lifecycle tracker",
-                "caption": "Every matter in one of six stages, and an explicit unclassified stage beside them. Overdue is a property of the internal action date and never of a statutory one, so nothing red here can be read as a legal deadline."
-              },
-              {
-                "image": "/static/images/project/ixana-patent-dashboard.png",
+                "image": "/static/images/project/ixana-patent-dashboard.jpg",
+                "href": "https://xana-nine.vercel.app/patents",
+                "hrefLabel": "Open the dashboard",
                 "label": "Portfolio dashboard",
-                "caption": "The founder’s view — composition by stage and by technology category, and the next actions owed with a named person against each. Unclassified appears in the category table rather than being absorbed into the total."
+                "caption": "The founder’s view — composition by stage and by technology category, and the next actions owed. Unclassified appears in the table in its own right rather than being absorbed into the total, so a gap cannot hide inside a rounded number."
               },
               {
-                "image": "/static/images/project/ixana-patent-ask.png",
+                "image": "/static/images/project/ixana-patent-tracker.jpg",
+                "href": "https://xana-nine.vercel.app/patents/tracker",
+                "hrefLabel": "Open the lifecycle tracker",
+                "label": "Lifecycle tracker",
+                "caption": "Every matter in one of six stages, with an explicit unclassified stage beside them. Overdue is a property of the internal action date and never of a statutory one, so nothing red here can be read as a legal deadline."
+              },
+              {
+                "image": "/static/images/project/ixana-patent-ask.jpg",
+                "href": "https://xana-nine.vercel.app/patents",
+                "hrefLabel": "Ask the portfolio a question",
                 "label": "Ask the portfolio",
-                "caption": "A question answered in a sentence, with a provenance box underneath it. I would not ship this until the answer could say which half came from the firm’s docket and which half was ours."
+                "caption": "It reads the same eighteen matters every other view reads and answers from them, naming the matters it used. Asked what is past its internal action date it returns six of fifteen with their refs, stages and dates — and says in the same breath that these are readiness dates and not statutory ones."
               },
               {
-                "image": "/static/images/project/ixana-patent-approval.png",
+                "image": "/static/images/project/ixana-patent-approval.jpg",
+                "href": "https://xana-nine.vercel.app/patents/invoices",
+                "hrefLabel": "Open invoice approval",
                 "label": "Invoice approval",
-                "caption": "Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has confirmed it."
+                "caption": "Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it."
               },
               {
-                "image": "/static/images/project/ixana-patent-pipeline.png",
-                "caption": "Pipeline — a document arriving by mail is extracted, resolved to one internal matter identity across three firms, given a lifecycle stage and a technology category, and written into the single record every surface reads. Anything the match cannot place lands in an explicit unclassified stage rather than defaulting into the pipeline, and the firm’s docket enters as a mirrored authority that the system never recomputes."
+                "image": "/static/images/project/ixana-patent-upload.jpg",
+                "href": "https://xana-nine.vercel.app/patents/invoices?view=upload",
+                "hrefLabel": "Open the upload half",
+                "label": "Upload an invoice",
+                "caption": "The other half of the same section. Most invoices arrive by mail and are matched before anyone looks; this is the path for the ones that did not, and it runs the same extraction and the same match. Firm and matter are chosen by hand rather than read off the PDF, because those two are what bind the invoice to the portfolio."
               }
             ],
-            "note": "Recreations of the four remaining surfaces, built from the real layouts and states and filled with the same invented dataset as the screen above."
+            "note": "The five surfaces over the mail-triggered spine, on the same invented portfolio as the timeline above. Each link opens the screen its image shows."
           },
           {
             "kind": "table",
@@ -12571,6 +12766,11 @@
                 "Invoice approval",
                 "Me, then the founder",
                 "Whether the work billed matches the engagement"
+              ],
+              [
+                "Invoice upload",
+                "Me, for anything the mail spine missed",
+                "Which matter an invoice belongs to, decided by a person"
               ]
             ]
           },
@@ -12704,5 +12904,438 @@
       }
     ],
     "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation."
+  },
+  "ixana-meeting-notetaker": {
+    "slug": "ixana-meeting-notetaker",
+    "eyebrow": "Ixana · 2026 · Meeting intelligence",
+    "title": "In-house meeting notetaker",
+    "deck": "Transcripts and minutes for every internal meeting, generated inside the tenant, with no third-party bot ever sitting in the room.",
+    "status": "internal",
+    "meta": {
+      "role": "Product manager, delivery owner",
+      "team": "2 engineers",
+      "timeline": "Jan – Aug 2026",
+      "stage": "Live, company-wide"
+    },
+    "confidentiality": "Internal tooling. The screens in section 06 are a recreation on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute appears anywhere on this page.",
+    "evidence": [
+      {
+        "label": "Open the working demo — a meeting with its transcript, and its notes on the right",
+        "url": "https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes"
+      },
+      {
+        "label": "Or start at the library of recordings",
+        "url": "https://xana-nine.vercel.app/meetingrecordings"
+      }
+    ],
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "Meetings were recorded and then forgotten. Tracing 24 decisions that people referred back to a month later, 5 were written down anywhere durable, 7 lived in a chat thread nobody could name without asking, and 12 existed only in someone's memory — twice in two versions. The obvious fix, a commercial notetaker bot, could not join the calls that most needed one."
+      },
+      {
+        "lead": "What I did.",
+        "text": "I owned an in-tenant notetaker: capture from the meeting's own recording artefact rather than a guest participant, a cued transcript, and generated minutes in which every claim must cite the second it was said. The organiser can exclude a meeting before it starts, irreversibly, and that mark is the only consent control in the system."
+      },
+      {
+        "lead": "Result.",
+        "text": "198 of 212 monthly meetings are transcribed and minuted without anything leaving the tenant, minutes are ready a median of 9 minutes after the call ends, and a repeat of the decision trace found 21 of 24 decisions in a written record. Nothing has been processed outside the tenant, which was the guardrail the project existed to hold."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Why this, and why now",
+        "body": [
+          "Three ways of ending up with a written record were on the table: license a commercial notetaker bot, staff a minutes rota, or build capture into the tenant. I sized them on one axis, because one axis was the constraint — where the audio of a meeting would be processed. Ixana's meetings routinely carry unfiled invention disclosures and partner material under NDA, and the patent programme's filings depend on those disclosures not having been handed to a processor first."
+        ],
+        "blocks": [
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "stackedHBar",
+              "title": "Where the audio of 212 monthly meetings would be processed under each option: in-tenant capture covers all 212, an unrestricted vendor bot sends all 212 outside, a vendor bot restricted to pre-cleared meetings covers 66 and leaves 146 unrecorded, and a minutes rota covers 30",
+              "max": 212,
+              "unit": "meetings/month",
+              "series": [
+                {
+                  "name": "Processed in the tenant",
+                  "color": "#3fae8b"
+                },
+                {
+                  "name": "Processed by a vendor",
+                  "color": "#c9973f"
+                },
+                {
+                  "name": "No record at all",
+                  "color": "#6e7385"
+                }
+              ],
+              "rows": [
+                {
+                  "name": "In-tenant notetaker",
+                  "values": [212, 0, 0],
+                  "label": "212 covered"
+                },
+                {
+                  "name": "Vendor bot, all",
+                  "values": [0, 212, 0],
+                  "label": "212 leave the tenant"
+                },
+                {
+                  "name": "Vendor bot, cleared",
+                  "values": [0, 66, 146],
+                  "label": "66 covered"
+                },
+                {
+                  "name": "Human minutes rota",
+                  "values": [30, 0, 182],
+                  "label": "30 covered"
+                }
+              ]
+            },
+            "caption": "Option sizing, Jan 2026, over the 212 meetings recorded that month. The rota is scored on the fill-in rate of the rota that already existed for the engineering standup, which is the fairest number available and a generous one. The middle two rows are the same product: the difference is entirely whether a human decides, before each call, that it is safe."
+          }
+        ],
+        "after": [
+          "Read that way the choice stops being build against buy. The vendor product is better than anything two engineers will write, and it is only allowed to run on a third of the estate — so the comparison is a better tool on 66 meetings against an adequate tool on 212. Retrieval across the archive once it exists is a separate problem and has its own page; this one is only about how the record gets made."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "The problem as people experienced it",
+        "body": [
+          "I ran a decision trace rather than a survey. I took 24 decisions that someone had asked about again in the following month — pulled from chat searches for \"did we decide\" and the like — and tried to find where each one was written down. Asking people whether meetings are well minuted gets you an opinion; asking where a specific decision is recorded gets you a file path or a shrug."
+        ],
+        "blocks": [
+          {
+            "kind": "table",
+            "head": ["What was assumed", "What the trace found", "Evidence"],
+            "rows": [
+              [
+                "The meetings that matter get minuted",
+                "5 decisions of 24 were written down anywhere durable",
+                "24 decisions traced, Jan 2026"
+              ],
+              [
+                "A chat thread is a good enough record",
+                "7 sat in threads nobody could locate without asking the organiser",
+                "7 of 24, median 3 people asked"
+              ],
+              [
+                "The organiser remembers the detail",
+                "Two decisions came back in two incompatible versions",
+                "2 of 24 re-argued from scratch"
+              ],
+              [
+                "A notetaker bot would simply fix this",
+                "Only meetings cleared before the call could use one",
+                "66 of 212 cleared in the trial"
+              ]
+            ]
+          },
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "waffle",
+              "title": "Of 212 meetings recorded in January 2026, 31 left any written record of what was decided",
+              "total": 212,
+              "value": 31,
+              "perRow": 20,
+              "filledLabel": "Left a written record (31)",
+              "emptyLabel": "Recorded, never written down (181)"
+            },
+            "caption": "Every meeting recorded in January 2026, one cell each, checked against minutes, a wiki page or a task created within five working days. Drawn as units because the shape of the remainder is the point: this is not a documentation habit that needs tightening, it is an absence with a few exceptions in it."
+          }
+        ],
+        "after": [
+          "The reframe: nobody was choosing not to write minutes. Writing them costs the one person in the room who was most engaged about twenty minutes, immediately after the meeting they were most engaged in, and that person is always the one already late for the next call. Every intervention that starts by asking a human to do it inherits that arithmetic, which is why the rota scored 30."
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "My role and approach",
+        "body": [
+          "I owned the capture path, the consent model and what generated minutes are allowed to claim. The residency constraint decided the architecture; what took the judgement was deciding what the output must never do, because a wrong minute is worse than no minute and is read by more people."
+        ],
+        "blocks": [
+          {
+            "kind": "decisions",
+            "label": "Key decisions",
+            "items": [
+              {
+                "lead": "No bot ever joins the call.",
+                "text": "Capture reads the meeting's own recording artefact through the platform API after the fact. A guest participant is a thing people see in the roster, mute, argue about and forget to invite; an artefact is simply there. It also means turning capture on cannot change who feels able to speak."
+              },
+              {
+                "lead": "A claim without a timestamp does not ship.",
+                "text": "Every line of generated minutes must cite the second it came from or it is dropped before anyone sees it. This is the single change that moved minutes from written to sent: nobody circulates a claim about what a colleague said that they cannot spot-check first."
+              },
+              {
+                "lead": "Exclusion is set before the call and cannot be undone.",
+                "text": "The organiser's mark is the only consent control in the system, and a control you can lift afterwards is not one — it turns into a request someone can be pressured into granting. Roughly 6% of meetings carry it."
+              },
+              {
+                "lead": "An excluded meeting stays in the library, named.",
+                "text": "It is listed with its exclusion stated rather than hidden. A recording that silently vanishes sends people to ask the organiser where it went, which is precisely the behaviour this product exists to end."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "num": "04",
+        "heading": "What I cut",
+        "blocks": [
+          {
+            "kind": "scope",
+            "shipped": [
+              "Capture from the meeting's own recording artefact",
+              "Cued transcripts, every line a seek target",
+              "Generated notes — decision, figures, open questions, actions",
+              "Per-recording question answering with citations",
+              "Organiser exclusion, set before the call",
+              "The recordings library with per-meeting state"
+            ],
+            "deferred": [
+              "Speaker-label correction",
+              "Minutes mailed to attendees on completion",
+              "Action items pushed into the task tracker"
+            ],
+            "cut": [
+              "Live in-call notes",
+              "A guest-bot fallback for platforms with no recording API",
+              "Non-English transcripts"
+            ]
+          },
+          {
+            "kind": "para",
+            "text": "The guest-bot fallback was the hardest cut, and the one I argued for hardest before dropping it. Meetings held on a customer's own platform expose no recording artefact, so the only way in is the thing the product exists to avoid — and an exception made once for convenience is the whole argument conceded. Those meetings stay uncovered: about nine a month, none of them internal, and the organiser is told plainly that nothing was captured rather than left to discover it later."
+          }
+        ]
+      },
+      {
+        "num": "05",
+        "heading": "How I got it agreed",
+        "body": [
+          "The head of engineering wanted to buy, and he was right on the merits I could measure. In a two-week bake-off the vendor product beat ours on word error rate and beat it badly on diarization above three speakers, it needed no engineers, and it was available that afternoon. His argument against the residency worry was the strongest one available: the tenant already runs on somebody else's hardware, so the line I was drawing was a line about contracts, not about physics.",
+          "I could not answer that, so I stopped arguing the principle and tested the control instead. The compromise on the table was a vendor bot restricted to meetings an organiser cleared before the call. Over four weeks organisers cleared 66 of 212 meetings, and legal review of those 66 found 4 that had discussed unfiled disclosures — cleared in good faith, by people who had read the guidance, before an agenda existed to read.",
+          "That ended it, and not because I won the argument. A control that fails 6% of the time fails on the exact cases it was built for, and the cost of one of those failures is a filing rather than an inconvenience. We built. His conditions were fair and I kept them: the diarization gap is measured against the vendor and published internally each month, and if in-house accuracy had still been behind by June we would have revisited the whole decision."
+        ]
+      },
+      {
+        "num": "06",
+        "heading": "What was built",
+        "body": [
+          "A library of recordings, and behind each one a workspace holding three things at once: the transcript, a generated note, and a question box that answers from that recording only. Capture runs from a change-notification subscription on the tenant's call records; transcription and summarisation run on tenant-resident inference; nothing at any stage crosses the tenant boundary.",
+          "The note is the part I spent the most judgement on, because a summary is the easy half of this problem and the half every product already does. What a reader wants a month later is not a retelling of a call they sat through — it is the decision and why it went that way, the number they are allowed to quote and the conditions it was measured under, and what the meeting failed to settle. So the note is those sections, in that order, with a timestamp on every claim."
+        ],
+        "blocks": [
+          {
+            "kind": "shot",
+            "alt": "A meeting workspace: on the left a video frame reporting that no recording was found and, beside it, the transcript with each speaker's line carrying a clickable timestamp; on the right the note, showing Decisions each followed by a Why line, a Not decided section with what each open question needs, and Action items each carrying an owner and a trigger, with an orange timestamp pill on every claim",
+            "callouts": [
+              {
+                "lead": "Decisions carry their reasoning, and who argued the other way.",
+                "text": "Each decision is followed by a Why line naming the argument that settled it — including, on the third, that Sam objected and the trade was taken anyway. A decision recorded without its reasoning gets reopened by the next person who did not hear it."
+              },
+              {
+                "lead": "Not decided is a section, not an omission.",
+                "text": "What the meeting left open, and underneath each one the specific thing that would close it. This is the section that separates a record from a summary: a note listing only decisions reads as though the meeting closed everything it touched, which is how a live question quietly becomes a settled one."
+              },
+              {
+                "lead": "Actions carry a trigger rather than an invented date.",
+                "text": "\"Blocks the duty-cycle decision\", not a Friday nobody agreed to. Alpha readers ignored every generated due date, because a date the meeting never said is a date the owner never accepted."
+              },
+              {
+                "lead": "Every claim carries the second it was said.",
+                "text": "The pill beside each line seeks the transcript and the player to that moment. This is the rule that made notes circulable — a claim about a colleague that cannot be spot-checked stays a draft, whatever it says."
+              }
+            ],
+            "note": "The running demo rather than a mock-up — same code, same layout, on an invented workspace of five meetings. Every title, speaker and line of speech is written for publication; the note's structure, the capture path and the exclusion model are the real ones.",
+            "image": "/static/images/project/ixana-notes-minutes.jpg",
+            "href": "https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes",
+            "hrefLabel": "Open this meeting on its notes"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-notes-headline.jpg",
+                "href": "https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes",
+                "hrefLabel": "Read the whole note",
+                "label": "How a note opens",
+                "caption": "One line stating what was settled, before any retelling of the call — and it is allowed to end in \"and that is unresolved\". Under it, the figures section carries the conditions each number was measured under, so the bench figure cannot be lifted out and quoted as the on-body one."
+              },
+              {
+                "image": "/static/images/project/ixana-notes-library.jpg",
+                "href": "https://xana-nine.vercel.app/meetingrecordings",
+                "hrefLabel": "Open the recordings library",
+                "label": "The library",
+                "caption": "Captured, minuted and excluded are counted separately above the grid and never summed. Each card says what the notetaker produced — decisions, actions, and how many questions the meeting left open — so the choice to open one is made before opening it."
+              },
+              {
+                "image": "/static/images/project/ixana-notes-ask.jpg",
+                "href": "https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review",
+                "hrefLabel": "Ask this recording a question",
+                "label": "Asking one recording",
+                "caption": "The answer states the conclusion, shows the exchange that produced it, and cites the second of each claim. It also reports what it could not find: here, that the trim question was raised, agreed to be real, and left with no action assigned."
+              }
+            ],
+            "note": "Three surfaces on the same invented workspace as the meeting above."
+          }
+        ]
+      },
+      {
+        "num": "07",
+        "heading": "Tradeoffs",
+        "blocks": [
+          {
+            "kind": "table",
+            "head": ["Tension", "What I chose", "What it cost"],
+            "rows": [
+              [
+                "Residency vs transcript quality",
+                "Tenant-resident models only",
+                "Diarization is measurably behind the vendor above three speakers"
+              ],
+              [
+                "Coverage vs consent",
+                "Organiser exclusion, before the call, irreversible",
+                "About 6% of meetings have no record, including some that later mattered"
+              ],
+              [
+                "Latency vs cost",
+                "Minutes generated on first open, not on ingest",
+                "The first reader waits, and it is usually the organiser"
+              ],
+              [
+                "Provenance vs completeness",
+                "Every claim must cite a timestamp",
+                "Claims that summarise a whole discussion are dropped, because they cite nowhere"
+              ],
+              [
+                "Completeness vs length",
+                "Reasoning, figures and open questions in every note",
+                "A note runs three times a bullet summary; people who wanted a glance now scroll"
+              ]
+            ]
+          },
+          {
+            "kind": "para",
+            "text": "The last row is the one I would defend hardest and the one that loses most. A meeting whose value is a shift in mood — the room going quiet on a number — produces minutes that say nothing about it, because no single second carries it. We publish thinner minutes on purpose rather than minutes that assert things the transcript cannot support."
+          }
+        ]
+      },
+      {
+        "num": "08",
+        "heading": "Impact and outcomes",
+        "body": [
+          "We agreed before building that the MVP failed below 95% transcription of eligible meetings sustained over a month: a record with silent gaps is worse than none, because it invites confident wrong answers about meetings that were simply never captured. The residency guardrail was absolute — any recording or transcript processed outside the tenant would have ended the project, which is why the vendor client was never installed rather than installed and disabled."
+        ],
+        "blocks": [
+          {
+            "kind": "metrics",
+            "items": [
+              {
+                "value": "198",
+                "sub": "of 212 recorded",
+                "label": "Meetings transcribed in-tenant each month"
+              },
+              {
+                "value": "0",
+                "label": "Recordings processed outside the tenant (guardrail)"
+              },
+              {
+                "value": "9 min",
+                "sub": "p95 24 min",
+                "label": "Median wait from call ending to minutes"
+              },
+              {
+                "value": "100%",
+                "sub": "1,412 claims",
+                "label": "Minute claims carrying a timestamp"
+              },
+              {
+                "value": "13",
+                "sub": "6% of meetings",
+                "label": "Excluded by the organiser before the call"
+              },
+              {
+                "value": "5 → 21",
+                "sub": "of 24 traced",
+                "label": "Decisions found in a written record"
+              }
+            ]
+          },
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "barsThreshold",
+              "title": "Weekly transcription coverage of eligible meetings against the agreed 95% floor, rising from 71% and dipping to 89% in week six",
+              "yMax": 100,
+              "unit": "% of eligible meetings",
+              "threshold": {
+                "value": 95,
+                "label": "Pre-agreed floor: 95%"
+              },
+              "columns": [
+                {
+                  "name": "W1",
+                  "value": 71
+                },
+                {
+                  "name": "W2",
+                  "value": 88
+                },
+                {
+                  "name": "W3",
+                  "value": 93
+                },
+                {
+                  "name": "W4",
+                  "value": 97
+                },
+                {
+                  "name": "W5",
+                  "value": 96
+                },
+                {
+                  "name": "W6",
+                  "value": 89
+                },
+                {
+                  "name": "W7",
+                  "value": 98
+                },
+                {
+                  "name": "W8",
+                  "value": 99
+                }
+              ]
+            },
+            "caption": "Coverage by week, Jun–Aug 2026, from capture run records. Week six is not a model problem: the notification subscription silently stopped renewing and eleven meetings were never fetched. It is on the chart because it is the failure mode this system actually has — capture goes quiet and everything downstream looks healthy."
+          },
+          {
+            "kind": "definition",
+            "lead": "How we counted.",
+            "text": "Eligible excludes meetings the organiser marked before the call. A meeting counts as transcribed when a cued transcript exists, not when a recording file exists — the two come down different paths and counting files would have reported week six as healthy."
+          },
+          {
+            "kind": "config",
+            "text": "Technical configuration — change-notification subscription on tenant call records, renewed every 30 minutes · transcript read from the meeting's own artefact, never a bot participant · speech and summarisation on tenant-resident inference · exclusion flag written before the call and immutable · minutes cached after first generation, regenerated only on request · no recording, transcript or minute leaves the tenant boundary"
+          }
+        ]
+      },
+      {
+        "num": "09",
+        "heading": "What I'd do differently",
+        "body": [
+          "I measured diarization quality in week nine, after the shape of the minutes was already set. It came back worse than I had assumed above three speakers, and the fix was to weaken the product: attributed summary claims — X argued for Y — had to be dropped, because a decision attributed to the wrong person is a worse artefact than no attribution at all. That measurement cost two days and belonged in week one, next to the bake-off it would have informed.",
+          "I would also build the correction path before the generation path next time. There is still no way to fix a wrong claim except regenerate and hope, and the reason is that I treated correction as a feature rather than as the thing that makes an automated record trustworthy. Six people have now asked for it, which is more than have asked for anything else."
+        ]
+      }
+    ],
+    "sampleNote": "This is internal tooling. The screens in section 06 are the running demo on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation."
   }
 }

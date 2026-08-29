@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
 		qualities: [75, 82, 88, 90],
 		minimumCacheTTL: 31536000,
 	},
-	// /hoobie was the route until the spelling was fixed. Kept permanently so
-	// existing links and anything already indexed still land.
+	// Routes that have been renamed. Kept permanently so existing links and
+	// anything already indexed still land.
 	async redirects() {
 		return [
 			{
@@ -26,10 +26,28 @@ const nextConfig: NextConfig = {
 				destination: '/hobby',
 				permanent: true,
 			},
+			// Book a meeting was folded into Let's connect, which now carries
+			// the booking widget, the message form and the contact routes.
+			{
+				source: '/book-a-meeting',
+				destination: '/lets-connect',
+				permanent: true,
+			},
 		];
 	},
 	async rewrites() {
 		return [
+			// The demos are single self-contained files in /public. These
+			// rewrites are only here so the case studies can link a clean
+			// path rather than an .html extension.
+			{
+				source: '/demo/ams-dashboard',
+				destination: '/demo/ams-dashboard.html',
+			},
+			{
+				source: '/demo/clickup-gantt',
+				destination: '/demo/clickup-gantt.html',
+			},
 			{
 				source: '/umami.js',
 				destination: `${umami_url}/script.js`,
