@@ -48,3 +48,14 @@ app/Changes/ixana-staging
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Scratch archives moved out of app/ during the launch audit. The xana app
+# source (Changes-archive/dummy/src) is tracked; its dependencies, build
+# output and the raw material dumps are not.
+Changes-archive/**/node_modules/
+Changes-archive/**/.next/
+Changes-archive/Books/
+Changes-archive/Desktop/
+Changes-archive/Works/
+Changes-archive/dummy/public/
+Changes-archive/final patent backend/

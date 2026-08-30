@@ -7,270 +7,333 @@
 <meta name="description" content="Interactive recreation of the Ricky Kids rider-counting survey tool: batch scoring of stored clips into counts, the hand-labelled evaluation, and the enforcement half that was deliberately never built. No frame, face or number plate appears anywhere.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
-   Shared shell for the Ricky Kids demos. Palette and type are
-   inherited from the portfolio's case-study system so the demos
-   read as one family with the case studies that link them.
-   Single-theme by design: these are bench tools, dark, with
-   every colour painted so nothing borrows a host background.
+   RIDER COUNTING — a privacy-forward civic instrument.
+
+   Identity: a public survey register set on warm paper. The
+   page is deliberately image-less — counts are the only thing
+   the tool ever produced, so counts are the only thing the
+   page will show. Big tabular numerals, ledger rules, one
+   civic accent. Single-theme by design; every colour painted.
+
+   INVARIANT (outranks everything else in this file): no image,
+   no video, no canvas, no base64 asset, no depiction of a
+   person, vehicle or frame. Ever.
    ============================================================ */
 :root {
-  color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+  --paper: #efece1;        /* page ground — warm stock          */
+  --sheet: #faf8f1;        /* the document itself                */
+  --well: #efebde;         /* recessed: table heads, bar tracks  */
+  --rule: #1d2531;         /* heavy ink rule                     */
+  --line: #d8d2c1;         /* hairline                           */
+  --line-soft: #e6e1d2;
+  --ink: #1d2531;
+  --body-ink: #3a434f;
+  --muted: #59626e;
+  --faint: #6d7480;        /* micro-labels only                  */
+  --accent: #245a94;       /* the one civic accent               */
+  --accent-wash: #e4e9ef;
+  --accent-line: #b3c3d6;
+  --ok: #177347;
+  --ok-wash: #e2ebdb;
+  --ok-line: #afcbae;
+  --warn: #8f6400;
+  --warn-wash: #f0e6c8;
+  --warn-line: #d7c489;
+  --crit: #ac3220;
+  --crit-wash: #f2e0d5;
+  --crit-line: #dcb09e;
+  --sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 * { box-sizing: border-box; }
+html { background: var(--paper); }
 body {
-  margin: 0; background: var(--bg); color: var(--body);
-  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  margin: 0; background: var(--paper); color: var(--body-ink);
+  font-family: var(--sans); font-size: 14.5px; line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 button { font: inherit; color: inherit; cursor: pointer; }
 select, input, textarea { font: inherit; color: inherit; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+/* ---- the document ---------------------------------------- */
 .app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  min-height: 100vh; max-width: 1120px; margin: 0 auto;
+  background: var(--sheet);
+  border-left: 1px solid var(--line); border-right: 1px solid var(--line);
+  border-top: 3px solid var(--rule);
   display: flex; flex-direction: column;
 }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
-.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+/* ---- masthead --------------------------------------------- */
+.mast { border-bottom: 1px solid var(--rule); }
+.serialline {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  padding: 9px 28px; border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.mast-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 22px 28px 18px; }
+.brand .eyebrow { margin: 0 0 7px; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+.brand h1 { margin: 0; font-size: clamp(22px, 3.4vw, 30px); font-weight: 700; letter-spacing: -.018em; line-height: 1.15; color: var(--ink); }
+.marks { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border: 1px solid var(--line); background: var(--sheet);
+  padding: 5px 11px; border-radius: 2px;
+  font-size: 11px; font-family: var(--mono); letter-spacing: .02em;
+  color: var(--muted); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.chip b { color: var(--ink); font-weight: 700; }
+.chip.good { border-color: var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.chip.good b { color: var(--ok); }
+.chip.warn { border-color: var(--warn-line); color: var(--warn); background: var(--warn-wash); }
+.chip.warn b { color: var(--warn); }
+.chip.crit { border-color: var(--crit-line); color: var(--crit); background: var(--crit-wash); }
+.chip.seal { border: 1px solid var(--ok); box-shadow: inset 0 0 0 2px var(--ok-wash), inset 0 0 0 3px var(--ok); padding: 7px 13px; text-transform: uppercase; letter-spacing: .1em; font-size: 10px; }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.good { background: var(--ok); } .dot.warn { background: var(--warn); }
 .dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
 
-.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
-.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
-.params .spacer { flex: 1; }
-
-.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
-.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
-.segmented button:last-child { border-right: 0; }
-.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
-.segmented button:hover { color: var(--ink); }
-.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
-.segmented button[aria-pressed="true"] span { color: var(--accent); }
-
-.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
-.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
-.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
-.provenance b { color: var(--body); font-weight: 500; }
-
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-  letter-spacing: .13em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+/* ---- index rail (tabs) ------------------------------------ */
+.railwrap { position: sticky; top: 0; z-index: 40; background: var(--sheet); border-bottom: 1px solid var(--line); }
+.rail { display: flex; align-items: stretch; gap: 0; padding: 0 28px; flex-wrap: wrap; }
+.rail .segmented { display: contents; }
+.rail button {
+  background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 12px 18px 11px; text-align: left; color: var(--muted);
+  display: flex; flex-direction: column; gap: 2px;
+  transition: color .15s ease, border-color .15s ease;
 }
-.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
-.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
-.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
-.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
-.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+.rail button b { font-weight: 600; font-size: 13.5px; letter-spacing: -.005em; }
+.rail button b::before { content: counter(tab, decimal-leading-zero) "\2002"; counter-increment: tab; font-family: var(--mono); font-weight: 400; font-size: 11px; color: var(--faint); }
+.rail button span { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.rail button:hover { color: var(--ink); }
+.rail button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--rule); }
+.rail button[aria-pressed="true"] b::before { color: var(--accent); }
+.rail button[aria-pressed="true"] span { color: var(--accent); }
+.rail { counter-reset: tab; }
+.rail .railmeta { margin-left: auto; align-self: center; padding-left: 12px; }
+
+.marginnote {
+  margin: 0; padding: 10px 28px 12px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 12.5px; color: var(--muted); background: var(--well);
+  max-width: none;
+}
+.marginnote b { color: var(--ink); font-weight: 600; }
+
+/* ---- pane -------------------------------------------------- */
+.pane { flex: 1; min-width: 0; padding: 26px 28px 48px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 22px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 0 0 7px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -.014em; color: var(--ink); }
+.provenance { margin: 8px 0 0; font-size: 13px; color: var(--muted); max-width: 78ch; }
+
+h3.blockhead { margin: 0 0 4px; font-size: 14.5px; font-weight: 600; color: var(--ink); letter-spacing: -.005em; }
+p.blocksub { margin: 0 0 14px; font-size: 12.5px; color: var(--muted); max-width: 74ch; }
 
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+  border: 1px solid var(--rule); background: var(--sheet); color: var(--ink);
+  border-radius: 2px; padding: 9px 16px; font-size: 13px; font-weight: 600;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
-.btn:disabled { opacity: .38; cursor: not-allowed; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
-.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
-.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
-.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
-.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
-.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
-.btn.ghost { background: transparent; }
-
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+.btn:hover:not(:disabled) { background: var(--well); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.primary { background: var(--rule); border-color: var(--rule); color: var(--sheet); }
+.btn.primary:hover:not(:disabled) { background: #2c3a4d; border-color: #2c3a4d; }
 
 .note {
-  margin-top: 14px; font-size: 12.5px; color: var(--muted);
-  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+  margin-top: 16px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--rule); padding-left: 13px; max-width: 84ch;
 }
-.note b { color: var(--body); font-weight: 500; }
+.note b { color: var(--ink); font-weight: 600; }
 .note.warn { border-left-color: var(--warn); }
 .note.crit { border-left-color: var(--crit); }
-.note.good { border-left-color: var(--good); }
+.note.good { border-left-color: var(--ok); }
 
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
-table.sheet thead th {
-  background: var(--surface-2); color: var(--muted);
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
-  letter-spacing: .11em; text-transform: uppercase;
-  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+/* ---- figure row: the counts themselves --------------------- */
+.figrow {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border: 1px solid var(--line); background: var(--sheet); margin-bottom: 18px;
 }
-table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-table.sheet tbody tr:last-child td { border-bottom: 0; }
-table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
-table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-table.sheet .name { color: var(--ink); }
-table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
-table.sheet tfoot .num { text-align: right; }
+.fig { padding: 16px 18px 14px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+.fig .v { font-family: var(--mono); font-weight: 700; font-size: clamp(28px, 3.6vw, 38px); line-height: 1.05; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.fig .l { font-size: 12.5px; color: var(--body-ink); margin-top: 7px; line-height: 1.4; }
+.fig .p { margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--faint); }
+.fig.good .v { color: var(--ok); } .fig.crit .v { color: var(--crit); } .fig.warn .v { color: var(--warn); } .fig.accent .v { color: var(--accent); }
 
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
-.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
-.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
-.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
-
-.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
-.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-.meterbar.good > i { background: var(--good); }
-.meterbar.crit > i { background: var(--crit); }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
-.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
-
-.toast {
-  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45);
-}
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.crit { border-color: var(--crit-dim); }
-
-@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
-</style>
-
-<style>
-/* -- Batch console ---------------------------------------- */
-.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: 18px; align-items: start; }
-@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
-
-.runbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+/* ---- run bar ----------------------------------------------- */
+.runbar { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; border: 1px solid var(--line); background: var(--sheet); padding: 18px 20px; margin-bottom: 18px; border-top: 2px solid var(--rule); }
 .runbar .copy { flex: 1; min-width: 260px; }
 .runbar h3 { margin: 0 0 5px; font-size: 15px; font-weight: 600; color: var(--ink); }
-.runbar p { margin: 0; font-size: 12.5px; color: var(--muted); max-width: 62ch; }
-.progress { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; width: 100%; margin-top: 12px; }
-.progress > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .12s linear; }
+.runbar p { margin: 0; font-size: 12.5px; color: var(--muted); max-width: 66ch; }
+.runbar p b { color: var(--ink); font-weight: 600; }
+.progress { height: 5px; background: var(--well); overflow: hidden; width: 100%; margin-top: 12px; }
+.progress > i { display: block; height: 100%; background: var(--accent); transition: width .12s linear; }
 
-/* the point of the whole page: there is nothing to look at */
+/* ---- ledger table ------------------------------------------ */
+.toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+.filterset { display: inline-flex; border: 1px solid var(--line); background: var(--sheet); }
+.filterset button { background: none; border: 0; border-right: 1px solid var(--line); padding: 6px 13px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.filterset button:last-child { border-right: 0; }
+.filterset button:hover { color: var(--ink); }
+.filterset button[aria-pressed="true"] { background: var(--rule); color: var(--sheet); }
+.rowcount { font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; color: var(--faint); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); background: var(--sheet); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 680px; }
+table.sheet thead th {
+  background: var(--well); color: var(--muted);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  text-align: left; padding: 9px 14px; border-bottom: 2px solid var(--rule); white-space: nowrap;
+}
+table.sheet thead th.num { text-align: right; }
+table.sheet tbody td { padding: 9px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: baseline; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(29, 37, 49, .03); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); font-weight: 500; }
+table.sheet .sub { font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--faint); }
+
+/* the point of the whole page: there is nothing to look at.
+   A typographic token, set with intent — not an apology. */
 .noframe {
-  display: grid; place-items: center; height: 72px; border-radius: 6px;
-  border: 1px dashed var(--line); background: repeating-linear-gradient(45deg, #0b0b10, #0b0b10 6px, #0e0e14 6px, #0e0e14 12px);
-  font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap;
 }
-.clipcell { display: grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: center; }
+.noframe::before, .noframe::after { content: ""; width: 16px; height: 1px; background: var(--line); flex: none; }
+.noframe .nil { font-size: 12px; letter-spacing: 0; color: var(--accent); }
 
-/* confusion matrix */
-.cm { display: grid; grid-template-columns: 130px repeat(3, 1fr); gap: 4px; }
-.cm .h { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); display: grid; place-items: center; padding: 6px 4px; text-align: center; }
-.cm .rh { justify-content: flex-start; text-align: left; }
+/* ---- the exhibit: confusion matrix ------------------------- */
+.exhibit {
+  border: 1px solid var(--rule); background: var(--sheet);
+  padding: 26px 28px 22px; position: relative; margin-bottom: 22px;
+}
+.exhibit::after { content: ""; position: absolute; inset: 5px; border: 1px solid var(--line); pointer-events: none; }
+.exhibit-head { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 4px; }
+.exhibit-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); }
+.exhibit-n { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+.cmwrap { overflow-x: auto; margin-top: 16px; }
+.cm { display: grid; grid-template-columns: 132px repeat(3, minmax(128px, 1fr)); gap: 6px; min-width: 560px; }
+.cm .h { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: grid; place-items: center; padding: 6px 4px; text-align: center; line-height: 1.5; }
+.cm .rh { justify-content: start; place-items: center start; text-align: left; }
 .cm button {
-  border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 14px 6px;
-  font-family: var(--mono); font-size: 17px; color: var(--body); text-align: center;
+  border: 1px solid var(--line); background: var(--sheet); padding: 18px 10px 14px;
+  font-family: var(--mono); font-weight: 700; font-size: clamp(24px, 3vw, 32px);
+  line-height: 1; color: var(--body-ink); text-align: center;
+  font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+  transition: background .15s ease;
 }
-.cm button .s { display: block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-top: 4px; }
-.cm button.diag { border-color: var(--good-dim); background: var(--good-wash); color: var(--good); }
-.cm button.over { border-color: var(--crit-dim); background: var(--crit-wash); color: var(--crit); }
-.cm button.under { border-color: var(--warn-dim); background: var(--warn-wash); color: var(--warn); }
-.cm button[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
+.cm button .s { display: block; font-weight: 400; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 9px; line-height: 1.5; }
+.cm button.diag { border-color: var(--ok-line); background: var(--ok-wash); color: var(--ok); }
+.cm button.over { border-color: var(--crit-line); background: var(--crit-wash); color: var(--crit); }
+.cm button.under { border-color: var(--warn-line); background: var(--warn-wash); color: var(--warn); }
+.cm button[aria-pressed="true"] { outline: 2px solid var(--rule); outline-offset: 1px; }
+.cm-caption { margin: 14px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--faint); }
 
-/* lighting bars */
-.lights { display: flex; flex-direction: column; gap: 10px; }
-.lrow { display: grid; grid-template-columns: 96px 1fr 78px; gap: 12px; align-items: center; }
-.lrow .n { font-size: 13px; color: var(--body); }
-.lrow .track { position: relative; height: 20px; border-radius: 5px; background: var(--surface-3); overflow: visible; }
-.lrow .track > i { display: block; height: 100%; border-radius: 5px; background: var(--good); }
-.lrow .track > i.miss { background: var(--crit); }
-.lrow .track > u { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--faint); text-decoration: none; }
-.lrow .v { font-family: var(--mono); font-size: 13px; text-align: right; color: var(--ink); }
-.lrow.excluded .n, .lrow.excluded .v { color: var(--faint); }
+/* ---- lighting chart ---------------------------------------- */
+.lights { display: flex; flex-direction: column; gap: 11px; }
+.lrow { display: grid; grid-template-columns: 84px 1fr 96px; gap: 12px; align-items: center; }
+.lrow .n { font-size: 13px; color: var(--ink); font-weight: 500; }
+.lrow .track { position: relative; height: 18px; background: var(--well); overflow: visible; }
+.lrow .track > i { display: block; height: 100%; background: var(--accent); }
+.lrow .track > i.miss { background: repeating-linear-gradient(135deg, #b9b2a0 0 3px, var(--well) 3px 7px); }
+.lrow .track > u { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--rule); text-decoration: none; }
+.lrow .v { font-family: var(--mono); font-size: 12px; text-align: right; color: var(--ink); white-space: nowrap; }
+.lrow.excluded .n { color: var(--muted); font-weight: 400; }
+.lrow.excluded .v { color: var(--muted); }
+.lrow .v .tag { display: block; font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
+.chart-caption { margin: 12px 0 0; font-family: var(--mono); font-size: 10px; letter-spacing: .05em; color: var(--faint); line-height: 1.7; }
 
-/* cut list */
-.cut { display: flex; flex-direction: column; gap: 8px; }
-.cutrow { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); padding: 11px 13px; }
-.cutrow .x { font-family: var(--mono); font-size: 15px; color: var(--crit); line-height: 1.2; }
-.cutrow .t { font-size: 13px; color: var(--ink); }
+/* ---- layout helpers ---------------------------------------- */
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 22px; align-items: start; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+/* ---- the struck register (cut view) ------------------------ */
+.cut { display: flex; flex-direction: column; border: 1px solid var(--line); background: var(--sheet); counter-reset: strike; }
+.cutrow { display: flex; gap: 14px; align-items: flex-start; padding: 15px 18px; border-bottom: 1px solid var(--line-soft); }
+.cutrow:last-child { border-bottom: 0; }
+.cutrow .x { font-family: var(--mono); font-weight: 700; font-size: 15px; color: var(--crit); line-height: 1.4; flex: none; }
+.cutrow .x::before { content: counter(strike, decimal-leading-zero); counter-increment: strike; font-weight: 400; font-size: 10px; color: var(--faint); margin-right: 8px; letter-spacing: .08em; }
+.cutrow .t { font-size: 13.5px; color: var(--ink); font-weight: 600; }
+.cutrow .t::after { content: "struck"; font-family: var(--mono); font-weight: 400; font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--crit); border: 1px solid var(--crit-line); background: var(--crit-wash); padding: 1px 6px; margin-left: 9px; vertical-align: 2px; }
 .cutrow .w { font-size: 12.5px; color: var(--muted); margin-top: 4px; max-width: 70ch; }
-.zero { border: 1px solid var(--good-dim); background: var(--good-wash); border-radius: 12px; padding: 16px 18px; }
-.zero .big { font-family: var(--mono); font-size: 34px; font-weight: 600; color: var(--good); line-height: 1; }
-.zero .l { font-size: 13px; color: var(--body); margin-top: 8px; }
+
+.zero { border: 1px solid var(--ok); box-shadow: inset 0 0 0 3px var(--sheet), inset 0 0 0 4px var(--ok-line); background: var(--ok-wash); padding: 26px 24px 22px; text-align: left; }
+.zero .big { font-family: var(--mono); font-weight: 700; font-size: 74px; line-height: .9; color: var(--ok); letter-spacing: -.04em; }
+.zero .l { font-size: 13px; color: var(--body-ink); margin-top: 12px; max-width: 40ch; }
+
+/* ---- colophon ---------------------------------------------- */
+.foot { border-top: 2px solid var(--rule); padding: 26px 28px 44px; background: var(--sheet); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 400; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.65; }
+.foot p b { color: var(--ink); font-weight: 600; }
+.foot .conf { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 96ch; }
+
+/* ---- toast ------------------------------------------------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px);
+  background: var(--rule); color: var(--sheet); border: 1px solid var(--rule);
+  padding: 11px 17px; font-size: 13px; z-index: 80; max-width: min(640px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 10px 28px rgba(29, 37, 49, .28);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-left: 4px solid var(--crit); }
+
+/* ---- responsive -------------------------------------------- */
+@media (max-width: 720px) {
+  .serialline, .mast-main, .rail, .marginnote, .pane, .foot { padding-left: 16px; padding-right: 16px; }
+  .rail button { padding: 10px 12px 9px; }
+  .exhibit { padding: 18px 16px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
 </style>
 
 <div class="app">
-  <header class="topbar">
-    <div class="topbar-row">
+  <header class="mast">
+    <div class="serialline">
+      <span>Form RS&#8211;03 &middot; Rider occupancy survey</span>
+      <span>Series 2022 &middot; Batch over stored clips &middot; No live feed</span>
+    </div>
+    <div class="mast-main">
       <div class="brand">
-        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Road safety</span>
+        <p class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Road safety</p>
         <h1>Rider counting &mdash; the survey tool</h1>
       </div>
-      <span class="chip"><span class="dot accent"></span>Batch over stored clips &middot; <b>2022</b></span>
-      <span class="chip good"><span class="dot good"></span><b>0</b> identifiers extracted</span>
-      <span class="chip" id="stateChip"><span class="dot"></span>Not yet scored</span>
+      <div class="marks">
+        <span class="chip seal good"><span class="dot good"></span><b>0</b>&nbsp;identifiers extracted</span>
+        <span class="chip" id="stateChip"><span class="dot"></span>Not yet scored</span>
+      </div>
     </div>
-    <div class="params">
-      <span class="plabel">View</span>
-      <div class="segmented" id="tabs" role="group" aria-label="View"></div>
-      <span class="spacer"></span>
-      <span class="chip"><span class="dot"></span><b>1,840</b> hand-labelled clips</span>
-    </div>
-    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0" id="paramNote"></p>
   </header>
+
+  <div class="railwrap">
+    <nav class="rail" aria-label="Register index">
+      <div class="segmented" id="tabs" role="group" aria-label="View"></div>
+      <span class="railmeta chip"><span class="dot accent"></span><b>1,840</b>&nbsp;hand-labelled clips</span>
+    </nav>
+    <p class="marginnote" id="paramNote"></p>
+  </div>
 
   <main class="pane">
     <div class="pane-head">
@@ -292,7 +355,7 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
         <p>No frame, no face, no number plate, no rider identity, and no camera input. Not blurred or withheld &mdash; <b>never extracted</b>. The survey number is defensible precisely because it identifies nobody.</p>
       </div>
       <div>
-        <h5 style="visibility:hidden">more</h5>
+        <h5>What it cost</h5>
         <p>The cost of that is on the third tab: the tool cannot deter a single rider. It can only count them, and counting is what nobody had numbers for.</p>
       </div>
     </div>
@@ -391,6 +454,12 @@ const THREE_UP_REPORTED = CLIPS.filter((c) => c.said === 3).length;
 const HELMETS = sum(CLIPS.map((c) => c.helmets));
 const RIDERS = sum(CLIPS.map((c) => c.said));
 
+/* Of the observed three-up share at the gates (26 stopped + 12
+   dropped-and-remounted = 38 points), 12 points defeated the
+   gate by dismounting: 12/38 → 31%, as the case study quotes. */
+const GATE_SHARE = PLACES[1].share + PLACES[2].share;
+const DROP_DEFEAT = Math.floor((PLACES[2].share / GATE_SHARE) * 100);
+
 const state = { tab: "survey", scored: false, running: false, done: 0, cell: null, place: "all" };
 </script>
 <script>
@@ -431,32 +500,33 @@ function renderSurvey() {
       <button class="btn primary" id="runBtn"${state.running ? " disabled" : ""}>${state.scored ? "Score again" : "Score the week"}</button>
     </div>
 
-    <div class="tiles" style="margin-bottom:16px">
-      <div class="tile"><div class="v">${state.scored ? rows.length.toLocaleString() : "—"}</div><div class="l">Clips scored</div><div class="p">one row written per clip</div></div>
-      <div class="tile"><div class="v">${state.scored ? threeUp : "—"}</div><div class="l">Three-up instances counted</div><div class="p">rider count ≥ 3</div></div>
-      <div class="tile"><div class="v">${state.scored ? pct(HELMETS, RIDERS) + "%" : "—"}</div><div class="l">Riders wearing a helmet</div><div class="p">same crop, same pass</div></div>
-      <div class="tile good"><div class="v">0</div><div class="l">Identifiers extracted</div><div class="p">no plate, no face, no identity</div></div>
+    <div class="figrow">
+      <div class="fig"><div class="v">${state.scored ? rows.length.toLocaleString() : "&mdash;"}</div><div class="l">Clips scored</div><div class="p">one row written per clip</div></div>
+      <div class="fig"><div class="v">${state.scored ? threeUp : "&mdash;"}</div><div class="l">Three-up instances counted</div><div class="p">rider count &ge; 3</div></div>
+      <div class="fig"><div class="v">${state.scored ? pct(HELMETS, RIDERS) + "%" : "&mdash;"}</div><div class="l">Riders wearing a helmet</div><div class="p">same crop, same pass</div></div>
+      <div class="fig accent"><div class="v">${DROP_DEFEAT}%</div><div class="l">Gate approaches defeated by drop-and-remount</div><div class="p">${PLACES[2].share} of ${GATE_SHARE} gate-share points &middot; timed observation</div></div>
+      <div class="fig good"><div class="v">0</div><div class="l">Identifiers extracted</div><div class="p">no plate, no face, no identity</div></div>
     </div>
 
-    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
-      <div class="segmented" role="group" aria-label="Location">
+    <div class="toolbar">
+      <div class="filterset" role="group" aria-label="Location">
         <button data-place="all" aria-pressed="${state.place === "all"}">All points</button>
         ${PLACES.map((p) => `<button data-place="${p.k}" aria-pressed="${state.place === p.k}">${esc(p.n)}</button>`).join("")}
       </div>
-      <span class="mono" style="font-size:11px;color:var(--faint)">${state.scored ? "showing the first 40 rows of " + rows.length.toLocaleString() : "score the week to write the sheet"}</span>
+      <span class="rowcount">${state.scored ? "showing the first 40 rows of " + rows.length.toLocaleString() : "score the week to write the sheet"}</span>
     </div>
 
     <div class="tablewrap"><table class="sheet">
       <thead><tr><th>Clip</th><th>Point</th><th class="num">Day</th><th class="num">Time</th><th class="num">Motorcycles</th><th class="num">Riders</th><th class="num">Helmets</th><th>Stored frame</th></tr></thead>
       <tbody>${shown.length ? shown.map((c) => `<tr>
         <td class="mono" style="white-space:nowrap">${c.id}</td>
-        <td class="name">${esc(c.spot)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(PLACES.find((p) => p.k === c.place).n)}</span></td>
+        <td class="name">${esc(c.spot)}<br><span class="sub">${esc(PLACES.find((p) => p.k === c.place).n)}</span></td>
         <td class="num">${c.day}</td><td class="num">${c.t}</td>
         <td class="num">1</td>
-        <td class="num" style="color:${c.said >= 3 ? "var(--crit)" : "var(--body)"}">${c.said}</td>
+        <td class="num" style="color:${c.said >= 3 ? "var(--crit)" : "var(--ink)"};font-weight:${c.said >= 3 ? "700" : "400"}">${c.said}</td>
         <td class="num">${c.helmets}</td>
-        <td><div class="noframe">no frame stored</div></td></tr>`).join("")
-        : `<tr><td colspan="8" style="padding:28px 12px;text-align:center;color:var(--muted)">The sheet is empty until the batch runs.</td></tr>`}
+        <td><span class="noframe"><span class="nil">&empty;</span>no frame stored</span></td></tr>`).join("")
+        : `<tr><td colspan="8" style="padding:30px 14px;text-align:center;color:var(--muted)">The register is empty until the batch runs.</td></tr>`}
       </tbody>
     </table></div>
     <p class="note"><b>The clip is deleted once it is scored.</b> That was the condition the campus security office added, and it is why the survey number can exist at all: there is nothing left for anyone to be custodian of. It is also why this tool can never be demonstrated working in real time.</p>`;
@@ -477,37 +547,49 @@ function runBatch() {
 }
 
 /* ============================================================
-   2 — EVALUATION
+   2 — EVALUATION. The matrix is the honesty centerpiece:
+   the 64 over-counted clips get the same typographic weight
+   as the diagonal, because they are the finding.
    ============================================================ */
 function renderEval() {
   const cell = state.cell;
   $("view").innerHTML = `
+    <div class="exhibit">
+      <div class="exhibit-head">
+        <span class="exhibit-tag">Exhibit A &middot; Agreement matrix</span>
+        <span class="exhibit-n">n = ${TOTAL.toLocaleString()} clips &middot; hand label agreed by two people</span>
+      </div>
+      <h3 class="blockhead">Model count against ground truth</h3>
+      <p class="blocksub">Select a cell. The diagonal is agreement; everything else is an error, and the direction of the error is the finding.</p>
+      <div class="cmwrap"><div class="cm">
+        <span class="h"></span>${CLASSES.map((c) => `<span class="h">model said<br>${esc(c)}</span>`).join("")}
+        ${MATRIX.map((row, t) => `<span class="h rh">truth &middot; ${esc(CLASSES[t])}</span>` + row.map((v, m) => {
+          const kind = t === m ? "diag" : m > t ? "over" : "under";
+          const word = t === m ? "correct" : m > t ? "over-counted" : "under-counted";
+          return `<button data-cell="${t}-${m}" class="${kind}" aria-pressed="${cell === t + "-" + m}">${v}<span class="s">${word} &middot; ${pct(v, sum(row))}% of row</span></button>`;
+        }).join("")).join("")}
+      </div></div>
+      <p class="cm-caption">Rows: hand-labelled truth. Columns: what the model wrote. Percentages are of each truth row.</p>
+      ${cell ? cellNote(cell) : `<p class="note"><b>64 against 14.</b> Two riders called three happens more than four times as often as three called two. For an enforcement tool that is a wrongly accused student; for a survey number it is a problem overstated — and overstating is the direction that gets quoted.</p>`}
+    </div>
     <div class="grid2">
       <div>
-        <h3 style="margin:0 0 4px;font-size:14px;color:var(--ink);font-weight:600">Model count against a hand label agreed by two people</h3>
-        <p style="margin:0 0 14px;font-size:12.5px;color:var(--muted)">Click a cell. The diagonal is agreement; everything else is an error, and the direction of the error is the finding.</p>
-        <div class="cm">
-          <span class="h"></span>${CLASSES.map((c) => `<span class="h">model said<br>${esc(c)}</span>`).join("")}
-          ${MATRIX.map((row, t) => `<span class="h rh">truth &middot; ${esc(CLASSES[t])}</span>` + row.map((v, m) => {
-            const kind = t === m ? "diag" : m > t ? "over" : "under";
-            return `<button data-cell="${t}-${m}" class="${kind}" aria-pressed="${cell === t + "-" + m}">${v}<span class="s">${t === m ? "correct" : m > t ? "over-counted" : "under-counted"}</span></button>`;
-          }).join("")).join("")}
+        <div class="figrow" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:0">
+          <div class="fig good"><div class="v">${AGREEMENT}%</div><div class="l">Rider-count agreement with hand labels</div><div class="p">${CORRECT.toLocaleString()} of ${TOTAL.toLocaleString()} clips</div></div>
+          <div class="fig crit"><div class="v">${FP}%</div><div class="l">False-positive rate (guardrail)</div><div class="p">${MATRIX[1][2]} of ${TWO_UP.toLocaleString()} two-rider clips called three</div></div>
         </div>
-        ${cell ? cellNote(cell) : `<p class="note"><b>64 against 14.</b> Two riders called three happens more than four times as often as three called two. For an enforcement tool that is a wrongly accused student; for a survey number it is a problem overstated — and overstating is the direction that gets quoted.</p>`}
+        <p class="note" style="margin-top:14px"><b>What the ${TOTAL.toLocaleString()} are.</b> The ${TOTAL.toLocaleString()} scored clips are the daylight-and-overcast set; dusk and night are reported separately and enter no survey figure.</p>
       </div>
       <div>
-        <div class="tiles" style="grid-template-columns:1fr">
-          <div class="tile good"><div class="v">${AGREEMENT}%</div><div class="l">Rider-count agreement with hand labels</div><div class="p">${CORRECT.toLocaleString()} of ${TOTAL.toLocaleString()} clips</div></div>
-          <div class="tile crit"><div class="v">${FP}%</div><div class="l">False-positive rate (guardrail)</div><div class="p">${MATRIX[1][2]} of ${TWO_UP.toLocaleString()} two-rider clips called three</div></div>
-        </div>
-        <h3 style="margin:18px 0 10px;font-size:14px;color:var(--ink);font-weight:600">Accuracy by lighting condition</h3>
-        <div class="lights">
+        <h3 class="blockhead">Accuracy by lighting condition</h3>
+        <div class="lights" style="margin-top:12px">
           ${LIGHTING.map((l) => `<div class="lrow ${l.used ? "" : "excluded"}">
             <span class="n">${esc(l.n)}</span>
             <span class="track"><i class="${l.v >= BAR ? "" : "miss"}" style="width:${l.v}%"></i><u style="left:${BAR}%" title="the ${BAR}% bar"></u></span>
-            <span class="v">${l.v}%</span></div>`).join("")}
+            <span class="v">${l.v}%${l.used ? "" : `<span class="tag">reported &middot; unused</span>`}</span></div>`).join("")}
         </div>
-        <p class="note warn"><b>Dusk and night are reported and used in nothing.</b> They sit below the 90% bar we agreed a survey number needs, so they appear in no figure on the survey tab. Night is not a degradation — the model is counting shapes it cannot resolve, and its confidence does not fall to match.</p>
+        <p class="chart-caption">Solid bar: enters the survey. Hatched: measured, reported, used in nothing. The rule at ${BAR}% is the admission bar a survey figure must clear.</p>
+        <p class="note warn"><b>Dusk and night are reported and used in nothing.</b> They sit below the ${BAR}% bar we agreed a survey number needs, so they appear in no figure on the survey tab. Night is not a degradation — the model is counting shapes it cannot resolve, and its confidence does not fall to match.</p>
       </div>
     </div>`;
   document.querySelectorAll("[data-cell]").forEach((b) => (b.onclick = () => { state.cell = state.cell === b.dataset.cell ? null : b.dataset.cell; render(); }));
@@ -528,16 +610,16 @@ function renderCut() {
     <div class="grid2">
       <div>
         <div class="cut">${CUTS.map((c) => `<div class="cutrow"><span class="x">&times;</span><div><div class="t">${esc(c.t)}</div><div class="w">${esc(c.w)}</div></div></div>`).join("")}</div>
-        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:18px">
           <button class="btn" id="liveBtn">Connect a live camera</button>
-          <span class="mono" style="font-size:11px;color:var(--faint)">there is no input to connect one to</span>
+          <span class="rowcount">there is no input to connect one to</span>
         </div>
         <p class="note"><b>What the restraint cost.</b> The system cannot stop a single rider — it can only count them. That is the trade the page is about: enforcement needs to be right about a person, and measurement only needs to be right on average.</p>
       </div>
       <div>
         <div class="zero">
           <div class="big">0</div>
-          <div class="l">number plates read, faces detected, riders identified, records kept and cameras connected — across ${TOTAL.toLocaleString()} clips.</div>
+          <div class="l">number plates read, faces detected, riders identified, records kept and cameras connected &mdash; across ${TOTAL.toLocaleString()} clips.</div>
         </div>
         <p class="note" style="margin-top:16px"><b>Not blurred. Not withheld. Never extracted.</b> There is no optical character recognition and no face detection anywhere in the pipeline, so there is no stage at which an identifier exists and is then discarded.</p>
       </div>
@@ -572,7 +654,10 @@ function render() {
   const tab = q.get("view");
   if (tab && TABS.some((t) => t.k === tab)) state.tab = tab;
   if (q.get("scored") !== "0") state.scored = true;
-  if (q.get("cell")) state.cell = q.get("cell");
+  /* only a well-formed r-c within the 3×3 grid selects a cell;
+     anything malformed falls back to no selection */
+  const cellQ = q.get("cell");
+  if (cellQ && /^[0-2]-[0-2]$/.test(cellQ)) state.cell = cellQ;
   if (q.get("place")) state.place = q.get("place");
   render();
 })();

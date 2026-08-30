@@ -310,3 +310,46 @@ DOI ("the demo is the paper" stays first).
   **AUTHOR-CONFIRM AC-3b:** restore if private/renamed.
 - Pending browser pass: xana-nine deep links (P3/17/19/25/26/27), Drive folder (P6),
   patents.google + mqtt.org (P33), YouTube confirmations.
+
+
+## Phase 2/3 — xana-nine (P3/P17/P19/P25/P26/P27), source-verified
+The deployed app's source lives at Changes-archive/dummy (repo github.com/PushpalDas/xana,
+package ixana-wiki-dummy). Verification against that source: overwhelmingly MATCH — including
+the hard states (?q= assistant answers, T-2214-style drawers, 6-of-15 overdue with the
+readiness-dates caveat, 18 matters, 48 tasks / 4.2% correction rate, the amber invoice gate,
+captured/minuted/excluded never summed, the 3.1/4.6 mW figures with conditions, Sam's objection,
+"Not decided", the nightly run that checked nothing).
+
+**F2.4 — THE MOST MATERIAL LAUNCH ITEM: the deployed app lags the source.** The dummy working
+tree is ~11 files ahead of origin/main (HEAD 1b37b44, 2026-08-30). At deployed HEAD these
+case-study promises FAIL live: /myfiles?tab=clickup (no tab deep link), player ?q= answers,
+meetingrecordings counts + per-card decision/action counts, the authored Q&A/figures/Not-decided
+notes content. This also explains Phase 3: the stored screenshots depict the WORKING-TREE app
+(richer than live) — they are not stale; the deployment is.
+**AUTHOR-CONFIRM AC-XANA (top of the list):** commit and push Changes-archive/dummy to
+github.com/PushpalDas/xana so Vercel redeploys. Until then, six pages' deep links underdeliver.
+
+Fixes I applied to the dummy source so the push carries full parity:
+- player [id]/page.tsx: consumes ?t= and seeks once media is ready (citation links already sent it).
+- VideoModal.tsx: #ts= citations now render as seek pills in notes and answers (was plain links).
+- Home.tsx: superseded badge on search-result rows (flag was returned and dropped).
+- TaskTracker.tsx: RTL header now states "54% on a 200-task sample" (was a code comment).
+- efficiency-demo-data.ts: best-engineer refusal opens "The ranking does not exist."
+- patent-demo-data.ts: overdue answer lists all six matters, not the top three.
+- PatentListPanel.tsx: legend line "Overdue is measured against internal readiness dates, never
+  statutory ones."
+
+Case-study edits (source cannot support the claim):
+- P26 timeline window April→February 2024; P26 "two kinds drawn differently" bullet reworded to
+  the docket-mirroring the app actually does.
+Accepted as product-stats (no demo change): P19 "690 recordings"/"11% minutes" (describe the real
+archive, not the 8-item recreation); P3 "p.2 lands on page two" (pages are stamped; navigation is
+route-level) — logged, not edited.
+
+## Phase 3 — Tier A snapshots
+24 live captures at 1440x900 compared against stored images: 14 exact/equivalent matches; the
+divergent ones all trace to the deployment lag (F2.4) or to interaction-dependent states the
+stored images capture correctly (popover open, ask answered, Gantt view, invoice modal, compare
+tab). DECISION: stored Tier-A screenshots are KEPT — they depict the source-of-truth app; the
+fix is the deploy, not the images. Re-verify against live after the author pushes (one capture
+run: scratchpad/capture-xana.mjs).

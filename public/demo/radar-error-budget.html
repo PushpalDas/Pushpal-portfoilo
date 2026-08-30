@@ -4,314 +4,436 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UAV Sphere Calibration — The Error Budget</title>
-<meta name="description" content="Interactive error budget for UAV-carried sphere calibration of a weather radar: five terms, a 1.5 dB budget, and the positioning accuracy the method actually demands.">
+<meta name="description" content="Interactive error budget for UAV-carried sphere calibration of a weather radar: five terms, a 1.5 dB budget, a 0.5 dB positioning pass mark, and the accuracy the method actually demands.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
-   Shared shell for the Ricky Kids demos. Palette and type are
-   inherited from the portfolio's case-study system so the demos
-   read as one family with the case studies that link them.
-   Single-theme by design: these are bench tools, dark, with
-   every colour painted so nothing borrows a host background.
+   P32 — Radar error budget.
+   Identity: precision instrumentation / engineering report.
+   Calibration-lab documentation: cool paper-grey ground,
+   Archivo + IBM Plex Mono, hairline rules, measured
+   annotations. Deliberately single-theme (light), every
+   colour painted. Restrained palette: neutral graphite marks,
+   ONE alert hue reserved for over-budget states — pass states
+   are carried by ink and words, never a second hue, so the
+   ok/warn roles below intentionally resolve to ink/alert.
    ============================================================ */
 :root {
-  color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+  --bg: #e7e9e9;            /* cool paper-grey bench */
+  --surface: #fbfbfa;       /* the sheet */
+  --surface-2: #f2f3f2;     /* recessed panel on the sheet */
+  --surface-3: #e9ebea;
+  --border: #c7ccce;        /* rule */
+  --hairline: #dde0e1;      /* hairline rule */
+  --text: #1a1d1f;          /* ink */
+  --body-ink: #383e43;
+  --dim: #5b6268;
+  --faint: #666d73;         /* smallest legible labels — still ≥4.5:1 on the sheet */
+  --accent: #1a1d1f;        /* interactive emphasis is ink, not a hue */
+  --bar: #454b50;           /* neutral graphite mark */
+  --bar-dom: #17191c;       /* dominant term — heavier, darker */
+  --ok: #1a1d1f;            /* pass = ink (single-alert-hue identity) */
+  --warn: #b42318;
+  --crit: #b42318;          /* the ONE alert hue */
+  --crit-deep: #8e1b11;
+  --crit-wash: #f7e9e6;
+  --band: #eff1f0;          /* budget-span band behind the tornado */
+  --sans: Archivo, "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --r-sm: 3px; --r-md: 6px;  /* one radius scale */
 }
 
 * { box-sizing: border-box; }
+html { background: var(--bg); }
 body {
-  margin: 0; background: var(--bg); color: var(--body);
+  margin: 0; background: var(--bg); color: var(--body-ink);
   font-family: var(--sans); font-size: 14px; line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
 button { font: inherit; color: inherit; cursor: pointer; }
-select, input, textarea { font: inherit; color: inherit; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.num, .v, .tick, .mkl { font-variant-numeric: tabular-nums; }
 
-.app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
-  display: flex; flex-direction: column;
+.doc {
+  max-width: 1180px; margin: 0 auto; padding: 28px 20px 56px;
 }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
-.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+.sheet {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  box-shadow: 0 1px 0 rgba(20,24,26,.04), 0 14px 40px -22px rgba(20,24,26,.28);
+}
 
+/* ---- masthead: report title block ---- */
+.masthead { padding: 26px 30px 0; }
+.doc-id {
+  display: flex; flex-wrap: wrap; gap: 6px 0; align-items: baseline;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--dim); margin: 0 0 14px;
+  border-bottom: 1px solid var(--text); padding-bottom: 10px;
+}
+.doc-id .sep { margin: 0 10px; color: var(--faint); }
+.doc-id .right { margin-left: auto; letter-spacing: .1em; }
+.masthead h1 {
+  margin: 0 0 10px; font-size: clamp(22px, 3.4vw, 29px); font-weight: 700;
+  letter-spacing: -.022em; line-height: 1.12; color: var(--text); max-width: 30ch;
+}
+.lede { margin: 0; font-size: 14.5px; color: var(--body-ink); max-width: 74ch; }
+.lede b { color: var(--text); font-weight: 600; }
+
+.mast-data {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0; margin: 20px 0 0; border-top: 1px solid var(--hairline);
+}
+.mast-data > div { padding: 12px 16px 14px 0; border-right: 1px solid var(--hairline); padding-left: 16px; }
+.mast-data > div:first-child { padding-left: 0; }
+.mast-data > div:last-child { border-right: 0; }
+.mast-data dt { font-family: var(--mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); margin: 0 0 4px; }
+.mast-data dd { margin: 0; font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--text); }
+.mast-data dd small { font-size: 11px; font-weight: 400; color: var(--dim); margin-left: 4px; }
+.mast-data dd.alert { color: var(--crit); }
+
+.status-strip {
+  margin-top: 18px; border-top: 1px solid var(--border);
+  background: var(--surface-2); border-radius: 0;
+  padding: 10px 30px; margin-left: -30px; margin-right: -30px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  font-size: 12.5px; color: var(--dim);
+}
+.status-strip b { color: var(--text); font-weight: 600; }
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border: 1px solid var(--border); background: var(--surface);
+  border-radius: 999px; padding: 4px 11px;
+  font-size: 11px; font-family: var(--mono); letter-spacing: .04em;
+  color: var(--body-ink); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
-.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+.chip.good { border-color: var(--text); color: var(--text); }
+.chip.crit { border-color: var(--crit); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex: none; }
+.chip.good .dot { background: var(--text); }
+.chip.crit .dot { background: var(--crit); }
 
-.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
-.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
-.params .spacer { flex: 1; }
+/* ---- numbered report sections ---- */
+.sec { padding: 26px 30px 30px; }
+.sec + .sec { border-top: 1px solid var(--hairline); }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 16px; }
+.sec-no { font-family: var(--mono); font-size: 11px; font-weight: 600; letter-spacing: .1em; color: var(--faint); }
+.sec-head h2 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.012em; color: var(--text); }
+.sec-head .rule { flex: 1; height: 1px; background: var(--hairline); align-self: center; }
+.sec-sub { margin: -8px 0 18px; font-size: 13px; color: var(--dim); max-width: 78ch; }
 
-.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
-.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+/* ---- dial (test condition) ---- */
+.dial-row { display: grid; grid-template-columns: 200px minmax(0,1fr); gap: 26px; align-items: start; }
+.dial-read .val { font-family: var(--mono); font-size: 34px; font-weight: 600; color: var(--text); line-height: 1; letter-spacing: -.02em; }
+.dial-read .val::before { content: "±"; font-size: 22px; color: var(--dim); font-weight: 400; margin-right: 1px; }
+.dial-read .unit { display: block; font-size: 12px; color: var(--dim); margin-top: 7px; max-width: 24ch; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%;
+  height: 2px; border-radius: 0; background: var(--border); outline-offset: 8px; margin: 16px 0 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 12px; height: 26px; border-radius: 2px;
+  background: var(--text); border: 0; cursor: ew-resize;
+  box-shadow: inset 0 0 0 2px var(--text), inset 0 0 0 3px var(--surface);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 26px; border-radius: 2px; background: var(--text);
+  border: 2px solid var(--surface); cursor: ew-resize;
+}
+.scale { position: relative; height: 46px; margin-top: 10px; }
+.scale .rail { position: absolute; left: 0; right: 0; top: 7px; height: 1px; background: var(--hairline); }
+.scale .mk { position: absolute; top: 2px; width: 1px; height: 11px; background: var(--dim); }
+.scale .mk span { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; letter-spacing: .02em; white-space: nowrap; color: var(--dim); }
+.scale .mk.demand { background: var(--text); } .scale .mk.demand span { color: var(--text); font-weight: 600; }
+.scale .mk.bom { background: var(--crit); } .scale .mk.bom span { color: var(--crit); font-weight: 600; }
+.scale .mk.edge span { transform: none; left: auto; right: 0; }
+.dial-note { margin: 12px 0 0; font-size: 12.5px; color: var(--dim); font-family: var(--mono); }
+.dial-note b { color: var(--text); font-weight: 600; }
+
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; background: var(--surface); margin-top: 18px; }
+.segmented button { background: none; border: 0; padding: 8px 15px; font-size: 12.5px; color: var(--dim); border-right: 1px solid var(--border); text-align: left; transition: background .15s ease, color .15s ease; }
 .segmented button:last-child { border-right: 0; }
-.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
-.segmented button:hover { color: var(--ink); }
-.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
-.segmented button[aria-pressed="true"] span { color: var(--accent); }
+.segmented button:hover { color: var(--text); background: var(--surface-2); }
+.segmented button[aria-pressed="true"] { background: var(--text); color: var(--surface); }
+.segmented button b { font-weight: 600; }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+.segmented button[aria-pressed="true"] span { color: #c9cdce; }
 
-.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
-.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
-.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
-.provenance b { color: var(--body); font-weight: 500; }
+/* ---- the tornado (centre stage) ---- */
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 348px; gap: 30px; align-items: start; }
 
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-  letter-spacing: .13em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+.plot { border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); overflow: hidden; }
+.plot-title { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 12px 16px 10px; border-bottom: 1px solid var(--hairline); }
+.plot-title h3 { margin: 0; font-size: 13.5px; font-weight: 650; color: var(--text); letter-spacing: -.005em; }
+.plot-title .u { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); white-space: nowrap; }
+.tor { padding: 4px 16px 12px; }
+.trow, .taxis { display: grid; grid-template-columns: 196px minmax(0,1fr) 118px; gap: 14px; align-items: center; }
+.taxis { height: 30px; }
+.taxis .alab { font-family: var(--mono); font-size: 9.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+.taxis .alab.r { text-align: right; }
+.taxis .lane { border: 0; background: none; height: 100%; }
+.tick { position: absolute; top: 50%; transform: translate(-50%,-50%); font-family: var(--mono); font-size: 10px; color: var(--faint); background: var(--surface); padding: 0 3px; z-index: 2; }
+.bandlab { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--mono); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); background: var(--band); padding: 1px 6px; border-radius: 2px; white-space: nowrap; z-index: 1; }
+
+.trow { min-height: 42px; }
+.trow .n { font-size: 13px; color: var(--text); line-height: 1.3; padding: 6px 0; }
+.trow .n small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .02em; color: var(--faint); margin-top: 2px; }
+.trow button.n { background: none; border: 0; padding: 6px 0; text-align: left; border-radius: var(--r-sm); }
+.trow button.n:hover { color: var(--crit-deep); }
+.trow.off .n, .trow.off .v { color: var(--faint); }
+.trow.off .n { text-decoration: line-through; text-decoration-thickness: 1px; }
+.trow.off .n small { text-decoration: none; }
+.lane { position: relative; height: 42px; }
+.lane .band { position: absolute; top: 0; bottom: 0; background: var(--band); }
+.lane .gl { position: absolute; top: 0; bottom: 0; width: 1px; }
+.lane .gl.zero { background: var(--border); }
+.lane .gl.dash { background: repeating-linear-gradient(to bottom, var(--border) 0 3px, transparent 3px 6px); }
+.lane .bar {
+  position: absolute; top: 16px; height: 10px; background: var(--bar); border-radius: 2px;
+  transition: left .18s ease, width .18s ease, background .18s ease;
 }
-.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
-.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
-.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
-.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
-.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
-
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+.lane .bar.dom { top: 12px; height: 18px; background: var(--bar-dom); }
+.lane .bar.over { background: var(--crit); }
+.lane .bar.offb { background: transparent; border: 1px dashed var(--border); }
+.domtag {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text); white-space: nowrap; z-index: 2;
 }
-.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
-.btn:disabled { opacity: .38; cursor: not-allowed; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
-.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
-.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
-.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
-.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
-.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
-.btn.ghost { background: transparent; }
+.domtag.over { color: var(--crit); }
+.domtag.inbar { color: var(--surface); }
+.trow .v { font-family: var(--mono); font-size: 11.5px; text-align: right; color: var(--text); white-space: nowrap; }
+.trow .v small { display: block; font-size: 9.5px; color: var(--faint); letter-spacing: .04em; }
+.figcap { margin: 10px 16px 14px; font-size: 11.5px; color: var(--dim); max-width: 76ch; }
+.figcap b { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); font-weight: 600; margin-right: 6px; }
 
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+/* ---- aside instruments ---- */
+.panel { border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); padding: 16px 18px; }
+.panel + .panel, .panel + .note, .note + .panel { margin-top: 14px; }
+.panel h4 { margin: 0 0 10px; font-family: var(--mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+.big { font-family: var(--mono); font-size: 36px; font-weight: 600; line-height: 1; letter-spacing: -.02em; color: var(--text); }
+.big.fail { color: var(--crit); }
+.panel .sub { font-size: 12.5px; color: var(--dim); margin-top: 8px; }
+.panel .sub b { color: var(--text); font-weight: 600; }
+.track { position: relative; height: 8px; border-radius: 2px; background: var(--surface-3); margin-top: 14px; }
+.track > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px; background: var(--bar); transition: width .18s ease, background .18s ease; }
+.track > i.over { background: var(--crit); }
+.track > u { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--text); text-decoration: none; }
+.track > u i { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); font-style: normal; font-family: var(--mono); font-size: 9px; letter-spacing: .06em; color: var(--dim); white-space: nowrap; }
+.marks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; color: var(--faint); margin-top: 7px; }
+.kv { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 12.5px; }
+.kv dt { color: var(--dim); margin: 0; }
+.kv dd { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--text); text-align: right; }
 
 .note {
-  margin-top: 14px; font-size: 12.5px; color: var(--muted);
-  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+  font-size: 12.5px; color: var(--dim); line-height: 1.6;
+  border-left: 2px solid var(--border); padding: 2px 0 2px 12px; max-width: 84ch;
 }
-.note b { color: var(--body); font-weight: 500; }
-.note.warn { border-left-color: var(--warn); }
+.note b { color: var(--text); font-weight: 600; }
 .note.crit { border-left-color: var(--crit); }
-.note.good { border-left-color: var(--good); }
+.note.crit b { color: var(--crit-deep); }
+.verdict { margin-top: 16px; }
 
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
-table.sheet thead th {
-  background: var(--surface-2); color: var(--muted);
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
+/* ---- the literature table ---- */
+.tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+table.sheet-t { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 620px; }
+table.sheet-t thead th {
+  color: var(--faint); font-family: var(--mono); font-size: 9.5px; font-weight: 600;
   letter-spacing: .11em; text-transform: uppercase;
-  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--text); white-space: nowrap;
 }
-table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-table.sheet tbody tr:last-child td { border-bottom: 0; }
-table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
-table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-table.sheet .name { color: var(--ink); }
-table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
-table.sheet tfoot .num { text-align: right; }
+table.sheet-t thead th.num { text-align: right; }
+table.sheet-t tbody td { padding: 11px 14px; border-bottom: 1px solid var(--hairline); vertical-align: baseline; }
+table.sheet-t tbody tr:last-child td { border-bottom: 0; }
+table.sheet-t td.num { font-family: var(--mono); font-size: 12.5px; text-align: right; white-space: nowrap; color: var(--text); }
+table.sheet-t td .src { display: block; font-family: var(--mono); font-size: 10px; color: var(--faint); margin-top: 2px; letter-spacing: .02em; }
+table.sheet-t td.name { color: var(--text); font-weight: 500; }
+.share { display: inline-block; vertical-align: middle; width: 72px; height: 6px; background: var(--surface-3); border-radius: 2px; margin-left: 12px; }
+.share i { display: block; height: 100%; border-radius: 2px; background: var(--bar); }
 
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
-.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
-.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
-.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
-
-.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
-.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-.meterbar.good > i { background: var(--good); }
-.meterbar.crit > i { background: var(--crit); }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
-.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+/* ---- footer ---- */
+.foot { border-top: 1px solid var(--border); background: var(--surface-2); padding: 22px 30px 26px; border-radius: 0 0 var(--r-md) var(--r-md); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.foot h5 { margin: 0 0 7px; font-family: var(--mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+.foot p { margin: 0; font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+.foot p b { color: var(--text); font-weight: 600; }
+.conf { margin-top: 18px !important; padding-top: 14px; border-top: 1px solid var(--hairline); font-size: 11.5px !important; color: var(--faint) !important; max-width: 100ch; }
 
 .toast {
   position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  background: var(--text); color: var(--surface); border-radius: var(--r-sm);
+  padding: 10px 16px; font-size: 13px; z-index: 80; max-width: min(620px, 90vw);
   opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+  box-shadow: 0 12px 32px rgba(20,24,26,.3);
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.crit { border-color: var(--crit-dim); }
+.toast.crit { background: var(--crit-deep); }
 
-@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+/* ---- responsive ---- */
+@media (max-width: 1020px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .dial-row { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 640px) {
+  .doc { padding: 14px 10px 40px; }
+  .masthead, .sec { padding-left: 18px; padding-right: 18px; }
+  .status-strip { margin-left: -18px; margin-right: -18px; padding-left: 18px; padding-right: 18px; }
+  .foot { padding-left: 18px; padding-right: 18px; }
+  .trow, .taxis { grid-template-columns: 118px minmax(0,1fr) 84px; gap: 8px; }
+  .trow .n { font-size: 11.5px; }
+  .trow .v { font-size: 10px; }
+  .doc-id .right { margin-left: 0; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
 </style>
 
-<style>
-.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 18px; align-items: start; }
-@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
-
-.dialbar { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
-.dialbar .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.dialbar .val { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1; }
-.dialbar .unit { font-size: 13px; color: var(--muted); }
-.scale { position: relative; height: 42px; margin-top: 6px; }
-.scale .rule { position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--surface-3); }
-.scale .mk { position: absolute; top: 2px; width: 2px; height: 12px; }
-.scale .mk span { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; white-space: nowrap; }
-.scale .mk.demand { background: var(--good); } .scale .mk.demand span { color: var(--good); }
-.scale .mk.bom { background: var(--crit); } .scale .mk.bom span { color: var(--crit); }
-
-/* tornado */
-.tor { display: flex; flex-direction: column; gap: 9px; }
-.trow { display: grid; grid-template-columns: 210px 1fr 92px; gap: 12px; align-items: center; }
-.trow .n { font-size: 13px; color: var(--body); }
-.trow.off .n, .trow.off .v { color: var(--faint); text-decoration: line-through; }
-.trow .lane { position: relative; height: 22px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; }
-.trow .lane .zero { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--faint); }
-.trow .lane .bar { position: absolute; top: 3px; bottom: 3px; background: var(--accent); border-radius: 3px; }
-.trow .lane .bar.dom { background: var(--crit); }
-.trow .lane .bar.off { background: var(--surface-3); }
-.trow .v { font-family: var(--mono); font-size: 12px; text-align: right; color: var(--ink); }
-.trow button { background: none; border: 0; padding: 0; text-align: left; }
-
-.gauge { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.gauge .big { font-family: var(--mono); font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -.02em; }
-.gauge .big.pass { color: var(--good); } .gauge .big.fail { color: var(--crit); }
-.gauge .sub { font-size: 13px; color: var(--body); margin-top: 8px; }
-.gauge .track { position: relative; height: 10px; border-radius: 5px; background: var(--surface-3); margin-top: 16px; overflow: visible; }
-.gauge .track > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--good); }
-.gauge .track > i.over { background: var(--crit); }
-.gauge .track > u { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); text-decoration: none; }
-.gauge .marks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-top: 8px; }
-</style>
-
-<div class="app">
-  <header class="topbar">
-    <div class="topbar-row">
-      <div class="brand">
-        <span class="eyebrow">Ricky Kids &middot; ISRO proposal &middot; Radar calibration</span>
-        <h1>UAV sphere calibration &mdash; the error budget</h1>
+<div class="doc">
+  <div class="sheet">
+    <header class="masthead">
+      <p class="doc-id">
+        <span>Ricky Kids · SRM Kattankulathur</span><span class="sep">/</span>
+        <span>ISRO proposal · weather-radar calibration</span>
+        <span class="right">Worked error budget · EB-01</span>
+      </p>
+      <h1>UAV sphere calibration — the error budget</h1>
+      <p class="lede">A weather radar is calibrated against an object of known radar cross-section sitting in the far field. The question is not whether a hexacopter can carry a sphere there. It is <b>whether you can know where the sphere is</b> once it arrives. This budget was built before anyone chose a motor — the pass mark came first.</p>
+      <dl class="mast-data">
+        <div><dt>Total budget</dt><dd>1.50<small>dB</small></dd></div>
+        <div><dt>Positioning pass mark</dt><dd>&le; 0.50<small>dB</small></dd></div>
+        <div><dt>Experiments decomposed</dt><dd>4<small>published</small></dd></div>
+        <div><dt>Flights conducted</dt><dd>0<small>by design</small></dd></div>
+      </dl>
+      <div class="status-strip">
+        <span>Condition under test: <b>altitude uncertainty of the sphere, 1&sigma;</b></span>
+        <span style="margin-left:auto"></span>
+        <span class="chip" id="stateChip"></span>
+        <span class="chip" id="posChip"></span>
       </div>
-      <span class="chip"><span class="dot accent"></span>Budget <b>1.5 dB</b></span>
-      <span class="chip"><span class="dot"></span><b>4</b> published experiments decomposed</span>
-      <span class="chip" id="stateChip"></span>
-    </div>
-    <div class="params">
-      <span class="plabel">Preset</span>
-      <div class="segmented" id="presets" role="group" aria-label="Preset"></div>
-      <span class="spacer"></span>
-      <span class="chip"><span class="dot crit"></span><b>0</b> flights conducted</span>
-    </div>
-    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
-      <b>This was built before anyone chose a motor.</b> Rather than start with the airframe, we decomposed the error budgets of four published experiments to find which term actually sets the achievable accuracy &mdash; and set the pass mark first.</p>
-  </header>
+    </header>
 
-  <main class="pane">
-    <div class="pane-head">
-      <p class="kicker">Worked error budget &middot; no flight was ever conducted</p>
-      <h2>Which term decides whether this works</h2>
-      <p class="provenance">A weather radar is calibrated against an object of known radar cross section sitting in the far field. The question is not whether a hexacopter can carry a sphere there. It is <b>whether you can know where the sphere is</b> once it arrives.</p>
-    </div>
-
-    <div class="dialbar">
-      <div class="top">
-        <span class="val" id="sVal">0.35</span><span class="unit">m &mdash; altitude uncertainty of the sphere, 1&sigma;</span>
-      </div>
-      <input type="range" id="dial" min="10" max="300" value="35" step="1" style="width:100%" aria-label="Altitude uncertainty">
-      <div class="scale" id="scale"></div>
-    </div>
-
-    <div class="grid2">
-      <div>
-        <h3 style="margin:0 0 4px;font-size:14px;color:var(--ink);font-weight:600">Swing each term puts into the calibration error</h3>
-        <p style="margin:0 0 14px;font-size:12.5px;color:var(--muted)">Click a term to take it out of the budget entirely &mdash; the most generous assumption you can make about it &mdash; and watch what the total does.</p>
-        <div class="tor" id="tor"></div>
-        <div id="verdict" style="margin-top:16px"></div>
-      </div>
-      <div>
-        <div class="gauge">
-          <div class="big" id="total">—</div>
-          <div class="sub" id="totalSub"></div>
-          <div class="track"><i id="bar"></i><u id="budgetMark"></u></div>
-          <div class="marks"><span>0 dB</span><span>1.5 dB budget</span><span id="scaleMax">3 dB</span></div>
+    <section class="sec" aria-labelledby="s1h">
+      <div class="sec-head"><span class="sec-no">01</span><h2 id="s1h">Test condition</h2><span class="rule"></span></div>
+      <div class="dial-row">
+        <div class="dial-read">
+          <span class="val" id="sVal">0.35</span>
+          <span class="unit">m — altitude uncertainty of the sphere, 1&sigma;</span>
+          <div class="segmented" id="presets" role="group" aria-label="Preset"></div>
         </div>
-        <div class="tiles" style="grid-template-columns:1fr;margin-top:16px">
-          <div class="tile" id="posTile"><div class="v" id="posV">—</div><div class="l">Error swing traced to sphere positioning</div><div class="p">altitude and horizontal at the current dial</div></div>
-          <div class="tile good"><div class="v">±0.35 m</div><div class="l">Positioning accuracy the method demands (guardrail)</div><div class="p">altitude, 1σ — where the budget just closes</div></div>
-          <div class="tile"><div class="v">±12°</div><div class="l">Angular coverage one flight pattern reaches</div><div class="p">elevation, at 350 m standoff</div></div>
+        <div>
+          <input type="range" id="dial" min="10" max="300" value="35" step="1" aria-label="Altitude uncertainty, centimetres">
+          <div class="scale" id="scale"></div>
+          <p class="dial-note" id="dialNote"></p>
         </div>
-        <p class="note" id="reqNote"></p>
       </div>
-    </div>
-  </main>
+    </section>
 
-  <footer class="foot">
-    <div class="foot-grid">
-      <div>
-        <h5>What this demo is</h5>
-        <p>The error budget from the case study, made adjustable. <b>The proposal, the specified airframe and the cited literature are real</b>; the budget itself is an invented worked illustration, and no flight was ever conducted. It exists to show which term the method actually turns on.</p>
+    <section class="sec" aria-labelledby="s2h">
+      <div class="sec-head"><span class="sec-no">02</span><h2 id="s2h">Which term decides whether this works</h2><span class="rule"></span></div>
+      <p class="sec-sub">Five terms combine in quadrature. Click a term to take it out of the budget entirely — the most generous assumption you can make about it — and watch what the total does.</p>
+      <div class="grid2">
+        <div>
+          <div class="plot">
+            <div class="plot-title"><h3>Swing each term puts into the calibration error</h3><span class="u">low / high · dB</span></div>
+            <div class="tor" id="tor"></div>
+            <p class="figcap"><b>Fig. 1</b> Asymmetric swing bounds per term at the current dial setting, against the 1.5 dB budget span (shaded). The dominant term is drawn heavier: sphere altitude is where the achievable accuracy is decided.</p>
+          </div>
+          <div class="verdict" id="verdict"></div>
+        </div>
+        <aside>
+          <div class="panel">
+            <h4>Quadrature total · vs 1.5 dB budget</h4>
+            <div class="big" id="total">—</div>
+            <div class="sub" id="totalSub"></div>
+            <div class="track"><i id="bar"></i><u id="budgetMark"><i>1.5 budget</i></u></div>
+            <div class="marks"><span>0 dB</span><span id="scaleMax">3 dB</span></div>
+          </div>
+          <div class="panel" id="posTile">
+            <h4>Sphere-position contribution · vs 0.5 dB pass mark</h4>
+            <div class="big" id="posV">—</div>
+            <div class="sub" id="posSub"></div>
+            <div class="track"><i id="posBar"></i><u id="posMark"><i>0.5 pass mark</i></u></div>
+            <div class="marks"><span>0 dB</span><span id="posScaleMax">2 dB</span></div>
+          </div>
+          <div class="panel">
+            <h4>Fixed points of the method</h4>
+            <dl class="kv">
+              <dt>Altitude accuracy the spec demands</dt><dd>±0.35 m, 1&sigma;</dd>
+              <dt>Altitude at which the budget closes</dt><dd id="closeAt">±0.36 m, 1&sigma;</dd>
+              <dt>Angular coverage, one flight pattern</dt><dd>±12&deg; elev.</dd>
+              <dt>Standoff for that coverage</dt><dd>350 m</dd>
+            </dl>
+          </div>
+          <p class="note" id="reqNote"></p>
+        </aside>
       </div>
-      <div>
-        <h5>The finding, in one move</h5>
-        <p>Drag the dial from <b>±0.35 m</b> to the module in our own bill of materials. Every other term in the budget could be made perfect and the method would still miss its own pass mark.</p>
+    </section>
+
+    <section class="sec" aria-labelledby="s3h">
+      <div class="sec-head"><span class="sec-no">03</span><h2 id="s3h">The literature this budget rests on</h2><span class="rule"></span></div>
+      <div class="tablewrap">
+        <table class="sheet-t">
+          <thead>
+            <tr>
+              <th scope="col">Decomposed experiment</th>
+              <th scope="col" class="num">Reported error, dB</th>
+              <th scope="col" class="num">Attributable to positioning, dB</th>
+              <th scope="col">Positioning share</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="name">S-band, sphere + external GNSS<span class="src">tethered sphere, surveyed ground receiver</span></td>
+              <td class="num">1.8</td><td class="num">1.5</td>
+              <td><span class="mono" style="font-size:11px;color:var(--dim)">83%</span><span class="share" aria-hidden="true"><i style="width:83%"></i></span></td>
+            </tr>
+            <tr>
+              <td class="name">Polarimetric X-band<span class="src">sphere calibration, dual-pol comparison</span></td>
+              <td class="num">1.4</td><td class="num">1.1</td>
+              <td><span class="mono" style="font-size:11px;color:var(--dim)">79%</span><span class="share" aria-hidden="true"><i style="width:79%"></i></span></td>
+            </tr>
+            <tr>
+              <td class="name">UAV vs pedestal comparison<span class="src">same sphere flown and fixed</span></td>
+              <td class="num">1.1</td><td class="num">0.9</td>
+              <td><span class="mono" style="font-size:11px;color:var(--dim)">82%</span><span class="share" aria-hidden="true"><i style="width:82%"></i></span></td>
+            </tr>
+            <tr>
+              <td class="name">Altitude-limited trial<span class="src">flight ceiling constrained the geometry</span></td>
+              <td class="num">2.2</td><td class="num">1.9</td>
+              <td><span class="mono" style="font-size:11px;color:var(--dim)">86%</span><span class="share" aria-hidden="true"><i style="width:86%"></i></span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div>
-        <h5 style="visibility:hidden">more</h5>
-        <p>That is the value of failing on paper: the airframe was never built, and the finding cost four literature decompositions rather than a season of flying.</p>
+      <p class="figcap" style="margin:10px 0 0"><b>Table 1</b> The four published calibration experiments whose error budgets were decomposed to build this one: in every case, most of the reported error traces to knowing the sphere's position — which is why the budget above turns on the altitude term, not the airframe.</p>
+    </section>
+
+    <footer class="foot">
+      <div class="foot-grid">
+        <div>
+          <h5>What this demo is</h5>
+          <p>The error budget from the case study, made adjustable. <b>The proposal, the specified airframe and the cited literature are real</b>; the budget itself is an invented worked illustration, and no flight was ever conducted. It exists to show which term the method actually turns on.</p>
+        </div>
+        <div>
+          <h5>The finding, in one move</h5>
+          <p>Drag the dial from <b>±0.35 m</b> to the <b>u-blox NEO-M8N</b> — the module in our own bill of materials. Every other term in the budget could be made perfect and the method would still miss its own pass mark.</p>
+        </div>
+        <div>
+          <h5>Why fail on paper</h5>
+          <p>The airframe was never built, and the finding cost four literature decompositions rather than a season of flying. Even at the demanded ±0.35 m, positioning contributes about 1.4 dB against a 0.5 dB pass mark — the case study says so plainly, and so does this page.</p>
+        </div>
       </div>
-    </div>
-    <p class="conf">Student research at SRM Kattankulathur, written against an ISRO proposal. The altitude term is modelled as linear in the positioning uncertainty and anchored at the published decomposition point of ±0.35 m; terms combine in quadrature. Every figure here is an invented worked illustration rather than a measurement — no flights were conducted, no radar was calibrated and no hardware was built.</p>
-  </footer>
+      <p class="conf">Student research at SRM Kattankulathur, written against an ISRO proposal. The altitude term is modelled as linear in the positioning uncertainty and anchored at the published decomposition point of ±0.35 m; terms combine in quadrature. Every figure here is an invented worked illustration rather than a measurement — no flights were conducted, no radar was calibrated and no hardware was built.</p>
+    </footer>
+  </div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -319,26 +441,29 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
 /* ============================================================
    DATA — the decomposition published in the case study.
 
-   The altitude term is anchored at ±0.35 m → 1.33 dB, which is
-   the point at which the whole budget just closes at 1.5 dB.
-   Everything else is fixed. Terms combine in quadrature.
+   The altitude term is anchored at ±0.35 m → 1.33 dB. The
+   budget closes at ±0.36 m (1.46 dB against 1.50 — a 0.04 dB
+   whisker); the spec demands ±0.35 m. Terms combine in
+   quadrature. Each term carries asymmetric low/high bounds
+   whose sum is the published total swing (unchanged).
    ============================================================ */
 const BUDGET = 1.5;
+const POS_PASS = 0.5;                    /* dB — the agreed failure bar for sphere positioning */
 const ANCHOR_SIGMA = 0.35, ANCHOR_DB = 1.33;
 const K = ANCHOR_DB / ANCHOR_SIGMA;      /* dB per metre of 1σ altitude error */
 
 const TERMS = [
-  { k: "alt",  n: "Sphere position — altitude",   db: null, note: "scales with the dial", on: true },
-  { k: "hor",  n: "Sphere position — horizontal", db: 0.45, note: "held at the published swing", on: true },
-  { k: "rcs",  n: "Sphere radar cross section",   db: 0.30, note: "machined sphere, known to a tolerance", on: true },
-  { k: "air",  n: "Scattering off the airframe",  db: 0.24, note: "the copter is in the beam too", on: true },
-  { k: "rx",   n: "Receiver linearity",           db: 0.11, note: "the radar's own contribution", on: true }
+  { k: "alt",  n: "Sphere position — altitude",   db: null, lo: 0.62, hi: 0.71, note: "scales with the dial", on: true },
+  { k: "hor",  n: "Sphere position — horizontal", db: 0.45, lo: 0.21, hi: 0.24, note: "held at the published swing", on: true },
+  { k: "rcs",  n: "Sphere radar cross-section",   db: 0.30, lo: 0.14, hi: 0.16, note: "machined sphere, known to a tolerance", on: true },
+  { k: "air",  n: "Scattering off the airframe",  db: 0.24, lo: 0.11, hi: 0.13, note: "the copter is in the beam too", on: true },
+  { k: "rx",   n: "Receiver linearity",           db: 0.11, lo: 0.05, hi: 0.06, note: "the radar's own contribution", on: true }
 ];
 
 const PRESETS = [
-  { k: "demand", n: "What the method demands", s: 0.35, sub: "±0.35 m 1σ" },
-  { k: "rtk",    n: "Carrier-phase correction", s: 0.12, sub: "±0.12 m 1σ" },
-  { k: "bom",    n: "The module in our BOM",   s: 1.50, sub: "±1.50 m 1σ" }
+  { k: "demand", n: "What the spec demands",  s: 0.35, sub: "±0.35 m 1σ" },
+  { k: "rtk",    n: "Carrier-phase (RTK)",    s: 0.12, sub: "±0.12 m 1σ" },
+  { k: "bom",    n: "u-blox NEO-M8N",         s: 1.50, sub: "±1.50 m — our BOM" }
 ];
 
 const state = { s: ANCHOR_SIGMA, off: {} };
@@ -346,10 +471,16 @@ const state = { s: ANCHOR_SIGMA, off: {} };
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const dbOf = (t) => (t.k === "alt" ? K * state.s : t.db);
+const boundsOf = (t) => {
+  if (t.k === "alt") { const f = state.s / ANCHOR_SIGMA; return { lo: t.lo * f, hi: t.hi * f }; }
+  return { lo: t.lo, hi: t.hi };
+};
 const live = () => TERMS.filter((t) => !state.off[t.k]);
 const rss = (arr) => Math.sqrt(arr.reduce((a, v) => a + v * v, 0));
 const total = () => rss(live().map(dbOf));
 const positioning = () => rss(TERMS.filter((t) => (t.k === "alt" || t.k === "hor") && !state.off[t.k]).map(dbOf));
+/* total the live budget would give at a stated altitude sigma */
+const totalAt = (s) => rss(live().map((t) => (t.k === "alt" ? K * s : t.db)));
 
 /* the altitude 1σ at which the budget just closes, given which
    terms are currently in it */
@@ -361,6 +492,9 @@ function requiredSigma() {
 }
 </script>
 <script>
+const MINUS = "−";
+const fmt2 = (v) => v.toFixed(2);
+
 function renderPresets() {
   $("presets").innerHTML = PRESETS.map((p) =>
     `<button data-p="${p.k}" aria-pressed="${Math.abs(state.s - p.s) < 0.005}"><b>${esc(p.n)}</b><span>${esc(p.sub)}</span></button>`).join("");
@@ -372,27 +506,67 @@ function renderPresets() {
 
 function renderScale() {
   const pos = (s) => ((s - 0.10) / (3.0 - 0.10)) * 100;
-  $("scale").innerHTML = `<div class="rule"></div>
-    <div class="mk demand" style="left:${pos(0.35)}%"><span>0.35 &mdash; demanded</span></div>
-    <div class="mk bom" style="left:${pos(1.5)}%"><span>1.50 &mdash; our module</span></div>`;
+  $("scale").innerHTML = `<div class="rail"></div>
+    <div class="mk" style="left:${pos(0.12)}%"><span>0.12 · RTK</span></div>
+    <div class="mk demand" style="left:${pos(0.35)}%"><span>0.35 · demanded</span></div>
+    <div class="mk bom" style="left:${pos(1.5)}%"><span>1.50 · NEO-M8N (our BOM)</span></div>`;
+  let note;
+  if (Math.abs(state.s - 1.50) < 0.005)
+    note = `<b>u-blox NEO-M8N — the module in our bill of materials.</b> ±1.50 m 1σ altitude: the receiver the programme would actually have flown.`;
+  else if (Math.abs(state.s - 0.35) < 0.005)
+    note = `<b>±0.35 m — the accuracy the spec demands</b> of the sphere's altitude. The budget itself closes at ±0.36 m.`;
+  else if (Math.abs(state.s - 0.12) < 0.005)
+    note = `<b>±0.12 m — carrier-phase (RTK) correction</b>, if the programme paid for a base station and a corrections link.`;
+  else
+    note = `Custom setting. The marked points reproduce the report's three scenarios.`;
+  $("dialNote").innerHTML = note;
 }
 
 function renderTornado() {
+  const over = total() > BUDGET;
   const vals = TERMS.map((t) => (state.off[t.k] ? 0 : dbOf(t)));
-  const max = Math.max(1.5, ...vals);
-  $("tor").innerHTML = TERMS.map((t, i) => {
-    const v = dbOf(t), off = !!state.off[t.k];
-    const w = (Math.min(v, max) / max) * 50;
-    const dom = !off && v === Math.max(...vals);
-    return `<div class="trow ${off ? "off" : ""}">
-      <button class="n" data-t="${t.k}" title="click to take this term out of the budget">${esc(t.n)}<br><span class="mono" style="font-size:10px;color:var(--faint)">${esc(t.note)}</span></button>
-      <span class="lane">
-        <span class="zero" style="left:50%"></span>
-        <span class="bar ${off ? "off" : dom ? "dom" : ""}" style="left:${50 - w}%;width:${w * 2}%"></span>
+  const bnds = TERMS.map((t) => (state.off[t.k] ? { lo: 0, hi: 0 } : boundsOf(t)));
+  const maxAbs = Math.max(0.85, ...bnds.flatMap((b) => [b.lo, b.hi]));
+  const H = Math.ceil(maxAbs * 1.1 * 10) / 10;             /* axis half-extent, dB */
+  const pos = (x) => 50 + (x / H) * 50;                    /* dB → % of lane */
+  const guides = `<span class="band" style="left:${pos(-BUDGET / 2)}%;width:${pos(BUDGET / 2) - pos(-BUDGET / 2)}%"></span>
+    <span class="gl dash" style="left:${pos(-BUDGET / 2)}%"></span>
+    <span class="gl dash" style="left:${pos(BUDGET / 2)}%"></span>
+    <span class="gl zero" style="left:50%"></span>`;
+
+  const axis = `<div class="taxis">
+      <span class="alab">term</span>
+      <span class="lane" style="position:relative">${guides}
+        <span class="tick" style="left:${pos(-H)}%">${MINUS}${H.toFixed(1)}</span>
+        <span class="tick" style="left:50%">0</span>
+        <span class="tick" style="left:${pos(H)}%">+${H.toFixed(1)}</span>
+        <span class="bandlab">1.5 dB budget span</span>
       </span>
-      <span class="v">${off ? "excluded" : "±" + (v / 2).toFixed(2) + " dB"}</span>
+      <span class="alab r">swing, dB</span>
+    </div>`;
+
+  $("tor").innerHTML = axis + TERMS.map((t, i) => {
+    const v = dbOf(t), off = !!state.off[t.k], b = boundsOf(t);
+    const dom = !off && v === Math.max(...vals);
+    const l = pos(-b.lo), r = pos(b.hi), w = Math.max(0, r - l);
+    let bar, tag = "";
+    if (off) {
+      bar = `<span class="bar offb" style="left:${pos(-t.lo)}%;width:${Math.max(0, pos(t.hi) - pos(-t.lo))}%"></span>`;
+    } else {
+      bar = `<span class="bar ${dom ? "dom" : ""}${dom && over ? " over" : ""}" style="left:${l}%;width:${w}%"></span>`;
+      if (dom) {
+        if (r <= 70) tag = `<span class="domtag${over ? " over" : ""}" style="left:calc(${r}% + 9px)">dominant term</span>`;
+        else if (l >= 30) tag = `<span class="domtag${over ? " over" : ""}" style="right:calc(${100 - l}% + 9px)">dominant term</span>`;
+        else tag = `<span class="domtag inbar" style="right:calc(${100 - r}% + 8px)">dominant term</span>`;
+      }
+    }
+    return `<div class="trow ${off ? "off" : ""}">
+      <button class="n" data-t="${t.k}" aria-pressed="${off}" title="Click to take this term out of the budget">${esc(t.n)}<small>${esc(t.note)}</small></button>
+      <span class="lane">${guides}${bar}${tag}</span>
+      <span class="v">${off ? "excluded" : MINUS + fmt2(b.lo) + " / +" + fmt2(b.hi)}${off ? "" : `<small>swing ${fmt2(v)} dB</small>`}</span>
     </div>`;
   }).join("");
+
   document.querySelectorAll("[data-t]").forEach((b) => (b.onclick = () => {
     state.off[b.dataset.t] = !state.off[b.dataset.t]; render();
     if (state.off[b.dataset.t] && b.dataset.t !== "alt" && total() > BUDGET)
@@ -403,36 +577,61 @@ function renderTornado() {
 function renderGauge() {
   const t = total(), pass = t <= BUDGET, maxScale = Math.max(3, Math.ceil(t));
   $("total").className = "big " + (pass ? "pass" : "fail");
-  $("total").textContent = t.toFixed(2) + " dB";
+  $("total").textContent = fmt2(t) + " dB";
   $("totalSub").innerHTML = pass
     ? `Total calibration error, in quadrature, against a <b>${BUDGET} dB</b> budget. Inside it.`
-    : `Total calibration error, in quadrature, against a <b>${BUDGET} dB</b> budget &mdash; over by ${(t - BUDGET).toFixed(2)} dB.`;
+    : `Total calibration error, in quadrature, against a <b>${BUDGET} dB</b> budget &mdash; over by ${fmt2(t - BUDGET)} dB.`;
   $("bar").className = pass ? "" : "over";
   $("bar").style.width = Math.min(100, (t / maxScale) * 100) + "%";
   $("budgetMark").style.left = (BUDGET / maxScale) * 100 + "%";
   $("scaleMax").textContent = maxScale + " dB";
-  const p = positioning();
-  $("posV").textContent = p.toFixed(2) + " dB";
-  $("posTile").className = "tile " + (p > BUDGET ? "crit" : "");
+
+  /* fix 2 — positioning against its own 0.5 dB pass mark */
+  const p = positioning(), pPass = p <= POS_PASS;
+  const pScale = Math.max(2, Math.ceil(p));
+  $("posV").className = "big " + (pPass ? "pass" : "fail");
+  $("posV").textContent = fmt2(p) + " dB";
+  $("posSub").innerHTML = state.off.alt && state.off.hor
+    ? `Both positioning terms are excluded &mdash; the most generous assumption there is.`
+    : pPass
+      ? `Sphere position (altitude + horizontal, in quadrature) against the agreed failure bar of <b>&le; ${POS_PASS} dB</b>.`
+      : `Sphere position (altitude + horizontal, in quadrature) against the agreed failure bar of <b>&le; ${POS_PASS} dB</b> &mdash; missed by ${fmt2(p - POS_PASS)} dB.${!state.off.alt && !state.off.hor ? ` Even the demanded ±0.35 m sits at ${fmt2(rss([ANCHOR_DB, 0.45]))} dB here.` : ""}`;
+  $("posBar").className = pPass ? "" : "over";
+  $("posBar").style.width = Math.min(100, (p / pScale) * 100) + "%";
+  $("posMark").style.left = (POS_PASS / pScale) * 100 + "%";
+  $("posScaleMax").textContent = pScale + " dB";
+  $("posTile").style.borderColor = pPass ? "" : "var(--crit)";
+
   const c = $("stateChip");
   c.className = "chip " + (pass ? "good" : "crit");
-  c.innerHTML = `<span class="dot ${pass ? "good" : "crit"}"></span>${pass ? "Inside the budget" : "Misses the pass mark"}`;
+  c.innerHTML = `<span class="dot"></span>${pass ? "total inside 1.5 dB budget" : "total misses 1.5 dB budget"}`;
+  const pc = $("posChip");
+  pc.className = "chip " + (pPass ? "good" : "crit");
+  pc.innerHTML = `<span class="dot"></span>${pPass ? "positioning ≤ 0.5 dB" : "positioning over 0.5 dB pass mark"}`;
 }
 
 function renderVerdict() {
   const t = total(), req = requiredSigma(), p = positioning();
   let html;
   if (state.s <= 0.36 && t <= BUDGET) {
-    html = `<div class="note good"><b>This is the pass mark, and it is the whole of the specification.</b> At ±${state.s.toFixed(2)} m the budget closes at ${t.toFixed(2)} dB, and ${p.toFixed(2)} dB of it &mdash; nearly all &mdash; is knowing where the sphere is. The airframe, the motors and the flight pattern are not what this method turns on.</div>`;
+    html = `<div class="note"><b>This is what the spec demands, and it is nearly the whole story.</b> At ±${fmt2(state.s)} m the total is ${fmt2(t)} dB against a 1.50 dB budget, and ${fmt2(p)} dB of it &mdash; nearly all &mdash; is knowing where the sphere is. Set against the agreed <b>0.5 dB positioning pass mark</b>, that ${fmt2(p)} dB still misses: the method fails its own bar even when the spec is met. The airframe, the motors and the flight pattern are not what this method turns on.</div>`;
   } else if (t > BUDGET) {
-    html = `<div class="note crit"><b>Over budget by ${(t - BUDGET).toFixed(2)} dB.</b> The altitude term alone is ${(K * state.s).toFixed(2)} dB. ${req !== null ? `To close the budget the sphere's altitude would have to be known to <b>±${req.toFixed(2)} m</b>, 1σ &mdash; ${(state.s / req).toFixed(1)}× better than the dial is set.` : ""} With the GNSS module in our own bill of materials the method misses its own pass mark, and no airframe decision changes that.</div>`;
+    html = `<div class="note crit"><b>Over budget by ${fmt2(t - BUDGET)} dB.</b> The altitude term alone is ${fmt2(K * state.s)} dB. ${req !== null ? `To close the budget the sphere's altitude would have to be known to <b>±${fmt2(req)} m</b>, 1σ &mdash; ${(state.s / req).toFixed(1)}× better than the dial is set.` : ""} With the u-blox NEO-M8N &mdash; the module in our own bill of materials &mdash; the method misses its own pass mark, and no airframe decision changes that.</div>`;
   } else {
-    html = `<div class="note good"><b>Inside the budget at ${t.toFixed(2)} dB.</b> Positioning still accounts for ${p.toFixed(2)} dB of it. Every term below the top two could be halved and the total would barely move.</div>`;
+    html = `<div class="note"><b>Inside the budget at ${fmt2(t)} dB.</b> Positioning still accounts for ${fmt2(p)} dB of it${p > POS_PASS ? ` &mdash; past the 0.5 dB pass mark on its own` : ""}. Every term below the top two could be halved and the total would barely move.</div>`;
   }
   $("verdict").innerHTML = html;
-  $("reqNote").innerHTML = req === null
-    ? `<b>Altitude excluded.</b> With the term the method turns on removed, what is left is the part nobody was worried about.`
-    : `<b>The budget closes at ±${req.toFixed(2)} m.</b> That is the number the whole proposal reduces to, and it was reached by decomposing four published experiments rather than by flying anything.`;
+
+  /* fix 3 — the closure note, reconciled: the budget closes at
+     ±0.36 m; the spec demands ±0.35 m. */
+  if (req === null) {
+    $("reqNote").innerHTML = `<b>Altitude excluded.</b> With the term the method turns on removed, what is left is the part nobody was worried about.`;
+    $("closeAt").textContent = "—";
+  } else {
+    const tAtDemand = totalAt(ANCHOR_SIGMA);
+    $("reqNote").innerHTML = `<b>The budget closes at ±${fmt2(req)} m; the spec demands ±0.35 m.</b> At ±0.35 m the total is ${fmt2(tAtDemand)} dB against 1.50 &mdash; a ${fmt2(BUDGET - tAtDemand)} dB whisker. That margin is the number the whole proposal reduces to, and it was reached by decomposing four published experiments rather than by flying anything.`;
+    $("closeAt").textContent = `±${fmt2(req)} m, 1σ`;
+  }
 }
 
 let toastT;
@@ -442,7 +641,7 @@ function toast(msg, crit) {
 }
 
 function render() {
-  $("sVal").textContent = state.s.toFixed(2);
+  $("sVal").textContent = fmt2(state.s);
   renderPresets(); renderScale(); renderTornado(); renderGauge(); renderVerdict();
 }
 

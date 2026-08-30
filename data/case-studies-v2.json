@@ -13032,7 +13032,7 @@
         "blocks": [
           {
             "kind": "shot",
-            "alt": "The spend and milestone timeline: eighteen lanes, one per matter, running from April 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane",
+            "alt": "The spend and milestone timeline: eighteen lanes, one per matter, running from February 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane",
             "callouts": [
               {
                 "lead": "Deadline triage is a policy, not a colour.",
@@ -13040,7 +13040,7 @@
               },
               {
                 "lead": "Every date on this screen is ours.",
-                "text": "Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so the two kinds are drawn differently and the origin travels with the date."
+                "text": "Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so this timeline carries only our internal readiness dates — anything statutory is read from the docket where it lives, and the tracker says so in as many words."
               },
               {
                 "lead": "Each firm sees its own matters and only its own.",
