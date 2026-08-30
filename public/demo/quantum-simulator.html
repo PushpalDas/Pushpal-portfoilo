@@ -1124,7 +1124,7 @@ function viewCircuit() {
 
   if (state.n >= 10) {
     h += '<p class="note warn" style="margin-bottom:14px">Ten is the ceiling and it is not configurable. ' +
-      'The state vector doubles per qubit and the operators the engine builds for it quadruple; eleven would put the update past the point where it still feels attached to the click.</p>';
+      'The state vector doubles per qubit and the measured update time doubles with it; eleven would put the update past the point where it still feels attached to the click.</p>';
   }
 
   if (state.loaded) {
@@ -1430,7 +1430,7 @@ function viewCeiling() {
   var h = '<div class="pane-head"><div class="kicker">04 &middot; The ceiling</div>' +
     '<h2>Where the picture stops feeling attached to the click</h2>' +
     '<p>The team agreed before building that the interaction failed if state-vector computation at the chosen ceiling went past 200 ms. ' +
-    'The engine builds a full 2ⁿ × 2ⁿ operator for every gate and three more per qubit for the Bloch vectors, so the cost quadruples with each qubit added. ' +
+    'The state vector doubles with every qubit, and the measured cost tracks that doubling — the Bloch vectors add three more reductions per qubit on top. ' +
     'Run it here and the same shape comes back on different hardware.</p></div>';
 
   h += '<div class="toolrow">' +
@@ -1449,7 +1449,7 @@ function viewCeiling() {
 
   if (state.bench && state.bench.length) {
     h += '<div class="card"><h3>Both curves, and what each step costs</h3>' +
-      '<p class="sub">The growth column is the ratio to the previous measured point. The engine builds operators of size 4ⁿ, so a single qubit added is expected to cost roughly four times as much.</p>' +
+      '<p class="sub">The growth column is the ratio to the previous measured point. The state vector doubles per added qubit, so the expected ratio is about two — which is what the measured column shows.</p>' +
       '<table class="t"><thead><tr><th>Qubits</th><th class="num">Amplitudes</th><th class="num">Deployed</th><th class="num">This browser</th><th class="num">Growth</th><th>Against budget</th></tr></thead><tbody>';
     state.bench.forEach(function (b, i) {
       var di = DEPLOYED.x.indexOf(b.n);

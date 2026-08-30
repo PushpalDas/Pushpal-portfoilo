@@ -1,0 +1,1518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporting and Gantt Dashboard</title>
+<meta name="description" content="Interactive demo of the ClickUp reporting and Gantt dashboard: a read-only timeline with instant scale switching, a bandwidth grid, a status board, and delay analysis read out of the comment thread.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<style>
+/* ============================================================
+   ClickUp reporting and Gantt dashboard — interactive demo.
+
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the
+   sibling AMS demo, so the two read as one product family.
+   Single-theme by intent: this is an internal dashboard, dark
+   by design, every colour painted explicitly so it holds on
+   any host ground.
+
+   The status hues are not the ones the internal build shipped
+   with. Those put "to do" blue next to "in review" violet at a
+   normal-vision ΔE of 13 — a pair full-colour readers struggle
+   to separate, before colour vision deficiency is considered.
+   Re-stepped to blue / amber / magenta / green, which clears
+   the normal-vision floor; the residual protanopia closeness
+   between amber and green is carried by the status word set
+   inside every bar and by the legend, never by hue alone.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+
+  /* Workflow states — validated against this surface. */
+  --st-todo: #3987e5;
+  --st-prog: #c98500;
+  --st-review: #d55181;
+  --st-done: #008300;
+  --st-closed: #6e7385;
+  /* Overdue is a flag, not a state: texture + badge, never a hue. */
+  --crit: #d03b3b;
+  --crit-wash: rgba(208, 59, 59, 0.10);
+
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; }
+select, input { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+/* -- Top bar ----------------------------------------------- */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.96);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 14px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--faint);
+}
+.brand .name { font-size: 15px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+
+.ro-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--body);
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 999px; padding: 5px 11px 5px 9px;
+}
+.ro-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--st-done); }
+.ro-badge b { color: var(--ink); font-weight: 600; }
+
+/* Mode + view tabs */
+.tabs { display: flex; gap: 2px; padding: 0 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tab {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--muted); padding: 10px 13px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab:hover { color: var(--body); }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tab .n { color: var(--faint); margin-left: 6px; font-size: 10px; }
+
+/* Control strip */
+.controls {
+  display: flex; align-items: flex-end; gap: 10px; padding: 13px 20px;
+  border-bottom: 1px solid var(--line); flex-wrap: wrap;
+  background: var(--surface);
+}
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field > label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--faint);
+}
+.field select, .field input {
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: 6px; padding: 7px 10px; font-size: 13px; color: var(--ink);
+  min-width: 190px;
+}
+.field select:hover, .field input:hover { border-color: var(--accent-dim); }
+
+.seg { display: inline-flex; background: var(--surface-2); border: 1px solid var(--line); border-radius: 7px; padding: 2px; }
+.seg button {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 5px; color: var(--muted);
+}
+.seg button[aria-pressed="true"] { background: var(--accent-wash); color: var(--ink); box-shadow: inset 0 0 0 1px var(--accent-dim); }
+.seg button:hover:not([aria-pressed="true"]) { color: var(--body); }
+
+.chip {
+  font-family: var(--mono); font-size: 11px; padding: 6px 11px;
+  border: 1px solid var(--line); border-radius: 999px; color: var(--muted);
+  background: var(--surface-2);
+}
+.chip[aria-pressed="true"] { color: var(--ink); border-color: var(--accent-dim); background: var(--accent-wash); }
+.chip:hover { color: var(--body); }
+
+.spacer { margin-left: auto; }
+
+.perf {
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
+}
+.perf b { color: var(--ink); font-weight: 500; }
+.perf .sep { color: var(--faint); }
+
+/* Legend */
+.legend {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 9px 20px; border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+  background: var(--surface);
+}
+.legend .li { display: inline-flex; align-items: center; gap: 6px; }
+.legend .sw { width: 9px; height: 9px; border-radius: 2px; }
+.legend .sw.hatch { background: var(--crit-wash); box-shadow: inset 0 0 0 1px var(--crit); }
+.legend .title { color: var(--ink); font-weight: 500; letter-spacing: 0.04em; }
+
+/* -- Panels ------------------------------------------------ */
+.panel { padding: 0; }
+.pane-head { padding: 18px 20px 0; }
+.pane-head h2 { font-size: 15px; color: var(--ink); margin: 0 0 4px; font-weight: 600; letter-spacing: -0.01em; }
+.pane-head p { margin: 0; font-size: 13px; color: var(--muted); max-width: 74ch; }
+
+/* Names pinned, chart scrolling. The two SVGs share a y layout, so
+   the rows line up; only the chart moves under the header. */
+.gantt-shell { display: flex; align-items: flex-start; margin: 14px 0 20px; }
+svg.gantt-names {
+  flex: none; display: block;
+  border-right: 1px solid var(--line);
+  background: var(--bg);
+  position: relative; z-index: 2;
+}
+.chart-wrap { overflow-x: auto; flex: 1; min-width: 0; padding-bottom: 4px; }
+svg.gantt { display: block; }
+.chart-wrap::-webkit-scrollbar { height: 9px; }
+.chart-wrap::-webkit-scrollbar-track { background: var(--surface); }
+.chart-wrap::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 5px; }
+.chart-wrap::-webkit-scrollbar-thumb:hover { background: var(--line); }
+
+.notice {
+  margin: 0 20px 18px; padding: 11px 14px;
+  border: 1px solid var(--line); border-left: 2px solid var(--accent-dim);
+  border-radius: 0 7px 7px 0; background: var(--surface);
+  font-size: 12.5px; color: var(--muted);
+}
+.notice b { color: var(--body); font-weight: 500; }
+
+/* Undated */
+.undated { margin: 0 20px 22px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.undated summary {
+  cursor: pointer; padding: 11px 14px; font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body);
+}
+.undated summary::marker { color: var(--faint); }
+.undated .rows { border-top: 1px solid var(--line); }
+.undated .r {
+  display: flex; align-items: center; gap: 12px; padding: 9px 14px;
+  border-bottom: 1px solid var(--line-soft); font-size: 13px;
+}
+.undated .r:last-child { border-bottom: none; }
+.undated .r .nm { color: var(--body); flex: 1; min-width: 0; }
+
+/* -- Tables ------------------------------------------------ */
+.tbl-wrap { overflow-x: auto; padding: 4px 20px 22px; }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.tbl th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.tbl td { padding: 9px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+table.tbl tbody tr:hover { background: var(--surface); }
+table.tbl tbody tr { cursor: pointer; }
+.tname { color: var(--ink); font-family: var(--mono); font-size: 12.5px; }
+.tpath { color: var(--faint); font-size: 11px; }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; color: #05050a; font-weight: 600; white-space: nowrap;
+}
+.badge-late {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 7px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px;
+  color: var(--crit); border: 1px solid var(--crit); background: var(--crit-wash);
+}
+
+.who { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.av {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.02em;
+  background: var(--surface-3); color: var(--body); box-shadow: inset 0 0 0 1px var(--line);
+}
+
+/* -- Bandwidth grid ---------------------------------------- */
+/* -- Bandwidth ---------------------------------------------- */
+table.bw-tbl td { white-space: nowrap; }
+table.bw-tbl tbody tr { cursor: default; }
+.bw-free { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+.bw-free.bw-none { color: var(--faint); }
+/* Overdue open work is the opposite of free, and must not read as a date. */
+.bw-free.bw-late {
+  color: var(--crit); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid var(--crit); background: var(--crit-wash); border-radius: 3px; padding: 2px 7px;
+}
+/* The refusal, styled so it cannot be mistaken for a date. */
+.bw-unknown {
+  display: inline-flex; align-items: baseline; gap: 7px;
+  font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+}
+.bw-why {
+  font-size: 9.5px; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--crit); border: 1px solid var(--crit); background: var(--crit-wash);
+  border-radius: 3px; padding: 2px 6px;
+}
+/* The definition, printed on the sheet rather than kept in a note. */
+.bw-rule {
+  margin: 0 20px 12px; padding: 10px 14px;
+  border: 1px solid var(--line); border-radius: 7px; background: var(--surface-2);
+  font-size: 12.5px; color: var(--muted);
+}
+.bw-rule b { color: var(--body); font-weight: 600; }
+
+/* -- Status board ------------------------------------------ */
+.tiles {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px; padding: 4px 20px 18px;
+}
+.tile {
+  border: 1px solid var(--line); border-radius: 9px; background: var(--surface);
+  padding: 13px 14px; position: relative; overflow: hidden;
+}
+.tile::before { content: ""; position: absolute; inset: 0 auto auto 0; height: 2px; width: 46px; background: var(--st-closed); }
+.tile .v { font-family: var(--mono); font-size: 26px; color: var(--ink); line-height: 1.1; letter-spacing: -0.02em; }
+.tile .l {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--muted); margin-top: 5px;
+}
+.tile .p { position: absolute; top: 13px; right: 14px; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+
+.board { display: grid; grid-template-columns: minmax(240px, 320px) 1fr; gap: 18px; padding: 0 20px 22px; align-items: start; }
+@media (max-width: 760px) { .board { grid-template-columns: 1fr; } }
+.donut-card { border: 1px solid var(--line); border-radius: 9px; background: var(--surface); padding: 16px; }
+.donut-row { display: flex; align-items: center; gap: 16px; }
+.dlegend { display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; min-width: 0; }
+.dlegend .row { display: flex; align-items: center; gap: 8px; }
+.dlegend .sw { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.dlegend .nm { color: var(--body); flex: 1; white-space: nowrap; }
+.dlegend .ct { font-family: var(--mono); color: var(--ink); }
+.dlegend .pc { font-family: var(--mono); color: var(--faint); font-size: 11px; width: 34px; text-align: right; }
+
+.grp { border: 1px solid var(--line); border-radius: 9px; background: var(--surface); overflow: hidden; }
+.grp + .grp { margin-top: 10px; }
+.grp > .h {
+  display: flex; align-items: center; gap: 9px; padding: 10px 13px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--body);
+  border-bottom: 1px solid var(--line);
+}
+.grp > .h .ct { margin-left: auto; color: var(--faint); }
+.grp .r { display: flex; align-items: center; gap: 12px; padding: 8px 13px; border-bottom: 1px solid var(--line-soft); font-size: 13px; cursor: pointer; }
+.grp .r:last-child { border-bottom: none; }
+.grp .r:hover { background: var(--surface-2); }
+.grp .r .nm { color: var(--body); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); font-size: 12.5px; }
+.grp .r .dt { font-family: var(--mono); font-size: 11px; color: var(--faint); white-space: nowrap; }
+
+/* -- Detail drawer ----------------------------------------- */
+.scrim { position: fixed; inset: 0; background: rgba(4,4,7,0.62); z-index: 60; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 100%);
+  background: var(--surface); border-left: 1px solid var(--line);
+  z-index: 61; overflow-y: auto; padding: 0 0 40px;
+}
+.drawer .dh {
+  position: sticky; top: 0; background: var(--surface); border-bottom: 1px solid var(--line);
+  padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px;
+}
+.drawer .dh .t { flex: 1; min-width: 0; }
+.drawer .dh h3 { margin: 0 0 5px; font-size: 15px; color: var(--ink); font-weight: 600; font-family: var(--mono); letter-spacing: -0.01em; }
+.drawer .dh .sub { font-size: 12px; color: var(--faint); font-family: var(--mono); }
+.drawer .x { font-size: 19px; color: var(--muted); line-height: 1; padding: 2px 6px; }
+.drawer .x:hover { color: var(--ink); }
+
+.dsec { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); }
+.dsec > h4 {
+  margin: 0 0 10px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px 16px; }
+.meta .k { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.meta .v { font-size: 13px; color: var(--ink); font-family: var(--mono); margin-top: 3px; }
+
+.deeplink {
+  display: flex; align-items: center; gap: 10px; padding: 11px 13px;
+  border: 1px solid var(--accent-dim); border-radius: 7px; background: var(--accent-wash);
+  font-family: var(--mono); font-size: 12px; color: var(--ink); word-break: break-all;
+}
+.deeplink .arrow { color: var(--accent); flex: none; }
+.deeplink .cp { margin-left: auto; flex: none; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+.thread { display: flex; flex-direction: column; gap: 2px; }
+.cmt { padding: 10px 12px; border-radius: 7px; border: 1px solid transparent; }
+.cmt.used { border-color: var(--accent-dim); background: var(--accent-wash); }
+.cmt .ch { display: flex; align-items: baseline; gap: 9px; margin-bottom: 4px; }
+.cmt .au { font-size: 12.5px; color: var(--ink); font-weight: 500; }
+.cmt .wh { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.cmt .tag {
+  margin-left: auto; font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent);
+}
+.cmt .bd { font-size: 13px; color: var(--body); }
+
+.twoup { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 620px) { .twoup { grid-template-columns: 1fr; } }
+.acct { border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); padding: 13px; }
+.acct h5 {
+  margin: 0 0 8px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--muted); font-weight: 500;
+}
+.acct p { margin: 0; font-size: 13px; color: var(--body); }
+.gen-note { margin-top: 11px; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  z-index: 90; background: var(--surface-3); border: 1px solid var(--line);
+  border-left: 2px solid var(--crit); border-radius: 8px;
+  padding: 11px 15px; font-size: 13px; color: var(--body);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: min(520px, calc(100vw - 32px));
+}
+.toast b { color: var(--ink); font-weight: 600; }
+
+/* Footer */
+.foot {
+  margin-top: auto; border-top: 1px solid var(--line); padding: 16px 20px 26px;
+  display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline;
+  font-family: var(--mono); font-size: 10.5px; color: var(--faint);
+}
+.foot .w { color: var(--body); }
+.foot .w b { color: var(--ink); }
+.foot a { color: var(--muted); }
+</style>
+
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ixana · internal</span>
+        <span class="name">Reporting and Gantt dashboard</span>
+      </div>
+      <span class="ro-badge"><span class="dot"></span><b>Read-only</b> · <span id="writeCount">0</span> writes</span>
+    </div>
+    <div class="tabs" role="tablist" aria-label="View">
+      <button class="tab" role="tab" data-view="gantt" aria-selected="true">Timeline</button>
+      <button class="tab" role="tab" data-view="bandwidth" aria-selected="false">Bandwidth</button>
+      <button class="tab" role="tab" data-view="list" aria-selected="false">List</button>
+      <button class="tab" role="tab" data-view="status" aria-selected="false">Status board</button>
+      <button class="tab" role="tab" data-view="delays" aria-selected="false">Delay analysis<span class="n" id="delayN"></span></button>
+    </div>
+  </div>
+
+  <div class="controls" id="controls"></div>
+  <div class="legend" id="legend"></div>
+  <div class="panel" id="panel"></div>
+
+  <div class="foot">
+    <span class="w"><b id="footWrites">0</b> writes to the source workspace, ever</span>
+    <span>·</span>
+    <span>Task state cached 5 min · generated delay analysis cached 30 min</span>
+    <span>·</span>
+    <span>Pinned to Wed 26 Aug 2026 so the case-study snapshots stay true</span>
+    <span>·</span>
+    <span>Invented data — <a href="/work/ai-pm-customized-multi-view-for-pms">read the case study</a></span>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   1 — Fixed clock
+   The demo is pinned. A live "today" would walk away from the
+   screenshots on the case study within a week, and the whole
+   point of publishing it is that the page can be checked.
+   ============================================================ */
+var TODAY = new Date(2026, 7, 26); // Wed 26 Aug 2026
+var DAY = 86400000;
+
+function d(y, m, day) { return new Date(y, m - 1, day); }
+function dayStart(x) { var t = new Date(x); t.setHours(0, 0, 0, 0); return t; }
+function addDays(x, n) { var t = new Date(x); t.setDate(t.getDate() + n); return t; }
+function fmt(x) {
+  if (!x) return "—";
+  return x.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+function fmtLong(x) {
+  if (!x) return "—";
+  return x.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+/* ============================================================
+   2 — Workflow states
+   Colour is never the only carrier: every bar prints its state,
+   the legend is always on, and the board repeats the counts as
+   a table.
+   ============================================================ */
+var STATES = {
+  todo:   { label: "To do",       color: "#3987e5", terminal: false },
+  prog:   { label: "In progress", color: "#c98500", terminal: false },
+  review: { label: "In review",   color: "#d55181", terminal: false },
+  done:   { label: "Done",        color: "#008300", terminal: true  },
+  closed: { label: "Closed",      color: "#6e7385", terminal: true  }
+};
+var STATE_ORDER = ["todo", "prog", "review", "done", "closed"];
+
+/* ============================================================
+   3 — The people and the work
+   Invented, per the confidentiality note on the case study. The
+   shape is real: a silicon programme where firmware, analog and
+   verification work sits under Space › Folder › List.
+   ============================================================ */
+var PEOPLE = [
+  { id: "a-mehta",   name: "Arjun Mehta",      initials: "AM", role: "Firmware lead" },
+  { id: "l-fischer", name: "Lena Fischer",     initials: "LF", role: "Systems architect" },
+  { id: "p-nair",    name: "Priya Nair",       initials: "PN", role: "Analog design" },
+  { id: "d-okafor",  name: "Daniel Okafor",    initials: "DO", role: "Verification" },
+  { id: "s-duarte",  name: "Sofia Duarte",     initials: "SD", role: "Test engineering" },
+  { id: "r-subram",  name: "Ravi Subramanian", initials: "RS", role: "Layout" }
+];
+var PERSON = {};
+PEOPLE.forEach(function (p) { PERSON[p.id] = p; });
+
+/* A task: id, name, who, state, start, due, planned{start,due}, path, deps, thread, analysis. */
+var TASKS = [
+  // ---- Arjun Mehta · FW: Testbench -------------------------
+  { id: "86a2r91xk", name: "Testbench harness: PER sweep", who: "a-mehta", state: "done",
+    start: d(2026,7,20), due: d(2026,7,31), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"] },
+  { id: "86a2r93bd", name: "CI: nightly regression on four boards", who: "a-mehta", state: "done",
+    start: d(2026,7,27), due: d(2026,8,6), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"],
+    deps: ["86a2r91xk"] },
+  { id: "86a2r95mq", name: "Backwards and forwards capture compatibility", who: "a-mehta", state: "done",
+    start: d(2026,8,3), due: d(2026,8,12), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"],
+    planned: { start: d(2026,8,3), due: d(2026,8,7) } },
+  { id: "86a2r97tt", name: "Testrunner usage in integration suite", who: "a-mehta", state: "prog",
+    start: d(2026,8,10), due: d(2026,8,21), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"],
+    deps: ["86a2r93bd"],
+    planned: { start: d(2026,8,10), due: d(2026,8,18) },
+    thread: [
+      { au: "Arjun Mehta", wh: d(2026,8,12), tx: "Runner is up on boards 1 and 2. Board 3 is still on the old bootloader so the harness can't reset it between cases." },
+      { au: "Daniel Okafor", wh: d(2026,8,14), tx: "Board 3 reflash needs the lab bench and Sofia has it until the 19th for the temperature sweep. I'd rather not interrupt that run.", used: true },
+      { au: "Arjun Mehta", wh: d(2026,8,18), tx: "Agreed — parking board 3. Suite passes on 1, 2 and 4, so we're not blocked on coverage, only on the last board.", used: true },
+      { au: "Sofia Duarte", wh: d(2026,8,20), tx: "Bench frees up on the 21st. Reflash slot is yours from the morning.", used: true }
+    ],
+    analysis: {
+      technical: "Blocked on hardware access, not on code. Three of four boards run the suite; board 3 is on a superseded bootloader and cannot be reset between cases without a reflash, and the reflash needs the temperature bench that is allocated to the YR31 sweep until 21 Aug. No commits stalled — the last push was 18 Aug.",
+      plain: "The work is done on three of the four test boards. The fourth needs a lab machine that another test is using until the 21st. Nobody is stuck waiting on code, and nothing needs a decision — it moves when the bench frees up.",
+      generatedAt: "18 min ago", cached: "30 min"
+    } },
+  { id: "86a2r99wc", name: "Success criteria for PER acceptance", who: "a-mehta", state: "todo",
+    start: d(2026,8,24), due: d(2026,9,4), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"],
+    deps: ["86a2r97tt"] },
+
+  // ---- Arjun Mehta · FW: Link bring-up ---------------------
+  { id: "86a2rb2fk", name: "Host enumeration across seven platforms", who: "a-mehta", state: "done",
+    start: d(2026,7,13), due: d(2026,7,24), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+  { id: "86a2rb4hn", name: "Retry backoff tuning under load", who: "a-mehta", state: "prog",
+    start: d(2026,8,3), due: d(2026,8,14), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"],
+    planned: { start: d(2026,8,3), due: d(2026,8,14) },
+    thread: [
+      { au: "Arjun Mehta", wh: d(2026,8,11), tx: "Backoff curve holds at 40 devices. Falls apart at 80 — median reconnect goes from 340 ms to 2.1 s." },
+      { au: "Lena Fischer", wh: d(2026,8,13), tx: "80 is above what the spec commits to. Do we care, or is this a next-silicon problem?" },
+      { au: "Arjun Mehta", wh: d(2026,8,14), tx: "We care — the demo floor at the November show will have more than 80 in the room. Reopening scope rather than closing this at 40.", used: true },
+      { au: "Lena Fischer", wh: d(2026,8,19), tx: "Then this needs an architecture pass before more tuning. I have time from the 24th; until then it's parked deliberately, not drifting.", used: true }
+    ],
+    analysis: {
+      technical: "Scope was widened after the due date, not missed. The committed target of 40 concurrent devices was met on 11 Aug; the task stayed open because measurements at 80 devices showed reconnect latency degrading 6× and the November demo environment is expected to exceed 80. Requires an architecture review before further tuning; the reviewer is available from 24 Aug.",
+      plain: "This hit its original target on time. It stayed open because we found a problem at roughly twice the load we had promised to handle, and that load is what the November demo will actually see. It is waiting on a design review that starts on the 24th — deliberately paused, not slipping.",
+      generatedAt: "6 min ago", cached: "30 min"
+    } },
+  { id: "86a2rb6pz", name: "Link teardown on host sleep", who: "a-mehta", state: "review",
+    start: d(2026,8,17), due: d(2026,8,28), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+  { id: "86a2rb8qd", name: "Power state machine: doc and diagram", who: "a-mehta", state: "todo",
+    start: d(2026,8,31), due: d(2026,9,11), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+  { id: "86a2rbb01", name: "Legacy pairing path removal", who: "a-mehta", state: "closed",
+    start: d(2026,7,6), due: d(2026,7,17), path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+
+  // ---- Lena Fischer ----------------------------------------
+  { id: "86a2rc1aa", name: "Link budget review for YR31", who: "l-fischer", state: "done",
+    start: d(2026,7,20), due: d(2026,8,4), path: ["Wi-R Silicon", "YR31 bring-up", "Architecture"] },
+  { id: "86a2rc3bb", name: "Concurrency model above 80 devices", who: "l-fischer", state: "todo",
+    start: d(2026,8,24), due: d(2026,9,8), path: ["Wi-R Silicon", "YR31 bring-up", "Architecture"],
+    deps: ["86a2rb4hn"] },
+  { id: "86a2rc5cc", name: "Interface contract with host SDK team", who: "l-fischer", state: "prog",
+    start: d(2026,8,6), due: d(2026,8,20), path: ["Wi-R Silicon", "YR31 bring-up", "Architecture"],
+    thread: [
+      { au: "Lena Fischer", wh: d(2026,8,17), tx: "Draft contract is out for comment. Two open points on error surfacing." },
+      { au: "Priya Nair", wh: d(2026,8,19), tx: "Second point touches the analog fault lines — I need a day on it and I'm in the shuttle review until the 21st.", used: true },
+      { au: "Lena Fischer", wh: d(2026,8,21), tx: "Fine. Holding the contract open rather than shipping it with a guess on fault semantics.", used: true }
+    ],
+    analysis: {
+      technical: "Held open by a single unresolved section on fault surfacing that depends on analog input. Reviewer unavailable until 21 Aug due to a shuttle review. Document is otherwise complete and circulated; the alternative was publishing the contract with unspecified fault semantics, which was rejected.",
+      plain: "One section of the document needs an answer from the analog side, and that person was tied up in another review. The rest is finished. It was held rather than published with a guess in it.",
+      generatedAt: "24 min ago", cached: "30 min"
+    } },
+
+  // ---- Priya Nair -------------------------------------------
+  { id: "86a2rd1dd", name: "LNA post-layout simulation", who: "p-nair", state: "done",
+    start: d(2026,7,13), due: d(2026,7,28), path: ["Wi-R Silicon", "YR31 bring-up", "Analog"] },
+  { id: "86a2rd3ee", name: "PLL jitter characterisation", who: "p-nair", state: "done",
+    start: d(2026,7,29), due: d(2026,8,11), path: ["Wi-R Silicon", "YR31 bring-up", "Analog"] },
+  { id: "86a2rd5ff", name: "TX buffer redesign for lower power", who: "p-nair", state: "prog",
+    start: d(2026,8,5), due: d(2026,8,18), path: ["Wi-R Silicon", "YR31 bring-up", "Analog"],
+    planned: { start: d(2026,8,5), due: d(2026,8,14) },
+    thread: [
+      { au: "Priya Nair", wh: d(2026,8,13), tx: "Second spin of the buffer hits the power target but corner coverage at -40C is thin." },
+      { au: "Ravi Subramanian", wh: d(2026,8,17), tx: "Layout for the second spin lands the 20th. Any sim before then is against the old parasitics.", used: true },
+      { au: "Priya Nair", wh: d(2026,8,20), tx: "Waiting on the layout drop rather than re-running against numbers we know are stale.", used: true }
+    ],
+    analysis: {
+      technical: "Power target met on the second spin; the task remains open for corner coverage at -40 °C, which cannot be closed until updated parasitics arrive with the layout drop scheduled for 20 Aug. Simulating against the previous extraction was considered and rejected as non-informative.",
+      plain: "The main goal — lower power — is met. What is left is checking it still works at the coldest temperature, and that check needs a file from the layout team that arrives on the 20th. Running it early would produce a number nobody could rely on.",
+      generatedAt: "31 min ago", cached: "30 min"
+    } },
+  { id: "86a2rd7gg", name: "Shuttle review pack", who: "p-nair", state: "review",
+    start: d(2026,8,17), due: d(2026,8,21), path: ["Wi-R Silicon", "Tape-out", "Reviews"] },
+
+  // ---- Daniel Okafor ----------------------------------------
+  { id: "86a2re1hh", name: "Coverage model for link layer", who: "d-okafor", state: "done",
+    start: d(2026,7,20), due: d(2026,8,3), path: ["Wi-R Silicon", "YR31 bring-up", "Verification"] },
+  { id: "86a2re3ii", name: "Randomised soak: 72h on four boards", who: "d-okafor", state: "prog",
+    start: d(2026,8,10), due: d(2026,9,4), path: ["Wi-R Silicon", "YR31 bring-up", "Verification"] },
+  { id: "86a2re5jj", name: "Regression triage rota", who: "d-okafor", state: "todo",
+    start: d(2026,8,25), due: d(2026,9,4), path: ["Wi-R Silicon", "YR31 bring-up", "Verification"] },
+  { id: "86a2re7kk", name: "Bootloader rollback test", who: "d-okafor", state: "review",
+    start: d(2026,8,12), due: d(2026,8,19), path: ["Wi-R Silicon", "YR31 bring-up", "Verification"],
+    thread: [
+      { au: "Daniel Okafor", wh: d(2026,8,18), tx: "Rollback works on three boards. Board 3 is the one Arjun parked — same bootloader problem." },
+      { au: "Arjun Mehta", wh: d(2026,8,18), tx: "Same root cause as the testrunner task. One bench slot fixes both.", used: true },
+      { au: "Daniel Okafor", wh: d(2026,8,21), tx: "Leaving in review rather than passing it with a known untested board.", used: true }
+    ],
+    analysis: {
+      technical: "Shares a root cause with the testrunner integration task: board 3 carries a superseded bootloader and is queued behind a bench allocation. Three of four boards pass rollback. Held in review deliberately rather than signed off with one board untested.",
+      plain: "Passes on three of four boards, and the fourth is the same machine that is holding up another task — one lab slot clears both. It is being kept open on purpose rather than marked done with a gap in it.",
+      generatedAt: "12 min ago", cached: "30 min"
+    } },
+
+  // ---- Sofia Duarte -----------------------------------------
+  { id: "86a2rf1ll", name: "Temperature sweep, YR31 samples", who: "s-duarte", state: "prog",
+    start: d(2026,8,10), due: d(2026,8,21), path: ["Wi-R Silicon", "Tape-out", "Bench"] },
+  { id: "86a2rf3mm", name: "Bench calibration and log capture", who: "s-duarte", state: "done",
+    start: d(2026,7,27), due: d(2026,8,7), path: ["Wi-R Silicon", "Tape-out", "Bench"] },
+  { id: "86a2rf5nn", name: "Board 3 reflash slot", who: "s-duarte", state: "prog",
+    start: d(2026,8,24), due: d(2026,8,26), path: ["Wi-R Silicon", "Tape-out", "Bench"],
+    deps: ["86a2rf1ll"] },
+
+  // ---- Ravi Subramanian -------------------------------------
+  { id: "86a2rg1oo", name: "TX buffer layout, second spin", who: "r-subram", state: "prog",
+    start: d(2026,8,11), due: d(2026,8,20), path: ["Wi-R Silicon", "YR31 bring-up", "Layout"] },
+  { id: "86a2rg3pp", name: "Top-level floorplan freeze", who: "r-subram", state: "todo",
+    start: d(2026,8,26), due: d(2026,9,9), path: ["Wi-R Silicon", "Tape-out", "Layout"] },
+  { id: "86a2rg5qq", name: "DRC clean on analog macro", who: "r-subram", state: "done",
+    start: d(2026,7,29), due: d(2026,8,10), path: ["Wi-R Silicon", "YR31 bring-up", "Layout"] },
+
+  // ---- Undated: the tail the workspace never dates ----------
+  { id: "86a2rh1rr", name: "Investigate spurious CRC errors on host 5", who: "a-mehta", state: "todo",
+    path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+  { id: "86a2rh3ss", name: "Write up the backoff findings for the wiki", who: "a-mehta", state: "todo",
+    path: ["Wi-R Silicon", "YR31 bring-up", "FW: Link bring-up"] },
+  { id: "86a2rh5tt", name: "Bootloader: unify the two reset paths", who: "a-mehta", state: "todo",
+    path: ["Wi-R Silicon", "YR31 bring-up", "FW: Testbench"] },
+  { id: "86a2rh7uu", name: "Decide whether host 7 stays in the matrix", who: "l-fischer", state: "todo",
+    path: ["Wi-R Silicon", "YR31 bring-up", "Architecture"] },
+  { id: "86a2rh9vv", name: "Retire the old parasitics extraction script", who: "p-nair", state: "todo",
+    path: ["Wi-R Silicon", "YR31 bring-up", "Analog"] },
+  { id: "86a2rhbww", name: "Spare boards: label and inventory", who: "s-duarte", state: "todo",
+    path: ["Wi-R Silicon", "Tape-out", "Bench"] }
+];
+
+/* Derived flags — computed once, so nothing on the page can
+   disagree with anything else on the page. */
+TASKS.forEach(function (t) {
+  t.person = PERSON[t.who];
+  t.dated = !!(t.start && t.due);
+  t.overdue = !!(t.due && !STATES[t.state].terminal && dayStart(t.due) < dayStart(TODAY));
+  t.lateDays = t.overdue ? Math.round((dayStart(TODAY) - dayStart(t.due)) / DAY) : 0;
+  t.slipped = !!(t.planned && t.due && dayStart(t.due) > dayStart(t.planned.due));
+});
+var BY_ID = {};
+TASKS.forEach(function (t) { BY_ID[t.id] = t; });
+
+var EXPLAINED = TASKS.filter(function (t) { return t.analysis; });
+
+/* ============================================================
+   4 — URL state
+   Every view, scale, person and open task is addressable. The
+   case study links straight into specific states, and those
+   links have to survive.
+   ============================================================ */
+var S = {
+  view: "gantt",
+  scale: "week",
+  person: "a-mehta",
+  states: null,   // null = all
+  lateOnly: false,
+  task: null
+};
+
+function readURL() {
+  var q = new URLSearchParams(location.search);
+  if (q.get("view")) S.view = q.get("view");
+  if (q.get("scale")) S.scale = q.get("scale");
+  if (q.get("person") && PERSON[q.get("person")]) S.person = q.get("person");
+  if (q.get("late") === "1") S.lateOnly = true;
+  if (q.get("task") && BY_ID[q.get("task")]) S.task = q.get("task");
+  if (q.get("states")) S.states = q.get("states").split(",").filter(function (k) { return STATES[k]; });
+}
+function writeURL() {
+  var q = new URLSearchParams();
+  if (S.view !== "gantt") q.set("view", S.view);
+  if (S.scale !== "week") q.set("scale", S.scale);
+  if (S.person !== "a-mehta") q.set("person", S.person);
+  if (S.lateOnly) q.set("late", "1");
+  if (S.states) q.set("states", S.states.join(","));
+  if (S.task) q.set("task", S.task);
+  var s = q.toString();
+  history.replaceState(null, "", s ? "?" + s : location.pathname);
+}
+
+function stateAllowed(k) { return !S.states || S.states.indexOf(k) !== -1; }
+
+/* Tasks in scope for the current view. Timeline and status are
+   per-person; bandwidth and list are the whole team, because
+   those are the questions people bring to them. */
+function scopedTasks() {
+  var base = TASKS.filter(function (t) { return stateAllowed(t.state); });
+  if (S.lateOnly) base = base.filter(function (t) { return t.overdue; });
+  if (S.view === "gantt" || S.view === "status") {
+    base = base.filter(function (t) { return t.who === S.person; });
+  }
+  return base;
+}
+
+/* ============================================================
+   5 — Read-only, demonstrably
+   The counter never moves. Anything that looks like an edit
+   says why it is refused rather than doing nothing.
+   ============================================================ */
+var toastT = null;
+function refuse(what) {
+  var el = document.getElementById("toast");
+  if (el) el.remove();
+  var t = document.createElement("div");
+  t.className = "toast";
+  t.id = "toast";
+  t.setAttribute("role", "status");
+  t.innerHTML = "<b>Read-only by design.</b> " + esc(what) +
+    " This dashboard holds no write credential, so the workspace cannot be changed from here — " +
+    "every element deep-links to the task instead, and 26 of the 31 wrong dates spotted last quarter were fixed that way.";
+  document.body.appendChild(t);
+  clearTimeout(toastT);
+  toastT = setTimeout(function () { t.remove(); }, 6200);
+}
+
+/* ============================================================
+   6 — Timeline geometry
+   One continuous date → x mapping over workdays, with the
+   column unit changing per scale. Switching scale re-runs this
+   over data already in memory: no request, no refetch.
+   ============================================================ */
+function buildWorkdays(from, to) {
+  var out = [], c = dayStart(from), e = dayStart(to);
+  while (c <= e) {
+    var w = c.getDay();
+    if (w !== 0 && w !== 6) out.push(new Date(c));
+    c = addDays(c, 1);
+  }
+  return out;
+}
+
+var SCALE = {
+  week:    { perCol: 1,  colW: 30, label: "Week" },
+  month:   { perCol: 5,  colW: 58, label: "Month" },
+  quarter: { perCol: 22, colW: 104, label: "Quarter" }
+};
+
+/* Trim a label to the pixels actually available rather than to a
+   character count. A monospace guess was close enough until a
+   task called "Backwards and forwards capture compatibility"
+   walked straight through the avatar column. */
+var _mc = null;
+function textPx(s, size, weight) {
+  if (!_mc) _mc = document.createElement("canvas").getContext("2d");
+  _mc.font = (weight || 400) + " " + (size || 12) + 'px "IBM Plex Mono", monospace';
+  return _mc.measureText(s).width;
+}
+function trimPx(s, maxPx, size, weight) {
+  if (textPx(s, size, weight) <= maxPx) return s;
+  var lo = 0, hi = s.length;
+  while (lo < hi) {
+    var mid = (lo + hi + 1) >> 1;
+    if (textPx(s.slice(0, mid) + "…", size, weight) <= maxPx) lo = mid; else hi = mid - 1;
+  }
+  return s.slice(0, lo).replace(/[\s·-]+$/, "") + "…";
+}
+
+function renderGantt(host) {
+  var rows = scopedTasks();
+  var dated = rows.filter(function (t) { return t.dated; });
+  var undated = rows.filter(function (t) { return !t.dated; });
+
+  if (!dated.length) {
+    host.innerHTML = '<div class="notice">No dated tasks match this filter. ' +
+      'The status filter and the late-only toggle both narrow the timeline; clear them to see the rest.</div>';
+    renderUndated(host, undated);
+    return;
+  }
+
+  var cfg = SCALE[S.scale] || SCALE.week;
+  var lo = dated.reduce(function (m, t) { return t.start < m ? t.start : m; }, dated[0].start);
+  var hi = dated.reduce(function (m, t) { return t.due > m ? t.due : m; }, dated[0].due);
+  lo = addDays(lo, -4); hi = addDays(hi, 6);
+  if (dayStart(TODAY) < lo) lo = addDays(TODAY, -4);
+  if (dayStart(TODAY) > hi) hi = addDays(TODAY, 6);
+
+  var wd = buildWorkdays(lo, hi);
+  var N = wd.length;
+  var wdKey = {};
+  wd.forEach(function (x, i) { wdKey[dayStart(x).getTime()] = i; });
+
+  // Fractional workday index, so a weekend date lands between the
+  // Friday and the Monday rather than being snapped onto one of them.
+  function wdIndex(date) {
+    var k = dayStart(date).getTime();
+    if (wdKey[k] !== undefined) return wdKey[k];
+    if (k < dayStart(wd[0]).getTime()) return 0;
+    if (k > dayStart(wd[N - 1]).getTime()) return N - 1;
+    for (var i = 0; i < N - 1; i++) {
+      var a = dayStart(wd[i]).getTime(), b = dayStart(wd[i + 1]).getTime();
+      if (a < k && k < b) return i + (k - a) / (b - a);
+    }
+    return N - 1;
+  }
+
+  /* The names are their own SVG, pinned, and the chart scrolls beside
+     it. One SVG for both was simpler to write and useless to read: at
+     week scale the programme is wider than any screen, and scrolling
+     to today took the task names off the left edge with it. The two
+     share a y layout, so the rows still line up. */
+  var NAME_W = 322, AV_W = 34, NAMES_W = NAME_W + AV_W, RIGHT = 96;
+  var colsTotal = N / cfg.perCol;
+  var chartW = colsTotal * cfg.colW;
+  var HDR_A = 26, HDR_B = 19, HDR = HDR_A + HDR_B;
+  var ROW_H = 40, BAR_H = 15, PLAN_H = 5, PLAN_GAP = 3;
+
+  function X(date) { return (wdIndex(date) / cfg.perCol) * cfg.colW; }
+  function Xend(date) { return ((wdIndex(date) + 1) / cfg.perCol) * cfg.colW; }
+
+  // Group rows under their List, the way the workspace nests them.
+  var groups = [], seen = {};
+  dated.forEach(function (t) {
+    var key = t.path.join(" › ");
+    if (!seen[key]) { seen[key] = { key: key, path: t.path, items: [] }; groups.push(seen[key]); }
+    seen[key].items.push(t);
+  });
+  groups.forEach(function (g) { g.items.sort(function (a, b) { return a.start - b.start; }); });
+
+  var GRP_H = 27;
+  var svgH = HDR + groups.reduce(function (s, g) { return s + GRP_H + g.items.length * ROW_H; }, 0) + 12;
+  var svgW = chartW + RIGHT;
+
+  var pn = [];  // names column
+  var p = [];   // chart
+
+  p.push('<defs>' +
+    '<pattern id="lateHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">' +
+    '<rect width="6" height="6" fill="rgba(208,59,59,0.10)"/>' +
+    '<line x1="0" y1="0" x2="0" y2="6" stroke="#d03b3b" stroke-width="1.1" opacity="0.55"/></pattern>' +
+    '<marker id="depHead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">' +
+    '<path d="M0,0 L6,3 L0,6 z" fill="#4a4e5e"/></marker>' +
+    '</defs>');
+
+  // --- Headers ---------------------------------------------------
+  pn.push('<rect x="0" y="0" width="' + NAMES_W + '" height="' + HDR + '" fill="#101015"/>');
+  pn.push('<text x="12" y="' + (HDR - 15) + '" fill="#4a4e5e" font-size="9" letter-spacing="0.11em" font-family="IBM Plex Mono, monospace">TASK</text>');
+  pn.push('<line x1="0" y1="' + HDR + '" x2="' + NAMES_W + '" y2="' + HDR + '" stroke="#23232d"/>');
+
+  p.push('<rect x="0" y="0" width="' + svgW + '" height="' + HDR + '" fill="#101015"/>');
+  var majorSeen = {};
+  for (var c = 0; c < colsTotal; c++) {
+    var idx = Math.min(N - 1, Math.round(c * cfg.perCol));
+    var dt = wd[idx];
+    var x = c * cfg.colW;
+    var major, minor;
+    if (S.scale === "week") {
+      major = (dt.getDay() === 1 || c === 0) ? dt.toLocaleDateString("en-GB", { month: "short" }) + " " + dt.getDate() : "";
+      minor = ["M", "T", "W", "T", "F"][dt.getDay() - 1] || "";
+    } else if (S.scale === "month") {
+      var mk = dt.toLocaleDateString("en-GB", { month: "long", year: "numeric" });
+      major = majorSeen[mk] ? "" : (majorSeen[mk] = 1, mk);
+      minor = dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    } else {
+      var qk = "Q" + (Math.floor(dt.getMonth() / 3) + 1) + " " + dt.getFullYear();
+      major = majorSeen[qk] ? "" : (majorSeen[qk] = 1, qk);
+      minor = dt.toLocaleDateString("en-GB", { month: "short" });
+    }
+    if (major) {
+      p.push('<text x="' + (x + 5) + '" y="' + (HDR_A - 9) + '" fill="#b4bacb" font-size="10.5" font-family="IBM Plex Mono, monospace">' + esc(major) + "</text>");
+      p.push('<line x1="' + x + '" y1="4" x2="' + x + '" y2="' + svgH + '" stroke="#23232d" stroke-width="1"/>');
+    } else {
+      p.push('<line x1="' + x + '" y1="' + HDR_A + '" x2="' + x + '" y2="' + svgH + '" stroke="#17171e" stroke-width="1"/>');
+    }
+    p.push('<text x="' + (x + cfg.colW / 2) + '" y="' + (HDR - 6) + '" text-anchor="middle" fill="#4a4e5e" font-size="9" font-family="IBM Plex Mono, monospace">' + esc(minor) + "</text>");
+  }
+  p.push('<line x1="0" y1="' + HDR + '" x2="' + svgW + '" y2="' + HDR + '" stroke="#23232d"/>');
+
+  // Today
+  var todayX = X(TODAY), todayW = Math.max(2, cfg.colW / cfg.perCol);
+  p.push('<rect x="' + todayX + '" y="' + HDR + '" width="' + todayW + '" height="' + (svgH - HDR) + '" fill="rgba(208,59,59,0.06)"/>');
+  p.push('<line x1="' + todayX + '" y1="' + HDR_A + '" x2="' + todayX + '" y2="' + svgH + '" stroke="#d03b3b" stroke-width="1.2"/>');
+  p.push('<text x="' + (todayX + 4) + '" y="' + (HDR_A - 9) + '" fill="#d03b3b" font-size="8.5" font-weight="600" font-family="IBM Plex Mono, monospace">TODAY</text>');
+
+  // --- Rows -------------------------------------------------------
+  var y = HDR;
+  var barPos = {};
+  groups.forEach(function (g) {
+    pn.push('<text x="12" y="' + (y + 18) + '" fill="#6e7385" font-size="10" font-family="IBM Plex Mono, monospace" letter-spacing="0.06em">' +
+      esc(trimPx(g.path.join("  ›  ").toUpperCase(), NAMES_W - 24, 10)) + "</text>");
+    pn.push('<line x1="0" y1="' + (y + GRP_H - 1) + '" x2="' + NAMES_W + '" y2="' + (y + GRP_H - 1) + '" stroke="#17171e"/>');
+    p.push('<line x1="0" y1="' + (y + GRP_H - 1) + '" x2="' + svgW + '" y2="' + (y + GRP_H - 1) + '" stroke="#17171e"/>');
+    y += GRP_H;
+
+    g.items.forEach(function (t) {
+      var st = STATES[t.state];
+      var bx = X(t.start), bw = Math.max(cfg.colW / cfg.perCol, Xend(t.due) - bx);
+      var by = y + (ROW_H - BAR_H - PLAN_GAP - PLAN_H) / 2;
+      // Dependency arrows leave from under the source bar rather than
+      // through its middle: routed at the centre line they drew
+      // straight across the due date sitting to its right.
+      barPos[t.id] = { x: bx, w: bw, y: by + BAR_H / 2, bottom: y + ROW_H - 5 };
+
+      var tip = esc(t.name + " — " + st.label + (t.overdue ? ", " + t.lateDays + " days past due" : "") +
+        " · " + fmt(t.start) + " to " + fmt(t.due));
+
+      // Name side
+      pn.push('<g class="row" data-task="' + esc(t.id) + '" style="cursor:pointer">');
+      pn.push('<rect x="0" y="' + y + '" width="' + NAMES_W + '" height="' + ROW_H + '" fill="transparent"><title>' + tip + "</title></rect>");
+      pn.push('<circle cx="12" cy="' + (y + ROW_H / 2) + '" r="3" fill="' + st.color + '"/>');
+      pn.push('<text x="26" y="' + (y + ROW_H / 2 + 4) + '" fill="#f2f3f6" font-size="12" font-family="IBM Plex Mono, monospace">' +
+        esc(trimPx(t.name, NAME_W - 54, 12)) + "</text>");
+      pn.push('<circle cx="' + (NAME_W + 15) + '" cy="' + (y + ROW_H / 2) + '" r="10" fill="#1c1c25" stroke="#23232d"/>');
+      pn.push('<text x="' + (NAME_W + 15) + '" y="' + (y + ROW_H / 2 + 3) + '" text-anchor="middle" fill="#b4bacb" font-size="8" font-weight="600" font-family="IBM Plex Mono, monospace">' +
+        esc(t.person.initials) + "</text>");
+      pn.push("</g>");
+
+      // Chart side
+      p.push('<g class="row" data-task="' + esc(t.id) + '" style="cursor:pointer">');
+      p.push('<rect x="0" y="' + y + '" width="' + svgW + '" height="' + ROW_H + '" fill="transparent"><title>' + tip + "</title></rect>");
+
+      if (t.overdue) {
+        var hx = Xend(t.due), hw = Math.max(3, todayX - hx);
+        p.push('<rect x="' + hx + '" y="' + by + '" width="' + hw + '" height="' + BAR_H + '" fill="url(#lateHatch)"/>');
+      }
+
+      p.push('<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + BAR_H + '" rx="4" fill="' + st.color + '"/>');
+      var lbl = st.label.toLowerCase();
+      if (bw > textPx(lbl, 9.5, 600) + 14) {
+        p.push('<text x="' + (bx + 7) + '" y="' + (by + BAR_H - 4) + '" fill="#f7f8fb" font-size="9.5" font-weight="600" font-family="IBM Plex Mono, monospace">' + esc(lbl) + "</text>");
+      }
+
+      // Planned-dates lane — drawn only where the plan and the dates disagree
+      if (t.planned) {
+        var px = X(t.planned.start), pw = Math.max(3, Xend(t.planned.due) - px);
+        p.push('<rect x="' + px + '" y="' + (by + BAR_H + PLAN_GAP) + '" width="' + pw + '" height="' + PLAN_H + '" rx="2" fill="#4a4e5e" opacity="0.85"><title>' +
+          esc("Originally planned " + fmt(t.planned.start) + " – " + fmt(t.planned.due)) + "</title></rect>");
+      }
+
+      // On a late row the labels start past the hatch, not on top of
+      // it — red text on the red overdue fill was the one thing in
+      // the first build nobody could read.
+      var rx = t.overdue ? Math.max(bx + bw + 9, todayX + 10) : bx + bw + 9;
+      p.push('<text x="' + rx + '" y="' + (by + BAR_H - 3) + '" fill="#6e7385" font-size="10" font-family="IBM Plex Mono, monospace">' + esc(fmt(t.due)) + "</text>");
+      var rx2 = rx + 46;
+      if (t.overdue) {
+        p.push('<text x="' + rx2 + '" y="' + (by + BAR_H - 3) + '" fill="#d03b3b" font-size="9.5" font-weight="600" font-family="IBM Plex Mono, monospace">' + t.lateDays + "d late</text>");
+        rx2 += 50;
+      }
+      if (t.analysis) {
+        p.push('<text x="' + rx2 + '" y="' + (by + BAR_H - 3) + '" fill="#5b7cfa" font-size="9.5" font-family="IBM Plex Mono, monospace">why?</text>');
+      }
+      p.push("</g>");
+      y += ROW_H;
+    });
+  });
+
+  // Dependency arrows last, so they sit above the grid
+  dated.forEach(function (t) {
+    (t.deps || []).forEach(function (dep) {
+      var a = barPos[dep], b = barPos[t.id];
+      if (!a || !b) return;
+      var x1 = a.x + a.w / 2, y1 = a.bottom, x2 = b.x - 3, y2 = b.y;
+      var mx = Math.max(x1 + 8, x2 - 10);
+      p.push('<path d="M' + x1 + "," + y1 + " H" + mx + " V" + y2 + " H" + x2 + '" fill="none" stroke="#4a4e5e" stroke-width="1" marker-end="url(#depHead)" opacity="0.75"/>');
+    });
+  });
+
+  host.innerHTML =
+    '<div class="pane-head"><h2>' + esc(PERSON[S.person].name) + " · " + dated.length + " dated task" + (dated.length === 1 ? "" : "s") + "</h2>" +
+    "<p>Every bar opens the task it stands for. The thin grey lane under a bar is the window the task was originally planned for, drawn only where the plan and the current dates disagree. Weekends are not columns — a five-day task is five columns wide at every scale.</p></div>" +
+    '<div class="gantt-shell">' +
+      '<svg class="gantt-names" width="' + NAMES_W + '" height="' + svgH + '" viewBox="0 0 ' + NAMES_W + " " + svgH + '" role="presentation">' + pn.join("") + "</svg>" +
+      '<div class="chart-wrap"><svg class="gantt" width="' + svgW + '" height="' + svgH + '" viewBox="0 0 ' + svgW + " " + svgH +
+        '" role="img" aria-label="Timeline of ' + esc(PERSON[S.person].name) + "'s dated tasks\">" + p.join("") + "</svg></div>" +
+    "</div>";
+
+  renderUndated(host, undated);
+
+  host.querySelectorAll("g.row").forEach(function (g) {
+    g.addEventListener("click", function () { openTask(g.getAttribute("data-task")); });
+  });
+
+  // Open on today. A timeline that opens on its earliest task shows
+  // the month everyone has stopped thinking about, and the first thing
+  // every reviewer did was scroll right.
+  var wrap = host.querySelector(".chart-wrap");
+  if (wrap) wrap.scrollLeft = Math.max(0, todayX - wrap.clientWidth * 0.62);
+}
+
+function renderUndated(host, undated) {
+  if (!undated.length) return;
+  var h = ['<details class="undated"><summary>Tasks without dates (' + undated.length + ')</summary><div class="rows">'];
+  undated.forEach(function (t) {
+    h.push('<div class="r" data-task="' + esc(t.id) + '" style="cursor:pointer">' +
+      '<span class="pill" style="background:' + STATES[t.state].color + '">' + esc(STATES[t.state].label) + '</span>' +
+      '<span class="nm mono">' + esc(t.name) + '</span>' +
+      '<span class="tpath mono">' + esc(t.path.join(" › ")) + "</span></div>");
+  });
+  h.push("</div></details>");
+  var wrap = document.createElement("div");
+  wrap.innerHTML = h.join("");
+  host.appendChild(wrap.firstChild);
+  host.querySelectorAll(".undated .r").forEach(function (r) {
+    r.addEventListener("click", function () { openTask(r.getAttribute("data-task")); });
+  });
+}
+
+/* ============================================================
+   7 — Bandwidth
+   Allocated days per person per week. The cell that matters is
+   the empty one: an engineer with nothing assigned is almost
+   always mis-recorded, not idle, so it is drawn as a gap in the
+   data rather than as capacity anyone can spend.
+   ============================================================ */
+function weekStart(x) {
+  var t = dayStart(x), off = (t.getDay() + 6) % 7;
+  return addDays(t, -off);
+}
+/* ============================================================
+   7 — Bandwidth
+   The question a lead actually brings to this screen is "when does
+   this person come free", not "how loaded are they" — so the view
+   answers that: the day after their last active dated task, split
+   by in-progress and to-do, plus the gaps in between.
+
+   The decision the case study rests on lives in one column. An
+   assignee whose remaining work carries no dates computes as free
+   from today, which is almost always wrong — the work exists, the
+   dates do not. Those people are not shown as available; they are
+   shown as not known, with the count of what is missing.
+   ============================================================ */
+function bandwidthFor(who) {
+  var mine = TASKS.filter(function (t) { return t.who === who && stateAllowed(t.state); });
+  var active = mine.filter(function (t) { return !STATES[t.state].terminal; });
+  var activeDated = active.filter(function (t) { return t.dated; });
+  var activeUndated = active.filter(function (t) { return !t.dated; });
+
+  /* Three different answers, and collapsing them was the first bug here.
+     Nothing of this kind queued is "none". Work that should already have
+     finished and has not is "overdue" — emphatically not free, which is
+     what a naive latest-end-date comparison reports. Only a real future
+     end date produces a date. */
+  function freeFrom(list) {
+    if (!list.length) return { date: null, label: "none", kind: "none" };
+    var latest = null;
+    list.forEach(function (t) { if (!latest || t.due > latest) latest = t.due; });
+    if (dayStart(latest) < dayStart(TODAY)) return { date: null, label: "overdue", kind: "late" };
+    var next = addDays(latest, 1);
+    return { date: next, label: fmt(next), kind: "date" };
+  }
+
+  var all = freeFrom(activeDated);
+  var prog = freeFrom(activeDated.filter(function (t) { return t.state === "prog"; }));
+  var todo = freeFrom(activeDated.filter(function (t) { return t.state === "todo"; }));
+
+  /* Free days are the working days in the next fortnight that no active
+     dated task covers — counted forward from today, not only as gaps
+     between two tasks. Counting gaps alone reported nothing for anyone
+     whose work simply runs out, which is the commonest case there is. */
+  var horizon = addDays(TODAY, 14);
+  var freeDays = 0, gaps = [], run = null;
+  for (var c = dayStart(TODAY); c <= horizon; c = addDays(c, 1)) {
+    var dw = c.getDay();
+    if (dw === 0 || dw === 6) continue;
+    var day = c.getTime();
+    var busy = activeDated.some(function (t) {
+      return dayStart(t.start).getTime() <= day && day <= dayStart(t.due).getTime();
+    });
+    if (busy) { if (run) { gaps.push(run); run = null; } continue; }
+    freeDays++;
+    if (run) run.to = new Date(c);
+    else run = { from: new Date(c), to: new Date(c) };
+  }
+  if (run) gaps.push(run);
+
+  return {
+    active: active.length, dated: activeDated.length, undated: activeUndated.length,
+    all: all, prog: prog, todo: todo, freeDays: freeDays, gaps: gaps
+  };
+}
+
+function renderBandwidth(host) {
+  var rows = PEOPLE.map(function (p) { return { p: p, b: bandwidthFor(p.id) }; });
+
+  var h = ['<div class="pane-head"><h2>Team bandwidth · who comes free, and when</h2>' +
+    '<p>The day after each person’s last active dated task, split by the work in progress and the work not started, ' +
+    'with the working days that fall free in between over the next fortnight. Nothing here is a forecast — it reads the dates that exist in the workspace today.</p></div>'];
+
+  h.push('<div class="tbl-wrap"><table class="tbl bw-tbl"><thead><tr>' +
+    '<th>Person</th><th>Active</th><th>Dated</th><th>Free from</th>' +
+    '<th>In progress until</th><th>To do until</th><th>Free days · next 14</th>' +
+    "</tr></thead><tbody>");
+
+  rows.forEach(function (r) {
+    var b = r.b;
+    // The whole argument, in one cell.
+    var unknown = b.undated > 0;
+    var freeCell = unknown
+      ? '<span class="bw-unknown" title="' +
+        esc(b.undated + " active task" + (b.undated === 1 ? "" : "s") +
+            " carry no dates, so this person's next free day cannot be computed. Shown as not known rather than as free.") +
+        '">not known <span class="bw-why">' + b.undated + ' undated</span></span>'
+      : '<span class="bw-free bw-' + b.all.kind + '">' + esc(b.all.label) + "</span>";
+    var cell = function (f) { return '<span class="bw-free bw-' + f.kind + '">' + esc(f.label) + "</span>"; };
+
+    h.push("<tr>" +
+      '<td><span class="who"><span class="av">' + esc(r.p.initials) + "</span>" +
+        '<span><span style="color:var(--ink);font-size:13px;display:block">' + esc(r.p.name) + "</span>" +
+        '<span style="font-size:10.5px;color:var(--faint)">' + esc(r.p.role) + "</span></span></span></td>" +
+      '<td class="mono">' + b.active + "</td>" +
+      '<td class="mono" style="color:' + (b.undated ? "var(--warn-ink,#c9973f)" : "var(--muted)") + '">' +
+        b.dated + (b.undated ? " <span style=\"color:var(--faint)\">of " + b.active + "</span>" : "") + "</td>" +
+      "<td>" + freeCell + "</td>" +
+      "<td>" + cell(b.prog) + "</td>" +
+      "<td>" + cell(b.todo) + "</td>" +
+      // Free days are as unknowable as the free-from date when work is undated.
+      '<td class="mono" style="color:var(--muted)">' + (unknown ? '<span class="bw-unknown">not known</span>' :
+        (b.freeDays ? b.freeDays + (b.gaps.length ? ' <span style="color:var(--faint)" title="' +
+          esc(b.gaps.map(function (g) { return fmt(g.from) + "–" + fmt(g.to); }).join(" · ")) +
+          '">in ' + b.gaps.length + (b.gaps.length === 1 ? " run" : " runs") + "</span>" : "") : "—")) +
+        "</td></tr>");
+  });
+  h.push("</tbody></table></div>");
+
+  /* The rule travels with the number. Two teams once held contradictory
+     capacity figures in good faith because the definition lived in a
+     metrics note nobody opened; printing it on the sheet is the whole
+     fix, and it costs one line. */
+  var undatedAll = TASKS.filter(function (t) { return !t.dated && !STATES[t.state].terminal; }).length;
+  var withheld = rows.filter(function (r) { return r.b.undated > 0; }).length;
+  h.push('<div class="bw-rule"><b>Committed capacity</b> means working days on tasks carrying a start date, a due date ' +
+    'and an assignee, excluding weekends. Anything missing one of the three is excluded and counted as undated — ' +
+    '<b>' + undatedAll + '</b> active tasks here, across <b>' + withheld + '</b> of the ' + PEOPLE.length + ' people, ' +
+    'whose next free day is withheld rather than guessed.</div>');
+
+  h.push('<div class="notice"><b>Why “not known” is not “free”.</b> Computed naively, an engineer whose remaining work carries ' +
+    'no dates comes out free from today — the work exists, the dates do not. An earlier build read that as spare capacity, ' +
+    'which would have put real staffing decisions on top of a data gap. The column now refuses to answer and says how much ' +
+    'is missing, which is the only version of this number a lead can act on.</div>');
+
+  host.innerHTML = h.join("");
+}
+
+/* ============================================================
+   8 — List
+   ============================================================ */
+function renderList(host) {
+  var rows = scopedTasks().slice().sort(function (a, b) {
+    if (!a.due) return 1;
+    if (!b.due) return -1;
+    return a.due - b.due;
+  });
+
+  var h = ['<div class="pane-head"><h2>All tasks · ' + rows.length + " row" + (rows.length === 1 ? "" : "s") + "</h2>" +
+    "<p>Every person, sorted by due date. Rows open the same panel the timeline opens.</p></div>"];
+  h.push('<div class="tbl-wrap"><table class="tbl"><thead><tr>' +
+    "<th>Task</th><th>State</th><th>Assignee</th><th>Start</th><th>Due</th><th>Space › list</th>" +
+    "</tr></thead><tbody>");
+  rows.forEach(function (t) {
+    h.push('<tr data-task="' + esc(t.id) + '">' +
+      '<td><div class="tname">' + esc(t.name) + "</div></td>" +
+      '<td><span class="pill" style="background:' + STATES[t.state].color + '">' + esc(STATES[t.state].label) + "</span>" +
+        (t.overdue ? '<span class="badge-late">' + t.lateDays + "d late</span>" : "") + "</td>" +
+      '<td><span class="who"><span class="av">' + esc(t.person.initials) + "</span>" + esc(t.person.name) + "</span></td>" +
+      '<td class="mono" style="color:var(--muted)">' + esc(fmt(t.start)) + "</td>" +
+      '<td class="mono" style="color:' + (t.overdue ? "var(--crit)" : "var(--body)") + '">' + esc(fmt(t.due)) + "</td>" +
+      '<td class="tpath mono">' + esc(t.path.join(" › ")) + "</td></tr>");
+  });
+  h.push("</tbody></table></div>");
+  host.innerHTML = h.join("");
+  host.querySelectorAll("tbody tr").forEach(function (r) {
+    r.addEventListener("click", function () { openTask(r.getAttribute("data-task")); });
+  });
+}
+
+/* ============================================================
+   9 — Status board
+   Six tiles, a donut over the five workflow states, and the
+   same numbers again as a table beside it. Overdue is a tile,
+   never a donut slice: a task can be in progress and overdue at
+   once, and a pie that counts it twice is a pie that lies.
+   ============================================================ */
+function donut(counts, total) {
+  var R = 66, r = 42, cx = 78, cy = 78, a = -Math.PI / 2, out = [];
+  STATE_ORDER.forEach(function (k) {
+    var v = counts[k] || 0;
+    if (!v) return;
+    var sweep = (v / total) * Math.PI * 2;
+    var a2 = a + sweep;
+    var large = sweep > Math.PI ? 1 : 0;
+    var x1 = cx + R * Math.cos(a), y1 = cy + R * Math.sin(a);
+    var x2 = cx + R * Math.cos(a2), y2 = cy + R * Math.sin(a2);
+    var x3 = cx + r * Math.cos(a2), y3 = cy + r * Math.sin(a2);
+    var x4 = cx + r * Math.cos(a), y4 = cy + r * Math.sin(a);
+    out.push('<path d="M' + x1 + "," + y1 + " A" + R + "," + R + " 0 " + large + ",1 " + x2 + "," + y2 +
+      " L" + x3 + "," + y3 + " A" + r + "," + r + " 0 " + large + ",0 " + x4 + "," + y4 + ' Z" fill="' +
+      STATES[k].color + '" stroke="#101015" stroke-width="2"><title>' +
+      esc(STATES[k].label + ": " + v + " of " + total) + "</title></path>");
+    a = a2;
+  });
+  return '<svg width="156" height="156" viewBox="0 0 156 156" role="img" aria-label="Task states">' + out.join("") +
+    '<text x="78" y="76" text-anchor="middle" fill="#f2f3f6" font-size="25" font-family="IBM Plex Mono, monospace">' + total + "</text>" +
+    '<text x="78" y="93" text-anchor="middle" fill="#4a4e5e" font-size="9.5" font-family="IBM Plex Mono, monospace">tasks</text></svg>';
+}
+
+function renderStatus(host) {
+  var rows = scopedTasks();
+  var counts = {}, total = rows.length;
+  STATE_ORDER.forEach(function (k) { counts[k] = 0; });
+  rows.forEach(function (t) { counts[t.state]++; });
+  var overdue = rows.filter(function (t) { return t.overdue; }).length;
+  var pct = function (v) { return total ? Math.round((v / total) * 100) : 0; };
+
+  var h = ['<div class="pane-head"><h2>' + esc(PERSON[S.person].name) + " · status board</h2>" +
+    "<p>The view people land on from a link. Counting it as use would measure link-following rather than use of the product, so it is excluded from the weekly-user figure.</p></div>"];
+
+  h.push('<div class="tiles">');
+  STATE_ORDER.forEach(function (k) {
+    h.push('<div class="tile"><div style="position:absolute;inset:0 auto auto 0;height:2px;width:46px;background:' + STATES[k].color + '"></div>' +
+      '<div class="v">' + counts[k] + '</div><div class="l">' + esc(STATES[k].label) + '</div><div class="p">' + pct(counts[k]) + "%</div></div>");
+  });
+  h.push('<div class="tile"><div style="position:absolute;inset:0 auto auto 0;height:2px;width:46px;background:#d03b3b"></div>' +
+    '<div class="v" style="color:' + (overdue ? "#d03b3b" : "var(--ink)") + '">' + overdue + '</div>' +
+    '<div class="l">Overdue</div><div class="p">' + pct(overdue) + "%</div></div>");
+  h.push("</div>");
+
+  h.push('<div class="board"><div class="donut-card"><div class="donut-row">' + donut(counts, total) + '<div class="dlegend">');
+  STATE_ORDER.forEach(function (k) {
+    h.push('<div class="row"><span class="sw" style="background:' + STATES[k].color + '"></span>' +
+      '<span class="nm">' + esc(STATES[k].label) + '</span><span class="ct">' + counts[k] + '</span><span class="pc">' + pct(counts[k]) + "%</span></div>");
+  });
+  h.push("</div></div>" +
+    '<p style="margin:14px 0 0;font-size:12px;color:var(--muted)">Overdue is deliberately not a slice. ' +
+    "A task can be in progress and overdue at the same time, and a ring that counted it twice would not add up.</p></div>");
+
+  h.push("<div>");
+  STATE_ORDER.forEach(function (k) {
+    var items = rows.filter(function (t) { return t.state === k; });
+    if (!items.length) return;
+    h.push('<div class="grp"><div class="h"><span class="sw" style="width:9px;height:9px;border-radius:2px;background:' + STATES[k].color + ';display:inline-block"></span>' +
+      esc(STATES[k].label) + '<span class="ct">' + items.length + "</span></div>");
+    items.forEach(function (t) {
+      h.push('<div class="r" data-task="' + esc(t.id) + '"><span class="nm">' + esc(t.name) + "</span>" +
+        (t.overdue ? '<span class="badge-late">' + t.lateDays + "d</span>" : "") +
+        '<span class="dt">' + esc(fmt(t.due)) + "</span></div>");
+    });
+    h.push("</div>");
+  });
+  h.push("</div></div>");
+
+  host.innerHTML = h.join("");
+  host.querySelectorAll(".grp .r").forEach(function (r) {
+    r.addEventListener("click", function () { openTask(r.getAttribute("data-task")); });
+  });
+}
+
+/* ============================================================
+   10 — Delay analysis index
+   ============================================================ */
+function renderDelays(host) {
+  var h = ['<div class="pane-head"><h2>Delay analysis · ' + EXPLAINED.length + " open tasks with a written account</h2>" +
+    "<p>Each one is produced by reading the comment thread on the task and writing two accounts of it: one for someone who will touch the code, one for someone who will not. " +
+    "It explains and never predicts — there is no completion date anywhere on this page, because a forecast people plan against needs evidence this data cannot carry.</p></div>"];
+
+  h.push('<div class="tbl-wrap"><table class="tbl"><thead><tr>' +
+    "<th>Task</th><th>Assignee</th><th>State</th><th>Due</th><th>Read from</th><th>Generated</th>" +
+    "</tr></thead><tbody>");
+  EXPLAINED.forEach(function (t) {
+    var used = (t.thread || []).filter(function (c) { return c.used; }).length;
+    h.push('<tr data-task="' + esc(t.id) + '">' +
+      '<td><div class="tname">' + esc(t.name) + "</div></td>" +
+      '<td><span class="who"><span class="av">' + esc(t.person.initials) + "</span>" + esc(t.person.name) + "</span></td>" +
+      '<td><span class="pill" style="background:' + STATES[t.state].color + '">' + esc(STATES[t.state].label) + "</span>" +
+        (t.overdue ? '<span class="badge-late">' + t.lateDays + "d late</span>" : "") + "</td>" +
+      '<td class="mono" style="color:' + (t.overdue ? "var(--crit)" : "var(--body)") + '">' + esc(fmt(t.due)) + "</td>" +
+      '<td class="mono" style="color:var(--muted)">' + used + " of " + (t.thread || []).length + " comments</td>" +
+      '<td class="mono" style="color:var(--faint)">' + esc(t.analysis.generatedAt) + "</td></tr>");
+  });
+  h.push("</tbody></table></div>");
+
+  h.push('<div class="notice"><b>The cache is the part I would change.</b> A generated account is held for thirty minutes, ' +
+    "set to control generation cost before there was any usage data to set it from. The effect is that two people opening the same slipped task " +
+    "ten minutes apart can read different words about it, and that inconsistency has cost more credibility in one meeting than the caching has saved all year.</div>");
+
+  host.innerHTML = h.join("");
+  host.querySelectorAll("tbody tr").forEach(function (r) {
+    r.addEventListener("click", function () { openTask(r.getAttribute("data-task")); });
+  });
+}
+
+/* ============================================================
+   11 — Task drawer
+   ============================================================ */
+function openTask(id) {
+  var t = BY_ID[id];
+  if (!t) return;
+  S.task = id;
+  writeURL();
+  closeDrawer(true);
+
+  var scrim = document.createElement("div");
+  scrim.className = "scrim";
+  scrim.id = "scrim";
+  scrim.addEventListener("click", function () { closeDrawer(); });
+
+  var dr = document.createElement("aside");
+  dr.className = "drawer";
+  dr.id = "drawer";
+  dr.setAttribute("role", "dialog");
+  dr.setAttribute("aria-label", t.name);
+
+  var st = STATES[t.state];
+  var url = "https://app.clickup.com/t/" + t.id;
+  var h = [];
+
+  h.push('<div class="dh"><div class="t"><h3>' + esc(t.name) + "</h3>" +
+    '<div class="sub">' + esc(t.path.join(" › ")) + " · " + esc(t.id) + "</div></div>" +
+    '<button class="x" id="drawerClose" aria-label="Close">✕</button></div>');
+
+  h.push('<div class="dsec"><div class="meta">' +
+    '<div><div class="k">State</div><div class="v"><span class="pill" style="background:' + st.color + '">' + esc(st.label) + "</span>" +
+      (t.overdue ? '<span class="badge-late">' + t.lateDays + "d late</span>" : "") + "</div></div>" +
+    '<div><div class="k">Assignee</div><div class="v">' + esc(t.person.name) + "</div></div>" +
+    '<div><div class="k">Start</div><div class="v">' + esc(fmtLong(t.start)) + "</div></div>" +
+    '<div><div class="k">Due</div><div class="v" style="color:' + (t.overdue ? "var(--crit)" : "var(--ink)") + '">' + esc(fmtLong(t.due)) + "</div></div>" +
+    (t.planned ? '<div><div class="k">Originally planned</div><div class="v" style="color:var(--muted)">' +
+      esc(fmt(t.planned.start)) + " – " + esc(fmt(t.planned.due)) + "</div></div>" : "") +
+    "</div></div>");
+
+  h.push('<div class="dsec"><h4>Deep link — the concession that replaced write-back</h4>' +
+    '<button class="deeplink" id="copyLink"><span class="arrow">↗</span><span>' + esc(url) + '</span><span class="cp">Copy</span></button>' +
+    '<p style="margin:10px 0 0;font-size:12.5px;color:var(--muted)">Every element on every view carries one of these. ' +
+    "It cost a week of plumbing and it is why 26 of the 31 wrong dates spotted last quarter were corrected within a day, without this dashboard ever holding a write credential.</p></div>");
+
+  if (t.thread && t.thread.length) {
+    h.push('<div class="dsec"><h4>Comment thread · ' + t.thread.length + " comments</h4><div class=\"thread\">");
+    t.thread.forEach(function (c) {
+      h.push('<div class="cmt' + (c.used ? " used" : "") + '"><div class="ch">' +
+        '<span class="au">' + esc(c.au) + '</span><span class="wh">' + esc(fmt(c.wh)) + "</span>" +
+        (c.used ? '<span class="tag">read by the analysis</span>' : "") + "</div>" +
+        '<div class="bd">' + esc(c.tx) + "</div></div>");
+    });
+    h.push("</div></div>");
+  }
+
+  if (t.analysis) {
+    h.push('<div class="dsec"><h4>Why it slipped — both accounts, generated together</h4><div class="twoup">' +
+      '<div class="acct"><h5>Technical</h5><p>' + esc(t.analysis.technical) + "</p></div>" +
+      '<div class="acct"><h5>Plain language</h5><p>' + esc(t.analysis.plain) + "</p></div></div>" +
+      '<div class="gen-note">Generated ' + esc(t.analysis.generatedAt) + " from the marked comments · cached for " + esc(t.analysis.cached) +
+      " · gpt-4o-mini · no completion date is produced, by design</div></div>");
+  } else {
+    h.push('<div class="dsec"><h4>Why it slipped</h4>' +
+      '<p style="margin:0;font-size:13px;color:var(--muted)">Nothing to explain — this task is not late and its thread carries no blocker. ' +
+      "An account is written for open tasks whose comments describe a hold; inventing one for the rest would make the ones that matter harder to find.</p></div>");
+  }
+
+  h.push('<div class="dsec"><h4>Edit</h4>' +
+    '<button id="tryEdit" style="border:1px solid var(--line);border-radius:7px;padding:9px 13px;background:var(--surface-2);color:var(--muted);font-size:13px">Change the due date</button>' +
+    '<p style="margin:10px 0 0;font-size:12.5px;color:var(--muted)">Try it.</p></div>');
+
+  dr.innerHTML = h.join("");
+  document.body.appendChild(scrim);
+  document.body.appendChild(dr);
+
+  dr.querySelector("#drawerClose").addEventListener("click", function () { closeDrawer(); });
+  dr.querySelector("#tryEdit").addEventListener("click", function () {
+    refuse("Changing a due date is the one thing this dashboard will never do.");
+  });
+  dr.querySelector("#copyLink").addEventListener("click", function () {
+    if (navigator.clipboard) navigator.clipboard.writeText(url).catch(function () {});
+    var cp = dr.querySelector("#copyLink .cp");
+    if (cp) { cp.textContent = "Copied"; setTimeout(function () { cp.textContent = "Copy"; }, 1600); }
+  });
+  document.addEventListener("keydown", escClose);
+}
+
+function escClose(e) { if (e.key === "Escape") closeDrawer(); }
+function closeDrawer(silent) {
+  var a = document.getElementById("scrim"), b = document.getElementById("drawer");
+  if (a) a.remove();
+  if (b) b.remove();
+  document.removeEventListener("keydown", escClose);
+  if (!silent) { S.task = null; writeURL(); }
+}
+
+/* ============================================================
+   12 — Controls, legend, and the render loop
+   ============================================================ */
+function renderControls() {
+  var c = document.getElementById("controls");
+  var h = [];
+
+  if (S.view === "gantt" || S.view === "status") {
+    h.push('<div class="field"><label for="who">Assignee</label><select id="who">' +
+      PEOPLE.map(function (p) {
+        return '<option value="' + p.id + '"' + (p.id === S.person ? " selected" : "") + ">" + esc(p.name) + " · " + esc(p.role) + "</option>";
+      }).join("") + "</select></div>");
+  }
+
+  if (S.view === "gantt") {
+    h.push('<div class="field"><label>Scale</label><div class="seg" id="scaleSeg">' +
+      ["week", "month", "quarter"].map(function (k) {
+        return '<button data-scale="' + k + '" aria-pressed="' + (S.scale === k) + '">' + SCALE[k].label + "</button>";
+      }).join("") + "</div></div>");
+  }
+
+  h.push('<div class="field"><label>State</label><div style="display:flex;gap:6px;flex-wrap:wrap">' +
+    STATE_ORDER.map(function (k) {
+      return '<button class="chip" data-state="' + k + '" aria-pressed="' + stateAllowed(k) + '">' + esc(STATES[k].label) + "</button>";
+    }).join("") +
+    '<button class="chip" data-late="1" aria-pressed="' + S.lateOnly + '">Late only</button>' +
+    "</div></div>");
+
+  h.push('<div class="spacer"></div>');
+  h.push('<div class="perf" id="perf"></div>');
+  h.push('<button class="chip" id="exportBtn" style="align-self:flex-end">Export SVG</button>');
+
+  c.innerHTML = h.join("");
+
+  var who = document.getElementById("who");
+  if (who) who.addEventListener("change", function () { S.person = who.value; render(); });
+
+  c.querySelectorAll("[data-scale]").forEach(function (b) {
+    b.addEventListener("click", function () { S.scale = b.getAttribute("data-scale"); render(); });
+  });
+  c.querySelectorAll("[data-state]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var k = b.getAttribute("data-state");
+      var cur = S.states ? S.states.slice() : STATE_ORDER.slice();
+      var i = cur.indexOf(k);
+      if (i === -1) cur.push(k); else cur.splice(i, 1);
+      S.states = cur.length === STATE_ORDER.length ? null : cur;
+      render();
+    });
+  });
+  var lateBtn = c.querySelector("[data-late]");
+  if (lateBtn) lateBtn.addEventListener("click", function () { S.lateOnly = !S.lateOnly; render(); });
+
+  document.getElementById("exportBtn").addEventListener("click", function () {
+    var svg = document.querySelector("svg.gantt");
+    if (!svg) { refuse("There is no timeline on screen to export."); return; }
+    var blob = new Blob(['<?xml version="1.0" encoding="UTF-8"?>' + svg.outerHTML], { type: "image/svg+xml" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "timeline-" + S.person + "-" + S.scale + ".svg";
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+}
+
+function renderLegend() {
+  var el = document.getElementById("legend");
+  var items = ['<span class="title">Legend</span>'];
+  STATE_ORDER.forEach(function (k) {
+    items.push('<span class="li"><span class="sw" style="background:' + STATES[k].color + '"></span>' + esc(STATES[k].label) + "</span>");
+  });
+  items.push('<span class="li"><span class="sw hatch"></span>past due</span>');
+  items.push('<span class="li"><span class="sw" style="background:#4a4e5e;height:4px;border-radius:2px"></span>originally planned</span>');
+  items.push('<span class="li"><span class="sw" style="background:#d03b3b;width:2px;height:12px;border-radius:0"></span>today · Wed 26 Aug 2026</span>');
+  el.innerHTML = items.join("");
+}
+
+var FIRST_PAINT = true;
+function render() {
+  var t0 = performance.now();
+  var host = document.getElementById("panel");
+
+  document.querySelectorAll(".tab").forEach(function (b) {
+    b.setAttribute("aria-selected", String(b.getAttribute("data-view") === S.view));
+  });
+  document.getElementById("delayN").textContent = EXPLAINED.length;
+
+  renderControls();
+  renderLegend();
+
+  if (S.view === "bandwidth") renderBandwidth(host);
+  else if (S.view === "list") renderList(host);
+  else if (S.view === "status") renderStatus(host);
+  else if (S.view === "delays") renderDelays(host);
+  else renderGantt(host);
+
+  var ms = performance.now() - t0;
+  var perf = document.getElementById("perf");
+  if (perf) {
+    // First paint carries the cost of building the page; a redraw is
+    // the number the scale switcher is actually judged on, and
+    // labelling both the same made every screenshot show cold start.
+    perf.innerHTML = (FIRST_PAINT ? "first paint " : "redrawn in ") + "<b>" + ms.toFixed(1) +
+      " ms</b> <span class=\"sep\">·</span> <b>0</b> requests <span class=\"sep\">·</span> <b>0</b> writes";
+  }
+  FIRST_PAINT = false;
+  writeURL();
+}
+
+/* Boot */
+readURL();
+// Warm the text measurer before the first paint is timed. The first
+// measureText against a webfont pays for the font, and charging that
+// to the renderer made the timing readout a font-loading benchmark.
+textPx("warm the measurer", 12);
+textPx("warm the measurer", 10);
+textPx("warm the measurer", 9.5, 600);
+document.querySelectorAll(".tab").forEach(function (b) {
+  b.addEventListener("click", function () { S.view = b.getAttribute("data-view"); render(); });
+});
+render();
+if (S.task) openTask(S.task);
+</script>
+</body>
+</html>

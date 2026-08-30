@@ -81,7 +81,6 @@ export const workItems: WorkItem[] = [
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
 		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
-		href: 'https://github.com/PushpalDas/Ixana-Wiki',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
 		demoUrl: 'https://xana-nine.vercel.app/',
 		color: '#dbeafe',

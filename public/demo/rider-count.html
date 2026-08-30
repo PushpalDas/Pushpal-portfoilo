@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rider Counting — The Survey Tool</title>
+<meta name="description" content="Interactive recreation of the Ricky Kids rider-counting survey tool: batch scoring of stored clips into counts, the hand-labelled evaluation, and the enforcement half that was deliberately never built. No frame, face or number plate appears anywhere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Shared shell for the Ricky Kids demos. Palette and type are
+   inherited from the portfolio's case-study system so the demos
+   read as one family with the case studies that link them.
+   Single-theme by design: these are bench tools, dark, with
+   every colour painted so nothing borrows a host background.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--body);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh; max-width: 1340px; margin: 0 auto;
+  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  display: flex; flex-direction: column;
+}
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+
+.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params .spacer { flex: 1; }
+
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] span { color: var(--accent); }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+
+.note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.note b { color: var(--body); font-weight: 500; }
+.note.warn { border-left-color: var(--warn); }
+.note.crit { border-left-color: var(--crit); }
+.note.good { border-left-color: var(--good); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.sheet thead th {
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
+table.sheet tfoot .num { text-align: right; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
+.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+.meterbar.crit > i { background: var(--crit); }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-color: var(--crit-dim); }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+
+<style>
+/* -- Batch console ---------------------------------------- */
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 360px; gap: 18px; align-items: start; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+.runbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+.runbar .copy { flex: 1; min-width: 260px; }
+.runbar h3 { margin: 0 0 5px; font-size: 15px; font-weight: 600; color: var(--ink); }
+.runbar p { margin: 0; font-size: 12.5px; color: var(--muted); max-width: 62ch; }
+.progress { height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; width: 100%; margin-top: 12px; }
+.progress > i { display: block; height: 100%; background: var(--accent); border-radius: 3px; transition: width .12s linear; }
+
+/* the point of the whole page: there is nothing to look at */
+.noframe {
+  display: grid; place-items: center; height: 72px; border-radius: 6px;
+  border: 1px dashed var(--line); background: repeating-linear-gradient(45deg, #0b0b10, #0b0b10 6px, #0e0e14 6px, #0e0e14 12px);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+}
+.clipcell { display: grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: center; }
+
+/* confusion matrix */
+.cm { display: grid; grid-template-columns: 130px repeat(3, 1fr); gap: 4px; }
+.cm .h { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); display: grid; place-items: center; padding: 6px 4px; text-align: center; }
+.cm .rh { justify-content: flex-start; text-align: left; }
+.cm button {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px; padding: 14px 6px;
+  font-family: var(--mono); font-size: 17px; color: var(--body); text-align: center;
+}
+.cm button .s { display: block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-top: 4px; }
+.cm button.diag { border-color: var(--good-dim); background: var(--good-wash); color: var(--good); }
+.cm button.over { border-color: var(--crit-dim); background: var(--crit-wash); color: var(--crit); }
+.cm button.under { border-color: var(--warn-dim); background: var(--warn-wash); color: var(--warn); }
+.cm button[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* lighting bars */
+.lights { display: flex; flex-direction: column; gap: 10px; }
+.lrow { display: grid; grid-template-columns: 96px 1fr 78px; gap: 12px; align-items: center; }
+.lrow .n { font-size: 13px; color: var(--body); }
+.lrow .track { position: relative; height: 20px; border-radius: 5px; background: var(--surface-3); overflow: visible; }
+.lrow .track > i { display: block; height: 100%; border-radius: 5px; background: var(--good); }
+.lrow .track > i.miss { background: var(--crit); }
+.lrow .track > u { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--faint); text-decoration: none; }
+.lrow .v { font-family: var(--mono); font-size: 13px; text-align: right; color: var(--ink); }
+.lrow.excluded .n, .lrow.excluded .v { color: var(--faint); }
+
+/* cut list */
+.cut { display: flex; flex-direction: column; gap: 8px; }
+.cutrow { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); padding: 11px 13px; }
+.cutrow .x { font-family: var(--mono); font-size: 15px; color: var(--crit); line-height: 1.2; }
+.cutrow .t { font-size: 13px; color: var(--ink); }
+.cutrow .w { font-size: 12.5px; color: var(--muted); margin-top: 4px; max-width: 70ch; }
+.zero { border: 1px solid var(--good-dim); background: var(--good-wash); border-radius: 12px; padding: 16px 18px; }
+.zero .big { font-family: var(--mono); font-size: 34px; font-weight: 600; color: var(--good); line-height: 1; }
+.zero .l { font-size: 13px; color: var(--body); margin-top: 8px; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Road safety</span>
+        <h1>Rider counting &mdash; the survey tool</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>Batch over stored clips &middot; <b>2022</b></span>
+      <span class="chip good"><span class="dot good"></span><b>0</b> identifiers extracted</span>
+      <span class="chip" id="stateChip"><span class="dot"></span>Not yet scored</span>
+    </div>
+    <div class="params">
+      <span class="plabel">View</span>
+      <div class="segmented" id="tabs" role="group" aria-label="View"></div>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot"></span><b>1,840</b> hand-labelled clips</span>
+    </div>
+    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0" id="paramNote"></p>
+  </header>
+
+  <main class="pane">
+    <div class="pane-head">
+      <p class="kicker" id="kicker"></p>
+      <h2 id="paneTitle"></h2>
+      <p class="provenance" id="paneProv"></p>
+    </div>
+    <div id="view"></div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A recreation of the tool that shipped, not the enforcement system the paper describes. <b>It reads stored survey clips and writes counts.</b> The detection approach, the three-model sequence and the team are real; every clip, count and accuracy figure here is invented for this sample.</p>
+      </div>
+      <div>
+        <h5>What you will not find on this page</h5>
+        <p>No frame, no face, no number plate, no rider identity, and no camera input. Not blurred or withheld &mdash; <b>never extracted</b>. The survey number is defensible precisely because it identifies nobody.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p>The cost of that is on the third tab: the tool cannot deter a single rider. It can only count them, and counting is what nobody had numbers for.</p>
+      </div>
+    </div>
+    <p class="conf">Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. No footage, frame, face, number plate or person from this project appears here or anywhere in it. The clip identifiers below are generated for the demo and refer to nothing; the accuracy figures, the confusion matrix, the labelled sample size and the timings are invented and reconciled with the case study.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, reconciled with the case study.
+
+   The confusion matrix is the published one. Everything the
+   survey view shows is generated from it, so the counts sheet
+   and the evaluation cannot disagree: 1,840 clips, 1,726 counted
+   correctly, and 64 two-up clips called three-up.
+   ============================================================ */
+const CLASSES = ["1 rider", "2 riders", "3 or more"];
+const MATRIX = [
+  [624, 12, 3],
+  [20, 956, 64],
+  [1, 14, 146]
+];
+
+/* Reported separately, and used in no survey figure below the
+   bar. These are the lighting study's own numbers. */
+const LIGHTING = [
+  { n: "Daylight", v: 96, used: true },
+  { n: "Overcast", v: 93, used: true },
+  { n: "Dusk", v: 78, used: false },
+  { n: "Night", v: 41, used: false }
+];
+const BAR = 90;
+
+/* Where three-up actually happens, from timed observation. */
+const PLACES = [
+  { k: "interior", n: "Interior point", share: 62, of: ["Library loop", "Hostel road", "Workshop lane", "Canteen crossing"] },
+  { k: "gate-stopped", n: "Gate — stopped", share: 26, of: ["Gate 1", "Gate 2", "Gate 3"] },
+  { k: "gate-evaded", n: "Gate — dropped and remounted", share: 12, of: ["Gate 1", "Gate 2", "Gate 3"] }
+];
+
+const CUTS = [
+  { t: "Number-plate recognition", w: "The piece everyone found most impressive, and the piece that changes what the system is. Once a plate is extracted, a count becomes an accusation about a named student — delivered automatically, with no appeal path, by a detector that is 41% accurate after dark." },
+  { t: "The offender database and repeat-offender escalation", w: "Storing who did what requires somebody to be custodian of it. The campus security office had not agreed to hold anything, and a student team is not a custodian." },
+  { t: "Automatic notices and fines", w: "A consequence delivered by a model nobody can question. The paper describes both notification arrows; neither was built." },
+  { t: "Any live camera connection", w: "The concession that became structural. There is no camera input in the shipped tool, so connecting one is a rewrite rather than a setting — which is the only version of that promise worth making." }
+];
+
+const TABS = [
+  { k: "survey", n: "Survey output", s: "what it writes" },
+  { k: "eval", n: "Evaluation", s: "how good is it" },
+  { k: "cut", n: "What it will not do", s: "the other half" }
+];
+
+/* ============================================================
+   DERIVED — the clip set is built from the matrix, so every
+   figure on the survey sheet traces back to a published cell.
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const sum = (a) => a.reduce((x, y) => x + y, 0);
+const pct = (n, d) => (d ? Math.round((n / d) * 1000) / 10 : 0);
+
+function rng(seed) { return function () { seed |= 0; seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+function buildClips() {
+  const r = rng(20220711), out = [];
+  let id = 0;
+  for (let t = 0; t < 3; t++) for (let m = 0; m < 3; m++) {
+    for (let k = 0; k < MATRIX[t][m]; k++) {
+      const truth = t + 1, said = m + 1;
+      /* location: three-up is where the observation says it is */
+      let place;
+      if (truth === 3) { const p = r() * 100; place = p < 62 ? PLACES[0] : p < 88 ? PLACES[1] : PLACES[2]; }
+      else place = r() < 0.55 ? PLACES[0] : PLACES[1];
+      const spot = place.of[(id + Math.floor(r() * place.of.length)) % place.of.length];
+      const day = DAYS[Math.floor(r() * 7)];
+      const hh = String(7 + Math.floor(r() * 14)).padStart(2, "0");
+      const mm = String(Math.floor(r() * 60)).padStart(2, "0");
+      const helmets = Math.max(0, said - Math.floor(r() * (said + 1)));
+      out.push({ id: "CLIP-" + String(++id).padStart(4, "0"), truth, said, place: place.k, spot, day, t: hh + ":" + mm, helmets });
+    }
+  }
+  /* deterministic shuffle so the sheet does not read as sorted by class */
+  for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+  return out;
+}
+const CLIPS = buildClips();
+const TOTAL = CLIPS.length;
+const CORRECT = MATRIX[0][0] + MATRIX[1][1] + MATRIX[2][2];
+const AGREEMENT = Math.round((CORRECT / TOTAL) * 100);
+const TWO_UP = sum(MATRIX[1]);
+const FP = Math.round((MATRIX[1][2] / TWO_UP) * 1000) / 10;
+const THREE_UP_REPORTED = CLIPS.filter((c) => c.said === 3).length;
+const HELMETS = sum(CLIPS.map((c) => c.helmets));
+const RIDERS = sum(CLIPS.map((c) => c.said));
+
+const state = { tab: "survey", scored: false, running: false, done: 0, cell: null, place: "all" };
+</script>
+<script>
+/* ============================================================
+   CHROME
+   ============================================================ */
+function renderTabs() {
+  $("tabs").innerHTML = TABS.map((t) =>
+    `<button data-tab="${t.k}" aria-pressed="${state.tab === t.k}"><b>${esc(t.n)}</b><span>${esc(t.s)}</span></button>`).join("");
+  document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { state.tab = b.dataset.tab; render(); }));
+  const c = $("stateChip");
+  if (state.running) { c.className = "chip warn"; c.innerHTML = `<span class="dot warn"></span>Scoring &middot; <b>${state.done}</b> / ${TOTAL}`; }
+  else if (state.scored) { c.className = "chip good"; c.innerHTML = `<span class="dot good"></span>Scored &middot; <b>40 min</b> for the week`; }
+  else { c.className = "chip"; c.innerHTML = `<span class="dot"></span>Not yet scored`; }
+  $("paramNote").innerHTML = {
+    survey: "<b>One row per clip, and the row is the whole output.</b> A count of motorcycles, a count of riders, a count of helmets. There is no frame behind any of these rows — the clip is read, counted and deleted.",
+    eval: "<b>The guardrail is the false-positive rate, not the headline accuracy.</b> A tool that turns two riders into three produces an alarming statistic, the statistic gets quoted, and nobody can go back and check it.",
+    cut: "<b>Everything left of the control unit shipped; everything right of it did not.</b> The four items below were designed, written up in the paper, and deliberately never built."
+  }[state.tab];
+}
+
+/* ============================================================
+   1 — THE SURVEY OUTPUT
+   ============================================================ */
+function renderSurvey() {
+  const rows = state.place === "all" ? CLIPS : CLIPS.filter((c) => c.place === state.place);
+  const shown = state.scored ? rows.slice(0, 40) : [];
+  const threeUp = rows.filter((c) => c.said === 3).length;
+  $("view").innerHTML = `
+    <div class="runbar">
+      <div class="copy">
+        <h3>${state.scored ? "A survey week, scored" : "Score a survey week"}</h3>
+        <p>${state.scored
+          ? `${TOTAL.toLocaleString()} stored clips read, counted and written to the survey sheet in <b>40 minutes</b>. By hand the same week took nine hours, and produced the same three numbers.`
+          : `${TOTAL.toLocaleString()} clips already collected for the survey. Three detectors in sequence — motorcycle, then riders and helmets inside the cropped motorcycle. Nothing is read from a live camera, because there is no camera input.`}</p>
+        ${state.running ? `<div class="progress"><i style="width:${(state.done / TOTAL) * 100}%"></i></div>` : ""}
+      </div>
+      <button class="btn primary" id="runBtn"${state.running ? " disabled" : ""}>${state.scored ? "Score again" : "Score the week"}</button>
+    </div>
+
+    <div class="tiles" style="margin-bottom:16px">
+      <div class="tile"><div class="v">${state.scored ? rows.length.toLocaleString() : "—"}</div><div class="l">Clips scored</div><div class="p">one row written per clip</div></div>
+      <div class="tile"><div class="v">${state.scored ? threeUp : "—"}</div><div class="l">Three-up instances counted</div><div class="p">rider count ≥ 3</div></div>
+      <div class="tile"><div class="v">${state.scored ? pct(HELMETS, RIDERS) + "%" : "—"}</div><div class="l">Riders wearing a helmet</div><div class="p">same crop, same pass</div></div>
+      <div class="tile good"><div class="v">0</div><div class="l">Identifiers extracted</div><div class="p">no plate, no face, no identity</div></div>
+    </div>
+
+    <div class="toolbar" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+      <div class="segmented" role="group" aria-label="Location">
+        <button data-place="all" aria-pressed="${state.place === "all"}">All points</button>
+        ${PLACES.map((p) => `<button data-place="${p.k}" aria-pressed="${state.place === p.k}">${esc(p.n)}</button>`).join("")}
+      </div>
+      <span class="mono" style="font-size:11px;color:var(--faint)">${state.scored ? "showing the first 40 rows of " + rows.length.toLocaleString() : "score the week to write the sheet"}</span>
+    </div>
+
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Clip</th><th>Point</th><th class="num">Day</th><th class="num">Time</th><th class="num">Motorcycles</th><th class="num">Riders</th><th class="num">Helmets</th><th>Stored frame</th></tr></thead>
+      <tbody>${shown.length ? shown.map((c) => `<tr>
+        <td class="mono" style="white-space:nowrap">${c.id}</td>
+        <td class="name">${esc(c.spot)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(PLACES.find((p) => p.k === c.place).n)}</span></td>
+        <td class="num">${c.day}</td><td class="num">${c.t}</td>
+        <td class="num">1</td>
+        <td class="num" style="color:${c.said >= 3 ? "var(--crit)" : "var(--body)"}">${c.said}</td>
+        <td class="num">${c.helmets}</td>
+        <td><div class="noframe">no frame stored</div></td></tr>`).join("")
+        : `<tr><td colspan="8" style="padding:28px 12px;text-align:center;color:var(--muted)">The sheet is empty until the batch runs.</td></tr>`}
+      </tbody>
+    </table></div>
+    <p class="note"><b>The clip is deleted once it is scored.</b> That was the condition the campus security office added, and it is why the survey number can exist at all: there is nothing left for anyone to be custodian of. It is also why this tool can never be demonstrated working in real time.</p>`;
+  $("runBtn").onclick = runBatch;
+  document.querySelectorAll("[data-place]").forEach((b) => (b.onclick = () => { state.place = b.dataset.place; render(); }));
+}
+
+let batchT;
+function runBatch() {
+  clearInterval(batchT);
+  state.running = true; state.scored = false; state.done = 0; render();
+  batchT = setInterval(() => {
+    state.done += 137;
+    if (state.done >= TOTAL) { state.done = TOTAL; clearInterval(batchT); state.running = false; state.scored = true; render();
+      toast(`${TOTAL.toLocaleString()} clips scored in 40 minutes — ${THREE_UP_REPORTED} three-up instances counted, 0 identifiers extracted.`); return; }
+    renderTabs(); const p = document.querySelector(".progress > i"); if (p) p.style.width = (state.done / TOTAL) * 100 + "%";
+  }, 90);
+}
+
+/* ============================================================
+   2 — EVALUATION
+   ============================================================ */
+function renderEval() {
+  const cell = state.cell;
+  $("view").innerHTML = `
+    <div class="grid2">
+      <div>
+        <h3 style="margin:0 0 4px;font-size:14px;color:var(--ink);font-weight:600">Model count against a hand label agreed by two people</h3>
+        <p style="margin:0 0 14px;font-size:12.5px;color:var(--muted)">Click a cell. The diagonal is agreement; everything else is an error, and the direction of the error is the finding.</p>
+        <div class="cm">
+          <span class="h"></span>${CLASSES.map((c) => `<span class="h">model said<br>${esc(c)}</span>`).join("")}
+          ${MATRIX.map((row, t) => `<span class="h rh">truth &middot; ${esc(CLASSES[t])}</span>` + row.map((v, m) => {
+            const kind = t === m ? "diag" : m > t ? "over" : "under";
+            return `<button data-cell="${t}-${m}" class="${kind}" aria-pressed="${cell === t + "-" + m}">${v}<span class="s">${t === m ? "correct" : m > t ? "over-counted" : "under-counted"}</span></button>`;
+          }).join("")).join("")}
+        </div>
+        ${cell ? cellNote(cell) : `<p class="note"><b>64 against 14.</b> Two riders called three happens more than four times as often as three called two. For an enforcement tool that is a wrongly accused student; for a survey number it is a problem overstated — and overstating is the direction that gets quoted.</p>`}
+      </div>
+      <div>
+        <div class="tiles" style="grid-template-columns:1fr">
+          <div class="tile good"><div class="v">${AGREEMENT}%</div><div class="l">Rider-count agreement with hand labels</div><div class="p">${CORRECT.toLocaleString()} of ${TOTAL.toLocaleString()} clips</div></div>
+          <div class="tile crit"><div class="v">${FP}%</div><div class="l">False-positive rate (guardrail)</div><div class="p">${MATRIX[1][2]} of ${TWO_UP.toLocaleString()} two-rider clips called three</div></div>
+        </div>
+        <h3 style="margin:18px 0 10px;font-size:14px;color:var(--ink);font-weight:600">Accuracy by lighting condition</h3>
+        <div class="lights">
+          ${LIGHTING.map((l) => `<div class="lrow ${l.used ? "" : "excluded"}">
+            <span class="n">${esc(l.n)}</span>
+            <span class="track"><i class="${l.v >= BAR ? "" : "miss"}" style="width:${l.v}%"></i><u style="left:${BAR}%" title="the ${BAR}% bar"></u></span>
+            <span class="v">${l.v}%</span></div>`).join("")}
+        </div>
+        <p class="note warn"><b>Dusk and night are reported and used in nothing.</b> They sit below the 90% bar we agreed a survey number needs, so they appear in no figure on the survey tab. Night is not a degradation — the model is counting shapes it cannot resolve, and its confidence does not fall to match.</p>
+      </div>
+    </div>`;
+  document.querySelectorAll("[data-cell]").forEach((b) => (b.onclick = () => { state.cell = state.cell === b.dataset.cell ? null : b.dataset.cell; render(); }));
+}
+
+function cellNote(cell) {
+  const [t, m] = cell.split("-").map(Number), v = MATRIX[t][m];
+  if (t === m) return `<p class="note good"><b>${v.toLocaleString()} clips counted correctly.</b> ${esc(CLASSES[t])} on the ground, ${esc(CLASSES[m])} in the sheet. This is the diagonal, and it is the only part of the matrix a survey number is built from.</p>`;
+  if (m > t) return `<p class="note crit"><b>${v} clips over-counted.</b> ${esc(CLASSES[t])} on the ground, reported as ${esc(CLASSES[m])}. In a survey this inflates the problem. In the enforcement system we did not build, each of these ${v} is a notice sent to somebody who did nothing — which is the argument for cutting the plate reader in one number.</p>`;
+  return `<p class="note warn"><b>${v} clips under-counted.</b> ${esc(CLASSES[t])} on the ground, reported as ${esc(CLASSES[m])}. A missed instance understates the problem, which is the safer direction for a survey and the useless direction for enforcement.</p>`;
+}
+
+/* ============================================================
+   3 — WHAT IT WILL NOT DO
+   ============================================================ */
+function renderCut() {
+  $("view").innerHTML = `
+    <div class="grid2">
+      <div>
+        <div class="cut">${CUTS.map((c) => `<div class="cutrow"><span class="x">&times;</span><div><div class="t">${esc(c.t)}</div><div class="w">${esc(c.w)}</div></div></div>`).join("")}</div>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px">
+          <button class="btn" id="liveBtn">Connect a live camera</button>
+          <span class="mono" style="font-size:11px;color:var(--faint)">there is no input to connect one to</span>
+        </div>
+        <p class="note"><b>What the restraint cost.</b> The system cannot stop a single rider — it can only count them. That is the trade the page is about: enforcement needs to be right about a person, and measurement only needs to be right on average.</p>
+      </div>
+      <div>
+        <div class="zero">
+          <div class="big">0</div>
+          <div class="l">number plates read, faces detected, riders identified, records kept and cameras connected — across ${TOTAL.toLocaleString()} clips.</div>
+        </div>
+        <p class="note" style="margin-top:16px"><b>Not blurred. Not withheld. Never extracted.</b> There is no optical character recognition and no face detection anywhere in the pipeline, so there is no stage at which an identifier exists and is then discarded.</p>
+      </div>
+    </div>`;
+  $("liveBtn").onclick = () => toast("There is no camera input in this tool. Connecting one is a rewrite rather than a setting — which was the point of making the concession structural instead of procedural.", true);
+}
+
+/* ============================================================
+   RENDER + INIT
+   ============================================================ */
+let toastT;
+function toast(msg, crit) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (crit ? " crit" : "");
+  clearTimeout(toastT); toastT = setTimeout(() => (t.className = "toast"), 5200);
+}
+
+const HEADS = {
+  survey: ["Batch over stored clips · no live feed", "Survey output", "One row per clip: how many motorcycles, how many riders, how many helmets. This is everything the tool produces, and the reason it was allowed to exist."],
+  eval: ["Hand-labelled evaluation set · two labellers", "Evaluation", "A model evaluated on its own training distribution will tell you it is excellent. Two people disagreeing over a frame is what makes the number mean anything."],
+  cut: ["Designed, written up, never built", "What it will not do", "The paper describes a full enforcement pipeline. Deciding not to build most of it took longer than building the detector."]
+};
+
+function render() {
+  const h = HEADS[state.tab];
+  $("kicker").textContent = h[0]; $("paneTitle").textContent = h[1]; $("paneProv").textContent = h[2];
+  renderTabs();
+  ({ survey: renderSurvey, eval: renderEval, cut: renderCut }[state.tab])();
+}
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  const tab = q.get("view");
+  if (tab && TABS.some((t) => t.k === tab)) state.tab = tab;
+  if (q.get("scored") !== "0") state.scored = true;
+  if (q.get("cell")) state.cell = q.get("cell");
+  if (q.get("place")) state.place = q.get("place");
+  render();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

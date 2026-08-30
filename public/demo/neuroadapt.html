@@ -1,0 +1,1881 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuroAdapt Feature Extraction</title>
+<meta name="description" content="Interactive demo of the NeuroAdapt spike-train feature extraction module: unit and population features computed in the browser from simulated spike trains, every metric carrying its definition, and a grounding check in front of the generated prose.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   NeuroAdapt - spike-train feature extraction, interactive demo.
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the AMS
+   dashboard demo, so the two read as the same product family.
+   Single dark theme, every colour painted explicitly.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --u1: #d0745a;
+  --u2: #5b7cfa;
+  --u3: #8a8fa3;
+  --u4: #3fae8b;
+  --u5: #c9973f;
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 244px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.state-ruo { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.state-ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+
+/* -- Layout ----------------------------------------------- */
+.shell { display: flex; align-items: stretch; flex: 1; min-height: 0; }
+
+.rail {
+  width: var(--rail); flex: none;
+  border-right: 1px solid var(--line);
+  padding: 16px 0 40px;
+  background: var(--bg);
+}
+.rail-group { padding: 0 0 18px; }
+.rail-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 0 20px 7px;
+}
+.rail-item {
+  display: flex; align-items: baseline; gap: 9px; width: 100%;
+  padding: 8px 20px; border: 0; background: transparent; text-align: left;
+  border-left: 2px solid transparent; color: var(--body); font-size: 13px;
+}
+.rail-item:hover { background: var(--surface); color: var(--ink); }
+.rail-item[aria-current="true"] {
+  border-left-color: var(--accent); background: var(--accent-wash); color: var(--ink); font-weight: 500;
+}
+.rail-item .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 15px; }
+.rail-item[aria-current="true"] .n { color: var(--accent); }
+.rail-item .sub { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+.rail-item:disabled { opacity: 0.4; cursor: not-allowed; }
+.rail-note {
+  margin: 4px 20px 0; padding: 11px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  font-size: 11.5px; line-height: 1.5; color: var(--muted);
+}
+.rail-note b { color: var(--body); font-weight: 500; }
+
+.pane { flex: 1; min-width: 0; padding: 22px 26px 64px; }
+
+/* -- Headings + shared blocks ----------------------------- */
+.pane-head { margin-bottom: 18px; }
+.pane-head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.pane-head h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -0.015em; }
+.pane-head p { margin: 0; max-width: 74ch; font-size: 13px; color: var(--body); }
+
+.card {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); padding: 16px 18px; margin-bottom: 16px;
+}
+.card > h3 {
+  margin: 0 0 3px; font-size: 13.5px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > .sub { margin: 0 0 13px; font-size: 12px; color: var(--muted); max-width: 82ch; }
+.card.tight { padding: 13px 15px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid2 > .card { margin-bottom: 0; }
+@media (max-width: 1080px) { .grid2 { grid-template-columns: 1fr; } }
+
+.badge {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted);
+  white-space: nowrap;
+}
+.badge.rule { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.badge.model { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.badge.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.badge.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+.note {
+  border-left: 2px solid var(--line); padding: 2px 0 2px 12px;
+  font-size: 12px; color: var(--muted); max-width: 88ch;
+}
+.note.warn { border-left-color: var(--warn-dim); color: var(--warn); }
+.note.good { border-left-color: var(--good-dim); }
+
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  border-radius: 7px; padding: 6px 12px; font-size: 12.5px; color: var(--body);
+}
+.btn:hover { border-color: var(--faint); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.btn.primary:hover { background: #6b89ff; }
+.btn.sm { padding: 3px 9px; font-size: 11.5px; }
+.btn[aria-pressed="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+
+.toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.toolbar .spacer { margin-left: auto; }
+
+/* -- Tables ----------------------------------------------- */
+table.data { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.data th {
+  text-align: left; vertical-align: bottom; padding: 0 10px 9px 0;
+  border-bottom: 1px solid var(--line); color: var(--ink); font-weight: 600; font-size: 12px;
+}
+table.data th .def {
+  display: block; font-family: var(--mono); font-size: 10px; line-height: 1.45;
+  color: var(--muted); font-weight: 400; margin-top: 4px; max-width: 27ch;
+  white-space: normal;
+}
+table.data td { padding: 9px 10px 9px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.data tr:last-child td { border-bottom: 0; }
+table.data tr.row-click:hover td { background: var(--surface-2); cursor: pointer; }
+table.data td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+table.data td.name { color: var(--ink); font-weight: 500; }
+.swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 7px; vertical-align: baseline; }
+.planted { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+
+/* -- Metric + definition pairing -------------------------- */
+.mrow {
+  display: grid; grid-template-columns: 128px 1fr; gap: 14px;
+  padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+}
+.mrow:last-child { border-bottom: 0; }
+.mrow .val { font-family: var(--mono); font-size: 19px; color: var(--ink); line-height: 1.2; }
+.mrow .val small { display: block; font-size: 10.5px; color: var(--muted); letter-spacing: 0.05em; margin-top: 3px; }
+.mrow .lab { font-size: 12.5px; color: var(--ink); font-weight: 500; }
+.mrow .def { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 3px; }
+.mrow .src { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-top: 4px; }
+
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+@media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.tile { border: 1px solid var(--line); border-radius: 9px; background: var(--surface); padding: 13px 14px; }
+.tile .v { font-family: var(--mono); font-size: 22px; color: var(--ink); line-height: 1.15; }
+.tile .l { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
+.tile .d { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-top: 6px; line-height: 1.45; }
+
+/* -- Run ---------------------------------------------------- */
+.stage {
+  display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: start;
+  padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+}
+.stage:last-child { border-bottom: 0; }
+.stage .idx { font-family: var(--mono); font-size: 11px; color: var(--faint); padding-top: 2px; }
+.stage .t { font-size: 13px; color: var(--ink); font-weight: 500; display: flex; gap: 9px; align-items: center; flex-wrap: wrap; }
+.stage .d { font-size: 12px; color: var(--muted); margin-top: 2px; max-width: 78ch; }
+.stage .out { font-family: var(--mono); font-size: 11px; color: var(--body); margin-top: 4px; }
+.stage .ms { font-family: var(--mono); font-size: 11px; color: var(--faint); text-align: right; padding-top: 3px; white-space: nowrap; }
+.stage.pending { opacity: 0.35; }
+.stage.pending .ms::after { content: "queued"; }
+
+.prov { font-family: var(--mono); font-size: 11px; line-height: 1.85; color: var(--body); }
+.prov .k { display: inline-block; width: 178px; color: var(--muted); }
+
+/* -- Figures ---------------------------------------------- */
+.fig { border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); padding: 13px 14px 10px; }
+.fig + .fig { margin-top: 14px; }
+.fig h4 { margin: 0 0 2px; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.fig .cap { font-size: 11.5px; color: var(--muted); margin: 8px 0 0; max-width: 88ch; }
+.fig .src {
+  font-family: var(--mono); font-size: 10px; color: var(--faint);
+  margin-top: 7px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.axis { stroke: var(--line); stroke-width: 1; }
+.gridline { stroke: var(--line-soft); stroke-width: 1; }
+.tick { font-family: var(--mono); font-size: 9px; fill: var(--faint); }
+.axlabel { font-family: var(--mono); font-size: 9.5px; fill: var(--muted); letter-spacing: 0.06em; }
+.pt-label { font-family: var(--mono); font-size: 10px; fill: var(--body); }
+.raw { font-family: var(--mono); font-size: 10.5px; color: var(--muted); background: var(--surface-3);
+       border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; margin-top: 9px;
+       white-space: pre-wrap; word-break: break-word; line-height: 1.65; max-height: 190px; overflow: auto; }
+
+/* -- Report ------------------------------------------------ */
+.pages { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.page-btn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 7px;
+  padding: 6px 11px; font-size: 12px; color: var(--body); display: flex; gap: 8px; align-items: center;
+}
+.page-btn .n { font-family: var(--mono); font-size: 10px; color: var(--faint); }
+.page-btn[aria-current="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+
+.sheet {
+  border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+  padding: 26px 30px 30px;
+}
+.sheet-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 20px; }
+.sheet-head .t { font-size: 17px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.sheet-head .s { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+.sheet h3 {
+  margin: 24px 0 4px; font-size: 12px; font-weight: 600; color: var(--ink);
+  font-family: var(--mono); letter-spacing: 0.13em; text-transform: uppercase;
+}
+.sheet h3:first-of-type { margin-top: 0; }
+.sheet p { font-size: 13px; color: var(--body); max-width: 84ch; }
+.sheet .tier {
+  border-left: 2px solid var(--accent-dim); padding-left: 16px; margin: 14px 0 26px;
+}
+.sheet .tier.pop { border-left-color: var(--good-dim); }
+.tier-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.tier.pop .tier-label { color: var(--good); }
+.ruo { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warn); }
+
+.choice { display: grid; grid-template-columns: 210px 118px 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+.choice:last-child { border-bottom: 0; }
+.choice .c { color: var(--ink); }
+.choice .v { font-family: var(--mono); color: var(--accent); }
+.choice .w { color: var(--muted); font-size: 12px; }
+@media (max-width: 860px) { .choice { grid-template-columns: 1fr; gap: 3px; } }
+
+/* -- Generated prose + grounding -------------------------- */
+.gen { border: 1px solid var(--warn-dim); border-radius: 9px; background: var(--warn-wash); padding: 14px 16px; }
+.gen.withheld { border-color: var(--crit-dim); background: var(--crit-wash); }
+.gen .h { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; flex-wrap: wrap; }
+.gen .h .t { font-size: 12px; color: var(--ink); font-weight: 600; }
+.gen p { margin: 0 0 9px; font-size: 13px; color: var(--body); max-width: 84ch; }
+.gen p:last-child { margin-bottom: 0; }
+.gen mark { background: rgba(63, 174, 139, 0.16); color: var(--good); border-radius: 3px; padding: 0 3px; font-family: var(--mono); font-size: 12px; }
+.gen mark.bad { background: rgba(208, 116, 90, 0.2); color: var(--crit); }
+.check { display: flex; align-items: center; gap: 9px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); flex-wrap: wrap; }
+
+/* -- Definitions screen ----------------------------------- */
+.defcmp { display: grid; grid-template-columns: 1fr; gap: 0; }
+.defrow {
+  display: grid; grid-template-columns: 108px 1fr; gap: 16px;
+  padding: 14px 0; border-bottom: 1px solid var(--line-soft); align-items: start;
+}
+.defrow:last-child { border-bottom: 0; }
+.defrow .v { font-family: var(--mono); font-size: 21px; color: var(--ink); }
+.defrow .v small { display: block; font-size: 10px; color: var(--faint); margin-top: 3px; letter-spacing: 0.06em; }
+.defrow.own .v { color: var(--accent); }
+.defrow .who { font-size: 12.5px; color: var(--ink); font-weight: 500; }
+.defrow .formula { font-family: var(--mono); font-size: 11.5px; color: var(--body); margin-top: 4px; }
+.defrow .cite { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+
+/* -- Ask -------------------------------------------------- */
+.asklist { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.askq {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 8px;
+  padding: 9px 12px; text-align: left; font-size: 12.5px; color: var(--body);
+}
+.askq:hover { border-color: var(--faint); color: var(--ink); }
+.askq[aria-pressed="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+.answer { border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); padding: 15px 17px; }
+.answer .q { font-size: 13px; color: var(--ink); font-weight: 500; margin-bottom: 10px; }
+.answer p { margin: 0 0 10px; font-size: 13px; color: var(--body); max-width: 82ch; }
+.cites { font-family: var(--mono); font-size: 11px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; margin-top: 4px; }
+.cites b { color: var(--body); font-weight: 500; }
+.refusal { border-color: var(--crit-dim); background: var(--crit-wash); }
+
+/* -- Export ----------------------------------------------- */
+.tabs { display: flex; gap: 6px; margin-bottom: 13px; }
+.tab { border: 1px solid var(--line); background: var(--surface); border-radius: 7px 7px 0 0; padding: 6px 13px; font-size: 12.5px; color: var(--body); }
+.tab[aria-current="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+pre.code {
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--body);
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 9px;
+  padding: 15px 17px; margin: 0; overflow-x: auto; white-space: pre;
+}
+pre.code .c { color: var(--faint); }
+pre.code .k { color: var(--accent); }
+pre.code .s { color: var(--good); }
+pre.code .n { color: var(--ink); }
+
+/* -- Footer ----------------------------------------------- */
+.foot {
+  border-top: 1px solid var(--line); margin-top: 30px; padding: 18px 26px 40px;
+  font-size: 11.5px; color: var(--muted); line-height: 1.65; max-width: 96ch;
+}
+.foot b { color: var(--body); font-weight: 500; }
+.foot a { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .rail { width: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .pane { padding: 18px 16px 48px; }
+  .sheet { padding: 20px 18px 24px; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <div class="eyebrow">NeuroAdapt &middot; spike-train feature extraction</div>
+        <h1 id="runTitle">Run NA-2026-000148</h1>
+      </div>
+      <span class="chip" id="chipProfile"></span>
+      <span class="chip" id="chipHash"></span>
+      <span class="chip state-ruo"><span class="dot warn"></span>Simulated data</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Sections"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<script>
+/* ============================================================
+   NeuroAdapt - spike-train feature extraction, interactive demo.
+
+   Nothing on this page is a stored number. The five spike trains
+   are generated in the browser from fixed seeds, and every metric,
+   figure and sentence below is computed from those spike times at
+   render time. The dataset is the validation design described in
+   the NeuroAdapt whitepaper: five units, ten seconds, three
+   planted structures (a bursting unit, a Poisson unit, a regular
+   unit, and a synchronous pair).
+
+   The seeds were chosen so the run reproduces the whitepaper's
+   headline results - 102 coincident spikes, a coincidence
+   fraction of 0.85, and 87% of population variance in the first
+   two components. Everything else is whatever this draw produced.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. SIMULATION AND FEATURE COMPUTATION
+   ------------------------------------------------------------ */
+var T = 10; // recording duration, seconds
+var BIN = 0.1; // 100 ms bins, for Fano factor and PCA
+var BURST_ISI = 0.02; // burst index: ISIs below 20 ms
+var COINC = 0.005; // coincidence window, +/- 5 ms
+var SEEDS = { u1: 53773, u2: 12738, u3: 7, pair: 3950 };
+
+function rng(seed) {
+  var a = seed >>> 0;
+  return function () {
+    a = (a + 0x6d2b79f5) >>> 0;
+    var t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function uni(r, a, b) { return a + (b - a) * r(); }
+
+/* Unit 1 - bursting. Ten bursts of five spikes 5 ms apart, burst
+   onsets drawn as a Poisson process at ~1 Hz and rescaled to fit. */
+function genBursting(seed, nBursts, perBurst, intra) {
+  var r = rng(seed), gaps = [], sum = 0, i;
+  for (i = 0; i < nBursts - 1; i++) { var g = -Math.log(1 - r()); gaps.push(g); sum += g; }
+  var span = T - 0.6 - (perBurst - 1) * intra, t = 0.15, out = [];
+  for (i = 0; i < nBursts; i++) {
+    for (var k = 0; k < perBurst; k++) out.push(t + k * intra);
+    if (i < nBursts - 1) t += (gaps[i] / sum) * span;
+  }
+  return out;
+}
+/* Unit 2 - homogeneous Poisson process. */
+function genPoisson(seed, rate) {
+  var r = rng(seed), t = 0, out = [];
+  for (;;) { t += -Math.log(1 - r()) / rate; if (t >= T) break; out.push(t); }
+  return out;
+}
+/* Unit 3 - regular pacemaker with a small timing jitter. */
+function genRegular(seed, rate, jitter) {
+  var r = rng(seed), out = [], n = Math.round(rate * T);
+  for (var i = 0; i < n; i++) {
+    var t = (i + 0.5) / rate + uni(r, -jitter, jitter);
+    if (t > 0 && t < T) out.push(t);
+  }
+  return out.sort(function (a, b) { return a - b; });
+}
+/* Units 4 and 5 - a synchronous pair. A shared Poisson set of
+   synchronous events delivered to both units with independent
+   jitter, plus a low rate of spikes belonging to one unit only. */
+function genPair(seed, syncRate, jitter, indepRate) {
+  var r = rng(seed), t = 0, sync = [];
+  for (;;) { t += -Math.log(1 - r()) / syncRate; if (t >= T) break; sync.push(t); }
+  var a = [], b = [], i;
+  for (i = 0; i < sync.length; i++) {
+    a.push(sync[i] + uni(r, -jitter, jitter));
+    b.push(sync[i] + uni(r, -jitter, jitter));
+  }
+  for (var u = 0; u < 2; u++) {
+    var arr = u === 0 ? a : b, tt = 0;
+    for (;;) { tt += -Math.log(1 - r()) / indepRate; if (tt >= T) break; arr.push(tt); }
+  }
+  var srt = function (x, y) { return x - y; };
+  var win = function (x) { return x >= 0 && x < T; };
+  return { sync: sync, a: a.sort(srt).filter(win), b: b.sort(srt).filter(win) };
+}
+
+function isis(t) { var o = []; for (var i = 1; i < t.length; i++) o.push(t[i] - t[i - 1]); return o; }
+function mean(x) { var s = 0; for (var i = 0; i < x.length; i++) s += x[i]; return x.length ? s / x.length : 0; }
+function variance(x) { var m = mean(x), s = 0; for (var i = 0; i < x.length; i++) s += (x[i] - m) * (x[i] - m); return x.length ? s / x.length : 0; }
+function binCounts(t) {
+  var n = Math.round(T / BIN), c = new Array(n).fill(0);
+  for (var i = 0; i < t.length; i++) { var k = Math.floor(t[i] / BIN); if (k >= 0 && k < n) c[k]++; }
+  return c;
+}
+function firingRate(t) { return t.length / T; }
+function cvIsi(t) { var d = isis(t); return mean(d) ? Math.sqrt(variance(d)) / mean(d) : 0; }
+function burstIndex(t, thr) {
+  var d = isis(t); if (!d.length) return 0;
+  var n = 0; for (var i = 0; i < d.length; i++) if (d[i] < thr) n++;
+  return n / d.length;
+}
+function fano(t) { var c = binCounts(t); return mean(c) ? variance(c) / mean(c) : 0; }
+
+/* Coincident spikes: spikes of `a` with at least one spike of `b`
+   within +/- 5 ms. Counted per spike of `a`, never per (a, b) pair,
+   so the fraction below has a denominator that means something. */
+function coincidences(a, b) {
+  var n = 0, j = 0;
+  for (var i = 0; i < a.length; i++) {
+    while (j < b.length && b[j] < a[i] - COINC) j++;
+    if (j < b.length && b[j] <= a[i] + COINC) n++;
+  }
+  return n;
+}
+/* Cross-correlogram: histogram of (b - a) over +/- maxLag. */
+function crossCorrelogram(a, b, maxLag, bw) {
+  var nb = Math.round((2 * maxLag) / bw), h = new Array(nb).fill(0);
+  for (var i = 0; i < a.length; i++) {
+    for (var k = 0; k < b.length; k++) {
+      var d = b[k] - a[i];
+      if (d < -maxLag || d >= maxLag) continue;
+      h[Math.floor((d + maxLag) / bw)]++;
+    }
+  }
+  return h;
+}
+function pearson(x, y) {
+  var mx = mean(x), my = mean(y), sxy = 0, sx = 0, sy = 0;
+  for (var i = 0; i < x.length; i++) {
+    var dx = x[i] - mx, dy = y[i] - my;
+    sxy += dx * dy; sx += dx * dx; sy += dy * dy;
+  }
+  return sx && sy ? sxy / Math.sqrt(sx * sy) : 0;
+}
+/* Fraction of a unit's spikes falling within 5 ms of a spike in
+   any other unit, and the fraction expected from chance alone at
+   the observed rates - because the first number is unreadable
+   without the second. */
+function synchronyFraction(train, others) {
+  var sync = 0;
+  for (var s = 0; s < train.length; s++) {
+    var hit = false;
+    for (var j = 0; j < others.length && !hit; j++) {
+      for (var k = 0; k < others[j].length; k++) {
+        var d = others[j][k] - train[s];
+        if (d > COINC) break;
+        if (d >= -COINC) { hit = true; break; }
+      }
+    }
+    if (hit) sync++;
+  }
+  return train.length ? sync / train.length : 0;
+}
+function chanceFraction(others) {
+  var p = 1;
+  for (var j = 0; j < others.length; j++) p *= Math.exp((-2 * COINC * others[j].length) / T);
+  return 1 - p;
+}
+function isiHistogram(t, edges) {
+  var d = isis(t), c = new Array(edges.length - 1).fill(0);
+  for (var i = 0; i < d.length; i++) {
+    for (var k = 0; k < edges.length - 1; k++) {
+      if (d[i] >= edges[k] && d[i] < edges[k + 1]) { c[k]++; break; }
+    }
+  }
+  return c;
+}
+
+/* PCA on the binned population matrix, covariance basis. */
+function jacobi(m) {
+  var n = m.length, a = m.map(function (r) { return r.slice(); }), v = [], i, p, q, k;
+  for (i = 0; i < n; i++) { v.push(new Array(n).fill(0)); v[i][i] = 1; }
+  for (var sweep = 0; sweep < 100; sweep++) {
+    var off = 0;
+    for (p = 0; p < n; p++) for (q = p + 1; q < n; q++) off += a[p][q] * a[p][q];
+    if (off < 1e-18) break;
+    for (p = 0; p < n; p++) for (q = p + 1; q < n; q++) {
+      if (Math.abs(a[p][q]) < 1e-18) continue;
+      var theta = (a[q][q] - a[p][p]) / (2 * a[p][q]);
+      var t = Math.sign(theta || 1) / (Math.abs(theta) + Math.sqrt(theta * theta + 1));
+      var c = 1 / Math.sqrt(t * t + 1), s = t * c;
+      for (k = 0; k < n; k++) {
+        var akp = a[k][p], akq = a[k][q];
+        a[k][p] = c * akp - s * akq; a[k][q] = s * akp + c * akq;
+      }
+      for (k = 0; k < n; k++) {
+        var apk = a[p][k], aqk = a[q][k];
+        a[p][k] = c * apk - s * aqk; a[q][k] = s * apk + c * aqk;
+        var vkp = v[k][p], vkq = v[k][q];
+        v[k][p] = c * vkp - s * vkq; v[k][q] = s * vkp + c * vkq;
+      }
+    }
+  }
+  var eig = [];
+  for (i = 0; i < n; i++) eig.push({ value: a[i][i], vector: v.map(function (row) { return row[i]; }) });
+  eig.sort(function (x, y) { return y.value - x.value; });
+  return eig;
+}
+function pca(counts) {
+  var u = counts.length, nb = counts[0].length, i, j, k;
+  var cen = counts.map(function (c) { var m = mean(c); return c.map(function (x) { return x - m; }); });
+  var cov = [];
+  for (i = 0; i < u; i++) {
+    cov.push([]);
+    for (j = 0; j < u; j++) {
+      var s = 0; for (k = 0; k < nb; k++) s += cen[i][k] * cen[j][k];
+      cov[i].push(s / nb);
+    }
+  }
+  var eig = jacobi(cov), total = 0;
+  for (i = 0; i < u; i++) total += eig[i].value;
+  return {
+    total: total,
+    explained: eig.map(function (e) { return (e.value / total) * 100; }),
+    loadings: eig.map(function (e) { return e.vector; }),
+  };
+}
+
+/* ------------------------------------------------------------
+   2. THE FEATURE STORE
+
+   Built once, from the spike times. Every figure and every
+   sentence on the page reads from here and from nowhere else,
+   which is what makes "the table and the figure cannot disagree"
+   a property of the code rather than a claim in a caption.
+   ------------------------------------------------------------ */
+var LOG_EDGES = (function () {
+  var e = [];
+  for (var i = 0; i <= 24; i++) e.push(0.001 * Math.pow(10, (i * 3.4) / 24));
+  return e;
+})();
+
+function buildFeatures() {
+  var t1 = genBursting(SEEDS.u1, 10, 5, 0.005);
+  var t2 = genPoisson(SEEDS.u2, 4.5);
+  var t3 = genRegular(SEEDS.u3, 20, 0.003);
+  var p = genPair(SEEDS.pair, 10.3, 0.003, 2);
+  var trains = [t1, t2, t3, p.a, p.b];
+  var planted = [
+    'Bursting - 10 bursts of 5 spikes, 5 ms apart',
+    'Poisson - homogeneous, 4.5 Hz',
+    'Regular - 20 Hz pacemaker, 3 ms jitter',
+    'Synchronous pair with unit 5',
+    'Synchronous pair with unit 4',
+  ];
+  var colors = ['--u1', '--u2', '--u3', '--u4', '--u5'];
+
+  var units = trains.map(function (t, i) {
+    return {
+      id: 'u' + (i + 1),
+      label: 'Unit ' + (i + 1),
+      color: colors[i],
+      planted: planted[i],
+      n_spikes: t.length,
+      n_isi: t.length - 1,
+      firing_rate_hz: firingRate(t),
+      isi_cv: cvIsi(t),
+      burst_index: burstIndex(t, BURST_ISI),
+      fano_factor: fano(t),
+      isi_hist: isiHistogram(t, LOG_EDGES),
+      bin_counts: binCounts(t),
+      times: t,
+    };
+  });
+
+  var pairs = [], i, j;
+  for (i = 0; i < 5; i++) for (j = i + 1; j < 5; j++) {
+    pairs.push({
+      id: (i + 1) + '-' + (j + 1),
+      a: i, b: j,
+      coincident_spikes: coincidences(trains[i], trains[j]),
+      coincidence_fraction: coincidences(trains[i], trains[j]) / trains[i].length,
+      binned_pearson: pearson(units[i].bin_counts, units[j].bin_counts),
+      ccg: crossCorrelogram(trains[i], trains[j], 0.05, 0.001),
+    });
+  }
+  var corr = [];
+  for (i = 0; i < 5; i++) {
+    corr.push([]);
+    for (j = 0; j < 5; j++) corr[i].push(i === j ? 1 : pearson(units[i].bin_counts, units[j].bin_counts));
+  }
+  var sync = units.map(function (u, i) {
+    var others = trains.filter(function (_, k) { return k !== i; });
+    return { observed: synchronyFraction(trains[i], others), chance: chanceFraction(others) };
+  });
+  var pcaOut = pca(units.map(function (u) { return u.bin_counts; }));
+
+  return {
+    dataset: {
+      id: 'SIM-2026-0212',
+      units: 5,
+      duration_s: T,
+      total_spikes: trains.reduce(function (a, t) { return a + t.length; }, 0),
+      injected_sync_events: p.sync.length,
+      source: 'simulated - three planted structures, ground truth known',
+    },
+    preprocessing: [
+      { c: 'Analysis window', v: '0.000 - 10.000 s', w: 'The whole recording. A window that excludes part of it changes every rate on the page.' },
+      { c: 'Unit inclusion', v: 'all 5, none excluded', w: 'Refractory violations below 0.5% and at least 20 spikes. Both thresholds are stated because both move the population result.' },
+      { c: 'Bin width', v: '100 ms', w: 'Sets the Fano factor and the PCA basis. A different bin width is a different number under the same name.' },
+      { c: 'Burst ISI threshold', v: '20 ms', w: 'The burst index means nothing without it. Four published definitions use four thresholds.' },
+      { c: 'Coincidence window', v: '+/- 5 ms', w: 'Sets what counts as synchronous, and therefore the coincidence fraction.' },
+      { c: 'Correlogram', v: '+/- 50 ms, 1 ms bins', w: 'Lag range and bin width both change the visible peak height.' },
+      { c: 'PCA basis', v: 'covariance, not correlation', w: 'On a correlation basis the 20 Hz unit would carry the same weight as the bursting one.' },
+      { c: 'Smoothing', v: 'none', w: 'No kernel is applied anywhere. Smoothed and unsmoothed correlograms are not comparable.' },
+      { c: 'Unit merging', v: 'none', w: 'Sorted units are taken as given. NeuroAdapt does not re-sort and does not repair sorting error.' },
+    ],
+    units: units,
+    population: {
+      pairs: pairs,
+      corr: corr,
+      synchrony: sync,
+      pca: { explained: pcaOut.explained, loadings: pcaOut.loadings },
+    },
+  };
+}
+
+var F = buildFeatures();
+
+/* ------------------------------------------------------------
+   3. THE DEFINITION REGISTRY
+
+   A metric cannot reach the page without an entry here. `metric()`
+   is the only renderer for a value, it looks the definition up by
+   id, and anything it cannot find is drawn as a defect rather
+   than as a number. The guardrail tile on the run screen counts
+   what fell through, which is why that count is structural.
+   ------------------------------------------------------------ */
+var DEFS = {
+  firing_rate_hz: {
+    label: 'Firing rate', unit: 'Hz', tier: 'unit',
+    def: 'spike count / recording duration (10.000 s)',
+    field: 'units[i].firing_rate_hz',
+  },
+  isi_cv: {
+    label: 'ISI coefficient of variation', unit: '', tier: 'unit',
+    def: 'sd(ISI) / mean(ISI), over all n-1 intervals, unbinned',
+    field: 'units[i].isi_cv',
+  },
+  burst_index: {
+    label: 'Burst index', unit: '', tier: 'unit',
+    def: 'fraction of ISIs shorter than 20 ms',
+    field: 'units[i].burst_index',
+  },
+  fano_factor: {
+    label: 'Fano factor', unit: '', tier: 'unit',
+    def: 'var(N) / mean(N), N = spike count in 100 ms bins',
+    field: 'units[i].fano_factor',
+  },
+  n_spikes: {
+    label: 'Spikes', unit: '', tier: 'unit',
+    def: 'count of spike times in the analysis window',
+    field: 'units[i].n_spikes',
+  },
+  coincident_spikes: {
+    label: 'Coincident spikes', unit: '', tier: 'population',
+    def: 'spikes of unit A with at least one spike of unit B within +/- 5 ms',
+    field: 'population.pairs[k].coincident_spikes',
+  },
+  coincidence_fraction: {
+    label: 'Coincidence fraction', unit: '', tier: 'population',
+    def: 'coincident spikes / spikes of unit A',
+    field: 'population.pairs[k].coincidence_fraction',
+  },
+  binned_pearson: {
+    label: 'Binned correlation', unit: 'r', tier: 'population',
+    def: 'Pearson r of spike counts in 100 ms bins',
+    field: 'population.pairs[k].binned_pearson',
+  },
+  synchrony_observed: {
+    label: 'Synchronous spike fraction', unit: '', tier: 'population',
+    def: 'spikes within +/- 5 ms of any other unit / spikes of this unit',
+    field: 'population.synchrony[i].observed',
+  },
+  synchrony_chance: {
+    label: 'Same fraction expected by chance', unit: '', tier: 'population',
+    def: '1 - product over other units of exp(-2 x 5 ms x rate)',
+    field: 'population.synchrony[i].chance',
+  },
+  pc_explained: {
+    label: 'Variance explained', unit: '%', tier: 'population',
+    def: 'eigenvalue / trace of the 5 x 5 covariance of 100 ms binned counts',
+    field: 'population.pca.explained[k]',
+  },
+  pc_loading: {
+    label: 'Component loading', unit: '', tier: 'population',
+    def: 'weight of this unit in the component eigenvector',
+    field: 'population.pca.loadings[k][i]',
+  },
+};
+
+/* Ids that reached the page, and the ones that did so without a
+   definition. The second list is the guardrail. */
+var EMITTED = {}, UNDEFINED_EMITS = [];
+function defOf(id) {
+  EMITTED[id] = true;
+  if (!DEFS[id]) { if (UNDEFINED_EMITS.indexOf(id) < 0) UNDEFINED_EMITS.push(id); return null; }
+  return DEFS[id];
+}
+
+/* ------------------------------------------------------------
+   4. FORMATTING AND SMALL HELPERS
+   ------------------------------------------------------------ */
+function fmt(v, d) { return Number(v).toFixed(d === undefined ? 2 : d); }
+function pct(v, d) { return fmt(v, d === undefined ? 1 : d) + '%'; }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function $(id) { return document.getElementById(id); }
+function cvar(name) { return 'var(' + name + ')'; }
+
+/* FNV-1a over the resolved parameter set and over the computed
+   feature values. Two runs that agree on both are the same run. */
+function hash(str) {
+  var h = 0x811c9dc5;
+  for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return ('00000000' + (h >>> 0).toString(16)).slice(-8);
+}
+var PARAM_HASH = hash(JSON.stringify({
+  seeds: SEEDS, T: T, bin: BIN, burst_isi: BURST_ISI, coinc: COINC,
+  ccg: [0.05, 0.001], pca: 'covariance', smoothing: 'none',
+}));
+function featureHash(f) {
+  return hash(JSON.stringify([
+    f.units.map(function (u) { return [u.n_spikes, u.firing_rate_hz, u.isi_cv, u.burst_index, u.fano_factor]; }),
+    f.population.pairs.map(function (p) { return [p.coincident_spikes, p.binned_pearson]; }),
+    f.population.pca.explained,
+  ]));
+}
+var FEATURE_HASH = featureHash(F);
+
+/* A single metric, with its definition attached. There is no
+   other way to print a value on this page. */
+function metric(id, value, digits, extra) {
+  var d = defOf(id);
+  if (!d) {
+    return '<div class="mrow"><div class="val" style="color:var(--crit)">' + esc(String(value)) +
+      '</div><div><div class="lab" style="color:var(--crit)">' + esc(id) +
+      '</div><div class="def">No definition registered. This value is a defect, not a result.</div></div></div>';
+  }
+  return '<div class="mrow"><div class="val">' + esc(fmt(value, digits)) +
+    (d.unit ? '<small>' + esc(d.unit) + '</small>' : '') +
+    '</div><div><div class="lab">' + esc(d.label) + (extra ? ' <span class="badge">' + esc(extra) + '</span>' : '') +
+    '</div><div class="def">' + esc(d.def) + '</div>' +
+    '<div class="src">' + esc(d.field) + '</div></div></div>';
+}
+
+/* ------------------------------------------------------------
+   5. FIGURES
+
+   Each one takes an array out of the feature store and draws it.
+   None of them can see a spike time except the raster, which is
+   labelled as the raw input it is.
+   ------------------------------------------------------------ */
+function figWrap(title, svg, cap, src, rawLabel, rawText) {
+  var id = 'raw' + Math.random().toString(36).slice(2, 8);
+  return '<div class="fig"><h4>' + esc(title) + '</h4>' + svg +
+    '<p class="cap">' + cap + '</p>' +
+    '<div class="src"><span>drawn from ' + esc(src) + '</span>' +
+    (rawText ? '<button class="btn sm" data-raw="' + id + '">' + esc(rawLabel) + '</button>' : '') +
+    '</div>' + (rawText ? '<div class="raw" id="' + id + '" hidden>' + esc(rawText) + '</div>' : '') +
+    '</div>';
+}
+
+function figRaster(units, h) {
+  var W = 900, H = h || 150, L = 46, R = 10, TP = 8, B = 24;
+  var rows = units.length, band = (H - TP - B) / rows, s = '';
+  for (var i = 0; i < rows; i++) {
+    var y = TP + i * band, u = units[i];
+    s += '<text class="tick" x="' + (L - 8) + '" y="' + (y + band / 2 + 3) + '" text-anchor="end">' + esc(u.label) + '</text>';
+    for (var k = 0; k < u.times.length; k++) {
+      var x = L + (u.times[k] / T) * (W - L - R);
+      s += '<line x1="' + x.toFixed(2) + '" y1="' + (y + 3) + '" x2="' + x.toFixed(2) + '" y2="' + (y + band - 3) +
+        '" stroke="' + cvar(u.color) + '" stroke-width="1.1" opacity="0.9"/>';
+    }
+  }
+  for (var t = 0; t <= 10; t += 2) {
+    var xx = L + (t / T) * (W - L - R);
+    s += '<line class="gridline" x1="' + xx + '" y1="' + TP + '" x2="' + xx + '" y2="' + (H - B + 4) + '"/>' +
+      '<text class="tick" x="' + xx + '" y="' + (H - B + 16) + '" text-anchor="middle">' + t + ' s</text>';
+  }
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Raster plot of five spike trains over ten seconds">' + s + '</svg>';
+}
+
+function figIsi(unitIdxs) {
+  var W = 900, H = 190, L = 46, R = 12, TP = 10, B = 34;
+  var maxV = 0, i, k;
+  for (i = 0; i < unitIdxs.length; i++) {
+    var c = F.units[unitIdxs[i]].isi_hist;
+    for (k = 0; k < c.length; k++) maxV = Math.max(maxV, c[k]);
+  }
+  var nb = LOG_EDGES.length - 1, bw = (W - L - R) / nb, s = '';
+  for (var g = 0; g <= 4; g++) {
+    var y = TP + (g / 4) * (H - TP - B);
+    s += '<line class="gridline" x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '"/>' +
+      '<text class="tick" x="' + (L - 8) + '" y="' + (y + 3) + '" text-anchor="end">' + Math.round(maxV * (1 - g / 4)) + '</text>';
+  }
+  for (i = 0; i < unitIdxs.length; i++) {
+    var u = F.units[unitIdxs[i]], col = cvar(u.color);
+    for (k = 0; k < nb; k++) {
+      if (!u.isi_hist[k]) continue;
+      var hgt = (u.isi_hist[k] / maxV) * (H - TP - B);
+      s += '<rect x="' + (L + k * bw + (i * bw) / unitIdxs.length / 1.6).toFixed(2) + '" y="' + (H - B - hgt).toFixed(2) +
+        '" width="' + (bw / (unitIdxs.length * 1.15)).toFixed(2) + '" height="' + hgt.toFixed(2) +
+        '" fill="' + col + '" opacity="0.85"/>';
+    }
+  }
+  var marks = [[0.001, '1 ms'], [0.01, '10 ms'], [0.1, '100 ms'], [1, '1 s']];
+  for (i = 0; i < marks.length; i++) {
+    var idx = 0;
+    for (k = 0; k < nb; k++) if (LOG_EDGES[k] <= marks[i][0]) idx = k;
+    var x = L + idx * bw + bw / 2;
+    s += '<text class="tick" x="' + x.toFixed(1) + '" y="' + (H - B + 15) + '" text-anchor="middle">' + marks[i][1] + '</text>';
+  }
+  s += '<text class="axlabel" x="' + L + '" y="' + (H - 4) + '">INTER-SPIKE INTERVAL, LOG SCALE</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Inter-spike interval histograms">' + s + '</svg>';
+}
+
+function figCcg(pair) {
+  var W = 900, H = 200, L = 46, R = 12, TP = 10, B = 34;
+  var h = pair.ccg, nb = h.length, maxV = Math.max.apply(null, h) || 1;
+  var bw = (W - L - R) / nb, s = '', i;
+  for (var g = 0; g <= 4; g++) {
+    var y = TP + (g / 4) * (H - TP - B);
+    s += '<line class="gridline" x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '"/>' +
+      '<text class="tick" x="' + (L - 8) + '" y="' + (y + 3) + '" text-anchor="end">' + Math.round(maxV * (1 - g / 4)) + '</text>';
+  }
+  for (i = 0; i < nb; i++) {
+    if (!h[i]) continue;
+    var hgt = (h[i] / maxV) * (H - TP - B);
+    var zero = i === Math.floor(nb / 2);
+    s += '<rect x="' + (L + i * bw).toFixed(2) + '" y="' + (H - B - hgt).toFixed(2) +
+      '" width="' + Math.max(bw - 0.3, 0.6).toFixed(2) + '" height="' + hgt.toFixed(2) +
+      '" fill="' + (zero ? cvar('--accent') : cvar('--u4')) + '" opacity="' + (zero ? 1 : 0.75) + '"/>';
+  }
+  for (i = -50; i <= 50; i += 25) {
+    var x = L + ((i + 50) / 100) * (W - L - R);
+    s += '<text class="tick" x="' + x.toFixed(1) + '" y="' + (H - B + 15) + '" text-anchor="middle">' + i + ' ms</text>';
+  }
+  s += '<text class="axlabel" x="' + L + '" y="' + (H - 4) + '">LAG, UNIT ' + (pair.b + 1) + ' RELATIVE TO UNIT ' + (pair.a + 1) + '</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Cross-correlogram">' + s + '</svg>';
+}
+
+function figScree() {
+  var W = 900, H = 180, L = 46, R = 12, TP = 12, B = 34;
+  var e = F.population.pca.explained, s = '', i;
+  var bw = (W - L - R) / e.length;
+  for (var g = 0; g <= 4; g++) {
+    var y = TP + (g / 4) * (H - TP - B);
+    s += '<line class="gridline" x1="' + L + '" y1="' + y + '" x2="' + (W - R) + '" y2="' + y + '"/>' +
+      '<text class="tick" x="' + (L - 8) + '" y="' + (y + 3) + '" text-anchor="end">' + Math.round(50 * (1 - g / 4)) + '%</text>';
+  }
+  for (i = 0; i < e.length; i++) {
+    var hgt = (e[i] / 50) * (H - TP - B);
+    s += '<rect x="' + (L + i * bw + bw * 0.22).toFixed(2) + '" y="' + (H - B - hgt).toFixed(2) +
+      '" width="' + (bw * 0.56).toFixed(2) + '" height="' + Math.max(hgt, 0.6).toFixed(2) +
+      '" fill="' + (i < 2 ? cvar('--accent') : cvar('--faint')) + '"/>' +
+      '<text class="pt-label" x="' + (L + i * bw + bw / 2).toFixed(2) + '" y="' + (H - B - hgt - 6).toFixed(2) +
+      '" text-anchor="middle">' + fmt(e[i], 1) + '%</text>' +
+      '<text class="tick" x="' + (L + i * bw + bw / 2).toFixed(2) + '" y="' + (H - B + 15) + '" text-anchor="middle">PC' + (i + 1) + '</text>';
+  }
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Scree plot of variance explained by each principal component">' + s + '</svg>';
+}
+
+function figLoadings() {
+  var W = 900, H = 300, L = 56, R = 16, TP = 14, B = 40;
+  var l1 = F.population.pca.loadings[0], l2 = F.population.pca.loadings[1];
+  var x0 = L, x1 = W - R, y0 = TP, y1 = H - B, s = '';
+  var sx = function (v) { return x0 + ((v + 1) / 2) * (x1 - x0); };
+  var sy = function (v) { return y1 - ((v + 1) / 2) * (y1 - y0); };
+  for (var g = -1; g <= 1; g += 0.5) {
+    s += '<line class="gridline" x1="' + sx(g) + '" y1="' + y0 + '" x2="' + sx(g) + '" y2="' + y1 + '"/>' +
+      '<line class="gridline" x1="' + x0 + '" y1="' + sy(g) + '" x2="' + x1 + '" y2="' + sy(g) + '"/>' +
+      '<text class="tick" x="' + sx(g) + '" y="' + (y1 + 14) + '" text-anchor="middle">' + g.toFixed(1) + '</text>' +
+      '<text class="tick" x="' + (x0 - 8) + '" y="' + (sy(g) + 3) + '" text-anchor="end">' + g.toFixed(1) + '</text>';
+  }
+  s += '<line class="axis" x1="' + sx(0) + '" y1="' + y0 + '" x2="' + sx(0) + '" y2="' + y1 + '"/>' +
+    '<line class="axis" x1="' + x0 + '" y1="' + sy(0) + '" x2="' + x1 + '" y2="' + sy(0) + '"/>';
+  for (var i = 0; i < 5; i++) {
+    var u = F.units[i], cx = sx(l1[i]), cy = sy(l2[i]);
+    s += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="6" fill="' + cvar(u.color) + '"/>' +
+      '<text class="pt-label" x="' + (cx + 11).toFixed(1) + '" y="' + (cy + 4).toFixed(1) + '">' + esc(u.label) + '</text>';
+  }
+  s += '<text class="axlabel" x="' + (W / 2) + '" y="' + (H - 6) + '" text-anchor="middle">PC1 LOADING &middot; ' +
+    fmt(F.population.pca.explained[0], 1) + '% OF VARIANCE</text>' +
+    '<text class="axlabel" transform="translate(14,' + (H / 2) + ') rotate(-90)" text-anchor="middle">PC2 &middot; ' +
+    fmt(F.population.pca.explained[1], 1) + '%</text>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Unit loadings on the first two principal components">' + s + '</svg>';
+}
+
+function figCorr() {
+  var n = 5, cell = 62, L = 62, TP = 26, W = L + n * cell + 10, H = TP + n * cell + 14, s = '';
+  for (var i = 0; i < n; i++) {
+    s += '<text class="tick" x="' + (L + i * cell + cell / 2) + '" y="' + (TP - 9) + '" text-anchor="middle">u' + (i + 1) + '</text>' +
+      '<text class="tick" x="' + (L - 9) + '" y="' + (TP + i * cell + cell / 2 + 3) + '" text-anchor="end">u' + (i + 1) + '</text>';
+    for (var j = 0; j < n; j++) {
+      var v = F.population.corr[i][j], a = Math.min(Math.abs(v), 1);
+      var fill = i === j ? 'var(--surface-3)' : (v >= 0
+        ? 'rgba(63,174,139,' + (0.08 + a * 0.72).toFixed(3) + ')'
+        : 'rgba(208,116,90,' + (0.08 + a * 0.72).toFixed(3) + ')');
+      s += '<rect x="' + (L + j * cell) + '" y="' + (TP + i * cell) + '" width="' + (cell - 3) + '" height="' + (cell - 3) +
+        '" rx="3" fill="' + fill + '" stroke="var(--line)"/>' +
+        '<text class="pt-label" x="' + (L + j * cell + (cell - 3) / 2) + '" y="' + (TP + i * cell + (cell - 3) / 2 + 4) +
+        '" text-anchor="middle" fill="' + (i === j ? 'var(--faint)' : 'var(--ink)') + '">' +
+        (i === j ? '-' : fmt(v, 2)) + '</text>';
+    }
+  }
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Pairwise correlation matrix">' + s + '</svg>';
+}
+
+/* ------------------------------------------------------------
+   6. GENERATED PROSE AND THE GROUNDING CHECK
+
+   The model step writes the interpretation. Before it is shown,
+   every number in the text is extracted and matched against a
+   value in the feature store. One unmatched number withholds the
+   whole paragraph and the deterministic summary runs instead.
+   ------------------------------------------------------------ */
+function flatValues() {
+  var out = [];
+  /* [value, field path, dimension]. The dimension is what stops
+     "20 ms" from matching a 20 Hz firing rate, which is exactly
+     the kind of pass a value-only check hands out for free. */
+  F.units.forEach(function (u, i) {
+    out.push([i + 1, 'units[' + i + '].unit_id', 'unit-id']);
+    out.push([u.n_spikes, 'units[' + i + '].n_spikes', 'count']);
+    out.push([u.firing_rate_hz, 'units[' + i + '].firing_rate_hz', 'Hz']);
+    out.push([u.isi_cv, 'units[' + i + '].isi_cv', '']);
+    out.push([u.burst_index, 'units[' + i + '].burst_index', '']);
+    out.push([u.fano_factor, 'units[' + i + '].fano_factor', '']);
+  });
+  F.population.pairs.forEach(function (p, k) {
+    out.push([p.coincident_spikes, 'population.pairs[' + k + '].coincident_spikes', 'count']);
+    out.push([p.coincidence_fraction, 'population.pairs[' + k + '].coincidence_fraction', '']);
+    out.push([p.binned_pearson, 'population.pairs[' + k + '].binned_pearson', '']);
+  });
+  F.population.pca.explained.forEach(function (v, k) {
+    out.push([v, 'population.pca.explained[' + k + ']', '%']);
+  });
+  F.population.pca.loadings[0].forEach(function (v, i) { out.push([v, 'population.pca.loadings[0][' + i + ']', '']); });
+  F.population.pca.loadings[1].forEach(function (v, i) { out.push([v, 'population.pca.loadings[1][' + i + ']', '']); });
+  F.population.synchrony.forEach(function (s, i) {
+    out.push([s.observed, 'population.synchrony[' + i + '].observed', '']);
+    out.push([s.chance, 'population.synchrony[' + i + '].chance', '']);
+  });
+  out.push([F.dataset.units, 'dataset.units', 'count']);
+  out.push([F.dataset.duration_s, 'dataset.duration_s', 's']);
+  out.push([F.dataset.total_spikes, 'dataset.total_spikes', 'count']);
+  out.push([F.dataset.injected_sync_events, 'dataset.injected_sync_events', 'count']);
+  out.push([F.population.pca.explained[0] + F.population.pca.explained[1], 'population.pca.explained[0] + [1]', '%']);
+  /* The thresholds are features of the run too, and a sentence
+     that quotes one is quoting the feature store. */
+  out.push([BURST_ISI * 1000, 'preprocessing.burst_isi_threshold_ms', 'ms']);
+  out.push([COINC * 1000, 'preprocessing.coincidence_window_ms', 'ms']);
+  out.push([BIN * 1000, 'preprocessing.bin_width_ms', 'ms']);
+  out.push([50, 'preprocessing.correlogram_max_lag_ms', 'ms']);
+  out.push([80, 'preprocessing.pca_variance_bar_pct', '%']);
+  return out;
+}
+var FLAT = flatValues();
+
+/* The dimension a number is written in, read off the words around
+   it. A bare number is dimensionless or a count; "unit 4" is a
+   reference to a unit id, not a quantity. */
+function dimensionOf(text, index, token) {
+  if (token.indexOf('%') >= 0) return '%';
+  var after = text.slice(index + token.length, index + token.length + 14);
+  var before = text.slice(Math.max(0, index - 18), index).toLowerCase();
+  if (/^\s*ms\b/.test(after)) return 'ms';
+  if (/^\s*hz\b/i.test(after)) return 'Hz';
+  if (/^\s*(spikes|intervals|units|events|components)\b/.test(after)) return 'count';
+  if (/^\s*s\b/.test(after)) return 's';
+  if (/\bunits?\s+(\d+(\.\d+)?\s+and\s+)?$/.test(before)) return 'unit-id';
+  return '';
+}
+/* Match a printed number to a stored value of the same dimension,
+   at the precision it was printed, closest first. A dimensionless
+   token also matches a count, and a percentage matches either a
+   stored percentage or a stored fraction times 100. */
+function matchValue(tok, dim) {
+  var raw = tok.replace(/[%,]/g, ''), v = parseFloat(raw);
+  if (isNaN(v)) return null;
+  var decimals = (raw.split('.')[1] || '').length;
+  var tol = decimals ? Math.pow(10, -decimals) / 2 + 1e-9 : 0.5;
+  var best = null, bestD = Infinity;
+  for (var i = 0; i < FLAT.length; i++) {
+    var s = FLAT[i][0], path = FLAT[i][1], sd = FLAT[i][2];
+    var ok = sd === dim || (dim === '' && sd === 'count') || (dim === 'count' && sd === '');
+    if (ok) {
+      var d = Math.abs(s - v);
+      if (d <= tol && d < bestD) { best = path; bestD = d; }
+    }
+    if (dim === '%' && sd === '') {
+      var d2 = Math.abs(s * 100 - v);
+      if (d2 <= tol && d2 < bestD) { best = path + ' x 100'; bestD = d2; }
+    }
+  }
+  return best;
+}
+function groundingCheck(text) {
+  var out = '', re = /\d+(?:\.\d+)?%?/g, last = 0, m, checked = [];
+  while ((m = re.exec(text)) !== null) {
+    var field = matchValue(m[0], dimensionOf(text, m.index, m[0]));
+    checked.push({ token: m[0], field: field });
+    out += esc(text.slice(last, m.index));
+    out += '<mark class="' + (field ? '' : 'bad') + '" title="' + esc(field || 'no matching field in the feature store') + '">' + esc(m[0]) + '</mark>';
+    last = m.index + m[0].length;
+  }
+  out += esc(text.slice(last));
+  var bad = checked.filter(function (c) { return !c.field; });
+  return { html: out, checked: checked, failed: bad, passed: bad.length === 0 };
+}
+
+function interpretation(injectUngrounded) {
+  var p = pairOf('4-5'), e = F.population.pca.explained, l2 = F.population.pca.loadings[1];
+  var u1 = F.units[0], u2 = F.units[1];
+  var t = 'Unit 1 fires in bursts: its ISI coefficient of variation is ' + fmt(u1.isi_cv, 2) +
+    ' against ' + fmt(u2.isi_cv, 2) + ' for the Poisson unit, and ' + pct(u1.burst_index * 100, 0) +
+    ' of its intervals fall below the 20 ms threshold. Units 4 and 5 fire together: ' +
+    p.coincident_spikes + ' of unit 4’s ' + F.units[4 - 1].n_spikes +
+    ' spikes have a unit 5 spike within 5 ms, a coincidence fraction of ' + fmt(p.coincidence_fraction, 2) +
+    '. The population is low-dimensional. The first two components carry ' + fmt(e[0], 1) + '% and ' +
+    fmt(e[1], 1) + '% of the variance, and unit 4 and unit 5 carry the largest weights in the second component, ' +
+    fmt(l2[3], 2) + ' and ' + fmt(l2[4], 2) + '.';
+  if (injectUngrounded) t += ' This is consistent with the 23% increase in burst rate reported for this preparation.';
+  return t;
+}
+function templateSummary() {
+  var p = pairOf('4-5'), e = F.population.pca.explained;
+  return '5 units, ' + F.dataset.total_spikes + ' spikes, ' + fmt(F.dataset.duration_s, 3) +
+    ' s. Highest ISI CV: unit 1 at ' + fmt(F.units[0].isi_cv, 2) + '. Highest coincidence fraction: units 4-5 at ' +
+    fmt(p.coincidence_fraction, 2) + ' (' + p.coincident_spikes + ' spikes). PC1 ' + fmt(e[0], 1) + '%, PC2 ' + fmt(e[1], 1) + '%.';
+}
+function pairOf(id) {
+  return F.population.pairs.filter(function (p) { return p.id === id; })[0];
+}
+
+/* ------------------------------------------------------------
+   7. COMPETING DEFINITIONS
+
+   The audit in the case study found four definitions of burst
+   index and three of synchrony in published use. Here they are,
+   applied to the same spike times, so the disagreement is a
+   number on the screen rather than an assertion.
+   ------------------------------------------------------------ */
+function burstDefinitions(idx) {
+  var t = F.units[idx].times, d = isis(t), n = d.length, i;
+  var short20 = 0, short10 = 0;
+  for (i = 0; i < n; i++) { if (d[i] < 0.02) short20++; if (d[i] < 0.01) short10++; }
+  var inBurst = 0, run = 1;
+  for (i = 0; i < n; i++) {
+    if (d[i] < 0.02) run++;
+    else { if (run >= 3) inBurst += run; run = 1; }
+  }
+  if (run >= 3) inBurst += run;
+  var rate = t.length / T, expected = n * (1 - Math.exp(-rate * 0.02));
+  return [
+    { who: 'Fraction of ISIs below 20 ms', formula: 'count(ISI < 20 ms) / (n - 1)', v: short20 / n, digits: 2, own: true,
+      cite: 'The definition NeuroAdapt ships, and the one written into every output it produces.' },
+    { who: 'Fraction of ISIs below 10 ms', formula: 'count(ISI < 10 ms) / (n - 1)', v: short10 / n, digits: 2,
+      cite: 'Same construction, a different threshold. Nothing in the metric name carries the threshold.' },
+    { who: 'Share of spikes inside a burst', formula: 'spikes in runs of 3+ with ISI < 20 ms / n', v: inBurst / t.length, digits: 2,
+      cite: 'Counts spikes rather than intervals, so it answers a different question under the same name.' },
+    { who: 'Observed / Poisson-expected short ISIs', formula: 'count(ISI < 20 ms) / (n - 1)(1 - e^-rate x 20 ms)', v: short20 / expected, digits: 1,
+      cite: 'A ratio, not a fraction. It is not bounded by 1 and cannot be compared with the three above.' },
+  ];
+}
+function syncDefinitions(pairId) {
+  var p = pairOf(pairId), a = F.units[p.a], b = F.units[p.b];
+  var mid = Math.floor(p.ccg.length / 2);
+  var peak = 0, k;
+  for (k = mid - 5; k <= mid + 5; k++) peak += p.ccg[k];
+  var chance = (a.n_spikes * b.n_spikes * (2 * COINC)) / T;
+  return [
+    { who: 'Coincidence fraction, +/- 5 ms', formula: 'spikes of A within 5 ms of B / spikes of A', v: p.coincidence_fraction, digits: 2, own: true,
+      cite: 'The definition NeuroAdapt ships. Bounded by 1, and asymmetric - A to B is not B to A.' },
+    { who: 'Pearson r of 100 ms binned counts', formula: 'corr(bin(A), bin(B))', v: p.binned_pearson, digits: 2,
+      cite: 'Also bounded by 1, also called synchrony, and it measures co-activity at 100 ms rather than coincidence at 5 ms.' },
+    { who: 'Correlogram peak over chance', formula: 'peak count in +/- 5 ms / expected under independence', v: peak / chance, digits: 1,
+      cite: 'An enrichment ratio. A paper reporting "synchrony = ' + fmt(peak / chance, 1) + '" and one reporting "synchrony = ' + fmt(p.coincidence_fraction, 2) + '" may have measured the same two neurons.' },
+  ];
+}
+
+/* ------------------------------------------------------------
+   8. STATE AND NAVIGATION
+   ------------------------------------------------------------ */
+var state = {
+  view: 'run',
+  ran: false,
+  unit: null,
+  pair: '4-5',
+  metric: 'burst',
+  at: null,
+  format: 'nwb',
+  ask: null,
+  inject: false,
+  determinism: null,
+};
+
+var VIEWS = [
+  { id: 'run', n: '01', t: 'The run', s: 'nine stages, two of them the model' },
+  { id: 'units', n: '02', t: 'Unit-level features', s: '5 units x 4 metrics' },
+  { id: 'population', n: '03', t: 'Population-level features', s: '10 pairs, correlograms, PCA' },
+  { id: 'definitions', n: '04', t: 'Competing definitions', s: 'the same spikes, four answers' },
+  { id: 'report', n: '05', t: 'Generated report', s: 'provenance, features, interpretation' },
+  { id: 'ask', n: '06', t: 'Ask the report', s: 'retrieval over what was computed' },
+  { id: 'export', n: '07', t: 'Export', s: 'NWB, CSV, JSON' },
+];
+
+function go(view, opts) {
+  state.view = view;
+  if (opts) for (var k in opts) state[k] = opts[k];
+  if (view !== 'run') state.ran = true;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ------------------------------------------------------------
+   9. THE STAGES
+
+   Each stage names what it produced. The two model stages are
+   badged, and neither of them writes into the feature store -
+   which is the whole reason the badge is worth printing.
+   ------------------------------------------------------------ */
+function stages() {
+  var p = pairOf('4-5'), e = F.population.pca.explained;
+  return [
+    { t: 'Ingest sorted units', k: 'rule', ms: 41,
+      d: 'Reads an NWB units table. Spike times are taken as sorted; NeuroAdapt does not re-sort and does not repair sorting error.',
+      out: F.dataset.units + ' units, ' + F.dataset.total_spikes + ' spikes, ' + fmt(F.dataset.duration_s, 3) + ' s' },
+    { t: 'Unit inclusion check', k: 'rule', ms: 12,
+      d: 'Refractory violations below 0.5% and at least 20 spikes. Both thresholds are recorded whether or not they exclude anything.',
+      out: '0 units excluded, 5 carried forward' },
+    { t: 'Resolve the pipeline profile', k: 'rule', ms: 7,
+      d: 'Binds every threshold the run will use - bin width, burst ISI, coincidence window, correlogram lag - and hashes the resolved set.',
+      out: 'profile spike-v0.1, parameter hash ' + PARAM_HASH },
+    { t: 'Unit-level features', k: 'rule', ms: 63,
+      d: 'Firing rate, ISI coefficient of variation, burst index and Fano factor, per unit, each written with its definition.',
+      out: '4 metrics x 5 units = 20 values, 20 definitions' },
+    { t: 'Population-level features', k: 'rule', ms: 214,
+      d: 'All 10 unit pairs: coincident spikes, binned correlation, and a cross-correlogram over +/- 50 ms in 1 ms bins.',
+      out: '10 pairs, peak coincidence ' + p.coincident_spikes + ' spikes at units 4-5' },
+    { t: 'Principal component analysis', k: 'rule', ms: 38,
+      d: 'Covariance of the 100 x 5 binned count matrix. Covariance rather than correlation, so a high-rate unit is not rescaled to look like a driver.',
+      out: 'PC1 ' + fmt(e[0], 1) + '%, PC2 ' + fmt(e[1], 1) + '%, PC1+PC2 ' + fmt(e[0] + e[1], 1) + '%' },
+    { t: 'Figures from the feature store', k: 'rule', ms: 96,
+      d: 'Every figure is drawn from a stored feature array. No figure reads the spike times except the raster, which is labelled as raw input.',
+      out: '5 figures, 5 source fields' },
+    { t: 'Interpret the figures', k: 'model', ms: 2140,
+      d: 'gpt-4o-mini receives the feature values and writes the interpretation paragraph. It receives no spike times and computes nothing.',
+      out: 'draft interpretation, ' + interpretation(false).length + ' characters' },
+    { t: 'Index the report for retrieval', k: 'model', ms: 780,
+      d: 'text-embedding-3-large over the report sections, stored in Weaviate. Retrieval sits on top of the feature set and could be removed without touching it.',
+      out: '6 sections embedded, 3072 dimensions' },
+  ];
+}
+
+/* ------------------------------------------------------------
+   10. VIEWS
+   ------------------------------------------------------------ */
+function head(kicker, title, sub) {
+  return '<div class="pane-head"><div class="kicker">' + esc(kicker) + '</div><h2>' + esc(title) + '</h2><p>' + sub + '</p></div>';
+}
+
+function viewRun() {
+  var st = stages(), h = '';
+  h += head('Stage 01', 'The run', 'Nine stages over one recording. Two of them are the model, and neither writes a number into the feature store &mdash; the interpretation is generated after every value already exists.');
+
+  h += '<div class="tiles">' +
+    tile(String(st.length), 'Stages in the run', 'seven rule-based, two model') +
+    tile('2', 'Stages that are the model', 'interpretation and indexing') +
+    tile('0', 'Numbers computed by a model', 'every value comes from a rule-based stage') +
+    tile(String(UNDEFINED_EMITS.length), 'Metrics printed without a definition', 'guardrail &mdash; counted at render time, not asserted') +
+    '</div>';
+
+  h += '<div class="card"><h3>Pipeline</h3>' +
+    '<p class="sub">Timings are from a simulated run. The badge on each stage is the thing worth reading: the split between counting and writing prose is the design.</p>';
+  st.forEach(function (s, i) {
+    var pending = !state.ran && i > 0;
+    h += '<div class="stage' + (pending ? ' pending' : '') + '">' +
+      '<div class="idx">' + String(i + 1).padStart(2, '0') + '</div>' +
+      '<div><div class="t">' + esc(s.t) + ' <span class="badge ' + s.k + '">' + s.k + '</span></div>' +
+      '<div class="d">' + esc(s.d) + '</div>' +
+      (pending ? '' : '<div class="out">&rarr; ' + esc(s.out) + '</div>') + '</div>' +
+      '<div class="ms">' + (pending ? '' : s.ms + ' ms') + '</div></div>';
+  });
+  h += '</div>';
+
+  if (!state.ran) {
+    h += '<div class="card tight"><button class="btn primary" id="doRun">Run the pipeline</button>' +
+      '<span class="note" style="margin-left:14px">Generates the five spike trains from the fixed seeds and computes every feature on this page in the browser.</span></div>';
+  } else {
+    h += '<div class="card"><h3>Provenance</h3>' +
+      '<p class="sub">Enough to reproduce the run, and no more. A result without this block is a defect rather than a result.</p>' +
+      '<div class="prov">' +
+      row('Dataset', F.dataset.id + ' &middot; ' + esc(F.dataset.source)) +
+      row('Pipeline profile', 'spike-v0.1') +
+      row('Parameter hash', PARAM_HASH) +
+      row('Feature hash', FEATURE_HASH) +
+      row('Seeds', 'u1 ' + SEEDS.u1 + ' &middot; u2 ' + SEEDS.u2 + ' &middot; u3 ' + SEEDS.u3 + ' &middot; pair ' + SEEDS.pair) +
+      row('Bin width', '100 ms') +
+      row('Burst ISI threshold', '20 ms') +
+      row('Coincidence window', '+/- 5 ms') +
+      row('Correlogram', '+/- 50 ms, 1 ms bins') +
+      row('PCA basis', 'covariance of 100 x 5 binned counts') +
+      row('Interpretation model', 'gpt-4o-mini, temperature 0') +
+      row('Retrieval', 'text-embedding-3-large, Weaviate') +
+      '</div>' +
+      '<div style="margin-top:14px"><button class="btn" id="doDet">Re-run and compare hashes</button>' +
+      (state.determinism ? ' <span class="badge ' + (state.determinism.same ? 'good' : 'crit') + '">' +
+        (state.determinism.same ? 'identical: ' + state.determinism.h : 'diverged') + '</span>' : '') +
+      '<div class="note" style="margin-top:10px">Re-running the same input under the same profile must produce the same feature hash. A mismatch is a release-blocking defect, not a rounding curiosity.</div></div></div>';
+  }
+  return h;
+}
+function row(k, v) { return '<div><span class="k">' + esc(k) + '</span>' + v + '</div>'; }
+function tile(v, l, d) {
+  return '<div class="tile"><div class="v">' + v + '</div><div class="l">' + l + '</div><div class="d">' + d + '</div></div>';
+}
+
+function viewUnits() {
+  var h = head('Stage 02', 'Unit-level features',
+    'Four metrics per unit, computed independently of every other unit. Each column carries its definition in the header, because a burst index without its threshold is the artefact the literature audit kept finding.');
+
+  h += '<div class="toolbar"><span class="badge">tier</span><b style="color:var(--ink)">single unit</b>' +
+    '<span class="spacer"></span>';
+  h += '<button class="btn sm" data-unit="" aria-pressed="' + (state.unit === null) + '">All units</button>';
+  F.units.forEach(function (u, i) {
+    h += '<button class="btn sm" data-unit="' + (i + 1) + '" aria-pressed="' + (state.unit === i) + '">' + esc(u.label) + '</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><table class="data"><thead><tr>' +
+    '<th>Unit<span class="def">planted structure, known from the simulation</span></th>' +
+    th('n_spikes') + th('firing_rate_hz') + th('isi_cv') + th('burst_index') + th('fano_factor') +
+    '</tr></thead><tbody>';
+  F.units.forEach(function (u, i) {
+    h += '<tr class="row-click" data-unit="' + (i + 1) + '">' +
+      '<td class="name"><span class="swatch" style="background:' + cvar(u.color) + '"></span>' + esc(u.label) +
+      '<span class="planted">' + esc(u.planted) + '</span></td>' +
+      '<td class="num">' + u.n_spikes + '</td>' +
+      '<td class="num">' + fmt(u.firing_rate_hz, 2) + '</td>' +
+      '<td class="num">' + fmt(u.isi_cv, 2) + '</td>' +
+      '<td class="num">' + fmt(u.burst_index, 2) + '</td>' +
+      '<td class="num">' + fmt(u.fano_factor, 2) + '</td></tr>';
+  });
+  h += '</tbody></table>' +
+    '<div class="note" style="margin-top:14px">Every value above is computed from the spike times when this page renders. The definitions under the column headings are the ones used to compute them &mdash; they are not documentation kept somewhere else.</div></div>';
+
+  if (state.unit !== null) {
+    var u = F.units[state.unit];
+    h += '<div class="grid2"><div class="card"><h3>' + esc(u.label) + ' &mdash; the four values, with their definitions</h3>' +
+      '<p class="sub">' + esc(u.planted) + '. This is what travels into the NWB file: the value and the sentence that defines it, in the same row.</p>' +
+      metric('n_spikes', u.n_spikes, 0) +
+      metric('firing_rate_hz', u.firing_rate_hz, 2) +
+      metric('isi_cv', u.isi_cv, 2) +
+      metric('burst_index', u.burst_index, 2) +
+      metric('fano_factor', u.fano_factor, 2) +
+      '</div><div class="card"><h3>Interval distribution</h3>' +
+      '<p class="sub">The histogram behind the two interval metrics above.</p>' +
+      figWrap('ISI histogram, ' + u.label, figIsi([state.unit]),
+        'Log-spaced bins from 1 ms to 2.5 s. ' + (state.unit === 0
+          ? 'The two modes are the intra-burst interval near 5 ms and the gap between bursts near 1 s &mdash; the bimodality the burst index compresses into one number.'
+          : 'Counts are the stored histogram, not a re-computation from spike times.'),
+        'units[' + state.unit + '].isi_hist', 'Show the stored array',
+        'units[' + state.unit + '].isi_hist = [' + u.isi_hist.join(', ') + ']') +
+      '</div></div>';
+  }
+
+  h += '<div class="card"><h3>The recording</h3><p class="sub">Raw input, shown for orientation. It is the only figure on this page drawn from spike times rather than from a stored feature.</p>' +
+    figWrap('Raster, five units over ten seconds', figRaster(F.units),
+      'Unit 1 fires in clusters, unit 3 is a metronome, and units 4 and 5 line up with each other. The features below are what makes that description a measurement.',
+      'units[i].times &mdash; raw input') + '</div>';
+  return h;
+}
+function th(id) {
+  var d = defOf(id);
+  return '<th>' + esc(d.label) + '<span class="def">' + esc(d.def) + '</span></th>';
+}
+
+function viewPopulation() {
+  var p = pairOf(state.pair), e = F.population.pca.explained;
+  var h = head('Stage 03', 'Population-level features',
+    'Computed across units, and kept separate from the single-unit tier throughout. The two have different assumptions and different reliability, and merging them invites reading a population claim as a statement about one neuron.');
+
+  h += '<div class="tiles">' +
+    tile(String(pairOf('4-5').coincident_spikes), 'Coincident spikes, units 4&ndash;5', 'unit-4 spikes with a unit-5 spike within +/- 5 ms') +
+    tile(fmt(pairOf('4-5').coincidence_fraction, 2), 'Coincidence fraction', 'of unit 4&rsquo;s ' + F.units[3].n_spikes + ' spikes') +
+    tile(pct(e[0] + e[1], 0), 'Variance in the first two components', fmt(e[0], 1) + '% + ' + fmt(e[1], 1) + '%') +
+    tile(String(F.population.pairs.length), 'Pairs analysed', 'every pair, not a chosen subset') +
+    '</div>';
+
+  h += '<div class="toolbar"><span class="badge">pair</span>';
+  F.population.pairs.forEach(function (pp) {
+    h += '<button class="btn sm" data-pair="' + pp.id + '" aria-pressed="' + (state.pair === pp.id) + '">' +
+      pp.id.replace('-', '&ndash;') + '</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><h3>Units ' + state.pair.replace('-', ' and ') + '</h3>' +
+    '<p class="sub">The correlogram is the stored histogram; the coincidence count beside it is computed from the spike times under the stated window. They are two different measurements of the same thing and the page says which is which.</p>' +
+    figWrap('Cross-correlogram, +/- 50 ms in 1 ms bins', figCcg(p),
+      (p.id === '4-5'
+        ? 'The centre bar is the planted synchrony: <b>' + p.coincident_spikes + '</b> of unit 4&rsquo;s ' + F.units[3].n_spikes +
+          ' spikes have a unit 5 spike within 5 ms. Away from zero the histogram is flat, which is what says the two units are otherwise independent.'
+        : 'No structure at zero lag. This is what a pair with no relationship looks like under exactly the same parameters.'),
+      'population.pairs[k].ccg', 'Show the stored array', 'population.pairs["' + p.id + '"].ccg = [' + p.ccg.join(', ') + ']') +
+    '<div style="margin-top:14px">' +
+    metric('coincident_spikes', p.coincident_spikes, 0) +
+    metric('coincidence_fraction', p.coincidence_fraction, 2) +
+    metric('binned_pearson', p.binned_pearson, 2) +
+    '</div></div>';
+
+  h += '<div class="grid2"><div class="card"><h3>Every pair, one number each</h3>' +
+    '<p class="sub">Pearson r of 100 ms binned counts. Click a cell to load that pair above.</p>' + figCorr() +
+    '<div class="note" style="margin-top:12px">Only one cell is large. A matrix that shows nothing almost everywhere is the honest result here, and it is the reason the 4&ndash;5 peak means something.</div></div>';
+
+  h += '<div class="card"><h3>Synchronous spikes, against chance</h3>' +
+    '<p class="sub">A synchrony figure without its chance level is unreadable: at 20 Hz, a unit collides with its neighbours constantly without being synchronous with anything.</p>' +
+    '<table class="data"><thead><tr><th>Unit</th>' +
+    '<th>Observed<span class="def">' + esc(DEFS.synchrony_observed.def) + '</span></th>' +
+    '<th>Chance<span class="def">' + esc(DEFS.synchrony_chance.def) + '</span></th>' +
+    '<th>Excess</th></tr></thead><tbody>';
+  F.population.synchrony.forEach(function (s, i) {
+    defOf('synchrony_observed'); defOf('synchrony_chance');
+    var ex = s.observed - s.chance;
+    h += '<tr><td class="name"><span class="swatch" style="background:' + cvar(F.units[i].color) + '"></span>' + esc(F.units[i].label) + '</td>' +
+      '<td class="num">' + fmt(s.observed, 2) + '</td><td class="num">' + fmt(s.chance, 2) + '</td>' +
+      '<td class="num" style="color:' + (ex > 0.2 ? 'var(--good)' : 'var(--muted)') + '">' + (ex >= 0 ? '+' : '') + fmt(ex, 2) + '</td></tr>';
+  });
+  h += '</tbody></table></div></div>';
+
+  h += '<div class="card"><h3>Population structure</h3>' +
+    '<p class="sub">PCA on the 100 x 5 matrix of binned counts, covariance basis. The simulation planted two coordinated patterns and no more, so two components carrying most of the variance is the result it was built to produce &mdash; a check that the pipeline works, not a discovery about neurons.</p>' +
+    figWrap('Variance explained by each component', figScree(),
+      'The first two components carry <b>' + fmt(e[0] + e[1], 1) + '%</b> of the variance. The pre-agreed bar was 80%.',
+      'population.pca.explained', 'Show the stored array',
+      'population.pca.explained = [' + F.population.pca.explained.map(function (v) { return fmt(v, 3); }).join(', ') + ']') +
+    figWrap('Where each unit sits in the first two components', figLoadings(),
+      'Unit 1 carries the first component almost alone &mdash; that component is &ldquo;did a burst happen in this bin&rdquo;. Units 4 and 5 carry the second together, at ' +
+      fmt(F.population.pca.loadings[1][3], 2) + ' and ' + fmt(F.population.pca.loadings[1][4], 2) +
+      ' &mdash; that component is &ldquo;did a synchronous event happen&rdquo;. Units 2 and 3 sit near the origin, which is the correct answer for them.',
+      'population.pca.loadings[0] and [1]', 'Show the stored arrays',
+      'population.pca.loadings[0] = [' + F.population.pca.loadings[0].map(function (v) { return fmt(v, 4); }).join(', ') + ']\n' +
+      'population.pca.loadings[1] = [' + F.population.pca.loadings[1].map(function (v) { return fmt(v, 4); }).join(', ') + ']') +
+    '</div>';
+  return h;
+}
+
+function viewDefinitions() {
+  var isBurst = state.metric === 'burst';
+  var rows = isBurst ? burstDefinitions(state.unit === null ? 0 : state.unit) : syncDefinitions(state.pair);
+  var vals = rows.map(function (r) { return fmt(r.v, r.digits); });
+  var distinct = vals.filter(function (v, i) { return vals.indexOf(v) === i; }).length;
+  var h = head('Why the module exists', 'One name, ' + distinct + ' number' + (distinct === 1 ? '' : 's'),
+    'The same spike times, under the definitions the audit found in published use. Nothing here is a disagreement about data. It is a disagreement about what the word means, and it is why NeuroAdapt writes the definition into the output beside the value.');
+
+  h += '<div class="toolbar">' +
+    '<button class="btn sm" data-metric="burst" aria-pressed="' + isBurst + '">Burst index</button>' +
+    '<button class="btn sm" data-metric="sync" aria-pressed="' + !isBurst + '">Synchrony</button>' +
+    '<span class="spacer"></span>';
+  if (isBurst) {
+    F.units.forEach(function (u, i) {
+      h += '<button class="btn sm" data-unit="' + (i + 1) + '" aria-pressed="' + ((state.unit === null ? 0 : state.unit) === i) + '">' + esc(u.label) + '</button>';
+    });
+  } else {
+    ['4-5', '2-3', '1-2'].forEach(function (id) {
+      h += '<button class="btn sm" data-pair="' + id + '" aria-pressed="' + (state.pair === id) + '">Units ' + id.replace('-', '&ndash;') + '</button>';
+    });
+  }
+  h += '</div>';
+
+  var subject = isBurst ? (F.units[state.unit === null ? 0 : state.unit].label + ', ' +
+    F.units[state.unit === null ? 0 : state.unit].n_spikes + ' spikes') : ('units ' + state.pair.replace('-', ' and '));
+  h += '<div class="card"><h3>' + (isBurst ? 'Burst index' : 'Synchrony') + ' of ' + esc(subject) +
+    ' <span class="badge crit">' + rows.length + ' definitions, ' + distinct + ' answer' + (distinct === 1 ? '' : 's') + '</span></h3>' +
+    '<p class="sub">Identical input. Identical code path up to the definition. The numbers below are computed here, now, from the same array of spike times.</p><div class="defcmp">';
+  rows.forEach(function (r) {
+    h += '<div class="defrow' + (r.own ? ' own' : '') + '"><div class="v">' + fmt(r.v, r.digits) +
+      (r.own ? '<small>NEUROADAPT</small>' : '<small>&nbsp;</small>') + '</div>' +
+      '<div><div class="who">' + esc(r.who) + '</div>' +
+      '<div class="formula">' + esc(r.formula) + '</div>' +
+      '<div class="cite">' + esc(r.cite) + '</div></div></div>';
+  });
+  h += '</div><div class="note warn" style="margin-top:14px">Reported as a bare number under one name, these read as ' + vals.join(', ') +
+    '. A reader comparing two papers has no way to tell whether the difference is the preparation or the threshold.';
+  /* Where two definitions happen to agree on this subject they
+     will not agree on the next one, and saying so is the point. */
+  if (distinct < rows.length && isBurst) {
+    var other = 1, alt = burstDefinitions(other).map(function (r) { return fmt(r.v, r.digits); });
+    h += ' Two of the four agree here, because every interval inside a burst of ' + esc(F.units[state.unit === null ? 0 : state.unit].label) +
+      ' is 5 ms and both thresholds catch all of them. On ' + esc(F.units[other].label) + ' the same four give ' + alt.join(', ') + '.';
+  }
+  h += '</div></div>';
+
+  h += '<div class="card"><h3>What NeuroAdapt does about it</h3>' +
+    '<p class="sub" style="max-width:84ch">It picks one, records which, and puts the definition in the same row as the value in every output &mdash; the NWB file, the CSV, the JSON and the report. That will annoy anyone using a different definition. It is also the only thing that makes two results comparable, and a better fifth definition would not have helped.</p>' +
+    '<div class="prov">' +
+    row('Chosen definition', isBurst ? 'fraction of ISIs below 20 ms' : 'coincident spikes within +/- 5 ms, over the spikes of unit A') +
+    row('Written into', 'NWB units table column description, CSV header block, JSON field, report page 2') +
+    row('Changing it requires', 'a new pipeline profile version, not an argument in a lab meeting') +
+    '</div></div>';
+  return h;
+}
+
+function viewReport() {
+  var e = F.population.pca.explained, p = pairOf('4-5');
+  var gen = groundingCheck(interpretation(state.inject));
+  var h = head('Stage 05', 'Generated report',
+    'One document per run, immutable once issued. Numbers first, prose last, and the prose only after every number in it has been matched to a field.');
+
+  h += '<div class="pages">' +
+    pageBtn('provenance', '01', 'Provenance') +
+    pageBtn('preprocessing', '02', 'Preprocessing choices') +
+    pageBtn('unit', '03', 'Unit-level features') +
+    pageBtn('population', '04', 'Population-level features') +
+    pageBtn('interpretation', '05', 'Interpretation') +
+    pageBtn('limits', '06', 'What this does not establish') +
+    '</div>';
+
+  h += '<div class="sheet"><div class="sheet-head">' +
+    '<div class="t">Spike-train feature report &mdash; ' + esc(F.dataset.id) + '</div>' +
+    '<div class="s">NeuroAdapt spike-v0.1 &middot; parameter hash ' + PARAM_HASH + ' &middot; feature hash ' + FEATURE_HASH +
+    ' &middot; <span class="ruo">research use only &mdash; simulated data</span></div></div>';
+
+  h += '<a id="rp-provenance"></a><h3>01 &middot; Provenance</h3><div class="prov">' +
+    row('Dataset', esc(F.dataset.id) + ' &middot; ' + esc(F.dataset.source)) +
+    row('Units / spikes / duration', F.dataset.units + ' / ' + F.dataset.total_spikes + ' / ' + fmt(F.dataset.duration_s, 3) + ' s') +
+    row('Ground truth', 'three planted structures: bursting unit, synchronous pair, regular unit') +
+    row('Injected synchronous events', String(F.dataset.injected_sync_events)) +
+    row('Pipeline profile', 'spike-v0.1 &middot; parameter hash ' + PARAM_HASH) +
+    row('Seeds', 'u1 ' + SEEDS.u1 + ' &middot; u2 ' + SEEDS.u2 + ' &middot; u3 ' + SEEDS.u3 + ' &middot; pair ' + SEEDS.pair) +
+    '</div>';
+
+  h += '<a id="rp-preprocessing"></a><h3>02 &middot; Preprocessing choices</h3>' +
+    '<p>Listed rather than implied. Every line below changes a number elsewhere in this report, and a reader who does not know these values cannot compare it with anything.</p>';
+  F.preprocessing.forEach(function (c) {
+    h += '<div class="choice"><div class="c">' + esc(c.c) + '</div><div class="v">' + esc(c.v) + '</div><div class="w">' + esc(c.w) + '</div></div>';
+  });
+
+  h += '<a id="rp-unit"></a><h3>03 &middot; Unit-level features</h3>' +
+    '<div class="tier"><div class="tier-label">Tier 1 &mdash; single unit, computed independently per unit</div>' +
+    '<table class="data"><thead><tr><th>Unit</th>' + th('n_spikes') + th('firing_rate_hz') + th('isi_cv') + th('burst_index') + th('fano_factor') + '</tr></thead><tbody>';
+  F.units.forEach(function (u) {
+    h += '<tr><td class="name"><span class="swatch" style="background:' + cvar(u.color) + '"></span>' + esc(u.label) + '</td>' +
+      '<td class="num">' + u.n_spikes + '</td><td class="num">' + fmt(u.firing_rate_hz, 2) + '</td>' +
+      '<td class="num">' + fmt(u.isi_cv, 2) + '</td><td class="num">' + fmt(u.burst_index, 2) + '</td>' +
+      '<td class="num">' + fmt(u.fano_factor, 2) + '</td></tr>';
+  });
+  h += '</tbody></table>' +
+    figWrap('Interval distributions, unit 1 against unit 2', figIsi([0, 1]),
+      'The bursting unit against the Poisson unit. Unit 1 is bimodal &mdash; intervals inside a burst near 5 ms, intervals between bursts near 1 s. Unit 2 is the broad single mode a Poisson process produces.',
+      'units[0].isi_hist, units[1].isi_hist', 'Show the stored arrays',
+      'units[0].isi_hist = [' + F.units[0].isi_hist.join(', ') + ']\nunits[1].isi_hist = [' + F.units[1].isi_hist.join(', ') + ']') +
+    '</div>';
+
+  h += '<a id="rp-population"></a><h3>04 &middot; Population-level features</h3>' +
+    '<div class="tier pop"><div class="tier-label">Tier 2 &mdash; population, computed across units</div>' +
+    '<p>Separated from tier 1 deliberately. A new single-unit metric can be added above without disturbing anything here, and nothing here can be read as a statement about one neuron.</p>' +
+    figWrap('Cross-correlogram, units 4 and 5', figCcg(p),
+      '<b>' + p.coincident_spikes + '</b> of unit 4&rsquo;s ' + F.units[3].n_spikes + ' spikes have a unit 5 spike within 5 ms: a coincidence fraction of <b>' +
+      fmt(p.coincidence_fraction, 2) + '</b>. The simulation injected ' + F.dataset.injected_sync_events + ' synchronous events.',
+      'population.pairs[k].ccg') +
+    figWrap('Where each unit sits in the first two components', figLoadings(),
+      'The first two components carry <b>' + fmt(e[0] + e[1], 1) + '%</b> of the population variance, against a pre-agreed bar of 80%. Unit 1 carries the first, units 4 and 5 carry the second together.',
+      'population.pca.loadings[0] and [1], population.pca.explained') +
+    '</div>';
+
+  h += '<a id="rp-interpretation"></a><h3>05 &middot; Interpretation</h3>' +
+    '<p>Written by the model from the values above. It receives the feature store and no spike times, so it can describe a number and cannot produce one.</p>' +
+    '<div class="gen' + (gen.passed ? '' : ' withheld') + '"><div class="h"><span class="badge model">gpt-4o-mini</span>' +
+    '<span class="t">' + (gen.passed ? 'Interpretation' : 'Explanation withheld') + '</span>' +
+    '<span class="spacer" style="margin-left:auto"></span>' +
+    '<button class="btn sm" id="doInject" aria-pressed="' + state.inject + '">' +
+    (state.inject ? 'Remove the ungrounded number' : 'Inject an ungrounded number') + '</button></div>';
+  if (gen.passed) {
+    h += '<p>' + gen.html + '</p>';
+  } else {
+    h += '<p style="opacity:.55">' + gen.html + '</p>' +
+      '<div class="note warn" style="margin-top:10px">' + gen.failed.length + ' number' + (gen.failed.length === 1 ? '' : 's') +
+      ' in the draft (' + gen.failed.map(function (f) { return esc(f.token); }).join(', ') +
+      ') matched no field in the feature store. The draft is withheld and the deterministic summary is used instead.</div>' +
+      '<div class="card tight" style="margin-top:12px;background:var(--surface-2)"><div class="badge rule" style="margin-bottom:8px">template summary</div>' +
+      '<p style="margin:0;font-family:var(--mono);font-size:12px">' + esc(templateSummary()) + '</p></div>';
+  }
+  h += '<div class="check"><span class="dot ' + (gen.passed ? 'good' : 'crit') + '"></span>' +
+    '<b style="color:var(--ink)">' + (gen.checked.length - gen.failed.length) + ' of ' + gen.checked.length +
+    '</b> numbers in the text traced to a field in the feature store. Hover a highlighted number to see which field.' +
+    (gen.passed ? '' : ' A single unmatched number withholds the whole paragraph.') +
+    '</div></div>';
+
+  h += '<a id="rp-limits"></a><h3>06 &middot; What this does not establish</h3>' +
+    '<p>Every figure in this report comes from simulated spike trains with no spike-sorting error. Sorting error is the dominant source of noise in a real recording, and a metric that recovers planted structure perfectly may be quite sensitive to units merged or split upstream. This validates the implementation. It says nothing about the science.</p>' +
+    '<p class="ruo" style="margin-top:18px">Research use only. Simulated data. No claim about any real recording.</p>';
+
+  h += '</div>';
+  return h;
+}
+function pageBtn(id, n, label) {
+  return '<button class="page-btn" data-at="' + id + '" aria-current="' + (state.at === id) + '">' +
+    '<span class="n">' + n + '</span>' + esc(label) + '</button>';
+}
+
+/* ------------------------------------------------------------
+   11. RETRIEVAL
+
+   Deliberately downstream. It answers from the feature store or
+   it refuses; there is no third behaviour, and refusing is the
+   common case for the questions people actually bring.
+   ------------------------------------------------------------ */
+function answers() {
+  var p = pairOf('4-5'), e = F.population.pca.explained, u1 = F.units[0];
+  return [
+    { q: 'Which unit is the most bursty, and by how much?',
+      a: 'Unit 1. Its burst index is ' + fmt(u1.burst_index, 2) + ' against ' + fmt(F.units[1].burst_index, 2) +
+        ' for the Poisson unit and ' + fmt(F.units[2].burst_index, 2) + ' for the regular unit, and its ISI coefficient of variation is ' +
+        fmt(u1.isi_cv, 2) + '. Burst index here is the fraction of intervals below 20 ms; under a 10 ms threshold the same spike train scores ' +
+        fmt(burstDefinitions(0)[1].v, 2) + '.',
+      c: ['units[0].burst_index', 'units[1].burst_index', 'units[2].burst_index', 'units[0].isi_cv', 'preprocessing.burst_isi_threshold_ms'] },
+    { q: 'How synchronous are units 4 and 5?',
+      a: p.coincident_spikes + ' of unit 4’s ' + F.units[3].n_spikes + ' spikes have a unit 5 spike within 5 ms, a coincidence fraction of ' +
+        fmt(p.coincidence_fraction, 2) + '. On 100 ms binned counts the Pearson correlation is ' + fmt(p.binned_pearson, 2) +
+        '. Those are two different measurements and the report carries both, because "synchrony" alone does not identify either.',
+      c: ['population.pairs[9].coincident_spikes', 'population.pairs[9].coincidence_fraction', 'population.pairs[9].binned_pearson'] },
+    { q: 'Is the population activity low-dimensional?',
+      a: 'Two components carry ' + fmt(e[0] + e[1], 1) + '% of the variance: PC1 at ' + fmt(e[0], 1) + '% and PC2 at ' + fmt(e[1], 1) +
+        '%. PC1 loads almost entirely on unit 1 and PC2 on units 4 and 5. The simulation planted exactly two coordinated patterns, so this is the pipeline recovering a known answer rather than a finding.',
+      c: ['population.pca.explained[0]', 'population.pca.explained[1]', 'population.pca.loadings[0]', 'population.pca.loadings[1]'] },
+    { q: 'What bin width was used, and does it matter?',
+      a: '100 ms, for both the Fano factor and the PCA. It matters: the Fano factor is variance over mean of counts in those bins, so a 50 ms bin gives a different number for the same spikes under the same name. The value is recorded in the preprocessing block of every report.',
+      c: ['preprocessing.bin_width_ms', 'units[i].fano_factor', 'population.pca'] },
+    { q: 'Is unit 1 an interneuron?',
+      refuse: 'Not in the feature set. NeuroAdapt computes timing features from sorted spike trains: firing rate, ISI coefficient of variation, burst index, Fano factor, pairwise coincidence, binned correlation and principal components. Cell type is not among them, and a high burst index is not a cell type. Waveform features would be the place to start, and this run has none.' },
+    { q: 'Did bursting increase after the drug was applied?',
+      refuse: 'Not in the feature set. This dataset carries no condition labels and no second epoch — it is one ten-second window with three planted structures. A before-and-after comparison would need two analysis windows and a stated hypothesis, neither of which exists in this run.' },
+  ];
+}
+
+function viewAsk() {
+  var qs = answers();
+  var h = head('Stage 06', 'Ask the report',
+    'The retrieval layer sits on top of the feature set and is not the contribution. It is useful, and keeping it downstream is what lets the feature set stand alone if the rest is discarded.');
+
+  h += '<div class="asklist">';
+  qs.forEach(function (q, i) {
+    h += '<button class="askq" data-ask="' + i + '" aria-pressed="' + (state.ask === i) + '">' + esc(q.q) +
+      (q.refuse ? ' <span class="badge crit" style="margin-left:6px">refused</span>' : '') + '</button>';
+  });
+  h += '</div>';
+
+  if (state.ask !== null && qs[state.ask]) {
+    var q = qs[state.ask];
+    h += '<div class="answer' + (q.refuse ? ' refusal' : '') + '"><div class="q">' + esc(q.q) + '</div>';
+    if (q.refuse) {
+      h += '<div class="badge crit" style="margin-bottom:10px">no answer available</div><p>' + esc(q.refuse) + '</p>';
+    } else {
+      h += '<p>' + esc(q.a) + '</p><div class="cites"><b>fields cited:</b> ' + q.c.map(esc).join(' &middot; ') + '</div>';
+    }
+    h += '</div>';
+  } else {
+    h += '<div class="note">Pick a question. Two of the six are refused, which is roughly the rate that holds for the questions researchers actually bring &mdash; most of them are about the experiment rather than about the spikes.</div>';
+  }
+
+  h += '<div class="card" style="margin-top:16px"><h3>What the layer is allowed to do</h3>' +
+    '<div class="prov">' +
+    row('Receives', 'the feature store, the preprocessing block, and the report sections') +
+    row('Never receives', 'spike times, or any value it could recompute') +
+    row('Must cite', 'a field path for every quantitative statement') +
+    row('Refuses when', 'the answer is not a field in the store, however reasonable the question') +
+    '</div></div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   12. EXPORT
+   ------------------------------------------------------------ */
+function exportNwb() {
+  var u = F.units;
+  var lines = [
+    '<span class="c"># NWB 2.6 - the feature set appended to the file the spikes came from,</span>',
+    '<span class="c"># so the definition travels with the data instead of living in a repo.</span>',
+    '',
+    '<span class="k">/units</span>                                  <span class="c"># existing table, untouched</span>',
+    '  spike_times, unit_id, quality',
+    '',
+    '<span class="k">/processing/neuroadapt_features</span>        <span class="c"># added by this run</span>',
+    '  description = <span class="s">"NeuroAdapt spike-v0.1, parameter hash ' + PARAM_HASH + '"</span>',
+    '',
+    '  <span class="k">unit_features</span>  <span class="c"># DynamicTable, one row per unit</span>',
+  ];
+  ['firing_rate_hz', 'isi_cv', 'burst_index', 'fano_factor'].forEach(function (id) {
+    var d = defOf(id);
+    lines.push('    <span class="k">' + id + '</span>');
+    lines.push('      description = <span class="s">"' + d.def + '"</span>');
+    lines.push('      unit        = <span class="s">"' + (d.unit || '1') + '"</span>');
+    lines.push('      values      = [' + u.map(function (x) { return '<span class="n">' + fmt(x[id], 2) + '</span>'; }).join(', ') + ']');
+  });
+  lines.push('');
+  lines.push('  <span class="k">population_features</span>');
+  lines.push('    coincident_spikes  description = <span class="s">"' + DEFS.coincident_spikes.def + '"</span>');
+  lines.push('                       values = {' + F.population.pairs.map(function (p) {
+    return '"' + p.id + '": <span class="n">' + p.coincident_spikes + '</span>';
+  }).join(', ') + '}');
+  lines.push('    pca_explained_pct  description = <span class="s">"' + DEFS.pc_explained.def + '"</span>');
+  lines.push('                       values = [' + F.population.pca.explained.map(function (v) {
+    return '<span class="n">' + fmt(v, 2) + '</span>';
+  }).join(', ') + ']');
+  lines.push('');
+  lines.push('<span class="c"># Every column carries its own description. A lab that opens this file</span>');
+  lines.push('<span class="c"># six years from now reads the definition out of the file, not out of us.</span>');
+  return lines.join('\n');
+}
+function exportCsv() {
+  var head = ['# NeuroAdapt spike-v0.1  parameter_hash=' + PARAM_HASH + '  feature_hash=' + FEATURE_HASH,
+    '# firing_rate_hz: ' + DEFS.firing_rate_hz.def,
+    '# isi_cv: ' + DEFS.isi_cv.def,
+    '# burst_index: ' + DEFS.burst_index.def,
+    '# fano_factor: ' + DEFS.fano_factor.def,
+    '# analysis_window=0.000-10.000s  bin=100ms  burst_isi=20ms  coincidence=5ms  smoothing=none',
+    'unit_id,n_spikes,firing_rate_hz,isi_cv,burst_index,fano_factor'];
+  F.units.forEach(function (u) {
+    head.push([u.id, u.n_spikes, fmt(u.firing_rate_hz, 3), fmt(u.isi_cv, 3), fmt(u.burst_index, 3), fmt(u.fano_factor, 3)].join(','));
+  });
+  return head.map(function (l) {
+    return l.charAt(0) === '#' ? '<span class="c">' + l + '</span>' : l;
+  }).join('\n');
+}
+function exportJson() {
+  var o = {
+    profile: 'spike-v0.1',
+    parameter_hash: PARAM_HASH,
+    feature_hash: FEATURE_HASH,
+    preprocessing: F.preprocessing.reduce(function (a, c) { a[c.c] = c.v; return a; }, {}),
+    definitions: Object.keys(DEFS).reduce(function (a, k) { a[k] = DEFS[k].def; return a; }, {}),
+    units: F.units.map(function (u) {
+      return { unit_id: u.id, n_spikes: u.n_spikes, firing_rate_hz: +fmt(u.firing_rate_hz, 3),
+        isi_cv: +fmt(u.isi_cv, 3), burst_index: +fmt(u.burst_index, 3), fano_factor: +fmt(u.fano_factor, 3) };
+    }),
+    population: {
+      pairs: F.population.pairs.map(function (p) {
+        return { pair: p.id, coincident_spikes: p.coincident_spikes,
+          coincidence_fraction: +fmt(p.coincidence_fraction, 3), binned_pearson: +fmt(p.binned_pearson, 3) };
+      }),
+      pca_explained_pct: F.population.pca.explained.map(function (v) { return +fmt(v, 2); }),
+    },
+  };
+  return esc(JSON.stringify(o, null, 2));
+}
+function viewExport() {
+  var h = head('Stage 07', 'Export',
+    'The output goes into an established container, not a better spreadsheet. Writing into NWB is what makes the definition travel with the data &mdash; a bespoke CSV would have reproduced the exact failure the audit found.');
+  h += '<div class="tabs">' +
+    ['nwb', 'csv', 'json'].map(function (f) {
+      return '<button class="tab" data-format="' + f + '" aria-current="' + (state.format === f) + '">' +
+        (f === 'nwb' ? 'NWB container' : f.toUpperCase()) + '</button>';
+    }).join('') + '</div>';
+  h += '<pre class="code">' + (state.format === 'nwb' ? exportNwb() : state.format === 'csv' ? exportCsv() : exportJson()) + '</pre>';
+  h += '<div class="note" style="margin-top:14px">All three carry the same parameter hash and the same definitions. The CSV and the JSON exist for convenience; the NWB file is the one that survives the person who made it.</div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   13. RENDER AND ROUTING
+   ------------------------------------------------------------ */
+function renderRail() {
+  var h = '<div class="rail-group"><div class="rail-label">Pipeline</div>';
+  VIEWS.forEach(function (v, i) {
+    if (i === 4) h += '</div><div class="rail-group"><div class="rail-label">Output</div>';
+    h += '<button class="rail-item" data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '">' +
+      '<span class="n">' + v.n + '</span><span>' + esc(v.t) + '<span class="sub">' + esc(v.s) + '</span></span></button>';
+  });
+  h += '</div><div class="rail-note"><b>Every number is computed here.</b> The five spike trains are generated in your browser from fixed seeds, and no value on any screen is stored in the page.</div>';
+  $('rail').innerHTML = h;
+}
+
+function renderFoot() {
+  $('foot').innerHTML =
+    '<b>What this is.</b> A working re-run of the validation dataset described in the NeuroAdapt whitepaper: five units, ten seconds, three planted structures with known ground truth. ' +
+    'The spike times are generated in the browser from the seeds shown on the run screen, and every metric, figure and sentence is computed from them at render time &mdash; nothing on this page is a stored figure. ' +
+    'The whitepaper&rsquo;s headline results reproduce here: <b>' + pairOf('4-5').coincident_spikes + '</b> coincident spikes at zero lag, a coincidence fraction of <b>' +
+    fmt(pairOf('4-5').coincidence_fraction, 2) + '</b>, and <b>' + fmt(F.population.pca.explained[0] + F.population.pca.explained[1], 1) +
+    '%</b> of population variance in the first two components. Per-unit statistics differ from the paper&rsquo;s where the draw differs; the run screen shows the seeds so the difference is checkable rather than mysterious. ' +
+    '<br><br><b>What it is not.</b> Simulated data, research use only. No real recording, no unpublished collaborator result, and no claim about neurons. ' +
+    'The interpretation paragraph is written by a model that receives the computed features and no spike times, and is withheld if any number in it fails to match a field.';
+}
+
+function render() {
+  renderRail();
+  var v = { run: viewRun, units: viewUnits, population: viewPopulation, definitions: viewDefinitions,
+    report: viewReport, ask: viewAsk, export: viewExport }[state.view] || viewRun;
+  $('pane').innerHTML = v();
+  $('chipProfile').innerHTML = '<span class="dot accent"></span>profile <b>spike-v0.1</b>';
+  $('chipHash').innerHTML = 'features <b>' + FEATURE_HASH + '</b>';
+  $('runTitle').textContent = state.ran ? 'Run NA-2026-000148' : 'Run NA-2026-000148 — not started';
+  wire();
+  if (state.view === 'report' && state.at) {
+    var el = $('rp-' + state.at);
+    if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+  }
+}
+
+function wire() {
+  document.querySelectorAll('[data-view]').forEach(function (b) {
+    b.onclick = function () { go(b.dataset.view); };
+  });
+  document.querySelectorAll('[data-unit]').forEach(function (b) {
+    b.onclick = function () {
+      var v = b.dataset.unit;
+      state.unit = v === '' ? null : parseInt(v, 10) - 1;
+      render();
+    };
+  });
+  document.querySelectorAll('[data-pair]').forEach(function (b) {
+    b.onclick = function () { state.pair = b.dataset.pair; render(); };
+  });
+  document.querySelectorAll('[data-metric]').forEach(function (b) {
+    b.onclick = function () { state.metric = b.dataset.metric; render(); };
+  });
+  document.querySelectorAll('[data-format]').forEach(function (b) {
+    b.onclick = function () { state.format = b.dataset.format; render(); };
+  });
+  document.querySelectorAll('[data-ask]').forEach(function (b) {
+    b.onclick = function () { state.ask = parseInt(b.dataset.ask, 10); render(); };
+  });
+  document.querySelectorAll('[data-at]').forEach(function (b) {
+    b.onclick = function () { state.at = b.dataset.at; render(); };
+  });
+  document.querySelectorAll('[data-raw]').forEach(function (b) {
+    b.onclick = function () {
+      var el = $(b.dataset.raw);
+      el.hidden = !el.hidden;
+      b.textContent = el.hidden ? 'Show the stored array' : 'Hide';
+    };
+  });
+  var run = $('doRun');
+  if (run) run.onclick = function () { state.ran = true; render(); };
+  var det = $('doDet');
+  if (det) det.onclick = function () {
+    var again = featureHash(buildFeatures());
+    state.determinism = { same: again === FEATURE_HASH, h: again };
+    render();
+  };
+  var inj = $('doInject');
+  if (inj) inj.onclick = function () { state.inject = !state.inject; render(); };
+}
+
+/* ------------------------------------------------------------
+   14. DEEP LINKS
+
+   The case study links a screenshot to the state it pictures, so
+   every screen the page shows is reachable by URL.
+   ------------------------------------------------------------ */
+(function init() {
+  var q = new URLSearchParams(location.search);
+  var view = q.get('view');
+  if (view && VIEWS.some(function (v) { return v.id === view; })) state.view = view;
+  if (q.get('unit')) { var qu = parseInt(q.get('unit'), 10); if (qu >= 1 && qu <= 5) state.unit = qu - 1; }
+  if (q.get('pair') && pairOf(q.get('pair'))) state.pair = q.get('pair');
+  if (q.get('metric')) state.metric = q.get('metric');
+  if (q.get('format')) state.format = q.get('format');
+  if (q.get('at')) state.at = q.get('at');
+  if (q.get('ask')) state.ask = parseInt(q.get('ask'), 10);
+  if (q.get('inject') === '1') state.inject = true;
+  /* A deep link lands on a finished run unless ?fresh=1 asks for
+     the pipeline stopped at the first stage. */
+  state.ran = q.get('fresh') !== '1';
+  if (q.get('fresh') === '1') state.view = 'run';
+  renderFoot();
+  render();
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

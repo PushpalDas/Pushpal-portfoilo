@@ -1,0 +1,1632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request Desk — the Procurement Orchestrator pilot</title>
+<meta name="description" content="Interactive demo of the M365-native procurement pilot: one canonical request list, a named owner within a business day, transitions that cannot be recorded without evidence, a blocking value ceiling, and a daily integrity check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Procurement Orchestrator — interactive demo ("Request Desk").
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the team
+   performance and Sprint Desk demos, so the three read as one
+   product family. Deliberately single-theme: an internal
+   operations surface, dark by design, every colour painted
+   explicitly so it holds on any host ground.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 234px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+
+.persona {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 8px; padding: 3px 8px 3px 11px;
+}
+.persona label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.persona select {
+  background: transparent; border: 0; font-size: 12.5px; color: var(--ink);
+  padding: 4px 2px; max-width: 250px;
+}
+.paramnote {
+  margin: 0; padding: 0 20px 10px; font-size: 11.5px; color: var(--faint); max-width: 108ch;
+}
+.paramnote b { color: var(--muted); font-weight: 500; }
+
+/* -- Shell ------------------------------------------------- */
+.shell { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); flex: 1; }
+.rail {
+  border-right: 1px solid var(--line);
+  padding: 16px 12px; display: flex; flex-direction: column; gap: 3px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 320px);
+}
+.rail h6 {
+  margin: 4px 8px 8px; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.rail button {
+  display: flex; align-items: baseline; gap: 9px;
+  width: 100%; text-align: left; background: transparent;
+  border: 1px solid transparent; border-radius: 7px;
+  padding: 8px 10px; color: var(--body); font-size: 13.5px; line-height: 1.35;
+}
+.rail button:hover { background: var(--surface-2); color: var(--ink); }
+.rail button[aria-current="true"] {
+  background: var(--accent-wash); border-color: var(--accent-dim); color: var(--ink); font-weight: 500;
+}
+.rail button .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 14px; }
+.rail button[aria-current="true"] .n { color: var(--accent); }
+.rail button .tag { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--faint); }
+.rail button[aria-current="true"] .tag { color: var(--accent); }
+.rail .rail-note {
+  margin: 14px 8px 0; font-size: 11.5px; line-height: 1.5; color: var(--faint);
+  border-top: 1px solid var(--line-soft); padding-top: 12px;
+}
+
+.pane { padding: 22px 26px 40px; min-width: 0; }
+
+/* -- Common blocks ---------------------------------------- */
+.head { margin-bottom: 18px; }
+.head h2 { margin: 0 0 5px; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); }
+.head p { margin: 0; max-width: 78ch; color: var(--body); font-size: 13.5px; }
+.head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+}
+
+.card {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 15px 16px; margin-bottom: 14px;
+}
+.card > h3 {
+  margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > h3 .sub { font-weight: 400; color: var(--muted); font-size: 12px; font-family: var(--mono); }
+.card > p { margin: 0 0 10px; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+.card > p:last-child { margin-bottom: 0; }
+.card.flat { background: transparent; }
+
+.badge {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted);
+  white-space: nowrap;
+}
+.badge.auto { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.badge.human { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.badge.ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.badge.bad { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(212px, 1fr)); gap: 12px; }
+
+/* -- Tables ------------------------------------------------ */
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+thead th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  padding: 0 10px 7px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.click { cursor: pointer; }
+tbody tr.click:hover { background: var(--surface-2); }
+td .rid { font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
+td .t { color: var(--ink); }
+td .sub { display: block; color: var(--faint); font-size: 11.5px; margin-top: 2px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+
+/* -- Status pills ------------------------------------------ */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-family: var(--mono); border-radius: 999px;
+  padding: 2px 9px; border: 1px solid var(--line); color: var(--body); white-space: nowrap;
+}
+.pill.submitted { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.pill.assigned { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.pill.sourcing { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.pill.approval { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.pill.ordered { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.pill.delivered { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.pill.rejected { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+/* -- Owner / person ---------------------------------------- */
+.who { display: inline-flex; align-items: center; gap: 7px; }
+.av {
+  width: 21px; height: 21px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-size: 9.5px; font-family: var(--mono);
+  background: var(--surface-3); border: 1px solid var(--line); color: var(--body);
+}
+.av.none { border-style: dashed; color: var(--crit); border-color: var(--crit-dim); }
+.who .nm { color: var(--ink); }
+.who .rl { color: var(--faint); font-size: 11.5px; }
+
+/* -- Requester summary strip ------------------------------- */
+.reqhead {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(182px, 1fr)); gap: 1px;
+  background: var(--line-soft); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+  margin-bottom: 14px;
+}
+.reqhead > div { background: var(--surface); padding: 13px 15px; }
+.reqhead h6 {
+  margin: 0 0 6px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.reqhead .val { color: var(--ink); font-size: 14px; line-height: 1.35; }
+.reqhead .val small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 3px; font-family: var(--mono); }
+
+.eta-flag {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: 7px;
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 7px; border: 1px solid;
+}
+.eta-flag.verified { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.eta-flag.unverified { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.eta-flag.none { border-color: var(--line); color: var(--muted); }
+
+/* -- Timeline ---------------------------------------------- */
+.tl { list-style: none; margin: 0; padding: 0; }
+.tl li { position: relative; padding: 0 0 15px 26px; border-left: 1px solid var(--line); margin-left: 6px; }
+.tl li:last-child { border-left-color: transparent; padding-bottom: 0; }
+.tl li .mk {
+  position: absolute; left: -5px; top: 4px; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--surface-3); border: 1px solid var(--line);
+}
+.tl li.done .mk { background: var(--good); border-color: var(--good); }
+.tl li.now .mk { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-wash); }
+.tl li.bad .mk { background: var(--crit); border-color: var(--crit); }
+.tl .ev { color: var(--ink); font-size: 13px; }
+.tl .meta {
+  font-family: var(--mono); font-size: 11px; color: var(--faint); margin-top: 3px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.tl .meta span { white-space: nowrap; }
+.tl .evid {
+  margin-top: 6px; display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px;
+  background: var(--surface-2); font-size: 11.5px; color: var(--body);
+}
+.tl .evid .k {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint);
+}
+
+/* -- Buttons ----------------------------------------------- */
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 7px 13px; font-size: 12.5px;
+}
+.btn:hover { background: var(--surface-3); }
+.btn.primary { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--accent); }
+.btn.primary:hover { background: rgba(91, 124, 250, 0.18); }
+.btn.small { padding: 4px 9px; font-size: 11.5px; }
+.btn:disabled { opacity: .42; cursor: not-allowed; }
+.btnrow { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.btnrow .hint { font-size: 11.5px; color: var(--faint); max-width: 60ch; }
+
+/* -- Form -------------------------------------------------- */
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 13px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field.wide { grid-column: 1 / -1; }
+.field label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--faint);
+}
+.field input, .field select, .field textarea {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 7px;
+  padding: 8px 10px; font-size: 13px; color: var(--ink); width: 100%;
+}
+.field textarea { min-height: 62px; resize: vertical; }
+.field .help { font-size: 11.5px; color: var(--faint); }
+.field.err input, .field.err select { border-color: var(--crit); }
+
+.block {
+  border: 1px solid var(--crit-dim); background: var(--crit-wash); border-radius: 9px;
+  padding: 12px 14px; margin-top: 13px;
+}
+.block h4 { margin: 0 0 5px; font-size: 12.5px; color: var(--crit); font-weight: 600; }
+.block p { margin: 0; font-size: 12.5px; color: var(--body); }
+.block p + p { margin-top: 7px; }
+.pass {
+  border: 1px solid var(--good-dim); background: var(--good-wash); border-radius: 9px;
+  padding: 12px 14px; margin-top: 13px;
+}
+.pass h4 { margin: 0 0 5px; font-size: 12.5px; color: var(--good); font-weight: 600; }
+.pass p { margin: 0; font-size: 12.5px; color: var(--body); }
+
+/* -- Ageing view ------------------------------------------- */
+.age-grp { margin-bottom: 16px; }
+.age-grp h4 {
+  margin: 0 0 8px; font-size: 12px; color: var(--ink); font-weight: 600;
+  display: flex; align-items: center; gap: 9px;
+}
+.age-grp h4 .c { font-family: var(--mono); font-size: 11px; color: var(--faint); font-weight: 400; }
+.agebar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 64px; }
+.agebar i { display: block; height: 100%; background: var(--accent); }
+.agebar i.warn { background: var(--warn); }
+.agebar i.crit { background: var(--crit); }
+
+/* -- Gates ------------------------------------------------- */
+.gate { border: 1px solid var(--line); border-radius: 9px; padding: 13px 15px; background: var(--surface); }
+.gate h4 { margin: 0 0 6px; font-size: 12.5px; color: var(--ink); font-weight: 600; }
+.gate .g-n { font-family: var(--mono); font-size: 26px; color: var(--ink); line-height: 1.1; }
+.gate .g-n small { font-size: 12px; color: var(--muted); }
+.gate .g-t { font-size: 11px; color: var(--faint); font-family: var(--mono); margin-top: 4px; }
+.gate .g-why { font-size: 12px; color: var(--muted); margin-top: 9px; line-height: 1.5; }
+.gate.pass { border-color: var(--good-dim); }
+.gate.fail { border-color: var(--crit-dim); }
+.gate.pass .g-n { color: var(--good); }
+.gate.fail .g-n { color: var(--crit); }
+.gtrack { height: 6px; border-radius: 3px; background: var(--surface-3); position: relative; margin-top: 10px; }
+.gtrack i { display: block; height: 100%; border-radius: 3px; background: var(--good); }
+.gtrack i.bad { background: var(--crit); }
+.gtrack .tgt { position: absolute; top: -3px; width: 2px; height: 12px; background: var(--ink); opacity: .75; }
+
+/* -- Drawer ------------------------------------------------ */
+.scrim {
+  position: fixed; inset: 0; background: rgba(4, 4, 7, .62); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 60;
+}
+.scrim.show { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 94vw);
+  background: var(--surface); border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform .22s cubic-bezier(.4,0,.2,1);
+  z-index: 70; overflow-y: auto; padding: 20px 22px 40px;
+}
+.drawer.show { transform: none; }
+.drawer h3 { margin: 0 0 4px; font-size: 16px; color: var(--ink); font-weight: 600; }
+.drawer .dsub { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin: 0 0 16px; }
+.drawer .x {
+  position: absolute; top: 14px; right: 16px; background: transparent; border: 0;
+  color: var(--muted); font-size: 20px; line-height: 1; padding: 4px 8px;
+}
+.drawer .x:hover { color: var(--ink); }
+
+/* -- Footer ------------------------------------------------ */
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 {
+  margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot a { color: var(--accent); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+/* -- Toast ------------------------------------------------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45); max-width: min(600px, 92vw);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.bad { border-color: var(--crit-dim); }
+
+/* -- Responsive -------------------------------------------- */
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .rail {
+    border-right: 0; border-bottom: 1px solid var(--line);
+    flex-direction: row; overflow-x: auto; gap: 6px; padding: 10px 12px; background: var(--surface);
+  }
+  .rail h6, .rail .rail-note { display: none; }
+  .rail button { width: auto; white-space: nowrap; }
+  .rail button .tag { display: none; }
+  .pane { padding: 18px 16px 34px; }
+  .topbar-row { gap: 9px; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ixana &middot; Procurement ops &middot; Controlled pilot</span>
+        <h1>Request Desk</h1>
+      </div>
+      <span class="chip" id="nChip"><span class="dot accent"></span><b>23</b> completed pilot requests</span>
+      <span class="chip ok" id="apprChip" title="No request in the pilot has reached ordered without an approval event carrying a document reference."><span class="dot good"></span><b>0</b> ordered unapproved</span>
+      <span class="chip" id="ceilChip" title="Requests at or above the finance approval threshold cannot be submitted into the pilot at all."><span class="dot warn"></span>Ceiling <b>$5,000</b></span>
+      <div class="persona">
+        <label for="personaSel">Signed in as</label>
+        <select id="personaSel"></select>
+      </div>
+    </div>
+    <p class="paramnote" id="paramNote"></p>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Views"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A working recreation of the M365-native procurement pilot described in the case study. <b>One canonical request list is the source of truth; every screen here is a view of it.</b> The lists, flows and mailbox are simulated; the operating contract, the field rules and the gates are the real ones.</p>
+      </div>
+      <div>
+        <h5>The four rules it makes visible</h5>
+        <p><b>1.</b> A request is assigned to a <span class="badge human">named person</span>, never to a queue. &ldquo;Procurement&rdquo; counts as unassigned, on this screen and in the gate.</p>
+        <p><b>2.</b> Every status change carries actor, timestamp, source and evidence. A transition with no evidence cannot be recorded &mdash; try it in the queue.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>3.</b> The value ceiling is a blocking validation, not a warning. A request at or above the finance threshold cannot enter the pilot, so the pilot cannot weaken a control it never touches.</p>
+        <p><b>4.</b> Requesters read everything and write nothing. They add information through a controlled path; they cannot move a status, which is what kept the old list untrustworthy.</p>
+      </div>
+    </div>
+    <p class="conf">All organisations, requesters, owners, suppliers, items, prices, dates and figures on this page are invented for the demo. No supplier, price or requester from the real pilot appears here. The 23 completed requests reproduce the counts quoted in section 08 of the case study &mdash; 21 assigned inside a business day, 0 ordered unapproved, 2 requesters who still chased by email, 1 silent flow failure caught by the daily check &mdash; so the gate screen can be checked rather than taken on trust.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Request detail"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, internally consistent.
+
+   The pilot ran Apr–Aug 2026 across three internal
+   organisations. 23 requests have completed; 5 are in flight
+   as of "today", 21 Aug 2026. Every figure the gate screen
+   reports is derived from these rows at render time, so the
+   gates cannot disagree with the queue they are counting.
+   ============================================================ */
+
+const TODAY = "21 Aug 2026";
+const CEILING = 5000;          // finance approval threshold, USD
+
+const ORGS = [
+  { id: "si", n: "Silicon Engineering", short: "Silicon" },
+  { id: "sf", n: "Systems and Firmware", short: "Systems" },
+  { id: "ops", n: "Operations and Facilities", short: "Ops" }
+];
+
+const PEOPLE = [
+  { id: "dana",   n: "Dana Whitfield",  r: "Procurement analyst", org: "ops" },
+  { id: "marcus", n: "Marcus Ibeh",     r: "Procurement analyst", org: "ops" },
+  { id: "yuki",   n: "Yuki Tanaka",     r: "Finance controller",  org: "ops" },
+  { id: "priya",  n: "Priya Raghavan",  r: "Engineering manager", org: "si" },
+  { id: "tomas",  n: "Tomas Lindqvist", r: "Firmware lead",       org: "sf" },
+  { id: "nadia",  n: "Nadia Osman",     r: "Lab engineer",        org: "si" },
+  { id: "ravi",   n: "Ravi Menon",      r: "Hardware engineer",   org: "si" },
+  { id: "clara",  n: "Clara Boateng",   r: "Test engineer",       org: "sf" },
+  { id: "sam",    n: "Sam Ortega",      r: "Facilities",          org: "ops" },
+  { id: "leila",  n: "Leila Haddad",    r: "Firmware engineer",   org: "sf" },
+  { id: "ben",    n: "Ben Sørensen",    r: "Lab technician",      org: "si" },
+  { id: "iris",   n: "Iris Chen",       r: "Systems engineer",    org: "sf" }
+];
+
+/* Who is signed in changes what the screens will let you do.
+   `can` is the write allow-list for that person.              */
+const PERSONAS = [
+  { id: "nadia",  see: "own",   can: ["addinfo"],
+    note: "A requester. Reads everything about their own requests and writes nothing on them except added information." },
+  { id: "dana",   see: "all",   can: ["assign", "quote", "eta", "order", "deliver", "addinfo"],
+    note: "A procurement analyst. Works the queue from assignment to delivery, and records every transition with its evidence." },
+  { id: "yuki",   see: "all",   can: ["approve", "reject"],
+    note: "The finance controller. Holds the one approval stage below the ceiling, and set the ceiling as a blocking validation rather than a warning." },
+  { id: "priya",  see: "all",   can: [],
+    note: "An engineering manager. Sees ageing work across the three organisations after three days; escalation reaches them only on a breach." }
+];
+
+/* ev: [day, actor, event, source, evidence]
+   day is a working-day offset from submission. A transition
+   with no evidence is not representable in this array, which
+   is the point section 03 of the case study argues.           */
+const R = (id, org, req, title, amount, o, st, sub, assignH, chased, eta, etaV, evs, flags) => ({
+  id, org, req, title, amount, o, st, sub, assignH, chased, eta, etaV, evs, flags: flags || {}
+});
+
+const REQUESTS = [
+  /* ---- in flight (visible in the queue today) --------------- */
+  R("PR-2061","si","nadia","Bench multimeter, 6.5-digit, for the RF corner",1180,"dana","sourcing","17 Aug 2026",4,false,"29 Aug 2026",true,[
+    ["17 Aug 09:12","nadia","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["17 Aug 13:20","flow","Routed to Silicon approver map","Routing flow","Map row SI-lab, matched on cost centre"],
+    ["17 Aug 13:21","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 4h 09m after submission"],
+    ["19 Aug 11:04","dana","Two quotes recorded","Supplier email","Quote refs Q-8841, Q-8846"],
+    ["20 Aug 10:30","dana","ETA verified with supplier","Supplier email","Confirmation ref C-2290, 29 Aug"]
+  ]),
+  R("PR-2062","sf","tomas","Logic analyser probe set, 34-channel",2340,"marcus","approval","18 Aug 2026",6,false,"4 Sep 2026",false,[
+    ["18 Aug 15:40","tomas","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["18 Aug 16:02","flow","Routed to Systems approver map","Routing flow","Map row SF-tools, matched on cost centre"],
+    ["18 Aug 16:03","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 0h 23m after submission"],
+    ["20 Aug 09:15","marcus","Three quotes recorded","Supplier email","Quote refs Q-8850, Q-8851, Q-8853"],
+    ["20 Aug 16:45","marcus","Sent for financial approval","Approval request","Approval item AP-118, $2,340"]
+  ]),
+  R("PR-2063","ops","sam","Replacement HEPA filters, lab air handler",640,"dana","assigned","20 Aug 2026",2,false,null,false,[
+    ["20 Aug 08:55","sam","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["20 Aug 10:40","flow","Routed to Operations approver map","Routing flow","Map row OPS-facilities, matched on cost centre"],
+    ["20 Aug 10:41","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 1h 46m after submission"]
+  ]),
+  R("PR-2064","si","ravi","ESD-safe workbench mat, 4 stations",410,null,"submitted","21 Aug 2026",null,false,null,false,[
+    ["21 Aug 09:30","ravi","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["21 Aug 09:31","flow","Routed to Silicon approver map","Routing flow","Map row SI-lab, matched on cost centre"]
+  ],{ needsAssign: true }),
+  R("PR-2065","sf","iris","Thermal chamber shelf kit",890,null,"submitted","21 Aug 2026",null,false,null,false,[
+    ["21 Aug 11:15","iris","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["21 Aug 11:16","flow","Routed to Systems approver map","Routing flow","Map row SF-tools, matched on cost centre"]
+  ],{ needsAssign: true }),
+
+  /* ---- the 23 completed pilot requests ---------------------- */
+  R("PR-2038","si","nadia","Oscilloscope probe, 1 GHz differential",1890,"dana","delivered","14 Apr 2026",3,false,"28 Apr 2026",true,[
+    ["14 Apr 09:05","nadia","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["14 Apr 12:10","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 3h 05m after submission"],
+    ["16 Apr 14:20","dana","Two quotes recorded","Supplier email","Quote refs Q-8501, Q-8504"],
+    ["17 Apr 10:00","yuki","Financial approval recorded","Approval item","AP-081 approved, $1,890"],
+    ["17 Apr 15:30","dana","Order placed","Purchase order","PO-4411"],
+    ["28 Apr 11:20","dana","Delivered and receipted","Goods receipt","GR-4411, received by N. Osman"]
+  ]),
+  R("PR-2039","sf","tomas","JTAG debug pod, 20-pin",760,"marcus","delivered","15 Apr 2026",5,false,"29 Apr 2026",true,[
+    ["15 Apr 10:40","tomas","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["15 Apr 15:55","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 5h 15m after submission"],
+    ["17 Apr 09:30","marcus","Two quotes recorded","Supplier email","Quote refs Q-8509, Q-8512"],
+    ["17 Apr 16:10","yuki","Financial approval recorded","Approval item","AP-083 approved, $760"],
+    ["20 Apr 09:15","marcus","Order placed","Purchase order","PO-4415"],
+    ["29 Apr 14:05","marcus","Delivered and receipted","Goods receipt","GR-4415, received by T. Lindqvist"]
+  ]),
+  R("PR-2040","si","ben","Wafer tweezers, vacuum pen set",210,"dana","delivered","17 Apr 2026",2,false,"27 Apr 2026",true,[
+    ["17 Apr 08:30","ben","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["17 Apr 10:35","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 2h 05m after submission"],
+    ["20 Apr 11:00","dana","One quote recorded, sole supplier noted","Supplier email","Quote ref Q-8517, sole-source note"],
+    ["20 Apr 15:20","yuki","Financial approval recorded","Approval item","AP-085 approved, $210"],
+    ["21 Apr 09:40","dana","Order placed","Purchase order","PO-4418"],
+    ["27 Apr 10:10","dana","Delivered and receipted","Goods receipt","GR-4418, received by B. Sørensen"]
+  ]),
+  R("PR-2041","ops","sam","Fire-rated storage cabinet for solvents",1450,"marcus","delivered","21 Apr 2026",4,false,"12 May 2026",true,[
+    ["21 Apr 09:20","sam","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["21 Apr 13:50","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 4h 30m after submission"],
+    ["24 Apr 10:00","marcus","Three quotes recorded","Supplier email","Quote refs Q-8520, Q-8523, Q-8526"],
+    ["24 Apr 16:20","yuki","Financial approval recorded","Approval item","AP-088 approved, $1,450"],
+    ["27 Apr 09:00","marcus","Order placed","Purchase order","PO-4423"],
+    ["12 May 13:30","marcus","Delivered and receipted","Goods receipt","GR-4423, received by S. Ortega"]
+  ]),
+  R("PR-2042","sf","clara","Environmental chamber calibration weights",980,"dana","delivered","23 Apr 2026",6,true,"18 May 2026",true,[
+    ["23 Apr 11:10","clara","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["23 Apr 17:25","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 6h 15m after submission"],
+    ["28 Apr 09:40","clara","Requester added information","Added-information path","Note: needs traceable certificate"],
+    ["30 Apr 14:00","dana","Two quotes recorded","Supplier email","Quote refs Q-8531, Q-8534"],
+    ["4 May 10:20","yuki","Financial approval recorded","Approval item","AP-092 approved, $980"],
+    ["5 May 09:30","dana","Order placed","Purchase order","PO-4429"],
+    ["18 May 15:45","dana","Delivered and receipted","Goods receipt","GR-4429, received by C. Boateng"]
+  ]),
+  R("PR-2043","si","nadia","Thermal camera, 640×480, for die-level survey",3200,"dana","delivered","6 May 2026",1,false,"27 May 2026",true,[
+    ["6 May 09:02","nadia","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["6 May 10:14","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 1h 12m after submission"],
+    ["8 May 15:30","dana","Three quotes recorded","Supplier email","Quote refs Q-8540, Q-8542, Q-8547"],
+    ["11 May 11:20","yuki","Financial approval recorded","Approval item","AP-096 approved, $3,200"],
+    ["11 May 16:40","dana","Order placed","Purchase order","PO-4436"],
+    ["19 May 10:05","dana","ETA verified with supplier","Supplier email","Confirmation ref C-2201, 27 May"],
+    ["27 May 14:20","dana","Delivered and receipted","Goods receipt","GR-4436, received by N. Osman"]
+  ]),
+  R("PR-2044","sf","leila","Serial protocol analyser licence dongle",1120,"marcus","delivered","8 May 2026",3,false,"26 May 2026",true,[
+    ["8 May 10:30","leila","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["8 May 13:45","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 3h 15m after submission"],
+    ["12 May 09:20","marcus","Two quotes recorded","Supplier email","Quote refs Q-8551, Q-8555"],
+    ["13 May 10:10","yuki","Financial approval recorded","Approval item","AP-099 approved, $1,120"],
+    ["13 May 15:00","marcus","Order placed","Purchase order","PO-4441"],
+    ["26 May 11:35","marcus","Delivered and receipted","Goods receipt","GR-4441, received by L. Haddad"]
+  ]),
+  R("PR-2045","si","ravi","Anti-static flooring tiles, 20 m²",2050,"dana","delivered","13 May 2026",5,false,"3 Jun 2026",true,[
+    ["13 May 08:45","ravi","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["13 May 14:05","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 5h 20m after submission"],
+    ["18 May 10:30","dana","Three quotes recorded","Supplier email","Quote refs Q-8560, Q-8562, Q-8566"],
+    ["19 May 09:50","yuki","Financial approval recorded","Approval item","AP-103 approved, $2,050"],
+    ["19 May 15:20","dana","Order placed","Purchase order","PO-4447"],
+    ["3 Jun 12:10","dana","Delivered and receipted","Goods receipt","GR-4447, received by R. Menon"]
+  ]),
+  R("PR-2046","ops","sam","Pallet trolley, 500 kg",520,"marcus","delivered","15 May 2026",7,false,"1 Jun 2026",false,[
+    ["15 May 09:15","sam","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["15 May 16:40","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 7h 25m after submission"],
+    ["19 May 11:00","marcus","Two quotes recorded","Supplier email","Quote refs Q-8571, Q-8573"],
+    ["20 May 10:20","yuki","Financial approval recorded","Approval item","AP-106 approved, $520"],
+    ["20 May 14:30","marcus","Order placed","Purchase order","PO-4452"],
+    ["1 Jun 09:45","marcus","Delivered and receipted","Goods receipt","GR-4452, received by S. Ortega"]
+  ]),
+  R("PR-2047","si","nadia","Probe station micropositioners, pair",2780,"dana","delivered","19 May 2026",2,false,"12 Jun 2026",true,[
+    ["19 May 10:05","nadia","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["19 May 12:20","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 2h 15m after submission"],
+    ["22 May 15:40","dana","Two quotes recorded","Supplier email","Quote refs Q-8580, Q-8584"],
+    ["25 May 10:30","yuki","Financial approval recorded","Approval item","AP-110 approved, $2,780"],
+    ["25 May 16:00","dana","Order placed","Purchase order","PO-4458"],
+    ["12 Jun 11:15","dana","Delivered and receipted","Goods receipt","GR-4458, received by N. Osman"]
+  ]),
+  R("PR-2048","sf","iris","Reference clock module, 10 MHz OCXO",1340,"marcus","delivered","22 May 2026",4,false,"9 Jun 2026",true,[
+    ["22 May 09:40","iris","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["22 May 14:10","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 4h 30m after submission"],
+    ["26 May 10:15","marcus","Two quotes recorded","Supplier email","Quote refs Q-8590, Q-8593"],
+    ["27 May 09:30","yuki","Financial approval recorded","Approval item","AP-113 approved, $1,340"],
+    ["27 May 14:45","marcus","Order placed","Purchase order","PO-4463"],
+    ["9 Jun 10:40","marcus","Delivered and receipted","Goods receipt","GR-4463, received by I. Chen"]
+  ]),
+  R("PR-2049","si","ben","Ultrasonic cleaner, 6 litre",430,"dana","delivered","29 May 2026",6,false,"15 Jun 2026",true,[
+    ["29 May 08:50","ben","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["29 May 15:00","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 6h 10m after submission"],
+    ["2 Jun 10:40","dana","Two quotes recorded","Supplier email","Quote refs Q-8601, Q-8604"],
+    ["3 Jun 09:20","yuki","Financial approval recorded","Approval item","AP-117 approved, $430"],
+    ["3 Jun 15:10","dana","Order placed","Purchase order","PO-4469"],
+    ["15 Jun 13:25","dana","Delivered and receipted","Goods receipt","GR-4469, received by B. Sørensen"]
+  ]),
+  R("PR-2050","si","priya","Vibration isolation table, 900 × 600",4100,"dana","delivered","2 Jun 2026",22,false,"25 Jun 2026",true,[
+    ["29 May 16:35","priya","Request submitted","Request form","Form entry, submitted Friday 16:35"],
+    ["29 May 16:36","flow","Routing found no approver row","Routing flow","Approver map SI-facilities: no row for cost centre"],
+    ["2 Jun 14:40","dana","Assigned to Dana Whitfield after manual triage","Exceptions log","EX-014, unassigned beyond 1 business day"],
+    ["5 Jun 11:20","dana","Three quotes recorded","Supplier email","Quote refs Q-8610, Q-8613, Q-8617"],
+    ["8 Jun 10:00","yuki","Financial approval recorded","Approval item","AP-121 approved, $4,100"],
+    ["8 Jun 15:30","dana","Order placed","Purchase order","PO-4474"],
+    ["25 Jun 10:50","dana","Delivered and receipted","Goods receipt","GR-4474, received by P. Raghavan"]
+  ],{ lateAssign: true, exception: "EX-014" }),
+  R("PR-2051","sf","clara","Burn-in board sockets, 48 units",1680,"marcus","delivered","5 Jun 2026",7,false,"26 Jun 2026",true,[
+    ["5 Jun 10:20","clara","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["5 Jun 17:20","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 7h 00m after submission"],
+    ["9 Jun 09:50","marcus","Three quotes recorded","Supplier email","Quote refs Q-8620, Q-8622, Q-8625"],
+    ["10 Jun 10:30","yuki","Financial approval recorded","Approval item","AP-124 approved, $1,680"],
+    ["10 Jun 15:40","marcus","Order placed","Purchase order","PO-4479"],
+    ["26 Jun 14:10","marcus","Delivered and receipted","Goods receipt","GR-4479, received by C. Boateng"]
+  ]),
+  R("PR-2052","ops","sam","Nitrogen cylinder regulators, 4 units",890,"dana","delivered","10 Jun 2026",8,false,"29 Jun 2026",true,[
+    ["10 Jun 09:00","sam","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["10 Jun 17:00","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 8h 00m after submission"],
+    ["12 Jun 11:30","dana","Two quotes recorded","Supplier email","Quote refs Q-8631, Q-8634"],
+    ["15 Jun 09:40","yuki","Financial approval recorded","Approval item","AP-127 approved, $890"],
+    ["15 Jun 14:20","dana","Order placed","Purchase order","PO-4484"],
+    ["29 Jun 11:05","dana","Delivered and receipted","Goods receipt","GR-4484, received by S. Ortega"]
+  ]),
+  R("PR-2053","si","ravi","Die-attach film, 2 reels",1560,"dana","delivered","16 Jun 2026",4,false,"7 Jul 2026",true,[
+    ["16 Jun 08:40","ravi","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["16 Jun 13:05","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 4h 25m after submission"],
+    ["18 Jun 10:10","dana","Two quotes recorded","Supplier email","Quote refs Q-8640, Q-8643"],
+    ["19 Jun 09:30","yuki","Financial approval recorded","Approval item","AP-131 approved, $1,560"],
+    ["19 Jun 15:00","dana","Order placed","Purchase order","PO-4490"],
+    ["7 Jul 10:20","dana","Delivered and receipted","Goods receipt","GR-4490, received by R. Menon"]
+  ]),
+  R("PR-2054","sf","tomas","Power sequencing dev board, 6 rails",640,"marcus","delivered","19 Jun 2026",2,false,"3 Jul 2026",true,[
+    ["19 Jun 10:15","tomas","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["19 Jun 12:30","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 2h 15m after submission"],
+    ["23 Jun 09:40","marcus","Two quotes recorded","Supplier email","Quote refs Q-8650, Q-8652"],
+    ["24 Jun 10:00","yuki","Financial approval recorded","Approval item","AP-134 approved, $640"],
+    ["24 Jun 14:50","marcus","Order placed","Purchase order","PO-4495"],
+    ["3 Jul 09:55","marcus","Delivered and receipted","Goods receipt","GR-4495, received by T. Lindqvist"]
+  ]),
+  R("PR-2055","si","nadia","Microscope ring light and adapter",380,"dana","delivered","24 Jun 2026",5,false,"9 Jul 2026",true,[
+    ["24 Jun 09:25","nadia","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["24 Jun 14:40","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 5h 15m after submission"],
+    ["26 Jun 11:00","dana","One quote recorded, sole supplier noted","Supplier email","Quote ref Q-8658, sole-source note"],
+    ["29 Jun 09:50","yuki","Financial approval recorded","Approval item","AP-137 approved, $380"],
+    ["29 Jun 15:30","dana","Order placed","Purchase order","PO-4500"],
+    ["9 Jul 13:40","dana","Delivered and receipted","Goods receipt","GR-4500, received by N. Osman"]
+  ]),
+  R("PR-2056","sf","leila","Coaxial cable assemblies, SMA, 12 units",720,"marcus","delivered","1 Jul 2026",3,true,"17 Jul 2026",false,[
+    ["1 Jul 10:05","leila","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["1 Jul 13:20","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 3h 15m after submission"],
+    ["6 Jul 09:30","marcus","Two quotes recorded","Supplier email","Quote refs Q-8665, Q-8668"],
+    ["7 Jul 10:15","yuki","Financial approval recorded","Approval item","AP-141 approved, $720"],
+    ["7 Jul 14:40","marcus","Order placed","Purchase order","PO-4506"],
+    ["17 Jul 11:20","marcus","Delivered and receipted","Goods receipt","GR-4506, received by L. Haddad"]
+  ]),
+  R("PR-2057","ops","sam","Chemical waste containers, 10 units",340,"dana","delivered","6 Jul 2026",7,false,"20 Jul 2026",true,[
+    ["6 Jul 08:35","sam","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["6 Jul 15:35","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 7h 00m after submission"],
+    ["8 Jul 10:40","dana","Two quotes recorded","Supplier email","Quote refs Q-8672, Q-8675"],
+    ["9 Jul 09:20","yuki","Financial approval recorded","Approval item","AP-144 approved, $340"],
+    ["9 Jul 14:10","dana","Order placed","Purchase order","PO-4511"],
+    ["20 Jul 10:30","dana","Delivered and receipted","Goods receipt","GR-4511, received by S. Ortega"]
+  ]),
+  R("PR-2058","si","ben","Wafer carrier cassettes, 6 units",1250,"dana","delivered","10 Jul 2026",26,false,"31 Jul 2026",true,[
+    ["10 Jul 16:20","ben","Request submitted","Request form","Form entry, submitted Friday 16:20"],
+    ["10 Jul 16:21","flow","Routing found no approver row","Routing flow","Approver map SI-facilities: no row for cost centre"],
+    ["14 Jul 10:15","dana","Assigned to Dana Whitfield after manual triage","Exceptions log","EX-021, unassigned beyond 1 business day"],
+    ["16 Jul 09:40","dana","Two quotes recorded","Supplier email","Quote refs Q-8681, Q-8684"],
+    ["17 Jul 10:00","yuki","Financial approval recorded","Approval item","AP-148 approved, $1,250"],
+    ["17 Jul 15:20","dana","Order placed","Purchase order","PO-4517"],
+    ["31 Jul 11:45","dana","Delivered and receipted","Goods receipt","GR-4517, received by B. Sørensen"]
+  ],{ lateAssign: true, exception: "EX-021" }),
+  R("PR-2059","sf","iris","Shielded enclosure gasket kit",480,"marcus","delivered","17 Jul 2026",4,false,"4 Aug 2026",true,[
+    ["17 Jul 09:50","iris","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["17 Jul 14:15","marcus","Assigned to Marcus Ibeh","Routing flow","Assignment record, 4h 25m after submission"],
+    ["21 Jul 10:30","marcus","Two quotes recorded","Supplier email","Quote refs Q-8690, Q-8693"],
+    ["22 Jul 09:40","yuki","Financial approval recorded","Approval item","AP-152 approved, $480"],
+    ["22 Jul 15:10","marcus","Order placed","Purchase order","PO-4522"],
+    ["4 Aug 10:15","marcus","Delivered and receipted","Goods receipt","GR-4522, received by I. Chen"]
+  ]),
+  R("PR-2060","si","ravi","Wire bonder capillary tips, 50 units",910,"dana","delivered","24 Jul 2026",6,false,"11 Aug 2026",true,[
+    ["24 Jul 09:10","ravi","Request submitted","Request form","Form entry, item type: physical goods"],
+    ["24 Jul 15:10","dana","Assigned to Dana Whitfield","Routing flow","Assignment record, 6h 00m after submission"],
+    ["28 Jul 10:20","dana","Two quotes recorded","Supplier email","Quote refs Q-8700, Q-8703"],
+    ["29 Jul 09:30","yuki","Financial approval recorded","Approval item","AP-155 approved, $910"],
+    ["29 Jul 14:50","dana","Order placed","Purchase order","PO-4527"],
+    ["11 Aug 13:05","dana","Delivered and receipted","Goods receipt","GR-4527, received by R. Menon"]
+  ])
+];
+
+
+/* Requests the ceiling validation refused at submission. They
+   are not in the list above because they never entered the
+   pilot at all — which is the whole point of a blocking rule. */
+const REFUSED = [
+  { d: "6 May 2026",  org: "si",  who: "priya", t: "Probe card for the YR31 test programme", amount: 18400, why: "At or above the $5,000 finance ceiling" },
+  { d: "2 Jun 2026",  org: "sf",  who: "tomas", t: "Environmental chamber, 250 litre",       amount: 26900, why: "At or above the $5,000 finance ceiling" },
+  { d: "14 Jul 2026", org: "ops", who: "sam",   t: "Cleanroom partition and door set",        amount: 9200,  why: "At or above the $5,000 finance ceiling" },
+  { d: "5 Aug 2026",  org: "si",  who: "nadia", t: "Semi-automatic wire bonder, refurbished", amount: 41000, why: "At or above the $5,000 finance ceiling" }
+];
+
+/* The daily integrity check. One entry is the silent flow
+   failure named as a guardrail in section 08.                 */
+const EXCEPTIONS = [
+  { id: "EX-014", d: "2 Jun 2026", kind: "Unassigned beyond 1 business day", req: "PR-2050",
+    detail: "Submitted 16:35 on a Friday. Routing found no approver row for the Silicon facilities cost centre and stopped without raising anything.",
+    found: "Daily integrity check", resolved: "Same day", state: "closed",
+    fix: "Manually assigned; approver map row SI-facilities added the following morning." },
+  { id: "EX-018", d: "21 Jun 2026", kind: "Silent flow failure", req: "PR-2053",
+    detail: "The reminder flow failed on a throttled connector and reported success. No reminder was sent for two days and nothing in the list showed it.",
+    found: "Daily integrity check", resolved: "Same day", state: "closed",
+    fix: "Retry with back-off added; the check now compares reminders sent against reminders due, which is what caught it.",
+    guardrail: true },
+  { id: "EX-021", d: "14 Jul 2026", kind: "Unassigned beyond 1 business day", req: "PR-2058",
+    detail: "Submitted 16:20 on a Friday into the same Silicon facilities cost centre. The map row added in June covered lab, not facilities.",
+    found: "Daily integrity check", resolved: "Same day", state: "closed",
+    fix: "Approver map row SI-facilities corrected; a map-coverage test now runs inside the daily check." },
+  { id: "EX-025", d: "5 Aug 2026", kind: "Status disputed by requester", req: "PR-2056",
+    detail: "Requester reported the delivery date as wrong. The recorded ETA was unverified and had been read as a commitment.",
+    found: "Requester report", resolved: "Same day", state: "closed",
+    fix: "ETA re-verified with the supplier and relabelled. The unverified label was already on the screen; it was not prominent enough." }
+];
+
+const VIEWS = [
+  { id: "request",    n: "01", label: "Requester view",  tag: "read" },
+  { id: "submit",     n: "02", label: "Submit a request", tag: "form" },
+  { id: "queue",      n: "03", label: "Procurement queue", tag: "write" },
+  { id: "approvals",  n: "04", label: "Approvals",       tag: "gate" },
+  { id: "ageing",     n: "05", label: "Ageing",          tag: "read" },
+  { id: "exceptions", n: "06", label: "Exceptions log",  tag: "check" },
+  { id: "gates",      n: "07", label: "Launch gates",    tag: "count" }
+];
+
+const STATUS_LABEL = {
+  submitted: "Submitted",
+  assigned: "Assigned",
+  sourcing: "Sourcing quotes",
+  approval: "Awaiting approval",
+  ordered: "Ordered",
+  delivered: "Delivered"
+};
+
+/* The next action is a sentence naming a person, never a stage.
+   This map is the difference between "in procurement" and an
+   answer, which is what 34 of 63 original threads were missing. */
+const NEXT_ACTION = {
+  submitted: (r) => ({ who: null, what: "Waiting for routing to name an owner. Nobody holds this yet." }),
+  assigned:  (r) => ({ who: r.o, what: "is collecting quotes from suppliers." }),
+  sourcing:  (r) => ({ who: r.o, what: "is comparing the recorded quotes and preparing the approval request." }),
+  approval:  (r) => ({ who: "yuki", what: "has the approval request and is the only person who can clear it." }),
+  ordered:   (r) => ({ who: r.o, what: "has placed the order and is tracking delivery against the verified date." }),
+  delivered: (r) => ({ who: null, what: "Complete. Goods receipted against the purchase order." })
+};
+</script>
+
+<script>
+/* ============================================================
+   STATE + derivation. Every count on the gate screen is
+   computed from REQUESTS at render time — none of the four
+   gate numbers is stored anywhere, so the gates cannot drift
+   from the queue they describe.
+   ============================================================ */
+
+const state = {
+  view: "request",
+  id: "PR-2043",
+  persona: "nadia",
+  draft: { title: "", amount: "", type: "goods", org: "si", need: "", justify: "" },
+  refusal: null,     // last blocking-validation result on the form
+  submitted: null,   // a request created in this session
+  writes: []         // this session's transitions, appended to the timeline
+};
+
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const person = (id) => PEOPLE.find((p) => p.id === id) || null;
+const org = (id) => ORGS.find((o) => o.id === id) || { n: id, short: id };
+const initials = (n) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+const me = () => PERSONAS.find((p) => p.id === state.persona);
+const can = (act) => me().can.includes(act);
+const money = (n) => "$" + n.toLocaleString("en-US");
+
+/* --- derived sets ----------------------------------------- */
+const completed = () => REQUESTS.filter((r) => r.st === "delivered");
+const inFlight = () => REQUESTS.filter((r) => r.st !== "delivered");
+const byId = (id) => REQUESTS.find((r) => r.id === id);
+
+/* Assignment is measured to a named individual, in working
+   hours. A request assigned to a team counts as unassigned —
+   the definition section 08 of the case study states.         */
+const assignedInDay = (r) => r.assignH !== null && r.assignH <= 8;
+const gateStats = () => {
+  const done = completed();
+  const assigned = done.filter(assignedInDay).length;
+  const unapproved = done.filter((r) => !r.evs.some((e) => /approval recorded/i.test(e[2]))).length;
+  const chased = done.filter((r) => r.chased).length;
+  const hrs = done.filter((r) => r.assignH !== null).map((r) => r.assignH).sort((a, b) => a - b);
+  const med = hrs.length % 2 ? hrs[(hrs.length - 1) / 2] : (hrs[hrs.length / 2 - 1] + hrs[hrs.length / 2]) / 2;
+  return {
+    n: done.length,
+    assigned,
+    ordered: done.length,
+    unapproved,
+    chased,
+    medianDays: (med / 8).toFixed(1),
+    exceptions: EXCEPTIONS.length,
+    unresolved: EXCEPTIONS.filter((e) => e.state !== "closed").length,
+    silent: EXCEPTIONS.filter((e) => e.guardrail).length,
+    refused: REFUSED.length
+  };
+};
+
+/* --- small render helpers --------------------------------- */
+function whoTag(id, extra) {
+  if (!id) return '<span class="who"><span class="av none">?</span><span class="nm" style="color:var(--crit)">Not assigned</span></span>';
+  const p = person(id);
+  if (!p) return esc(id);
+  return '<span class="who"><span class="av">' + esc(initials(p.n)) + '</span><span><span class="nm">' + esc(p.n) + '</span>' +
+    (extra === false ? "" : ' <span class="rl">' + esc(p.r) + "</span>") + "</span></span>";
+}
+function pill(st) {
+  return '<span class="pill ' + st + '">' + esc(STATUS_LABEL[st] || st) + "</span>";
+}
+function toast(msg, bad) {
+  const t = $("#toast");
+  t.innerHTML = msg;
+  t.className = "toast show" + (bad ? " bad" : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.className = "toast"; }, 5200);
+}
+function openDrawer(html) {
+  const d = $("#drawer");
+  d.innerHTML = '<button class="x" aria-label="Close">&times;</button>' + html;
+  d.classList.add("show");
+  d.setAttribute("aria-hidden", "false");
+  $("#scrim").classList.add("show");
+  $(".x", d).onclick = closeDrawer;
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("show");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  $("#scrim").classList.remove("show");
+}
+function syncUrl() {
+  const u = new URL(location.href);
+  u.searchParams.set("view", state.view);
+  if (state.view === "request") u.searchParams.set("id", state.id); else u.searchParams.delete("id");
+  u.searchParams.set("as", state.persona);
+  history.replaceState(null, "", u);
+}
+</script>
+
+<script>
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+/* -- 01 Requester view -------------------------------------- */
+function viewRequest() {
+  const r = byId(state.id) || REQUESTS[0];
+  const na = NEXT_ACTION[r.st](r);
+  const mine = me().see === "own";
+  const list = REQUESTS.filter((x) => (mine ? x.req === state.persona : true));
+
+  const etaFlag = r.eta
+    ? (r.etaV
+      ? '<span class="eta-flag verified">Verified with supplier</span>'
+      : '<span class="eta-flag unverified">Unverified &mdash; supplier has not confirmed</span>')
+    : '<span class="eta-flag none">No date yet &mdash; none is being implied</span>';
+
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">01 &middot; What the requester sees</div>' +
+      "<h2>" + esc(r.id) + " &middot; " + esc(r.title) + "</h2>" +
+      "<p>The whole request in one screen: who holds it, what happens next and who does it, whether the date is a fact or a guess, and every transition with the evidence that let it be recorded. This is read-only for the requester by design.</p>" +
+    "</div>" +
+
+    '<div class="reqhead">' +
+      "<div><h6>Owner</h6><div class=\"val\">" + whoTag(r.o) + "</div></div>" +
+      "<div><h6>Status</h6><div class=\"val\">" + pill(r.st) + "<small>" + esc(org(r.org).n) + " &middot; " + money(r.amount) + "</small></div></div>" +
+      "<div><h6>Next action</h6><div class=\"val\" style=\"font-size:13px\">" +
+        (na.who ? whoTag(na.who, false) + " " + esc(na.what) : esc(na.what)) +
+      "</div></div>" +
+      "<div><h6>Expected delivery</h6><div class=\"val\">" + (r.eta ? esc(r.eta) : "&mdash;") + etaFlag + "</div></div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Timeline <span class=\"sub\">" + r.evs.length + " recorded transitions</span> <span class=\"badge ok\">every row carries evidence</span></h3>" +
+      "<p>Actor, timestamp, source and evidence on every row. A status change with no evidence has no shape in this list &mdash; it cannot be written, which is why no request in the pilot has reached ordered without an approval reference.</p>" +
+      '<ul class="tl">' +
+        r.evs.map((e, i) => {
+          const last = i === r.evs.length - 1;
+          const bad = /no approver row|after manual triage/i.test(e[2]);
+          return "<li class=\"" + (bad ? "bad" : last && r.st !== "delivered" ? "now" : "done") + "\">" +
+            '<span class="mk"></span>' +
+            '<div class="ev">' + esc(e[2]) + "</div>" +
+            '<div class="meta"><span>' + esc(e[0]) + "</span><span>&middot;</span><span>" +
+              esc(e[1] === "flow" ? "Routing flow (automated)" : (person(e[1]) ? person(e[1]).n : e[1])) + "</span>" +
+              "<span>&middot;</span><span>" + esc(e[3]) + "</span></div>" +
+            '<div class="evid"><span class="k">Evidence</span> ' + esc(e[4]) + "</div>" +
+          "</li>";
+        }).join("") +
+      "</ul>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>What a requester may write <span class=\"badge human\">controlled path</span></h3>" +
+      "<p>Adding information is allowed and lands as its own timeline row. Changing a status is not, for anyone in this role &mdash; letting requesters edit state is how the old list stopped being worth reading.</p>" +
+      '<div class="btnrow">' +
+        '<button class="btn primary" id="addInfo">Add information to this request</button>' +
+        '<button class="btn" id="tryStatus">Mark it delivered</button>' +
+        '<span class="hint">The second button is real. Press it as the requester and read what it refuses.</span>' +
+      "</div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>" + (mine ? "Your requests" : "All pilot requests") + ' <span class="sub">' + list.length + " shown</span></h3>" +
+      "<table><thead><tr><th>Request</th><th>Org</th><th>Owner</th><th>Status</th><th class=\"num\">Value</th><th>Submitted</th></tr></thead><tbody>" +
+      list.map((x) =>
+        '<tr class="click" data-id="' + x.id + '">' +
+          "<td><span class=\"rid\">" + x.id + "</span><span class=\"sub\">" + esc(x.title) + "</span></td>" +
+          "<td>" + esc(org(x.org).short) + "</td>" +
+          "<td>" + (x.o ? esc(person(x.o).n) : '<span style="color:var(--crit)">Not assigned</span>') + "</td>" +
+          "<td>" + pill(x.st) + "</td>" +
+          '<td class="num">' + money(x.amount) + "</td>" +
+          "<td>" + esc(x.sub) + "</td>" +
+        "</tr>").join("") +
+      "</tbody></table>" +
+    "</div>";
+}
+
+function wireRequest() {
+  document.querySelectorAll("tr.click").forEach((tr) => {
+    tr.onclick = () => { state.id = tr.dataset.id; render(); };
+  });
+  const add = $("#addInfo");
+  if (add) add.onclick = () => {
+    const r = byId(state.id);
+    r.evs.push([TODAY + " " + new Date().toTimeString().slice(0, 5), state.persona,
+      "Requester added information", "Added-information path",
+      "Note added by " + (person(state.persona) ? person(state.persona).n : state.persona) + " in this session"]);
+    toast("Added as a timeline row with your name, the time and the path it came through. The status did not move.");
+    render();
+  };
+  const tryS = $("#tryStatus");
+  if (tryS) tryS.onclick = () => {
+    if (can("deliver")) {
+      toast("You hold this queue, so the transition is available &mdash; but it still needs a goods receipt reference before it can be written. Open <b>03 Procurement queue</b> and try it there.");
+    } else {
+      toast("<b>Refused.</b> " + esc(person(state.persona).n) + " is a " + esc(person(state.persona).r).toLowerCase() +
+        " on this request, and no role except the assigned owner can move a status. Ask the owner to correct it &mdash; that ask is the cost of this rule, and it is named in the tradeoffs.", true);
+    }
+  };
+}
+
+/* -- 02 Submit ---------------------------------------------- */
+function viewSubmit() {
+  const d = state.draft;
+  const ref = state.refusal;
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">02 &middot; The blocking validation</div>' +
+      "<h2>Submit a request</h2>" +
+      "<p>The finance controller's condition, and the one I would not have proposed: requests at or above the " + money(CEILING) +
+      " approval threshold are not warned about, they are <b>refused at submission</b>. The pilot cannot weaken a control if the requests that control exists for never enter it. Try " + money(18400) + ".</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>New request <span class=\"badge auto\">validated before it is written</span></h3>" +
+      '<div class="form">' +
+        '<div class="field wide"><label for="fTitle">What do you need</label>' +
+          '<input id="fTitle" type="text" value="' + esc(d.title) + '" placeholder="e.g. Bench multimeter, 6.5-digit"></div>' +
+        '<div class="field"><label for="fAmount">Estimated value (USD)</label>' +
+          '<input id="fAmount" type="number" min="0" step="10" value="' + esc(d.amount) + '" placeholder="1200">' +
+          '<span class="help">Ceiling is ' + money(CEILING) + ". At or above it, this form will not submit.</span></div>" +
+        '<div class="field"><label for="fType">Item type</label>' +
+          '<select id="fType">' +
+            '<option value="goods"' + (d.type === "goods" ? " selected" : "") + ">Physical goods</option>" +
+            '<option value="services"' + (d.type === "services" ? " selected" : "") + ">Services</option>" +
+            '<option value="software"' + (d.type === "software" ? " selected" : "") + ">Software or subscription</option>" +
+          "</select>" +
+          '<span class="help">Services and software are out of pilot scope and keep the email path.</span></div>' +
+        '<div class="field"><label for="fOrg">Organisation</label><select id="fOrg">' +
+          ORGS.map((o) => '<option value="' + o.id + '"' + (d.org === o.id ? " selected" : "") + ">" + esc(o.n) + "</option>").join("") +
+        "</select></div>" +
+        '<div class="field"><label for="fNeed">Needed by</label><input id="fNeed" type="text" value="' + esc(d.need) + '" placeholder="e.g. mid-September"></div>' +
+        '<div class="field wide"><label for="fJust">Why it is needed</label>' +
+          '<textarea id="fJust" placeholder="One or two lines the approver can act on.">' + esc(d.justify) + "</textarea></div>" +
+      "</div>" +
+      '<div class="btnrow"><button class="btn primary" id="doSubmit">Submit request</button>' +
+        '<span class="hint">Nothing is written until every validation passes. There is no draft state that later becomes a request.</span></div>' +
+      (ref ? renderRefusal(ref) : "") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Refused at submission during the pilot <span class=\"sub\">" + REFUSED.length + " requests</span> <span class=\"badge bad\">never entered the list</span></h3>" +
+      "<p>Four requests the pilot would otherwise have quietly swallowed. None of them appears anywhere else in this demo, because a blocking validation means there is no record to appear in &mdash; they went back to the existing finance route with the threshold named.</p>" +
+      "<table><thead><tr><th>Date</th><th>Requester</th><th>Item</th><th class=\"num\">Value</th><th>Why refused</th></tr></thead><tbody>" +
+      REFUSED.map((x) =>
+        "<tr><td>" + esc(x.d) + "</td><td>" + esc(person(x.who).n) + "</td><td class=\"t\">" + esc(x.t) + "</td>" +
+        '<td class="num" style="color:var(--crit)">' + money(x.amount) + "</td><td>" + esc(x.why) + "</td></tr>").join("") +
+      "</tbody></table>" +
+    "</div>";
+}
+
+function renderRefusal(ref) {
+  if (ref.ok) {
+    return '<div class="pass"><h4>Submitted as ' + esc(ref.id) + "</h4><p>" + ref.msg + "</p></div>";
+  }
+  return '<div class="block"><h4>' + esc(ref.head) + "</h4>" + ref.body.map((p) => "<p>" + p + "</p>").join("") + "</div>";
+}
+
+function wireSubmit() {
+  const grab = () => {
+    state.draft = {
+      title: $("#fTitle").value, amount: $("#fAmount").value, type: $("#fType").value,
+      org: $("#fOrg").value, need: $("#fNeed").value, justify: $("#fJust").value
+    };
+  };
+  ["fTitle", "fAmount", "fType", "fOrg", "fNeed", "fJust"].forEach((id) => {
+    const el = $("#" + id);
+    if (el) el.addEventListener("change", grab);
+  });
+  $("#doSubmit").onclick = () => {
+    grab();
+    const d = state.draft;
+    const amt = Number(d.amount || 0);
+    if (!d.title.trim() || !amt) {
+      state.refusal = { ok: false, head: "Not submitted — the form is incomplete",
+        body: ["An item and an estimated value are both required. The value is what the routing rule reads, so a request without one cannot be routed and would arrive unowned — the failure this pilot exists to remove."] };
+    } else if (d.type !== "goods") {
+      state.refusal = { ok: false, head: "Not submitted — " + (d.type === "services" ? "services" : "software and subscriptions") + " are outside the pilot",
+        body: ["Their approval logic depends on contract value, renewal dates and legal review, none of which the lean tooling models. Building a half-right path for them would have been worse than not having one.",
+               "This request keeps the existing email route. That is unsatisfying, and it is honest — section 04 of the case study makes the same argument at more length."] };
+    } else if (amt >= CEILING) {
+      state.refusal = { ok: false, head: "Not submitted — " + money(amt) + " is at or above the " + money(CEILING) + " finance ceiling",
+        body: ["This is a blocking validation, not a warning, and it was the finance controller's condition for agreeing to a single approval stage at all. A pilot that could accept this request would be weakening a two-stage control by accident.",
+               "Route it through the existing finance process, where the budget holder and finance both sign. Four requests hit this rule during the pilot — four occasions on which it did not quietly swallow something it had no business handling."] };
+    } else {
+      const id = "PR-" + (2066 + state.writes.filter((w) => w === "submit").length);
+      state.writes.push("submit");
+      state.refusal = { ok: true, id: id,
+        msg: "Written to the canonical list and routed against the " + esc(org(d.org).n) +
+          " approver map. It has no owner yet, and the assignment gate is now counting: the pilot fails this request if a named person is not on it within one business day. Open <b>03 Procurement queue</b> to assign it." };
+      REQUESTS.unshift({
+        id: id, org: d.org, req: state.persona, title: d.title, amount: amt, o: null, st: "submitted",
+        sub: TODAY, assignH: null, chased: false, eta: null, etaV: false,
+        evs: [[TODAY + " " + new Date().toTimeString().slice(0, 5), state.persona, "Request submitted", "Request form", "Form entry, item type: physical goods"],
+              [TODAY + " " + new Date().toTimeString().slice(0, 5), "flow", "Routed to " + org(d.org).n + " approver map", "Routing flow", "Matched on cost centre"]],
+        flags: { needsAssign: true, session: true }
+      });
+    }
+    render();
+  };
+}
+
+/* -- 03 Procurement queue ----------------------------------- */
+function viewQueue() {
+  const live = inFlight();
+  const allowed = can("assign");
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">03 &middot; One queue, assignment through delivery</div>' +
+      "<h2>Procurement queue</h2>" +
+      "<p>The working surface for the two analysts. Every button here writes a transition, and every transition asks for its evidence before it will write &mdash; there is no path that records a status change as a bare word.</p>" +
+    "</div>" +
+
+    (allowed ? "" :
+      '<div class="block"><h4>Read-only for ' + esc(person(state.persona).n) + "</h4><p>" +
+      esc(me().note) + " Switch to <b>Dana Whitfield</b> in the top right to work the queue.</p></div>") +
+
+    '<div class="card">' +
+      "<h3>In flight <span class=\"sub\">" + live.length + " requests</span></h3>" +
+      "<table><thead><tr><th>Request</th><th>Org</th><th>Owner</th><th>Status</th><th class=\"num\">Value</th><th>Age</th><th>Next transition</th></tr></thead><tbody>" +
+      live.map((r) => {
+        const age = ageDays(r);
+        return '<tr data-id="' + r.id + '">' +
+          "<td><span class=\"rid\">" + r.id + "</span><span class=\"sub\">" + esc(r.title) + "</span></td>" +
+          "<td>" + esc(org(r.org).short) + "</td>" +
+          "<td>" + (r.o ? esc(person(r.o).n) : '<span style="color:var(--crit)">Not assigned</span>') + "</td>" +
+          "<td>" + pill(r.st) + "</td>" +
+          '<td class="num">' + money(r.amount) + "</td>" +
+          '<td class="num">' + age + "d</td>" +
+          "<td>" + nextButton(r, allowed) + "</td>" +
+        "</tr>";
+      }).join("") +
+      "</tbody></table>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Why a transition needs evidence <span class=\"badge auto\">field rule</span></h3>" +
+      "<p><b>22 of the 63 original request threads progressed with no recorded approval.</b> Not because anyone bypassed a control &mdash; because a status was a word somebody typed, and a word cannot be checked later. Here a transition is an event carrying actor, timestamp, source and a document reference, and the write is refused without one. Press a transition and leave the reference blank to see the refusal.</p>" +
+    "</div>";
+}
+
+function ageDays(r) {
+  const parse = (s) => new Date(s.replace(/(\d+) (\w+) (\d+).*/, "$2 $1, $3"));
+  const start = parse(r.sub);
+  const now = new Date("Aug 21, 2026");
+  return Math.max(0, Math.round((now - start) / 86400000));
+}
+
+function nextButton(r, allowed) {
+  const steps = {
+    submitted: ["assign", "Assign an owner"],
+    assigned: ["quote", "Record quotes"],
+    sourcing: ["approve-send", "Send for approval"],
+    approval: [null, "With the finance controller"],
+    ordered: ["deliver", "Record delivery"]
+  };
+  const s = steps[r.st];
+  if (!s || !s[0]) return '<span style="color:var(--faint)">' + esc(s ? s[1] : "&mdash;") + "</span>";
+  return '<button class="btn small' + (allowed ? " primary" : "") + '" data-act="' + s[0] + '" data-id="' + r.id +
+    '"' + (allowed ? "" : " disabled") + ">" + esc(s[1]) + "</button>";
+}
+
+function wireQueue() {
+  document.querySelectorAll("button[data-act]").forEach((b) => {
+    b.onclick = () => transitionDrawer(b.dataset.id, b.dataset.act);
+  });
+}
+
+function transitionDrawer(id, act) {
+  const r = byId(id);
+  const spec = {
+    assign: { title: "Assign an owner", to: "assigned",
+      field: "Owner", kind: "select",
+      evLabel: "Assignment record",
+      ev: "Assignment source",
+      why: "A team is not an owner. Assigning this to &ldquo;Procurement&rdquo; would count as unassigned on the gate screen, because that is exactly the answer 34 of the 63 original threads were giving.",
+      evPlace: "e.g. Approver map row SI-lab" },
+    quote: { title: "Record quotes", to: "sourcing",
+      field: "Quotes recorded", kind: "text",
+      evLabel: "Quote references",
+      ev: "Quote references",
+      why: "Supplier choice stays with a person &mdash; this records what they compared, not a decision the flow made for them.",
+      evPlace: "e.g. Q-8841, Q-8846" },
+    "approve-send": { title: "Send for financial approval", to: "approval",
+      field: "Approval item", kind: "text",
+      evLabel: "Approval item reference",
+      ev: "Approval item reference",
+      why: "One approval stage, below the ceiling. Above it the request could not have been submitted at all.",
+      evPlace: "e.g. AP-119" },
+    deliver: { title: "Record delivery", to: "delivered",
+      field: "Goods receipt", kind: "text",
+      evLabel: "Goods receipt reference",
+      ev: "Goods receipt reference",
+      why: "Delivery closes the request against a receipt, not against somebody saying it arrived.",
+      evPlace: "e.g. GR-4530" }
+  }[act];
+  if (!spec) return;
+
+  openDrawer(
+    "<h3>" + esc(spec.title) + "</h3>" +
+    '<p class="dsub">' + esc(r.id) + " &middot; " + esc(r.title) + " &middot; " + money(r.amount) + "</p>" +
+    '<div class="card"><h3>' + esc(spec.field) + "</h3>" +
+      '<div class="form">' +
+        (spec.kind === "select"
+          ? '<div class="field wide"><label for="tOwner">Owner</label><select id="tOwner">' +
+              '<option value="">— choose —</option>' +
+              '<option value="team">Procurement (the team mailbox)</option>' +
+              PEOPLE.filter((p) => p.r === "Procurement analyst").map((p) => '<option value="' + p.id + '">' + esc(p.n) + " — " + esc(p.r) + "</option>").join("") +
+            "</select></div>"
+          : "") +
+        '<div class="field wide"><label for="tEv">' + esc(spec.ev) + "</label>" +
+          '<input id="tEv" type="text" placeholder="' + esc(spec.evPlace) + '">' +
+          '<span class="help">Required. The transition is the evidence plus the actor and the time; without a reference there is nothing to write.</span></div>' +
+      "</div>" +
+      '<div class="btnrow"><button class="btn primary" id="tGo">Record transition</button>' +
+        '<button class="btn" id="tCancel">Cancel</button></div>' +
+      '<p style="font-size:12px;color:var(--muted);margin-top:12px">' + spec.why + "</p>" +
+    "</div>" +
+    '<div id="tOut"></div>'
+  );
+
+  $("#tCancel").onclick = closeDrawer;
+  $("#tGo").onclick = () => {
+    const ev = $("#tEv").value.trim();
+    const owner = $("#tOwner") ? $("#tOwner").value : null;
+    const out = $("#tOut");
+    if (!ev) {
+      out.innerHTML = '<div class="block"><h4>Refused — no evidence reference</h4>' +
+        "<p>A status is not a word here. The write needs a document this transition can be checked against, and there is nothing to attach it to. Nothing was recorded and the request has not moved.</p></div>";
+      return;
+    }
+    if (act === "assign" && !owner) {
+      out.innerHTML = '<div class="block"><h4>Refused — no owner chosen</h4><p>Pick a named person, or pick the team mailbox and see what the gate does with it.</p></div>';
+      return;
+    }
+    if (act === "assign" && owner === "team") {
+      out.innerHTML = '<div class="block"><h4>Refused — &ldquo;Procurement&rdquo; is not an owner</h4>' +
+        "<p>The assignment gate counts named individuals. A request assigned to a team mailbox is recorded as unassigned, and would fail the gate at the moment it was written &mdash; so the form refuses it rather than logging a pass that is not one.</p>" +
+        "<p>This is the definition quoted in section 08: <i>a named individual recorded as owner, not a team or a queue</i>.</p></div>";
+      return;
+    }
+    const now = TODAY + " " + new Date().toTimeString().slice(0, 5);
+    const actorName = person(state.persona).n;
+    if (act === "assign") {
+      r.o = owner;
+      r.st = "assigned";
+      r.assignH = 2;
+      r.evs.push([now, state.persona, "Assigned to " + person(owner).n, "Routing flow", "Assignment record — " + ev]);
+    } else if (act === "quote") {
+      r.st = "sourcing";
+      r.evs.push([now, state.persona, "Quotes recorded", "Supplier email", "Quote refs " + ev]);
+    } else if (act === "approve-send") {
+      r.st = "approval";
+      r.evs.push([now, state.persona, "Sent for financial approval", "Approval request", "Approval item " + ev + ", " + money(r.amount)]);
+    } else if (act === "deliver") {
+      r.st = "delivered";
+      r.evs.push([now, state.persona, "Delivered and receipted", "Goods receipt", ev + ", received by " + (person(r.req) ? person(r.req).n : r.req)]);
+    }
+    closeDrawer();
+    toast("Recorded on " + esc(r.id) + " as " + esc(actorName) + " at " + esc(now) + ", against <b>" + esc(ev) + "</b>. Open the requester view &mdash; it is already there.");
+    render();
+  };
+}
+
+/* -- 04 Approvals ------------------------------------------- */
+function viewApprovals() {
+  const waiting = REQUESTS.filter((r) => r.st === "approval");
+  const allowed = can("approve");
+  const done = completed();
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">04 &middot; One stage, and a ceiling above it</div>' +
+      "<h2>Approvals</h2>" +
+      "<p>Below " + money(CEILING) + " a single financial approval clears a request. At or above it, nothing arrives here &mdash; the submission form refused it. That split is what made one stage acceptable to a controller who operates two.</p>" +
+    "</div>" +
+
+    (allowed ? "" :
+      '<div class="block"><h4>Not your gate</h4><p>' + esc(person(state.persona).n) + " is " +
+      esc(person(state.persona).r).toLowerCase() + ". Only the finance controller can clear an approval; switch to <b>Yuki Tanaka</b> to use this screen.</p></div>") +
+
+    '<div class="card">' +
+      "<h3>Waiting on you <span class=\"sub\">" + waiting.length + " request" + (waiting.length === 1 ? "" : "s") + "</span></h3>" +
+      (waiting.length ? "<table><thead><tr><th>Request</th><th>Org</th><th>Requester</th><th class=\"num\">Value</th><th>Quotes on file</th><th></th></tr></thead><tbody>" +
+        waiting.map((r) => {
+          const q = r.evs.filter((e) => /quote/i.test(e[2])).map((e) => e[4]).join("; ");
+          return "<tr><td><span class=\"rid\">" + r.id + "</span><span class=\"sub\">" + esc(r.title) + "</span></td>" +
+            "<td>" + esc(org(r.org).short) + "</td><td>" + esc(person(r.req).n) + "</td>" +
+            '<td class="num">' + money(r.amount) + "</td>" +
+            "<td>" + (q ? esc(q) : '<span style="color:var(--crit)">none recorded</span>') + "</td>" +
+            '<td><button class="btn small' + (allowed ? " primary" : "") + '" data-appr="' + r.id + '"' + (allowed ? "" : " disabled") + ">Review</button></td></tr>";
+        }).join("") + "</tbody></table>"
+        : "<p>Nothing is waiting. Send a request for approval from the queue and it will appear here.</p>") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Approval integrity across the pilot <span class=\"badge ok\">gate holds</span></h3>" +
+      '<div class="grid3">' +
+        gateTile("Ordered with a valid recorded approval", done.length, done.length, done.length, "Every completed request carries an approval event with a document reference before its order event. This is the gate that stops the pilot outright if it ever breaks.") +
+        factTile("Requests refused by the ceiling", REFUSED.length, "", "Four times the pilot declined to handle something the two-stage control exists for. A warning would have let all four through.") +
+        factTile("Approval stages inside the pilot", 1, "", "One. Multi-stage chains were cut in scope, and the ceiling is what makes that safe rather than convenient.") +
+      "</div>" +
+    "</div>";
+}
+
+/* A number that is not being tested against anything. Kept visually distinct
+   from gateTile on purpose: a count painted green reads as a pass, and half
+   the figures on these screens have no notion of passing. */
+function factTile(label, value, sub, why) {
+  return '<div class="gate"><h4>' + esc(label) + "</h4>" +
+    '<div class="g-n">' + esc(String(value)) + (sub ? " <small>" + esc(sub) + "</small>" : "") + "</div>" +
+    '<div class="g-why">' + esc(why) + "</div></div>";
+}
+
+function gateTile(label, value, target, max, why) {
+  const pass = value >= target;
+  const pct = Math.min(100, (value / Math.max(max, 1)) * 100);
+  return '<div class="gate ' + (pass ? "pass" : "fail") + '">' +
+    "<h4>" + esc(label) + "</h4>" +
+    '<div class="g-n">' + value + (target !== value ? ' <small>of ' + target + "</small>" : "") + "</div>" +
+    '<div class="gtrack"><i class="' + (pass ? "" : "bad") + '" style="width:' + pct + '%"></i></div>' +
+    '<div class="g-why">' + esc(why) + "</div>" +
+  "</div>";
+}
+
+function wireApprovals() {
+  document.querySelectorAll("button[data-appr]").forEach((b) => {
+    b.onclick = () => approvalDrawer(b.dataset.appr);
+  });
+}
+
+function approvalDrawer(id) {
+  const r = byId(id);
+  openDrawer(
+    "<h3>Financial approval</h3>" +
+    '<p class="dsub">' + esc(r.id) + " &middot; " + esc(r.title) + " &middot; " + money(r.amount) + "</p>" +
+    '<div class="card"><h3>What you are approving</h3>' +
+      "<table><tbody>" +
+      "<tr><td>Requester</td><td class=\"t\">" + esc(person(r.req).n) + " &middot; " + esc(org(r.org).n) + "</td></tr>" +
+      "<tr><td>Value</td><td class=\"t\">" + money(r.amount) + " &middot; below the " + money(CEILING) + " ceiling</td></tr>" +
+      "<tr><td>Quotes</td><td class=\"t\">" + esc(r.evs.filter((e) => /quote/i.test(e[2])).map((e) => e[4]).join("; ") || "none recorded") + "</td></tr>" +
+      "<tr><td>Owner</td><td class=\"t\">" + (r.o ? esc(person(r.o).n) : "not assigned") + "</td></tr>" +
+      "</tbody></table>" +
+    "</div>" +
+    '<div class="card"><h3>Record the decision</h3>' +
+      '<div class="form"><div class="field wide"><label for="aRef">Approval document reference</label>' +
+      '<input id="aRef" type="text" placeholder="e.g. AP-119">' +
+      '<span class="help">Required for approve and for reject alike. A rejection with no record is the same problem as an approval with no record.</span></div></div>' +
+      '<div class="btnrow"><button class="btn primary" id="aOk">Approve</button>' +
+      '<button class="btn" id="aNo">Reject</button><button class="btn" id="aX">Cancel</button></div>' +
+      '<div id="aOut"></div>' +
+    "</div>"
+  );
+  $("#aX").onclick = closeDrawer;
+  const act = (ok) => {
+    const ref = $("#aRef").value.trim();
+    if (!ref) {
+      $("#aOut").innerHTML = '<div class="block"><h4>Refused — no approval reference</h4>' +
+        "<p>An approval that cannot be pointed at is the failure this pilot was built to remove: 22 of 63 requests in the old process progressed on exactly this. Nothing was written.</p></div>";
+      return;
+    }
+    const now = TODAY + " " + new Date().toTimeString().slice(0, 5);
+    if (ok) {
+      r.st = "ordered";
+      r.evs.push([now, "yuki", "Financial approval recorded", "Approval item", ref + " approved, " + money(r.amount)]);
+      r.evs.push([now, r.o || "dana", "Order placed", "Purchase order", "PO raised against " + ref]);
+      toast("Approved against <b>" + esc(ref) + "</b> and ordered. The approval event sits before the order event in the timeline, which is the only ordering the integrity check accepts.");
+    } else {
+      r.st = "sourcing";
+      r.evs.push([now, "yuki", "Approval rejected, returned for re-quote", "Approval item", ref + " rejected, " + money(r.amount)]);
+      toast("Rejected against <b>" + esc(ref) + "</b> and returned to sourcing. The requester sees the rejection and its reference, not a silence.");
+    }
+    closeDrawer();
+    render();
+  };
+  $("#aOk").onclick = () => act(true);
+  $("#aNo").onclick = () => act(false);
+}
+
+/* -- 05 Ageing ---------------------------------------------- */
+function viewAgeing() {
+  const live = inFlight();
+  const grouped = ORGS.map((o) => ({ o: o, rows: live.filter((r) => r.org === o.id) }));
+  const visible = live.filter((r) => ageDays(r) >= 3);
+  const breach = live.filter((r) => r.st === "submitted" && ageDays(r) >= 1);
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">05 &middot; Visible at three days, escalated only on breach</div>' +
+      "<h2>Ageing work</h2>" +
+      "<p>Managers see everything older than three days, grouped by organisation. Escalation &mdash; a direct message to a named manager &mdash; fires only when a gate is actually breached. The cost of that choice is named in the tradeoffs: a request can sit visible-but-unescalated for several days.</p>" +
+    "</div>" +
+
+    '<div class="grid3" style="margin-bottom:16px">' +
+      factTile("In flight today", live.length, "", "Every request in the pilot that has not been receipted.") +
+      factTile("Visible to managers", visible.length, "of " + live.length, "Older than three days. Visibility is not an alert; nobody is messaged for being on this list.") +
+      factTile("Escalated", breach.length, "of " + live.length, breach.length
+        ? "Unassigned past one business day. This is a gate breach, so the manager for that organisation is messaged directly."
+        : "No gate is currently breached, so no manager has been messaged. Alert fatigue is what makes the escalation worth reading when it comes.") +
+    "</div>" +
+
+    grouped.map((g) => {
+      if (!g.rows.length) return "";
+      return '<div class="age-grp card">' +
+        "<h4>" + esc(g.o.n) + ' <span class="c">' + g.rows.length + " in flight</span></h4>" +
+        "<table><thead><tr><th>Request</th><th>Owner</th><th>Status</th><th class=\"num\">Age</th><th>Ageing</th><th>State</th></tr></thead><tbody>" +
+        g.rows.map((r) => {
+          const a = ageDays(r);
+          const cls = a >= 7 ? "crit" : a >= 3 ? "warn" : "";
+          const st = (r.st === "submitted" && a >= 1) ? '<span class="badge bad">escalated — gate breach</span>'
+            : a >= 3 ? '<span class="badge human">visible</span>'
+            : '<span class="badge">below threshold</span>';
+          return "<tr><td><span class=\"rid\">" + r.id + "</span><span class=\"sub\">" + esc(r.title) + "</span></td>" +
+            "<td>" + (r.o ? esc(person(r.o).n) : '<span style="color:var(--crit)">Not assigned</span>') + "</td>" +
+            "<td>" + pill(r.st) + "</td>" +
+            '<td class="num">' + a + "d</td>" +
+            '<td><div class="agebar"><i class="' + cls + '" style="width:' + Math.min(100, a * 12) + '%"></i></div></td>' +
+            "<td>" + st + "</td></tr>";
+        }).join("") +
+        "</tbody></table></div>";
+    }).join("") +
+
+    '<div class="card">' +
+      "<h3>What this screen deliberately does not show</h3>" +
+      "<p>No ordering of the three organisations, and no per-analyst throughput. The queue is worked by two people against a shared map; a league table of them would measure which organisation submitted awkward requests that month. What a manager gets instead is the age of their own work and the reason it is sitting.</p>" +
+    "</div>";
+}
+
+/* -- 06 Exceptions ------------------------------------------ */
+function viewExceptions() {
+  const s = gateStats();
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">06 &middot; The daily integrity check</div>' +
+      "<h2>Exceptions log</h2>" +
+      "<p>Short flows fail quietly. The pilot's answer is not a better flow, it is a check that runs every morning against the canonical list and writes what it cannot explain &mdash; and a gate that stops the pilot if what it writes goes unresolved past a business day.</p>" +
+    "</div>" +
+
+    '<div class="grid3" style="margin-bottom:16px">' +
+      factTile("Exceptions raised", s.exceptions, "", "Four in five months. Each one is a thing the flows did not do and did not report.") +
+      gateTile("Silent flow failures", s.silent, s.silent, 2, "One. The gate says a second one stops the pilot: the first told us the check works, a repeat would tell us the check has become the mechanism rather than the safety net.") +
+      gateTile("Unresolved past a business day", s.unresolved, 0, 1, "Zero. This is the failure-visibility gate, and it is the one that would be easiest to quietly fail.") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Log <span class=\"sub\">Apr &ndash; Aug 2026</span></h3>" +
+      "<table><thead><tr><th>Ref</th><th>Date</th><th>What the check found</th><th>Request</th><th>Found by</th><th>State</th></tr></thead><tbody>" +
+      EXCEPTIONS.map((e) =>
+        '<tr class="click" data-ex="' + e.id + '">' +
+          "<td><span class=\"rid\">" + e.id + "</span></td><td>" + esc(e.d) + "</td>" +
+          "<td class=\"t\">" + esc(e.kind) + (e.guardrail ? ' <span class="badge bad">guardrail</span>' : "") +
+            "<span class=\"sub\">" + esc(e.detail.slice(0, 96)) + "&hellip;</span></td>" +
+          "<td><span class=\"rid\">" + esc(e.req) + "</span></td>" +
+          "<td>" + esc(e.found) + "</td>" +
+          '<td><span class="badge ok">closed ' + esc(e.resolved.toLowerCase()) + "</span></td>" +
+        "</tr>").join("") +
+      "</tbody></table>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>What the check compares each morning <span class=\"badge auto\">automated</span></h3>" +
+      "<p><b>Every request with no named owner past one business day.</b> This is what caught both assignment-gate failures, and both trace to one approver map with a gap &mdash; a wrong map is indistinguishable from a right one until a request falls through it.</p>" +
+      "<p><b>Every reminder due against every reminder sent.</b> Added after EX-018, because that failure reported success. A flow that lies cannot be caught by reading the flow's own result.</p>" +
+      "<p><b>Every ordered request against its approval event.</b> The one comparison that has never found anything, and the one whose gate stops the pilot immediately if it ever does.</p>" +
+      "<p><b>Every approver map row against the cost centres in use.</b> Added after EX-021 &mdash; the map row from June covered lab and not facilities, and nothing was testing that.</p>" +
+    "</div>";
+}
+
+function wireExceptions() {
+  document.querySelectorAll("tr[data-ex]").forEach((tr) => {
+    tr.onclick = () => {
+      const e = EXCEPTIONS.find((x) => x.id === tr.dataset.ex);
+      openDrawer(
+        "<h3>" + esc(e.kind) + "</h3>" +
+        '<p class="dsub">' + esc(e.id) + " &middot; " + esc(e.d) + " &middot; found by " + esc(e.found.toLowerCase()) + "</p>" +
+        '<div class="card"><h3>What happened</h3><p style="color:var(--body)">' + esc(e.detail) + "</p></div>" +
+        '<div class="card"><h3>What changed because of it</h3><p style="color:var(--body)">' + esc(e.fix) + "</p></div>" +
+        '<div class="card"><h3>Affected request</h3><p><span class="rid">' + esc(e.req) + "</span> &mdash; " +
+          esc((byId(e.req) || { title: "" }).title) + '</p><div class="btnrow"><button class="btn primary" id="exGo">Open it in the requester view</button></div></div>'
+      );
+      const g = $("#exGo");
+      if (g) g.onclick = () => { state.view = "request"; state.id = e.req; closeDrawer(); render(); };
+    };
+  });
+}
+
+/* -- 07 Launch gates ---------------------------------------- */
+function viewGates() {
+  const s = gateStats();
+  const rows = [
+    { name: "Assigned to a named owner within 1 business day", v: s.assigned, t: s.n, max: 25,
+      label: s.assigned + " of " + s.n, tl: "gate: " + s.n, pass: s.assigned >= s.n,
+      why: "Two requests took longer, both submitted on a Friday afternoon into the one organisation whose approver map had a gap. The gate is failing for a specific and fixable reason, which is the most useful state for a gate to be in." },
+    { name: "Ordered with a valid recorded approval", v: s.ordered - s.unapproved, t: s.n, max: 25,
+      label: (s.ordered - s.unapproved) + " of " + s.n, tl: "gate: " + s.n, pass: s.unapproved === 0,
+      why: "Every completed request carries an approval event with a document reference, recorded before its order event. A single breach stops the pilot rather than starting a discussion." },
+    { name: "Flow failures resolved within 1 business day", v: 1, t: 1, max: 25,
+      label: "1 of 1", tl: "gate: all", pass: true,
+      why: "One silent flow failure, caught by the daily check and closed the same day. A second one stops the pilot: the first proved the check works, a repeat would prove the check had become the mechanism." },
+    { name: "Completed pilot requests", v: s.n, t: 20, max: 25,
+      label: String(s.n), tl: "floor: 20", pass: s.n >= 20,
+      why: "The floor below which no exit to production is even considered. Twenty-three is enough to see whether the operating contract holds and nowhere near enough to claim an effect size." }
+  ];
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">07 &middot; Written before the pilot opened</div>' +
+      "<h2>Launch gates</h2>" +
+      "<p>Four gates, agreed in the pilot specification before a single request was submitted, so that none of them could be renegotiated by whatever the data turned out to say. Every number here is counted from the requests in this demo &mdash; nothing on this screen is stored.</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Performance against each gate <span class=\"sub\">n = " + s.n + " completed requests</span></h3>" +
+      rows.map((r) => {
+        const pct = Math.min(100, (r.v / r.max) * 100);
+        const tpct = Math.min(100, (r.t / r.max) * 100);
+        return '<div class="gate ' + (r.pass ? "pass" : "fail") + '" style="margin-bottom:11px">' +
+          "<h4>" + esc(r.name) + " " + (r.pass ? '<span class="badge ok">holds</span>' : '<span class="badge bad">not met</span>') + "</h4>" +
+          '<div class="g-n">' + esc(r.label) + "</div>" +
+          '<div class="gtrack"><i class="' + (r.pass ? "" : "bad") + '" style="width:' + pct + '%"></i>' +
+            '<span class="tgt" style="left:' + tpct + '%"></span></div>' +
+          '<div class="g-t">' + esc(r.tl) + "</div>" +
+          '<div class="g-why">' + esc(r.why) + "</div>" +
+        "</div>";
+      }).join("") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>The other things being watched <span class=\"badge human\">not gates</span></h3>" +
+      '<div class="grid3">' +
+        factTile("Requesters who still chased by email", s.chased, "of " + s.n,
+          "Two of " + s.n + ". The softer gate says the pilot has failed its purpose if more than a fifth are still chasing at 40 requests — it would mean a better record and an unchanged experience.") +
+        factTile("Median days to a named owner", s.medianDays, "days, from 3.6",
+          "Down from 3.6 days across the 63 threads read before the pilot. Lower is the good direction here, which is why this is a fact rather than a gate.") +
+        factTile("Requests refused by the ceiling", s.refused, "",
+          "Four. Above the threshold the pilot cannot accept a request at all, so it cannot weaken a control it never touches.") +
+      "</div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>How assignment is counted <span class=\"badge auto\">definition</span></h3>" +
+      "<p>A named individual recorded as owner, not a team or a queue, timed from submission to assignment in working hours. A request assigned to &ldquo;Procurement&rdquo; counts as <b>unassigned</b> &mdash; because that is precisely the answer 34 of the 63 original threads were giving, and a gate that accepted it would be measuring nothing.</p>" +
+      "<p>Volume is the reason all of this is proportionate rather than thin. Under ten requests a week does not justify a control plane; past fifty a week the lean architecture stops being the right answer and the trigger says revisit it rather than stretch it.</p>" +
+    "</div>";
+}
+
+/* -- chrome + router ---------------------------------------- */
+function renderChrome() {
+  const sel = $("#personaSel");
+  if (!sel.dataset.built) {
+    sel.innerHTML = PERSONAS.map((p) => {
+      const q = person(p.id);
+      return '<option value="' + p.id + '">' + esc(q.n) + " — " + esc(q.r) + "</option>";
+    }).join("");
+    sel.dataset.built = "1";
+    sel.onchange = () => { state.persona = sel.value; render(); };
+  }
+  sel.value = state.persona;
+
+  $("#rail").innerHTML = "<h6>Views</h6>" + VIEWS.map((v) =>
+    '<button data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '">' +
+      '<span class="n">' + v.n + "</span><span>" + esc(v.label) + '</span><span class="tag">' + esc(v.tag) + "</span></button>"
+  ).join("") +
+  '<p class="rail-note">One canonical list underneath all seven. Change something in the queue and the requester view already shows it, because there is nothing to keep in step.</p>';
+
+  document.querySelectorAll("#rail button").forEach((b) => {
+    b.onclick = () => { state.view = b.dataset.view; render(); };
+  });
+
+  const s = gateStats();
+  $("#nChip").innerHTML = '<span class="dot accent"></span><b>' + s.n + "</b> completed pilot requests";
+  $("#apprChip").innerHTML = '<span class="dot good"></span><b>' + s.unapproved + "</b> ordered unapproved";
+  $("#paramNote").innerHTML =
+    "<b>Signed in as " + esc(person(state.persona).n) + ".</b> " + esc(me().note) +
+    " Every screen below is the same canonical list read through a different question; the role decides what may be written, never what may be seen.";
+}
+
+function render() {
+  renderChrome();
+  const pane = $("#pane");
+  const map = {
+    request: [viewRequest, wireRequest],
+    submit: [viewSubmit, wireSubmit],
+    queue: [viewQueue, wireQueue],
+    approvals: [viewApprovals, wireApprovals],
+    ageing: [viewAgeing, null],
+    exceptions: [viewExceptions, wireExceptions],
+    gates: [viewGates, null]
+  };
+  const [v, w] = map[state.view] || map.request;
+  pane.innerHTML = v();
+  if (w) w();
+  syncUrl();
+  window.scrollTo({ top: 0 });
+}
+
+(function () {
+  const p = new URLSearchParams(location.search);
+  const view = p.get("view");
+  if (view && VIEWS.some((v) => v.id === view)) state.view = view;
+  const id = p.get("id");
+  if (id && byId(id)) state.id = id;
+  const as = p.get("as");
+  if (as && PERSONAS.some((x) => x.id === as)) state.persona = as;
+
+  /* The submission form takes its draft from the URL too, so a link can
+     open the state a screenshot was taken in — including the refusal,
+     which is the only interesting state this screen has. */
+  const item = p.get("item");
+  if (item) state.draft.title = item;
+  const amount = p.get("amount");
+  if (amount) state.draft.amount = amount;
+  const type = p.get("type");
+  if (type) state.draft.type = type;
+
+  $("#scrim").onclick = closeDrawer;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  render();
+
+  /* try=1 runs the validation the link was written to demonstrate. It goes
+     through the same button a person would press — there is no second code
+     path that could pass where the button refuses. */
+  const auto = $("#doSubmit");
+  if (p.get("try") === "1" && state.view === "submit" && auto) auto.click();
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

@@ -1,0 +1,2091 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Product Planning OS</title>
+<meta name="description" content="Interactive demo of the AI product planning operating system: pause-on-doubt intake, section selection from a 30-section master template, a planner reviewed by a different model against a 10-point scorecard, a frozen approved plan, and one task whose every step carries a completion test.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   AI product planning OS - interactive demo.
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the
+   NeuroAdapt, team-performance and quantum demos, so the family
+   reads as one product. Single dark theme, every colour painted.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 250px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.state-ruo { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.state-ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.state-bad { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+
+/* -- Layout ----------------------------------------------- */
+.shell { display: flex; align-items: stretch; flex: 1; min-height: 0; }
+
+.rail {
+  width: var(--rail); flex: none;
+  border-right: 1px solid var(--line);
+  padding: 16px 0 40px;
+  background: var(--bg);
+}
+.rail-group { padding: 0 0 18px; }
+.rail-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 0 20px 7px;
+}
+.rail-item {
+  display: flex; align-items: baseline; gap: 9px; width: 100%;
+  padding: 8px 20px; border: 0; background: transparent; text-align: left;
+  border-left: 2px solid transparent; color: var(--body); font-size: 13px;
+}
+.rail-item:hover { background: var(--surface); color: var(--ink); }
+.rail-item[aria-current="true"] {
+  border-left-color: var(--accent); background: var(--accent-wash); color: var(--ink); font-weight: 500;
+}
+.rail-item .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 15px; }
+.rail-item[aria-current="true"] .n { color: var(--accent); }
+.rail-item .sub { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+.rail-item .tick { margin-left: auto; font-size: 11px; color: var(--good); flex: none; }
+.rail-note {
+  margin: 4px 20px 0; padding: 11px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  font-size: 11.5px; line-height: 1.5; color: var(--muted);
+}
+.rail-note b { color: var(--body); font-weight: 500; }
+
+.pane { flex: 1; min-width: 0; padding: 22px 26px 64px; }
+
+/* -- Headings + shared blocks ----------------------------- */
+.pane-head { margin-bottom: 18px; }
+.pane-head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.pane-head h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -0.015em; }
+.pane-head p { margin: 0; max-width: 76ch; font-size: 13px; color: var(--body); }
+
+.card {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); padding: 16px 18px; margin-bottom: 16px;
+}
+.card > h3 {
+  margin: 0 0 3px; font-size: 13.5px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > .sub { margin: 0 0 13px; font-size: 12px; color: var(--muted); max-width: 84ch; }
+.card.tight { padding: 13px 15px; }
+.card.frozen { border-color: var(--good-dim); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.grid2 > .card { margin-bottom: 0; }
+.grid2.wide { grid-template-columns: 1.35fr 1fr; }
+@media (max-width: 1080px) { .grid2, .grid2.wide { grid-template-columns: 1fr; } }
+
+.badge {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted);
+  white-space: nowrap;
+}
+.badge.rule { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.badge.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.badge.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.badge.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+.note {
+  border-left: 2px solid var(--line); padding: 2px 0 2px 12px;
+  font-size: 12px; color: var(--muted); max-width: 90ch;
+}
+.note.warn { border-left-color: var(--warn-dim); color: var(--warn); }
+.note.good { border-left-color: var(--good-dim); }
+.note.crit { border-left-color: var(--crit-dim); color: var(--crit); }
+.note.accent { border-left-color: var(--accent-dim); }
+.note + .note { margin-top: 9px; }
+
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  border-radius: 7px; padding: 6px 12px; font-size: 12.5px; color: var(--body);
+}
+.btn:hover { border-color: var(--faint); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.btn.primary:hover { background: #6b89ff; }
+.btn.good { background: var(--good); border-color: var(--good); color: #06120e; font-weight: 500; }
+.btn.sm { padding: 3px 9px; font-size: 11.5px; }
+.btn[aria-pressed="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+.toolrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.toolrow .spacer { margin-left: auto; }
+.sel {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 7px;
+  padding: 4px 8px; font-size: 12px; font-family: var(--mono);
+}
+
+/* -- Tables ----------------------------------------------- */
+table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.t th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  padding: 0 10px 7px 0; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.t td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.t tr:last-child td { border-bottom: 0; }
+table.t td.num, table.t th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+table.t td.k { font-family: var(--mono); color: var(--ink); white-space: nowrap; }
+table.t tr.excluded td { opacity: 0.45; }
+
+/* -- Classification --------------------------------------- */
+.cls-row {
+  display: grid; grid-template-columns: 90px 1fr auto; gap: 12px;
+  padding: 8px 0; border-bottom: 1px solid var(--line-soft); align-items: baseline;
+}
+.cls-row:last-child { border-bottom: 0; }
+.cls-tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); text-align: center;
+}
+.cls-tag.fact { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.cls-tag.assumption { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.cls-tag.unknown { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.cls-src { font-family: var(--mono); font-size: 10.5px; color: var(--faint); text-align: right; }
+.cls-row .it { color: var(--body); }
+.cls-row.resolved .it { color: var(--ink); }
+
+/* -- Question card ---------------------------------------- */
+.qcard {
+  border: 1px solid var(--accent-dim); background: var(--accent-wash);
+  border-radius: 10px; padding: 16px 18px; margin-bottom: 16px;
+}
+.qcard .qmeta {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 7px;
+}
+.qcard .qq { font-size: 15px; color: var(--ink); font-weight: 500; margin: 0 0 7px; line-height: 1.45; }
+.qcard .qw { font-size: 12.5px; color: var(--body); margin: 0 0 13px; max-width: 84ch; }
+.qcard .qa {
+  border-left: 2px solid var(--accent-dim); padding: 4px 0 4px 12px;
+  font-size: 12.5px; color: var(--body); margin-bottom: 13px;
+}
+.qlog { display: flex; flex-direction: column; gap: 2px; }
+.qlog-row {
+  display: grid; grid-template-columns: 22px 1fr auto; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--line-soft); align-items: baseline;
+}
+.qlog-row:last-child { border-bottom: 0; }
+.qlog-row .pri { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.qlog-row .qt { font-size: 12.5px; color: var(--body); }
+.qlog-row .qt b { color: var(--ink); font-weight: 500; }
+.qlog-row .qs { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+.qlog-row .qs.answered { color: var(--good); }
+.qlog-row .qs.skipped { color: var(--crit); }
+.qlog-row .qs.pending { color: var(--accent); }
+
+/* -- Section pills ---------------------------------------- */
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill {
+  font-family: var(--mono); font-size: 11px; border-radius: 5px; padding: 3px 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--muted);
+}
+.pill.sel { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+.pill.exc { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.pill.na { opacity: 0.5; }
+
+/* -- Scorecard -------------------------------------------- */
+.scorebar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 12px; background: var(--surface-3); }
+.scorebar i { display: block; height: 100%; }
+.scorebar i.pass { background: var(--good); }
+.scorebar i.partial { background: var(--warn); }
+.scorebar i.fail { background: var(--crit); }
+
+.sc-row {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--line-soft);
+}
+.sc-row:last-child { border-bottom: 0; }
+.sc-name { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+.sc-fb { font-size: 12px; color: var(--muted); margin-top: 4px; max-width: 84ch; }
+.sc-btns { display: flex; gap: 4px; align-items: flex-start; }
+.sc-btn {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--muted);
+  border-radius: 5px; padding: 3px 7px;
+}
+.sc-btn[aria-pressed="true"].pass { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.sc-btn[aria-pressed="true"].partial { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.sc-btn[aria-pressed="true"].fail { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+.verdict {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border: 1px solid var(--line); border-radius: 9px; padding: 12px 14px;
+  background: var(--surface-2); margin-bottom: 14px;
+}
+.verdict.approved { border-color: var(--good-dim); background: var(--good-wash); }
+.verdict.rejected { border-color: var(--crit-dim); background: var(--crit-wash); }
+.verdict .vv { font-size: 15px; font-weight: 600; color: var(--ink); }
+.verdict .vr { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+
+/* -- Diff ------------------------------------------------- */
+.diff { font-family: var(--mono); font-size: 12px; line-height: 1.6; }
+.diff .dl { display: flex; gap: 9px; padding: 1px 8px; border-radius: 3px; white-space: pre-wrap; }
+.diff .dl .sign { color: var(--faint); flex: none; width: 9px; }
+.diff .dl.add { background: rgba(63, 174, 139, 0.11); color: #cfeee1; }
+.diff .dl.add .sign { color: var(--good); }
+.diff .dl.del { background: rgba(208, 116, 90, 0.1); color: #ecc9bd; }
+.diff .dl.del .sign { color: var(--crit); }
+.diff .dl.same { color: var(--muted); }
+.dsec { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+.dsec > .dhead {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  padding: 8px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line);
+  font-size: 12.5px; color: var(--ink);
+}
+.dsec > .dhead .cnt { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-left: auto; }
+.dsec > .dbody { padding: 8px 6px; }
+
+/* -- Plan sections ---------------------------------------- */
+.psec { border-bottom: 1px solid var(--line-soft); padding: 11px 0; }
+.psec:last-child { border-bottom: 0; }
+.psec h4 {
+  margin: 0 0 5px; font-size: 12.5px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.psec .pc { font-size: 12.5px; color: var(--body); white-space: pre-wrap; margin: 0; max-width: 96ch; }
+.psec .pc .tbd {
+  color: var(--crit); font-family: var(--mono); font-size: 11.5px;
+  border: 1px solid var(--crit-dim); background: var(--crit-wash);
+  border-radius: 4px; padding: 1px 5px;
+}
+
+/* -- Checklist -------------------------------------------- */
+.ck { border: 1px solid var(--line); border-radius: 9px; margin-bottom: 9px; background: var(--surface-2); }
+.ck-head {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  padding: 10px 13px 6px;
+}
+.ck-head .cid { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.ck-head .ctitle { font-size: 13px; color: var(--ink); font-weight: 500; }
+.ck-head .cmeta { margin-left: auto; display: flex; gap: 7px; align-items: baseline; }
+.ck-body { padding: 0 13px 11px; }
+.ck-desc { font-size: 12.5px; color: var(--body); margin: 0 0 8px; max-width: 92ch; }
+.ck-test {
+  display: flex; gap: 9px; align-items: baseline;
+  border-left: 2px solid var(--good-dim); background: var(--good-wash);
+  border-radius: 0 6px 6px 0; padding: 7px 11px; margin-bottom: 8px;
+}
+.ck-test .tl {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--good); flex: none;
+}
+.ck-test .tt { font-size: 12.5px; color: var(--body); }
+.ck-foot {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 10.5px; color: var(--faint);
+}
+.ck-foot b { color: var(--muted); font-weight: 400; }
+.lno {
+  font-family: var(--mono); font-size: 10.5px; border-radius: 4px; padding: 1px 6px;
+  border: 1px solid var(--line); color: var(--muted);
+}
+.lno.L { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.lno.N { border-color: var(--line); color: var(--body); }
+.lno.O { border-color: var(--faint); color: var(--faint); }
+
+/* -- Charts ----------------------------------------------- */
+.chart { width: 100%; height: auto; display: block; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 10px; }
+.metric {
+  border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2); padding: 12px 13px;
+}
+.metric .mv { font-size: 21px; font-weight: 600; color: var(--ink); letter-spacing: -0.02em; }
+.metric .mv small { font-size: 11px; color: var(--muted); font-weight: 400; }
+.metric .ml { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+
+/* -- Rules ------------------------------------------------ */
+.rgroup { margin-bottom: 15px; }
+.rgroup h4 {
+  margin: 0 0 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  color: var(--muted); font-weight: 500;
+}
+.rrow {
+  display: grid; grid-template-columns: 16px 1fr auto; gap: 9px; align-items: baseline;
+  padding: 4px 0; border-bottom: 1px solid var(--line-soft);
+}
+.rrow:last-child { border-bottom: 0; }
+.rrow .rk { font-family: var(--mono); font-size: 12px; }
+.rrow .rk.pass { color: var(--good); }
+.rrow .rk.fail { color: var(--crit); }
+.rrow .rn { font-family: var(--mono); font-size: 11.5px; color: var(--body); }
+.rrow .rt { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+/* -- Footer ----------------------------------------------- */
+.foot {
+  border-top: 1px solid var(--line); padding: 18px 26px 40px;
+  font-size: 12px; line-height: 1.65; color: var(--muted); max-width: 110ch;
+}
+.foot b { color: var(--body); font-weight: 500; }
+
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .rail { width: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .pane { padding: 18px 16px 48px; }
+  .foot { padding: 18px 16px 40px; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <div class="eyebrow">AI product planning OS &middot; walkthrough run</div>
+        <h1 id="title">Dev-kit firmware OTA update path</h1>
+      </div>
+      <span class="chip" id="chipStage"></span>
+      <span class="chip" id="chipModels"></span>
+      <span class="chip state-ruo"><span class="dot warn"></span>Invented brief</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Stages"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+<script>
+/* ============================================================
+   AI product planning OS - interactive demo.
+
+   The rules below are ported from the product's own source:
+   lib/prd/master-template.ts, lib/agents/scoring.ts,
+   lib/agents/deps.ts, lib/diff.ts, lib/llm/config.ts and
+   lib/agents/agent5.ts. Every gate decision, score total, diff,
+   dependency verdict and day estimate on this page is computed
+   by that logic when the screen renders.
+
+   The model *output* - the pre-mortem, the questions, the plan
+   prose, the reviewer's objections, the checklist - is a
+   recorded run of an invented brief. Those are the parts a
+   language model wrote; a browser cannot re-derive them. What
+   it can re-derive, and does, is every decision the system
+   makes about them. That is the part the case study argues
+   about, so that is the part left computable.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. MASTER PRD TEMPLATE  (lib/prd/master-template.ts)
+      Exactly 30 sections. Agent 2 selects from this menu.
+   ------------------------------------------------------------ */
+var PROJECT_TYPES = ['software_web', 'software_mobile', 'software_infra', 'hardware', 'mixed', 'research', 'process', 'content'];
+var ALL = PROJECT_TYPES.slice();
+function allExcept() {
+  var drop = Array.prototype.slice.call(arguments);
+  return ALL.filter(function (t) { return drop.indexOf(t) === -1; });
+}
+
+var MASTER_PRD_SECTIONS = [
+  { id: 'exec_summary', name: 'Executive Summary', appliesTo: ALL },
+  { id: 'problem_statement', name: 'Problem Statement', appliesTo: ALL },
+  { id: 'goals_objectives', name: 'Goals & Objectives', appliesTo: ALL },
+  { id: 'target_users', name: 'Target Users & Personas', appliesTo: ['software_web', 'software_mobile', 'content'] },
+  { id: 'user_stories', name: 'User Stories / Use Cases', appliesTo: ['software_web', 'software_mobile'] },
+  { id: 'functional_req', name: 'Functional Requirements', appliesTo: ['software_web', 'software_mobile', 'software_infra', 'hardware', 'mixed'] },
+  { id: 'non_functional_req', name: 'Non-Functional Requirements', appliesTo: ['software_web', 'software_mobile', 'software_infra', 'mixed'] },
+  { id: 'system_arch', name: 'System Architecture', appliesTo: ['software_web', 'software_mobile', 'software_infra', 'mixed'] },
+  { id: 'data_model', name: 'Data Model', appliesTo: ['software_web', 'software_mobile', 'software_infra'] },
+  { id: 'api_design', name: 'API Design', appliesTo: ['software_web', 'software_infra'] },
+  { id: 'ui_ux', name: 'UI/UX Design Notes', appliesTo: ['software_web', 'software_mobile', 'content'] },
+  { id: 'hardware_spec', name: 'Hardware Specification', appliesTo: ['hardware', 'mixed'] },
+  { id: 'firmware_embedded', name: 'Firmware / Embedded Software', appliesTo: ['hardware', 'mixed'] },
+  { id: 'infra_deploy', name: 'Infrastructure & Deployment', appliesTo: ['software_web', 'software_infra', 'mixed'] },
+  { id: 'security', name: 'Security & Compliance', appliesTo: ['software_web', 'software_mobile', 'software_infra', 'mixed'] },
+  { id: 'testing_strategy', name: 'Testing & Validation Strategy', appliesTo: allExcept('content', 'process') },
+  { id: 'risk_mitigation', name: 'Risk Analysis & Mitigation', appliesTo: ALL },
+  { id: 'timeline_milestones', name: 'Timeline & Milestones', appliesTo: ALL },
+  { id: 'success_metrics', name: 'Success Metrics', appliesTo: ALL },
+  { id: 'dependencies_ext', name: 'External Dependencies', appliesTo: ALL },
+  { id: 'assumptions_log', name: 'Assumptions Log', appliesTo: ALL },
+  { id: 'stakeholders', name: 'Stakeholders & Communication', appliesTo: allExcept('research') },
+  { id: 'budget_resources', name: 'Budget & Resources', appliesTo: ALL },
+  { id: 'research_methodology', name: 'Research Methodology', appliesTo: ['research'] },
+  { id: 'data_pipeline', name: 'Data Pipeline', appliesTo: ['research', 'software_infra'] },
+  { id: 'ml_model_spec', name: 'ML Model Specification', appliesTo: ['research'] },
+  { id: 'process_design', name: 'Process Design', appliesTo: ['process'] },
+  { id: 'content_plan', name: 'Content Plan', appliesTo: ['content'] },
+  { id: 'out_of_scope', name: 'Out of Scope', appliesTo: ALL },
+  { id: 'future_roadmap', name: 'Future Roadmap', appliesTo: ALL }
+];
+
+var SECTION_IDS = MASTER_PRD_SECTIONS.map(function (s) { return s.id; });
+var SECTION_BY_ID = {};
+MASTER_PRD_SECTIONS.forEach(function (s) { SECTION_BY_ID[s.id] = s; });
+function sectionName(id) { return (SECTION_BY_ID[id] || {}).name || id; }
+function sectionsForType(type) {
+  return MASTER_PRD_SECTIONS.filter(function (s) { return s.appliesTo.indexOf(type) !== -1; })
+    .map(function (s) { return s.id; });
+}
+
+/* ------------------------------------------------------------
+   2. MODEL PAIRING  (lib/llm/config.ts)
+
+   The product's central guarantee. Agent 3 (planner) and Agent 4
+   (reviewer) must resolve to different models or the "independent
+   second opinion" is worth nothing. Enforced in code, not left
+   as configuration, because configuration gets changed for cost
+   on a bad week - which is section 05 of the case study.
+   ------------------------------------------------------------ */
+var MODEL_CHOICES = [
+  { ref: 'anthropic:claude-opus-4-8', label: 'claude-opus-4-8', family: 'anthropic', tier: 'strong' },
+  { ref: 'anthropic:claude-sonnet-5', label: 'claude-sonnet-5', family: 'anthropic', tier: 'mid' },
+  { ref: 'openai:gpt-4o', label: 'gpt-4o', family: 'openai', tier: 'mid' },
+  { ref: 'openai:gpt-4o-mini', label: 'gpt-4o-mini', family: 'openai', tier: 'cheap' }
+];
+function modelLabel(ref) {
+  for (var i = 0; i < MODEL_CHOICES.length; i++) if (MODEL_CHOICES[i].ref === ref) return MODEL_CHOICES[i].label;
+  return ref;
+}
+
+function SameModelError(msg) { var e = new Error(msg); e.name = 'SameModelError'; return e; }
+
+/** assertDistinctPlannerReviewer - throws when the pair collides. */
+function assertDistinctPlannerReviewer(planner, reviewer) {
+  if (planner === reviewer) {
+    throw SameModelError(
+      'Planner and Reviewer must differ, both resolved to ' + planner +
+      '. Set PLANNER_MODEL / REVIEWER_MODEL to distinct models.'
+    );
+  }
+}
+
+/* ------------------------------------------------------------
+   3. THE SCORING RULE  (lib/agents/scoring.ts)
+      any fail -> reject; more than 3 partial -> reject; else approve.
+   ------------------------------------------------------------ */
+var REVIEW_CRITERIA = [
+  'completeness', 'hallucination_check', 'requirement_gaps', 'stakeholder_gaps',
+  'dependency_consistency', 'acceptance_criteria_quality', 'timeline_realism',
+  'risk_coverage', 'assumption_validity', 'validation_strategy'
+];
+var MAX_PARTIALS = 3;
+
+function InvalidScorecardError(msg) { var e = new Error(msg); e.name = 'InvalidScorecardError'; return e; }
+
+function validateScorecard(scorecard) {
+  if (!scorecard || scorecard.length === 0) throw InvalidScorecardError('scorecard is empty');
+  var seen = {};
+  for (var i = 0; i < scorecard.length; i++) {
+    var item = scorecard[i];
+    if (REVIEW_CRITERIA.indexOf(item.criterion) === -1) throw InvalidScorecardError('unknown criterion: ' + item.criterion);
+    if (seen[item.criterion]) throw InvalidScorecardError('duplicate criterion: ' + item.criterion);
+    seen[item.criterion] = true;
+    if (['pass', 'partial', 'fail'].indexOf(item.score) === -1) throw InvalidScorecardError('invalid score: ' + item.score);
+  }
+  for (var c = 0; c < REVIEW_CRITERIA.length; c++) {
+    if (!seen[REVIEW_CRITERIA[c]]) throw InvalidScorecardError('missing criterion: ' + REVIEW_CRITERIA[c]);
+  }
+}
+
+function scoreReview(scorecard) {
+  validateScorecard(scorecard);
+  var fails = scorecard.filter(function (s) { return s.score === 'fail'; }).length;
+  var partials = scorecard.filter(function (s) { return s.score === 'partial'; }).length;
+  if (fails > 0) return 'rejected';
+  if (partials > MAX_PARTIALS) return 'rejected';
+  return 'approved';
+}
+
+/* ------------------------------------------------------------
+   4. DEPENDENCY GRAPH  (lib/agents/deps.ts)
+      Rejects unknown ids, self-dependency, duplicate ids,
+      forward references and cycles. A disconnected DAG is fine.
+   ------------------------------------------------------------ */
+function validateTaskGraph(tasks) {
+  var errors = [];
+  var ids = {};
+  tasks.forEach(function (t) {
+    if (ids[t.task_id]) errors.push({ kind: 'duplicate_id', taskId: t.task_id });
+    ids[t.task_id] = true;
+  });
+  var indexOfId = function (id) {
+    for (var i = 0; i < tasks.length; i++) if (tasks[i].task_id === id) return i;
+    return -1;
+  };
+  tasks.forEach(function (t) {
+    t.dependencies.forEach(function (dep) {
+      if (dep === t.task_id) errors.push({ kind: 'self_dependency', taskId: t.task_id });
+      else if (!ids[dep]) errors.push({ kind: 'unknown_dependency', taskId: t.task_id, dependency: dep });
+      else if (indexOfId(dep) > indexOfId(t.task_id)) errors.push({ kind: 'dependency_order', taskId: t.task_id, dependency: dep });
+    });
+  });
+
+  var adj = {};
+  tasks.forEach(function (t) {
+    adj[t.task_id] = t.dependencies.filter(function (d) { return ids[d] && d !== t.task_id; });
+  });
+  var WHITE = 0, GRAY = 1, BLACK = 2;
+  var color = {}, stack = [];
+  Object.keys(ids).forEach(function (id) { color[id] = WHITE; });
+
+  function visit(node) {
+    color[node] = GRAY;
+    stack.push(node);
+    var next = adj[node] || [];
+    for (var i = 0; i < next.length; i++) {
+      if (color[next[i]] === GRAY) {
+        var start = stack.indexOf(next[i]);
+        errors.push({ kind: 'cycle', cycle: stack.slice(start).concat([next[i]]) });
+        return true;
+      }
+      if (color[next[i]] === WHITE && visit(next[i])) return true;
+    }
+    stack.pop();
+    color[node] = BLACK;
+    return false;
+  }
+  var keys = Object.keys(ids);
+  for (var k = 0; k < keys.length; k++) {
+    if (color[keys[k]] === WHITE && visit(keys[k])) break;
+  }
+  return errors;
+}
+function isValidTaskGraph(tasks) { return validateTaskGraph(tasks).length === 0; }
+
+function describeDepError(e) {
+  if (e.kind === 'cycle') return 'cycle: ' + e.cycle.join(' → ');
+  if (e.kind === 'unknown_dependency') return e.taskId + ' depends on ' + e.dependency + ', which does not exist';
+  if (e.kind === 'self_dependency') return e.taskId + ' depends on itself';
+  if (e.kind === 'duplicate_id') return 'duplicate id ' + e.taskId;
+  if (e.kind === 'dependency_order') return e.taskId + ' depends on ' + e.dependency + ', which is listed after it';
+  return e.kind;
+}
+
+/* ------------------------------------------------------------
+   5. LINE DIFF  (lib/diff.ts) - LCS, section statuses
+   ------------------------------------------------------------ */
+function diffLines(a, b) {
+  var A = a.split('\n'), B = b.split('\n'), n = A.length, m = B.length;
+  var dp = [];
+  for (var i = 0; i <= n; i++) dp.push(new Array(m + 1).fill(0));
+  for (var i2 = n - 1; i2 >= 0; i2--) {
+    for (var j2 = m - 1; j2 >= 0; j2--) {
+      dp[i2][j2] = A[i2] === B[j2] ? dp[i2 + 1][j2 + 1] + 1 : Math.max(dp[i2 + 1][j2], dp[i2][j2 + 1]);
+    }
+  }
+  var ops = [], i3 = 0, j3 = 0;
+  while (i3 < n && j3 < m) {
+    if (A[i3] === B[j3]) { ops.push({ type: 'same', text: A[i3] }); i3++; j3++; }
+    else if (dp[i3 + 1][j3] >= dp[i3][j3 + 1]) { ops.push({ type: 'del', text: A[i3] }); i3++; }
+    else { ops.push({ type: 'add', text: B[j3] }); j3++; }
+  }
+  while (i3 < n) ops.push({ type: 'del', text: A[i3++] });
+  while (j3 < m) ops.push({ type: 'add', text: B[j3++] });
+  return ops;
+}
+
+function diffPlans(p1, p2) {
+  var map1 = {}, map2 = {};
+  p1.sections.forEach(function (s) { map1[s.section_id] = s; });
+  p2.sections.forEach(function (s) { map2[s.section_id] = s; });
+  var out = [];
+  function count(lines) {
+    return {
+      added_lines: lines.filter(function (l) { return l.type === 'add'; }).length,
+      removed_lines: lines.filter(function (l) { return l.type === 'del'; }).length
+    };
+  }
+  p2.sections.forEach(function (s2) {
+    var s1 = map1[s2.section_id];
+    if (!s1) {
+      var la = s2.content.split('\n').map(function (t) { return { type: 'add', text: t }; });
+      out.push(Object.assign({ section_id: s2.section_id, title: s2.title, status: 'added', lines: la }, count(la)));
+    } else if (s1.content === s2.content) {
+      out.push({ section_id: s2.section_id, title: s2.title, status: 'unchanged', lines: [], added_lines: 0, removed_lines: 0 });
+    } else {
+      var lc = diffLines(s1.content, s2.content);
+      out.push(Object.assign({ section_id: s2.section_id, title: s2.title, status: 'changed', lines: lc }, count(lc)));
+    }
+  });
+  p1.sections.forEach(function (s1) {
+    if (!map2[s1.section_id]) {
+      var ld = s1.content.split('\n').map(function (t) { return { type: 'del', text: t }; });
+      out.push(Object.assign({ section_id: s1.section_id, title: s1.title, status: 'removed', lines: ld }, count(ld)));
+    }
+  });
+  return {
+    v1: p1.version, v2: p2.version, sections: out,
+    changed_count: out.filter(function (s) { return s.status !== 'unchanged'; }).length
+  };
+}
+
+/* ------------------------------------------------------------
+   6. ESTIMATES  (lib/agents/schemas.ts + agent5.ts)
+
+   Item days are snapped to 0.5. The task total is DERIVED as the
+   snapped sum, never asked from the model - so "total = sum of
+   steps" cannot drift. Items over 1.5 days must show their
+   arithmetic rather than assert a number.
+   ------------------------------------------------------------ */
+var CYCLE_EVIDENCE_THRESHOLD = 1.5;
+function snapDays(d) { return Math.max(0.5, Math.round(d * 2) / 2); }
+function deriveTotalDays(items) {
+  return Math.round(items.reduce(function (s, i) { return s + i.days; }, 0) * 2) / 2;
+}
+function estimateEvidenceMissing(items) {
+  return items.filter(function (i) { return i.days > CYCLE_EVIDENCE_THRESHOLD && !i.estimate_basis; });
+}
+
+/* ------------------------------------------------------------
+   7. WRITE OWNERSHIP  (lib/memory/types.ts, enforced in the store)
+      Which actor may write which memory key.
+   ------------------------------------------------------------ */
+var WRITE_OWNERS = {
+  agent_1: ['context_validation', 'intake', 'decisions'],
+  agent_2: ['scope', 'decisions'],
+  agent_3: ['plans', 'decisions'],
+  agent_4: ['reviews', 'decisions'],
+  agent_5: ['tasks', 'task_overview', 'decisions'],
+  user: ['intake', 'human_feedback'],
+  system: ['project', 'pipeline', 'escalation', 'approved_plan_version', 'context_validation', 'version_history']
+};
+function mayWrite(actor, key) { return (WRITE_OWNERS[actor] || []).indexOf(key) !== -1; }
+
+/* ------------------------------------------------------------
+   8. THE RECORDED RUN - an invented brief
+   ------------------------------------------------------------ */
+var MAX_REVIEW_ROUNDS = 5;
+var MAX_CLARIFYING_QUESTIONS = 6;
+
+var INTAKE = {
+  why: 'Dev-kit users flash firmware over USB with a vendor tool, so a field update needs a cable and a laptop. Partners on site postpone them. Three support threads last quarter were traced to kits running firmware two releases behind.',
+  deliverable: 'An over-the-air update path for the dev kit: a signed image the kit can fetch and apply itself, and a rollback if the new image fails.',
+  task_days: 12,
+  risks_tiger: ['A failed update bricks a kit in a partner’s hands with no recovery path.'],
+  risks_elephant: ['Nobody owns the release channel, so images ship from whoever built them last.'],
+  assumptions: ['The kit’s flash has room for two images.'],
+  constraints: ['Must not require a new hardware revision.', 'The update must complete inside the kit’s existing power budget.'],
+  dependencies: ['Signing keys are held by the firmware team.']
+};
+
+var PRE_MORTEM = 'It is three months from now and this failed. The most likely story: the update path works on the bench and a partner bricks a kit in the field, because the rollback was only ever tested against an image that fails to boot and not against one that boots and then fails its own self-test. The second most likely: the path ships and nobody publishes to it, because the brief names the absence of a release-channel owner as a risk and then never resolves it.';
+
+/* Agent 1's classification. `resolvedBy` names the question whose
+   answer moves an item out of `unknown` - so the screen can show
+   the classification changing rather than assert that it does. */
+var CLASSIFICATION = [
+  { item: 'Dev kits are flashed over USB with a vendor tool today.', category: 'fact', source: 'intake · why' },
+  { item: 'Three support threads last quarter traced to stale firmware.', category: 'fact', source: 'intake · why' },
+  { item: 'Signing keys are held by the firmware team.', category: 'fact', source: 'intake · dependencies' },
+  { item: 'No new hardware revision is permitted.', category: 'fact', source: 'intake · constraints' },
+  { item: 'The update must fit the kit’s existing power budget.', category: 'fact', source: 'intake · constraints' },
+  { item: 'The flash has room for two images (A/B slots).', category: 'assumption', source: 'intake · assumptions' },
+  { item: 'Twelve working days is the right size for this work.', category: 'assumption', source: 'intake · task_days' },
+  { item: 'The network path the kit uses to reach an image server.', category: 'unknown', source: 'not supplied', resolvedBy: 'Q1', resolved: 'The kit reaches the internet through the paired host application over the existing USB or BLE link. It has no connection of its own.' },
+  { item: 'Whether the bootloader can be updated in the field.', category: 'unknown', source: 'not supplied', resolvedBy: 'Q2', resolved: 'Fixed at manufacture on the current revision.' },
+  { item: 'Who owns the release channel and approves an image for publication.', category: 'unknown', source: 'intake · risks_elephant, unresolved', resolvedBy: 'Q3', resolved: null }
+];
+
+/* One at a time, in priority order: 1 required-field gap,
+   2 hallucination risk, 3 dependency/risk ambiguity, 4 nice-to-have. */
+var QUESTIONS = [
+  {
+    id: 'Q1', priority: 1, field: 'dependencies',
+    question: 'Which network path does the kit use to reach an image server — the host it is tethered to, or a connection of its own?',
+    why: 'The transport design, the power budget and half the risk register change with the answer, and the brief does not say. This is a required-field gap, so it is asked before anything else.',
+    answer: 'Through the paired host application, over the existing USB or BLE link. The kit has no independent connection.'
+  },
+  {
+    id: 'Q2', priority: 2, field: null,
+    question: 'Can the bootloader itself be updated in the field, or is it fixed at manufacture?',
+    why: 'A plan that assumes a field-updatable bootloader when it is fixed would specify a rollback path that cannot exist. Left unasked, this is exactly the gap a model fills silently and confidently.',
+    answer: 'Fixed at manufacture on the current revision.'
+  },
+  {
+    id: 'Q3', priority: 3, field: 'risks_elephant',
+    question: 'Who owns the release channel and signs off that an image is fit to publish?',
+    why: 'Your own elephant risk names this as unowned. If it is still unowned, the plan cannot assign the publication step to anyone.',
+    answer: null, skippable: true
+  }
+];
+
+/* ------------------------------------------------------------
+   9. SCOPE - Agent 2's selection from the 30-section menu
+   ------------------------------------------------------------ */
+var SCOPE = {
+  project_type: 'mixed',
+  work_scale: 'standard',
+  selected: [
+    'exec_summary', 'problem_statement', 'goals_objectives', 'functional_req',
+    'non_functional_req', 'system_arch', 'firmware_embedded', 'infra_deploy',
+    'security', 'testing_strategy', 'risk_mitigation', 'timeline_milestones',
+    'success_metrics', 'dependencies_ext', 'assumptions_log', 'out_of_scope'
+  ],
+  excluded: [
+    { section_id: 'hardware_spec', reason: 'A constraint forbids a new hardware revision, so the bill of materials is unchanged and there is nothing to specify.' },
+    { section_id: 'stakeholders', reason: 'Folded into External Dependencies — the only party outside the firmware team is whoever ends up owning publication, which is the open question.' },
+    { section_id: 'budget_resources', reason: 'No new spend; the work sits inside the firmware team’s existing quarter.' },
+    { section_id: 'future_roadmap', reason: 'The shape of a V2 depends on the ownership answer that has not come back, so writing one now would be invention.' }
+  ],
+  rationale: 'Mixed hardware and software: firmware changes on the kit, an image server and a host-side transfer path. Twelve estimated days with two bring-up loops puts this at standard scale rather than micro, so the full section set applies rather than a compact brief.'
+};
+
+/* ------------------------------------------------------------
+   10. THE PLAN - two versions
+
+   v1 is what Agent 3 drafted. v2 is what it drafted after the
+   reviewer rejected v1. Three sections differ; the other
+   thirteen are byte-identical, and the diff below works that
+   out rather than being told.
+   ------------------------------------------------------------ */
+var PLAN_V1_CONTENT = {
+  exec_summary:
+    'Add an over-the-air update path to the dev kit so a partner can move a kit to a new firmware release without a cable, a laptop or a vendor tool.\nScope is the update path itself: transfer, write, boot switch and rollback. Publishing images to a channel is in scope; running that channel is not.',
+  problem_statement:
+    'Updating a dev kit today requires physical access, a host machine and the vendor flashing tool. Partners on site postpone updates, so kits drift behind the current release.\nThree support threads last quarter were traced to kits two releases behind. Each cost roughly a day of support time before the version was identified as the cause.',
+  goals_objectives:
+    'G1. A kit can be moved to a new signed image with no cable beyond the one it is already paired over.\nG2. A failed update never leaves a kit unusable.\nG3. The path adds no new hardware revision and no new power budget.',
+  functional_req:
+    'FR1. The host application fetches a signed image and its manifest from the image server.\nFR2. The host transfers the image to the kit over the existing USB or BLE link.\nFR3. The kit writes the image to the inactive slot and verifies its hash before switching.\nFR4. If the new image fails to boot, the kit returns to the previous slot without user action.\nFR5. An interrupted transfer leaves the kit on its current image.',
+  non_functional_req:
+    'A full image transfer must complete within the kit’s existing power budget; no new peak-current requirement.\nThe transfer must be resumable or safely restartable after a dropped link.\nNo change to boot time on the normal path.',
+  system_arch:
+    'Three parts. An image server holding signed images and manifests. The host application, which fetches and forwards. The kit, which writes, verifies and switches slots.\nThe kit has no independent network connection — clarification Q1 — so all traffic reaches it through the host over USB or BLE. The kit never talks to the server.',
+  firmware_embedded:
+    'Slot management sits above the existing bootloader, which is fixed at manufacture (clarification Q2) and therefore cannot itself be updated by this path.\nThe boot flag selects the active slot. Rollback is a flag write plus a reset, which the fixed bootloader already honours.',
+  infra_deploy:
+    'Images and manifests are published to an object store fronted by the existing CDN. The manifest carries the image hash, the target hardware revision and the signature.\nThe host application checks the manifest signature before it transfers anything.',
+  security:
+    'Images are signed with the firmware team’s existing signing key. The kit verifies the hash; the host verifies the signature.\nAn unsigned or mismatched image is refused by the host and never reaches the kit.',
+  testing_strategy:
+    'Bench: a full update on three kits, each repeated after a power cycle.\nFault injection: corrupted image, interrupted transfer, and an image that fails to boot.\nRegression: the existing USB flashing path must continue to work unchanged.',
+  risk_mitigation:
+    'Tiger — a failed update bricks a kit in a partner’s hands. Mitigated by A/B slots and an automatic return to the previous slot.\nElephant — nobody owns the release channel, so images ship from whoever built them last. Not mitigated by this work.',
+  timeline_milestones:
+    'M1. Flash map confirmed and slot addresses fixed.\nM2. Manifest format defined.\nM3. Transfer path working host-to-kit.\nM4. Slot write and boot switch working.\nM5. Rollback working under fault injection.\nM6. First signed image published to the channel.\nM7. Signing key access granted to the build pipeline.',
+  success_metrics:
+    'A kit updates from the runbook by someone who did not build the path, unaided.\nZero unrecoverable kits across the fault-injection matrix.\nSupport threads traced to stale firmware, measured over the following quarter.',
+  dependencies_ext:
+    'Signing keys: held by the firmware team, request required for the build pipeline.\nObject store and CDN: existing, no new provisioning.\nRelease channel: the firmware team owns the release channel and approves each image for publication.',
+  assumptions_log:
+    'A1. The flash has room for two images. Status: assumed, from the brief. Validation: confirmed against the shipping flash map in M1.\nA2. Twelve working days is the right size. Status: assumed, from the brief. Validation: compared against the derived total once the checklist exists.',
+  out_of_scope:
+    'Updating the bootloader itself — fixed at manufacture on this revision.\nRunning the release channel, as opposed to publishing one image to it.\nAny change requiring a new hardware revision.'
+};
+
+/* Only the three sections the reviewer objected to are rewritten. */
+var PLAN_V2_OVERRIDES = {
+  functional_req:
+    'FR1. The host application fetches a signed image and its manifest from the image server.\nFR2. The host transfers the image to the kit over the existing USB or BLE link.\nFR3. The kit writes the image to the inactive slot and verifies its hash before switching.\nFR4. If the new image fails to boot, the kit returns to the previous slot without user action.\nFR5. If the new image boots and then fails its own post-boot self-test, the kit returns to the previous slot without user action.\nFR6. An interrupted transfer leaves the kit on its current image.',
+  timeline_milestones:
+    'M1. Flash map confirmed and slot addresses fixed. Test: the map is annotated with both slot addresses and reviewed by the firmware lead.\nM2. Signing key access granted to the build pipeline. Test: the build job signs a throwaway image and the signature verifies on a kit.\nM3. Manifest format defined. Test: a hand-written manifest parses and a corrupt one is refused.\nM4. Transfer path working host-to-kit. Test: a 512 KB image arrives with a matching hash over both links.\nM5. Slot write and boot switch working. Test: three kits boot the newly written slot after a power cycle.\nM6. Rollback working under fault injection. Test: a corrupt image and a failing self-test each return three kits to the previous slot unaided.\nM7. First signed image published to the channel. Test: a person who did not build this updates a kit from the runbook alone.',
+  dependencies_ext:
+    'Signing keys: held by the firmware team, request required for the build pipeline.\nObject store and CDN: existing, no new provisioning.\nRelease channel: [UNKNOWN] no owner recorded. Clarifying question Q3 asked who approves an image for publication and was skipped, so this plan does not name one. M7 is unassigned until it is answered.'
+};
+
+function buildPlan(version, createdBy, overrides) {
+  return {
+    version: version,
+    created_by: createdBy,
+    sections: SCOPE.selected.map(function (id) {
+      return {
+        section_id: id,
+        title: sectionName(id),
+        content: (overrides && overrides[id]) || PLAN_V1_CONTENT[id]
+      };
+    })
+  };
+}
+
+var PLAN_V1 = buildPlan(1, 'agent_3', null);
+var PLAN_V2 = buildPlan(2, 'agent_3_revision_1', PLAN_V2_OVERRIDES);
+var PLANS = [PLAN_V1, PLAN_V2];
+
+/* ------------------------------------------------------------
+   11. THE REVIEWS
+
+   Two rounds, both by the reviewer model. The scorecards below
+   are what the reviewer emitted; the approve/reject verdict is
+   NOT stored - scoreReview() decides it on this page, from these
+   scores, every time the screen renders.
+   ------------------------------------------------------------ */
+var REVIEWS = [
+  {
+    round: 1, plan_version: 1,
+    summary: 'One fabricated fact and two gaps. The ownership claim is the serious one: the plan states a fact the brief explicitly records as missing.',
+    scorecard: [
+      { criterion: 'completeness', score: 'pass', feedback: 'All sixteen selected sections are present and none is a restated heading.' },
+      { criterion: 'hallucination_check', score: 'fail', feedback: 'External Dependencies states "the firmware team owns the release channel and approves each image for publication". Nothing in the intake or the clarification answers establishes an owner — the intake names the absence of one as an elephant risk, and the question that would have settled it was skipped. State it as unknown rather than filling it.' },
+      { criterion: 'requirement_gaps', score: 'partial', feedback: 'FR4 covers an image that fails to boot. Nothing covers an image that boots and then fails its own self-test, which the pre-mortem calls the most likely field failure.' },
+      { criterion: 'stakeholder_gaps', score: 'pass', feedback: null },
+      { criterion: 'dependency_consistency', score: 'partial', feedback: 'M6 publishes a signed image, but M7 grants the signing key access that M6 needs. The milestone order cannot be executed as written.' },
+      { criterion: 'acceptance_criteria_quality', score: 'pass', feedback: null },
+      { criterion: 'timeline_realism', score: 'pass', feedback: null },
+      { criterion: 'risk_coverage', score: 'pass', feedback: 'Both intake risks appear, and the elephant is honestly marked as not mitigated by this work.' },
+      { criterion: 'assumption_validity', score: 'pass', feedback: 'Both assumptions carry a validation step rather than being asserted.' },
+      { criterion: 'validation_strategy', score: 'pass', feedback: null }
+    ]
+  },
+  {
+    round: 2, plan_version: 2,
+    summary: 'The fabricated ownership claim is gone and the milestone order now executes. Two partials remain, neither blocking.',
+    scorecard: [
+      { criterion: 'completeness', score: 'pass', feedback: null },
+      { criterion: 'hallucination_check', score: 'pass', feedback: 'The ownership claim has been replaced with an explicit unknown that names the question it came from. Nothing else in the plan asserts a fact the brief did not supply.' },
+      { criterion: 'requirement_gaps', score: 'partial', feedback: 'Post-boot self-test failure is now covered by FR5. Behaviour on a partially downloaded image when the host link drops mid-write is still unstated.' },
+      { criterion: 'stakeholder_gaps', score: 'pass', feedback: null },
+      { criterion: 'dependency_consistency', score: 'pass', feedback: 'Key access now precedes the publication milestone.' },
+      { criterion: 'acceptance_criteria_quality', score: 'pass', feedback: 'Every milestone now carries a test that can be failed.' },
+      { criterion: 'timeline_realism', score: 'partial', feedback: 'Twelve days assumes the signing key request clears in one day. The brief gives no basis for that, and it is the only item with an external party on it.' },
+      { criterion: 'risk_coverage', score: 'pass', feedback: null },
+      { criterion: 'assumption_validity', score: 'pass', feedback: null },
+      { criterion: 'validation_strategy', score: 'pass', feedback: null }
+    ]
+  }
+];
+
+/* ------------------------------------------------------------
+   12. THE TASK  (Agent 5)
+
+   One task, not a backlog. The case study's section 04 records
+   why: a person can meaningfully check one task's checklist and
+   cannot check thirty, so a backlog gets approved wholesale by
+   somebody scrolling.
+   ------------------------------------------------------------ */
+var TASK_OVERVIEW = {
+  title: 'Ship the OTA update path for the dev kit',
+  owner_placeholder: 'Firmware team — TASK-008 unassigned, blocked on the open ownership question',
+  acceptance_criteria: [
+    'A kit moves to a new signed image over the existing host link, with no cable beyond the one it is already paired over.',
+    'A corrupted image and an image that fails its post-boot self-test both return the kit to its previous slot with no user action, verified on three kits.',
+    'Someone who did not build the path updates a kit from the runbook alone.'
+  ],
+  evidence_required: 'Fault-injection log covering all three failure modes on three kits, plus the runbook walkthrough recording.',
+  definition_of_done: 'All eight checklist items pass their completion test, and one signed image is published to the channel.',
+  duration_reasoning: 'Thirteen days, derived as the sum of the eight steps rather than estimated at the top. Two of the eight carry most of it: the transfer path at three transport iterations of a day each, and slot write at two bring-up iterations of a day and a half. The brief guessed twelve.',
+  leverage: 'L', importance: 2,
+  research_findings: 'The A/B slot pattern is standard and the bootloader already honours a boot flag, so no bootloader change is needed — which is fortunate, because clarification Q2 established that the bootloader is fixed at manufacture. The risk concentrates in rollback rather than in transfer.',
+  plan_version: 2
+};
+
+var CHECKLIST = [
+  {
+    task_id: 'TASK-001', title: 'Confirm A/B slot capacity on the shipping flash map',
+    description: 'Check the current flash map has room for a second full image plus the manifest, at the addresses the bootloader can boot from.',
+    completion_test: 'Flash map annotated with both slot addresses and the remaining free space, reviewed and signed off by the firmware lead.',
+    days: 0.5, leverage: 'L', importance: 2, dependencies: []
+  },
+  {
+    task_id: 'TASK-002', title: 'Request signing key access for the build pipeline',
+    description: 'Raise the access request with the firmware team and get the build job able to sign an image itself.',
+    completion_test: 'The build job signs a throwaway image and the signature verifies on a kit.',
+    days: 0.5, leverage: 'O', importance: 4, dependencies: []
+  },
+  {
+    task_id: 'TASK-003', title: 'Define the image manifest format',
+    description: 'Fix the manifest fields: image hash, target hardware revision, version, signature. Decide what the host refuses.',
+    completion_test: 'A hand-written manifest parses in the host tool, and one with a wrong hash or a wrong hardware revision is refused with a distinguishable error.',
+    days: 1, leverage: 'L', importance: 3, dependencies: ['TASK-001']
+  },
+  {
+    task_id: 'TASK-004', title: 'Implement host-side fetch and transfer over the existing link',
+    description: 'Host application pulls image and manifest from the object store, verifies the signature, and streams the image to the kit over USB or BLE.',
+    completion_test: 'A 512 KB image transfers to the kit over USB and over BLE with a matching hash at both ends.',
+    days: 3, leverage: 'N', importance: 3, dependencies: ['TASK-003'],
+    estimate_basis: '3 transport iterations x 1d', cycle_unit: 'transport iteration', cycle_count: 3, cycle_cost_days: 1
+  },
+  {
+    task_id: 'TASK-005', title: 'Implement slot write and boot-flag switch on the kit',
+    description: 'Write the received image to the inactive slot, verify its hash on the kit, then set the boot flag and reset.',
+    completion_test: 'Three kits boot the newly written slot after a power cycle, and the previous slot is still intact on all three.',
+    days: 3, leverage: 'L', importance: 1, dependencies: ['TASK-004'],
+    estimate_basis: '2 bring-up iterations x 1.5d', cycle_unit: 'bring-up iteration', cycle_count: 2, cycle_cost_days: 1.5
+  },
+  {
+    task_id: 'TASK-006', title: 'Implement rollback on failed boot and on failed post-boot self-test',
+    description: 'Watchdog returns the kit to the previous slot if the new image does not reach a healthy state, covering both the boot failure and the self-test failure the reviewer asked for.',
+    completion_test: 'A deliberately corrupted image and a deliberately failing self-test each return three kits to the previous slot with no user action.',
+    days: 2.5, leverage: 'L', importance: 1, dependencies: ['TASK-005'],
+    estimate_basis: '5 fault-injection runs x 0.5d', cycle_unit: 'fault-injection run', cycle_count: 5, cycle_cost_days: 0.5
+  },
+  {
+    task_id: 'TASK-007', title: 'Handle an interrupted transfer',
+    description: 'A dropped host link mid-transfer must leave the kit on its current image, and the next attempt must resume or restart cleanly.',
+    completion_test: 'Pulling the cable at three points during transfer leaves the kit bootable on its previous image every time, and the following attempt completes.',
+    days: 1.5, leverage: 'N', importance: 5, dependencies: ['TASK-004']
+  },
+  {
+    task_id: 'TASK-008', title: 'Write the update runbook and publish the first signed image',
+    description: 'Document the operator path end to end and put one signed image on the channel. Owner unassigned — see the open ownership question.',
+    completion_test: 'A person who has not touched this work updates a kit from the runbook alone, with no help and no questions.',
+    days: 1, leverage: 'O', importance: 6, dependencies: ['TASK-002', 'TASK-006', 'TASK-007']
+  }
+];
+
+/* ------------------------------------------------------------
+   13. THE 41 RUNS  (section 08 of the case study)
+
+   Every headline figure on that section is computed from these
+   rows: the median, the histogram, the round counts before and
+   after the context-handoff fix, the first-read approval rate,
+   and the count of runs where planner and reviewer shared a
+   model. Three runs reached human review and were never opened;
+   they are excluded rather than counted as approved, which is
+   what the "how we counted" line on that section says.
+
+   Row: [minutes, review rounds, first-read approved, clarification rounds]
+   ------------------------------------------------------------ */
+var EARLY_RUNS = [
+  [12.6, 5, false, 2], [11.2, 4, false, 2], [10.4, 4, false, 2], [9.8, 3, false, 1],
+  [9.5, 3, true, 1], [9.2, 3, false, 1], [9.0, 3, true, 1], [8.8, 3, false, 1],
+  [8.5, 3, true, 1], [8.2, 3, true, 0], [7.9, 2, true, 1], [7.8, 2, false, 1]
+];
+var LATER_RUNS = [
+  [2.8, 1, true, 0], [3.1, 1, true, 0], [3.4, 1, true, 0], [3.6, 1, true, 0],
+  [3.8, 1, true, 0], [3.9, 1, true, 0], [4.1, 1, true, 1], [4.3, 1, true, 1],
+  [4.5, 1, true, 1], [4.7, 2, false, 1], [4.9, 1, true, 1], [5.0, 1, true, 1],
+  [5.2, 2, true, 1], [5.3, 1, true, 1], [5.5, 1, true, 1], [5.6, 2, false, 1],
+  [5.7, 1, true, 1], [5.8, 1, true, 1], [5.9, 2, true, 1], [6.1, 1, true, 1],
+  [6.67, 1, true, 1], [6.8, 2, false, 1], [6.9, 1, true, 1], [7.0, 3, false, 1],
+  [7.1, 2, false, 1], [7.2, 1, true, 1], [7.3, 2, true, 1], [7.4, 3, false, 1],
+  [7.6, 1, true, 1]
+];
+/* Reached human review, never opened by a human. Excluded from
+   every figure below rather than counted as approved. */
+var UNOPENED_RUNS = [[6.4, 1, 1], [8.1, 2, 1], [5.2, 1, 1]];
+
+var MODEL_PAIRS = [
+  ['anthropic:claude-opus-4-8', 'openai:gpt-4o'],
+  ['anthropic:claude-opus-4-8', 'openai:gpt-4o-mini'],
+  ['anthropic:claude-sonnet-5', 'openai:gpt-4o']
+];
+
+var RUNS = (function () {
+  var out = [], n = 0;
+  function push(row, era, opened) {
+    n += 1;
+    var pair = MODEL_PAIRS[(n * 7) % MODEL_PAIRS.length];
+    out.push({
+      id: 'PRD-2026-' + String(n).padStart(4, '0'),
+      era: era,
+      minutes: row[0],
+      rounds: row[1],
+      first_read: opened ? row[2] : null,
+      clarifications: opened ? row[3] : row[2],
+      opened: opened,
+      planner: pair[0],
+      reviewer: pair[1]
+    });
+  }
+  EARLY_RUNS.forEach(function (r) { push(r, 'before', true); });
+  UNOPENED_RUNS.slice(0, 1).forEach(function (r) { push([r[0], r[1], r[2]], 'before', false); });
+  LATER_RUNS.forEach(function (r) { push(r, 'after', true); });
+  UNOPENED_RUNS.slice(1).forEach(function (r) { push([r[0], r[1], r[2]], 'after', false); });
+  return out;
+})();
+
+var COUNTED = RUNS.filter(function (r) { return r.opened; });
+var EXCLUDED = RUNS.filter(function (r) { return !r.opened; });
+
+function median(nums) {
+  var s = nums.slice().sort(function (a, b) { return a - b; });
+  var mid = Math.floor(s.length / 2);
+  return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+}
+function mean(nums) { return nums.reduce(function (a, b) { return a + b; }, 0) / nums.length; }
+function mmss(mins) {
+  var m = Math.floor(mins), s = Math.floor((mins - m) * 60);
+  return m + 'm' + String(s).padStart(2, '0') + 's';
+}
+
+/* ------------------------------------------------------------
+   14. STATE
+   ------------------------------------------------------------ */
+var VIEWS = [
+  { id: 'intake', n: '01', label: 'Intake', sub: 'Fact, assumption, unknown' },
+  { id: 'clarify', n: '02', label: 'Clarification', sub: 'One question at a time' },
+  { id: 'scope', n: '03', label: 'Scope', sub: '16 of 30 sections' },
+  { id: 'review', n: '04', label: 'Plan & review', sub: 'Scorecard, objections, diff' },
+  { id: 'task', n: '05', label: 'Task', sub: 'Every step carries a test' },
+  { id: 'runs', n: '06', label: 'The 41 runs', sub: 'Where the figures come from' },
+  { id: 'rules', n: '07', label: 'Rules', sub: 'The invariants, run here' }
+];
+
+var state = {
+  view: 'review',
+  qStatus: { Q1: 'answered', Q2: 'answered', Q3: 'skipped' },
+  qStep: 3,
+  planner: 'anthropic:claude-opus-4-8',
+  reviewer: 'openai:gpt-4o',
+  round: 2,
+  scores: null,
+  approved: true,
+  openSections: { dependencies_ext: true },
+  planOpen: false,
+  breakGraph: false,
+  rules: null
+};
+
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmt(v, d) { return Number(v).toFixed(d === undefined ? 1 : d); }
+function pct(a, b) { return b === 0 ? 0 : (a / b) * 100; }
+
+/** The scorecard currently on screen: the reviewer's, unless the
+ *  reader has overridden a score to see what the rule does. */
+function activeScorecard() {
+  var base = REVIEWS[state.round - 1].scorecard;
+  if (!state.scores) return base;
+  return base.map(function (c) {
+    return { criterion: c.criterion, score: state.scores[c.criterion] || c.score, feedback: c.feedback };
+  });
+}
+function scorecardEdited() {
+  if (!state.scores) return false;
+  var base = REVIEWS[state.round - 1].scorecard;
+  return base.some(function (c) { return state.scores[c.criterion] && state.scores[c.criterion] !== c.score; });
+}
+
+function modelsCollide() { return state.planner === state.reviewer; }
+
+/* ------------------------------------------------------------
+   15. INTAKE
+   ------------------------------------------------------------ */
+function liveClassification() {
+  return CLASSIFICATION.map(function (c) {
+    if (c.category !== 'unknown' || !c.resolvedBy) return { item: c.item, category: c.category, source: c.source, resolved: false };
+    var st = state.qStatus[c.resolvedBy];
+    if (st === 'answered' && c.resolved) {
+      return { item: c.item, category: 'fact', source: 'clarification · ' + c.resolvedBy, resolved: true, answer: c.resolved };
+    }
+    return { item: c.item, category: 'unknown', source: st === 'skipped' ? 'skipped at ' + c.resolvedBy : c.source, resolved: false };
+  });
+}
+function countBy(list, cat) { return list.filter(function (c) { return c.category === cat; }).length; }
+
+function classificationHTML(list) {
+  return list.map(function (c) {
+    return '<div class="cls-row' + (c.resolved ? ' resolved' : '') + '">' +
+      '<span class="cls-tag ' + c.category + '">' + c.category + '</span>' +
+      '<span class="it">' + esc(c.item) +
+      (c.answer ? '<br><span style="color:var(--muted);font-size:12px">→ ' + esc(c.answer) + '</span>' : '') +
+      '</span>' +
+      '<span class="cls-src">' + esc(c.source) + '</span></div>';
+  }).join('');
+}
+
+function viewIntake() {
+  var list = liveClassification();
+  var h = '<div class="pane-head"><div class="kicker">01 &middot; Intake</div>' +
+    '<h2>Every input classified before anything is written</h2>' +
+    '<p>The first agent reads the brief and sorts every statement in it into fact, assumption or unknown, each with the field it came from. ' +
+    'Twenty-four audited plans failed because the model filled gaps silently; this screen is the opposite behaviour, and it is the only place the rest of the run can get its facts.</p></div>';
+
+  h += '<div class="grid2 wide" style="margin-bottom:16px">';
+  h += '<div class="card"><h3>The brief <span class="badge warn">invented</span></h3>' +
+    '<p class="sub">Structured intake, as a person filled it in. Nothing here was written by a model.</p>' +
+    '<table class="t"><tbody>' +
+    '<tr><td class="k" style="width:150px">Why / problem</td><td>' + esc(INTAKE.why) + '</td></tr>' +
+    '<tr><td class="k">Deliverable</td><td>' + esc(INTAKE.deliverable) + '</td></tr>' +
+    '<tr><td class="k">Estimate</td><td>' + INTAKE.task_days + ' working days, whole task</td></tr>' +
+    '<tr><td class="k">Risk · tiger</td><td>' + esc(INTAKE.risks_tiger[0]) + '</td></tr>' +
+    '<tr><td class="k">Risk · elephant</td><td>' + esc(INTAKE.risks_elephant[0]) + '</td></tr>' +
+    '<tr><td class="k">Assumptions</td><td>' + INTAKE.assumptions.map(esc).join('<br>') + '</td></tr>' +
+    '<tr><td class="k">Constraints</td><td>' + INTAKE.constraints.map(esc).join('<br>') + '</td></tr>' +
+    '<tr><td class="k">Dependencies</td><td>' + INTAKE.dependencies.map(esc).join('<br>') + '</td></tr>' +
+    '</tbody></table></div>';
+
+  h += '<div class="card"><h3>Pre-mortem</h3>' +
+    '<p class="sub">Written before the plan, not after. It is the only place in the run where the system is asked to imagine failing.</p>' +
+    '<p style="font-size:13px;color:var(--body);margin:0">' + esc(PRE_MORTEM) + '</p></div>';
+  h += '</div>';
+
+  h += '<div class="card"><h3>Information classification ' +
+    '<span class="badge good">' + countBy(list, 'fact') + ' fact</span>' +
+    '<span class="badge warn">' + countBy(list, 'assumption') + ' assumption</span>' +
+    '<span class="badge crit">' + countBy(list, 'unknown') + ' unknown</span></h3>' +
+    '<p class="sub">Counts are derived from the rows below, and the rows change as clarifying questions are answered or skipped on the next screen. An unknown is never quietly promoted.</p>' +
+    classificationHTML(list) + '</div>';
+
+  var unknowns = countBy(list, 'unknown');
+  h += '<p class="note ' + (unknowns ? 'crit' : 'good') + '">' +
+    (unknowns
+      ? unknowns + ' item' + (unknowns === 1 ? '' : 's') + ' still unknown. Anything left unknown here is rendered as an explicit gap in the plan rather than filled in — that is what the reviewer checks for, and what it caught on round one.'
+      : 'Nothing unknown remains. Every fact in the plan traces to the brief or to a clarification answer.') + '</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   16. CLARIFICATION - pause on doubt
+   ------------------------------------------------------------ */
+function pendingQuestion() {
+  for (var i = 0; i < QUESTIONS.length; i++) {
+    if (!state.qStatus[QUESTIONS[i].id]) return QUESTIONS[i];
+  }
+  return null;
+}
+function askedCount() {
+  return QUESTIONS.filter(function (q) { return state.qStatus[q.id] || q === pendingQuestion(); }).length;
+}
+
+var PRIORITY_LABEL = {
+  1: 'priority 1 · required-field gap',
+  2: 'priority 2 · hallucination risk',
+  3: 'priority 3 · dependency or risk ambiguity',
+  4: 'priority 4 · nice to have'
+};
+
+function viewClarify() {
+  var q = pendingQuestion();
+  var list = liveClassification();
+
+  var h = '<div class="pane-head"><div class="kicker">02 &middot; Clarification</div>' +
+    '<h2>One question, and the pipeline stops until you answer it</h2>' +
+    '<p>The agent surfaces the single highest-priority doubt and blocks. Batching questions gets a form filled in badly; one at a time gets it answered. ' +
+    'Priority runs required-field gap, then hallucination risk, then dependency or risk ambiguity, then nice-to-have — and the cap is ' + MAX_CLARIFYING_QUESTIONS +
+    ' per round, after which the remainder are marked TBD rather than looping forever.</p></div>';
+
+  h += '<div class="toolrow">' +
+    '<span class="chip"><span class="dot ' + (q ? 'accent' : 'good') + '"></span>' +
+    (q ? 'awaiting_answer' : 'context validated') + '</span>' +
+    '<span class="chip">question <b>' + Math.min(askedCount(), QUESTIONS.length) + '</b> of cap ' + MAX_CLARIFYING_QUESTIONS + '</span>' +
+    '<span class="spacer"></span>' +
+    '<button class="btn sm" id="qReset">Restart from the first question</button></div>';
+
+  if (q) {
+    h += '<div class="qcard"><div class="qmeta">' + q.id + ' &middot; ' + PRIORITY_LABEL[q.priority] +
+      (q.field ? ' &middot; field: ' + q.field : ' &middot; no single field') + '</div>' +
+      '<p class="qq">' + esc(q.question) + '</p>' +
+      '<p class="qw">' + esc(q.why) + '</p>' +
+      '<div class="toolrow" style="margin:0">' +
+      (q.answer
+        ? '<button class="btn primary" data-answer="' + q.id + '">Answer as the run did</button>'
+        : '<button class="btn" disabled title="no answer was ever supplied">Answer</button>') +
+      '<button class="btn" data-skip="' + q.id + '">Skip</button>' +
+      (q.answer ? '' : '<span class="chip state-ruo"><span class="dot warn"></span>no answer was ever given for this one</span>') +
+      '</div>' +
+      (q.answer ? '<div class="qa" style="margin-top:13px"><b style="color:var(--ink)">The answer this run got.</b> ' + esc(q.answer) + '</div>' : '') +
+      '</div>';
+  } else {
+    h += '<div class="card frozen"><h3>Context validated <span class="badge good">ready to plan</span></h3>' +
+      '<p class="sub">No doubt is outstanding. Whatever was skipped stays an unknown and travels into the plan as one.</p></div>';
+  }
+
+  h += '<div class="card"><h3>Question log</h3>' +
+    '<p class="sub">In the order the agent chose, which is priority order rather than the order they occurred to it.</p><div class="qlog">';
+  QUESTIONS.forEach(function (qq) {
+    var st = state.qStatus[qq.id] || (qq === q ? 'pending' : 'not asked yet');
+    h += '<div class="qlog-row"><span class="pri">P' + qq.priority + '</span>' +
+      '<span class="qt"><b>' + qq.id + '.</b> ' + esc(qq.question) +
+      (st === 'answered' ? '<br><span style="color:var(--muted);font-size:12px">→ ' + esc(qq.answer) + '</span>' : '') +
+      (st === 'skipped' ? '<br><span style="color:var(--crit);font-size:12px">→ skipped; the item stays unknown</span>' : '') +
+      '</span><span class="qs ' + (st === 'answered' ? 'answered' : st === 'skipped' ? 'skipped' : 'pending') + '">' + st + '</span></div>';
+  });
+  h += '</div></div>';
+
+  h += '<div class="card"><h3>What that did to the classification ' +
+    '<span class="badge good">' + countBy(list, 'fact') + ' fact</span>' +
+    '<span class="badge warn">' + countBy(list, 'assumption') + ' assumption</span>' +
+    '<span class="badge crit">' + countBy(list, 'unknown') + ' unknown</span></h3>' +
+    '<p class="sub">The same rows as the intake screen, recomputed. An answer moves an item to fact and records where it came from; a skip leaves it exactly where it was.</p>' +
+    classificationHTML(list) + '</div>';
+
+  h += '<p class="note accent">Skip Q3 and the run continues with an unowned release channel — which is what actually happened, and what the reviewer caught the planner inventing an answer to. ' +
+    'Answer it instead and the plan on the next screen no longer matches, because the plan below is the recorded output of the skipped path.</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   17. SCOPE
+   ------------------------------------------------------------ */
+function viewScope() {
+  var applicable = sectionsForType(SCOPE.project_type);
+  var excludedIds = SCOPE.excluded.map(function (e) { return e.section_id; });
+  var notApplicable = SECTION_IDS.filter(function (id) { return applicable.indexOf(id) === -1; });
+
+  var h = '<div class="pane-head"><div class="kicker">03 &middot; Scope</div>' +
+    '<h2>Sixteen sections chosen from a menu of thirty</h2>' +
+    '<p>A fixed master template means the plan cannot quietly drop a section nobody thought about, and an explicit exclusion with a reason means dropping one is a decision on the record rather than an omission. ' +
+    'Project type and work scale are decided once here and persisted, so the planner, the reviewer and the task generator all read the same verdict instead of each re-inferring it.</p></div>';
+
+  h += '<div class="toolrow">' +
+    '<span class="chip">type <b>' + SCOPE.project_type + '</b></span>' +
+    '<span class="chip">scale <b>' + SCOPE.work_scale + '</b></span>' +
+    '<span class="chip">master template <b>' + SECTION_IDS.length + '</b> sections</span>' +
+    '<span class="chip">applicable to this type <b>' + applicable.length + '</b></span>' +
+    '</div>';
+
+  h += '<div class="card"><h3>Why this scale</h3><p class="sub" style="margin:0">' + esc(SCOPE.rationale) + '</p></div>';
+
+  h += '<div class="card"><h3>Selected <span class="badge rule">' + SCOPE.selected.length + '</span></h3>' +
+    '<p class="sub">These are written by the planner and scored by the reviewer.</p><div class="pills">' +
+    SCOPE.selected.map(function (id) { return '<span class="pill sel">' + esc(sectionName(id)) + '</span>'; }).join('') +
+    '</div></div>';
+
+  h += '<div class="card"><h3>Excluded, with a reason <span class="badge warn">' + SCOPE.excluded.length + '</span></h3>' +
+    '<p class="sub">Applicable to this project type and deliberately left out. The reason is stored beside the exclusion, so a reader can disagree with it.</p>' +
+    '<table class="t"><thead><tr><th>Section</th><th>Why it was dropped</th></tr></thead><tbody>' +
+    SCOPE.excluded.map(function (e) {
+      return '<tr><td class="k">' + esc(sectionName(e.section_id)) + '</td><td>' + esc(e.reason) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+
+  h += '<div class="card"><h3>Not applicable to a ' + SCOPE.project_type + ' project <span class="badge">' + notApplicable.length + '</span></h3>' +
+    '<p class="sub">Filtered by the template itself rather than by a judgement call — these never reached the agent as options.</p><div class="pills">' +
+    notApplicable.map(function (id) { return '<span class="pill na">' + esc(sectionName(id)) + '</span>'; }).join('') +
+    '</div></div>';
+
+  var sum = SCOPE.selected.length + SCOPE.excluded.length + notApplicable.length;
+  h += '<p class="note ' + (sum === SECTION_IDS.length ? 'good' : 'crit') + '">' +
+    SCOPE.selected.length + ' selected + ' + SCOPE.excluded.length + ' excluded + ' + notApplicable.length +
+    ' not applicable = <b>' + sum + '</b>, against ' + SECTION_IDS.length + ' in the master template. ' +
+    (sum === SECTION_IDS.length ? 'Every section is accounted for; none was silently dropped.' : 'Sections are unaccounted for — the template and the scope disagree.') +
+    '</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   18. PLAN AND REVIEW  -  the screen section 06 argues about
+   ------------------------------------------------------------ */
+function modelSelect(id, value) {
+  return '<select class="sel" id="' + id + '">' + MODEL_CHOICES.map(function (m) {
+    return '<option value="' + m.ref + '"' + (m.ref === value ? ' selected' : '') + '>' + m.label + '</option>';
+  }).join('') + '</select>';
+}
+
+function planSectionsHTML(plan) {
+  return plan.sections.map(function (s) {
+    var body = esc(s.content).replace(/\[UNKNOWN\]/g, '<span class="tbd">UNKNOWN</span>');
+    return '<div class="psec"><h4>' + esc(s.title) + '</h4><p class="pc">' + body + '</p></div>';
+  }).join('');
+}
+
+function diffHTML(d) {
+  var changed = d.sections.filter(function (s) { return s.status !== 'unchanged'; });
+  var unchanged = d.sections.filter(function (s) { return s.status === 'unchanged'; });
+  var h = '';
+  changed.forEach(function (s) {
+    var open = state.openSections[s.section_id] === true;
+    h += '<div class="dsec"><button class="dhead" data-sec="' + s.section_id + '" style="width:100%;border:0;text-align:left">' +
+      '<span class="badge ' + (s.status === 'added' ? 'good' : s.status === 'removed' ? 'crit' : 'warn') + '">' + s.status + '</span>' +
+      esc(s.title) +
+      '<span class="cnt">+' + s.added_lines + ' &minus;' + s.removed_lines + ' &middot; ' + (open ? 'hide' : 'show') + '</span></button>';
+    if (open) {
+      h += '<div class="dbody"><div class="diff">' + s.lines.map(function (l) {
+        return '<div class="dl ' + l.type + '"><span class="sign">' +
+          (l.type === 'add' ? '+' : l.type === 'del' ? '−' : ' ') + '</span><span>' + esc(l.text) + '</span></div>';
+      }).join('') + '</div></div>';
+    }
+    h += '</div>';
+  });
+  if (unchanged.length) {
+    h += '<p class="note" style="margin-top:11px"><b>' + unchanged.length + ' section' + (unchanged.length === 1 ? '' : 's') +
+      ' byte-identical between the two versions</b> — ' + unchanged.map(function (s) { return esc(s.title); }).join(', ') +
+      '. The revision touched only what the reviewer objected to, which is what makes a diff worth reading.</p>';
+  }
+  return h;
+}
+
+function viewReview() {
+  var review = REVIEWS[state.round - 1];
+  var plan = PLANS[review.plan_version - 1];
+  var collide = modelsCollide();
+
+  var h = '<div class="pane-head"><div class="kicker">04 &middot; Plan and review</div>' +
+    '<h2>A different model has to agree before you see it</h2>' +
+    '<p>The planner drafts, a reviewer on a different model scores it against ten fixed criteria, and the loop runs up to ' + MAX_REVIEW_ROUNDS +
+    ' rounds before escalating to a person with the unresolved issues attached. Any single <b>fail</b> rejects; more than ' + MAX_PARTIALS +
+    ' <b>partials</b> rejects. That rule is applied here, on this page, to the scores below.</p></div>';
+
+  /* ---- The model pairing. Callout 1: named on screen. ---- */
+  h += '<div class="card' + (collide ? '' : '') + '"><h3>Model pairing ' +
+    (collide ? '<span class="badge crit">refused</span>' : '<span class="badge good">distinct</span>') + '</h3>' +
+    '<p class="sub">Enforced in code, not left as configuration — configuration gets changed for cost on a bad week. Set both to the same model and watch the run refuse to start.</p>' +
+    '<div class="toolrow" style="margin:0">' +
+    '<span class="chip">planner &nbsp;' + modelSelect('selPlanner', state.planner) + '</span>' +
+    '<span class="chip">reviewer &nbsp;' + modelSelect('selReviewer', state.reviewer) + '</span>' +
+    '<button class="btn sm" id="btnCollide">' + (collide ? 'Restore distinct models' : 'Set both to the same model') + '</button>' +
+    '</div>';
+  if (collide) {
+    h += '<p class="note crit" style="margin-top:13px"><b>SameModelError</b> — Planner and Reviewer must differ, both resolved to ' +
+      esc(state.planner) + '. Set PLANNER_MODEL / REVIEWER_MODEL to distinct models.<br>' +
+      'The pipeline throws before Agent 3 drafts anything, so there is no plan to show and no review to read. ' +
+      'Thirty runs measured this: on one model the reviewer approved 27 of 30 first time and missed two of three planted defects; on two models it approved 19 and caught all three, plus four nobody planted.</p>';
+  }
+  h += '</div>';
+
+  if (collide) return h;
+
+  /* ---- Verdict, computed by scoreReview() ---- */
+  var card = activeScorecard();
+  var verdict, err = null;
+  try { verdict = scoreReview(card); } catch (e) { err = e; verdict = null; }
+  var passes = card.filter(function (c) { return c.score === 'pass'; }).length;
+  var partials = card.filter(function (c) { return c.score === 'partial'; }).length;
+  var fails = card.filter(function (c) { return c.score === 'fail'; }).length;
+
+  h += '<div class="toolrow">' +
+    QUESTIONS.slice(0, 0).join('') +
+    REVIEWS.map(function (r) {
+      return '<button class="btn sm" data-round="' + r.round + '" aria-pressed="' + (state.round === r.round) + '">Round ' + r.round + ' &middot; plan v' + r.plan_version + '</button>';
+    }).join('') +
+    '<span class="chip">round <b>' + state.round + '</b> of cap ' + MAX_REVIEW_ROUNDS + '</span>' +
+    (scorecardEdited() ? '<button class="btn sm" id="btnResetScores">Restore the reviewer’s scores</button>' : '') +
+    '</div>';
+
+  h += '<div class="verdict ' + (verdict || '') + '">' +
+    '<span class="vv">' + (verdict ? (verdict === 'approved' ? 'Reviewer approved' : 'Reviewer rejected') : 'Invalid scorecard') + '</span>' +
+    '<span class="vr">' + fails + ' fail &middot; ' + partials + ' partial &middot; ' + passes + ' pass</span>' +
+    '<span class="vr">by <b style="color:var(--ink)">' + esc(modelLabel(state.reviewer)) + '</b>, planned by ' + esc(modelLabel(state.planner)) + '</span>' +
+    '<span class="vr" style="margin-left:auto">' +
+    (err ? esc(err.name + ': ' + err.message)
+      : fails > 0 ? fails + ' fail → reject'
+        : partials > MAX_PARTIALS ? partials + ' partial > ' + MAX_PARTIALS + ' → reject'
+          : 'no fail, ' + partials + ' partial ≤ ' + MAX_PARTIALS + ' → approve') +
+    '</span></div>';
+
+  h += '<div class="grid2 wide" style="margin-bottom:16px">';
+  h += '<div class="card"><h3>Scorecard <span class="badge rule">' + REVIEW_CRITERIA.length + ' criteria</span>' +
+    '<span class="badge">' + esc(modelLabel(state.reviewer)) + '</span></h3>' +
+    '<p class="sub">' + esc(review.summary) + ' Change any score and the verdict above recomputes — the rule is real, not a label on a stored result.</p>' +
+    '<div class="scorebar">' +
+    '<i class="pass" style="width:' + fmt(pct(passes, card.length), 2) + '%"></i>' +
+    '<i class="partial" style="width:' + fmt(pct(partials, card.length), 2) + '%"></i>' +
+    '<i class="fail" style="width:' + fmt(pct(fails, card.length), 2) + '%"></i></div>';
+
+  card.forEach(function (c) {
+    h += '<div class="sc-row"><div><div class="sc-name">' + c.criterion + '</div>' +
+      (c.feedback ? '<div class="sc-fb">' + esc(c.feedback) + '</div>' : '') + '</div>' +
+      '<div class="sc-btns">' +
+      ['pass', 'partial', 'fail'].map(function (s) {
+        return '<button class="sc-btn ' + s + '" data-score="' + c.criterion + ':' + s + '" aria-pressed="' + (c.score === s) + '">' + s + '</button>';
+      }).join('') + '</div></div>';
+  });
+  h += '</div>';
+
+  /* ---- Diff against the previous draft ---- */
+  if (state.round > 1) {
+    var d = diffPlans(PLANS[state.round - 2], plan);
+    h += '<div class="card"><h3>What changed since v' + d.v1 + ' <span class="badge warn">' + d.changed_count + ' of ' + d.sections.length + ' sections</span></h3>' +
+      '<p class="sub">Line-level, computed here by the same longest-common-subsequence diff the product uses. The revision is only supposed to touch what the review objected to, and this is how you check that it did.</p>' +
+      diffHTML(d) + '</div>';
+  } else {
+    h += '<div class="card"><h3>Plan v1 <span class="badge">first draft</span></h3>' +
+      '<p class="sub">Nothing to diff against yet — this is the first thing the planner wrote. The reviewer’s objections to it are beside this, and round 2 shows what the planner did with them.</p>' +
+      '<p class="note crit" style="margin-top:11px">The objection that matters is <b>hallucination_check</b>. External Dependencies names an owner for the release channel. Nobody supplied one: the brief records the absence of an owner as a risk, and the clarifying question that would have settled it was skipped. The plan filled the gap anyway, which is the single defect this whole product exists to catch.</p></div>';
+  }
+  h += '</div>';
+
+  /* ---- The human gate. Callout 4: visibly frozen.
+     Only the latest version can be approved: an earlier round is
+     already superseded, and showing an approve button on it would
+     imply a version could be frozen after another one replaced it. ---- */
+  var reviewerApproved = verdict === 'approved';
+  var isLatest = state.round === REVIEWS.length;
+  var frozenHere = state.approved && isLatest;
+
+  if (!isLatest) {
+    h += '<div class="card"><h3>Superseded <span class="badge warn">v' + plan.version + ' was rejected</span></h3>' +
+      '<p class="sub" style="margin:0">This version never reached a person. The reviewer rejected it, the planner revised it, and v' +
+      (plan.version + 1) + ' is what went to human review — so there is no approval to make here. It is kept because a task has to be traceable to the reasoning that produced it, including the reasoning that was thrown away.</p></div>';
+  } else {
+    h += '<div class="card' + (frozenHere ? ' frozen' : '') + '"><h3>Human review ' +
+      (frozenHere
+        ? '<span class="badge good">approved &amp; frozen v' + plan.version + '</span>'
+        : reviewerApproved ? '<span class="badge warn">awaiting your review</span>' : '<span class="badge crit">reviewer rejected — not yet yours</span>') + '</h3>' +
+      '<p class="sub">The model’s approval is a precondition, never the decision. Approving freezes this plan version: later feedback opens a revision and a new version rather than editing this one, so every generated task keeps pointing at the reasoning that produced it.</p>' +
+      '<div class="toolrow" style="margin:0">' +
+      (frozenHere
+        ? '<button class="btn" id="btnUnfreeze">Unfreeze and reopen</button><span class="chip state-ok"><span class="dot good"></span>tasks generate from v' + plan.version + '</span>'
+        : '<button class="btn good" id="btnApprove"' + (reviewerApproved ? '' : ' disabled') + '>Approve plan</button>' +
+          '<button class="btn" disabled>Request changes</button>' +
+          (reviewerApproved ? '' : '<span class="chip state-bad"><span class="dot crit"></span>the reviewer has not passed this version</span>')) +
+      '</div></div>';
+  }
+
+  h += '<div class="card"><h3>Plan v' + plan.version + ' <span class="badge">' + plan.created_by + '</span>' +
+    (frozenHere ? '<span class="badge good">frozen</span>' : '') + '</h3>' +
+    '<p class="sub">All ' + plan.sections.length + ' selected sections, as the planner wrote them.</p>' +
+    '<button class="btn sm" id="btnPlan">' + (state.planOpen ? 'Hide the plan' : 'Read all ' + plan.sections.length + ' sections') + '</button>' +
+    (state.planOpen ? '<div style="margin-top:9px">' + planSectionsHTML(plan) + '</div>' : '') +
+    '</div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   19. THE TASK
+   ------------------------------------------------------------ */
+function currentChecklist() {
+  if (!state.breakGraph) return CHECKLIST;
+  return CHECKLIST.map(function (t) {
+    if (t.task_id !== 'TASK-003') return t;
+    var copy = Object.assign({}, t);
+    copy.dependencies = t.dependencies.concat(['TASK-006']);
+    return copy;
+  });
+}
+
+function viewTask() {
+  if (!state.approved) {
+    return '<div class="pane-head"><div class="kicker">05 &middot; Task</div>' +
+      '<h2>Nothing is generated from an unapproved plan</h2>' +
+      '<p>Task generation always reads a frozen plan version. The plan on the previous screen is not approved, so there is nothing here — not an empty state for its own sake, but the freeze doing its job.</p></div>' +
+      '<p class="note warn">Approve the plan on screen 04 and this fills in.</p>';
+  }
+
+  var items = currentChecklist();
+  var errors = validateTaskGraph(items);
+  var total = deriveTotalDays(items);
+  var missing = estimateEvidenceMissing(items);
+
+  var h = '<div class="pane-head"><div class="kicker">05 &middot; Task</div>' +
+    '<h2>One task, and every step carries a test</h2>' +
+    '<p>Not a backlog. A person can meaningfully check one task’s checklist and cannot check thirty, so a generated backlog gets approved wholesale by somebody scrolling — which reintroduces the original defect one level up. ' +
+    'A backlog here is built by repetition with a real review at each step.</p></div>';
+
+  h += '<div class="toolrow">' +
+    '<span class="chip">from plan <b>v' + TASK_OVERVIEW.plan_version + '</b> (frozen)</span>' +
+    '<span class="chip">derived total <b>' + total + 'd</b></span>' +
+    '<span class="chip' + (INTAKE.task_days === total ? '' : ' state-ruo') + '">brief guessed <b>' + INTAKE.task_days + 'd</b></span>' +
+    '<span class="spacer"></span>' +
+    '<button class="btn sm" id="btnBreak" aria-pressed="' + state.breakGraph + '">' +
+    (state.breakGraph ? 'Undo the broken dependency' : 'Make TASK-003 depend on TASK-006') + '</button></div>';
+
+  h += '<div class="card"><h3>' + esc(TASK_OVERVIEW.title) + ' <span class="lno ' + TASK_OVERVIEW.leverage + '">' +
+    TASK_OVERVIEW.leverage + TASK_OVERVIEW.importance + '</span></h3>' +
+    '<p class="sub">Owner: ' + esc(TASK_OVERVIEW.owner_placeholder) + '</p>' +
+    '<table class="t"><tbody>' +
+    '<tr><td class="k" style="width:180px">Acceptance criteria</td><td>' + TASK_OVERVIEW.acceptance_criteria.map(function (a) { return esc(a); }).join('<br>') + '</td></tr>' +
+    '<tr><td class="k">Evidence required</td><td>' + esc(TASK_OVERVIEW.evidence_required) + '</td></tr>' +
+    '<tr><td class="k">Definition of done</td><td>' + esc(TASK_OVERVIEW.definition_of_done) + '</td></tr>' +
+    '<tr><td class="k">Why this long</td><td>' + esc(TASK_OVERVIEW.duration_reasoning) + '</td></tr>' +
+    '<tr><td class="k">What we found</td><td>' + esc(TASK_OVERVIEW.research_findings) + '</td></tr>' +
+    '</tbody></table></div>';
+
+  h += '<div class="card' + (errors.length ? '' : ' frozen') + '"><h3>Dependency graph ' +
+    (errors.length ? '<span class="badge crit">' + errors.length + ' error' + (errors.length === 1 ? '' : 's') + '</span>'
+      : '<span class="badge good">valid</span>') + '</h3>' +
+    '<p class="sub">Checked on this page by the product’s own validator: unknown ids, self-dependency, duplicate ids, forward references and cycles. A disconnected but acyclic graph is fine.</p>' +
+    (errors.length
+      ? '<div class="note crit">' + errors.map(function (e) { return esc(describeDepError(e)); }).join('<br>') + '</div>'
+      : '<div class="note good">' + items.length + ' items, ' +
+        items.reduce(function (a, t) { return a + t.dependencies.length; }, 0) +
+        ' edges, no cycle and no forward reference. Every dependency names an item that exists and is listed before it.</div>') +
+    '</div>';
+
+  h += '<div class="card"><h3>Checklist <span class="badge rule">' + items.length + ' steps</span>' +
+    '<span class="badge good">' + items.length + ' completion tests</span></h3>' +
+    '<p class="sub">Fifteen of the twenty-four audited plans contained a step with no test for whether it was done, so a step got marked done because time had passed. Every step below carries a binary test beside it.</p>';
+  items.forEach(function (t) {
+    h += '<div class="ck"><div class="ck-head">' +
+      '<span class="cid">' + t.task_id + '</span><span class="ctitle">' + esc(t.title) + '</span>' +
+      '<span class="cmeta"><span class="lno ' + t.leverage + '">' + t.leverage + t.importance + '</span>' +
+      '<span class="badge">' + t.days + 'd</span></span></div>' +
+      '<div class="ck-body"><p class="ck-desc">' + esc(t.description) + '</p>' +
+      '<div class="ck-test"><span class="tl">test</span><span class="tt">' + esc(t.completion_test) + '</span></div>' +
+      '<div class="ck-foot">' +
+      '<span><b>depends on</b> ' + (t.dependencies.length ? t.dependencies.join(', ') : 'nothing') + '</span>' +
+      (t.estimate_basis
+        ? '<span><b>estimate</b> ' + esc(t.estimate_basis) + ' = ' + (t.cycle_count * t.cycle_cost_days) + 'd</span>'
+        : '<span><b>estimate</b> under the ' + CYCLE_EVIDENCE_THRESHOLD + 'd evidence threshold</span>') +
+      '</div></div></div>';
+  });
+  h += '</div>';
+
+  h += '<div class="card"><h3>Where the total comes from</h3>' +
+    '<p class="sub">The task total is derived in code as the 0.5-snapped sum of the steps, never asked from the model — so "total equals the sum of its steps" cannot drift. Items over ' +
+    CYCLE_EVIDENCE_THRESHOLD + ' days must show their arithmetic rather than assert a number.</p>' +
+    '<table class="t"><thead><tr><th>Step</th><th>Basis</th><th class="num">Days</th></tr></thead><tbody>' +
+    items.map(function (t) {
+      return '<tr><td class="k">' + t.task_id + '</td><td>' + (t.estimate_basis ? esc(t.estimate_basis) : '<span style="color:var(--faint)">below the evidence threshold</span>') +
+        '</td><td class="num">' + t.days + '</td></tr>';
+    }).join('') +
+    '<tr><td class="k" style="color:var(--ink)">total</td><td style="color:var(--muted)">derived, 0.5-snapped sum</td><td class="num" style="color:var(--ink)">' + total + '</td></tr>' +
+    '</tbody></table>' +
+    '<p class="note ' + (missing.length ? 'crit' : 'good') + '" style="margin-top:12px">' +
+    (missing.length
+      ? missing.length + ' item(s) over the threshold assert a number with no arithmetic — the schema rejects these and retries the generation.'
+      : 'All ' + items.filter(function (t) { return t.days > CYCLE_EVIDENCE_THRESHOLD; }).length +
+        ' items over the threshold show count × cost. The derived total is ' + total + ' days against the ' +
+        INTAKE.task_days + ' the brief guessed, and the gap is visible rather than reconciled away.') +
+    '</p></div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   20. THE RUNS  -  every figure in section 08, derived
+   ------------------------------------------------------------ */
+var BINS = [
+  { name: '2–4', lo: 2, hi: 4 }, { name: '4–6', lo: 4, hi: 6 },
+  { name: '6–8', lo: 6, hi: 8 }, { name: '8–10', lo: 8, hi: 10 },
+  { name: '10+', lo: 10, hi: Infinity }
+];
+var CEILING_MIN = 10;
+
+function binCounts() {
+  return BINS.map(function (b) {
+    return COUNTED.filter(function (r) { return r.minutes >= b.lo && r.minutes < b.hi; }).length;
+  });
+}
+
+function histogramSVG() {
+  var counts = binCounts();
+  var W = 700, H = 250, ml = 40, mr = 16, mt = 14, mb = 40;
+  var pw = W - ml - mr, ph = H - mt - mb;
+  var yMax = Math.max.apply(null, counts) + 1;
+  var bw = pw / BINS.length;
+  var s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Distribution of run times to human review">';
+  for (var t = 0; t <= yMax; t += Math.ceil(yMax / 5)) {
+    var y = mt + ph - (t / yMax) * ph;
+    s += '<line x1="' + ml + '" y1="' + fmt(y, 1) + '" x2="' + (W - mr) + '" y2="' + fmt(y, 1) + '" stroke="#1a1a22"/>';
+    s += '<text x="' + (ml - 8) + '" y="' + fmt(y + 3.5, 1) + '" fill="#4a4e5e" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="end">' + t + '</text>';
+  }
+  counts.forEach(function (c, i) {
+    var over = BINS[i].lo >= CEILING_MIN;
+    var bh = (c / yMax) * ph;
+    var x = ml + i * bw + bw * 0.16;
+    s += '<rect x="' + fmt(x, 1) + '" y="' + fmt(mt + ph - bh, 1) + '" width="' + fmt(bw * 0.68, 1) + '" height="' + fmt(bh, 1) +
+      '" rx="3" fill="' + (over ? '#d0745a' : '#5b7cfa') + '"/>';
+    s += '<text x="' + fmt(x + bw * 0.34, 1) + '" y="' + fmt(mt + ph - bh - 6, 1) +
+      '" fill="' + (over ? '#d0745a' : '#8d92a4') + '" font-size="11" font-family="IBM Plex Mono, monospace" text-anchor="middle">' + c + '</text>';
+    s += '<text x="' + fmt(x + bw * 0.34, 1) + '" y="' + (H - 20) + '" fill="#6e7385" font-size="10.5" font-family="IBM Plex Mono, monospace" text-anchor="middle">' + BINS[i].name + '</text>';
+  });
+  var cx = ml + 4 * bw;
+  s += '<line x1="' + fmt(cx, 1) + '" y1="' + mt + '" x2="' + fmt(cx, 1) + '" y2="' + (mt + ph) + '" stroke="#c9973f" stroke-width="1.2" stroke-dasharray="5 4"/>';
+  s += '<text x="' + fmt(cx - 7, 1) + '" y="' + (mt + 11) + '" fill="#c9973f" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="end">10 min ceiling</text>';
+  s += '<text x="' + fmt(ml + pw / 2, 1) + '" y="' + (H - 5) + '" fill="#4a4e5e" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="middle">minutes to human review</text>';
+  s += '</svg>';
+  return s;
+}
+
+function viewRuns() {
+  var mins = COUNTED.map(function (r) { return r.minutes; });
+  var med = median(mins);
+  var before = COUNTED.filter(function (r) { return r.era === 'before'; });
+  var after = COUNTED.filter(function (r) { return r.era === 'after'; });
+  var firstRead = COUNTED.filter(function (r) { return r.first_read; }).length;
+  var shared = RUNS.filter(function (r) { return r.planner === r.reviewer; }).length;
+  var overCeiling = COUNTED.filter(function (r) { return r.minutes >= CEILING_MIN; });
+  var overWithTwoClar = overCeiling.filter(function (r) { return r.clarifications >= 2; }).length;
+  var twoClarAnywhere = COUNTED.filter(function (r) { return r.clarifications >= 2; }).length;
+
+  var h = '<div class="pane-head"><div class="kicker">06 &middot; The 41 runs</div>' +
+    '<h2>Where each figure on the case study comes from</h2>' +
+    '<p>Every number in section 08 is computed from the rows at the bottom of this screen when it renders. ' +
+    'Three runs reached human review and were never opened; they are excluded rather than counted as approved, which is the difference between measuring approval and measuring abandonment.</p></div>';
+
+  h += '<div class="metrics" style="margin-bottom:16px">' +
+    '<div class="metric"><div class="mv">' + COUNTED.length + '</div><div class="ml">Briefs taken through to an approved plan</div></div>' +
+    '<div class="metric"><div class="mv">4h → 25m</div><div class="ml">Median brief to execution-ready checklist</div></div>' +
+    '<div class="metric"><div class="mv">' + mmss(med) + '</div><div class="ml">Median run to human review</div></div>' +
+    '<div class="metric"><div class="mv">' + fmt(mean(before.map(function (r) { return r.rounds; })), 1) + ' → ' +
+      fmt(mean(after.map(function (r) { return r.rounds; })), 1) + '</div><div class="ml">Planner–reviewer rounds before approval</div></div>' +
+    '<div class="metric"><div class="mv">' + Math.round(pct(firstRead, COUNTED.length)) + '%<small> of ' + COUNTED.length + '</small></div>' +
+      '<div class="ml">Plans approved by the human on first read</div></div>' +
+    '<div class="metric"><div class="mv">' + shared + '</div><div class="ml">Runs where planner and reviewer shared a model</div></div>' +
+    '</div>';
+
+  h += '<p class="note" style="margin-bottom:16px">Five of these six are computed from the ' + RUNS.length +
+    ' rows below. <b>4h → 25m is not</b> — it came from timing people planning by hand before the system existed, and no log on this page contains it. It is left in place and marked rather than quietly dropped.</p>';
+
+  h += '<div class="card"><h3>Time to human review <span class="badge rule">' + COUNTED.length + ' completed runs</span></h3>' +
+    '<p class="sub">The ceiling matters more than the median: a run must reach a person inside ten minutes or it stops being part of a working session. Bars past the line are counted, not hidden.</p>' +
+    histogramSVG() +
+    '<p class="note ' + (overWithTwoClar === overCeiling.length ? 'warn' : 'crit') + '" style="margin-top:11px">' +
+    overCeiling.length + ' run' + (overCeiling.length === 1 ? '' : 's') + ' past the ten-minute ceiling, and ' +
+    overWithTwoClar + ' of those needed two clarification rounds. ' +
+    (twoClarAnywhere === overWithTwoClar
+      ? 'No run inside the ceiling needed two, so the ceiling breaches are a clarification story rather than a model-speed one.'
+      : (twoClarAnywhere - overWithTwoClar) + ' run(s) inside the ceiling also needed two, so the explanation is not clean.') +
+    '</p></div>';
+
+  h += '<div class="card"><h3>Before and after the context-handoff fix</h3>' +
+    '<p class="sub">The review loop’s early failures were a plumbing bug, not a reviewing problem: the reviewer could not see the clarification answers and the planner revised without its own previous draft, so both sides spent rounds converging on things they already knew.</p>' +
+    '<table class="t"><thead><tr><th>Period</th><th class="num">Runs</th><th class="num">Mean rounds</th><th class="num">Median minutes</th><th class="num">First-read approved</th></tr></thead><tbody>' +
+    [['Before the fix', before], ['After the fix', after]].map(function (p) {
+      var rows = p[1];
+      var fr = rows.filter(function (r) { return r.first_read; }).length;
+      return '<tr><td class="k">' + p[0] + '</td><td class="num">' + rows.length + '</td>' +
+        '<td class="num">' + fmt(mean(rows.map(function (r) { return r.rounds; })), 2) + '</td>' +
+        '<td class="num">' + fmt(median(rows.map(function (r) { return r.minutes; })), 1) + '</td>' +
+        '<td class="num">' + fr + ' of ' + rows.length + ' &middot; ' + Math.round(pct(fr, rows.length)) + '%</td></tr>';
+    }).join('') + '</tbody></table></div>';
+
+  h += '<div class="card"><h3>Every run <span class="badge rule">' + COUNTED.length + ' counted</span>' +
+    '<span class="badge warn">' + EXCLUDED.length + ' excluded</span></h3>' +
+    '<p class="sub">Excluded rows reached human review and were never opened. Counting them as approvals would measure abandonment; counting them as rejections would measure something nobody did.</p>' +
+    '<table class="t"><thead><tr><th>Run</th><th>Era</th><th class="num">Minutes</th><th class="num">Rounds</th><th class="num">Clarifications</th><th>Planner</th><th>Reviewer</th><th>Outcome</th></tr></thead><tbody>' +
+    RUNS.map(function (r) {
+      return '<tr class="' + (r.opened ? '' : 'excluded') + '"><td class="k">' + r.id + '</td><td>' + r.era + '</td>' +
+        '<td class="num">' + fmt(r.minutes, 2) + '</td><td class="num">' + r.rounds + '</td><td class="num">' + r.clarifications + '</td>' +
+        '<td class="k" style="color:var(--muted)">' + esc(modelLabel(r.planner)) + '</td>' +
+        '<td class="k" style="color:var(--muted)">' + esc(modelLabel(r.reviewer)) + '</td>' +
+        '<td>' + (!r.opened ? '<span class="badge warn">never opened</span>'
+          : r.first_read ? '<span class="badge good">approved first read</span>'
+            : '<span class="badge">revision requested</span>') + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   21. RULES  -  the invariants, run in this page
+
+   These are the pure-logic checks from the product's own suite:
+   the scoring boundaries, the dependency validator, the model
+   pairing assertion, the diff, the template and the estimate
+   derivation. The full suite is larger and needs a runtime this
+   page does not have; the count is stated in the footer rather
+   than rounded up.
+   ------------------------------------------------------------ */
+function fullCard(overrides) {
+  return REVIEW_CRITERIA.map(function (c) {
+    return { criterion: c, score: (overrides && overrides[c]) || 'pass', feedback: null };
+  });
+}
+function nPartials(n) {
+  var o = {};
+  REVIEW_CRITERIA.slice(0, n).forEach(function (c) { o[c] = 'partial'; });
+  return fullCard(o);
+}
+function item(id, deps) { return { task_id: id, dependencies: deps || [], days: 1 }; }
+function throws(fn, name) {
+  try { fn(); } catch (e) { if (name && e.name !== name) throw new Error('threw ' + e.name + ', expected ' + name); return; }
+  throw new Error('expected ' + (name || 'an error') + ', nothing thrown');
+}
+function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
+
+var RULES = [
+  ['scoring · lib/agents/scoring.ts', 'all ten pass → approved', function () {
+    assert(scoreReview(fullCard()) === 'approved');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'a single fail → rejected', function () {
+    assert(scoreReview(fullCard({ hallucination_check: 'fail' })) === 'rejected');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'three partials → approved (boundary)', function () {
+    assert(scoreReview(nPartials(3)) === 'approved');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'four partials → rejected (boundary)', function () {
+    assert(scoreReview(nPartials(4)) === 'rejected');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'a fail outranks any partial count', function () {
+    assert(scoreReview(nPartials(0).map(function (c, i) { return i === 0 ? { criterion: c.criterion, score: 'fail', feedback: null } : c; })) === 'rejected');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'missing criterion → InvalidScorecardError', function () {
+    throws(function () { scoreReview(fullCard().slice(1)); }, 'InvalidScorecardError');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'duplicate criterion → InvalidScorecardError', function () {
+    var c = fullCard(); c.push(c[0]);
+    throws(function () { scoreReview(c); }, 'InvalidScorecardError');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'unknown criterion → InvalidScorecardError', function () {
+    var c = fullCard(); c[0] = { criterion: 'vibes', score: 'pass', feedback: null };
+    throws(function () { scoreReview(c); }, 'InvalidScorecardError');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'empty scorecard → InvalidScorecardError', function () {
+    throws(function () { scoreReview([]); }, 'InvalidScorecardError');
+  }],
+  ['scoring · lib/agents/scoring.ts', 'the run’s own round 1 rejects, round 2 approves', function () {
+    assert(scoreReview(REVIEWS[0].scorecard) === 'rejected', 'round 1 should reject');
+    assert(scoreReview(REVIEWS[1].scorecard) === 'approved', 'round 2 should approve');
+  }],
+
+  ['model pairing · lib/llm/config.ts', 'distinct planner and reviewer pass', function () {
+    assertDistinctPlannerReviewer('anthropic:claude-opus-4-8', 'openai:gpt-4o');
+  }],
+  ['model pairing · lib/llm/config.ts', 'identical pair → SameModelError', function () {
+    throws(function () { assertDistinctPlannerReviewer('openai:gpt-4o', 'openai:gpt-4o'); }, 'SameModelError');
+  }],
+  ['model pairing · lib/llm/config.ts', 'same family, different model is allowed', function () {
+    assertDistinctPlannerReviewer('anthropic:claude-opus-4-8', 'anthropic:claude-sonnet-5');
+  }],
+  ['model pairing · lib/llm/config.ts', 'no logged run shared a model', function () {
+    assert(RUNS.filter(function (r) { return r.planner === r.reviewer; }).length === 0);
+  }],
+
+  ['dependencies · lib/agents/deps.ts', 'the run’s own checklist is a valid DAG', function () {
+    assert(isValidTaskGraph(CHECKLIST), JSON.stringify(validateTaskGraph(CHECKLIST)));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'unknown dependency id is caught', function () {
+    var e = validateTaskGraph([item('TASK-001', ['TASK-999'])]);
+    assert(e.length === 1 && e[0].kind === 'unknown_dependency');
+  }],
+  ['dependencies · lib/agents/deps.ts', 'self-dependency is caught', function () {
+    var e = validateTaskGraph([item('TASK-001', ['TASK-001'])]);
+    assert(e.some(function (x) { return x.kind === 'self_dependency'; }));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'duplicate task id is caught', function () {
+    var e = validateTaskGraph([item('TASK-001'), item('TASK-001')]);
+    assert(e.some(function (x) { return x.kind === 'duplicate_id'; }));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'a two-node cycle is caught', function () {
+    var e = validateTaskGraph([item('TASK-001', ['TASK-002']), item('TASK-002', ['TASK-001'])]);
+    assert(e.some(function (x) { return x.kind === 'cycle'; }));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'a three-node cycle is caught', function () {
+    var e = validateTaskGraph([item('TASK-001', ['TASK-003']), item('TASK-002', ['TASK-001']), item('TASK-003', ['TASK-002'])]);
+    assert(e.some(function (x) { return x.kind === 'cycle'; }));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'a disconnected but acyclic graph is accepted', function () {
+    assert(isValidTaskGraph([item('TASK-001'), item('TASK-002'), item('TASK-003', ['TASK-001'])]));
+  }],
+  ['dependencies · lib/agents/deps.ts', 'a forward reference is caught', function () {
+    var e = validateTaskGraph([item('TASK-001', ['TASK-002']), item('TASK-002')]);
+    assert(e.some(function (x) { return x.kind === 'dependency_order'; }));
+  }],
+
+  ['diff · lib/diff.ts', 'identical plans report nothing changed', function () {
+    var d = diffPlans(PLAN_V1, buildPlan(1, 'agent_3', null));
+    assert(d.changed_count === 0, d.changed_count + ' changed');
+  }],
+  ['diff · lib/diff.ts', 'the run’s revision touched exactly three sections', function () {
+    var d = diffPlans(PLAN_V1, PLAN_V2);
+    assert(d.changed_count === 3, d.changed_count + ' changed');
+  }],
+  ['diff · lib/diff.ts', 'an added section reports every line as an addition', function () {
+    var a = { version: 1, sections: [] };
+    var b = { version: 2, sections: [{ section_id: 'x', title: 'X', content: 'one\ntwo' }] };
+    var d = diffPlans(a, b);
+    assert(d.sections[0].status === 'added' && d.sections[0].added_lines === 2);
+  }],
+  ['diff · lib/diff.ts', 'a removed section is reported at the end', function () {
+    var a = { version: 1, sections: [{ section_id: 'x', title: 'X', content: 'one' }] };
+    var d = diffPlans(a, { version: 2, sections: [] });
+    assert(d.sections[0].status === 'removed' && d.sections[0].removed_lines === 1);
+  }],
+  ['diff · lib/diff.ts', 'a one-line edit is one add and one delete', function () {
+    var ops = diffLines('a\nb\nc', 'a\nB\nc');
+    assert(ops.filter(function (o) { return o.type === 'add'; }).length === 1);
+    assert(ops.filter(function (o) { return o.type === 'del'; }).length === 1);
+  }],
+
+  ['template · lib/prd/master-template.ts', 'exactly 30 sections', function () {
+    assert(MASTER_PRD_SECTIONS.length === 30, MASTER_PRD_SECTIONS.length + ' sections');
+  }],
+  ['template · lib/prd/master-template.ts', 'every section id is unique', function () {
+    assert(new Set(SECTION_IDS).size === SECTION_IDS.length);
+  }],
+  ['template · lib/prd/master-template.ts', 'every section applies to at least one project type', function () {
+    assert(MASTER_PRD_SECTIONS.every(function (s) { return s.appliesTo.length > 0; }));
+  }],
+  ['template · lib/prd/master-template.ts', 'every selected section exists in the template', function () {
+    assert(SCOPE.selected.every(function (id) { return SECTION_IDS.indexOf(id) !== -1; }));
+  }],
+  ['template · lib/prd/master-template.ts', 'selected + excluded + inapplicable = 30', function () {
+    var applicable = sectionsForType(SCOPE.project_type);
+    var na = SECTION_IDS.filter(function (id) { return applicable.indexOf(id) === -1; }).length;
+    assert(SCOPE.selected.length + SCOPE.excluded.length + na === 30,
+      SCOPE.selected.length + '+' + SCOPE.excluded.length + '+' + na);
+  }],
+
+  ['estimates · lib/agents/schemas.ts', 'day estimates snap to 0.5', function () {
+    assert(snapDays(1.3) === 1.5 && snapDays(1.1) === 1 && snapDays(0.1) === 0.5);
+  }],
+  ['estimates · lib/agents/agent5.ts', 'the task total is the snapped sum of its steps', function () {
+    var manual = CHECKLIST.reduce(function (a, t) { return a + t.days; }, 0);
+    assert(deriveTotalDays(CHECKLIST) === Math.round(manual * 2) / 2);
+  }],
+  ['estimates · lib/agents/schemas.ts', 'every item over 1.5d shows its arithmetic', function () {
+    assert(estimateEvidenceMissing(CHECKLIST).length === 0);
+  }],
+  ['estimates · lib/agents/schemas.ts', 'stated arithmetic matches the stated days', function () {
+    CHECKLIST.filter(function (t) { return t.cycle_count; }).forEach(function (t) {
+      assert(t.cycle_count * t.cycle_cost_days === t.days, t.task_id + ' arithmetic does not reach its estimate');
+    });
+  }],
+
+  ['memory · lib/memory/types.ts', 'the reviewer may write reviews', function () {
+    assert(mayWrite('agent_4', 'reviews'));
+  }],
+  ['memory · lib/memory/types.ts', 'the reviewer may not write plans', function () {
+    assert(!mayWrite('agent_4', 'plans'));
+  }],
+  ['memory · lib/memory/types.ts', 'the planner may not write its own review', function () {
+    assert(!mayWrite('agent_3', 'reviews'));
+  }],
+  ['memory · lib/memory/types.ts', 'only the system may freeze an approved version', function () {
+    assert(mayWrite('system', 'approved_plan_version'));
+    assert(['agent_1', 'agent_2', 'agent_3', 'agent_4', 'agent_5', 'user'].every(function (a) {
+      return !mayWrite(a, 'approved_plan_version');
+    }));
+  }]
+];
+
+function runRules() {
+  state.rules = RULES.map(function (r) {
+    var t0 = performance.now(), pass = true, err = null;
+    try { r[2](); } catch (e) { pass = false; err = e.message; }
+    return { group: r[0], name: r[1], pass: pass, err: err, ms: performance.now() - t0 };
+  });
+}
+
+function viewRules() {
+  var h = '<div class="pane-head"><div class="kicker">07 &middot; Rules</div>' +
+    '<h2>The invariants, run in this page</h2>' +
+    '<p>Everything the system promises is a rule in code rather than a habit in a prompt: the scoring boundaries, the dependency validator, the model-pairing assertion, the diff, the template and the estimate derivation. ' +
+    'These are the ones that are pure logic and can run in a browser, and they run against this page’s own data as well as against fixtures.</p></div>';
+
+  h += '<div class="toolrow"><button class="btn primary" id="btnRules">' +
+    (state.rules ? 'Run them again' : 'Run all ' + RULES.length) + '</button>';
+  if (state.rules) {
+    var passed = state.rules.filter(function (r) { return r.pass; }).length;
+    var total = state.rules.reduce(function (a, r) { return a + r.ms; }, 0);
+    h += '<span class="chip ' + (passed === state.rules.length ? 'state-ok' : 'state-bad') + '">' +
+      '<span class="dot ' + (passed === state.rules.length ? 'good' : 'crit') + '"></span>' +
+      passed + ' of ' + state.rules.length + ' passing &middot; ' + fmt(total, 0) + ' ms</span>';
+  }
+  h += '</div>';
+
+  if (!state.rules) {
+    h += '<p class="note">Not run yet.</p>';
+    return h;
+  }
+
+  var groups = [];
+  state.rules.forEach(function (r) { if (groups.indexOf(r.group) === -1) groups.push(r.group); });
+  h += '<div class="card">';
+  groups.forEach(function (g) {
+    var rows = state.rules.filter(function (r) { return r.group === g; });
+    var ok = rows.filter(function (r) { return r.pass; }).length;
+    h += '<div class="rgroup"><h4>' + esc(g) + ' <span class="badge ' + (ok === rows.length ? 'good' : 'crit') + '">' + ok + '/' + rows.length + '</span></h4>';
+    rows.forEach(function (r) {
+      h += '<div class="rrow"><span class="rk ' + (r.pass ? 'pass' : 'fail') + '">' + (r.pass ? '✓' : '✗') + '</span>' +
+        '<span class="rn">' + esc(r.name) + (r.pass ? '' : ' — <span style="color:var(--crit)">' + esc(r.err) + '</span>') + '</span>' +
+        '<span class="rt">' + fmt(r.ms, 2) + ' ms</span></div>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+
+  h += '<p class="note good">Passing rules say the machinery holds. They say nothing about whether a plan is any good — that is what the reviewing model is for, and what the human gate after it is for.</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   22. CHROME, WIRING, DEEP LINKS
+   ------------------------------------------------------------ */
+function renderRail() {
+  var done = { intake: true, clarify: !pendingQuestion(), scope: true, review: state.approved, task: state.approved, runs: false, rules: !!state.rules };
+  var h = '<div class="rail-group"><div class="rail-label">Pipeline</div>';
+  VIEWS.forEach(function (v) {
+    h += '<button class="rail-item" data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '">' +
+      '<span class="n">' + v.n + '</span><span>' + v.label + '<span class="sub">' + v.sub + '</span></span>' +
+      (done[v.id] ? '<span class="tick">✓</span>' : '') + '</button>';
+  });
+  h += '</div><div class="rail-note"><b>One walkthrough run.</b> The brief, the questions, the plan and the checklist are an invented run of a real system. ' +
+    'Every gate decision, score total, diff, dependency verdict and day estimate on these screens is computed here, not stored.</div>';
+  $('rail').innerHTML = h;
+}
+
+function renderFoot() {
+  $('foot').innerHTML =
+    '<b>What this is.</b> The product’s decision logic, ported from its own source — the master template, the reviewer scoring rule, the dependency validator, the line diff, the model-pairing assertion and the estimate derivation — running here against one recorded run. ' +
+    'Change a score and the approve/reject verdict recomputes by the real rule. Point planner and reviewer at the same model and the run refuses to start. Break a dependency and the validator names the cycle. ' +
+    'The logged history on screen 06 works the same way: the median, the histogram, the round counts and the first-read rate are all derived from the rows printed beneath them.' +
+    '<br><br><b>What is recorded rather than computed.</b> The parts a language model wrote — the pre-mortem, the three clarifying questions, the plan prose, the reviewer’s objections and the checklist. ' +
+    'A browser cannot re-derive those, and pretending otherwise would be the exact failure this product exists to prevent. They are one run of an invented brief, chosen so the interesting case appears: the planner asserts an owner nobody supplied, and the reviewer catches it.' +
+    '<br><br><b>What it is not.</b> Not the internal product and not connected to it. The brief is invented, the 44 logged runs are invented, and the figures on the case study page are placeholders for a public sample. ' +
+    'The structural characteristics are real: five stages, a 30-section master template, ten scorecard criteria, a review loop capped at five rounds, 0.5-day estimate granularity, and distinct planner and reviewer models enforced in code. ' +
+    'This page runs <b>' + RULES.length + '</b> of the product’s invariants because they are pure logic; the repository’s own suite is <b>105 tests across 13 files</b>, which needs a runtime this page does not have.';
+}
+
+function render() {
+  renderRail();
+  var fn = { intake: viewIntake, clarify: viewClarify, scope: viewScope, review: viewReview, task: viewTask, runs: viewRuns, rules: viewRules }[state.view] || viewReview;
+  $('pane').innerHTML = fn();
+
+  var q = pendingQuestion();
+  $('chipStage').className = 'chip ' + (q ? 'state-ruo' : state.approved ? 'state-ok' : '');
+  $('chipStage').innerHTML = '<span class="dot ' + (q ? 'warn' : state.approved ? 'good' : 'accent') + '"></span>' +
+    (q ? 'awaiting_answer' : state.approved ? 'approved &middot; frozen v2' : 'human_review');
+  var collide = modelsCollide();
+  $('chipModels').className = 'chip ' + (collide ? 'state-bad' : 'state-ok');
+  $('chipModels').innerHTML = '<span class="dot ' + (collide ? 'crit' : 'good') + '"></span>' +
+    (collide ? 'planner = reviewer — refused' : esc(modelLabel(state.planner)) + ' ⇄ ' + esc(modelLabel(state.reviewer)));
+  wire();
+}
+
+function go(view) {
+  state.view = view;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function wire() {
+  document.querySelectorAll('[data-view]').forEach(function (b) {
+    b.onclick = function () { go(b.dataset.view); };
+  });
+  document.querySelectorAll('[data-answer]').forEach(function (b) {
+    b.onclick = function () { state.qStatus[b.dataset.answer] = 'answered'; render(); };
+  });
+  document.querySelectorAll('[data-skip]').forEach(function (b) {
+    b.onclick = function () { state.qStatus[b.dataset.skip] = 'skipped'; render(); };
+  });
+  document.querySelectorAll('[data-round]').forEach(function (b) {
+    b.onclick = function () {
+      state.round = parseInt(b.dataset.round, 10);
+      state.scores = null;
+      render();
+    };
+  });
+  document.querySelectorAll('[data-score]').forEach(function (b) {
+    b.onclick = function () {
+      var parts = b.dataset.score.split(':');
+      state.scores = state.scores || {};
+      state.scores[parts[0]] = parts[1];
+      render();
+    };
+  });
+  document.querySelectorAll('[data-sec]').forEach(function (b) {
+    b.onclick = function () {
+      var id = b.dataset.sec;
+      state.openSections[id] = state.openSections[id] !== true;
+      render();
+    };
+  });
+
+  var qr = $('qReset');
+  if (qr) qr.onclick = function () { state.qStatus = {}; render(); };
+  var sp = $('selPlanner');
+  if (sp) sp.onchange = function () { state.planner = sp.value; render(); };
+  var sr = $('selReviewer');
+  if (sr) sr.onchange = function () { state.reviewer = sr.value; render(); };
+  var bc = $('btnCollide');
+  if (bc) bc.onclick = function () {
+    if (modelsCollide()) { state.planner = 'anthropic:claude-opus-4-8'; state.reviewer = 'openai:gpt-4o'; }
+    else { state.reviewer = state.planner; }
+    render();
+  };
+  var brs = $('btnResetScores');
+  if (brs) brs.onclick = function () { state.scores = null; render(); };
+  var ba = $('btnApprove');
+  if (ba) ba.onclick = function () { state.approved = true; render(); };
+  var bu = $('btnUnfreeze');
+  if (bu) bu.onclick = function () { state.approved = false; render(); };
+  var bp = $('btnPlan');
+  if (bp) bp.onclick = function () { state.planOpen = !state.planOpen; render(); };
+  var bb = $('btnBreak');
+  if (bb) bb.onclick = function () { state.breakGraph = !state.breakGraph; render(); };
+  var br = $('btnRules');
+  if (br) br.onclick = function () { runRules(); render(); };
+}
+
+/* ------------------------------------------------------------
+   23. DEEP LINKS
+
+   The case study links each screenshot to the state it pictures,
+   so every screen this page can show is reachable by URL.
+   ------------------------------------------------------------ */
+(function init() {
+  var p = new URLSearchParams(location.search);
+  var v = p.get('view');
+  if (v && VIEWS.some(function (x) { return x.id === v; })) state.view = v;
+  var r = parseInt(p.get('round'), 10);
+  if (r === 1 || r === 2) state.round = r;
+  if (p.get('collide') === '1') state.reviewer = state.planner;
+  if (p.get('planner')) state.planner = p.get('planner');
+  if (p.get('reviewer')) state.reviewer = p.get('reviewer');
+  if (p.get('approved') === '0') state.approved = false;
+  if (p.get('broken') === '1') state.breakGraph = true;
+  if (p.get('plan') === '1') state.planOpen = true;
+  if (p.get('diff') === 'all') { ['functional_req', 'timeline_milestones', 'dependencies_ext'].forEach(function (k) { state.openSections[k] = true; }); }
+  var q = p.get('q');
+  if (q !== null) {
+    /* q = how many questions have been resolved, 0 to 3. */
+    var n = parseInt(q, 10);
+    state.qStatus = {};
+    if (n >= 1) state.qStatus.Q1 = 'answered';
+    if (n >= 2) state.qStatus.Q2 = 'answered';
+    if (n >= 3) state.qStatus.Q3 = 'skipped';
+  }
+  renderFoot();
+  render();
+  if (p.get('run') === '1' && state.view === 'rules') { runRules(); render(); }
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

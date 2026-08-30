@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UAV Sphere Calibration — The Error Budget</title>
+<meta name="description" content="Interactive error budget for UAV-carried sphere calibration of a weather radar: five terms, a 1.5 dB budget, and the positioning accuracy the method actually demands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Shared shell for the Ricky Kids demos. Palette and type are
+   inherited from the portfolio's case-study system so the demos
+   read as one family with the case studies that link them.
+   Single-theme by design: these are bench tools, dark, with
+   every colour painted so nothing borrows a host background.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--body);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh; max-width: 1340px; margin: 0 auto;
+  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  display: flex; flex-direction: column;
+}
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+
+.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params .spacer { flex: 1; }
+
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] span { color: var(--accent); }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+
+.note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.note b { color: var(--body); font-weight: 500; }
+.note.warn { border-left-color: var(--warn); }
+.note.crit { border-left-color: var(--crit); }
+.note.good { border-left-color: var(--good); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.sheet thead th {
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
+table.sheet tfoot .num { text-align: right; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
+.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+.meterbar.crit > i { background: var(--crit); }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-color: var(--crit-dim); }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+
+<style>
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 18px; align-items: start; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+.dialbar { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+.dialbar .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.dialbar .val { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1; }
+.dialbar .unit { font-size: 13px; color: var(--muted); }
+.scale { position: relative; height: 42px; margin-top: 6px; }
+.scale .rule { position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--surface-3); }
+.scale .mk { position: absolute; top: 2px; width: 2px; height: 12px; }
+.scale .mk span { position: absolute; top: 15px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; white-space: nowrap; }
+.scale .mk.demand { background: var(--good); } .scale .mk.demand span { color: var(--good); }
+.scale .mk.bom { background: var(--crit); } .scale .mk.bom span { color: var(--crit); }
+
+/* tornado */
+.tor { display: flex; flex-direction: column; gap: 9px; }
+.trow { display: grid; grid-template-columns: 210px 1fr 92px; gap: 12px; align-items: center; }
+.trow .n { font-size: 13px; color: var(--body); }
+.trow.off .n, .trow.off .v { color: var(--faint); text-decoration: line-through; }
+.trow .lane { position: relative; height: 22px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; }
+.trow .lane .zero { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--faint); }
+.trow .lane .bar { position: absolute; top: 3px; bottom: 3px; background: var(--accent); border-radius: 3px; }
+.trow .lane .bar.dom { background: var(--crit); }
+.trow .lane .bar.off { background: var(--surface-3); }
+.trow .v { font-family: var(--mono); font-size: 12px; text-align: right; color: var(--ink); }
+.trow button { background: none; border: 0; padding: 0; text-align: left; }
+
+.gauge { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.gauge .big { font-family: var(--mono); font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -.02em; }
+.gauge .big.pass { color: var(--good); } .gauge .big.fail { color: var(--crit); }
+.gauge .sub { font-size: 13px; color: var(--body); margin-top: 8px; }
+.gauge .track { position: relative; height: 10px; border-radius: 5px; background: var(--surface-3); margin-top: 16px; overflow: visible; }
+.gauge .track > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--good); }
+.gauge .track > i.over { background: var(--crit); }
+.gauge .track > u { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); text-decoration: none; }
+.gauge .marks { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-top: 8px; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ricky Kids &middot; ISRO proposal &middot; Radar calibration</span>
+        <h1>UAV sphere calibration &mdash; the error budget</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>Budget <b>1.5 dB</b></span>
+      <span class="chip"><span class="dot"></span><b>4</b> published experiments decomposed</span>
+      <span class="chip" id="stateChip"></span>
+    </div>
+    <div class="params">
+      <span class="plabel">Preset</span>
+      <div class="segmented" id="presets" role="group" aria-label="Preset"></div>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot crit"></span><b>0</b> flights conducted</span>
+    </div>
+    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
+      <b>This was built before anyone chose a motor.</b> Rather than start with the airframe, we decomposed the error budgets of four published experiments to find which term actually sets the achievable accuracy &mdash; and set the pass mark first.</p>
+  </header>
+
+  <main class="pane">
+    <div class="pane-head">
+      <p class="kicker">Worked error budget &middot; no flight was ever conducted</p>
+      <h2>Which term decides whether this works</h2>
+      <p class="provenance">A weather radar is calibrated against an object of known radar cross section sitting in the far field. The question is not whether a hexacopter can carry a sphere there. It is <b>whether you can know where the sphere is</b> once it arrives.</p>
+    </div>
+
+    <div class="dialbar">
+      <div class="top">
+        <span class="val" id="sVal">0.35</span><span class="unit">m &mdash; altitude uncertainty of the sphere, 1&sigma;</span>
+      </div>
+      <input type="range" id="dial" min="10" max="300" value="35" step="1" style="width:100%" aria-label="Altitude uncertainty">
+      <div class="scale" id="scale"></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 style="margin:0 0 4px;font-size:14px;color:var(--ink);font-weight:600">Swing each term puts into the calibration error</h3>
+        <p style="margin:0 0 14px;font-size:12.5px;color:var(--muted)">Click a term to take it out of the budget entirely &mdash; the most generous assumption you can make about it &mdash; and watch what the total does.</p>
+        <div class="tor" id="tor"></div>
+        <div id="verdict" style="margin-top:16px"></div>
+      </div>
+      <div>
+        <div class="gauge">
+          <div class="big" id="total">—</div>
+          <div class="sub" id="totalSub"></div>
+          <div class="track"><i id="bar"></i><u id="budgetMark"></u></div>
+          <div class="marks"><span>0 dB</span><span>1.5 dB budget</span><span id="scaleMax">3 dB</span></div>
+        </div>
+        <div class="tiles" style="grid-template-columns:1fr;margin-top:16px">
+          <div class="tile" id="posTile"><div class="v" id="posV">—</div><div class="l">Error swing traced to sphere positioning</div><div class="p">altitude and horizontal at the current dial</div></div>
+          <div class="tile good"><div class="v">±0.35 m</div><div class="l">Positioning accuracy the method demands (guardrail)</div><div class="p">altitude, 1σ — where the budget just closes</div></div>
+          <div class="tile"><div class="v">±12°</div><div class="l">Angular coverage one flight pattern reaches</div><div class="p">elevation, at 350 m standoff</div></div>
+        </div>
+        <p class="note" id="reqNote"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>The error budget from the case study, made adjustable. <b>The proposal, the specified airframe and the cited literature are real</b>; the budget itself is an invented worked illustration, and no flight was ever conducted. It exists to show which term the method actually turns on.</p>
+      </div>
+      <div>
+        <h5>The finding, in one move</h5>
+        <p>Drag the dial from <b>±0.35 m</b> to the module in our own bill of materials. Every other term in the budget could be made perfect and the method would still miss its own pass mark.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p>That is the value of failing on paper: the airframe was never built, and the finding cost four literature decompositions rather than a season of flying.</p>
+      </div>
+    </div>
+    <p class="conf">Student research at SRM Kattankulathur, written against an ISRO proposal. The altitude term is modelled as linear in the positioning uncertainty and anchored at the published decomposition point of ±0.35 m; terms combine in quadrature. Every figure here is an invented worked illustration rather than a measurement — no flights were conducted, no radar was calibrated and no hardware was built.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — the decomposition published in the case study.
+
+   The altitude term is anchored at ±0.35 m → 1.33 dB, which is
+   the point at which the whole budget just closes at 1.5 dB.
+   Everything else is fixed. Terms combine in quadrature.
+   ============================================================ */
+const BUDGET = 1.5;
+const ANCHOR_SIGMA = 0.35, ANCHOR_DB = 1.33;
+const K = ANCHOR_DB / ANCHOR_SIGMA;      /* dB per metre of 1σ altitude error */
+
+const TERMS = [
+  { k: "alt",  n: "Sphere position — altitude",   db: null, note: "scales with the dial", on: true },
+  { k: "hor",  n: "Sphere position — horizontal", db: 0.45, note: "held at the published swing", on: true },
+  { k: "rcs",  n: "Sphere radar cross section",   db: 0.30, note: "machined sphere, known to a tolerance", on: true },
+  { k: "air",  n: "Scattering off the airframe",  db: 0.24, note: "the copter is in the beam too", on: true },
+  { k: "rx",   n: "Receiver linearity",           db: 0.11, note: "the radar's own contribution", on: true }
+];
+
+const PRESETS = [
+  { k: "demand", n: "What the method demands", s: 0.35, sub: "±0.35 m 1σ" },
+  { k: "rtk",    n: "Carrier-phase correction", s: 0.12, sub: "±0.12 m 1σ" },
+  { k: "bom",    n: "The module in our BOM",   s: 1.50, sub: "±1.50 m 1σ" }
+];
+
+const state = { s: ANCHOR_SIGMA, off: {} };
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const dbOf = (t) => (t.k === "alt" ? K * state.s : t.db);
+const live = () => TERMS.filter((t) => !state.off[t.k]);
+const rss = (arr) => Math.sqrt(arr.reduce((a, v) => a + v * v, 0));
+const total = () => rss(live().map(dbOf));
+const positioning = () => rss(TERMS.filter((t) => (t.k === "alt" || t.k === "hor") && !state.off[t.k]).map(dbOf));
+
+/* the altitude 1σ at which the budget just closes, given which
+   terms are currently in it */
+function requiredSigma() {
+  const others = rss(live().filter((t) => t.k !== "alt").map(dbOf));
+  if (state.off.alt) return null;
+  const room = BUDGET * BUDGET - others * others;
+  return room <= 0 ? 0 : Math.sqrt(room) / K;
+}
+</script>
+<script>
+function renderPresets() {
+  $("presets").innerHTML = PRESETS.map((p) =>
+    `<button data-p="${p.k}" aria-pressed="${Math.abs(state.s - p.s) < 0.005}"><b>${esc(p.n)}</b><span>${esc(p.sub)}</span></button>`).join("");
+  document.querySelectorAll("[data-p]").forEach((b) => (b.onclick = () => {
+    state.s = PRESETS.find((p) => p.k === b.dataset.p).s;
+    $("dial").value = Math.round(state.s * 100); render();
+  }));
+}
+
+function renderScale() {
+  const pos = (s) => ((s - 0.10) / (3.0 - 0.10)) * 100;
+  $("scale").innerHTML = `<div class="rule"></div>
+    <div class="mk demand" style="left:${pos(0.35)}%"><span>0.35 &mdash; demanded</span></div>
+    <div class="mk bom" style="left:${pos(1.5)}%"><span>1.50 &mdash; our module</span></div>`;
+}
+
+function renderTornado() {
+  const vals = TERMS.map((t) => (state.off[t.k] ? 0 : dbOf(t)));
+  const max = Math.max(1.5, ...vals);
+  $("tor").innerHTML = TERMS.map((t, i) => {
+    const v = dbOf(t), off = !!state.off[t.k];
+    const w = (Math.min(v, max) / max) * 50;
+    const dom = !off && v === Math.max(...vals);
+    return `<div class="trow ${off ? "off" : ""}">
+      <button class="n" data-t="${t.k}" title="click to take this term out of the budget">${esc(t.n)}<br><span class="mono" style="font-size:10px;color:var(--faint)">${esc(t.note)}</span></button>
+      <span class="lane">
+        <span class="zero" style="left:50%"></span>
+        <span class="bar ${off ? "off" : dom ? "dom" : ""}" style="left:${50 - w}%;width:${w * 2}%"></span>
+      </span>
+      <span class="v">${off ? "excluded" : "±" + (v / 2).toFixed(2) + " dB"}</span>
+    </div>`;
+  }).join("");
+  document.querySelectorAll("[data-t]").forEach((b) => (b.onclick = () => {
+    state.off[b.dataset.t] = !state.off[b.dataset.t]; render();
+    if (state.off[b.dataset.t] && b.dataset.t !== "alt" && total() > BUDGET)
+      toast("Still over budget. Every term except sphere altitude can be made perfect and the method still misses its pass mark — which is the finding.");
+  }));
+}
+
+function renderGauge() {
+  const t = total(), pass = t <= BUDGET, maxScale = Math.max(3, Math.ceil(t));
+  $("total").className = "big " + (pass ? "pass" : "fail");
+  $("total").textContent = t.toFixed(2) + " dB";
+  $("totalSub").innerHTML = pass
+    ? `Total calibration error, in quadrature, against a <b>${BUDGET} dB</b> budget. Inside it.`
+    : `Total calibration error, in quadrature, against a <b>${BUDGET} dB</b> budget &mdash; over by ${(t - BUDGET).toFixed(2)} dB.`;
+  $("bar").className = pass ? "" : "over";
+  $("bar").style.width = Math.min(100, (t / maxScale) * 100) + "%";
+  $("budgetMark").style.left = (BUDGET / maxScale) * 100 + "%";
+  $("scaleMax").textContent = maxScale + " dB";
+  const p = positioning();
+  $("posV").textContent = p.toFixed(2) + " dB";
+  $("posTile").className = "tile " + (p > BUDGET ? "crit" : "");
+  const c = $("stateChip");
+  c.className = "chip " + (pass ? "good" : "crit");
+  c.innerHTML = `<span class="dot ${pass ? "good" : "crit"}"></span>${pass ? "Inside the budget" : "Misses the pass mark"}`;
+}
+
+function renderVerdict() {
+  const t = total(), req = requiredSigma(), p = positioning();
+  let html;
+  if (state.s <= 0.36 && t <= BUDGET) {
+    html = `<div class="note good"><b>This is the pass mark, and it is the whole of the specification.</b> At ±${state.s.toFixed(2)} m the budget closes at ${t.toFixed(2)} dB, and ${p.toFixed(2)} dB of it &mdash; nearly all &mdash; is knowing where the sphere is. The airframe, the motors and the flight pattern are not what this method turns on.</div>`;
+  } else if (t > BUDGET) {
+    html = `<div class="note crit"><b>Over budget by ${(t - BUDGET).toFixed(2)} dB.</b> The altitude term alone is ${(K * state.s).toFixed(2)} dB. ${req !== null ? `To close the budget the sphere's altitude would have to be known to <b>±${req.toFixed(2)} m</b>, 1σ &mdash; ${(state.s / req).toFixed(1)}× better than the dial is set.` : ""} With the GNSS module in our own bill of materials the method misses its own pass mark, and no airframe decision changes that.</div>`;
+  } else {
+    html = `<div class="note good"><b>Inside the budget at ${t.toFixed(2)} dB.</b> Positioning still accounts for ${p.toFixed(2)} dB of it. Every term below the top two could be halved and the total would barely move.</div>`;
+  }
+  $("verdict").innerHTML = html;
+  $("reqNote").innerHTML = req === null
+    ? `<b>Altitude excluded.</b> With the term the method turns on removed, what is left is the part nobody was worried about.`
+    : `<b>The budget closes at ±${req.toFixed(2)} m.</b> That is the number the whole proposal reduces to, and it was reached by decomposing four published experiments rather than by flying anything.`;
+}
+
+let toastT;
+function toast(msg, crit) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (crit ? " crit" : "");
+  clearTimeout(toastT); toastT = setTimeout(() => (t.className = "toast"), 5000);
+}
+
+function render() {
+  $("sVal").textContent = state.s.toFixed(2);
+  renderPresets(); renderScale(); renderTornado(); renderGauge(); renderVerdict();
+}
+
+$("dial").oninput = (e) => { state.s = Number(e.target.value) / 100; render(); };
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  const p = PRESETS.find((x) => x.k === q.get("preset"));
+  if (p) state.s = p.s;
+  const s = Number(q.get("sigma"));
+  if (s >= 0.1 && s <= 3.0) state.s = s;
+  (q.get("off") || "").split(",").filter(Boolean).forEach((k) => { if (TERMS.some((t) => t.k === k)) state.off[k] = true; });
+  $("dial").value = Math.round(state.s * 100);
+  render();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

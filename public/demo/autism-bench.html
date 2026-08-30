@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autism Kit — The Bench Review</title>
+<meta name="description" content="Interactive recreation of the design review behind Ricky Kids' assistive play kit: three interactions, fourteen classroom criteria, two special-education teachers, and the stop test the review turned on. No child took part in this project.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Shared shell for the Ricky Kids demos. Palette and type are
+   inherited from the portfolio's case-study system so the demos
+   read as one family with the case studies that link them.
+   Single-theme by design: these are bench tools, dark, with
+   every colour painted so nothing borrows a host background.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--body);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh; max-width: 1340px; margin: 0 auto;
+  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  display: flex; flex-direction: column;
+}
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+
+.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params .spacer { flex: 1; }
+.params .chip { flex: none; }
+
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] span { color: var(--accent); }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+
+.note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.note b { color: var(--body); font-weight: 500; }
+.note.warn { border-left-color: var(--warn); }
+.note.crit { border-left-color: var(--crit); }
+.note.good { border-left-color: var(--good); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.sheet thead th {
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
+table.sheet tfoot .num { text-align: right; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
+.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+.meterbar.crit > i { background: var(--crit); }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-color: var(--crit-dim); }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+
+<style>
+/* -- Bench layout ----------------------------------------- */
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 18px; align-items: start; }
+@media (max-width: 1080px) { .bench { grid-template-columns: 1fr; } }
+
+.stage-wrap { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; overflow: hidden; }
+.stage-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.stage-head .t { font-size: 13.5px; color: var(--ink); font-weight: 500; margin-right: auto; }
+.stage-body { padding: 18px 16px; }
+
+/* Letter keypad, shared by the prompt and the gantry */
+.keys { display: flex; gap: 6px; flex-wrap: wrap; }
+.keys button {
+  width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--surface-2); color: var(--body); font-size: 15px; font-weight: 500;
+}
+.keys button:hover { border-color: #35354a; color: var(--ink); }
+.keys button[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent-dim); color: var(--accent); }
+
+/* The prompt card a child would see */
+.prompt {
+  display: grid; grid-template-columns: 128px 1fr; gap: 18px; align-items: center;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2);
+  padding: 20px; min-height: 172px;
+}
+.prompt .glyph {
+  font-size: 84px; line-height: 1; font-weight: 600; color: var(--ink);
+  display: grid; place-items: center; height: 128px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+}
+.prompt .word { font-size: 26px; color: var(--ink); font-weight: 600; letter-spacing: -.01em; }
+.prompt .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.prompt.idle .glyph { color: var(--faint); }
+.speaker { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.wave { display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; }
+.wave i { width: 3px; background: var(--accent-dim); border-radius: 1px; height: 4px; display: block; }
+.wave.on i { background: var(--accent); animation: w .9s ease-in-out infinite; }
+.wave.on i:nth-child(2) { animation-delay: .12s } .wave.on i:nth-child(3) { animation-delay: .24s }
+.wave.on i:nth-child(4) { animation-delay: .36s } .wave.on i:nth-child(5) { animation-delay: .48s }
+@keyframes w { 0%,100% { height: 4px } 50% { height: 16px } }
+
+/* Teacher tablet queue */
+.queue { display: flex; flex-direction: column; gap: 8px; }
+.qrow { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); padding: 9px 12px; }
+.qrow .g { font-family: var(--mono); font-size: 15px; color: var(--ink); width: 22px; }
+.qrow .w { font-size: 13px; color: var(--body); flex: 1; }
+.qrow.done { opacity: .5; }
+.qrow.now { border-color: var(--accent-dim); background: var(--accent-wash); }
+
+/* Gantry */
+.gantry { display: grid; grid-template-columns: 330px minmax(0,1fr); gap: 16px; }
+@media (max-width: 720px) { .gantry { grid-template-columns: 1fr; } }
+.plot { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 10px; }
+.gcode {
+  border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  height: 258px; overflow-y: auto; padding: 10px 12px; line-height: 1.7;
+}
+.gcode div.cur { color: var(--accent); }
+.gcode div.done { color: var(--body); }
+.axis { display: flex; gap: 16px; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 10px; }
+.axis b { color: var(--ink); font-weight: 500; }
+
+/* Criteria sheet */
+.crit-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.crit-head .score { font-family: var(--mono); font-size: 22px; font-weight: 600; color: var(--ink); }
+.crit-head .of { font-size: 12px; color: var(--muted); }
+.crit { display: flex; flex-direction: column; gap: 6px; }
+.crow { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 9px 11px; }
+.crow .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); padding-top: 3px; }
+.crow .c { font-size: 12.5px; color: var(--body); }
+.crow .d { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+.crow.not { border-color: var(--crit-dim); background: var(--crit-wash); }
+.crow.cond { border-color: var(--warn-dim); }
+.crow .say { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+.stopbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.verdict { border-radius: 10px; padding: 13px 15px; font-size: 13px; margin-top: 14px; border: 1px solid var(--line); background: var(--surface-2); color: var(--body); }
+.verdict.crit { border-color: var(--crit-dim); background: var(--crit-wash); }
+.verdict.good { border-color: var(--good-dim); background: var(--good-wash); }
+.verdict b { color: var(--ink); font-weight: 500; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Assistive play</span>
+        <h1>Autism kit &mdash; the bench review</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>Bench review &middot; <b>Q4 2021</b></span>
+      <span class="chip good"><span class="dot good"></span><b>0</b> sessions with children</span>
+      <span class="chip" id="verdictChip"></span>
+    </div>
+    <div class="params">
+      <span class="plabel">Interaction</span>
+      <div class="segmented" id="tabs" role="group" aria-label="Interaction"></div>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot"></span><b>2</b> teachers &middot; <b>14</b> criteria</span>
+    </div>
+    <p class="paramnote" id="paramNote" style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0"></p>
+  </header>
+
+  <main class="pane">
+    <div class="pane-head">
+      <p class="kicker">Design review &middot; the kit on a bench, no child present</p>
+      <h2 id="paneTitle"></h2>
+      <p class="provenance" id="paneProv"></p>
+    </div>
+    <div class="bench">
+      <div>
+        <div class="stage-wrap">
+          <div class="stage-head">
+            <span class="t" id="stageTitle"></span>
+            <span class="badge rule" id="stageBadge"></span>
+          </div>
+          <div class="stage-body" id="stage"></div>
+        </div>
+        <div class="stopbar">
+          <button class="btn crit" id="pullBtn">The child pulls their hand away</button>
+          <button class="btn sm" id="stopBtn">Teacher presses stop</button>
+          <span class="mono" style="font-size:11px;color:var(--faint)">the test the review turned on</span>
+        </div>
+        <div id="verdict"></div>
+      </div>
+      <div>
+        <div class="crit-head">
+          <span class="score" id="critScore"></span>
+          <span class="of">of 14 classroom criteria met, agreed by both teachers</span>
+        </div>
+        <div class="crit" id="crit"></div>
+        <p class="note"><b>The criteria are theirs, not ours.</b> Fourteen checks these two teachers already apply to anything entering their classroom. We would have measured whether the kit worked; they measured whether it can be stopped, cleaned and predicted.</p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A recreation of the bench review described in the case study: three interactions, fourteen criteria, two special-education teachers. <b>The kit is the real one</b> &mdash; an ATmega board with a CNC Shield V3, A4988 drivers, lead screws and a micro servo running GRBL. The criteria, the verdicts and the teachers' words are invented for this sample.</p>
+      </div>
+      <div>
+        <h5>The test the review turned on</h5>
+        <p><b>The child pulls their hand away.</b> Two of the three interactions simply end. The third completes the stroke it started, because a lead screw cannot tell a child who is concentrating from one who wants to leave.</p>
+        <p>A stop button is not the same thing, and the difference is the reason the gantry was not built again.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>No child took part in any part of this project.</b> Nothing here is a clinical, therapeutic or educational-outcome claim, and none could be made from a design review: two practitioners said which of three ideas they would allow into a classroom.</p>
+      </div>
+    </div>
+    <p class="conf">Student work at SRM Kattankulathur. The prototype, its hardware and the involvement of teachers from an autism care centre are real; the teachers and the centre are not named. No child appears anywhere in this project, no reading or observation of a child exists, and every criterion, verdict, quotation and figure on this page is invented for the sample. The letter paths are our own and the G-code is generated from them at render time.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — the bench review, invented and internally consistent.
+
+   Three interactions, fourteen criteria, two teachers. The
+   totals here are the ones the case study publishes: 12, 10 and
+   5 of 14. Every verdict below is a judgement about whether a
+   thing may enter a classroom — never about a child, and never
+   about an outcome, because no child took part in any of this.
+   ============================================================ */
+
+const INTERACTIONS = [
+  { k: "prompt", name: "Visual and sound prompts", sub: "the letter card",
+    title: "Visual and sound prompts",
+    prov: "A letter is shown and named. It runs to a fixed length, the same way every time, and stops on its own. This is the interaction the teachers scored highest, and it is the least impressive thing on the bench.",
+    stage: "Letter card &mdash; what the child sees and hears" },
+  { k: "content", name: "Teacher-assigned content", sub: "the tablet",
+    title: "Teacher-assigned content",
+    prov: "The teacher builds the session on a tablet and pushes it to the kit over the local network. The device chooses nothing. It scored well on everything except one criterion, and that criterion is the reason it is not the answer on its own.",
+    stage: "Teacher tablet &mdash; the session queue" },
+  { k: "gantry", name: "Guided-writing gantry", sub: "the machine",
+    title: "Guided-writing gantry",
+    prov: "A two-axis stage on lead screws traces the letter, and in the version we wanted, guided a child's hand along it. It is the part of the kit we spent the most time on, and the part that was rejected.",
+    stage: "Two-axis stage &mdash; GRBL over the HC-05 link" }
+];
+
+/* dim = the six dimensions the fourteen criteria average into.
+   v   = verdict per interaction: met | cond | not.
+   say = what a teacher said, where they said something. */
+const CRITERIA = [
+  { n: "01", dim: "Safety in use", c: "Stops the instant a child withdraws",
+    v: { prompt: "met", content: "met", gantry: "not" },
+    say: { gantry: "It finishes what it started. That is the whole objection." } },
+  { n: "02", dim: "Safety in use", c: "No part can hold or trap a hand",
+    v: { prompt: "met", content: "met", gantry: "not" },
+    say: { gantry: "A machine holding a child who wants to stop is the problem, not the feature." } },
+  { n: "03", dim: "Safety in use", c: "No pinch points or exposed drive",
+    v: { prompt: "met", content: "met", gantry: "cond" },
+    say: { gantry: "Guardable. Nobody has guarded it." } },
+  { n: "04", dim: "Predictable response", c: "The same input produces the same response",
+    v: { prompt: "met", content: "met", gantry: "met" } },
+  { n: "05", dim: "Predictable response", c: "Nothing starts unless the teacher starts it",
+    v: { prompt: "met", content: "met", gantry: "met" } },
+  { n: "06", dim: "Teacher control", c: "A teacher can stop it from where they stand",
+    v: { prompt: "met", content: "met", gantry: "met" },
+    say: { gantry: "A stop button is not the same as a child being able to leave." } },
+  { n: "07", dim: "Teacher control", c: "Content is set by the teacher, not the device",
+    v: { prompt: "met", content: "met", gantry: "met" } },
+  { n: "08", dim: "Teacher control", c: "It can be paused mid-activity and resumed",
+    v: { prompt: "met", content: "met", gantry: "met" } },
+  { n: "09", dim: "Child independence", c: "A child can use it without an adult holding them",
+    v: { prompt: "met", content: "not", gantry: "not" },
+    say: { content: "Somebody has to drive the tablet. That somebody is me.",
+           gantry: "The hand in the jig is the product. There is no version of this a child does alone." } },
+  { n: "10", dim: "Child independence", c: "A child can leave the activity at any moment",
+    v: { prompt: "met", content: "met", gantry: "not" },
+    say: { gantry: "Leaving has to be the child's decision, taken with their arm." } },
+  { n: "11", dim: "Robustness", c: "Surfaces can be wiped down between children",
+    v: { prompt: "cond", content: "cond", gantry: "not" },
+    say: { gantry: "It is made of wood. Everything gets mouthed.",
+           prompt: "The screen wipes. The case it sits in does not." } },
+  { n: "12", dim: "Robustness", c: "It survives a fall from table height",
+    v: { prompt: "met", content: "cond", gantry: "cond" },
+    say: { gantry: "It survives. It does not stay square, and out of square it drags." } },
+  { n: "13", dim: "Cost to a centre", c: "Affordable to a public centre under ₹5,000",
+    v: { prompt: "cond", content: "cond", gantry: "cond" },
+    say: { prompt: "Only if it runs on a tablet the centre already owns." } },
+  { n: "14", dim: "Cost to a centre", c: "Repairable with parts available locally",
+    v: { prompt: "met", content: "met", gantry: "cond" },
+    say: { gantry: "The steppers and the driver board, yes. The lead screws, not here." } }
+];
+
+/* Letter strokes on a 0–100 grid, y down. Our own paths; the
+   G-code beside the plot is generated from them at render time,
+   so the machine and the picture cannot disagree. */
+const LETTERS = {
+  A: { word: "apple",  s: [[[10,90],[50,10],[90,90]], [[27,55],[73,55]]] },
+  B: { word: "ball",   s: [[[22,10],[22,90]], [[22,10],[62,10],[76,27],[62,48],[22,48]], [[22,48],[68,48],[82,69],[68,90],[22,90]]] },
+  C: { word: "cat",    s: [[[80,26],[60,10],[36,14],[20,35],[20,65],[36,86],[60,90],[80,74]]] },
+  D: { word: "drum",   s: [[[22,10],[22,90]], [[22,10],[58,13],[80,36],[80,64],[58,87],[22,90]]] },
+  E: { word: "egg",    s: [[[80,10],[22,10],[22,90],[80,90]], [[22,50],[66,50]]] },
+  F: { word: "fish",   s: [[[80,10],[22,10],[22,90]], [[22,48],[66,48]]] },
+  G: { word: "goat",   s: [[[80,26],[60,10],[36,14],[20,35],[20,65],[36,86],[60,90],[80,74],[80,54],[56,54]]] },
+  H: { word: "hat",    s: [[[22,10],[22,90]], [[80,10],[80,90]], [[22,50],[80,50]]] },
+  O: { word: "orange", s: [[[50,10],[26,25],[18,50],[26,75],[50,90],[74,75],[82,50],[74,25],[50,10]]] },
+  T: { word: "tree",   s: [[[15,12],[85,12]], [[50,12],[50,90]]] }
+};
+const KEYS = Object.keys(LETTERS);
+
+/* The session a teacher pushed to the kit from the tablet. */
+const SESSION = ["A", "T", "C", "H", "O"];
+
+const state = { tab: "prompt", letter: "A", playing: false, stopped: null, step: 0, qi: 0 };
+
+/* ============================================================
+   DERIVED
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tabOf = (k) => INTERACTIONS.find((i) => i.k === k);
+const tally = (k) => {
+  const t = { met: 0, cond: 0, not: 0 };
+  CRITERIA.forEach((c) => t[c.v[k]]++);
+  return t;
+};
+
+/* The machine path, resampled so the pen moves at one speed and
+   the G-code line highlighted is always the line being run. */
+function buildPath(letter) {
+  const L = LETTERS[letter], steps = [], g = [];
+  const mm = (v) => (v * 1.2).toFixed(1);
+  const gy = (v) => ((100 - v) * 1.2).toFixed(1);
+  g.push("; " + letter + " — generated from the stroke set");
+  g.push("G21 G90 ; mm, absolute");
+  L.s.forEach((stroke, si) => {
+    const a = stroke[0];
+    g.push("M5 ; pen up");
+    g.push(`G0 X${mm(a[0])} Y${gy(a[1])}`);
+    steps.push({ x: a[0], y: a[1], pen: false, s: si, g: g.length - 1 });
+    g.push("M3 S90 ; pen down");
+    const down = g.length - 1;
+    steps.push({ x: a[0], y: a[1], pen: true, s: si, g: down });
+    for (let i = 1; i < stroke.length; i++) {
+      const p0 = stroke[i - 1], p1 = stroke[i];
+      g.push(`G1 X${mm(p1[0])} Y${gy(p1[1])} F600`);
+      const gi = g.length - 1;
+      const d = Math.hypot(p1[0] - p0[0], p1[1] - p0[1]);
+      const n = Math.max(2, Math.round(d / 1.6));
+      for (let t = 1; t <= n; t++) {
+        steps.push({ x: p0[0] + (p1[0] - p0[0]) * (t / n), y: p0[1] + (p1[1] - p0[1]) * (t / n), pen: true, s: si, g: gi });
+      }
+    }
+  });
+  g.push("M5 ; pen up");
+  g.push("G0 X0 Y0 ; park");
+  steps.push({ x: 0, y: 100, pen: false, s: L.s.length, g: g.length - 1 });
+  return { steps, g };
+}
+let PATH = buildPath("A");
+
+/* ============================================================
+   CHROME
+   ============================================================ */
+function renderTabs() {
+  $("tabs").innerHTML = INTERACTIONS.map((i) =>
+    `<button data-tab="${i.k}" aria-pressed="${state.tab === i.k}"><b>${esc(i.name)}</b><span>${esc(i.sub)}</span></button>`).join("");
+  document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => setTab(b.dataset.tab)));
+  const t = tally(state.tab);
+  const chip = $("verdictChip");
+  chip.className = "chip " + (t.not === 0 ? "good" : t.not > 3 ? "crit" : "warn");
+  chip.innerHTML = `<span class="dot ${t.not === 0 ? "good" : t.not > 3 ? "crit" : "warn"}"></span><b>${t.met}</b> of 14 met &middot; ${t.not} not met`;
+  $("paramNote").innerHTML = state.tab === "gantry"
+    ? `<b>Five criteria not met, and four of the five are the same criterion twice over:</b> what happens when a child wants it to stop. Press the red button below and watch the stage, not the scoresheet.`
+    : `<b>Nothing here holds a child.</b> Press the red button below: the interaction ends because there was never anything to disengage from.`;
+}
+
+function setTab(k) {
+  if (state.tab === k) return;
+  stopRun();
+  state.tab = k; state.stopped = null; state.step = 0; state.qi = 0;
+  render();
+}
+
+function renderCriteria() {
+  const k = state.tab, t = tally(k);
+  $("critScore").textContent = t.met;
+  $("crit").innerHTML = CRITERIA.map((c) => {
+    const v = c.v[k], say = c.say && c.say[k];
+    return `<div class="crow ${v}">
+      <span class="n">${c.n}</span>
+      <div><div class="c">${esc(c.c)}</div><div class="d">${esc(c.dim)}</div>
+        ${say ? `<div class="say">&ldquo;${esc(say)}&rdquo;</div>` : ""}</div>
+      <span class="badge ${v}">${v === "met" ? "met" : v === "cond" ? "with a condition" : "not met"}</span>
+    </div>`;
+  }).join("");
+}
+</script>
+<script>
+/* ============================================================
+   THE THREE INTERACTIONS
+   ============================================================ */
+function keypad() {
+  return `<div class="keys" role="group" aria-label="Letter">${KEYS.map((k) =>
+    `<button data-key="${k}" aria-pressed="${state.letter === k}">${k}</button>`).join("")}</div>`;
+}
+function bindKeys() {
+  document.querySelectorAll("[data-key]").forEach((b) => (b.onclick = () => {
+    state.letter = b.dataset.key; state.stopped = null;
+    if (state.tab === "gantry") { PATH = buildPath(state.letter); state.step = 0; }
+    render(); if (state.tab === "gantry") startRun(); else playPrompt();
+  }));
+}
+
+/* ---- 1. the letter card ---- */
+function renderPrompt() {
+  const L = LETTERS[state.letter];
+  $("stageTitle").innerHTML = tabOf("prompt").stage;
+  $("stageBadge").textContent = "fixed length";
+  $("stage").innerHTML = `
+    <div class="prompt ${state.playing ? "" : "idle"}">
+      <div class="glyph">${state.letter}</div>
+      <div>
+        <div class="word">${state.letter} for ${esc(L.word)}</div>
+        <div class="sub">${state.playing ? "Playing — 4 seconds, the same every time." : state.stopped ? "Ended." : "Ready. Choose a letter to play it."}</div>
+        <div class="speaker"><span class="wave ${state.playing ? "on" : ""}"><i></i><i></i><i></i><i></i><i></i></span>${state.playing ? "speaking" : "silent"}</div>
+      </div>
+    </div>
+    <div style="margin-top:16px">${keypad()}</div>
+    <p class="note"><b>Fixed length, fixed order, no response to the child.</b> The teachers scored predictability at the top: a child managing surprise all day does not need a device that reacts to them.</p>`;
+  bindKeys();
+}
+let promptT;
+function playPrompt() {
+  clearTimeout(promptT); state.playing = true; state.stopped = null; renderPrompt();
+  promptT = setTimeout(() => { state.playing = false; renderPrompt(); }, 4000);
+}
+
+/* ---- 2. the teacher's tablet ---- */
+function renderContent() {
+  $("stageTitle").innerHTML = tabOf("content").stage;
+  $("stageBadge").textContent = "local network";
+  $("stage").innerHTML = `
+    <div class="queue">${SESSION.map((k, i) => {
+      const cls = state.stopped ? (i < state.qi ? "done" : "") : i < state.qi ? "done" : i === state.qi ? "now" : "";
+      return `<div class="qrow ${cls}"><span class="g">${k}</span><span class="w">${k} for ${esc(LETTERS[k].word)}</span>
+        <span class="mono" style="font-size:10.5px;color:var(--faint)">${i < state.qi ? "done" : i === state.qi && !state.stopped ? "now" : "queued"}</span></div>`;
+    }).join("")}</div>
+    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn sm" id="advBtn"${state.qi >= SESSION.length || state.stopped ? " disabled" : ""}>Advance the session</button>
+      <button class="btn sm ghost" id="resetQ">Reset the queue</button>
+      <span class="mono" style="font-size:11px;color:var(--faint);align-self:center">assigned by the teacher, pushed over the local network</span>
+    </div>
+    <p class="note"><b>The device chooses nothing.</b> Which letters, in which order, for how long — all of it is set on the tablet before the session starts. That is criterion 07, and it is why this interaction scored where it did on teacher control and lost a point on independence.</p>`;
+  $("advBtn").onclick = () => { if (state.qi < SESSION.length) state.qi++; state.stopped = null; render(); };
+  $("resetQ").onclick = () => { state.qi = 0; state.stopped = null; render(); };
+}
+
+/* ---- 3. the gantry ---- */
+function renderGantry() {
+  $("stageTitle").innerHTML = tabOf("gantry").stage;
+  $("stageBadge").textContent = "grbl · 600 mm/min";
+  const L = LETTERS[state.letter];
+  const guide = L.s.map((st) => `<polyline points="${st.map((p) => p[0] + "," + p[1]).join(" ")}" fill="none" stroke="#23232d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  $("stage").innerHTML = `
+    <div class="gantry">
+      <div>
+        <div class="plot">
+          <svg viewBox="-6 -6 112 112" width="100%" style="display:block;aspect-ratio:1/1">
+            <rect x="-6" y="-6" width="112" height="112" fill="none"/>
+            <g id="guide">${guide}</g>
+            <g id="drawn"></g>
+            <g id="pen"></g>
+          </svg>
+        </div>
+        <div class="axis">
+          <span>X <b id="ax">0.0</b> mm</span><span>Y <b id="ay">0.0</b> mm</span>
+          <span>pen <b id="apen">up</b></span><span>stroke <b id="astroke">—</b> of ${L.s.length}</span>
+        </div>
+        <div style="margin-top:14px">${keypad()}</div>
+      </div>
+      <div>
+        <div class="gcode" id="gcode"></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn sm" id="runBtn">${state.playing ? "Running…" : "Trace the letter"}</button>
+          <button class="btn sm ghost" id="rewind">Rewind</button>
+        </div>
+      </div>
+    </div>
+    <p class="note"><b>Lead screws, not belts.</b> We chose them for precision. A belt slips under load, which we treated as a defect — and a teacher pointed out that slipping is the only reason a belt-driven version would have been arguable at all.</p>`;
+  $("gcode").innerHTML = PATH.g.map((l, i) => `<div data-g="${i}">${esc(l)}</div>`).join("");
+  $("runBtn").onclick = startRun;
+  $("rewind").onclick = () => { stopRun(); state.step = 0; state.stopped = null; render(); };
+  bindKeys();
+  paint();
+}
+
+function paint() {
+  const i = Math.min(state.step, PATH.steps.length - 1), s = PATH.steps[i];
+  const drawn = $("drawn"); if (!drawn) return;
+  const byStroke = {};
+  for (let j = 0; j <= i; j++) { const p = PATH.steps[j]; if (!p.pen) continue; (byStroke[p.s] = byStroke[p.s] || []).push(p.x + "," + p.y); }
+  drawn.innerHTML = Object.values(byStroke).map((pts) =>
+    `<polyline points="${pts.join(" ")}" fill="none" stroke="#5b7cfa" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  $("pen").innerHTML = `<circle cx="${s.x}" cy="${s.y}" r="${s.pen ? 3.1 : 2.2}" fill="${s.pen ? "#f2f3f6" : "#4a4e5e"}"/>`;
+  $("ax").textContent = (s.x * 1.2).toFixed(1);
+  $("ay").textContent = ((100 - s.y) * 1.2).toFixed(1);
+  $("apen").textContent = s.pen ? "down" : "up";
+  $("astroke").textContent = s.pen ? s.s + 1 : "—";
+  const gc = $("gcode");
+  gc.querySelectorAll("div").forEach((d, gi) => { d.className = gi < s.g ? "done" : gi === s.g ? "cur" : ""; });
+  const cur = gc.querySelector("div.cur");
+  if (cur) gc.scrollTop = Math.max(0, cur.offsetTop - 100);
+}
+
+let runT;
+function startRun() {
+  stopRun(); state.stopped = null; state.playing = true; state.step = 0;
+  $("runBtn").textContent = "Running…";
+  runT = setInterval(() => {
+    state.step++;
+    if (state.step >= PATH.steps.length - 1) { state.step = PATH.steps.length - 1; stopRun(); render(); return; }
+    paint();
+  }, 26);
+}
+function stopRun() { clearInterval(runT); runT = null; state.playing = false; clearTimeout(promptT); }
+</script>
+<script>
+/* ============================================================
+   THE TEST THE REVIEW TURNED ON
+   ============================================================ */
+function pullAway() {
+  if (state.tab === "prompt") {
+    stopRun(); state.playing = false; state.stopped = "pull"; render();
+    verdict("good", "<b>The prompt ends.</b> There was nothing to disengage from — the child was looking at a card, not attached to a machine. Criteria 01, 02 and 10 are met for exactly this reason, and it is why this is the interaction both teachers would put in front of a child.");
+    return;
+  }
+  if (state.tab === "content") {
+    stopRun(); state.stopped = "pull"; render();
+    verdict("good", "<b>The session stops where it is.</b> The tablet is the only thing running and the teacher is holding it. What this interaction loses is criterion 09 — a child cannot run it alone, because somebody has to drive the tablet.");
+    return;
+  }
+  /* the gantry: it finishes the stroke, because it cannot know */
+  if (!state.playing && state.step === 0) { toast("Trace a letter first — the test only means something while the stage is moving."); return; }
+  const from = PATH.steps[Math.min(state.step, PATH.steps.length - 1)];
+  const endOfStroke = PATH.steps.findIndex((p, i) => i > state.step && p.s !== from.s);
+  const target = endOfStroke === -1 ? PATH.steps.length - 1 : endOfStroke - 1;
+  stopRun(); state.stopped = "pull"; state.playing = true;
+  runT = setInterval(() => {
+    state.step++;
+    if (state.step >= target) { state.step = target; stopRun(); state.playing = false; render();
+      verdict("crit", "<b>The stage completed the stroke.</b> A lead screw carries the same force whether the hand in the jig is concentrating or leaving, and nothing in this design reads the difference. This is criterion 01, marked <b>not met</b> by both teachers, and criteria 02, 09 and 10 fail for the same reason. We had a stop button. They wanted a machine where stopping <i>is</i> the child pulling their hand away — and that is a different machine, which we did not build.");
+      return; }
+    paint();
+  }, 26);
+  render();
+}
+
+function teacherStop() {
+  if (state.tab === "gantry") {
+    if (!state.playing && state.step === 0) { toast("Trace a letter first."); return; }
+    stopRun(); state.stopped = "teacher"; render();
+    verdict("", "<b>The stage halts mid-stroke.</b> The button works, and it is criterion 06 — met. It is also the distinction the review turned on: a teacher pressing stop is not a child being able to leave. One of those is available to everyone in the room; the other is available to the person holding the button.");
+    return;
+  }
+  stopRun(); state.playing = false; state.stopped = "teacher"; render();
+  verdict("", "<b>Stopped.</b> On this interaction the teacher's button and the child pulling away do the same thing, which is the point &mdash; there is only one way for it to end and both of them have it.");
+}
+
+function verdict(kind, html) {
+  $("verdict").innerHTML = `<div class="verdict ${kind}">${html}</div>`;
+}
+
+let toastT;
+function toast(msg, crit) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (crit ? " crit" : "");
+  clearTimeout(toastT); toastT = setTimeout(() => (t.className = "toast"), 4200);
+}
+
+/* ============================================================
+   RENDER + INIT
+   ============================================================ */
+function render() {
+  const t = tabOf(state.tab);
+  $("paneTitle").textContent = t.title;
+  $("paneProv").textContent = t.prov;
+  renderTabs();
+  ({ prompt: renderPrompt, content: renderContent, gantry: renderGantry }[state.tab])();
+  renderCriteria();
+}
+
+$("pullBtn").onclick = pullAway;
+$("stopBtn").onclick = teacherStop;
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  const tab = q.get("i"), letter = (q.get("letter") || "").toUpperCase();
+  if (tab && INTERACTIONS.some((i) => i.k === tab)) state.tab = tab;
+  if (LETTERS[letter]) state.letter = letter;
+  PATH = buildPath(state.letter);
+  render();
+  if (state.tab === "gantry" && q.get("test") === "pull") {
+    /* Land mid-stroke with the stage moving, then run the test the
+       review turned on — so the link opens the state it pictures. */
+    const mid = PATH.steps.findIndex((p, i) => i > 6 && p.pen && p.s === 0 && i > PATH.steps.length * 0.18);
+    state.step = mid > 0 ? mid : 12;
+    paint(); pullAway();
+  } else if (q.get("run") === "1" && state.tab === "gantry") startRun();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

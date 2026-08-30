@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sludge Test Lane — The Operating Envelope</title>
+<meta name="description" content="Interactive recreation of the Ricky Kids sludge test lane: a density dial, three drive configurations, and the traction limit below which a track fluidises what it stands on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Shared shell for the Ricky Kids demos. Palette and type are
+   inherited from the portfolio's case-study system so the demos
+   read as one family with the case studies that link them.
+   Single-theme by design: these are bench tools, dark, with
+   every colour painted so nothing borrows a host background.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--body);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh; max-width: 1340px; margin: 0 auto;
+  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  display: flex; flex-direction: column;
+}
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+
+.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params .spacer { flex: 1; }
+
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] span { color: var(--accent); }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+
+.note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.note b { color: var(--body); font-weight: 500; }
+.note.warn { border-left-color: var(--warn); }
+.note.crit { border-left-color: var(--crit); }
+.note.good { border-left-color: var(--good); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.sheet thead th {
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
+table.sheet tfoot .num { text-align: right; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
+.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+.meterbar.crit > i { background: var(--crit); }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-color: var(--crit-dim); }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+
+<style>
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 18px; align-items: start; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+.dialbar { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+.dialbar .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.dialbar .val { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1; }
+.dialbar .unit { font-size: 13px; color: var(--muted); }
+.dialbar .medium { margin-left: auto; font-size: 13px; color: var(--body); }
+
+.scale { position: relative; height: 54px; margin-top: 18px; }
+.scale .rule { position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--surface-3); }
+.scale .bound { position: absolute; top: 0; bottom: 18px; width: 2px; background: var(--crit); }
+.scale .bound span { position: absolute; top: -17px; left: -1px; font-family: var(--mono); font-size: 10px; color: var(--crit); white-space: nowrap; }
+.scale .tick { position: absolute; top: 4px; width: 1px; height: 10px; background: var(--faint); }
+.scale .tick span { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+.bands { display: flex; flex-direction: column; gap: 12px; }
+.band { display: grid; grid-template-columns: 190px 1fr 118px; gap: 14px; align-items: center; }
+.band .n { font-size: 13.5px; color: var(--body); }
+.band .n small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+.band .lane { position: relative; height: 26px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); }
+.band .env { position: absolute; top: 0; bottom: 0; border-radius: 5px; background: rgba(91,124,250,.18); border: 1px solid var(--accent-dim); }
+.band .env.own { background: var(--good-wash); border-color: var(--good-dim); }
+.band .run { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 9px; height: 9px; border-radius: 50%; }
+.band .run.ok { background: var(--good); } .band .run.no { background: var(--crit); }
+.band .now { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); }
+.band .st { font-family: var(--mono); font-size: 11.5px; text-align: right; }
+.band .st.ok { color: var(--good); } .band .st.no { color: var(--crit); }
+
+.tank { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 12px; }
+.sink { display: flex; gap: 14px; align-items: baseline; margin-top: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+.sink b { color: var(--ink); font-weight: 500; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Field robotics</span>
+        <h1>Sludge test lane &mdash; the operating envelope</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>Test tank &middot; <b>27 runs</b></span>
+      <span class="chip"><span class="dot"></span>3 media &middot; 3 drives &middot; 3 runs each</span>
+      <span class="chip" id="stateChip"></span>
+    </div>
+    <div class="params">
+      <span class="plabel">Medium</span>
+      <div class="segmented" id="media" role="group" aria-label="Medium"></div>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot crit"></span>Traction limit <b>1.15 g/cm³</b></span>
+    </div>
+    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
+      <b>The project name assumes traversing is possible.</b> The cheapest thing we could do was spend the first quarter building a tank and trying to disprove our own title. Move the dial below the dashed line and run the lane.</p>
+  </header>
+
+  <main class="pane">
+    <div class="pane-head">
+      <p class="kicker">One lane, one vehicle, three graded sludge analogues</p>
+      <h2>What the medium does to the drive</h2>
+      <p class="provenance">The variable was the medium; the vehicle stayed fixed. A drive that has to be hauled back on its tether has <b>added an entry to the job rather than removed one</b> — that was the pass mark, agreed before any of this was built.</p>
+    </div>
+
+    <div class="dialbar">
+      <div class="top">
+        <span class="val" id="dVal">1.02</span><span class="unit">g/cm³ &mdash; density of the medium in the lane</span>
+        <span class="medium" id="dMedium"></span>
+      </div>
+      <input type="range" id="dial" min="95" max="165" value="102" step="1" style="width:100%" aria-label="Medium density">
+      <div class="scale" id="scale"></div>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="bands" id="bands"></div>
+        <div id="verdict" style="margin-top:16px"></div>
+        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+          <button class="btn primary" id="runBtn">Run the lane</button>
+          <button class="btn sm" id="revBtn" disabled>Reverse out of the stall</button>
+          <span class="mono" style="font-size:11px;color:var(--faint);align-self:center">tracked drive, 9 runs per medium</span>
+        </div>
+      </div>
+      <div>
+        <div class="tank">
+          <svg viewBox="0 0 240 150" width="100%" style="display:block">
+            <defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+              <rect width="8" height="8" fill="#12121a"/><line x1="0" y1="0" x2="0" y2="8" stroke="#1b1b24" stroke-width="4"/></pattern></defs>
+            <rect x="4" y="4" width="232" height="142" fill="none" stroke="#23232d"/>
+            <rect id="med" x="5" y="60" width="230" height="85" fill="url(#hatch)"/>
+            <line id="surface" x1="5" y1="60" x2="235" y2="60" stroke="#3a3a4a" stroke-width="1.5"/>
+            <g id="veh"></g>
+            <line id="trackline" x1="0" y1="0" x2="0" y2="0" stroke="var(--crit)" stroke-dasharray="3 3" stroke-width="1"/>
+          </svg>
+          <div class="sink">
+            <span>sinkage <b id="sinkV">—</b> mm</span><span>track height <b>60</b> mm</span><span id="sinkState">idle</span>
+          </div>
+        </div>
+        <p class="note" id="sinkNote"><b>Sinkage is measured while the drive runs, not after it.</b> In six of nine tracked runs it never stabilised — the drive kept turning, the medium kept thinning, and the vehicle kept going down.</p>
+        <div class="tiles" style="grid-template-columns:1fr;margin-top:16px">
+          <div class="tile crit"><div class="v">2 of 9</div><div class="l">Tracked stalls the vehicle recovered from unaided (guardrail)</div><div class="p">reversing dug it in deeper in 7 of 9</div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>The test lane from the case study, on one axis. <b>The vehicle drawings and the component list are the project's real ones</b>; the tank, the three analogues, the densities, the sinkage and the run counts are invented for this sample. Nothing here was tested in a real sewer.</p>
+      </div>
+      <div>
+        <h5>The finding, in one move</h5>
+        <p>Put the dial at the fresh analogue and run the lane with tracks. The medium thins under the drive, sinkage passes the track height, and the vehicle stops being on a surface and starts being in a fluid.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>The band and the runs are two different things.</b> The tracked envelope is where a track can hold in a medium left alone. The dots are where it actually completed the lane — and the two only meet at the settled analogue.</p>
+      </div>
+    </div>
+    <p class="conf">Student research at SRM Kattankulathur with a collaborator at Jadavpur University, entered in the 2021-22 Technology Infusion Grand Challenge. The vehicle was modelled and costed and no version of it was ever put into a live sewer. Every density, sinkage figure, run count and success rate on this page is invented and reconciled with the case study.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, reconciled with the case study.
+   ============================================================ */
+const MIN = 0.95, MAX = 1.65, BOUND = 1.15, TRACK_H = 60;
+
+const MEDIA = [
+  { k: "fresh", n: "Fresh", d: 1.02, sink: 118, label: "Fresh sludge analogue" },
+  { k: "part", n: "Part-settled", d: 1.18, sink: 74, label: "Part-settled analogue" },
+  { k: "settled", n: "Settled", d: 1.42, sink: 31, label: "Settled analogue" }
+];
+
+/* from / to is the modelled envelope; runs are what actually
+   completed the lane, and the difference between them is the
+   whole reason the vehicle in the drawings has no wheels. */
+const DRIVES = [
+  { k: "track", n: "Tracked drive", sub: "the design we started with", from: 1.15, to: 1.60, own: false,
+    runs: { fresh: false, part: false, settled: true } },
+  { k: "paddle", n: "Paddle wheels and thrusters", sub: "the configuration in the drawings", from: 0.98, to: 1.30, own: true,
+    runs: { fresh: true, part: true, settled: false } },
+  { k: "thrust", n: "Thrusters alone", sub: "fine in the fluid regime", from: 0.98, to: 1.12, own: false,
+    runs: { fresh: true, part: false, settled: false } }
+];
+
+const state = { d: 1.02, running: false, stalled: false, sink: 0, t: 0 };
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const posOf = (d) => ((d - MIN) / (MAX - MIN)) * 100;
+const nearest = () => MEDIA.reduce((a, b) => (Math.abs(b.d - state.d) < Math.abs(a.d - state.d) ? b : a));
+const onMedium = () => MEDIA.find((m) => Math.abs(m.d - state.d) < 0.005);
+
+/* Sinkage between the mixed media, interpolated on density and
+   clamped at the ends. The three anchors are the measured ones. */
+function sinkAt(d) {
+  const pts = MEDIA.slice().sort((a, b) => a.d - b.d);
+  if (d <= pts[0].d) return pts[0].sink + (pts[0].d - d) * 260;
+  if (d >= pts[pts.length - 1].d) return Math.max(6, pts[pts.length - 1].sink - (d - pts[pts.length - 1].d) * 60);
+  for (let i = 1; i < pts.length; i++) {
+    if (d <= pts[i].d) {
+      const t = (d - pts[i - 1].d) / (pts[i].d - pts[i - 1].d);
+      return pts[i - 1].sink + (pts[i].sink - pts[i - 1].sink) * t;
+    }
+  }
+  return 60;
+}
+</script>
+<script>
+function renderMedia() {
+  $("media").innerHTML = MEDIA.map((m) =>
+    `<button data-m="${m.k}" aria-pressed="${onMedium() && onMedium().k === m.k}"><b>${esc(m.n)}</b><span>${m.d.toFixed(2)} g/cm³</span></button>`).join("");
+  document.querySelectorAll("[data-m]").forEach((b) => (b.onclick = () => {
+    state.d = MEDIA.find((m) => m.k === b.dataset.m).d;
+    $("dial").value = Math.round(state.d * 100); reset(); render();
+  }));
+}
+
+function renderScale() {
+  $("scale").innerHTML =
+    `<div class="rule"></div>
+     <div class="bound" style="left:${posOf(BOUND)}%"><span>1.15 &mdash; traction limit</span></div>` +
+    MEDIA.map((m) => `<div class="tick" style="left:${posOf(m.d)}%"><span>${esc(m.n)}</span></div>`).join("");
+}
+
+function renderBands() {
+  $("bands").innerHTML = DRIVES.map((dr) => {
+    const inEnv = state.d >= dr.from && state.d <= dr.to;
+    const m = onMedium();
+    const observed = m ? dr.runs[m.k] : null;
+    const ok = observed === null ? inEnv : observed;
+    return `<div class="band">
+      <span class="n">${esc(dr.n)}<small>${esc(dr.sub)}</small></span>
+      <span class="lane">
+        <span class="env${dr.own ? " own" : ""}" style="left:${posOf(dr.from)}%;width:${posOf(dr.to) - posOf(dr.from)}%"></span>
+        ${MEDIA.map((mm) => `<span class="run ${dr.runs[mm.k] ? "ok" : "no"}" style="left:${posOf(mm.d)}%" title="${esc(mm.label)} — ${dr.runs[mm.k] ? "completed the lane" : "did not complete"}"></span>`).join("")}
+        <span class="now" style="left:${posOf(state.d)}%"></span>
+      </span>
+      <span class="st ${ok ? "ok" : "no"}">${observed === null ? (inEnv ? "inside envelope" : "outside envelope") : observed ? "completed" : "did not complete"}</span>
+    </div>`;
+  }).join("");
+}
+
+function renderVerdict() {
+  const m = onMedium(), s = sinkAt(state.d);
+  let html;
+  if (state.d < BOUND) {
+    html = `<div class="note crit"><b>Below the traction limit.</b> A track transmits weight into the medium, the medium thins where the weight is, and the track sinks into what it just thinned. At ${state.d.toFixed(2)} g/cm³ the modelled sinkage is <b>${Math.round(s)} mm</b> against a ${TRACK_H} mm track — the tracks are touching nothing solid.</div>`;
+  } else if (m && m.k === "part") {
+    html = `<div class="note warn"><b>Inside the tracked envelope, and it still did not complete the lane.</b> The band says a track can hold at 1.18 g/cm³ in a medium left alone. A running track does not leave it alone: the margin here is 0.03 g/cm³ against 0.27 at the settled analogue, and the drive spent it in the first metre. Sinkage measured <b>74 mm</b> against a ${TRACK_H} mm track.</div>`;
+  } else {
+    html = `<div class="note good"><b>Above the traction limit with margin.</b> Sinkage at ${state.d.toFixed(2)} g/cm³ is <b>${Math.round(s)} mm</b>, inside the ${TRACK_H} mm track height, so the drive is standing on something. This is the only medium of the three in which the tracked lane was completed.</div>`;
+  }
+  $("verdict").innerHTML = html;
+  const c = $("stateChip");
+  const below = state.d < BOUND;
+  c.className = "chip " + (below ? "crit" : "good");
+  c.innerHTML = `<span class="dot ${below ? "crit" : "good"}"></span>${below ? "Tracks fluidise the medium" : "Tracks can hold"}`;
+}
+
+function drawTank() {
+  const s = state.running || state.stalled ? state.sink : sinkAt(state.d);
+  const surfaceY = 60;
+  const mmToPx = 0.42;                 /* 150 px of tank ≈ 355 mm of depth */
+  const bodyY = surfaceY + s * mmToPx; /* the vehicle rides down as it sinks */
+  const x = 30 + (state.running || state.stalled ? state.t : 0) * 1.55;
+  $("veh").innerHTML =
+    `<rect x="${x - 22}" y="${bodyY - 26}" width="44" height="18" rx="3" fill="#1c1c25" stroke="#3a3a4a"/>
+     <rect x="${x - 26}" y="${bodyY - 8}" width="52" height="9" rx="4" fill="${state.d < BOUND ? "#5e3628" : "#235c4b"}" stroke="${state.d < BOUND ? "#d0745a" : "#3fae8b"}"/>
+     <circle cx="${x - 15}" cy="${bodyY - 3.5}" r="3" fill="#0b0b10"/><circle cx="${x + 15}" cy="${bodyY - 3.5}" r="3" fill="#0b0b10"/>`;
+  const tl = $("trackline");
+  tl.setAttribute("x1", 5); tl.setAttribute("x2", 235);
+  tl.setAttribute("y1", surfaceY + TRACK_H * mmToPx); tl.setAttribute("y2", surfaceY + TRACK_H * mmToPx);
+  $("sinkV").textContent = Math.round(s);
+  $("sinkState").textContent = state.stalled ? "stalled — tracks buried" : state.running ? "running" : s > TRACK_H ? "would bury the tracks" : "idle";
+  $("sinkState").style.color = s > TRACK_H ? "var(--crit)" : "var(--muted)";
+}
+
+let runT;
+function runLane() {
+  clearInterval(runT);
+  state.running = true; state.stalled = false; state.t = 0; state.sink = sinkAt(state.d) * 0.35;
+  $("revBtn").disabled = true; $("runBtn").textContent = "Running…"; $("runBtn").disabled = true;
+  const target = sinkAt(state.d);
+  runT = setInterval(() => {
+    state.t += 1.6;
+    /* below the limit the drive keeps thinning what it stands on,
+       so sinkage does not settle — it follows the drive */
+    state.sink += state.d < BOUND ? (target - state.sink) * 0.06 + 0.9 : (target - state.sink) * 0.10;
+    drawTank();
+    const buried = state.sink >= TRACK_H;
+    if (buried && state.d < BOUND) { stall(); return; }
+    if (state.t >= 118) { finish(); return; }
+  }, 40);
+}
+function stall() {
+  clearInterval(runT); state.running = false; state.stalled = true;
+  $("runBtn").textContent = "Run the lane"; $("runBtn").disabled = false; $("revBtn").disabled = false;
+  drawTank();
+  $("verdict").innerHTML = `<div class="note crit"><b>Stalled at ${Math.round(state.t)}% of the lane.</b> Sinkage passed the ${TRACK_H} mm track height while the drive was still turning. The pass mark was self-recovery, and this run has not met it — <b>seven of nine stalls got worse when we reversed</b>. Try it.</div>`;
+  toast("Stalled. Sinkage passed the track height while the drive was running — the medium under the tracks is thinner than the medium beside them.", true);
+}
+function finish() {
+  clearInterval(runT); state.running = false;
+  $("runBtn").textContent = "Run the lane"; $("runBtn").disabled = false;
+  drawTank(); renderVerdict();
+  toast(`Lane completed at ${state.d.toFixed(2)} g/cm³ — sinkage settled at ${Math.round(state.sink)} mm, inside the ${TRACK_H} mm track height.`);
+}
+function reverseOut() {
+  state.sink += 16; state.t = Math.max(0, state.t - 6); drawTank();
+  $("verdict").innerHTML = `<div class="note crit"><b>Reversing dug it in ${Math.round(state.sink)} mm.</b> The track works the medium in the other direction and thins it further, so the vehicle goes down rather than back. This is the seven-of-nine result, and it is why the guardrail was self-recovery rather than distance travelled: a vehicle that has to be hauled out on its tether has added an entry to the job.</div>`;
+}
+function reset() { clearInterval(runT); state.running = false; state.stalled = false; state.t = 0; state.sink = sinkAt(state.d); $("revBtn").disabled = true; $("runBtn").disabled = false; $("runBtn").textContent = "Run the lane"; }
+
+let toastT;
+function toast(msg, crit) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (crit ? " crit" : "");
+  clearTimeout(toastT); toastT = setTimeout(() => (t.className = "toast"), 5000);
+}
+
+function render() {
+  $("dVal").textContent = state.d.toFixed(2);
+  const m = onMedium();
+  $("dMedium").innerHTML = m ? `<span class="mono" style="color:var(--body)">${esc(m.label)}</span> &middot; sinkage measured <b style="color:var(--ink)">${m.sink} mm</b> over 9 runs` : `<span class="mono" style="color:var(--faint)">between the mixed analogues</span>`;
+  renderMedia(); renderScale(); renderBands(); renderVerdict(); drawTank();
+}
+
+$("dial").oninput = (e) => { state.d = Number(e.target.value) / 100; reset(); render(); };
+$("runBtn").onclick = runLane;
+$("revBtn").onclick = reverseOut;
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  const d = Number(q.get("d"));
+  if (d >= MIN && d <= MAX) state.d = d;
+  const m = MEDIA.find((x) => x.k === q.get("medium"));
+  if (m) state.d = m.d;
+  $("dial").value = Math.round(state.d * 100);
+  reset(); render();
+  if (q.get("run") === "1") runLane();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

@@ -1,0 +1,2161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Lawyer — Patent Drafting Run</title>
+<meta name="description" content="Interactive recreation of the patentgen prototype: the intake containment gate, a drafting run stage by stage, the gap list, claims, the critic ring, §1.84 drawings, the filing package, and the corpus-coverage verdict that decides whether any of it means anything.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   AI Lawyer / patentgen — interactive recreation.
+   Palette and type inherited from the portfolio's case-study
+   system and from the sibling demos, so the family reads as one
+   product. Single dark theme, every colour painted explicitly.
+
+   The prototype's own UI is a light, document-like surface an
+   attorney reads for long stretches. This is the portfolio's
+   dark shell wearing the same information architecture: the same
+   sections, the same badges, the same verbatim blocks, and the
+   same refusal wording.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #b8873f;
+  --accent-dim: #5e4520;
+  --accent-wash: rgba(184, 135, 63, 0.11);
+  --good: #5f9a54;
+  --good-dim: #2f5228;
+  --good-wash: rgba(95, 154, 84, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #c05e4a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(192, 94, 74, 0.12);
+  --blue: #5b7cfa;
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input { font: inherit; color: inherit; }
+a { color: var(--accent); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1320px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 10px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.warnish { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.critish { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.chip.goodish { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip button { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 2px; font-family: var(--mono); font-size: 11.5px; }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.crit { background: var(--crit); }
+
+/* -- View tabs -------------------------------------------- */
+.viewbar { display: flex; gap: 2px; padding: 0 14px; overflow-x: auto; border-bottom: 1px solid var(--line); background: var(--surface); }
+.viewbar button {
+  background: none; border: 0; border-bottom: 2px solid transparent;
+  padding: 10px 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap;
+}
+.viewbar button:hover { color: var(--body); }
+.viewbar button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.viewbar .vb-count { font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-left: 6px; }
+
+/* -- Layout ----------------------------------------------- */
+.main { flex: 1; padding: 22px 20px 60px; }
+.stack > * + * { margin-top: 20px; }
+.lede { max-width: 76ch; color: var(--body); }
+.lede b { color: var(--ink); font-weight: 500; }
+
+h2.sec {
+  margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: baseline; gap: 10px;
+  border-top: 1px solid var(--line); padding-top: 16px;
+}
+h2.sec .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); letter-spacing: 0; }
+h3.sub { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--body); }
+
+.panel { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
+.panel-pad { padding: 16px 18px; }
+.panel + .panel { margin-top: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
+
+.note { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
+.note b { color: var(--body); font-weight: 500; }
+.note code, .lede code { font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
+
+/* -- Alerts ----------------------------------------------- */
+.alert { border-radius: 8px; border: 1px solid; padding: 15px 17px; }
+.alert h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; }
+.alert p { margin: 6px 0 0; font-size: 12.5px; max-width: 80ch; }
+.alert.stop { border-color: var(--crit-dim); background: var(--crit-wash); }
+.alert.stop h3 { color: var(--crit); }
+.alert.warn { border-color: var(--warn-dim); background: var(--warn-wash); }
+.alert.warn h3 { color: var(--warn); }
+.alert.ok { border-color: var(--good-dim); background: var(--good-wash); }
+.alert.ok h3 { color: var(--good); }
+.alert.plain { border-color: var(--line); background: var(--surface-2); }
+.alert.plain h3 { color: var(--ink); }
+
+/* Verbatim output — a refusal, a violation, a check failure. Quoted, never
+   paraphrased: the exact wording is the actionable part, and rewording a
+   legal refusal in friendlier prose loses what makes it actionable. */
+pre.verbatim {
+  margin: 12px 0 0; padding: 12px 14px; overflow-x: auto;
+  white-space: pre-wrap; border: 1px solid var(--line);
+  background: var(--surface-3); border-radius: 6px;
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.65; color: var(--body);
+}
+
+/* -- Badges ----------------------------------------------- */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid var(--line); color: var(--muted);
+  border-radius: 4px; padding: 2px 7px;
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.badge.good { border-color: var(--good-dim); color: var(--good); }
+.badge.warn { border-color: var(--warn-dim); color: var(--warn); }
+.badge.stop { border-color: var(--crit-dim); color: var(--crit); }
+.badge.accent { border-color: var(--accent-dim); color: var(--accent); }
+.badgerow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+
+/* -- Tables ----------------------------------------------- */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.clickable { cursor: pointer; }
+tbody tr.clickable:hover { background: var(--surface-2); }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+tr.selected { background: var(--accent-wash); }
+tfoot td { font-family: var(--mono); color: var(--ink); border-top: 1px solid var(--line); }
+
+/* -- Definition lists ------------------------------------- */
+dl.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 12px 22px; margin: 0; }
+dl.fields dt { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+dl.fields dd { margin: 2px 0 0; color: var(--ink); font-size: 13px; }
+dl.fields dd .mono { font-size: 12px; }
+
+/* -- Buttons ---------------------------------------------- */
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 6px; padding: 8px 14px; font-size: 13px;
+}
+.btn:hover { border-color: var(--accent-dim); background: var(--surface-3); }
+.btn.primary { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--accent); font-weight: 500; }
+.btn.primary:hover { background: rgba(184,135,63,0.18); }
+.btn.small { padding: 5px 10px; font-size: 12px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* -- Forms ------------------------------------------------ */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field > label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+.field input, .field select {
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 6px;
+  padding: 8px 10px; font-size: 13px; color: var(--ink);
+}
+.opt {
+  display: block; border: 1px solid var(--line); border-radius: 8px;
+  padding: 12px 14px; background: var(--surface-2); cursor: pointer;
+}
+.opt + .opt { margin-top: 8px; }
+.opt:hover { border-color: var(--faint); }
+.opt.chosen { border-color: var(--accent-dim); background: var(--accent-wash); }
+.opt-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.opt-head .name { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+.opt-why { margin: 7px 0 0 25px; font-size: 12.5px; color: var(--muted); max-width: 74ch; }
+.opt input { accent-color: var(--accent); }
+
+/* -- Stage / run progress --------------------------------- */
+.stage { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--line-soft); }
+.stage:last-child { border-bottom: 0; }
+.stage .mark { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 10px; color: var(--faint); margin-top: 1px; }
+.stage.done .mark { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.stage.active .mark { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.stage .label { color: var(--muted); font-size: 13px; }
+.stage.done .label, .stage.active .label { color: var(--ink); }
+.stage .t { font-family: var(--mono); font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.substages { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
+.substages li { font-size: 12px; color: var(--faint); display: flex; gap: 8px; align-items: baseline; }
+.substages li.done { color: var(--muted); } .substages li.active { color: var(--accent); }
+
+.bar { height: 4px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); transition: width 0.18s linear; }
+
+.eventlog { max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-3); padding: 10px 12px; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; }
+.eventlog div { color: var(--muted); }
+.eventlog div b { color: var(--body); font-weight: 500; }
+.eventlog div .ts { color: var(--faint); }
+
+/* -- Claims ----------------------------------------------- */
+.claim { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
+.claim:last-child { border-bottom: 0; }
+.claim-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.claim-head .n { font-family: var(--mono); font-size: 13px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.claim-head .preamble { color: var(--ink); font-weight: 500; }
+.claim .trans { margin: 3px 0 0 24px; font-size: 12.5px; color: var(--muted); }
+.claim ul { margin: 6px 0 0; padding: 0 0 0 24px; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+/* A claim reads as a hanging block: the preamble sets the margin and each
+   lettered element aligns under it. Running them flush makes (a)/(b)/(c) hard
+   to scan, which is most of what reading a claim set is. */
+.claim li { padding-left: 2.4rem; text-indent: -2.4rem; font-size: 13px; line-height: 1.62; }
+.claim li .el { font-family: var(--mono); color: var(--muted); }
+.claim mark { background: var(--accent-wash); color: var(--accent); border-radius: 2px; padding: 0 2px; }
+.numeral { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--accent); }
+
+/* -- Critic ring ------------------------------------------ */
+.round { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.round + .round { margin-top: 14px; }
+.round-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 11px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.round-head h4 { margin: 0; font-size: 13px; color: var(--ink); font-weight: 600; }
+.critics { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); }
+.critic { padding: 14px 16px; border-right: 1px solid var(--line-soft); }
+.critic:last-child { border-right: 0; }
+.critic h5 { margin: 0 0 7px; font-size: 11px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.critic p { margin: 0; font-size: 12.5px; color: var(--muted); }
+.finding { border-left: 2px solid var(--crit-dim); padding: 2px 0 2px 11px; margin-top: 10px; }
+.finding .fh { font-family: var(--mono); font-size: 11px; color: var(--crit); }
+.finding .lim { font-size: 12px; color: var(--body); font-style: italic; margin: 4px 0 0; }
+.finding .why { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; }
+.reviser { padding: 13px 16px; border-top: 1px solid var(--line); background: var(--surface-2); }
+.reviser ul { margin: 7px 0 0; padding-left: 18px; }
+.reviser li { font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
+
+/* -- Charts ----------------------------------------------- */
+.hbars { display: flex; flex-direction: column; gap: 9px; }
+.hbar { display: grid; grid-template-columns: 210px 1fr 92px; gap: 12px; align-items: center; font-size: 12.5px; }
+.hbar .nm { color: var(--body); }
+.hbar .track { height: 15px; background: #20202a; border-radius: 3px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
+.hbar .fill { height: 100%; background: #7d6c4d; }
+.hbar.hi .fill { background: var(--accent); }
+.hbar.good .fill { background: var(--good); }
+.hbar .val { font-family: var(--mono); font-size: 12px; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 640px) { .hbar { grid-template-columns: 118px 1fr 70px; gap: 8px; font-size: 11.5px; } }
+
+/* -- Metric tiles ----------------------------------------- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 13px 15px; }
+.tile .v { font-family: var(--mono); font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.tile .s { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-top: 1px; }
+.tile .l { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+
+/* -- Result tabs ------------------------------------------ */
+.rtabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.rtabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 9px 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.rtabs button:hover { color: var(--body); }
+.rtabs button[aria-current="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.rtabs .c { font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-left: 5px; }
+
+/* -- Prose (gaps, package) -------------------------------- */
+.prose { max-width: 78ch; font-size: 13px; }
+.prose h4 { margin: 20px 0 7px; font-size: 13px; color: var(--ink); font-weight: 600; }
+.prose h4:first-child { margin-top: 0; }
+.prose h5 { margin: 16px 0 6px; font-size: 12.5px; color: var(--body); font-weight: 600; }
+.prose p { margin: 0 0 9px; color: var(--muted); }
+.prose ul, .prose ol { margin: 0 0 10px; padding-left: 20px; }
+.prose li { margin-bottom: 6px; color: var(--muted); }
+.prose li b, .prose p b { color: var(--body); font-weight: 500; }
+.prose code { font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--surface-3); padding: 1px 4px; border-radius: 3px; }
+
+/* -- Drawing sheet ---------------------------------------- */
+.sheet { background: #ffffff; border-radius: 4px; padding: 8px; overflow-x: auto; }
+.sheet svg { display: block; width: 100%; height: auto; max-width: 780px; margin: 0 auto; }
+
+/* -- Footer ----------------------------------------------- */
+.foot { border-top: 1px solid var(--line); margin-top: 44px; padding: 20px; font-size: 12px; color: var(--faint); max-width: 100ch; }
+.foot p { margin: 0 0 8px; }
+.foot b { color: var(--muted); font-weight: 500; }
+
+@media (max-width: 700px) {
+  .topbar-row { padding: 10px 14px; }
+  .main { padding: 18px 14px 50px; }
+  .critic { border-right: 0; border-bottom: 1px solid var(--line-soft); }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ixana · patentgen · prototype</span>
+        <h1>AI Lawyer — patent drafting run</h1>
+      </div>
+      <span class="chip goodish"><span class="dot good"></span>Gate&nbsp;0 <b>enforced</b></span>
+      <span class="chip" id="chip-corpus"></span>
+      <span class="chip" id="chip-cost"></span>
+    </div>
+    <nav class="viewbar" id="viewbar" aria-label="Views"></nav>
+  </header>
+  <main class="main" id="view" tabindex="-1"></main>
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ------------------------------------------------------------
+   Two things are true of everything below and the footer says so
+   again at the bottom of the page:
+
+   1. The MECHANISM is the prototype's. The four publication
+      states and their rationales, the fail-closed containment
+      gate, the stage sequence and its measured timings, the
+      three-critic ring with a reviser between rounds, the
+      coverage verdict that leads the prior-art section, the
+      §1.84 proof against the rendered sheet, and the filable
+      verdict are all reproduced as built.
+
+   2. The SPECIMEN is invented. The disclosure, the sources, the
+      people, the run identifiers, the claims, the references and
+      the costs are made up for publication. No real disclosure,
+      filing or attorney work product appears anywhere on this
+      page.
+
+   The one exception is the corpus measurement in the "Corpus
+   ceiling" view, which is the real ADR 002 result over public
+   patent data — it is the finding the case study turns on, and
+   inventing it would have made the page argue nothing.
+   ============================================================ */
+
+/* -- Publication states, served verbatim from the enum ------
+   In the prototype these strings come from GET /api/intake/statuses,
+   which reads them straight off patentgen/gates/intake.py. The UI
+   must never hold its own copy: a duplicate would drift from the
+   source of truth while continuing to look authoritative. Here they
+   are quoted rather than paraphrased, for the same reason. */
+const STATUSES = [
+  {
+    value: 'unknown',
+    label: 'unknown',
+    mayProcess: false,
+    foreignLost: false,
+    needsDate: false,
+    rationale: 'Publication status has not been established. Nothing may be transmitted until a human decides.',
+  },
+  {
+    value: 'unpublished_internal',
+    label: 'unpublished · internal',
+    mayProcess: true,
+    foreignLost: false,
+    needsDate: false,
+    rationale: 'Not disclosed outside the company. All jurisdictions remain available. Provider confidentiality terms still govern which model may be used.',
+  },
+  {
+    value: 'published_us_grace_foreign_lost',
+    label: 'published · US grace',
+    mayProcess: true,
+    foreignLost: true,
+    needsDate: true,
+    rationale: 'Published within the 35 U.S.C. 102(b)(1) grace period. A US filing remains available. Absolute-novelty jurisdictions (EPO, India) are already lost — draft US-only and record the loss rather than drafting for jurisdictions that are gone.',
+  },
+  {
+    value: 'published_us_barred',
+    label: 'published · US barred',
+    mayProcess: false,
+    foreignLost: true,
+    needsDate: true,
+    rationale: "Published more than one year before the intended filing date. The inventor's own publication is a statutory bar under 35 U.S.C. 102(b)(1). Requires a named-attorney override.",
+  },
+];
+const statusInfo = (v) => STATUSES.find((s) => s.value === v);
+const US_GRACE_PERIOD_DAYS = 365;
+
+/* patentgen/gates/intake.py::classify — advisory only. A human confirms or
+   overrides it, and what gets stored is their choice, never a value
+   recomputed later against a filing date that has since moved. */
+function classify(publicationDate, filingDate) {
+  if (!publicationDate) return 'unknown';
+  const filing = filingDate ? new Date(filingDate) : new Date('2026-08-30');
+  const days = Math.round((filing - new Date(publicationDate)) / 86400000);
+  if (days > US_GRACE_PERIOD_DAYS) return 'published_us_barred';
+  return 'published_us_grace_foreign_lost';
+}
+
+/* -- Staged sources ---------------------------------------- */
+const SOURCES = [
+  {
+    id: 'dis0416',
+    origin: 'data/DIS-0416-contact-gated-wake.pdf',
+    kind: 'pdf',
+    mime: 'application/pdf',
+    sha: '4f1c8ad2c9b07e5613a4d8f0b21c7e93a5602df84bb1c7e0d93a6f14b8c25e07',
+    size: 1842003,
+    retrieved: '2026-08-26T08:31:14Z',
+    title: 'DIS-0416 — Contact-gated wake and low-rate keying for a body-coupled wearable link',
+    pages: 14,
+    chars: 52118,
+    blocks: 318,
+    sheets: 9,
+    tables: [
+      { caption: 'Table 1 — Measured wake latency by electrode area', headers: ['Area (mm²)', 'Probe (µA)', 'Wake (ms)'], rows: 6, page: 6 },
+      { caption: 'Table 2 — Quiescent current by reference-node state', headers: ['State', 'I_q (nA)', 'Return path'], rows: 4, page: 9 },
+    ],
+    captions: ['FIG. 1', 'FIG. 2', 'FIG. 3A', 'FIG. 3B', 'FIG. 4', 'FIG. 5', 'FIG. 6', 'FIG. 7', 'FIG. 8'],
+    preview:
+      'DIS-0416  INVENTION DISCLOSURE  (internal, not for distribution)\n\n1. Problem. A body-coupled wearable link spends nearly all of its life\nidle, and a receiver that stays biased for a partner that is not there\ndominates the energy budget. Duty-cycling the receiver trades that\nenergy for latency: the wearer touches the second device and waits.\n\n2. Proposal. Hold the driver disconnected from the contact electrode\nand run a sub-threshold probe across the electrode pair. When the\nmeasured coupling admittance crosses a threshold referenced to a\nbaseline taken while out of contact, connect the driver and key a\nreduced-rate preamble while it settles...',
+    decision: null,
+    suggested: 'unpublished_internal',
+  },
+  {
+    id: 'en2210',
+    origin: 'data/EN-2210-wake-receiver-notes.pdf',
+    kind: 'pdf',
+    mime: 'application/pdf',
+    sha: '9b70e3c1a24df85e0c6713b9d4f28a6510ce7b23d8091fa4c65b3e7d2a09f184',
+    size: 774219,
+    retrieved: '2026-08-26T08:33:02Z',
+    title: 'EN-2210 — Wake receiver design notes, rev C',
+    pages: 11,
+    chars: 30447,
+    blocks: 204,
+    sheets: 5,
+    tables: [{ caption: 'Table 1 — Settling time against driver bias', headers: ['Bias (µA)', 't_settle (µs)'], rows: 8, page: 4 }],
+    captions: ['FIG. 1', 'FIG. 2A', 'FIG. 2B', 'FIG. 3', 'FIG. 4'],
+    preview:
+      'EN-2210  DESIGN NOTES  rev C\n\nThe wake path is the whole design. Everything else on the die is a\nconventional voltage-mode transceiver, and the interesting question is\nwhat has to be true for a driver to be connected to a body electrode\nin under eight milliseconds without biasing it for the preceding hour...',
+    decision: { status: 'unpublished_internal', by: 'R. Mehta', at: '2026-08-26T08:34:02Z', pub: null, filing: null, override: null },
+    suggested: 'unpublished_internal',
+  },
+  {
+    id: 'wp0092',
+    origin: 'data/WP-0092-body-channel-overview.pdf',
+    kind: 'pdf',
+    mime: 'application/pdf',
+    sha: '2ad57e91c4b0836fda1e5c7290b34d6e8f1a07c5b962d34e8a71f0c6b5d29e43',
+    size: 4103882,
+    retrieved: '2026-08-25T15:58:41Z',
+    title: 'WP-0092 — Why the body is the better channel (public whitepaper)',
+    pages: 18,
+    chars: 41960,
+    blocks: 262,
+    sheets: 0,
+    tables: [],
+    captions: [],
+    preview:
+      'WHY THE BODY IS THE BETTER CHANNEL\n\nWearables are multiplying, and the radios inside them were designed for\na world of rooms, not of skin. Body-coupled communication is a strong\ncontender for the personal-area network of the next decade: ultra-low\npower, inherently private, and impossible to snoop without touching\nthe person...',
+    decision: { status: 'published_us_barred', by: 'R. Mehta', at: '2026-08-25T16:02:19Z', pub: '2024-11-02', filing: '2026-09-01', override: null },
+    suggested: 'published_us_barred',
+    publishedAt: '2024-11-02',
+    filingAt: '2026-09-01',
+  },
+];
+
+/* -- The stage sequence, with durations measured from real runs ----
+   frontend/lib/stages.ts. These exist so the UI can be honest about the
+   wait rather than showing an indeterminate spinner for five minutes.
+   They are typical, not promises. */
+const STAGES = [
+  { id: 'queued', label: 'Queued', typical: 1, artifact: null },
+  { id: 'extracting', label: 'Reading the documents', typical: 4, artifact: 'extracted.txt' },
+  { id: 'source_figures', label: 'Reading the source drawing sheets', typical: 38, artifact: 'source_figures.md' },
+  { id: 'sorting_disclosure', label: 'Sorting claimable from not', typical: 47, artifact: 'extracted_disclosure.json' },
+  { id: 'drafting', label: 'Prior art and drafting', typical: 199, artifact: 'claims.txt' },
+  { id: 'figures', label: 'Drawings and numerals', typical: 21, artifact: 'drawings.pdf' },
+  { id: 'packaging', label: 'Filing package', typical: 2, artifact: 'package/PACKAGE.md' },
+  { id: 'done', label: 'Done', typical: 0, artifact: 'manifest.json' },
+];
+
+/* The four phases inside `drafting`, reported by the drafter itself and
+   arriving in status.json as `substage`. Without them the longest stage is a
+   single 199-second step with nothing to say. */
+const SUBSTAGES = [
+  { id: 'concepts', label: 'Extracting search concepts', at: 0 },
+  { id: 'retrieval', label: 'Searching the corpus', at: 11 },
+  { id: 'rerank', label: 'Ranking prior art', at: 24 },
+  { id: 'claims', label: 'Drafting claims', at: 46 },
+  { id: 'critics', label: 'Critic ring', at: 118 },
+  { id: 'specification', label: 'Writing the specification', at: 165 },
+];
+
+/* -- The run index ------------------------------------------
+   Seven runs, including the three that a demo needs more than the
+   successful one: a containment refusal, a source that could not be
+   drafted from, and a run that died without a manifest. */
+const RUNS = [
+  { id: '20260826T091412Z-4f1c8ad2', status: 'ok', title: 'DIS-0416 — Contact-gated wake and low-rate keying for a body-coupled wearable link', src: 'DIS-0416 + EN-2210', intake: 'unpublished_internal', started: '2026-08-26 09:14', dur: 312, cost: null, claims: 14, figures: 3, filable: true, artifacts: 17, note: 'The run this page opens on. Two documents read as one disclosure.' },
+  { id: '20260826T083920Z-4f1c8ad2', status: 'blocked', title: 'DIS-0416 — Contact-gated wake and low-rate keying for a body-coupled wearable link', src: 'DIS-0416', intake: null, started: '2026-08-26 08:39', dur: 6, cost: '0.00', claims: null, figures: null, filable: null, artifacts: 1, note: 'A real containment refusal, rendered verbatim. Nothing was transmitted.' },
+  { id: '20260825T161104Z-2ad57e91', status: 'insufficient_disclosure', title: 'WP-0092 — Why the body is the better channel', src: 'WP-0092', intake: 'published_us_barred', started: '2026-08-25 16:11', dur: 94, cost: '0.31', claims: null, figures: null, filable: null, artifacts: 5, note: 'The whitepaper. 1 claimable concept of 7, 15 parameters quarantined — the gap list is the deliverable.' },
+  { id: '20260825T142207Z-4f1c8ad2', status: 'incomplete', title: null, src: 'DIS-0416', intake: 'unpublished_internal', started: '2026-08-25 14:22', dur: null, cost: null, claims: null, figures: null, filable: null, artifacts: 3, note: 'Killed at the vision pass. No manifest, so the page says so rather than rendering an empty draft.' },
+  { id: '20260824T104533Z-4f1c8ad2', status: 'ok', title: 'DIS-0416 — Contact-gated wake (single document)', src: 'DIS-0416', intake: 'unpublished_internal', started: '2026-08-24 10:45', dur: 268, cost: '1.42', claims: 11, figures: 2, filable: false, artifacts: 15, note: 'Before EN-2210 was added. Three fewer claims and two §112(b) errors — the design notes carried the settling numbers.' },
+  { id: '20260823T171840Z-4f1c8ad2', status: 'ok', title: 'DIS-0416 — Contact-gated wake (critics exhausted)', src: 'DIS-0416 + EN-2210', intake: 'unpublished_internal', started: '2026-08-23 17:18', dur: 441, cost: '2.08', claims: 14, figures: 3, filable: false, artifacts: 16, note: 'Three rounds ending `exhausted` — findings still standing when the cap ran out. Not the same outcome as `clean`.' },
+  { id: '20260822T093017Z-9b70e3c1', status: 'error', title: 'EN-2210 — Wake receiver design notes, rev C', src: 'EN-2210', intake: 'unpublished_internal', started: '2026-08-22 09:30', dur: 203, cost: '0.88', claims: null, figures: null, filable: null, artifacts: 9, note: 'Drawing render failed on a malformed leader line. The draft was kept — the expensive part had already been paid for.' },
+];
+
+/* -- The gap list -------------------------------------------
+   Produced whether or not a draft follows, and ranked first among the
+   things the run actually removes from an attorney's day: it is the
+   inventor questionnaire, written from what the disclosure did not say. */
+const GAPS = {
+  total: 6,
+  claimable: 5,
+  blocked: 1,
+  quarantined: 4,
+  marketing: 7,
+  blockedConcepts: [
+    {
+      statement: 'A wearable posture-monitoring application in which the body-coupled link carries classified posture events to a paired device.',
+      support: 'named_only',
+      why: 'The disclosure names posture monitoring as the motivating application and identifies a link that carries its output. It does not identify the sensed quantity, disclose a classifier or its inputs, or teach how a posture event is derived. The transport is enabled; the monitoring subject is only named.',
+    },
+  ],
+  questions: [
+    'What probe amplitude, frequency and duty cycle does the contact-detection circuit apply, and over what electrode areas and skin conditions was the resulting admittance measured? Table 1 gives six areas at one probe current; the claim needs the range it holds over.',
+    'How is the out-of-contact baseline acquired and refreshed — on every reset window, on a timer, or on a detected change? Without the acquisition procedure the baseline-referenced threshold is enabled only for the single measurement shown.',
+    'What settling behaviour of the driver sets the eight-millisecond wake bound, and what happens when it is not met? EN-2210 Table 1 gives settling against bias but does not say which bias the bound assumes.',
+    'What preamble length, symbol rate and acquisition procedure does the reduced-rate keying use, and how does the receiver detect the transition to payload rate? "One eighth of the payload rate" is a ratio, not a scheme.',
+    'How is the receiver reference node floated and re-grounded, and what leakage path remains while floated? Table 2 reports quiescent current in four states without disclosing the switching that produces them.',
+    'In the two-device rendezvous, how is the contention window sized, how are collisions detected, and what happens when both devices wake on the same contact event?',
+  ],
+  namedNotDescribed: [
+    { name: 'admittance comparator', role: 'Compares the probed coupling admittance against the contact threshold and asserts the contact signal.' },
+    { name: 'baseline store', role: 'Holds the out-of-contact admittance the threshold is referenced to.' },
+    { name: 'rendezvous controller', role: 'Sizes and arbitrates the contention window when two devices wake on the same contact.' },
+  ],
+  marketingClaims: [
+    'Body-coupled communication is described as "a strong contender" for the personal-area network of the next decade.',
+    'The link is characterised as "ultra-low power" without a comparison condition.',
+    'The disclosure asserts that body-coupled traffic "cannot be snooped without touching the person".',
+    'The wake path is described as "effectively instantaneous to the wearer".',
+    'Quiescent current is characterised as "orders of magnitude" below a duty-cycled receiver.',
+    'The reduced-rate preamble is said to give "significantly better" acquisition.',
+    'The approach is described as "inherently private" compared with radio.',
+  ],
+  quarantinedParams: [
+    { q: 'wake latency', v: '"effectively instantaneous"', kind: 'aspirational' },
+    { q: 'quiescent current', v: '"orders of magnitude lower"', kind: 'comparative' },
+    { q: 'range', v: '"the whole body"', kind: 'aspirational' },
+    { q: 'link margin', v: '"comfortable"', kind: 'aspirational' },
+  ],
+};
+
+/* -- Claims -------------------------------------------------
+   Rendered from the parsed structure in claims.json, not from the flat
+   rendered strings, so dependency and statutory category come for free.
+   `wide` marks text the reviser added after the widened corpus produced a
+   §103 finding — the point being that the draft is downstream of the search. */
+const CLAIMS = [
+  {
+    n: 1, kind: 'independent', cat: 'system', dep: null, trans: 'comprising',
+    preamble: 'A body-coupled communication device',
+    els: [
+      { l: '(a)', t: 'a first contact electrode and a second contact electrode arranged to couple to a wearer’s skin at spaced locations;' },
+      { l: '(b)', t: 'a probe circuit coupled to the first and second contact electrodes and configured to apply, during a quiescent state of the device, a probe signal having an amplitude below a signalling threshold of the device and to produce a coupling-admittance measurement therefrom;' },
+      { l: '(c)', t: 'a baseline store holding an out-of-contact coupling-admittance value acquired while the first and second contact electrodes are not coupled to skin;' },
+      { l: '(d)', t: 'an admittance comparator configured to assert a contact signal when the coupling-admittance measurement exceeds the out-of-contact coupling-admittance value by at least a contact margin<span data-wide>, the contact margin being fixed with respect to an out-of-contact coupling-admittance value re-acquired at an interval shorter than a drift interval of the baseline store</span>;' },
+      { l: '(e)', t: 'a voltage-mode driver having a driver output and a disconnect switch coupled between the driver output and the first contact electrode, the disconnect switch being open throughout the quiescent state such that the driver output is electrically isolated from the first contact electrode;' },
+      { l: '(f)', t: 'a wake controller responsive to the contact signal to close the disconnect switch and to place the device in a signalling state within a wake interval shorter than eight milliseconds from assertion of the contact signal; and' },
+      { l: '(g)', t: 'a keying circuit configured, during the wake interval, to key the voltage-mode driver at a preamble symbol rate that is a fraction of a payload symbol rate of the device, and thereafter to key the voltage-mode driver at the payload symbol rate.' },
+    ],
+  },
+  { n: 2, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'wherein the probe signal has an amplitude no greater than one tenth of a signalling amplitude of the voltage-mode driver.' }] },
+  { n: 3, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'wherein the preamble symbol rate is one eighth of the payload symbol rate.' }] },
+  { n: 4, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'further comprising a receiver reference node and a switch configured to isolate the receiver reference node from a device ground throughout the quiescent state, such that the device presents no galvanic return path while quiescent.' }] },
+  { n: 5, kind: 'dependent', cat: 'system', dep: 4, trans: 'comprising', preamble: 'The device of claim 4', els: [{ l: '(a)', t: 'wherein a quiescent current of the device with the receiver reference node isolated is less than 40 nanoamperes.' }] },
+  { n: 6, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'wherein the contact margin corresponds to a coupling-admittance increase of at least a factor of four over the out-of-contact coupling-admittance value.' }] },
+  { n: 7, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'wherein the probe circuit is configured to repeat the probe signal at a probe interval of from 20 milliseconds through 250 milliseconds during the quiescent state.' }] },
+  { n: 8, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', preamble: 'The device of claim 1', els: [{ l: '(a)', t: 'further comprising a rendezvous controller configured, upon assertion of the contact signal, to defer keying by a contention interval selected from a contention window before closing the disconnect switch.' }] },
+  {
+    n: 9, kind: 'independent', cat: 'method', dep: null, trans: 'comprising',
+    preamble: 'A method of establishing a body-coupled communication link',
+    els: [
+      { l: '(a)', t: 'holding a voltage-mode driver of a first device electrically isolated from a first contact electrode during a quiescent state;' },
+      { l: '(b)', t: 'acquiring, while the first contact electrode is not coupled to skin, an out-of-contact coupling-admittance value;' },
+      { l: '(c)', t: 'applying, during the quiescent state, a probe signal having an amplitude below a signalling threshold and measuring a coupling admittance between the first contact electrode and a second contact electrode;' },
+      { l: '(d)', t: 'asserting a contact signal when the measured coupling admittance exceeds the out-of-contact coupling-admittance value by at least a contact margin<span data-wide>, the out-of-contact coupling-admittance value being re-acquired at an interval shorter than a drift interval of the acquiring</span>;' },
+      { l: '(e)', t: 'connecting the voltage-mode driver to the first contact electrode within a wake interval shorter than eight milliseconds from the asserting; and' },
+      { l: '(f)', t: 'keying the voltage-mode driver at a preamble symbol rate that is a fraction of a payload symbol rate during the wake interval, and at the payload symbol rate thereafter.' },
+    ],
+  },
+  { n: 10, kind: 'dependent', cat: 'method', dep: 9, trans: 'comprising', preamble: 'The method of claim 9', els: [{ l: '(a)', t: 'further comprising isolating a receiver reference node of the first device from a device ground throughout the quiescent state.' }] },
+  { n: 11, kind: 'dependent', cat: 'method', dep: 9, trans: 'comprising', preamble: 'The method of claim 9', els: [{ l: '(a)', t: 'wherein the acquiring is repeated in response to a change in the measured coupling admittance exceeding a drift threshold.' }] },
+  { n: 12, kind: 'dependent', cat: 'method', dep: 9, trans: 'comprising', preamble: 'The method of claim 9', els: [{ l: '(a)', t: 'further comprising deferring the connecting by a contention interval selected from a contention window, and abandoning the connecting when a body-coupled preamble from a second device is detected during the contention interval.' }] },
+  { n: 13, kind: 'dependent', cat: 'method', dep: 9, trans: 'comprising', preamble: 'The method of claim 9', els: [{ l: '(a)', t: 'wherein the probe signal is applied at a probe interval of from 20 milliseconds through 250 milliseconds.' }] },
+  {
+    n: 14, kind: 'independent', cat: 'crm', dep: null, trans: 'comprising',
+    preamble: 'A non-transitory computer-readable medium storing instructions that, when executed by a controller of a body-coupled communication device, cause the device to perform operations',
+    els: [
+      { l: '(a)', t: 'maintaining a disconnect switch between a voltage-mode driver and a contact electrode in an open state during a quiescent state;' },
+      { l: '(b)', t: 'reading a coupling-admittance measurement produced by a probe circuit and comparing it against a stored out-of-contact coupling-admittance value;' },
+      { l: '(c)', t: 'closing the disconnect switch within a wake interval shorter than eight milliseconds when the comparison exceeds a contact margin; and' },
+      { l: '(d)', t: 'causing the voltage-mode driver to be keyed at a preamble symbol rate during the wake interval and at a payload symbol rate thereafter.' },
+    ],
+  },
+  {
+    n: 15, kind: 'dependent', cat: 'system', dep: 1, trans: 'comprising', wideOnly: true,
+    preamble: 'The device of claim 1',
+    els: [{ l: '(a)', t: 'wherein the baseline store is configured to re-acquire the out-of-contact coupling-admittance value at an interval of from 2 seconds through 60 seconds, and to suspend re-acquisition while the contact signal is asserted.' }],
+  },
+];
+
+const CLAIMSET = {
+  aliceRisk: 'low',
+  strategy: 'Three statutory categories over one mechanism, with the wake bound in every independent claim. The bound is the only limitation the disclosure supports numerically and the only one that separates the concept from ordinary contact detection, so it carries the claim rather than sitting in a dependent.',
+  openQuestions: {
+    narrow: [
+      'The eight-millisecond wake bound is recited in all three independent claims and supported by one measurement condition. Confirm the bias and electrode area it assumes before the claim is relied upon.',
+      'Claim 8 recites a rendezvous controller whose contention window is not sized anywhere in the disclosure. Either add the sizing or expect a §112(a) objection on this dependent alone.',
+      'No reference retrieved in this run is in the disclosure’s art, so nothing in this claim set has been differentiated over anything. Read the coverage verdict before reading the claims.',
+    ],
+    wide: [
+      'The eight-millisecond wake bound is recited in all three independent claims and supported by one measurement condition. Confirm the bias and electrode area it assumes before the claim is relied upon.',
+      'Claim 8 recites a rendezvous controller whose contention window is not sized anywhere in the disclosure. Either add the sizing or expect a §112(a) objection on this dependent alone.',
+      'The re-acquisition interval added to claims 1 and 9 under §103 rests on the drift figures in EN-2210 Table 2, which report four states rather than a drift rate. This is the weakest support in the set and it is now load-bearing.',
+      'US-13,104,882-B2 and US-13,061,447-B2 are both in H04B 13 and share an assignee family. Expect them to be combined in a first office action, and decide the response before filing rather than after.',
+    ],
+  },
+};
+
+/* -- Retrieval ----------------------------------------------
+   Two corpora, one disclosure. `narrow` is the filtered UI/HCI BigQuery
+   extract the prototype actually shipped with; `wide` is the widened
+   extract ADR 002 measured and recommended against building yet.
+
+   The failure mode being demonstrated is that narrow retrieval does not
+   return nothing. It returns the least irrelevant documents it holds,
+   formatted exactly like real results, and everything downstream reasons
+   from them. */
+const RETRIEVAL = {
+  narrow: {
+    field: 'The disclosure is in capacitive body-coupled communication physical-layer transceivers, particularly contact-gated wake sequencing and low-rate preamble keying during driver settling.',
+    judged: 42,
+    inArt: 0,
+    coverage: 'absent',
+    refs: [
+      { id: 'US-13,401,229-B2', title: 'Gesture disambiguation for a wrist-worn touch surface', cpc: 'G06F 3/041', date: '2021-04-06', assignee: 'Northgate Interface Labs', why: 'Nominally closest by term overlap — it mentions electrodes on skin. It discloses capacitive touch sensing on a device surface, not communication through a body.', inArt: false },
+      { id: 'US-13,288,764-B2', title: 'Proximity wake for a display panel controller', cpc: 'G06F 1/3231', date: '2020-09-15', assignee: 'Aster Display Systems', why: 'Wake-on-proximity in a display power-management context. No body channel, no driver isolation, no keying.', inArt: false },
+      { id: 'US-13,150,913-B2', title: 'Adaptive threshold calibration for capacitive input surfaces', cpc: 'G06F 3/044', date: '2019-12-03', assignee: 'Northgate Interface Labs', why: 'Baseline-referenced thresholding, in touch input. The mechanism rhymes; the art does not.', inArt: false },
+      { id: 'US-13,077,455-B2', title: 'Application usage reporting from a networked terminal', cpc: 'G06Q 30/02', date: '2018-06-21', assignee: 'Larkfield Analytics', why: 'Retrieved on the word "wearable" alone. Nothing in common with the disclosure.', inArt: false },
+    ],
+  },
+  wide: {
+    field: 'The disclosure is in capacitive body-coupled communication physical-layer transceivers, particularly contact-gated wake sequencing and low-rate preamble keying during driver settling.',
+    judged: 58,
+    inArt: 11,
+    coverage: 'covered',
+    refs: [
+      { id: 'US-13,104,882-B2', title: 'Capacitive body-coupled transceiver with contact-gated power sequencing', cpc: 'H04B 13/005, H04W 52/02', date: '2019-03-11', assignee: 'Meridian Bio-Interfaces', why: 'Closest reference. Gates a body-coupled transmitter on a measured skin-contact signal and isolates the driver while idle. Compares against a fixed threshold and reports a 60 ms wake.', inArt: true, closest: true },
+      { id: 'US-13,061,447-B2', title: 'Skin-contact detection using sub-threshold admittance probing', cpc: 'A61B 5/0537, H04B 13/00', date: '2017-08-02', assignee: 'Calder Wearables', why: 'Sub-threshold admittance probe referenced to an out-of-contact baseline, in physiological sensing rather than a link. Supplies the limitation US-13,104,882-B2 lacks.', inArt: true },
+      { id: 'US-13,229,510-B2', title: 'Return-path isolation for capacitive human body communication', cpc: 'H04B 13/005', date: '2020-06-19', assignee: 'Vantis Body Networks', why: 'Floats the receiver reference node during idle to remove the galvanic return path. Says nothing about wake latency.', inArt: true },
+      { id: 'US-13,177,364-A1', title: 'Preamble rate reduction for settling-limited transmitters', cpc: 'H04L 7/04', date: '2020-12-14', assignee: 'Halstead Radio', why: 'Reduced-rate preamble keyed while a driver settles, in a narrowband RF context. The nearest teaching to element (g).', inArt: true },
+      { id: 'US-13,318,027-B2', title: 'Body-area rendezvous with a contention window', cpc: 'H04W 74/08', date: '2018-11-30', assignee: 'Vantis Body Networks', why: 'Contention window over a body channel. Relevant to claims 8 and 12 only; no wake gating.', inArt: true },
+      { id: 'US-13,096,741-B2', title: 'Wearable posture classification from body-coupled signals', cpc: 'A61B 5/11', date: '2019-05-22', assignee: 'Calder Wearables', why: 'The application context the disclosure names but does not teach. Retrieved because the concept was extracted; not charted, because it was not claimed.', inArt: true },
+    ],
+  },
+};
+
+/* The claim chart. Built only when coverage is `covered` — charting the
+   closest document in the wrong art produces a confident novelty position
+   resting on nothing, so the prototype refuses to build one at all. */
+const CHART = {
+  closest: 'US-13,104,882-B2',
+  anticipation: 'low',
+  obviousness: 'high',
+  distinguishing: 1,
+  rows: [
+    { el: '(a)', lim: 'first and second contact electrodes coupled to skin at spaced locations', verdict: 'taught', where: 'col. 4 ll. 12–28; FIG. 2', note: 'Two skin electrodes, same arrangement.' },
+    { el: '(b)', lim: 'probe signal below the signalling threshold, producing a coupling-admittance measurement', verdict: 'taught', where: 'col. 5 ll. 3–19', note: 'A low-amplitude contact probe, described in the same terms.' },
+    { el: '(c)', lim: 'baseline store holding an out-of-contact admittance value', verdict: 'elsewhere', where: 'US-13,061,447-B2, col. 3 ll. 41–58', note: 'Not in the closest reference. Supplied by a second reference in the same CPC subclass.' },
+    { el: '(d)', lim: 'contact margin referenced to the stored baseline', verdict: 'elsewhere', where: 'US-13,061,447-B2, col. 4 ll. 2–22', note: 'Same reference. This pairing is what makes the §103 position real.' },
+    { el: '(e)', lim: 'disconnect switch open throughout the quiescent state', verdict: 'taught', where: 'col. 6 ll. 30–47; FIG. 3', note: 'Driver isolated while idle.' },
+    { el: '(f)', lim: 'wake interval shorter than eight milliseconds', verdict: 'not taught', where: '—', note: 'The reference reports 60 ms and treats latency as acceptable. Nothing of record teaches the bound or a reason to seek it.' },
+    { el: '(g)', lim: 'preamble symbol rate a fraction of the payload rate during the wake interval', verdict: 'elsewhere', where: 'US-13,177,364-A1, ¶¶ 0031–0038', note: 'Taught in narrowband RF. Combining across arts needs an articulated reason; settling is the plausible one.' },
+  ],
+};
+
+/* -- The critic ring ----------------------------------------
+   Three critics run concurrently and blind to each other, a reviser answers
+   them between rounds, and the run stops `clean`, `exhausted` or `stalled`.
+   The headline is the stop reason, never the round count: three rounds ending
+   `clean` and three rounds ending `exhausted` are opposite outcomes and the
+   number is identical. */
+const REVIEW = {
+  narrow: {
+    stop: 'clean',
+    rounds: [
+      {
+        n: 1,
+        critics: [
+          { name: 'novelty', allow: true, assessment: 'The retrieved references are outside the body-coupled communication art and do not support a meaningful §102 or §103 rejection. No reference discloses a driver held isolated from a contact electrode during a quiescent state, a baseline-referenced contact margin, or a bounded wake interval. Because the missing limitations are not supplied by another reference of record and no technically grounded reason to combine can be articulated, claims 1–14 are allowable over the art of record.', findings: [] },
+          { name: '§112', allow: false, assessment: 'The disclosure supports the probe, the isolation switch, the wake bound and the reduced-rate preamble. The set is not allowable as written because of the undefined contact margin and the antecedent break in claim 5.', findings: [
+            { ground: '§112(b)', severity: 'substantial', claims: '1, 9, 14', lim: '“exceeds the out-of-contact coupling-admittance value by at least a contact margin”', why: 'The claims do not define the contact margin or give an objective criterion for it, so whether the relationship is satisfied can depend on a value chosen after the fact. Claim 6 supplies a factor of four; the independent claims do not incorporate it.', fix: 'Recite the margin as a stated multiple of the stored value in claims 1, 9 and 14, and rewrite claim 6 to add a further supported limitation rather than restating the amended parent.' },
+            { ground: '§112(b)', severity: 'substantial', claims: '5', lim: '“a quiescent current of the device with the receiver reference node isolated”', why: 'Claim 5 depends on claim 4, which recites isolating the receiver reference node, but refers to “the device ground” without antecedent basis in claim 5’s own chain after the amendment proposed above.', fix: 'Carry “a device ground” into claim 4 explicitly, or make claim 5 depend on claim 1 and restate the isolation.' },
+          ] },
+          { name: 'simulated first office action', allow: false, assessment: 'Claims 1–14 are directed to a physical communication device and a signalling method and do not warrant a rejection under 35 U.S.C. §101. None of the references of record concerns communication through a body, and no rejection under §§102 or 103 is supported by the art provided. Claims 1, 9 and 14 are objected to under §112(b) for the reasons given above.', findings: [], allowable: '—' },
+        ],
+        amendments: [
+          'Claims 1, 9 and 14 amended under §112(b) to recite a contact margin corresponding to a coupling-admittance increase of at least a factor of four over the stored out-of-contact value.',
+          'Claim 6 rewritten to add the probe-repetition condition rather than restating the factor now incorporated into claim 1.',
+          'Claim 4 amended to introduce “a device ground” explicitly, restoring antecedent basis for claim 5.',
+        ],
+      },
+      {
+        n: 2,
+        critics: [
+          { name: 'novelty', allow: true, assessment: 'Unchanged. The references remain outside the art and supply none of the amended limitations. Claims 1–14 would be allowable over the cited references, subject to a competent search in the relevant body-coupled communication art.', findings: [] },
+          { name: '§112', allow: true, assessment: 'The amended claims recite an objective margin, an antecedent-clean isolation chain, and timing limitations supported by the disclosure. They do not claim the undisclosed internals of the rendezvous controller or the excluded posture-monitoring subsystem. No §112 rejection is warranted.', findings: [] },
+          { name: 'simulated first office action', allow: true, assessment: 'Claims 1–14 are allowable on the present record. The claims recite eligible physical apparatus, a method and a storage medium, are adequately definite, and are supported by the supplied disclosure. The references of record concern touch input, display power management, usage reporting and interface calibration, and do not disclose communication through a body. No rejection under §§101, 102, 103 or 112 is made.', findings: [], allowable: '1–14' },
+        ],
+        amendments: [],
+      },
+    ],
+  },
+  wide: {
+    stop: 'exhausted',
+    rounds: [
+      {
+        n: 1,
+        critics: [
+          { name: 'novelty', allow: false, assessment: 'US-13,104,882-B2 discloses a body-coupled transceiver that isolates its driver during a quiescent state and gates it on a measured skin-contact signal. It does not disclose a baseline-referenced contact margin, which US-13,061,447-B2 supplies in the same CPC subclass and for the stated purpose of rejecting electrode drift. A §103 rejection over the combination is well supported.', findings: [
+            { ground: '§103', severity: 'fatal', claims: '1, 9, 14', lim: 'the contact-gating and driver-isolation limitations as a whole', why: 'US-13,104,882-B2 teaches elements (a), (b) and (e) directly. US-13,061,447-B2 teaches the baseline-referenced comparison of elements (c) and (d) and states the reason to use it — electrode drift over a wearing period. Both are H04B 13 and share an assignee family, so the combination is one an examiner will make.', fix: 'Move the sub-eight-millisecond wake bound to the point of novelty and add what makes it achievable — the re-acquisition interval — rather than relying on the gating architecture, which is taught.' },
+          ] },
+          { name: '§112', allow: false, assessment: 'Same two findings as against the narrow record: the contact margin is undefined in the independent claims and claim 5 has an antecedent break. The §112 critic is blind to the novelty critic and to the references, so its findings do not move when the corpus does.', findings: [
+            { ground: '§112(b)', severity: 'substantial', claims: '1, 9, 14', lim: '“by at least a contact margin”', why: 'No objective criterion for the margin appears in the independent claims. Claim 6 supplies a factor of four; the parents do not incorporate it.', fix: 'Recite the margin as a stated multiple in claims 1, 9 and 14.' },
+            { ground: '§112(b)', severity: 'substantial', claims: '5', lim: '“the device ground”', why: 'No antecedent basis for “the device ground” in the chain.', fix: 'Introduce “a device ground” in claim 4.' },
+          ] },
+          { name: 'simulated first office action', allow: false, assessment: 'Claims 1–14 stand rejected under 35 U.S.C. §103 as unpatentable over US-13,104,882-B2 in view of US-13,061,447-B2. Claims 1, 9 and 14 are further rejected under §112(b). Claim 3 is objected to as dependent on a rejected base claim but would be allowable if rewritten in independent form including all limitations of the base claim — the reduced-rate preamble is taught only in a different art and only for a different reason.', findings: [], allowable: 'none as presented; claim 3 indicated' },
+        ],
+        amendments: [
+          'Claims 1, 9 and 14 amended under §112(b) to recite a contact margin corresponding to at least a factor of four over the stored value.',
+          'Claim 4 amended to introduce “a device ground”; claim 6 rewritten to add the probe-repetition condition.',
+          'Claims 1 and 9 amended under §103 to require the out-of-contact value to be re-acquired at an interval shorter than the drift interval, which US-13,061,447-B2 does not teach and expressly does not need.',
+          'New claim 15 added, reciting the 2–60 second re-acquisition interval and its suspension while contact is asserted.',
+        ],
+      },
+      {
+        n: 2,
+        critics: [
+          { name: 'novelty', allow: false, assessment: 'The amendment narrows correctly but the position is not yet clean. US-13,061,447-B2 re-acquires its baseline on a wearing-session boundary, which a reader could characterise as an interval shorter than its own drift interval. The distinguishing feature is now the suspension during asserted contact, which appears only in new claim 15 and not in the independent claims.', findings: [
+            { ground: '§103', severity: 'substantial', claims: '1, 9', lim: '“re-acquired at an interval shorter than a drift interval”', why: 'The limitation as amended may read on the session-boundary re-acquisition of US-13,061,447-B2. The feature that does not read on it — suspending re-acquisition while contact is asserted — sits in a dependent claim.', fix: 'Pull the suspension limitation of claim 15 into claims 1 and 9, or accept a narrower independent claim than the disclosure supports.' },
+          ] },
+          { name: '§112', allow: true, assessment: 'The amended claims recite an objective margin and a clean antecedent chain. The new re-acquisition limitation is supported by EN-2210 Table 2 read with the baseline-store description, though thinly — the disclosure reports four states rather than a drift rate.', findings: [] },
+          { name: 'simulated first office action', allow: false, assessment: 'Claims 1, 9 and 14 remain rejected under §103 over US-13,104,882-B2 in view of US-13,061,447-B2. The §112(b) rejections are withdrawn. Claim 15 is indicated as containing allowable subject matter.', findings: [], allowable: '15 indicated' },
+        ],
+        amendments: [
+          'The reviser declined to pull the suspension limitation into claims 1 and 9. Recorded reason: the disclosure supports the suspension for one embodiment only, and moving it up would surrender scope the specification may yet support after the inventor answers question 2 in the gap list.',
+        ],
+        surrendered: false,
+      },
+      {
+        n: 3,
+        critics: [
+          { name: 'novelty', allow: false, assessment: 'Unchanged from round 2. The §103 position over the combination stands against claims 1, 9 and 14 as written.', findings: [
+            { ground: '§103', severity: 'substantial', claims: '1, 9, 14', lim: '“re-acquired at an interval shorter than a drift interval”', why: 'Carried forward. No amendment was made in round 2, so the finding is unchanged rather than re-argued.', fix: 'Unresolved. This is what the attorney is being handed.' },
+          ] },
+          { name: '§112', allow: true, assessment: 'No change. The set remains definite and supported.', findings: [] },
+          { name: 'simulated first office action', allow: false, assessment: 'Claims 1, 9 and 14 remain rejected under §103. Claim 15 remains indicated as containing allowable subject matter. A response would either amend the independent claims to include the suspension limitation or traverse on the drift-interval reading.', findings: [], allowable: '15 indicated' },
+        ],
+        amendments: [],
+      },
+    ],
+  },
+};
+
+/* -- Drawings -----------------------------------------------
+   Layout is deterministic and in millimetres; the lint is a proof against
+   the rendered PDF rather than against the model that drew it, which is the
+   only version of the check that can fail honestly. */
+const LINT = [
+  { rule: '37 CFR 1.84(f)', check: 'Sheet size', measured: '279.4 × 215.9 mm', required: 'Letter or A4', pass: true },
+  { rule: '37 CFR 1.84(g)', check: 'Margins — top / left / right / bottom', measured: '25.4 / 25.4 / 16.2 / 12.7 mm', required: '≥ 25.4 / 25.4 / 15.9 / 10.0 mm', pass: true },
+  { rule: '37 CFR 1.84(l)', check: 'Line weight, uniform and durable', measured: 'min 0.28 mm', required: '≥ 0.08 mm', pass: true },
+  { rule: '37 CFR 1.84(p)(3)', check: 'Reference-character height', measured: 'min 3.5 mm', required: '≥ 3.2 mm', pass: true },
+  { rule: '37 CFR 1.84(a)(1)', check: 'Black ink only, no colour, no greyscale fill', measured: '0 non-black objects', required: '0', pass: true },
+  { rule: '37 CFR 1.84(u)', check: 'Sheet numbering as “n/total”', measured: '1/3, 2/3, 3/3', required: 'present', pass: true },
+  { rule: '37 CFR 1.84(o)', check: 'Legends', measured: 'none present', required: 'n/a', pass: true },
+];
+
+const NUMERAL_PROBLEMS = [
+  'numeral 118 is “baseline store” in the drawings and “baseline register” in the specification',
+  'numeral 132 (“probe current source”) is drawn but never mentioned in the specification',
+];
+
+/* 37 CFR 1.83(a) — a feature recited in a claim must appear in a drawing.
+   These are warnings, not errors: they do not prevent filing, and each needs
+   a disposition rather than silence. */
+const COVERAGE_NOTES = [
+  { numeral: 108, name: 'admittance comparator', where: 'claim 1(d)' },
+  { numeral: 124, name: 'contention window', where: 'claim 8' },
+  { numeral: 126, name: 'rendezvous controller', where: 'claim 8' },
+  { numeral: 140, name: 'preamble keying circuit', where: 'claim 1(g)' },
+  { numeral: 144, name: 'payload symbol rate', where: 'claim 1(g)' },
+];
+
+const NUMERALS = [
+  [100, 'body-coupled communication device'], [102, 'first contact electrode'], [104, 'second contact electrode'],
+  [106, 'probe circuit'], [108, 'admittance comparator'], [110, 'contact signal'],
+  [112, 'wake controller'], [114, 'voltage-mode driver'], [116, 'disconnect switch'],
+  [118, 'baseline store'], [120, 'receiver'], [122, 'receiver reference node'],
+  [124, 'contention window'], [126, 'rendezvous controller'], [128, 'device ground'],
+  [130, 'reference-isolation switch'], [132, 'probe current source'], [134, 'skin / body signal path'],
+  [136, 'quiescent state'], [138, 'signalling state'], [140, 'preamble keying circuit'],
+  [142, 'preamble symbol rate'], [144, 'payload symbol rate'], [146, 'wake interval'],
+];
+
+/* -- Cost and provenance ------------------------------------
+   Three invariants from the prototype are visible in this table and are the
+   reason it exists at all:
+
+   1. Token counters are nested totals, not disjoint buckets. `input`
+      includes `cached` and `cache write`; `output` includes `reasoning`.
+      A formula that adds them up double-bills and nothing raises.
+   2. Cache TTL differs by model and a wrong value is a silent no-op.
+   3. Output cost dominates input cost — the inverse of the usual RAG
+      intuition — because output bills at six times the input rate and
+      hidden reasoning tokens bill at the output rate.
+
+   Every dollar figure on this page is computed from these rows at render
+   time. Nothing is a literal. */
+const RATES = {
+  'gpt-5.6-sol': { in: 1.75, cached: 0.175, out: 10.5, ttl: '30m' },
+  'gpt-5.5-mini': { in: 0.25, cached: 0.025, out: 1.5, ttl: '24h' },
+};
+
+const LEDGER = {
+  narrow: [
+    { agent: 'disclosure extractor', model: 'gpt-5.6-sol', calls: 1, input: 62400, cached: 0, write: 44800, output: 11240, reason: 6100 },
+    { agent: 'source figure reader (vision)', model: 'gpt-5.6-sol', calls: 9, input: 96300, cached: 44800, write: 0, output: 7020, reason: 2140 },
+    { agent: 'search concepts', model: 'gpt-5.5-mini', calls: 1, input: 14100, cached: 0, write: 0, output: 2180, reason: 0 },
+    { agent: 'reranker + coverage verdict', model: 'gpt-5.6-sol', calls: 1, input: 71900, cached: 44800, write: 0, output: 4860, reason: 1320 },
+    { agent: 'claim drafter', model: 'gpt-5.6-sol', calls: 1, input: 68500, cached: 44800, write: 0, output: 15900, reason: 9700 },
+    { agent: 'critic · novelty', model: 'gpt-5.6-sol', calls: 2, input: 84200, cached: 62000, write: 0, output: 6400, reason: 3900 },
+    { agent: 'critic · §112', model: 'gpt-5.6-sol', calls: 2, input: 84200, cached: 62000, write: 0, output: 9300, reason: 6100 },
+    { agent: 'critic · simulated office action', model: 'gpt-5.6-sol', calls: 2, input: 86800, cached: 62000, write: 0, output: 8100, reason: 4400 },
+    { agent: 'claim reviser', model: 'gpt-5.6-sol', calls: 2, input: 92400, cached: 62000, write: 0, output: 14700, reason: 8200 },
+    { agent: 'specification writer', model: 'gpt-5.6-sol', calls: 1, input: 74600, cached: 44800, write: 0, output: 21300, reason: 4700 },
+    { agent: 'figure agent', model: 'gpt-5.6-sol', calls: 1, input: 38900, cached: 0, write: 0, output: 6400, reason: 1600 },
+    { agent: 'prior-art claim chart', model: 'gpt-5.6-sol', calls: 0, input: 0, cached: 0, write: 0, output: 0, reason: 0, skipped: 'Coverage absent — no closest reference to chart.' },
+  ],
+  wide: [
+    { agent: 'disclosure extractor', model: 'gpt-5.6-sol', calls: 1, input: 62400, cached: 0, write: 44800, output: 11240, reason: 6100 },
+    { agent: 'source figure reader (vision)', model: 'gpt-5.6-sol', calls: 9, input: 96300, cached: 44800, write: 0, output: 7020, reason: 2140 },
+    { agent: 'search concepts', model: 'gpt-5.5-mini', calls: 1, input: 14100, cached: 0, write: 0, output: 2180, reason: 0 },
+    { agent: 'reranker + coverage verdict', model: 'gpt-5.6-sol', calls: 1, input: 84300, cached: 44800, write: 0, output: 6900, reason: 2100 },
+    { agent: 'claim drafter', model: 'gpt-5.6-sol', calls: 1, input: 82900, cached: 44800, write: 0, output: 17600, reason: 10800 },
+    { agent: 'critic · novelty', model: 'gpt-5.6-sol', calls: 3, input: 128600, cached: 93000, write: 0, output: 11200, reason: 6900 },
+    { agent: 'critic · §112', model: 'gpt-5.6-sol', calls: 3, input: 128600, cached: 93000, write: 0, output: 13900, reason: 8800 },
+    { agent: 'critic · simulated office action', model: 'gpt-5.6-sol', calls: 3, input: 132100, cached: 93000, write: 0, output: 12600, reason: 6700 },
+    { agent: 'claim reviser', model: 'gpt-5.6-sol', calls: 3, input: 141800, cached: 93000, write: 0, output: 21400, reason: 12100 },
+    { agent: 'specification writer', model: 'gpt-5.6-sol', calls: 1, input: 74600, cached: 44800, write: 0, output: 21300, reason: 4700 },
+    { agent: 'figure agent', model: 'gpt-5.6-sol', calls: 1, input: 38900, cached: 0, write: 0, output: 6400, reason: 1600 },
+    { agent: 'prior-art claim chart', model: 'gpt-5.6-sol', calls: 1, input: 58400, cached: 44800, write: 0, output: 7900, reason: 2300 },
+  ],
+};
+
+function rowCost(r) {
+  const rate = RATES[r.model];
+  const uncached = r.input - r.cached;
+  return (uncached * rate.in + r.cached * rate.cached + r.output * rate.out) / 1e6;
+}
+const ledgerTotal = (mode) => LEDGER[mode].reduce((n, r) => n + rowCost(r), 0);
+const reasoningTotal = (mode) => LEDGER[mode].reduce((n, r) => n + r.reason, 0);
+const outputShare = (mode) => {
+  let out = 0, all = 0;
+  for (const r of LEDGER[mode]) {
+    const rate = RATES[r.model];
+    const o = (r.output * rate.out) / 1e6;
+    out += o; all += rowCost(r);
+  }
+  return all ? out / all : 0;
+};
+
+/* -- The corpus ceiling -------------------------------------
+   The one set of real numbers on this page: ADR 002, measured over an
+   80-patent gold set of granted US filings and their 3,399 front-page
+   citations, all of it public patent data. It is the finding the whole
+   project turned on and inventing it would have made the page argue
+   nothing. */
+const CEILING = {
+  patents: 80,
+  citations: 3399,
+  inCorpus: 524,
+  ceiling: 0.154,
+  widened: 0.735,
+  recovered: 0.791,
+  corpusRows: 304000,
+  eras: [
+    { name: '2005–2009 filings', patents: 20, citations: 364, inCorpus: 11, ceiling: 3.0 },
+    { name: '2010–2014 filings', patents: 20, citations: 1832, inCorpus: 225, ceiling: 12.3 },
+    { name: '2015–2019 filings', patents: 20, citations: 646, inCorpus: 109, ceiling: 16.9 },
+    { name: '2020–2026 filings', patents: 20, citations: 557, inCorpus: 179, ceiling: 32.1 },
+  ],
+  causes: [
+    { cause: 'Excluded by the CPC filter (published ≥ 2005, no UI code)', n: 1312, pct: 52.5 },
+    { cause: 'Excluded by the 2005 date floor', n: 1185, pct: 47.5 },
+    { cause: '…of which are UI-classified — the date floor acting alone', n: 217, pct: 8.7, sub: true },
+    { cause: 'Not present in the upstream table at all', n: 0, pct: 0 },
+  ],
+  subclasses: [
+    { code: 'G06F', pct: 45.8 }, { code: 'G06Q', pct: 17.9 }, { code: 'H04L', pct: 16.3 },
+    { code: 'H04W', pct: 10.6 }, { code: 'H04N', pct: 9.5 }, { code: 'G01S', pct: 7.7 },
+    { code: 'H04M', pct: 6.9 }, { code: 'G01C', pct: 6.0 }, { code: 'G06T', pct: 5.0 },
+    { code: 'G08G', pct: 4.9 },
+  ],
+};
+
+/* ============================================================
+   STATE + ROUTER
+   Every view is addressable, because the case study links into
+   individual screens and a demo you cannot deep-link into is a
+   slideshow with extra steps.
+   ============================================================ */
+const VIEWS = [
+  { id: 'sources', label: 'Sources', count: () => SOURCES.length },
+  { id: 'intake', label: 'Intake gate', count: null },
+  { id: 'run', label: 'Run', count: null },
+  { id: 'result', label: 'Result', count: null },
+  { id: 'corpus', label: 'Corpus ceiling', count: null },
+  { id: 'runs', label: 'All runs', count: () => RUNS.length },
+];
+
+const S = {
+  view: 'result',
+  src: 'dis0416',
+  tab: 'gaps',
+  corpus: 'narrow',
+  decisions: {},
+  intake: { status: 'unpublished_internal', pub: '', filing: '2026-09-01', by: '', override: '' },
+  run: { t: 0, playing: false, speed: 30, done: false, timer: null },
+};
+for (const s of SOURCES) S.decisions[s.id] = s.decision ? { ...s.decision } : null;
+
+const TOTAL_SECONDS = STAGES.reduce((n, s) => n + s.typical, 0);
+
+function readURL() {
+  const p = new URLSearchParams(location.search);
+  const v = p.get('view');
+  if (v && VIEWS.some((x) => x.id === v)) S.view = v;
+  const src = p.get('src');
+  if (src && SOURCES.some((x) => x.id === src)) S.src = src;
+  const tab = p.get('tab');
+  if (tab) S.tab = tab;
+  const c = p.get('corpus');
+  if (c === 'wide' || c === 'narrow') S.corpus = c;
+  const st = p.get('status');
+  if (st && statusInfo(st)) {
+    S.intake.status = st;
+    const info = statusInfo(st);
+    if (info.needsDate && !S.intake.pub) S.intake.pub = st === 'published_us_barred' ? '2024-11-02' : '2026-07-01';
+  }
+  if (p.get('decided') === '0') S.decisions[S.src] = null;
+  if (p.get('speed')) S.run.speed = Number(p.get('speed')) || 30;
+  if (p.get('play') === '1') S.run.playing = true;
+}
+
+function writeURL() {
+  const p = new URLSearchParams();
+  p.set('view', S.view);
+  if (S.view === 'intake' || S.view === 'sources') p.set('src', S.src);
+  // An intake deep link has to survive a reload, or the case study's link
+  // lands on a different screen the second time someone opens it.
+  if (S.view === 'intake' && !S.decisions[S.src]) {
+    p.set('status', S.intake.status);
+    if (SOURCES.find((x) => x.id === S.src).decision) p.set('decided', '0');
+  }
+  if (S.view === 'result') p.set('tab', S.tab);
+  if (S.corpus !== 'narrow') p.set('corpus', S.corpus);
+  history.replaceState(null, '', location.pathname + '?' + p.toString());
+}
+
+function go(view, extra) {
+  stopRun();
+  S.view = view;
+  if (extra) Object.assign(S, extra);
+  render();
+  document.getElementById('view').focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+}
+
+/* -- small helpers ----------------------------------------- */
+const usd = (n) => '$' + n.toFixed(2);
+const usd4 = (n) => '$' + n.toFixed(4);
+const int = (n) => n.toLocaleString('en-US');
+const pct = (n, d) => (n * 100).toFixed(d === undefined ? 1 : d) + '%';
+const kb = (n) => (n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.round(n / 1024) + ' KB');
+function mmss(sec) {
+  const m = Math.floor(sec / 60), s = Math.round(sec % 60);
+  return m + 'm ' + String(s).padStart(2, '0') + 's';
+}
+function bars(rows, max, unit) {
+  return '<div class="hbars">' + rows.map((r) =>
+    '<div class="hbar ' + (r.hi ? 'hi' : r.good ? 'good' : '') + '">' +
+      '<span class="nm">' + r.name + '</span>' +
+      '<span class="track"><i class="fill" style="width:' + Math.max(0.6, (r.value / max) * 100).toFixed(1) + '%"></i></span>' +
+      '<span class="val">' + r.label + '</span>' +
+    '</div>').join('') +
+    (unit ? '<p class="note" style="margin-top:4px">' + unit + '</p>' : '') + '</div>';
+}
+const badge = (t, cls) => '<span class="badge ' + (cls || '') + '">' + t + '</span>';
+
+/* ============================================================
+   CHROME
+   ============================================================ */
+function renderChrome() {
+  document.getElementById('viewbar').innerHTML = VIEWS.map((v) =>
+    '<button data-go="' + v.id + '"' + (S.view === v.id ? ' aria-current="page"' : '') + '>' + v.label +
+    (v.count ? '<span class="vb-count">' + v.count() + '</span>' : '') + '</button>').join('');
+
+  const wide = S.corpus === 'wide';
+  document.getElementById('chip-corpus').className = 'chip ' + (wide ? 'goodish' : 'critish');
+  document.getElementById('chip-corpus').innerHTML =
+    '<span class="dot ' + (wide ? 'good' : 'crit') + '"></span>Corpus: <b>' +
+    (wide ? 'widened · ceiling 73.5%' : 'UI extract · ceiling 15.4%') + '</b>' +
+    ' <button data-act="toggle-corpus">' + (wide ? 'revert' : 'widen') + '</button>';
+
+  const total = ledgerTotal(S.corpus);
+  document.getElementById('chip-cost').innerHTML = 'Run cost <b>' + usd(total) + '</b>';
+}
+
+/* ============================================================
+   VIEW — SOURCES
+   ============================================================ */
+function viewSources() {
+  const s = SOURCES.find((x) => x.id === S.src) || SOURCES[0];
+  const d = S.decisions[s.id];
+
+  const rows = SOURCES.map((x) => {
+    const dx = S.decisions[x.id];
+    const state = !dx ? badge('no decision', 'stop')
+      : statusInfo(dx.status).mayProcess || dx.override ? badge(statusInfo(dx.status).label, 'good')
+      : badge(statusInfo(dx.status).label, 'stop');
+    return '<tr class="clickable' + (x.id === s.id ? ' selected' : '') + '" data-src="' + x.id + '">' +
+      '<td><b style="color:var(--ink)">' + x.origin.split('/').pop() + '</b><br><span class="mono" style="font-size:11px;color:var(--faint)">' + x.sha.slice(0, 24) + '…</span></td>' +
+      '<td class="num">' + x.pages + '</td><td class="num">' + x.sheets + '</td>' +
+      '<td class="num">' + kb(x.size) + '</td>' +
+      '<td>' + state + '</td></tr>';
+  }).join('');
+
+  return '<div class="stack">' +
+    '<p class="lede">Three documents have been fetched and fingerprinted. <b>Nothing has left this process.</b> ' +
+    'Acquisition hashes the bytes; inspection reads them locally. The gate that decides whether they may be transmitted is the next view — ' +
+    'and it is a containment boundary, not a workflow step.</p>' +
+
+    '<div class="tablewrap"><table><thead><tr>' +
+    '<th>Source · sha256</th><th class="num">Pages</th><th class="num">Sheets</th><th class="num">Size</th><th>Intake decision</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+
+    '<h2 class="sec"><span class="n">02</span>Inspection — no network, no decision required</h2>' +
+    '<div class="alert plain"><h3>' + s.title + '</h3>' +
+    '<p>You cannot make an informed intake decision about a document you are not allowed to look at, so <code>inspect</code> is deliberately network-free. ' +
+    'It is also the only step that costs nothing.</p></div>' +
+
+    '<div class="panel panel-pad"><dl class="fields">' +
+    '<div><dt>origin</dt><dd class="mono" style="font-size:12px">' + s.origin + '</dd></div>' +
+    '<div><dt>sha256</dt><dd class="mono" style="font-size:11px;word-break:break-all">' + s.sha + '</dd></div>' +
+    '<div><dt>content type</dt><dd class="mono">' + s.mime + '</dd></div>' +
+    '<div><dt>retrieved</dt><dd class="mono">' + s.retrieved + '</dd></div>' +
+    '<div><dt>pages</dt><dd>' + s.pages + '</dd></div>' +
+    '<div><dt>text blocks</dt><dd>' + int(s.blocks) + '</dd></div>' +
+    '<div><dt>characters</dt><dd>' + int(s.chars) + '</dd></div>' +
+    '<div><dt>drawing sheets</dt><dd>' + s.sheets + '</dd></div>' +
+    '</dl>' +
+    '<p class="note" style="margin-top:14px">Content type is sniffed from the bytes, not from the extension. ' +
+    'The store re-hashes on read, so the bytes drafted from are provably the bytes decided on.</p></div>' +
+
+    (s.tables.length ? '<div class="panel panel-pad"><h3 class="sub">Tables preserved · ' + s.tables.length + '</h3>' +
+      s.tables.map((t) => '<p class="note" style="margin:0 0 6px"><b>' + t.caption + '</b> — ' + t.headers.join(' · ') + ' · ' + t.rows + ' rows · p.' + t.page + '</p>').join('') +
+      '</div>' : '') +
+
+    (s.captions.length ? '<div class="panel panel-pad"><h3 class="sub">Figure captions found · ' + s.captions.length + '</h3>' +
+      '<p class="mono" style="font-size:12px;color:var(--body);margin:0">' + s.captions.join(' · ') + '</p>' +
+      '<p class="note" style="margin-top:10px">Drawing sheets are located by character count and sheet header, then read by one vision call each. ' +
+      'The mechanism usually lives in the drawings rather than the prose, which is why this pass exists at all.</p></div>' : '') +
+
+    '<div class="panel panel-pad"><h3 class="sub">Preview</h3><pre class="verbatim" style="margin-top:0">' + s.preview + '</pre></div>' +
+
+    '<div class="btnrow">' +
+    (d
+      ? '<span class="badge ' + ((statusInfo(d.status).mayProcess || d.override) ? 'good' : 'stop') + '">decision on record · ' + statusInfo(d.status).label + '</span>' +
+        '<button class="btn" data-go="intake" data-src="' + s.id + '">Open the gate for this source</button>'
+      : '<button class="btn primary" data-go="intake" data-src="' + s.id + '">Record an intake decision →</button>') +
+    '</div>' +
+    '</div>';
+}
+
+/* ============================================================
+   VIEW — INTAKE GATE
+   The one screen worth building first. The refusal has to be
+   legible, not implied by a greyed-out button, and every
+   rationale is the enum's own words.
+   ============================================================ */
+function viewIntake() {
+  const s = SOURCES.find((x) => x.id === S.src) || SOURCES[0];
+  const d = S.decisions[s.id];
+  if (d) return intakeRecorded(s, d);
+
+  const chosen = S.intake.status;
+  const info = statusInfo(chosen);
+  const suggested = S.intake.pub ? classify(S.intake.pub, S.intake.filing) : null;
+
+  const opts = STATUSES.map((st) =>
+    '<label class="opt' + (st.value === chosen ? ' chosen' : '') + '">' +
+      '<span class="opt-head">' +
+        '<input type="radio" name="status" value="' + st.value + '" data-act="pick-status"' + (st.value === chosen ? ' checked' : '') + '>' +
+        '<span class="name">' + st.value + '</span>' +
+        (st.mayProcess ? badge('proceeds', 'good') : badge('blocks', 'stop')) +
+        (st.foreignLost ? badge('foreign rights lost', 'warn') : '') +
+        (st.needsDate ? badge('needs a date') : '') +
+      '</span>' +
+      '<p class="opt-why">' + st.rationale + '</p>' +
+    '</label>').join('');
+
+  const canRecord = S.intake.by.trim().length > 0 &&
+    (!info.needsDate || S.intake.pub) &&
+    (info.mayProcess || S.intake.override.trim().length > 0);
+
+  return '<div class="stack">' +
+    '<div class="alert stop" role="alert">' +
+      '<h3 class="mono">RUN REFUSED — no intake decision on record</h3>' +
+      '<p>Nothing may be transmitted to a model or to BigQuery until a human answers one question: ' +
+      '<b style="color:var(--ink)">is this document already public?</b></p>' +
+      '<p>The gate is enforced at the call boundary inside the model client and the BigQuery client — not at the CLI, and not at client construction. ' +
+      'Both clients memoise their SDK object, so a check placed at construction would fire once per process and every subsequent call would sail through. ' +
+      'It would look present in review and enforce nothing at run time.</p>' +
+      '<pre class="verbatim">' +
+'ContainmentError: OpenAI completion (gpt-5.6-sol) was attempted for source\n' +
+s.sha.slice(0, 12) + '... which has no intake decision on record.\n' +
+'A human must decide the publication status before any material leaves this\n' +
+'process. DecisionStore.decide(...) records it.' +
+      '</pre>' +
+    '</div>' +
+
+    '<p class="lede"><b>' + s.title + '</b><br>' +
+    '<span class="mono" style="font-size:11.5px;color:var(--faint)">' + s.sha + '</span></p>' +
+
+    '<h2 class="sec"><span class="n">01</span>Four states, and two of them block</h2>' +
+    '<p class="note">The question is not “is the document public?” but “what may the pipeline do with it?”. Those differ, and collapsing them into a boolean ' +
+    'is how material gets transmitted before anyone has decided it should be — a publication thirteen months before filing and one thirteen days before filing ' +
+    'are both “published”, and are not remotely the same situation.</p>' +
+    '<div>' + opts + '</div>' +
+
+    '<h2 class="sec"><span class="n">02</span>Record it</h2>' +
+    '<div class="panel panel-pad">' +
+      '<div class="grid2">' +
+        '<div class="field"><label for="f-by">Decided by (required)</label>' +
+        '<input id="f-by" data-act="field" data-k="by" value="' + S.intake.by + '" placeholder="Your name"></div>' +
+        '<div class="field"><label for="f-pub">Publication date' + (info.needsDate ? ' (required)' : '') + '</label>' +
+        '<input id="f-pub" type="date" data-act="field" data-k="pub" value="' + S.intake.pub + '"></div>' +
+        '<div class="field"><label for="f-fil">Intended filing date</label>' +
+        '<input id="f-fil" type="date" data-act="field" data-k="filing" value="' + S.intake.filing + '"></div>' +
+        (info.mayProcess ? '' :
+          '<div class="field"><label for="f-ov">Attorney override (required for a blocking status)</label>' +
+          '<input id="f-ov" data-act="field" data-k="override" value="' + S.intake.override + '" placeholder="Named attorney"></div>') +
+      '</div>' +
+
+      (suggested ? '<div class="alert ' + (statusInfo(suggested).mayProcess ? 'plain' : 'warn') + '" style="margin-top:14px">' +
+        '<h3>Classified from the dates as <span class="mono">' + suggested + '</span> — advisory only</h3>' +
+        '<p>' + Math.round((new Date(S.intake.filing || '2026-08-30') - new Date(S.intake.pub)) / 86400000) +
+        ' days between publication and the intended filing date, against a ' + US_GRACE_PERIOD_DAYS + '-day grace period. ' +
+        'A human confirms or overrides this, and what gets stored is their choice — the pipeline must be able to prove what was decided at intake, ' +
+        'not re-derive it later against a filing date that has since moved.</p></div>' : '') +
+
+      (info.mayProcess ? '' :
+        '<div class="alert stop" style="margin-top:14px"><h3>This status blocks</h3><p>' + info.rationale + '</p>' +
+        '<p>Recording it is allowed. Running on it is not, unless a named attorney takes the decision — and the override is recorded against them.</p></div>') +
+
+      '<div class="btnrow" style="margin-top:16px">' +
+      '<button class="btn primary" data-act="record"' + (canRecord ? '' : ' disabled') + '>Record this decision</button>' +
+      '<span class="note" style="margin:0">' +
+      (canRecord ? 'Recording is free. Only starting a run spends money.'
+        : (!S.intake.by.trim() ? 'A name is required — a decision nobody signed is not a decision.'
+          : (info.needsDate && !S.intake.pub) ? 'A published status asserts the document is public. Without the date the status is unverifiable.'
+          : 'A blocking status needs a named attorney before it can be recorded as an override.')) +
+      '</span></div>' +
+    '</div>' +
+
+    '<div class="alert plain"><h3>Try the two that matter</h3>' +
+    '<p>Pick <span class="mono">published_us_barred</span> and record it: the run button does not appear — it is <b>absent</b>, not greyed out, because a disabled control ' +
+    'invites you to look for the way around it. Then pick <span class="mono">unpublished_internal</span> and it appears.</p></div>' +
+    '</div>';
+}
+
+function intakeRecorded(s, d) {
+  const info = statusInfo(d.status);
+  const permits = info.mayProcess || !!d.override;
+  return '<div class="stack">' +
+    '<div class="alert ' + (permits ? 'ok' : 'stop') + '">' +
+      '<h3>' + (permits ? 'Decision on record — processing permitted' : 'Decision on record — processing blocked') + '</h3>' +
+      '<p>' + info.rationale + '</p>' +
+      (d.override ? '<p><b>Overridden by ' + d.override + '.</b> The override is itself auditable, and travels with every artefact this run produces.</p>' : '') +
+    '</div>' +
+
+    '<div class="panel panel-pad"><dl class="fields">' +
+    '<div><dt>source</dt><dd style="font-size:12.5px">' + s.origin.split('/').pop() + '</dd></div>' +
+    '<div><dt>status</dt><dd class="mono" style="font-size:12.5px">' + d.status + '</dd></div>' +
+    '<div><dt>decided by</dt><dd>' + d.by + '</dd></div>' +
+    '<div><dt>decided at</dt><dd class="mono" style="font-size:12px">' + (d.at || '2026-08-26T08:41:07Z') + '</dd></div>' +
+    (d.pub ? '<div><dt>published</dt><dd class="mono">' + d.pub + '</dd></div>' : '') +
+    (d.filing ? '<div><dt>intended filing</dt><dd class="mono">' + d.filing + '</dd></div>' : '') +
+    '<div><dt>foreign rights</dt><dd>' + (info.foreignLost ? '<span style="color:var(--warn)">already lost</span>' : 'available') + '</dd></div>' +
+    '<div><dt>permits processing</dt><dd>' + (permits ? '<span style="color:var(--good)">yes</span>' : '<span style="color:var(--crit)">no</span>') + '</dd></div>' +
+    '</dl>' +
+    '<p class="note" style="margin-top:14px">Keyed to the content hash, not the path: editing the document produces different bytes, and a decision made about the old text does not carry over. ' +
+    'A draft built from several documents is exactly as cleared as its least-cleared member — the gate ANDs the clearances rather than trusting the first one.</p></div>' +
+
+    (permits
+      ? '<div class="btnrow"><button class="btn primary" data-go="run">Start the run</button>' +
+        '<span class="note" style="margin:0">≈ ' + mmss(TOTAL_SECONDS) + ' and ' + usd(ledgerTotal('narrow')) + '. This is the only step that spends money.</span></div>'
+      : '<div class="alert plain"><h3>There is no run button here</h3>' +
+        '<p>Not a disabled one — none. A greyed-out control tells you the thing exists and you are not allowed to have it, which is an invitation to find the way around. ' +
+        'A named attorney can record an override, and that is a different act with a different name attached to it.</p></div>') +
+
+    '<div class="btnrow"><button class="btn small" data-act="reset-decision" data-src="' + s.id + '">Clear this decision and try another status</button></div>' +
+    '</div>';
+}
+
+/* ============================================================
+   VIEW — THE RUN
+   Seven stages with durations measured from real runs, four
+   phases inside the longest one, and the artifacts appearing as
+   they are written. The alternative is an indeterminate spinner
+   for five minutes, which tells a user nothing except that
+   something might be wrong.
+   ============================================================ */
+const RUN_START = 9 * 3600 + 14 * 60 + 12;
+function clockAt(sec) {
+  const t = RUN_START + Math.round(sec);
+  const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+
+const STAGE_START = (() => {
+  let acc = 0; const out = {};
+  for (const s of STAGES) { out[s.id] = acc; acc += s.typical; }
+  return out;
+})();
+
+const ARTIFACTS_AT = [
+  { at: 5, name: 'extracted.txt', size: '82,566 chars' },
+  { at: 43, name: 'source_figures.md', size: '19,204 chars' },
+  { at: 90, name: 'extracted_disclosure.json', size: '24,118 chars' },
+  { at: 90, name: 'gaps.md', size: '4,806 chars' },
+  { at: 289, name: 'claims.json', size: '16,402 chars' },
+  { at: 289, name: 'claims.txt', size: '9,713 chars' },
+  { at: 289, name: 'critique.json', size: '3,144 chars' },
+  { at: 289, name: 'critique.md', size: '2,588 chars' },
+  { at: 289, name: 'specification.json', size: '31,880 chars' },
+  { at: 289, name: 'abstract.txt', size: '902 chars' },
+  { at: 289, name: 'prior_art.json', size: '2,410 chars' },
+  { at: 289, name: 'prior_art.md', size: '812 chars' },
+  { at: 310, name: 'figures.json', size: '8,911 chars' },
+  { at: 310, name: 'numerals.json', size: '1,690 chars' },
+  { at: 310, name: 'drawings.pdf', size: '3 sheets' },
+  { at: 312, name: 'package/*.docx', size: '3 files' },
+  { at: 312, name: 'application.pdf', size: 'review copy' },
+  { at: 312, name: 'manifest.json', size: 'final' },
+];
+
+const EVENTS = [
+  { at: 90, ev: 'concepts', label: 'Extracting search concepts' },
+  { at: 101, ev: 'retrieval', label: 'Searching the corpus' },
+  { at: 114, ev: 'rerank', label: 'Ranking prior art', extra: () => 'candidates ' + RETRIEVAL[S.corpus].judged },
+  { at: 136, ev: 'claims', label: 'Drafting claims', extra: () => 'prior_art ' + RETRIEVAL[S.corpus].refs.filter((r) => r.inArt).length },
+  { at: 208, ev: 'critics', label: 'Critic round 1', extra: () => 'claims ' + visibleClaims().length },
+  { at: 255, ev: 'specification', label: 'Writing the specification', extra: () => 'claims ' + visibleClaims().length },
+];
+
+function stopRun() {
+  if (S.run.timer) { clearInterval(S.run.timer); S.run.timer = null; }
+  S.run.playing = false;
+}
+
+function startRun() {
+  stopRun();
+  if (S.run.done) { S.run.t = 0; S.run.done = false; }
+  S.run.playing = true;
+  const step = 0.1;
+  S.run.timer = setInterval(() => {
+    S.run.t += step * S.run.speed;
+    if (S.run.t >= TOTAL_SECONDS) {
+      S.run.t = TOTAL_SECONDS;
+      S.run.done = true;
+      stopRun();
+      render();
+      return;
+    }
+    paintRun();
+  }, step * 1000);
+  render();
+}
+
+function currentStage() {
+  let id = STAGES[0].id;
+  for (const s of STAGES) if (S.run.t >= STAGE_START[s.id]) id = s.id;
+  return id;
+}
+
+function viewRun() {
+  return '<div class="stack">' +
+    '<p class="lede">The run is on disk from the first stage, so closing the tab is safe — this page is a reader over a directory, not a session. ' +
+    'A local <code>readdir</code> is sub-millisecond and keeps working while the backend is saturated by a five-minute run, which is exactly when you want to browse a previous one.</p>' +
+    (S.corpus === 'wide'
+      ? '<p class="note">This plays the run against the <b>shipped</b> corpus: ' + mmss(TOTAL_SECONDS) + ' and ' + usd(ledgerTotal('narrow')) + '. ' +
+        'On the widened corpus the same disclosure takes ' + mmss(468) + ' and ' + usd(ledgerTotal('wide')) + ', because the critic ring runs a third round and the claim chart gets built.</p>'
+      : '') +
+    '<div class="btnrow">' +
+      '<button class="btn primary" data-act="run-toggle">' + (S.run.playing ? 'Pause' : S.run.done ? 'Run it again' : S.run.t > 0 ? 'Resume' : 'Start the run') + '</button>' +
+      '<button class="btn small" data-act="run-speed" data-v="1"' + (S.run.speed === 1 ? ' aria-pressed="true"' : '') + '>1×</button>' +
+      '<button class="btn small" data-act="run-speed" data-v="30"' + (S.run.speed === 30 ? ' aria-pressed="true"' : '') + '>30×</button>' +
+      '<button class="btn small" data-act="run-speed" data-v="120"' + (S.run.speed === 120 ? ' aria-pressed="true"' : '') + '>120×</button>' +
+      '<button class="btn small" data-act="run-skip">Skip to the result</button>' +
+      '<span class="note" style="margin:0">Real elapsed time ' + mmss(TOTAL_SECONDS) + '. Playing at ' + S.run.speed + '×.</span>' +
+    '</div>' +
+    '<div id="run-body"></div></div>';
+}
+
+function paintRun() {
+  const host = document.getElementById('run-body');
+  if (!host) return;
+  const t = S.run.t;
+  const cur = currentStage();
+  const curIdx = STAGES.findIndex((s) => s.id === cur);
+  const frac = Math.min(1, t / TOTAL_SECONDS);
+
+  const stageRows = STAGES.map((s, i) => {
+    const started = t >= STAGE_START[s.id];
+    const done = i < curIdx || S.run.done;
+    const active = i === curIdx && !S.run.done;
+    let sub = '';
+    if (s.id === 'drafting' && started) {
+      const rel = t - STAGE_START.drafting;
+      sub = '<ul class="substages">' + SUBSTAGES.map((ss, j) => {
+        const next = SUBSTAGES[j + 1];
+        const sdone = next ? rel >= next.at : rel >= s.typical;
+        const sactive = rel >= ss.at && !sdone;
+        return '<li class="' + (sdone ? 'done' : sactive ? 'active' : '') + '">' +
+          '<span class="mono" style="font-size:10.5px">' + (sdone ? '✓' : sactive ? '▸' : '·') + '</span>' + ss.label + '</li>';
+      }).join('') + '</ul>';
+    }
+    return '<div class="stage ' + (done ? 'done' : active ? 'active' : '') + '">' +
+      '<span class="mark">' + (done ? '✓' : active ? '▸' : '') + '</span>' +
+      '<span><span class="label">' + s.label + '</span>' + sub + '</span>' +
+      '<span class="t">' + (started ? '+' + Math.round(Math.min(t, STAGE_START[s.id] + s.typical)) + 's' : s.typical ? '~' + s.typical + 's' : '') + '</span>' +
+    '</div>';
+  }).join('');
+
+  const written = ARTIFACTS_AT.filter((a) => t >= a.at);
+  const evs = EVENTS.filter((e) => t >= e.at);
+
+  host.innerHTML =
+    '<div class="panel panel-pad">' +
+      '<div class="badgerow" style="margin-bottom:12px">' +
+        (S.run.done ? badge('drafted', 'good') : badge('running', 'accent')) +
+        badge('internal') +
+        '<span class="mono" style="font-size:11.5px;color:var(--faint)">20260826T091412Z-4f1c8ad2</span>' +
+        '<span class="mono" style="margin-left:auto;font-size:12px;color:var(--ink)">' + mmss(t) + ' / ' + mmss(TOTAL_SECONDS) + '</span>' +
+      '</div>' +
+      '<div class="bar"><i style="width:' + (frac * 100).toFixed(1) + '%"></i></div>' +
+      '<div style="margin-top:14px">' + stageRows + '</div>' +
+      (t >= 90 && !S.run.done ? '<p class="note" style="margin-top:12px"><b>The gap list is already on disk.</b> It appears at +90 seconds and stays on screen while claims are still drafting — it is produced whether or not a draft follows, so it is not held back to arrive with one.</p>' : '') +
+    '</div>' +
+
+    '<div class="grid2" style="margin-top:14px">' +
+      '<div class="panel panel-pad"><h3 class="sub">Events</h3>' +
+        (evs.length ? '<div class="eventlog">' + evs.map((e) =>
+          '<div><span class="ts">' + clockAt(e.at) + '</span> <b>' + e.ev + '</b> — ' + e.label +
+          (e.extra ? ' <span class="ts">· ' + e.extra() + '</span>' : '') + '</div>').join('') + '</div>'
+          : '<p class="note">Nothing yet.</p>') +
+      '</div>' +
+      '<div class="panel panel-pad"><h3 class="sub">Artifacts written · ' + written.length + ' of ' + ARTIFACTS_AT.length + '</h3>' +
+        (written.length ? '<div class="eventlog">' + written.slice().reverse().map((a) =>
+          '<div><span class="ts">+' + a.at + 's</span> <b>' + a.name + '</b> <span class="ts">' + a.size + '</span></div>').join('') + '</div>'
+          : '<p class="note">Nothing yet.</p>') +
+      '</div>' +
+    '</div>' +
+
+    (S.run.done ? '<div class="alert ok" style="margin-top:14px"><h3>Done — ' + mmss(TOTAL_SECONDS) + ', ' + usd(ledgerTotal('narrow')) + '</h3>' +
+      '<p>The pipeline ran to completion. What it produced is attorney-review material, not a filing — used that way it is worth five minutes; used as a filing it is a liability.</p>' +
+      '<p><button class="btn primary" data-go="result">Open the result</button></p></div>' : '');
+}
+
+/* ============================================================
+   VIEW — THE RESULT
+   ============================================================ */
+function visibleClaims() {
+  return CLAIMS.filter((c) => !c.wideOnly || S.corpus === 'wide');
+}
+
+const RESULT_TABS = [
+  { id: 'gaps', label: 'What the draft needs', count: () => GAPS.questions.length },
+  { id: 'claims', label: 'Claims', count: () => visibleClaims().length },
+  { id: 'prior-art', label: 'Prior art', count: null },
+  { id: 'review', label: 'Claim review', count: () => REVIEW[S.corpus].rounds.length },
+  { id: 'drawings', label: 'Drawings', count: () => 3 },
+  { id: 'package', label: 'Filing package', count: null },
+  { id: 'cost', label: 'Cost and provenance', count: null },
+  { id: 'artifacts', label: 'Artifacts', count: () => ARTIFACTS_AT.length },
+];
+
+function viewResult() {
+  const wide = S.corpus === 'wide';
+  const cost = ledgerTotal(S.corpus);
+  const dur = wide ? 468 : 312;
+  const cov = RETRIEVAL[S.corpus];
+  const rev = REVIEW[S.corpus];
+
+  const head =
+    '<div class="badgerow" style="margin-bottom:10px">' +
+      badge('drafted', 'good') + badge('internal') +
+      (cov.coverage === 'covered' ? badge('coverage covered', 'good') : badge('coverage absent', 'stop')) +
+      badge('critics ' + rev.stop, rev.stop === 'clean' ? 'good' : 'warn') +
+      badge('filable', 'good') +
+    '</div>' +
+    '<h2 style="margin:0 0 4px;font-size:19px;color:var(--ink);font-weight:600;letter-spacing:-0.012em">' +
+      'DIS-0416 — Contact-gated wake and low-rate keying for a body-coupled wearable link</h2>' +
+    '<dl class="fields" style="margin-top:14px">' +
+      '<div><dt>run</dt><dd class="mono" style="font-size:12px">20260826T091412Z-4f1c8ad2</dd></div>' +
+      '<div><dt>started</dt><dd class="mono" style="font-size:12.5px">2026-08-26 09:14</dd></div>' +
+      '<div><dt>duration</dt><dd class="mono">' + mmss(dur) + '</dd></div>' +
+      '<div><dt>cost</dt><dd class="mono">' + usd(cost) + '</dd></div>' +
+      '<div><dt>sources</dt><dd style="font-size:12.5px">2 documents, one disclosure</dd></div>' +
+      '<div><dt>concepts</dt><dd>' + GAPS.claimable + ' claimable of ' + GAPS.total + '</dd></div>' +
+    '</dl>' +
+    '<p class="note" style="margin-top:10px">source: <span class="mono" style="font-size:11.5px">data/DIS-0416-contact-gated-wake.pdf · 4f1c8ad2c9b07e56…</span> ' +
+    'and <span class="mono" style="font-size:11.5px">data/EN-2210-wake-receiver-notes.pdf · 9b70e3c1a24df85e…</span> — ' +
+    'read as a single disclosure with their boundaries preserved. Each needed its own intake decision.</p>';
+
+  const tabs = '<div class="rtabs">' + RESULT_TABS.map((t) =>
+    '<button data-tab="' + t.id + '"' + (S.tab === t.id ? ' aria-current="true"' : '') + '>' + t.label +
+    (t.count ? '<span class="c">' + t.count() + '</span>' : '') + '</button>').join('') + '</div>';
+
+  const body = {
+    gaps: tabGaps, claims: tabClaims, 'prior-art': tabPriorArt, review: tabReview,
+    drawings: tabDrawings, package: tabPackage, cost: tabCost, artifacts: tabArtifacts,
+  }[S.tab] || tabGaps;
+
+  return '<div>' + head + '<div style="margin-top:20px"></div>' + tabs + body() + '</div>';
+}
+
+/* -- tab: gap list ----------------------------------------- */
+function tabGaps() {
+  return '<div class="stack">' +
+    '<p class="lede">Ranked first among the things this run removes from an attorney’s day, and the only one produced whether or not a draft follows. ' +
+    'It is the inventor questionnaire, written from what the disclosure did not say.</p>' +
+
+    '<div class="tiles">' +
+      '<div class="tile"><div class="v">' + GAPS.total + '</div><div class="l">Candidate concepts found</div></div>' +
+      '<div class="tile"><div class="v">' + GAPS.claimable + '</div><div class="s">of ' + GAPS.total + '</div><div class="l">Claimable now</div></div>' +
+      '<div class="tile"><div class="v">' + GAPS.blocked + '</div><div class="l">Blocked for lack of enablement</div></div>' +
+      '<div class="tile"><div class="v">' + GAPS.quarantined + '</div><div class="l">Parameters quarantined as unverifiable</div></div>' +
+    '</div>' +
+
+    '<div class="prose">' +
+      '<h4>Concepts that cannot be claimed yet</h4>' +
+      GAPS.blockedConcepts.map((c) =>
+        '<div class="panel panel-pad" style="margin-bottom:10px">' +
+        '<p style="color:var(--ink);margin-bottom:8px">' + c.statement + '</p>' +
+        '<p style="margin-bottom:6px"><b>Support level:</b> <code>' + c.support + '</code></p>' +
+        '<p style="margin:0"><b>Why:</b> ' + c.why + '</p></div>').join('') +
+
+      '<h4>Questions for the inventor</h4>' +
+      '<ol>' + GAPS.questions.map((q) => '<li>' + q + '</li>').join('') + '</ol>' +
+
+      '<h4>Components named but not described</h4>' +
+      '<p>Each appears by name with no disclosed structure. A claim reciting one is only as strong as what the specification teaches.</p>' +
+      '<ul>' + GAPS.namedNotDescribed.map((c) => '<li><b>' + c.name + '</b> — ' + c.role + '</li>').join('') + '</ul>' +
+
+      '<h4>Statements set aside as marketing</h4>' +
+      '<p>Not used in drafting. Listed so the exclusion is visible rather than silent — the quarantine and the enablement filter are deterministic, not prompted.</p>' +
+      '<ul>' + GAPS.marketingClaims.map((m) => '<li>' + m + '</li>').join('') + '</ul>' +
+
+      '<h4>Parameters quarantined</h4>' +
+      '<div class="tablewrap"><table><thead><tr><th>Quantity</th><th>As written</th><th>Kind</th></tr></thead><tbody>' +
+      GAPS.quarantinedParams.map((p) => '<tr><td>' + p.q + '</td><td style="color:var(--body)">' + p.v + '</td><td><span class="mono" style="font-size:11.5px;color:var(--warn)">' + p.kind + '</span></td></tr>').join('') +
+      '</tbody></table></div>' +
+    '</div>' +
+
+    '<div class="alert plain"><h3>The input decides the output</h3>' +
+    '<p>Measured on the same code and the same prompts: this disclosure plus its design notes yielded <b>5 claimable concepts of 6</b> and 4 quarantined parameters. ' +
+    'The public whitepaper for the same technology yielded <b>1 of 7</b> and 15. The drafter was never the bottleneck — a document that names a mechanism without teaching it ' +
+    'cannot be drafted from, and this list is what says which one you have. That is why <code>inspect</code> exists and why it runs before anyone spends money.</p></div>' +
+    '</div>';
+}
+
+/* -- tab: claims ------------------------------------------- */
+function tabClaims() {
+  const cl = visibleClaims();
+  const ind = cl.filter((c) => c.kind === 'independent');
+  const wide = S.corpus === 'wide';
+  const qs = CLAIMSET.openQuestions[S.corpus];
+
+  /* The reviser's §103 amendments are carried inline and marked, so the claim
+     set reads as one document either way rather than as two variants. */
+  const wideText = (t) => wide
+    ? t.replace(/<span data-wide>/g, '<mark>').replace(/<\/span>/g, '</mark>')
+    : t.replace(/<span data-wide>[\s\S]*?<\/span>/g, '');
+
+  const rendered = cl.map((c) => {
+    const els = c.els.map((e) =>
+      '<li><span class="el">' + e.l + '</span> ' + wideText(e.t) + '</li>').join('');
+    const head = '<div class="claim-head"><span class="n">' + c.n + '.</span>' +
+      '<span class="preamble">' + c.preamble + '</span>' +
+      badge(c.cat) + (c.dep ? badge('← ' + c.dep) : '') + (c.wideOnly ? badge('added under §103', 'warn') : '') +
+      '</div>';
+    // A dependent claim is one sentence continuing its parent — "The device of
+    // claim 1, wherein ...". Printing a transitional phrase and a lettered list
+    // over a single clause is how a generated claim set announces itself.
+    if (c.kind === 'dependent') {
+      return '<li class="claim">' + head +
+        '<p style="margin:5px 0 0 24px;font-size:13px;line-height:1.62">' +
+        c.els.map((e) => wideText(e.t)).join(' ') + '</p></li>';
+    }
+    return '<li class="claim">' + head +
+      '<p class="trans">' + c.trans + ':</p><ul>' + els + '</ul></li>';
+  }).join('');
+
+  return '<div class="stack">' +
+    '<p class="note">' + ind.length + ' independent · ' + (cl.length - ind.length) + ' dependent · Alice risk ' +
+    '<span style="color:var(--good)">' + CLAIMSET.aliceRisk + '</span>' +
+    (wide ? ' · <span style="color:var(--accent)">highlighted text was added by the reviser after the widened corpus produced a §103 finding</span>' : '') + '</p>' +
+
+    (wide ? '' : '<div class="alert stop"><h3>Read the coverage verdict before reading these claims</h3>' +
+      '<p>No reference retrieved in this run is in this disclosure’s art. Nothing below has been differentiated over anything, and the critics’ verdict on it means nothing. ' +
+      'The claims read well. That is the failure mode, not evidence against it.</p></div>') +
+
+    '<ol style="list-style:none;padding:0;margin:0">' + rendered + '</ol>' +
+
+    '<div class="panel panel-pad"><h3 class="sub">Strategy</h3><p class="note" style="margin:0">' + CLAIMSET.strategy + '</p></div>' +
+
+    '<div class="alert warn"><h3>Flagged for the attorney · ' + qs.length + '</h3>' +
+    '<ul style="margin:8px 0 0;padding-left:18px">' + qs.map((q) => '<li style="font-size:12.5px;margin-bottom:6px">' + q + '</li>').join('') + '</ul></div>' +
+    '</div>';
+}
+
+/* -- tab: prior art ----------------------------------------
+   Led by whether the search was worth anything.
+
+   The coverage verdict is an alert rather than a stat because it
+   invalidates the sections around it. `absent` means the corpus does not
+   contain this disclosure's art, so the references are not prior art
+   against these claims and neither the critic ring's verdict nor the
+   claim chart carries a novelty conclusion — a distinction that is
+   invisible in a well-formatted reference list, which is exactly why it
+   gets its own banner. */
+function tabPriorArt() {
+  const r = RETRIEVAL[S.corpus];
+  const covered = r.coverage === 'covered';
+
+  const refRows = r.refs.map((x) =>
+    '<tr>' +
+      '<td><span class="mono" style="font-size:11.5px;color:' + (x.closest ? 'var(--accent)' : 'var(--body)') + '">' + x.id + '</span>' +
+      (x.closest ? ' ' + badge('closest', 'accent') : '') + (x.inArt ? ' ' + badge('in art', 'good') : ' ' + badge('off art', 'stop')) +
+      '<br><b style="color:var(--ink)">' + x.title + '</b></td>' +
+      '<td><span class="mono" style="font-size:11px">' + x.cpc + '</span><br><span style="color:var(--faint)">' + x.assignee + ' · ' + x.date + '</span></td>' +
+      '<td style="max-width:34ch">' + x.why + '</td>' +
+    '</tr>').join('');
+
+  const chart = covered
+    ? '<h2 class="sec"><span class="n">03</span>Claim chart — claim 1 against ' + CHART.closest + '</h2>' +
+      '<p class="note">The broadest claim, limitation by limitation, against the closest reference. ' +
+      '<b>“Taught elsewhere” is the column that matters:</b> a limitation supplied by a second reference in the same subclass is a §103 position, not a distinction.</p>' +
+      '<div class="tablewrap"><table><thead><tr><th>El.</th><th>Limitation</th><th>Verdict</th><th>Where</th><th>Note</th></tr></thead><tbody>' +
+      CHART.rows.map((row) => {
+        const cls = row.verdict === 'not taught' ? 'good' : row.verdict === 'elsewhere' ? 'warn' : 'stop';
+        const lbl = row.verdict === 'elsewhere' ? 'taught elsewhere' : row.verdict;
+        return '<tr><td class="mono">' + row.el + '</td><td style="max-width:32ch;color:var(--body)">' + row.lim + '</td>' +
+          '<td>' + badge(lbl, cls) + '</td><td class="mono" style="font-size:11px">' + row.where + '</td>' +
+          '<td style="max-width:32ch">' + row.note + '</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<div class="grid2" style="margin-top:14px">' +
+        '<div class="panel panel-pad"><h3 class="sub">Risk on this record</h3>' +
+        '<p class="note" style="margin:0">§102 anticipation <b style="color:var(--good)">' + CHART.anticipation + '</b> · ' +
+        '§103 obviousness <b style="color:var(--crit)">' + CHART.obviousness + '</b> · ' +
+        CHART.distinguishing + ' distinguishing feature found</p>' +
+        '<p class="note" style="margin-top:8px">The single distinguishing feature is the sub-eight-millisecond wake bound. Everything else in claim 1 is taught by the record, ' +
+        'which is why the reviser moved the bound to the point of novelty rather than leaving it in a dependent claim.</p></div>' +
+        '<div class="panel panel-pad"><h3 class="sub">What changed when the corpus widened</h3>' +
+        '<p class="note" style="margin:0">Claims went from 14 to 15, claim 1 gained a limitation, the critic ring ran three rounds instead of two and stopped ' +
+        '<b>exhausted</b> rather than <b>clean</b>, and the run cost ' + usd(ledgerTotal('wide') - ledgerTotal('narrow')) + ' more. ' +
+        'The disclosure did not change. Only the search did.</p></div>' +
+      '</div>'
+    : '<h2 class="sec"><span class="n">03</span>Claim chart</h2>' +
+      '<div class="alert plain"><h3>Not built</h3>' +
+      '<p>No retrieved reference is in this disclosure’s art, so there is no closest reference to chart. This is a corpus coverage problem, not evidence of novelty. ' +
+      'Charting the closest document in the wrong art would produce a confident novelty position resting on nothing, so the chart is refused rather than rendered empty.</p></div>';
+
+  return '<div class="stack">' +
+    '<div class="alert ' + (covered ? 'ok' : 'stop') + '" role="alert">' +
+      '<h3>Corpus coverage: ' + r.coverage + ' — ' + r.inArt + ' of ' + r.judged + ' candidates in this art</h3>' +
+      (covered
+        ? '<p>At least three references are in the disclosure’s art. Novelty reasoning here rests on a search that looked in the right place — still subject to the 73.5% ceiling of the widened extract.</p>'
+        : '<p>None of the ' + r.judged + ' candidates judged is in this disclosure’s art. <b>The references below are not prior art against these claims and no novelty conclusion may be drawn from them.</b> ' +
+          'Retrieval outside the corpus’s net does not return nothing — it returns the least irrelevant documents it holds, formatted exactly like real results, and everything downstream reasons from them.</p>') +
+      '<p>Field read as: ' + r.field + '</p>' +
+    '</div>' +
+
+    (covered ? '' : '<div class="alert warn"><h3>This is what a silent failure looks like</h3>' +
+      '<p>On a real run of this shape the simulated examiner reported every claim allowable — over touch-interface art. Correct reasoning, worthless conclusion. ' +
+      'Nothing in the output looked wrong, which is why the verdict is computed and banner-ed rather than left for an attorney to notice. ' +
+      '<button class="btn small" data-act="toggle-corpus">Widen the corpus and watch this page change</button></p></div>') +
+
+    '<h2 class="sec"><span class="n">02</span>References of record · ' + r.refs.length + ' shown of ' + r.judged + ' judged</h2>' +
+    '<p class="note">Candidates come from lexical search — CPC hints <b>boost, never filter</b>, because a wrong hint must not empty the result set — widened by citation expansion: ' +
+    'the references a seed patent itself cites are a shortlist a human examiner already assembled for a neighbouring invention. ' +
+    'Ranking is done by a model against the disclosure rather than by term overlap, and each reference carries its own one-line rationale.</p>' +
+    '<div class="tablewrap"><table><thead><tr><th>Reference</th><th>Classification · origin</th><th>Why it came back</th></tr></thead><tbody>' + refRows + '</tbody></table></div>' +
+    '<p class="note" style="margin-top:8px"><b>Reference identifiers, titles, assignees and dates on this page are invented for publication</b> and do not correspond to real publications. ' +
+    'The retrieval behaviour, the coverage verdict and the chart structure are the real ones.</p>' +
+
+    chart +
+    '</div>';
+}
+
+/* -- tab: claim review ------------------------------------- */
+function tabReview() {
+  const rev = REVIEW[S.corpus];
+  const stopTone = rev.stop === 'clean' ? 'good' : 'warn';
+  const outstanding = rev.rounds[rev.rounds.length - 1].critics.reduce((n, c) => n + c.findings.length, 0);
+
+  const rounds = rev.rounds.map((rd) =>
+    '<div class="round">' +
+      '<div class="round-head"><h4>Round ' + rd.n + '</h4>' +
+      rd.critics.map((c) => badge(c.name.replace('simulated first office action', 'examiner') + ' · ' + (c.allow ? 'would allow' : 'would reject'), c.allow ? 'good' : 'stop')).join('') +
+      '</div>' +
+      '<div class="critics">' + rd.critics.map((c) =>
+        '<div class="critic"><h5>' + c.name + (c.allowable ? '<span style="color:var(--faint)">allowable: ' + c.allowable + '</span>' : '') + '</h5>' +
+        '<p>' + c.assessment + '</p>' +
+        c.findings.map((f) =>
+          '<div class="finding"><span class="fh">' + f.ground + ' · ' + f.severity + ' · claims ' + f.claims + '</span>' +
+          '<p class="lim">' + f.lim + '</p><p class="why">' + f.why + '</p>' +
+          '<p class="why" style="color:var(--body)"><b>Proposed:</b> ' + f.fix + '</p></div>').join('') +
+        '</div>').join('') +
+      '</div>' +
+      (rd.amendments.length
+        ? '<div class="reviser"><h3 class="sub" style="margin:0">The reviser answered</h3><ul>' + rd.amendments.map((a) => '<li>' + a + '</li>').join('') + '</ul></div>'
+        : '<div class="reviser"><p class="note" style="margin:0">No amendment. ' +
+          (rd.n === rev.rounds.length ? 'The round limit ran out with findings standing.' : 'Nothing forced one.') + '</p></div>') +
+    '</div>').join('');
+
+  return '<div class="stack">' +
+    '<p class="lede">Three critics attack the claims <b>concurrently and blind to each other</b> — a novelty critic against the retrieved record, a §112 critic against the disclosure, ' +
+    'and a simulated first office action — and a reviser answers them between rounds. Blind matters: a novelty critic that can see the §112 findings starts negotiating with them.</p>' +
+
+    '<div class="alert ' + (rev.stop === 'clean' ? 'ok' : 'warn') + '">' +
+      '<h3>Stopped: ' + rev.stop + ' after ' + rev.rounds.length + ' round' + (rev.rounds.length > 1 ? 's' : '') + '</h3>' +
+      (rev.stop === 'clean'
+        ? '<p>No critic could still fault the final claim set. Note what this does <b>not</b> mean on the current corpus: the novelty critic allowed the claims because nothing in the record was in the right art.</p>'
+        : '<p><b>' + outstanding + ' finding still standing when the cap ran out.</b> Three rounds ending <span class="mono">exhausted</span> and three rounds ending <span class="mono">clean</span> are opposite outcomes and the round count is identical — ' +
+          'which is why the headline is the stop reason and never “3 rounds”. What is unresolved is what the attorney is being handed, named.</p>') +
+    '</div>' +
+
+    rounds +
+
+    '<div class="alert plain"><h3>The reviser is allowed to refuse</h3>' +
+    '<p>' + (S.corpus === 'wide'
+      ? 'In round 2 it declined to pull the suspension limitation up into the independent claims and recorded why: the disclosure supports it for one embodiment only, and surrendering scope before the inventor has answered question 2 in the gap list is a decision an attorney should make, not a loop. That refusal is why this run ends <span class="mono">exhausted</span>.'
+      : 'A reviser that always concedes converges quickly on claims nobody would file. Its refusals are recorded with their reasons, and an unresolved finding is reported rather than absorbed. On the widened corpus this run ends <span class="mono">exhausted</span> for exactly that reason.') + '</p></div>' +
+    '</div>';
+}
+
+/* -- tab: drawings -----------------------------------------
+   Layout is deterministic and in millimetres — no Graphviz, because a
+   layout engine that is free to move things cannot be proved against a
+   rule that measures where they ended up. The lint runs on the rendered
+   PDF, CTM-aware, rather than on the model's description of it. */
+function figureSVG() {
+  const S1 = 'fill:none;stroke:#111;stroke-width:1.7;stroke-linecap:round';
+  const S2 = 'fill:none;stroke:#111;stroke-width:1.4';
+  const DSH = 'fill:none;stroke:#111;stroke-width:1.2;stroke-dasharray:6 5';
+  // The control line to the disconnect switch. A finer dash than the device
+  // outline, so a wire routed near the boundary does not read as a second one.
+  const CTL = 'fill:none;stroke:#111;stroke-width:1.2;stroke-dasharray:2 3';
+  const TX = 'fill:#111;font-family:Inter,system-ui,sans-serif;font-size:11.5px';
+  const NUM = 'fill:#111;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600';
+  const box = (x, y, w, h, label, sub) =>
+    '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" style="' + S1 + '"/>' +
+    '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + (sub ? -4 : 4)) + '" text-anchor="middle" style="' + TX + '">' + label + '</text>' +
+    (sub ? '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + 11) + '" text-anchor="middle" style="' + TX + '">' + sub + '</text>' : '');
+  const num = (x, y, n) => '<text x="' + x + '" y="' + y + '" style="' + NUM + '">' + n + '</text>';
+  const lead = (x1, y1, x2, y2) => '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" style="' + S2 + '"/>';
+  const wire = (pts) => '<polyline points="' + pts + '" style="' + S1 + '"/>';
+  const dot = (x, y) => '<circle cx="' + x + '" cy="' + y + '" r="3.2" style="fill:#111"/>';
+
+  return '<svg viewBox="0 0 780 560" role="img" aria-label="FIG. 1 — block diagram of the body-coupled communication device, showing the probe circuit, baseline store and admittance comparator driving a wake controller that closes a disconnect switch between the voltage-mode driver and the first contact electrode.">' +
+    '<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+    '<path d="M 0 0 L 10 5 L 0 10 z" fill="#111"/></marker></defs>' +
+
+    '<text x="742" y="38" text-anchor="end" style="' + TX + '">1/3</text>' +
+
+    /* device outline */
+    '<rect x="30" y="58" width="560" height="412" style="' + DSH + '"/>' +
+    num(36, 50, '100') + lead(58, 54, 74, 66) +
+
+    /* body and electrodes */
+    '<rect x="660" y="140" width="70" height="240" rx="34" style="' + S1 + '"/>' +
+    '<text x="695" y="264" text-anchor="middle" style="' + TX + '">body</text>' +
+    num(700, 400, '134') + lead(706, 390, 700, 372) +
+    '<rect x="596" y="168" width="18" height="46" style="' + S1 + '"/>' +
+    '<rect x="596" y="282" width="18" height="46" style="' + S1 + '"/>' +
+    num(608, 158, '102') + num(608, 350, '104') +
+    wire('614,191 660,191') + wire('614,305 660,305') +
+
+    /* row 1 — keying, driver, disconnect switch */
+    box(62, 96, 140, 52, 'preamble keying', 'circuit') + num(68, 88, '140') +
+    box(246, 96, 150, 52, 'voltage-mode driver') + num(252, 88, '114') +
+    wire('202,122 246,122') +
+    wire('396,122 430,122') + '<circle cx="430" cy="122" r="3.4" style="' + S2 + ';fill:#fff"/>' +
+    '<line x1="430" y1="122" x2="500" y2="104" style="' + S1 + '"/>' +
+    '<circle cx="510" cy="122" r="3.4" style="' + S2 + ';fill:#fff"/>' +
+    wire('510,122 545,122 545,191 596,191') +
+    num(414, 92, '116') +
+
+    /* probe tap off the transmit node */
+    wire('570,280 570,150 548,150') + dot(545, 150) +
+
+    /* row 2 — baseline store, admittance comparator */
+    box(62, 190, 140, 52, 'baseline store') + num(68, 182, '118') +
+    box(430, 190, 140, 52, 'admittance', 'comparator') + num(436, 182, '108') +
+    '<polyline points="132,190 132,164 500,164 500,190" style="' + S1 + '" marker-end="url(#ar)"/>' +
+
+    /* row 3 — wake controller, probe circuit */
+    box(246, 280, 150, 52, 'wake controller') + num(252, 272, '112') +
+    box(430, 280, 140, 52, 'probe circuit') + num(436, 272, '106') +
+    '<polyline points="500,280 500,246" style="' + S1 + '" marker-end="url(#ar)"/>' +
+    '<polyline points="430,216 413,216 413,306 400,306" style="' + S1 + '" marker-end="url(#ar)"/>' +
+    num(340, 264, '110') +
+
+    /* wake control of the disconnect switch */
+    '<polyline points="246,306 232,306 232,84 470,84 470,100" style="' + CTL + '" marker-end="url(#ar)"/>' +
+
+    /* probe current source */
+    '<circle cx="532" cy="368" r="15" style="' + S1 + '"/>' +
+    '<path d="M 524 368 q 4 -7 8 0 q 4 7 8 0" style="' + S2 + '"/>' +
+    wire('532,332 532,353') + wire('532,383 532,392') + dot(532, 392) +
+    num(548, 372, '132') +
+
+    /* row 4 — receiver and the isolated reference node */
+    box(62, 366, 140, 52, 'receiver') + num(68, 358, '120') +
+    wire('202,392 588,392 588,305 596,305') +
+    wire('132,418 132,440') + dot(132, 440) + num(96, 436, '122') +
+    '<circle cx="132" cy="440" r="3.4" style="' + S2 + ';fill:#fff"/>' +
+    '<line x1="132" y1="440" x2="196" y2="424" style="' + S1 + '"/>' +
+    '<circle cx="210" cy="440" r="3.4" style="' + S2 + ';fill:#fff"/>' +
+    num(160, 466, '130') +
+    wire('210,440 256,440') +
+    '<line x1="234" y1="440" x2="278" y2="440" style="' + S1 + '"/>' +
+    '<line x1="242" y1="447" x2="270" y2="447" style="' + S1 + '"/>' +
+    '<line x1="250" y1="454" x2="262" y2="454" style="' + S1 + '"/>' +
+    num(290, 452, '128') +
+
+    '<text x="390" y="524" text-anchor="middle" style="' + TX + ';font-size:14px;font-weight:600">FIG. 1</text>' +
+  '</svg>';
+}
+
+function tabDrawings() {
+  const lintRows = LINT.map((l) =>
+    '<tr><td class="mono" style="font-size:11.5px">' + l.rule + '</td><td>' + l.check + '</td>' +
+    '<td class="mono">' + l.measured + '</td><td class="mono" style="color:var(--faint)">' + l.required + '</td>' +
+    '<td>' + badge(l.pass ? 'pass' : 'fail', l.pass ? 'good' : 'stop') + '</td></tr>').join('');
+
+  return '<div class="stack">' +
+    '<p class="lede">Three sheets, laid out deterministically in millimetres and rendered to PDF, then <b>measured</b>. ' +
+    'The §1.84 check runs against the rendered page rather than against the description of it, because that is the only version of the check that can fail honestly.</p>' +
+
+    '<div class="sheet">' + figureSVG() + '</div>' +
+    '<p class="note">FIG. 1 of 3. FIG. 2 is the wake timing diagram — probe interval, contact assertion, the eight-millisecond bound and the preamble-to-payload transition. ' +
+    'FIG. 3 is the method of claim 9 as a flow. Colour is inexpressible in the renderer, not merely discouraged: there is no code path that can emit it.</p>' +
+
+    '<h2 class="sec"><span class="n">02</span>The §1.84 proof</h2>' +
+    '<div class="tablewrap"><table><thead><tr><th>Rule</th><th>Check</th><th>Measured</th><th>Required</th><th></th></tr></thead><tbody>' + lintRows + '</tbody></table></div>' +
+
+    '<h2 class="sec"><span class="n">03</span>Numeral consistency · ' + NUMERAL_PROBLEMS.length + ' problems</h2>' +
+    '<p class="note">Reference numerals are idempotent and unique in both directions — one numeral per thing, one thing per numeral. These two are the cases where the drawings and the specification disagree, ' +
+    'which is a thing a human reviewer misses reliably and a set comparison never does.</p>' +
+    '<div class="panel panel-pad">' + NUMERAL_PROBLEMS.map((p) => '<p class="note" style="margin:0 0 6px">· ' + p + '</p>').join('') + '</div>' +
+
+    '<h2 class="sec"><span class="n">04</span>37 CFR 1.83(a) — claim features not drawn · ' + COVERAGE_NOTES.length + '</h2>' +
+    '<p class="note">A feature recited in a claim must appear in a drawing. These are <b>warnings, not errors</b>: USPTO distinguishes the two and warnings do not prevent filing. ' +
+    'Each needs a disposition — fixed or waived with a recorded reason — rather than silence.</p>' +
+    '<div class="tablewrap"><table><thead><tr><th class="num">Numeral</th><th>Feature</th><th>Recited in</th></tr></thead><tbody>' +
+    COVERAGE_NOTES.map((c) => '<tr><td class="num numeral">' + c.numeral + '</td><td>' + c.name + '</td><td class="mono" style="font-size:11.5px">' + c.where + '</td></tr>').join('') +
+    '</tbody></table></div>' +
+
+    '<h2 class="sec"><span class="n">05</span>Reference numerals · ' + NUMERALS.length + '</h2>' +
+    '<div class="panel panel-pad"><p style="margin:0;font-size:12.5px;line-height:2">' +
+    NUMERALS.map((n) => '<span class="numeral">' + n[0] + '</span> ' + n[1]).join(' &nbsp;·&nbsp; ') + '</p></div>' +
+    '</div>';
+}
+
+/* -- tab: filing package ----------------------------------- */
+function tabPackage() {
+  return '<div class="stack">' +
+    '<div class="alert ok"><h3>Status: ready for attorney review</h3>' +
+    '<p>The mechanical §112(b) antecedent-basis and §112(a) depth checks pass and the drawings measure clean, so the package verdict is <span class="mono">filable: true</span>. ' +
+    '<b>Passing them is necessary, not sufficient.</b> Gate 0 — patent versus trade secret — and Gate 1, human claim-strategy review, are both still missing, and Gate 2 is an attorney signature this system cannot produce.</p></div>' +
+
+    '<div class="tablewrap"><table><thead><tr><th>Artifact</th><th>Purpose</th></tr></thead><tbody>' +
+    '<tr><td class="mono">specification.docx</td><td>Specification. DOCX avoids the non-DOCX surcharge.</td></tr>' +
+    '<tr><td class="mono">claims.docx</td><td>Claims, filed separately.</td></tr>' +
+    '<tr><td class="mono">abstract.docx</td><td>Abstract, 37 CFR 1.72(b).</td></tr>' +
+    '<tr><td class="mono">drawings.pdf</td><td>Drawings, 37 CFR 1.84 — three sheets, measured.</td></tr>' +
+    '</tbody></table></div>' +
+
+    '<h2 class="sec"><span class="n">02</span>Warnings · ' + COVERAGE_NOTES.length + ' — review, then fix or waive</h2>' +
+    '<div class="panel panel-pad">' + COVERAGE_NOTES.map((c) =>
+      '<p class="note" style="margin:0 0 6px"><span class="mono" style="color:var(--warn)">[warning]</span> 1.83(a) claim feature not drawn: ‘' + c.name + '’ (numeral <span class="numeral">' + c.numeral + '</span>) is recited in ' + c.where + ' but appears in no figure</p>').join('') +
+    '</div>' +
+
+    '<h2 class="sec"><span class="n">03</span>Still required before filing</h2>' +
+    '<div class="prose"><ul>' +
+      '<li><b>Patent Center training-mode dry run</b>: zero errors, and every warning fixed or waived with a recorded rationale. This is a manual step — validation lives behind an authenticated UI.</li>' +
+      '<li>An <b>ADS (37 CFR 1.76)</b> and an <b>IDS</b>. Neither is produced by this system, and the IDS in particular is a decision about what you know, not a document that can be generated.</li>' +
+      '<li><b>Gate 0</b> — patent or trade secret. Never automated here, deliberately.</li>' +
+      '<li><b>Gate 1</b> — human claim-strategy review.</li>' +
+      '<li><b>Gate 2</b> — attorney sign-off. The output of this run is a document an attorney edits and signs. Used that way it is worth five minutes; used as a filing it is a liability.</li>' +
+    '</ul></div>' +
+
+    '<div class="alert plain"><h3>What the first draft actually removes</h3>' +
+    '<p>Ranked by how much of the work it takes off an attorney: the <b>gap list</b>, which is the inventor questionnaire and is produced whether or not a draft follows; ' +
+    'a <b>structured first draft</b> — claims in statutory form, a specification wired to them, §1.84-clean drawings and a DOCX set, which is the mechanical hours done; ' +
+    '<b>prior-art risk</b>, but only if the coverage verdict says the search looked in the right place; and <b>questions for review</b> — what three critics argued and what the reviser surrendered.</p></div>' +
+    '</div>';
+}
+
+/* -- tab: cost and provenance ------------------------------ */
+function tabCost() {
+  const rows = LEDGER[S.corpus];
+  const total = ledgerTotal(S.corpus);
+  const reasoning = reasoningTotal(S.corpus);
+  const share = outputShare(S.corpus);
+
+  const body = rows.map((r) => {
+    const c = rowCost(r);
+    return '<tr' + (r.calls === 0 ? ' style="opacity:0.55"' : '') + '>' +
+      '<td>' + r.agent + (r.skipped ? '<br><span style="color:var(--faint);font-size:11.5px">' + r.skipped + '</span>' : '') + '</td>' +
+      '<td class="mono" style="font-size:11.5px">' + r.model + '</td>' +
+      '<td class="num">' + r.calls + '</td>' +
+      '<td class="num">' + int(r.input) + (r.cached ? '<br><span style="color:var(--faint);font-size:11px">' + int(r.cached) + ' cached</span>' : '') +
+        (r.write ? '<br><span style="color:var(--faint);font-size:11px">' + int(r.write) + ' cache write</span>' : '') + '</td>' +
+      '<td class="num">' + int(r.output) + (r.reason ? '<br><span style="color:var(--faint);font-size:11px">' + int(r.reason) + ' reasoning</span>' : '') + '</td>' +
+      '<td class="num">' + (r.calls ? usd4(c) : '—') + '</td></tr>';
+  }).join('');
+
+  return '<div class="stack">' +
+    '<p class="lede">Every model call carries its own cost record, attached at the call rather than reconciled from an invoice. ' +
+    'Cost per disclosure is the number that decides whether this beats outside counsel, and a monthly bill cannot answer that question for one document.</p>' +
+
+    '<div class="tiles">' +
+      '<div class="tile"><div class="v">' + usd(total) + '</div><div class="l">This run, computed from the rows below</div></div>' +
+      '<div class="tile"><div class="v">' + pct(share, 0) + '</div><div class="l">Of that spent on output tokens</div></div>' +
+      '<div class="tile"><div class="v">' + int(reasoning) + '</div><div class="l">Hidden reasoning tokens, billed at the output rate</div></div>' +
+      '<div class="tile"><div class="v">' + usd(total / GAPS.claimable) + '</div><div class="l">Per claimable concept carried into the draft</div></div>' +
+    '</div>' +
+
+    '<div class="tablewrap"><table><thead><tr>' +
+    '<th>Agent</th><th>Model</th><th class="num">Calls</th><th class="num">Input</th><th class="num">Output</th><th class="num">Cost</th>' +
+    '</tr></thead><tbody>' + body + '</tbody>' +
+    '<tfoot><tr><td colspan="3">Total</td>' +
+    '<td class="num">' + int(rows.reduce((n, r) => n + r.input, 0)) + '</td>' +
+    '<td class="num">' + int(rows.reduce((n, r) => n + r.output, 0)) + '</td>' +
+    '<td class="num">' + usd(total) + '</td></tr></tfoot></table></div>' +
+
+    '<h2 class="sec"><span class="n">02</span>Three invariants this table exists to make visible</h2>' +
+    '<div class="grid2">' +
+      '<div class="panel panel-pad"><h3 class="sub">1 · Counters are nested, not disjoint</h3>' +
+      '<p class="note" style="margin:0"><code>input</code> already includes <code>cached</code> and <code>cache write</code>; <code>output</code> already includes <code>reasoning</code>. ' +
+      'A formula that adds them up double-bills and nothing raises — it just inflates every forecast. The usage type asserts the nesting rather than trusting it, so a provider-side change surfaces immediately instead of silently.</p></div>' +
+
+      '<div class="panel panel-pad"><h3 class="sub">2 · Cache TTL differs by model, and a wrong value is a silent no-op</h3>' +
+      '<p class="note" style="margin:0">' + Object.entries(RATES).map(([m, r]) => '<code>' + m + '</code> accepts only <code>' + r.ttl + '</code>').join('; ') + '. ' +
+      'Passing the wrong one is dropped upstream and you pay for a cold prefix believing it was warm, so the cache-parameter builder raises rather than sending it.</p></div>' +
+
+      '<div class="panel panel-pad"><h3 class="sub">3 · Output cost dominates input cost</h3>' +
+      '<p class="note" style="margin:0">The inverse of the usual retrieval intuition. Output bills at six times the input rate and reasoning tokens bill at the output rate, so ' + pct(share, 0) + ' of this run is output. ' +
+      'Cost levers in order: model choice for output-heavy agents, reasoning effort, the critic-loop cap, and only then input caching.</p></div>' +
+
+      '<div class="panel panel-pad"><h3 class="sub">Provenance is attached at creation</h3>' +
+      '<p class="note" style="margin:0">Every model-touching function records its run on success, on refusal <em>and</em> on exception. A trace that only records successes looks complete while missing the step that failed. ' +
+      'This is also the one thing here that genuinely cannot be retrofitted: you cannot attach provenance to artefacts that already exist.</p></div>' +
+    '</div>' +
+    '</div>';
+}
+
+/* -- tab: artifacts ---------------------------------------- */
+function tabArtifacts() {
+  return '<div class="stack">' +
+    '<p class="lede">Everything the run wrote, in the order it wrote it. The run directory is the record — the read plane parses these files off disk rather than asking the backend, ' +
+    'which is why this page keeps working while a five-minute run saturates the worker.</p>' +
+    '<div class="tablewrap"><table><thead><tr><th class="num">+t</th><th>File</th><th>Size</th></tr></thead><tbody>' +
+    ARTIFACTS_AT.map((a) => '<tr><td class="num">' + a.at + 's</td><td class="mono" style="font-size:12px;color:var(--ink)">' + a.name + '</td><td class="mono" style="color:var(--faint)">' + a.size + '</td></tr>').join('') +
+    '</tbody></table></div>' +
+    '<p class="note">In the prototype these are downloadable through an allow-listed artifact route: a run directory is user-influenced input, so the route serves a fixed set of names rather than joining a path.</p>' +
+    '</div>';
+}
+
+/* ============================================================
+   VIEW — THE CORPUS CEILING
+   The one place on this page carrying real numbers. ADR 002,
+   measured over 80 granted US patents and their 3,399
+   front-page citations — public patent data throughout.
+   ============================================================ */
+function viewCorpus() {
+  const C = CEILING;
+  const wide = S.corpus === 'wide';
+
+  return '<div class="stack">' +
+    '<p class="lede">Retrieval is the weakest part of this system and the one that most needs reading carefully, because <b>its failure mode is silent</b>. ' +
+    'Before spending months tuning a ranker, we measured what any ranker could possibly achieve on the corpus we had. The answer decided the project.</p>' +
+
+    '<div class="tiles">' +
+      '<div class="tile"><div class="v">15.4%</div><div class="s">the ceiling</div><div class="l">Of ground-truth citations present in the corpus at all</div></div>' +
+      '<div class="tile"><div class="v">' + int(C.citations) + '</div><div class="s">' + int(C.inCorpus) + ' present</div><div class="l">Front-page citations across an ' + C.patents + '-patent gold set</div></div>' +
+      '<div class="tile"><div class="v">52.5%</div><div class="l">Of the missing art excluded by the CPC filter, not the date floor</div></div>' +
+      '<div class="tile"><div class="v">73.5%</div><div class="s">if widened</div><div class="l">Ceiling after ten subclasses and a 1995 floor</div></div>' +
+    '</div>' +
+
+    '<h2 class="sec"><span class="n">01</span>The finding</h2>' +
+    '<p class="note">The gold set is ' + C.patents + ' granted US patents in the corpus’s own classification, stratified across four publication eras, with their front-page citations as ground truth — ' +
+    'the prior art a human examiner already found. <b>' + pct(1 - C.ceiling, 1) + ' of it is not in the corpus at all</b>, so no amount of embedding work, reranking or query refinement can retrieve it. ' +
+    'That is a ceiling, not a score.</p>' +
+    bars(C.eras.map((e) => ({ name: e.name, value: e.ceiling, label: e.ceiling.toFixed(1) + '%', hi: e.ceiling === 32.1 }))
+      .concat([{ name: 'All four eras', value: 15.4, label: '15.4%', hi: true }, { name: 'After widening', value: 73.5, label: '73.5%', good: true }]),
+      100, 'Share of ground-truth citations present in the corpus. n = ' + int(C.citations) + ' citations across ' + C.patents + ' patents.') +
+
+    '<h2 class="sec"><span class="n">02</span>The diagnosis, and why the obvious reading was wrong</h2>' +
+    '<p class="note">The era gradient looks like the 2005 date floor. <b>It is not</b> — that reading is confounded, because older patents cite art that is also classified differently. ' +
+    'Probing all ' + int(2497) + ' missing US citations against the upstream table separates the two causes:</p>' +
+    '<div class="tablewrap"><table><thead><tr><th>Cause</th><th class="num">Citations</th><th class="num">Share</th></tr></thead><tbody>' +
+    C.causes.map((c) => '<tr' + (c.sub ? ' style="color:var(--faint)"' : '') + '><td>' + (c.sub ? '&nbsp;&nbsp;' : '') + c.cause + '</td>' +
+      '<td class="num">' + int(c.n) + '</td><td class="num">' + c.pct.toFixed(1) + '%</td></tr>').join('') +
+    '</tbody></table></div>' +
+    '<p class="note" style="margin-top:10px">87.8% of the missing citations are US patents, so this is not a country-coverage problem. Dropping the date floor alone recovers 8.7%.</p>' +
+
+    '<h2 class="sec"><span class="n">03</span>The premise was wrong</h2>' +
+    '<div class="alert warn"><h3>Prior art for a UI invention is not UI-classified</h3>' +
+    '<p>A map-navigation interface cites G01C and G08G. A messaging interface cites H04L and H04W. Examiners cite across the whole of computing and telecoms, and there is no clean CPC boundary that contains it. ' +
+    'The premise behind “build a UI patent corpus” was wrong, and only the measurement exposed it.</p></div>' +
+    bars(C.subclasses.map((s) => ({ name: s.code, value: s.pct, label: s.pct.toFixed(1) + '%' })), 50,
+      'CPC subclasses of the missing art, as a share of missing citations. Rows overlap: one citation can carry several codes.') +
+
+    '<h2 class="sec"><span class="n">04</span>The reframe, which was the most valuable output</h2>' +
+    '<div class="panel panel-pad">' +
+    '<p class="note">A ranker scoring 0.14 against a 0.154 ceiling is at <b>91% of achievable</b> — excellent. Reported as “14% recall” it looks broken, and would trigger months of pointless ranker tuning. ' +
+    'Move the slider and read both numbers:</p>' +
+    '<div class="field" style="margin-top:12px;max-width:420px"><label for="rk">Absolute recall @20 of the ranker under test</label>' +
+    '<input id="rk" type="range" min="0" max="154" value="140" data-act="recall"></div>' +
+    '<div id="recall-out" style="margin-top:10px"></div>' +
+    '<p class="note" style="margin-top:12px">Three numbers must therefore be reported and never collapsed into one: recall, ceiling, and recall relative to ceiling. ' +
+    'The regression gate keys on the third, because otherwise widening the corpus later would show up as a quality regression.</p>' +
+    '</div>' +
+
+    '<h2 class="sec"><span class="n">05</span>What we decided</h2>' +
+    '<div class="alert plain"><h3>Do not widen yet</h3>' +
+    '<p>The BigQuery extract exists only because the patent-office API credentials are pending. Those APIs search the entire corpus server-side and have no ceiling problem — ' +
+    '<b>the ceiling is a property of the stopgap, not of the architecture.</b> Spending another quarter-terabyte and a billing decision to raise a stopgap’s ceiling, weeks before the stopgap is replaced, ' +
+    'is likely wasted work. Ten whole subclasses since 1995 is millions of publications and does not fit the sandbox storage allowance as the schema stands.</p>' +
+    '<p>So: keep the ' + int(C.corpusRows) + '-document corpus with a known ceiling for ranker development, report recall against the ceiling, and revisit if the credentials slip.</p></div>' +
+
+    '<div class="btnrow"><button class="btn primary" data-act="toggle-corpus">' +
+    (wide ? 'Revert to the shipped corpus' : 'Widen the corpus and re-run the draft') + '</button>' +
+    '<span class="note" style="margin:0">' + (wide ? 'Currently on the widened extract — coverage covered, critics exhausted, ' + usd(ledgerTotal('wide')) + '.' : 'Currently on the shipped extract — coverage absent, critics clean, ' + usd(ledgerTotal('narrow')) + '.') + '</span></div>' +
+    '</div>';
+}
+
+function paintRecall() {
+  const el = document.getElementById('recall-out');
+  const rk = document.getElementById('rk');
+  if (!el || !rk) return;
+  const v = Number(rk.value) / 1000;
+  const rel = v / CEILING.ceiling;
+  el.innerHTML =
+    '<div class="tiles">' +
+    '<div class="tile"><div class="v">' + pct(v, 1) + '</div><div class="l">Absolute recall @20 — how it would be reported</div></div>' +
+    '<div class="tile"><div class="v" style="color:' + (rel > 0.85 ? 'var(--good)' : rel > 0.6 ? 'var(--warn)' : 'var(--crit)') + '">' + pct(rel, 0) + '</div>' +
+    '<div class="l">Of achievable — how it should be reported</div></div>' +
+    '<div class="tile"><div class="v">15.4%</div><div class="l">Ceiling, fixed by the corpus and not by the ranker</div></div>' +
+    '</div>';
+}
+
+/* ============================================================
+   VIEW — ALL RUNS
+   The three worth having are not the successful one.
+   ============================================================ */
+const RUN_TONE = {
+  ok: { label: 'drafted', cls: 'good', note: 'The pipeline ran to completion.' },
+  insufficient_disclosure: { label: 'no draft', cls: 'warn', note: 'The source did not support a claim. The gap list is the deliverable.' },
+  blocked: { label: 'refused', cls: 'stop', note: 'The containment gate refused before anything was transmitted.' },
+  error: { label: 'error', cls: 'stop', note: 'The run failed partway.' },
+  incomplete: { label: 'incomplete', cls: '', note: 'No manifest — the run crashed, was killed, or is still going.' },
+};
+
+function viewRuns() {
+  const rows = RUNS.map((r) => {
+    const t = RUN_TONE[r.status];
+    return '<tr' + (r.status === 'ok' && r.id.startsWith('20260826T0914') ? ' class="clickable" data-go="result"' : '') + '>' +
+      '<td><span class="mono" style="font-size:11.5px;color:var(--ink)">' + r.id + '</span><br>' +
+      '<span style="color:var(--faint)">' + (r.title || '— no manifest, so no title —') + '</span></td>' +
+      '<td>' + badge(t.label, t.cls) + (r.intake ? '<br>' + badge(statusInfo(r.intake).label) : '') + '</td>' +
+      '<td class="num">' + (r.dur ? mmss(r.dur) : '—') + '</td>' +
+      '<td class="num">' + (r.cost !== null ? '$' + r.cost : usd(ledgerTotal(S.corpus))) + '</td>' +
+      '<td class="num">' + (r.claims ?? '—') + '</td>' +
+      '<td>' + (r.filable === true ? badge('filable', 'good') : r.filable === false ? badge('not filable', 'stop') : '—') + '</td>' +
+      '<td style="max-width:36ch">' + r.note + '</td></tr>';
+  }).join('');
+
+  return '<div class="stack">' +
+    '<p class="lede">Seven runs. Browsing them is free and does not need the backend running at all, because the read plane reads the run directories straight off disk. ' +
+    '<b>The three worth opening are not the successful one.</b></p>' +
+
+    '<div class="tablewrap"><table><thead><tr>' +
+    '<th>Run</th><th>State</th><th class="num">Duration</th><th class="num">Cost</th><th class="num">Claims</th><th>Package</th><th>What it shows</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table></div>' +
+
+    '<h2 class="sec"><span class="n">02</span>The refusal, verbatim</h2>' +
+    '<p class="note">Run <span class="mono">20260826T083920Z-4f1c8ad2</span>. A new entry point called the retrieval client from inside a worker thread. Context variables do not cross thread boundaries, ' +
+    'so the clearance set on the calling thread was invisible in the worker and the gate refused. <b>The failure was closed</b> — it refused rather than transmitting without clearance, ' +
+    'which is the correct direction to be wrong in.</p>' +
+    '<pre class="verbatim">' +
+'ContainmentError: BigQuery query was attempted with no active source.\n' +
+'Nothing may be transmitted to a third party until a source has been\n' +
+'fingerprinted (W0.1) and an intake decision recorded (W0.2).\n' +
+'Wrap the work in `with active_source(src.sha256):` and record a decision\n' +
+'first — see patentgen/gates/intake.py.' +
+    '</pre>' +
+    '<p class="note" style="margin-top:10px">Fail closed is the whole design. No active source is a <b>block</b>, not a pass: the common failure is not “someone set the wrong status”, ' +
+    'it is “nobody set one at all”, because a new entry point forgot to. That case has to be the loud one.</p>' +
+
+    '<h2 class="sec"><span class="n">03</span>A run with no manifest</h2>' +
+    '<p class="note">Run <span class="mono">20260825T142207Z-4f1c8ad2</span> was killed at the vision pass. It left three files and a directory that looks exactly like a result. ' +
+    'The page says <span class="mono">incomplete</span> and lists what was written, rather than rendering an empty draft — “incomplete” is accurate about the files on disk. ' +
+    'A run still in flight gets a different word, because calling a ninety-second-old run “incomplete” reads as broken.</p>' +
+    '</div>';
+}
+
+/* ============================================================
+   RENDER + EVENTS
+   ============================================================ */
+function render() {
+  renderChrome();
+  const host = document.getElementById('view');
+  host.innerHTML = { sources: viewSources, intake: viewIntake, run: viewRun, result: viewResult, corpus: viewCorpus, runs: viewRuns }[S.view]();
+  if (S.view === 'run') paintRun();
+  if (S.view === 'corpus') paintRecall();
+  writeURL();
+}
+
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-go],[data-act],[data-tab],[data-src]');
+  if (!t) return;
+
+  if (t.dataset.act === 'toggle-corpus') {
+    S.corpus = S.corpus === 'wide' ? 'narrow' : 'wide';
+    render(); return;
+  }
+  if (t.dataset.act === 'record') {
+    const info = statusInfo(S.intake.status);
+    S.decisions[S.src] = {
+      status: S.intake.status, by: S.intake.by.trim(),
+      at: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
+      pub: info.needsDate ? S.intake.pub : null,
+      filing: S.intake.filing || null,
+      override: info.mayProcess ? null : S.intake.override.trim() || null,
+    };
+    render(); return;
+  }
+  if (t.dataset.act === 'reset-decision') {
+    S.decisions[t.dataset.src] = null;
+    S.intake = { status: 'unpublished_internal', pub: '', filing: '2026-09-01', by: '', override: '' };
+    render(); return;
+  }
+  if (t.dataset.act === 'run-toggle') { S.run.playing ? (stopRun(), render()) : startRun(); return; }
+  if (t.dataset.act === 'run-speed') { S.run.speed = Number(t.dataset.v); render(); return; }
+  if (t.dataset.act === 'run-skip') { stopRun(); S.run.t = TOTAL_SECONDS; S.run.done = true; go('result'); return; }
+
+  if (t.dataset.tab) { S.tab = t.dataset.tab; render(); window.scrollTo({ top: 0 }); return; }
+  if (t.dataset.go) { if (t.dataset.src) S.src = t.dataset.src; go(t.dataset.go); return; }
+  if (t.dataset.src) { S.src = t.dataset.src; render(); return; }
+});
+
+document.addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.dataset && t.dataset.act === 'pick-status') { S.intake.status = t.value; render(); }
+});
+
+document.addEventListener('input', (e) => {
+  const t = e.target;
+  if (t.dataset && t.dataset.act === 'field') {
+    S.intake[t.dataset.k] = t.value;
+    const k = t.dataset.k, pos = t.selectionStart;
+    render();
+    const again = document.querySelector('[data-k="' + k + '"]');
+    if (again) { again.focus(); try { again.setSelectionRange(pos, pos); } catch (_) {} }
+  }
+  if (t.dataset && t.dataset.act === 'recall') paintRecall();
+});
+
+/* -- Footer ------------------------------------------------ */
+document.getElementById('foot').innerHTML =
+  '<p><b>What is real here and what is not.</b> The mechanism is the prototype’s: the four publication states and their rationales, the fail-closed containment gate enforced inside the outbound clients, ' +
+  'the stage sequence and its measured timings, the three-critic ring with a reviser between rounds, the coverage verdict that leads the prior-art section, the §1.84 proof measured against the rendered sheet, ' +
+  'the nested token accounting, and the filable verdict. Every dollar figure on this page is computed from the ledger rows at render time; none is a literal.</p>' +
+  '<p><b>The specimen is invented.</b> DIS-0416, EN-2210 and WP-0092 do not exist. The claims, the reference identifiers, the assignees, the people, the run identifiers and the costs are made up for publication. ' +
+  'No real disclosure, filing or attorney work product appears anywhere on this page, and the prototype has never been run on a real inventor disclosure.</p>' +
+  '<p><b>One exception.</b> The corpus measurement in “Corpus ceiling” is the real result — an 80-patent gold set, 3,399 front-page citations, a 15.4% ceiling and the CPC diagnosis behind it — ' +
+  'computed over public patent data. It is the finding the project turned on, and inventing it would have left this page arguing nothing.</p>' +
+  '<p>Nothing here has been filed, and no attorney has used it. The output is attorney-review material and the package verdict says so.</p>';
+
+readURL();
+render();
+// `?play=1` is a live run, not a paused one. Without this the flag would
+// render the Pause button over a timer that was never started.
+if (S.view === 'run' && S.run.playing) startRun();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

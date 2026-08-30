@@ -1,0 +1,2767 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team Performance Reporting Desk</title>
+<meta name="description" content="Interactive demo of the team performance reporting engine: any of five delivery teams, a weekly, monthly or quarterly window, deterministic counting, model-written root causes, and a signature gate in front of publication.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Team performance reporting engine - interactive demo.
+   Five teams (AMS, RTL, PS, HW, FW) x three cadences
+   (weekly, monthly, quarterly) over one corpus of work.
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) so the demo reads
+   as the same product family. Deliberately single-theme: this
+   is an internal dashboard, dark by design, with every colour
+   painted explicitly so it holds on any host ground.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 236px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.state-draft { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.state-live { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.accent { background: var(--accent); }
+
+.persona {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 8px; padding: 3px 8px 3px 11px;
+}
+.persona label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.persona select {
+  background: transparent; border: 0; font-size: 12.5px; color: var(--ink);
+  padding: 4px 2px; max-width: 250px;
+}
+.persona select option { background: var(--surface-2); color: var(--ink); }
+
+/* -- Layout ----------------------------------------------- */
+.shell { display: flex; align-items: stretch; flex: 1; min-height: 0; }
+
+.rail {
+  width: var(--rail); flex: none;
+  border-right: 1px solid var(--line);
+  padding: 16px 0 40px;
+  background: linear-gradient(180deg, var(--bg), #0a0a0e);
+}
+.rail-head {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint); padding: 0 16px 10px;
+}
+.rail-item {
+  display: grid; grid-template-columns: 20px 1fr; gap: 10px;
+  width: 100%; text-align: left; background: none; border: 0;
+  border-left: 2px solid transparent; padding: 8px 14px;
+  color: var(--body);
+}
+.rail-item:hover:not([disabled]) { background: var(--surface); color: var(--ink); }
+.rail-item[aria-current="true"] { background: var(--surface); border-left-color: var(--accent); color: var(--ink); }
+.rail-item[disabled] { opacity: 0.34; cursor: not-allowed; }
+.rail-num { font-family: var(--mono); font-size: 11px; color: var(--faint); padding-top: 2px; }
+.rail-item[aria-current="true"] .rail-num { color: var(--accent); }
+.rail-name { font-size: 13.5px; line-height: 1.32; }
+.rail-sub {
+  display: block; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-top: 3px;
+}
+.rail-sep { height: 1px; background: var(--line); margin: 14px 16px; }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 60px; }
+
+/* -- Badges: the page's central semantic ------------------ */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: 0.13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.signed { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.unconf { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.decile { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+/* -- Pane header ------------------------------------------ */
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 6px;
+}
+.pane-head h2 {
+  margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+/* -- Buttons ---------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.good:hover:not(:disabled) { background: rgba(63,174,139,.2); border-color: var(--good); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+/* -- Run screen ------------------------------------------- */
+.run-wrap { max-width: 900px; }
+.run-cta {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 12px; padding: 22px 24px; margin-bottom: 22px;
+  display: flex; gap: 20px; align-items: center; flex-wrap: wrap;
+}
+.run-cta .copy { flex: 1; min-width: 260px; }
+.run-cta h3 { margin: 0 0 6px; font-size: 16px; font-weight: 600; color: var(--ink); }
+.run-cta p { margin: 0; font-size: 13px; color: var(--muted); max-width: 60ch; }
+
+.pipeline { display: flex; flex-direction: column; gap: 0; }
+.node {
+  display: grid; grid-template-columns: 26px 1fr auto; gap: 14px; align-items: start;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 12px 14px;
+  opacity: 0.4; transition: opacity .3s ease, border-color .3s ease, background .3s ease;
+}
+.node.active { opacity: 1; border-color: var(--accent-dim); background: var(--surface-2); }
+.node.done { opacity: 1; }
+.node-mark {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--line); display: grid; place-items: center;
+  font-family: var(--mono); font-size: 10px; color: var(--faint); background: var(--bg);
+}
+.node.done .node-mark { border-color: var(--good-dim); color: var(--good); }
+.node.active .node-mark { border-color: var(--accent); color: var(--accent); }
+.node-title { font-size: 13.5px; color: var(--ink); font-weight: 500; display: flex; gap: 9px; align-items: center; flex-wrap: wrap; }
+.node-out { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin-top: 4px; min-height: 17px; }
+.node-time { font-family: var(--mono); font-size: 11px; color: var(--faint); padding-top: 2px; }
+.connector { width: 1px; height: 14px; background: var(--line); margin-left: 27px; }
+.branchset { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.branchset .node { grid-template-columns: 22px 1fr; }
+.branchset .node-time { display: none; }
+.branchset .node-title { display: block; font-size: 13px; }
+.branchset .node-title .badge { margin-top: 6px; }
+.branch-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase;
+  color: var(--faint); margin: 0 0 8px 27px;
+}
+.legend-line {
+  display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center;
+  margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line);
+  font-size: 12px; color: var(--muted);
+}
+.legend-line .badge { justify-self: start; }
+
+/* -- Tables ----------------------------------------------- */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px; }
+table.sheet thead th {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,0.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .id { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td {
+  padding: 10px 12px; border-top: 1px solid var(--line);
+  font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2);
+}
+table.sheet tfoot .num { text-align: right; }
+tr.is-decile td { background: rgba(208,116,90,0.04); }
+tr.is-open td { background: var(--accent-wash) !important; }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+
+.sheet-note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.sheet-note b { color: var(--body); font-weight: 500; }
+</style>
+<style>
+/* -- Delay sheet toolbar + coverage ----------------------- */
+.toolbar {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button {
+  background: none; border: 0; padding: 6px 11px; font-size: 12px; color: var(--muted);
+  border-right: 1px solid var(--line);
+}
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+
+.coverage {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;
+}
+.coverage .figure {
+  font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1;
+}
+.coverage .figure small { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 4px; }
+.coverage .cap { font-size: 12px; color: var(--muted); max-width: 40ch; }
+.coverage .track {
+  flex: 1; min-width: 180px; height: 8px; border-radius: 4px;
+  background: var(--surface-3); position: relative; overflow: hidden;
+}
+.coverage .track > i { position: absolute; inset: 0 auto 0 0; background: var(--good); transition: width .35s ease; border-radius: 4px; }
+.coverage .track > u {
+  position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--faint); text-decoration: none;
+}
+.coverage .marks { display: flex; gap: 18px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.coverage .marks b { color: var(--body); font-weight: 500; }
+
+.cause-cell { width: 32%; }
+table.sheet td:first-child { width: 24%; }
+table.sheet .owner { white-space: nowrap; }
+.cause-text { color: var(--body); }
+.cause-none { color: var(--faint); font-style: italic; }
+.cause-unconf { color: var(--warn); }
+.cause-meta {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  margin-top: 5px; font-family: var(--mono); font-size: 10.5px; color: var(--faint);
+}
+.threadlink {
+  background: none; border: 0; padding: 0; color: var(--accent);
+  font-family: var(--mono); font-size: 10.5px; text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sig-cell { white-space: nowrap; }
+.sig-name { color: var(--good); font-size: 12.5px; }
+.sig-when { display: block; font-family: var(--mono); font-size: 10px; color: var(--faint); }
+
+/* -- Drawer ----------------------------------------------- */
+.scrim {
+  position: fixed; inset: 0; background: rgba(4,4,6,0.62); z-index: 60;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+}
+.scrim.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%);
+  background: var(--surface); border-left: 1px solid var(--line); z-index: 61;
+  transform: translateX(100%); transition: transform .26s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+}
+.drawer.open { transform: none; }
+.drawer-head { padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.drawer-head .row { display: flex; gap: 12px; align-items: flex-start; }
+.drawer-head h3 { margin: 4px 0 0; font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+.drawer-facts {
+  display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px;
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+}
+.drawer-facts b { color: var(--ink); font-weight: 500; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 18px 20px 24px; }
+.drawer-foot { border-top: 1px solid var(--line); padding: 14px 20px; background: var(--surface-2); }
+.x-btn { margin-left: auto; background: none; border: 1px solid var(--line); border-radius: 6px; width: 28px; height: 28px; color: var(--muted); line-height: 1; }
+.x-btn:hover { color: var(--ink); border-color: #35354a; }
+
+.sec-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--faint); margin: 0 0 10px; display: flex; align-items: center; gap: 9px;
+}
+.analysis {
+  border: 1px solid var(--accent-dim); background: var(--accent-wash);
+  border-radius: 9px; padding: 14px 16px; margin-bottom: 8px;
+}
+.analysis p { margin: 0; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+.analysis .src { margin-top: 10px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+
+.thread { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.comment { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--surface-2); }
+.comment.cand { border-color: var(--warn-dim); background: var(--warn-wash); }
+.comment.ev { border-color: var(--accent-dim); }
+.comment .meta {
+  display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap;
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-bottom: 5px;
+}
+.comment .meta b { color: var(--body); font-weight: 500; font-family: var(--sans); font-size: 12px; }
+.comment p { margin: 0; font-size: 13px; color: var(--body); }
+.comment .tag {
+  margin-left: auto; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--warn);
+}
+.comment.ev .tag { color: var(--accent); }
+
+.field label {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 6px;
+}
+.field textarea {
+  width: 100%; min-height: 62px; resize: vertical;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 7px;
+  padding: 9px 11px; font-size: 13px; color: var(--ink); line-height: 1.5;
+}
+.field textarea::placeholder { color: var(--faint); }
+.gate {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px;
+}
+.gate-msg { font-size: 12px; color: var(--muted); flex: 1; min-width: 200px; }
+.gate-msg.deny { color: var(--warn); }
+.gate-msg.ok { color: var(--good); }
+
+/* -- Metric tiles ----------------------------------------- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v {
+  font-family: var(--mono); font-size: 24px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p {
+  margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: 0.04em;
+}
+
+.narrative {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 10px;
+  padding: 16px 18px; margin-top: 16px;
+}
+.narrative p { margin: 0 0 12px; font-size: 13.5px; color: var(--body); line-height: 1.65; max-width: 74ch; }
+.narrative p:last-child { margin-bottom: 0; }
+
+/* -- Issues ----------------------------------------------- */
+.issues { display: flex; flex-direction: column; gap: 12px; }
+.issue { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 15px 17px; }
+.issue .top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.issue h4 { margin: 0; font-size: 14.5px; font-weight: 600; color: var(--ink); }
+.issue p { margin: 0; font-size: 13.5px; color: var(--body); line-height: 1.6; max-width: 78ch; }
+.issue .rec { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft); font-size: 13px; color: var(--body); }
+.issue .rec b { color: var(--ink); font-weight: 500; }
+.srcs { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 11px; }
+.srcs button {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px;
+  padding: 3px 8px; font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+}
+.srcs button:hover { color: var(--accent); border-color: var(--accent-dim); }
+.sev { width: 3px; align-self: stretch; border-radius: 2px; }
+
+/* -- Publish ---------------------------------------------- */
+.publish-bar {
+  display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  border: 1px solid var(--line); background: var(--surface); border-radius: 10px;
+  padding: 14px 16px; margin-top: 20px;
+}
+.publish-bar .txt { flex: 1; min-width: 240px; font-size: 12.5px; color: var(--muted); max-width: 62ch; }
+.preflight { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.preflight li { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; }
+.preflight .k { font-family: var(--mono); font-size: 11px; color: var(--faint); width: 26px; flex: none; padding-top: 2px; }
+
+.published-banner {
+  border: 1px solid var(--good-dim); background: var(--good-wash);
+  border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;
+  display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+}
+.published-banner .t { font-size: 13.5px; color: var(--ink); }
+.published-banner .s { font-family: var(--mono); font-size: 11px; color: var(--good); margin-top: 3px; }
+
+/* -- Before view ------------------------------------------ */
+.before-banner {
+  border: 1px solid var(--warn-dim); background: var(--warn-wash);
+  border-radius: 10px; padding: 12px 16px; margin-bottom: 14px;
+  font-size: 12.5px; color: var(--body); display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+}
+.before-banner b { color: var(--warn); font-weight: 500; }
+
+/* -- Footer ----------------------------------------------- */
+.foot {
+  border-top: 1px solid var(--line); margin-top: 10px;
+  padding: 22px 20px 40px; background: #06060a;
+}
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 {
+  margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot a { color: var(--accent); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+/* -- Toast ------------------------------------------------ */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80;
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* -- Responsive ------------------------------------------- */
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .rail {
+    width: 100%; border-right: 0; border-bottom: 1px solid var(--line);
+    display: flex; overflow-x: auto; padding: 8px 8px; gap: 4px;
+  }
+  .rail-head, .rail-sep { display: none; }
+  .rail-item {
+    grid-template-columns: 1fr; border-left: 0; border-bottom: 2px solid transparent;
+    white-space: nowrap; padding: 8px 12px; border-radius: 6px;
+  }
+  .rail-item[aria-current="true"] { border-left: 0; border-bottom-color: var(--accent); }
+  .rail-num { display: none; }
+  .branchset { grid-template-columns: 1fr; }
+  .topbar-row { gap: 10px; }
+  .brand { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+</style>
+
+<style>
+/* ============================================================
+   The parameter bar. The whole product is two parameters —
+   which team, which window — so they sit above the report and
+   never inside a menu. Everything below the bar is a function
+   of these two controls.
+   ============================================================ */
+.params {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 9px 20px; border-top: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+.params .plabel {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint);
+}
+.params .segmented button { padding: 6px 13px; font-size: 12.5px; }
+.params .segmented button b { font-weight: 500; }
+.params .segmented button span {
+  display: block; font-family: var(--mono); font-size: 9px;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px;
+}
+.params .segmented button[aria-pressed="true"] span { color: var(--accent); }
+.params .spacer { flex: 1; }
+
+/* A one-line reminder of what the two parameters changed. */
+.paramnote {
+  padding: 8px 20px 10px; font-size: 12px; color: var(--muted);
+  border-top: 1px solid var(--line-soft); background: #0b0b10;
+}
+.paramnote b { color: var(--body); font-weight: 500; }
+
+/* Cadence banner at the top of a pane — says what this window
+   is for, and what it deliberately does not do. */
+.cadbanner {
+  border: 1px solid var(--line); border-left: 2px solid var(--accent);
+  background: var(--surface); border-radius: 0 10px 10px 0;
+  padding: 12px 16px; margin-bottom: 16px; font-size: 12.5px; color: var(--body);
+}
+.cadbanner b { color: var(--ink); font-weight: 500; }
+.cadbanner.warn { border-left-color: var(--warn); }
+.cadbanner .k {
+  display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 5px;
+}
+
+/* Recurring-blocker clusters on the quarterly sheet. */
+.clusters { display: flex; flex-direction: column; gap: 10px; }
+.cluster {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 14px 16px;
+}
+.cluster .top { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.cluster h4 { margin: 0; font-size: 14.5px; font-weight: 600; color: var(--ink); flex: 1; min-width: 200px; }
+.cluster .count { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.cluster p { margin: 8px 0 0; font-size: 13.5px; color: var(--body); line-height: 1.6; max-width: 78ch; }
+.spark { display: flex; gap: 4px; align-items: flex-end; height: 26px; }
+.spark span {
+  width: 16px; background: var(--accent-dim); border-radius: 2px 2px 0 0;
+  display: block; position: relative;
+}
+.spark span.hi { background: var(--accent); }
+.spark i {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 9.5px; color: var(--muted); font-style: normal;
+}
+
+/* The portfolio sheet — the only page the five teams share. */
+.portfolio-note {
+  border: 1px solid var(--warn-dim); background: var(--warn-wash);
+  border-radius: 10px; padding: 13px 16px; margin-bottom: 16px;
+  font-size: 12.5px; color: var(--body);
+}
+.portfolio-note b { color: var(--warn); font-weight: 500; }
+
+@media (max-width: 900px) {
+  .params { padding: 9px 12px; }
+  .params .spacer { display: none; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow" id="brandEyebrow">Ixana &middot; Delivery reporting</span>
+        <h1>Team performance reporting</h1>
+      </div>
+      <span class="chip" id="windowChip"><span class="dot accent"></span>Window <b>&mdash;</b></span>
+      <span class="chip" id="stateChip"><span class="dot"></span>Not yet run</span>
+      <span class="chip" title="Every count and percentage in every report is computed by rule from the task records. The model writes prose only."><span class="dot good"></span><b>0</b> counts from a model</span>
+      <div class="persona">
+        <label for="personaSel">Viewing as</label>
+        <select id="personaSel"></select>
+      </div>
+    </div>
+    <div class="params">
+      <span class="plabel">Team</span>
+      <div class="segmented" id="teamSeg" role="group" aria-label="Team"></div>
+      <span class="plabel" style="margin-left:8px">Window</span>
+      <div class="segmented" id="cadSeg" role="group" aria-label="Reporting cadence"></div>
+      <span class="spacer"></span>
+      <span class="chip" id="sizeChip"></span>
+    </div>
+    <p class="paramnote" id="paramNote"></p>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Workbook sheets"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A working recreation of the team performance reporting engine described in the case study. <b>Two parameters &mdash; which team, which window &mdash; produce every report on this page.</b> The run is simulated and the content is invented; the structure, the rules and the gate are the real ones.</p>
+      </div>
+      <div>
+        <h5>The four decisions it makes visible</h5>
+        <p><b>1.</b> Counting is deterministic; only synthesis goes to a model &mdash; every panel carries a <span class="badge rule">rule</span> or <span class="badge model">model</span> badge.</p>
+        <p><b>2.</b> The window decides what the model is for: a threshold weekly, the worst decile monthly, and at quarter it reads the three monthly reports and writes no task analysis at all.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>3.</b> The signature gate exists from monthly upwards. A weekly report is a working document and is never signed, because signing it would cost four times as much for a document nobody quotes.</p>
+        <p><b>4.</b> Five teams share a report shape and six cause categories, and are never ranked against each other. The one sheet that puts them on a page reports whether the process ran, not how they performed.</p>
+      </div>
+    </div>
+    <p class="conf">All teams, tasks, names, comment threads, causes and figures on this page are invented for the demo. No task, customer or individual&rsquo;s performance data appears here. The five team names are real internal groupings at Ixana; everything inside them is not. March and April are held as the monthly reports they produced, not as task records, because that is what the quarterly report actually reads.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Task detail"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, internally consistent.
+
+   One corpus of work, five teams, one month of task records.
+   A report is a function of two parameters: which team, and
+   which window. Nothing countable below is written down; every
+   figure on every sheet is derived from these arrays at render
+   time, which is the claim the run screen makes out loud.
+
+   March and April are NOT held as task records. They are held
+   as the monthly reports they produced, because that is what
+   the quarterly report actually reads — the same second-pass
+   rule as the monthly workbook, one level up.
+   ============================================================ */
+
+const TEAMS = [
+  { k:"ams", name:"AMS", full:"Analog & mixed signal",
+    groups:["AMS Design","AMS Layout","AMS Verification","AMS Modeling"] },
+  { k:"rtl", name:"RTL", full:"RTL design & integration",
+    groups:["RTL Design","Integration","Design verification","Synthesis"] },
+  { k:"ps",  name:"PS",  full:"Post-silicon",
+    groups:["Bring-up","Characterisation","ATE & production test"] },
+  { k:"hw",  name:"HW",  full:"Hardware",
+    groups:["Board design","Signal integrity","Compliance"] },
+  { k:"fw",  name:"FW",  full:"Firmware",
+    groups:["Platform firmware","Drivers","Release engineering"] }
+];
+
+/* The five weeks the month is cut into, by due date. The weekly
+   report reads week 21 — index 3 — the last complete week
+   before the month's cut-off. */
+const WEEKS = [[1,3],[4,10],[11,17],[18,24],[25,31]];
+const WEEK_INDEX = 3;
+
+const CADENCES = [
+  { k:"weekly", name:"Weekly", sub:"week 21", window:"18–24 May 2026",
+    rule:"threshold", gate:false, runTime:"4m 12s",
+    forWhat:"A working document for the lead, read on a Monday. It is the only report that names work which has <b>not</b> closed, because open and late is the only kind a lead can still act on.",
+    notWhat:"It is never signed and never quoted. Signing weekly would cost a lead four times what signing a month costs, for a document that does not leave the team." },
+  { k:"monthly", name:"Monthly", sub:"May 2026", window:"1–31 May 2026",
+    rule:"decile", gate:true, runTime:"12m 04s",
+    forWhat:"The accountability document. It goes to leadership, it gets quoted in resourcing conversations, and every written cause in it carries the name of a person who owns the affected work.",
+    notWhat:"It counts only what closed. Work still open past its date is a weekly concern and not a monthly fact, so this report states how many it left out rather than absorbing them." },
+  { k:"quarterly", name:"Quarterly", sub:"Q1 2026", window:"Mar–May 2026",
+    rule:"cluster", gate:true, runTime:"6m 41s",
+    forWhat:"The pattern document, for the quarterly review. It reads the three monthly reports and nothing else — no task record is fetched — and its job is to say which blockers came back.",
+    notWhat:"It writes no root cause of its own. Every cause it groups was written, signed and published by a named person a month or two ago." }
+];
+
+/* The shared vocabulary. Six categories, negotiated down from
+   the eleven the first draft had, because a category five teams
+   cannot agree on is a category the quarterly cannot count. */
+const CATS = {
+  queue:   { n:"Shared queue or capacity",        s:"Queue" },
+  dep:     { n:"Waiting on upstream work",        s:"Upstream" },
+  spec:    { n:"Requirement or input not frozen", s:"Spec churn" },
+  tool:    { n:"Tool, licence or fixture",        s:"Tooling" },
+  process: { n:"Review or approval cadence",      s:"Process" },
+  none:    { n:"No cause recorded in the thread", s:"None" }
+};
+const CAT_ORDER = ["queue","dep","spec","tool","process","none"];
+
+/* ot = tasks delivered on time, one number per week of the month.
+   Monthly on-time is their sum; the weekly report reads one cell.
+   Delayed counts are derived from the rows below, never entered. */
+const ROSTER = [
+  { n:"Rakesh Menon",   tm:"ams", g:"AMS Design",       ot:[1,3,3,3,2], lead:true },
+  { n:"Priya Iyer",     tm:"ams", g:"AMS Design",       ot:[2,5,5,5,4] },
+  { n:"Tomás Herrera",  tm:"ams", g:"AMS Design",       ot:[2,4,4,4,4] },
+  { n:"Wei Lin",        tm:"ams", g:"AMS Design",       ot:[1,4,4,4,3] },
+  { n:"Ana Beck",       tm:"ams", g:"AMS Layout",       ot:[1,2,3,2,2], lead:true },
+  { n:"Kofi Mensah",    tm:"ams", g:"AMS Layout",       ot:[2,4,5,4,4] },
+  { n:"Sanjana Rao",    tm:"ams", g:"AMS Layout",       ot:[2,5,5,5,5] },
+  { n:"Diego Marín",    tm:"ams", g:"AMS Layout",       ot:[1,4,4,3,3] },
+  { n:"Daniel Okoye",   tm:"ams", g:"AMS Verification", ot:[1,2,3,3,2], lead:true },
+  { n:"Mira Halvorsen", tm:"ams", g:"AMS Verification", ot:[2,5,6,6,5] },
+  { n:"Yusuf Karim",    tm:"ams", g:"AMS Verification", ot:[2,4,4,4,3] },
+  { n:"Lena Farrow",    tm:"ams", g:"AMS Modeling",     ot:[1,2,2,2,2], lead:true },
+  { n:"Anders Holm",    tm:"ams", g:"AMS Modeling",     ot:[2,4,5,5,4] },
+  { n:"Ritu Nanda",     tm:"ams", g:"AMS Modeling",     ot:[1,4,4,4,3] },
+
+  { n:"Aarav Sengupta", tm:"rtl", g:"RTL Design",       ot:[1,3,3,2,2], lead:true },
+  { n:"Hanna Lindqvist",tm:"rtl", g:"RTL Design",       ot:[2,4,5,4,4] },
+  { n:"Marcus Adeyemi", tm:"rtl", g:"RTL Design",       ot:[2,4,4,4,3] },
+  { n:"Nikhil Barve",   tm:"rtl", g:"RTL Design",       ot:[1,4,4,3,3] },
+  { n:"Sofia Renard",   tm:"rtl", g:"Integration",      ot:[1,2,3,2,2], lead:true },
+  { n:"Jae-won Park",   tm:"rtl", g:"Integration",      ot:[2,4,4,4,4] },
+  { n:"Elif Demir",     tm:"rtl", g:"Integration",      ot:[2,4,4,3,3] },
+  { n:"Owen Trask",     tm:"rtl", g:"Design verification",  ot:[1,3,3,3,2], lead:true },
+  { n:"Divya Ramakrishnan", tm:"rtl", g:"Design verification", ot:[2,5,5,5,4] },
+  { n:"Tobias Krahn",   tm:"rtl", g:"Design verification",  ot:[2,4,4,4,4] },
+  { n:"Grace Nwosu",    tm:"rtl", g:"Synthesis",        ot:[1,2,2,2,2], lead:true },
+  { n:"Ilya Voronov",   tm:"rtl", g:"Synthesis",        ot:[1,3,4,3,3] },
+
+  { n:"Idris Fadel",    tm:"ps", g:"Bring-up",          ot:[1,2,3,2,2], lead:true },
+  { n:"Clara Voss",     tm:"ps", g:"Bring-up",          ot:[2,4,4,4,3] },
+  { n:"Rohan Kulkarni", tm:"ps", g:"Bring-up",          ot:[1,4,4,3,3] },
+  { n:"Meera Pillai",   tm:"ps", g:"Bring-up",          ot:[1,3,3,3,2] },
+  { n:"Naomi Sato",     tm:"ps", g:"Characterisation",  ot:[1,3,3,2,2], lead:true },
+  { n:"Peter Iversen",  tm:"ps", g:"Characterisation",  ot:[2,4,4,4,4] },
+  { n:"Amara Chen",     tm:"ps", g:"Characterisation",  ot:[2,4,4,3,3] },
+  { n:"Luis Ferrer",    tm:"ps", g:"ATE & production test", ot:[1,2,2,2,2], lead:true },
+  { n:"Zainab Qureshi", tm:"ps", g:"ATE & production test", ot:[1,3,4,3,3] },
+  { n:"Henrik Solberg", tm:"ps", g:"ATE & production test", ot:[1,3,3,3,3] },
+
+  { n:"Bea Karlsson",   tm:"hw", g:"Board design",      ot:[1,2,3,2,2], lead:true },
+  { n:"Tanvir Ahmed",   tm:"hw", g:"Board design",      ot:[2,4,4,3,3] },
+  { n:"Julia Moreau",   tm:"hw", g:"Board design",      ot:[1,3,4,3,3] },
+  { n:"Nadia Haddad",   tm:"hw", g:"Board design",      ot:[1,3,3,2,2] },
+  { n:"Samuel Otieno",  tm:"hw", g:"Signal integrity",  ot:[1,2,2,2,2], lead:true },
+  { n:"Ines Batista",   tm:"hw", g:"Signal integrity",  ot:[1,4,4,3,3] },
+  { n:"Karan Malhotra", tm:"hw", g:"Signal integrity",  ot:[1,3,3,3,3] },
+  { n:"Freya Lindgren", tm:"hw", g:"Compliance",        ot:[1,2,2,2,1], lead:true },
+  { n:"Andrei Popescu", tm:"hw", g:"Compliance",        ot:[1,3,3,3,2] },
+
+  { n:"Mateo Rivas",    tm:"fw", g:"Platform firmware", ot:[1,3,3,2,2], lead:true },
+  { n:"Sunita Bhalla",  tm:"fw", g:"Platform firmware", ot:[2,4,4,4,4] },
+  { n:"Ola Nyberg",     tm:"fw", g:"Platform firmware", ot:[1,4,4,3,3] },
+  { n:"Ravi Sundaram",  tm:"fw", g:"Platform firmware", ot:[1,3,3,3,2] },
+  { n:"Kenji Mori",     tm:"fw", g:"Drivers",           ot:[1,2,3,2,2], lead:true },
+  { n:"Aisha Bello",    tm:"fw", g:"Drivers",           ot:[2,4,4,4,3] },
+  { n:"Pavel Dvorak",   tm:"fw", g:"Drivers",           ot:[1,3,4,3,3] },
+  { n:"Leila Nasser",   tm:"fw", g:"Release engineering", ot:[1,2,2,2,2], lead:true },
+  { n:"Bruno Costa",    tm:"fw", g:"Release engineering", ot:[1,3,3,3,3] }
+];
+
+/* The signer for a group is its lead, taken from the roster. The
+   compiler can sign nothing, which is the whole point of her: a
+   signature has to come from someone who owns the affected work,
+   so a signature from the person assembling the report is not a
+   weaker signature, it is not a signature at all. */
+const COMPILER = { id:"compiler", name:"Nadia Rehman", role:"Report compiler", tm:null, g:null };
+</script>
+
+<script>
+/* d   = days late · ci = index of the comment a rule-based ranker
+   flagged as the likely explanation (-1 = the thread holds none)
+   cat = one of the six categories all five teams share
+   an  = a written analysis, present only on rows some window's
+         rule selects; ev = the comments that analysis drew on
+   uns = left unsigned at the May cut-off, with the reason        */
+const ROWS = [
+  { tm:"ams", id:"T-2214", cat:"queue", t:"Bandgap reference: temperature coefficient re-centre after silicon", p:"C", o:"Wei Lin", due:"08 May", del:"01 Jun", d:24, ci:2, ev:[2,3],
+    cause:"Trim could not reach the measured curvature, so a schematic change was needed; the re-layout then waited on the C-block floorplan queue.",
+    an:"Delivered 24 days late because first silicon put the temperature coefficient outside the range the trim network can reach — which turned a trim task into a schematic and layout change. Of those 24 days, 17 fall between the 11 May diagnosis and delivery, spent waiting for a layout slot queued behind the C-block floorplan revision (T-2302, itself 7 days late). The measurement work was not the delay; the shared layout queue was.",
+    th:[["Wei Lin","06 May","First silicon reads +11 ppm/°C against a −2 target, and the trim network cannot reach it from where the curvature sits."],
+        ["Tomás Herrera","07 May","Confirmed on three parts from two wafers, so this is not a sample."],
+        ["Wei Lin","11 May","Re-centring needs a schematic change to the curvature branch, not a trim. That is a new layout pass."],
+        ["Kofi Mensah","14 May","Layout slot for the curvature branch is behind the C-block floorplan revision, earliest 22 May."],
+        ["Wei Lin","29 May","Second pass measures −3 ppm/°C. Closing."]] },
+
+  { tm:"ams", id:"T-2189", cat:"dep", t:"RX AFE gain stage: re-layout for LDO droop under burst traffic", p:"A", o:"Kofi Mensah", due:"11 May", del:"30 May", d:19, ci:1, ev:[1,3],
+    cause:"Blocked nine days on LDO bench correlation; rail spacing could not be committed against provisional droop figures.",
+    an:"Nineteen days late, of which the layout work accounts for four. The stage was blocked from 9 to 18 May waiting on LDO bench correlation (T-2101, 6 days late), because committing rail spacing against provisional droop figures would have forced a second re-layout. This is a dependency the schedule treated as parallel and the work treated as serial.",
+    th:[["Kofi Mensah","09 May","Holding this: the LDO droop numbers I am laying out against changed twice this week."],
+        ["Priya Iyer","09 May","Bench correlation is still open (T-2101). I would not commit the rail spacing yet."],
+        ["Kofi Mensah","18 May","Correlation landed. Restarting the gain stage with the final droop figure."],
+        ["Ana Beck","19 May","Noting for the report: the re-layout itself took four days. The wait was nine."],
+        ["Kofi Mensah","30 May","DRC clean, handed to verification."]] },
+
+  { tm:"ams", id:"T-2263", cat:"tool", t:"PLL lock-time regression on the 3001 verification bench", p:"D", o:"Mira Halvorsen", due:"15 May", del:"01 Jun", d:17, ci:1, ev:[1,2,3],
+    cause:"Bench re-cabling during the jitter setup rebuild invalidated four measurement runs, which had to be repeated.",
+    an:"Seventeen days late, and the regression was an artefact of the bench rather than the design: the reference clock path gained 11 cm of cable during the jitter setup rebuild (T-2334). Diagnosis took eight days; the remaining nine went on re-running four measurement sessions taken after the bench changed. The real cost is that a bench change was not recorded anywhere the measurement log could see it.",
+    th:[["Mira Halvorsen","12 May","Lock time regressed 40% against the April run on the same netlist, so this is the bench."],
+        ["Yusuf Karim","13 May","Bench was re-cabled for the jitter setup rebuild last week."],
+        ["Mira Halvorsen","20 May","Confirmed: the reference clock path picked up 11 cm of cable. Re-measuring everything since 8 May."],
+        ["Daniel Okoye","21 May","That invalidates four runs. Re-running them is the delay, not the fix."],
+        ["Mira Halvorsen","01 Jun","All four re-run and matching April. Closing."]] },
+
+  { tm:"ams", id:"T-2231", cat:"spec", t:"Coupling model refresh for the sealed-transfer geometry", p:"B", o:"Anders Holm", due:"13 May", del:"28 May", d:15, ci:1, ev:[0,1,2],
+    cause:"Started against a geometry mechanical had not yet frozen: eight days waiting for the step file, then five days of solver time.",
+    an:"Fifteen days late, split almost evenly between waiting and computing: eight days for mechanical to freeze the sealed-transfer geometry, then five days of solver time on the sweep. Nothing here was avoidable once the task started against a revision that was still moving, which is the argument for gating model refresh on a frozen geometry rather than on a target date.",
+    th:[["Anders Holm","11 May","The geometry I was given is the pre-seal revision. Waiting on the current step file."],
+        ["Lena Farrow","12 May","Mechanical is mid-revision; they expect to freeze on the 19th."],
+        ["Anders Holm","20 May","Step file in. Re-running the sweep, about five days of solver time."],
+        ["Ritu Nanda","26 May","Fixture calibration will need the new numbers too."],
+        ["Anders Holm","28 May","Sweep complete, correlation within 0.8 dB."]] },
+
+  { tm:"ams", id:"T-2101", cat:"tool", t:"LDO PSRR bench correlation for the A-sample", p:"A", o:"Priya Iyer", due:"05 May", del:"11 May", d:6, ci:1,
+    cause:"A probe grounding artefact put the first measurement 6 dB off; the setup had to be rebuilt and re-measured.",
+    th:[["Priya Iyer","04 May","Bench PSRR is 6 dB off sim at 1 MHz. Chasing the probe setup before I trust it."],
+        ["Priya Iyer","08 May","It was the probe ground spring. Rebuilt and re-measured, now within 1.5 dB."]] },
+
+  { tm:"ams", id:"T-2118", cat:"dep", t:"ESD clamp review sign-off pack", p:"A", o:"Diego Marín", due:"07 May", del:"11 May", d:4, ci:0,
+    cause:"Held four days for the foundry rule deck update needed to state the clamp margin.",
+    th:[["Diego Marín","06 May","Waiting on the foundry rule deck update before I can state the clamp margin."],
+        ["Diego Marín","11 May","Deck landed on the 10th. Pack out."]] },
+
+  { tm:"ams", id:"T-2126", cat:"queue", t:"Comparator offset trim code freeze", p:"A", o:"Wei Lin", due:"06 May", del:"15 May", d:9, ci:0,
+    cause:"Codes could not be frozen before the mismatch Monte Carlo returned; the solver queue added most of the wait.",
+    th:[["Wei Lin","05 May","Monte Carlo on the mirror mismatch is not back yet, and freezing the codes before it is guesswork."],
+        ["Anders Holm","08 May","Running it. Solver queue is deep this week."],
+        ["Wei Lin","15 May","Codes frozen against the returned distribution."]] },
+
+  { tm:"ams", id:"T-2133", cat:"spec", t:"Top-level pin list reconciliation with package", p:"A", o:"Ana Beck", due:"12 May", del:"15 May", d:3, ci:0,
+    cause:"Two supply pins moved after the package freeze, forcing a second reconciliation pass.",
+    th:[["Ana Beck","12 May","Package team changed two supply pins after the last freeze. Reconciling both sides."],
+        ["Ana Beck","15 May","Reconciled and signed off."]] },
+
+  { tm:"ams", id:"T-2147", cat:"dep", t:"Analog IO ring DRC clean", p:"A", o:"Sanjana Rao", due:"08 May", del:"15 May", d:7, ci:0,
+    cause:"Antenna violations traced to the test-mode mux insertion, which arrived four days after the DRC slot.",
+    th:[["Sanjana Rao","07 May","Ring is clean except 40 antenna violations that all trace to the test-mode mux insertion."],
+        ["Yusuf Karim","11 May","Mux insertion is late itself. I will hand you the final netlist on the 13th."],
+        ["Sanjana Rao","15 May","Clean."]] },
+
+  { tm:"ams", id:"T-2152", cat:"tool", t:"Reference current mirror mismatch Monte Carlo", p:"A", o:"Anders Holm", due:"11 May", del:"16 May", d:5, ci:0,
+    cause:"A single solver licence until Thursday stretched a 40-hour run across five days.",
+    th:[["Anders Holm","10 May","Two thousand points at three corners is 40 hours of solver, and I have one licence until Thursday."],
+        ["Anders Holm","16 May","Done. Sigma is tighter than the schematic assumed."]] },
+
+  { tm:"ams", id:"T-2168", cat:"none", t:"Test-mode mux insertion", p:"A", o:"Yusuf Karim", due:"09 May", del:"11 May", d:2, ci:-1,
+    cause:"Two days late against a slot that assumed the IO ring was frozen. Nothing was written in the thread.",
+    th:[["Yusuf Karim","09 May","Started."],
+        ["Yusuf Karim","11 May","Handed over."]] },
+
+  { tm:"ams", id:"T-2175", cat:"dep", t:"AFE noise budget update after bench data", p:"A", o:"Tomás Herrera", due:"08 May", del:"19 May", d:11, ci:0,
+    cause:"The bench noise floor came in 3 dB high, which forced a redistribution across two owners rather than a local patch.",
+    th:[["Tomás Herrera","07 May","Bench noise floor is 3 dB above the budget assumption. The budget has to be redistributed, not patched."],
+        ["Priya Iyer","12 May","If you move the AFE allocation, the LDO spec moves too. That needs both owners."],
+        ["Tomás Herrera","19 May","Redistributed with Priya. Both specs updated."]] },
+
+  { tm:"ams", id:"T-2183", cat:"process", t:"A-sample bring-up checklist owner sign-off", p:"A", o:"Rakesh Menon", due:"14 May", del:"17 May", d:3, ci:0, uns:"Owner on customer site 12–29 May; the row reached the lead after the cut-off.",
+    cause:"Owner was on customer site for the sign-off window, and the pack waited three days for a remote signature.",
+    th:[["Rakesh Menon","13 May","On customer site 12–29 May. Will sign remotely if the pack is stable."],
+        ["Priya Iyer","17 May","Signed off by Rakesh over mail, attaching here."]] },
+
+  { tm:"ams", id:"T-2196", cat:"dep", t:"Bias network schematic rev C", p:"A", o:"Priya Iyer", due:"13 May", del:"21 May", d:8, ci:0,
+    cause:"Held for the AFE noise budget rather than redrawing twice; started two days after it landed.",
+    th:[["Priya Iyer","12 May","Rev C depends on the noise budget landing. Holding rather than redrawing twice."],
+        ["Priya Iyer","21 May","Budget landed on the 19th, rev C out two days later."]] },
+
+  { tm:"ams", id:"T-2205", cat:"tool", t:"Coupling test fixture calibration run", p:"B", o:"Ritu Nanda", due:"12 May", del:"17 May", d:5, ci:0,
+    cause:"The calibration standard was away for annual certification for the first four days of the window.",
+    th:[["Ritu Nanda","11 May","Calibration standard is out for its annual cert until the 15th."],
+        ["Ritu Nanda","17 May","Back and calibrated."]] },
+
+  { tm:"ams", id:"T-2212", cat:"process", t:"Substrate model correlation report", p:"B", o:"Lena Farrow", due:"07 May", del:"11 May", d:4, ci:0,
+    cause:"A measurement-uncertainty section with no precedent took four days to write and review.",
+    th:[["Lena Farrow","06 May","Correlation is fine. The report needs a measurement uncertainty section we have never written before."],
+        ["Lena Farrow","11 May","Written and reviewed."]] },
+
+  { tm:"ams", id:"T-2219", cat:"queue", t:"Body-channel path loss sweep re-run", p:"B", o:"Anders Holm", due:"08 May", del:"15 May", d:7, ci:0,
+    cause:"Queued behind another solver job on the same single licence.",
+    th:[["Anders Holm","07 May","Re-run is queued behind the mismatch Monte Carlo on the same licence."],
+        ["Anders Holm","15 May","Complete."]] },
+
+  { tm:"ams", id:"T-2226", cat:"none", t:"Model handoff package to RTL", p:"B", o:"Ritu Nanda", due:"18 May", del:"20 May", d:2, ci:-1, uns:"No cause in the thread, and the owner was unreachable before the cut-off.",
+    cause:"Two days late with no explanation in the thread; the owner was on the coupling fixture run and did not return to it.",
+    th:[["Ritu Nanda","18 May","Packaging."],
+        ["Ritu Nanda","20 May","Sent."]] },
+
+  { tm:"ams", id:"T-2238", cat:"dep", t:"Return-path assumption review with layout", p:"B", o:"Kofi Mensah", due:"11 May", del:"17 May", d:6, ci:0,
+    cause:"Waited on the coupling model refresh, then reviewed against interim numbers to avoid slipping further.",
+    th:[["Kofi Mensah","10 May","This needs Anders and the refreshed coupling model, which is not out yet."],
+        ["Anders Holm","15 May","Model refresh is itself late. Review on the 16th with the interim numbers."],
+        ["Kofi Mensah","17 May","Reviewed. Two assumptions changed."]] },
+
+  { tm:"ams", id:"T-2244", cat:"spec", t:"S-parameter de-embedding script update", p:"B", o:"Lena Farrow", due:"20 May", del:"23 May", d:3, ci:0,
+    cause:"A fixture change moved the de-embedding reference; a small edit landed in a week with no slack.",
+    th:[["Lena Farrow","19 May","The fixture changed, so the de-embedding reference does too. Small change, wrong week."],
+        ["Lena Farrow","23 May","Updated and re-validated against the calibration run."]] },
+
+  { tm:"ams", id:"T-2251", cat:"dep", t:"Bandgap trim range extension", p:"C", o:"Wei Lin", due:"06 May", del:"18 May", d:12, ci:0,
+    cause:"Folded into the bandgap curvature schematic pass; it could not close before that work did.",
+    th:[["Wei Lin","06 May","Same root as the temperature coefficient work — the range has to grow before anything else closes."],
+        ["Wei Lin","18 May","Range extended in the same schematic pass."]] },
+
+  { tm:"ams", id:"T-2257", cat:"queue", t:"Regulator startup sequencing fix", p:"C", o:"Priya Iyer", due:"14 May", del:"19 May", d:5, ci:0,
+    cause:"The fix was ready on time and waited five days for corner simulation capacity.",
+    th:[["Priya Iyer","13 May","Sequencing fix is ready, but it needs a corner sim matrix and Yusuf is on the C-block."],
+        ["Priya Iyer","19 May","Matrix came back clean. Merged."]] },
+
+  { tm:"ams", id:"T-2264", cat:"spec", t:"Layout parasitic extraction re-run after ECO", p:"C", o:"Sanjana Rao", due:"12 May", del:"20 May", d:8, ci:0,
+    cause:"An ECO landed mid-extraction, turning a delta run into a full re-run.",
+    th:[["Sanjana Rao","11 May","The ECO landed after I started extraction, so this is a full re-run and not a delta."],
+        ["Sanjana Rao","20 May","Re-run complete. Three nets moved outside tolerance and were fixed."]] },
+
+  { tm:"ams", id:"T-2270", cat:"queue", t:"Corner sim matrix for the C-block", p:"C", o:"Yusuf Karim", due:"15 May", del:"19 May", d:4, ci:0,
+    cause:"Second in a queue of two matrices running against one bench.",
+    th:[["Yusuf Karim","14 May","Running two matrices this week against one bench. C-block is second."],
+        ["Yusuf Karim","19 May","C-block matrix out."]] },
+
+  { tm:"ams", id:"T-2277", cat:"spec", t:"Analog netlist LVS clean", p:"C", o:"Diego Marín", due:"13 May", del:"19 May", d:6, ci:0,
+    cause:"Chasing the same ECO as the extraction re-run; cleaned against the post-ECO netlist.",
+    th:[["Diego Marín","12 May","LVS is chasing the same ECO as the extraction re-run."],
+        ["Diego Marín","19 May","Clean against the post-ECO netlist."]] },
+
+  { tm:"ams", id:"T-2283", cat:"queue", t:"Temperature sensor linearity check", p:"C", o:"Mira Halvorsen", due:"19 May", del:"22 May", d:3, ci:0,
+    cause:"The thermal chamber was booked for PLL characterisation until the 21st.",
+    th:[["Mira Halvorsen","18 May","Chamber is booked for the PLL work until the 21st."],
+        ["Mira Halvorsen","22 May","Linearity within spec."]] },
+
+  { tm:"ams", id:"T-2289", cat:"dep", t:"Power-on-reset threshold review", p:"C", o:"Tomás Herrera", due:"15 May", del:"24 May", d:9, ci:0, uns:"Owner on leave from 25 May. The cause was drafted and never signed.",
+    cause:"Blocked on the bandgap curvature result, and reviewed once the second-pass measurement existed.",
+    th:[["Tomás Herrera","14 May","Threshold review needs the bandgap curvature answer, which is still open."],
+        ["Tomás Herrera","24 May","Reviewed against the second-pass measurement."]] },
+
+  { tm:"ams", id:"T-2295", cat:"none", t:"Trim register map freeze", p:"C", o:"Rakesh Menon", due:"20 May", del:"22 May", d:2, ci:-1,
+    cause:"Two days late. The thread records no reason, and the owner was travelling in the window.",
+    th:[["Rakesh Menon","20 May","Freezing."],
+        ["Rakesh Menon","22 May","Frozen and circulated."]] },
+
+  { tm:"ams", id:"T-2302", cat:"spec", t:"C-block floorplan revision", p:"C", o:"Ana Beck", due:"15 May", del:"22 May", d:7, ci:0, uns:"Two owners disagree about which boundary caused the wait. Unresolved at the cut-off.",
+    cause:"Three downstream tasks wanted different block boundaries, and the revision waited on the largest requirement.",
+    th:[["Ana Beck","14 May","Revision is straightforward, but three tasks are queued on it and each wants a different boundary."],
+        ["Kofi Mensah","18 May","Curvature branch needs 40 microns more than the current draft."],
+        ["Ana Beck","22 May","Revised with the larger boundary."]] },
+
+  { tm:"ams", id:"T-2308", cat:"dep", t:"Decap allocation study", p:"C", o:"Kofi Mensah", due:"21 May", del:"26 May", d:5, ci:0,
+    cause:"Needed post-ECO extraction numbers that arrived five days into the window.",
+    th:[["Kofi Mensah","20 May","Study needs the post-ECO extraction numbers."],
+        ["Kofi Mensah","26 May","Allocation set. 12% more decap than the draft."]] },
+
+  { tm:"ams", id:"T-2315", cat:"tool", t:"PLL charge pump leakage characterisation", p:"D", o:"Mira Halvorsen", due:"11 May", del:"21 May", d:10, ci:0,
+    cause:"Leakage sat below the meter floor and the low-current fixture was away for vendor repair until the 18th.",
+    th:[["Mira Halvorsen","10 May","Leakage is below the meter floor on this setup. I need the low-current fixture."],
+        ["Daniel Okoye","14 May","Fixture is with the vendor for repair, back on the 18th."],
+        ["Mira Halvorsen","21 May","Characterised with the returned fixture."]] },
+
+  { tm:"ams", id:"T-2321", cat:"queue", t:"Divider chain timing closure on bench", p:"D", o:"Yusuf Karim", due:"14 May", del:"20 May", d:6, ci:0,
+    cause:"Shared bench time with the lock-time regression investigation, which overran.",
+    th:[["Yusuf Karim","13 May","Bench time is shared with the lock-time regression work, which is taking longer than planned."],
+        ["Yusuf Karim","20 May","Closed."]] },
+
+  { tm:"ams", id:"T-2327", cat:"process", t:"Clock buffer layout ECO", p:"D", o:"Diego Marín", due:"18 May", del:"22 May", d:4, ci:0,
+    cause:"A one-day change waited on a weekly review board slot.",
+    th:[["Diego Marín","17 May","ECO is small. The review board only sits on Tuesdays."],
+        ["Diego Marín","22 May","Approved and implemented."]] },
+
+  { tm:"ams", id:"T-2334", cat:"tool", t:"Jitter measurement setup rebuild", p:"D", o:"Daniel Okoye", due:"08 May", del:"16 May", d:8, ci:0, uns:"The owner is this team's signer. His own two rows were last on the list and missed the cut-off.",
+    cause:"The rebuild around a new source took longer than planned and changed the bench cabling, which cost other measurements.",
+    th:[["Daniel Okoye","07 May","Rebuilding the setup around the new source. Cabling will change."],
+        ["Daniel Okoye","16 May","Rebuilt and verified against the reference part."]] },
+
+  { tm:"ams", id:"T-2340", cat:"none", t:"VCO tuning curve re-measure", p:"D", o:"Mira Halvorsen", due:"22 May", del:"25 May", d:3, ci:-1,
+    cause:"Three days late with nothing recorded in the thread; the bench log shows it followed the re-cabling re-runs.",
+    th:[["Mira Halvorsen","22 May","Re-measuring."],
+        ["Mira Halvorsen","25 May","Curve attached."]] },
+
+  { tm:"ams", id:"T-2346", cat:"dep", t:"Lock detector false-trip investigation", p:"D", o:"Tomás Herrera", due:"19 May", del:"26 May", d:7, ci:0, ev:[0,1],
+    cause:"Waited for a clean bench baseline; the trips turned out to be an artefact of the added cable delay.",
+    an:"Seven days late, and not a design defect. The false trips appeared only on the re-cabled bench, so the investigation could not conclude anything until a clean baseline existed — six of the seven days are that wait. This is the third row this week whose delay traces back to the jitter setup rebuild, and the only one where the bench change is named in the thread rather than inferred.",
+    th:[["Tomás Herrera","18 May","False trips only appear on the re-cabled bench, so I am waiting for a clean baseline."],
+        ["Tomás Herrera","26 May","Not a design issue. The trip threshold was inside the added cable delay."]] },
+
+  { tm:"ams", id:"T-2352", cat:"none", t:"Bench automation script for PLL sweeps", p:"D", o:"Daniel Okoye", due:"21 May", del:"26 May", d:5, ci:-1, uns:"Same signer as T-2334, and this thread holds no cause either.",
+    cause:"Five days late with no reason recorded, and the owner was absorbed in the bench rebuild.",
+    th:[["Daniel Okoye","21 May","Writing."],
+        ["Daniel Okoye","26 May","Merged."]] },
+
+  { tm:"ams", id:"T-2358", cat:"none", t:"PLL documentation pack for design review", p:"D", o:"Priya Iyer", due:"26 May", del:"28 May", d:2, ci:-1,
+    cause:"Two days late. The thread records nothing, and the pack depended on measurements that closed on the 26th.",
+    th:[["Priya Iyer","26 May","Assembling."],
+        ["Priya Iyer","28 May","Pack circulated."]] },
+
+  /* ---- RTL ------------------------------------------------ */
+
+  { tm:"rtl", id:"R-3104", cat:"dep", t:"Interrupt controller RTL freeze for the YR31 SoC", p:"A", o:"Hanna Lindqvist", due:"07 May", del:"28 May", d:21, ci:1, ev:[1,2],
+    cause:"Frozen against an interrupt map the firmware team revised twice; eighteen of the twenty-one days were spent waiting for the second revision to settle.",
+    an:"Twenty-one days late, and the RTL work in it is three. The block was ready to freeze on 9 May against the interrupt map firmware published on the 4th; that map was revised on the 12th and again on the 19th, each revision changing which sources are maskable. Freezing between the two revisions would have meant freezing twice. This is a handoff with no version contract on it, not a design difficulty — and the firmware side of the same map, F-4102, is 17 days late in a different team's report for the same reason.",
+    th:[["Hanna Lindqvist","09 May","Block is ready to freeze, but the interrupt map I am freezing against is four days old and I am told it is moving."],
+        ["Kenji Mori","12 May","Revised map is out. Two sources changed from maskable to level-sensitive."],
+        ["Hanna Lindqvist","13 May","That is a second freeze if I take it now and a third if it moves again. Holding until firmware say it is stable."],
+        ["Kenji Mori","19 May","Final revision. No further changes planned before tapeout."],
+        ["Hanna Lindqvist","28 May","Frozen against the 19 May map. Handed to synthesis."]] },
+
+  { tm:"rtl", id:"R-3117", cat:"spec", t:"AXI fabric arbitration rewrite after the latency review", p:"C", o:"Marcus Adeyemi", due:"11 May", del:"27 May", d:16, ci:2, ev:[0,2],
+    cause:"The latency budget the rewrite targets was still under review when the task opened, and the arbitration scheme changed once it landed.",
+    an:"Sixteen days late because the task started against a latency budget that had not been agreed. The first arbitration scheme was written to a 40-cycle worst case, the review settled on 28, and the second scheme is a different design rather than a tuning of the first. Nine of the sixteen days are the rewrite; the other seven are the wait for a number the task needed before it could begin.",
+    th:[["Marcus Adeyemi","08 May","Writing arbitration against the 40-cycle worst case in the draft budget."],
+        ["Sofia Renard","13 May","The review landed on 28 cycles. Round-robin will not hold that under the burst profile."],
+        ["Marcus Adeyemi","14 May","Then this is a rewrite, not a tune. Weighted priority with a starvation counter."],
+        ["Marcus Adeyemi","27 May","Rewritten and passing the burst regression at 26 cycles worst case."]] },
+
+  { tm:"rtl", id:"R-3122", cat:"queue", t:"Clock-domain crossing audit on the sensor bridge", p:"B", o:"Tobias Krahn", due:"12 May", del:"23 May", d:11, ci:1,
+    cause:"Queued behind two other audits on the single formal licence the team shares.",
+    th:[["Tobias Krahn","11 May","Audit needs the formal tool and there are two jobs ahead of me on the one licence."],
+        ["Grace Nwosu","15 May","Mine finishes Thursday. You are next after Owen."],
+        ["Tobias Krahn","23 May","Clean. Two false paths documented."]] },
+
+  { tm:"rtl", id:"R-3128", cat:"dep", t:"Lint clean on the power-management block", p:"C", o:"Nikhil Barve", due:"13 May", del:"22 May", d:9, ci:0,
+    cause:"Waited on the power intent rewrite; linting against the old intent produces a waiver list that is thrown away.",
+    th:[["Nikhil Barve","12 May","Linting before the UPF rewrite lands gives me a waiver list I throw away next week."],
+        ["Nikhil Barve","22 May","Clean against the new intent. Eleven waivers, all documented."]] },
+
+  { tm:"rtl", id:"R-3133", cat:"tool", t:"UVM sequence library for the NFE datapath", p:"D", o:"Divya Ramakrishnan", due:"14 May", del:"22 May", d:8, ci:0,
+    cause:"The simulator licence pool was fully committed to the nightly regression for most of the window.",
+    th:[["Divya Ramakrishnan","13 May","Licence pool is committed to the nightly until the 20th. I can write sequences but not run them."],
+        ["Divya Ramakrishnan","22 May","Ran and debugged in the weekend window. Library is in."]] },
+
+  { tm:"rtl", id:"R-3141", cat:"dep", t:"Synthesis constraints refresh for the new floorplan", p:"A", o:"Grace Nwosu", due:"15 May", del:"22 May", d:7, ci:0, uns:"The owner is the Synthesis lead and this is her own row. It was last on her list and missed the cut-off.",
+    cause:"Held for the floorplan revision, which was itself late; constraints written against the old boundaries would not have applied.",
+    th:[["Grace Nwosu","14 May","Constraints follow the floorplan, and the floorplan is moving."],
+        ["Grace Nwosu","22 May","Refreshed against the revised boundaries."]] },
+
+  { tm:"rtl", id:"R-3147", cat:"process", t:"Register map generator update", p:"B", o:"Ilya Voronov", due:"12 May", del:"18 May", d:6, ci:0,
+    cause:"A one-day change that waited for the weekly tooling review to sit.",
+    th:[["Ilya Voronov","12 May","Change is done. The tooling review sits on Mondays and I missed this one by an hour."],
+        ["Ilya Voronov","18 May","Approved and merged."]] },
+
+  { tm:"rtl", id:"R-3152", cat:"queue", t:"Formal property set for the arbiter", p:"C", o:"Owen Trask", due:"18 May", del:"23 May", d:5, ci:0,
+    cause:"Second in the same single-licence formal queue as the crossing audit.",
+    th:[["Owen Trask","17 May","Same single formal licence. I am behind Tobias."],
+        ["Owen Trask","23 May","Properties written and proven."]] },
+
+  { tm:"rtl", id:"R-3158", cat:"queue", t:"Testbench migration to the shared regression farm", p:"D", o:"Jae-won Park", due:"19 May", del:"24 May", d:5, ci:0,
+    cause:"The farm was at capacity for the tapeout regression and new jobs were held.",
+    th:[["Jae-won Park","18 May","Farm is full with the tapeout regression. New jobs are queued, not running."],
+        ["Jae-won Park","24 May","Migrated once the queue drained."]] },
+
+  { tm:"rtl", id:"R-3163", cat:"dep", t:"Reset sequencing fix in the always-on domain", p:"A", o:"Elif Demir", due:"20 May", del:"24 May", d:4, ci:0,
+    cause:"Needed the power intent rewrite to state which domain holds reset, which arrived four days late.",
+    th:[["Elif Demir","19 May","The fix depends on which domain owns reset after the UPF rewrite."],
+        ["Elif Demir","24 May","Intent says always-on. Fixed and simulated."]] },
+
+  { tm:"rtl", id:"R-3169", cat:"tool", t:"Gate-level simulation setup for the C block", p:"C", o:"Sofia Renard", due:"21 May", del:"25 May", d:4, ci:0,
+    cause:"The timing file the setup needs came from a tool version the flow scripts could not parse.",
+    th:[["Sofia Renard","20 May","The SDF is from the new tool version and our flow scripts do not parse it."],
+        ["Sofia Renard","25 May","Flow updated. Simulation running."]] },
+
+  { tm:"rtl", id:"R-3174", cat:"none", t:"Coverage closure on the interrupt path", p:"B", o:"Divya Ramakrishnan", due:"22 May", del:"25 May", d:3, ci:-1,
+    cause:"Three days late with nothing recorded in the thread.",
+    th:[["Divya Ramakrishnan","22 May","Closing."],["Divya Ramakrishnan","25 May","Closed at 99.2 per cent."]] },
+
+  { tm:"rtl", id:"R-3181", cat:"none", t:"RTL handoff pack to the layout team", p:"A", o:"Aarav Sengupta", due:"26 May", del:"29 May", d:3, ci:-1, uns:"No cause in the thread, and the owner was in a tapeout review through the signing window.",
+    cause:"Three days late with no reason recorded.",
+    th:[["Aarav Sengupta","26 May","Assembling."],["Aarav Sengupta","29 May","Sent."]] },
+
+  { tm:"rtl", id:"R-3186", cat:"none", t:"Scan insertion review", p:"D", o:"Marcus Adeyemi", due:"27 May", del:"29 May", d:2, ci:-1,
+    cause:"Two days late, nothing recorded.",
+    th:[["Marcus Adeyemi","27 May","Reviewing."],["Marcus Adeyemi","29 May","Signed off."]] },
+
+  /* ---- PS ------------------------------------------------- */
+
+  { tm:"ps", id:"P-2701", cat:"tool", t:"A0 silicon bring-up: PLL never locks on the third board", p:"D", o:"Clara Voss", due:"06 May", del:"24 May", d:18, ci:1, ev:[1,2],
+    cause:"A reference oscillator populated at the wrong frequency on one board build sent eleven days into a design investigation that was never a design issue.",
+    an:"Eighteen days late, and seventeen of them were spent looking in the wrong place. Three boards were built; the third never locked, and the investigation ran as a design problem for eleven days before the oscillator on that board was read off the part and found to be 25 MHz against the 38.4 the design expects. The board build was not a task, so nothing in this report could have pointed at it — the same shape as the AMS bench re-cabling two months ago: a configuration change nobody logged, found by exhaustion.",
+    th:[["Clara Voss","07 May","Boards 1 and 2 lock. Board 3 does not, same image, same settings."],
+        ["Idris Fadel","11 May","If it were the design, all three would fail. Something about board 3 is different."],
+        ["Clara Voss","18 May","Read the oscillator off board 3. It is 25 MHz. The BOM says 38.4."],
+        ["Rohan Kulkarni","19 May","Build swapped it during a shortage. There is no task anywhere recording that."],
+        ["Clara Voss","24 May","Reworked, locks on all three. Closing."]] },
+
+  { tm:"ps", id:"P-2708", cat:"queue", t:"Shmoo across voltage and temperature for the NFE part", p:"B", o:"Peter Iversen", due:"08 May", del:"22 May", d:14, ci:0, ev:[0,1],
+    cause:"One thermal chamber shared across three parts; the sweep ran in the gaps.",
+    an:"Fourteen days late, all of it chamber time that did not exist. The sweep is 26 hours of measurement and the team has one chamber, booked solid across three parts for the first three weeks of the month. The work did not slip; the queue in front of it did. This is the second month running that the chamber is the largest single source of delay days in this team, and the first month it was written down.",
+    th:[["Peter Iversen","07 May","Sweep is 26 hours in the chamber and the chamber is booked to the 19th."],
+        ["Naomi Sato","08 May","Three parts, one chamber. I can give you the weekend of the 16th."],
+        ["Peter Iversen","22 May","Ran across two weekends. Full matrix in."]] },
+
+  { tm:"ps", id:"P-2714", cat:"dep", t:"ATE test program bring-up for the trim registers", p:"A", o:"Zainab Qureshi", due:"11 May", del:"21 May", d:10, ci:1,
+    cause:"Waited on the final trim register map, which moved with the analog schematic pass.",
+    th:[["Zainab Qureshi","10 May","The test program writes trim registers that are still being renumbered."],
+        ["Luis Ferrer","13 May","AMS say the map freezes on the 20th."],
+        ["Zainab Qureshi","21 May","Program written against the frozen map."]] },
+
+  { tm:"ps", id:"P-2721", cat:"dep", t:"Correlation of bench and ATE PSRR numbers", p:"A", o:"Amara Chen", due:"12 May", del:"20 May", d:8, ci:0,
+    cause:"Blocked until the bench figures were re-taken after a probe rebuild upstream.",
+    th:[["Amara Chen","11 May","I cannot correlate against bench numbers that are being re-taken."],
+        ["Amara Chen","20 May","Re-taken numbers in. Correlated within 1.8 dB."]] },
+
+  { tm:"ps", id:"P-2727", cat:"queue", t:"Yield analysis for the first production lot", p:"C", o:"Henrik Solberg", due:"13 May", del:"20 May", d:7, ci:0,
+    cause:"The lot data landed five days late from the test floor and the analysis window closed behind it.",
+    th:[["Henrik Solberg","12 May","Test floor has not released the lot data yet."],
+        ["Henrik Solberg","20 May","Data in on the 17th. Analysis out."]] },
+
+  { tm:"ps", id:"P-2733", cat:"tool", t:"Low-current measurement fixture recalibration", p:"D", o:"Meera Pillai", due:"15 May", del:"21 May", d:6, ci:0,
+    cause:"The calibration standard was with the vendor and returned late.",
+    th:[["Meera Pillai","14 May","Standard is with the vendor, promised the 18th."],
+        ["Meera Pillai","21 May","Back on the 19th, recalibrated."]] },
+
+  { tm:"ps", id:"P-2739", cat:"spec", t:"Production test limits for the NFE range profiles", p:"B", o:"Luis Ferrer", due:"18 May", del:"23 May", d:5, ci:0,
+    cause:"The third range profile was still being defined when the limits were due.",
+    th:[["Luis Ferrer","17 May","Two of three profiles are defined. I cannot set limits for the third."],
+        ["Luis Ferrer","23 May","Third profile settled. Limits set for all three."]] },
+
+  { tm:"ps", id:"P-2745", cat:"queue", t:"Bring-up board rework for the second build", p:"C", o:"Rohan Kulkarni", due:"19 May", del:"23 May", d:4, ci:0, uns:"The owner was on the production floor for the first lot and did not return to the row before the cut-off.",
+    cause:"The rework bench was committed to the production lot for most of the week.",
+    th:[["Rohan Kulkarni","18 May","Rework bench is on the production lot until Thursday."],
+        ["Rohan Kulkarni","23 May","Reworked."]] },
+
+  { tm:"ps", id:"P-2751", cat:"none", t:"Characterisation report template update", p:"A", o:"Naomi Sato", due:"20 May", del:"23 May", d:3, ci:-1,
+    cause:"Three days late with nothing recorded in the thread.",
+    th:[["Naomi Sato","20 May","Updating."],["Naomi Sato","23 May","Circulated."]] },
+
+  { tm:"ps", id:"P-2757", cat:"dep", t:"Scan chain diagnostic run on failing units", p:"D", o:"Idris Fadel", due:"21 May", del:"24 May", d:3, ci:0, uns:"Two owners disagree about whether the wait belongs to this row or to the ATE row upstream. Unresolved at the cut-off.",
+    cause:"Waited on the ATE program that reads the diagnostic registers.",
+    th:[["Idris Fadel","21 May","This needs the ATE program that was itself late."],
+        ["Luis Ferrer","23 May","That wait is on my row, not yours."],
+        ["Idris Fadel","24 May","Run complete either way. Three units diagnosed."]] },
+
+  { tm:"ps", id:"P-2762", cat:"none", t:"Bench log migration to the shared drive", p:"B", o:"Clara Voss", due:"22 May", del:"24 May", d:2, ci:-1,
+    cause:"Two days late, nothing recorded.",
+    th:[["Clara Voss","22 May","Migrating."],["Clara Voss","24 May","Done."]] },
+
+  /* ---- HW ------------------------------------------------- */
+
+  { tm:"hw", id:"H-1802", cat:"dep", t:"Main board rev C: re-spin after the connector change", p:"A", o:"Tanvir Ahmed", due:"07 May", del:"23 May", d:16, ci:1, ev:[1,2],
+    cause:"A connector change agreed in a mechanical review hardware was not in; the board was already routed when it arrived.",
+    an:"Sixteen days late because a decision that changed the board was taken in a meeting the board owner was not in. The connector moved on 8 May in a mechanical review; the board was routed to the old footprint and 60 per cent placed. Re-routing cost six days and the fabrication slot cost eight more, because the slot booked for rev C could not be moved. Nothing here was a hardware problem. The review had no hardware attendee, and no rule that says it should.",
+    th:[["Tanvir Ahmed","08 May","Mechanical changed the connector this morning. I am 60 per cent placed against the old footprint."],
+        ["Bea Karlsson","08 May","Who was in that review? Nobody from hardware, is the answer."],
+        ["Tanvir Ahmed","14 May","Re-routed. The fab slot we had is on the 20th and cannot move."],
+        ["Tanvir Ahmed","23 May","Boards back, powered, no rework."]] },
+
+  { tm:"hw", id:"H-1809", cat:"spec", t:"Signal integrity closure on the high-speed link", p:"B", o:"Ines Batista", due:"09 May", del:"21 May", d:12, ci:0, ev:[0,2],
+    cause:"Closed against a channel budget that changed once the connector moved, which invalidated the first set of simulations.",
+    an:"Twelve days late, and the second half of it is the same connector change that cost the board re-spin. The channel model was built against the old footprint; when it moved, the impedance discontinuity moved with it and the eye closed by 14 per cent. Seven days of simulation had to be redone. One decision taken in one meeting appears in this report twice, under two owners — which is the argument for counting delay days rather than delayed tasks.",
+    th:[["Ines Batista","08 May","Channel model is against the old connector position."],
+        ["Ines Batista","13 May","Eye closes 14 per cent with it moved. Re-simulating the whole channel."],
+        ["Samuel Otieno","15 May","Same root as the board re-spin. Worth saying so in the report."],
+        ["Ines Batista","21 May","Closed with two extra ground vias."]] },
+
+  { tm:"hw", id:"H-1815", cat:"dep", t:"Power tree review for the sensor daughterboard", p:"C", o:"Nadia Haddad", due:"11 May", del:"20 May", d:9, ci:0,
+    cause:"Waited for the firmware team's measured current profile, which arrived after the release freeze.",
+    th:[["Nadia Haddad","10 May","I need the measured current profile from firmware before the tree means anything."],
+        ["Nadia Haddad","20 May","Profile in on the 18th. Tree reviewed and two rails resized."]] },
+
+  { tm:"hw", id:"H-1821", cat:"tool", t:"EMC pre-scan on the rev B build", p:"D", o:"Freya Lindgren", due:"13 May", del:"20 May", d:7, ci:0,
+    cause:"The chamber slot moved when the anechoic chamber went down for repair.",
+    th:[["Freya Lindgren","12 May","Chamber is down. The vendor is booked for the 15th."],
+        ["Freya Lindgren","20 May","Pre-scan done. Two marginal emissions to chase."]] },
+
+  { tm:"hw", id:"H-1827", cat:"dep", t:"Connector footprint library update", p:"A", o:"Julia Moreau", due:"14 May", del:"20 May", d:6, ci:0,
+    cause:"Held until the mechanical change was final, so the library was not updated twice.",
+    th:[["Julia Moreau","13 May","Not updating the library until mechanical say the footprint is final."],
+        ["Julia Moreau","20 May","Final on the 18th. Library updated and released."]] },
+
+  { tm:"hw", id:"H-1833", cat:"queue", t:"Impedance coupon measurement on the rev C panel", p:"B", o:"Karan Malhotra", due:"18 May", del:"23 May", d:5, ci:0,
+    cause:"The measurement bench was committed to the compliance pre-scan for most of the week.",
+    th:[["Karan Malhotra","17 May","Bench is on the EMC work until Thursday."],
+        ["Karan Malhotra","23 May","Coupons measured, all within tolerance."]] },
+
+  { tm:"hw", id:"H-1839", cat:"process", t:"Safety file update for the new enclosure", p:"C", o:"Freya Lindgren", due:"19 May", del:"22 May", d:3, ci:0, uns:"The owner is the Compliance lead and this is her own row; unsigned at the cut-off.",
+    cause:"A three-day wait for the monthly documentation review board.",
+    th:[["Freya Lindgren","19 May","Update is written. The documentation board sits on the 21st."],
+        ["Freya Lindgren","22 May","Approved."]] },
+
+  { tm:"hw", id:"H-1845", cat:"none", t:"Bring-up harness assembly", p:"D", o:"Bea Karlsson", due:"20 May", del:"22 May", d:2, ci:-1,
+    cause:"Two days late, nothing recorded in the thread.",
+    th:[["Bea Karlsson","20 May","Assembling."],["Bea Karlsson","22 May","Done."]] },
+
+  { tm:"hw", id:"H-1851", cat:"spec", t:"Test point placement for the production fixture", p:"A", o:"Andrei Popescu", due:"21 May", del:"23 May", d:2, ci:0,
+    cause:"Placement waited on the final fixture drawing, which moved two test point locations.",
+    th:[["Andrei Popescu","21 May","Fixture drawing moved two test points."],
+        ["Andrei Popescu","23 May","Placed against the final drawing."]] },
+
+  /* ---- FW ------------------------------------------------- */
+
+  { tm:"fw", id:"F-4102", cat:"spec", t:"Interrupt map and mask table for the YR31 driver", p:"A", o:"Sunita Bhalla", due:"06 May", del:"23 May", d:17, ci:2, ev:[1,2],
+    cause:"The map was published on time, then revised twice against hardware review comments; the mask table had to be rewritten against the third version.",
+    an:"Seventeen days late, and the map itself was published on time. What was late was agreement about it: revisions on 12 and 19 May, each changing which sources are maskable, each invalidating the table written against the version before. Eleven of the seventeen days are the gap between first publication and last revision. The RTL side of the same handoff, R-3104, is 21 days late for the same reason and is counted in a different team's report — which is why the quarterly is the only place this appears as one problem rather than two.",
+    th:[["Sunita Bhalla","06 May","Map is out. Writing the mask table against it."],
+        ["Hanna Lindqvist","12 May","Two sources need to be level-sensitive, not edge. That changes the mask semantics."],
+        ["Sunita Bhalla","13 May","Second rewrite of the table. I will hold until this stops moving."],
+        ["Hanna Lindqvist","19 May","Final. No more changes before tapeout."],
+        ["Sunita Bhalla","23 May","Table rewritten against the 19th. Tested against the RTL model."]] },
+
+  { tm:"fw", id:"F-4109", cat:"dep", t:"Power management driver for the always-on island", p:"C", o:"Kenji Mori", due:"08 May", del:"21 May", d:13, ci:1, ev:[0,1],
+    cause:"Blocked on the power intent rewrite; a driver cannot address domains whose boundaries are still moving.",
+    an:"Thirteen days late, of which the driver work is four. The always-on island boundary moved twice with the floorplan, and each move changed which registers survive a domain transition. Writing against a moving boundary produces a driver that has to be rewritten, so the task waited from 9 to 18 May for the boundary to be called final. The same unfrozen input, the RTL power intent rewrite, is still open in the RTL team's weekly at the time of this run.",
+    th:[["Kenji Mori","09 May","The island boundary has moved twice. Which registers survive a transition changes with it."],
+        ["Nikhil Barve","12 May","Third power intent rewrite is in progress. I would not build against the current one."],
+        ["Kenji Mori","21 May","Boundary final on the 18th. Driver written and tested."]] },
+
+  { tm:"fw", id:"F-4115", cat:"queue", t:"Release candidate build for the 2.4 firmware", p:"B", o:"Leila Nasser", due:"11 May", del:"21 May", d:10, ci:0,
+    cause:"The build farm was committed to the RTL regression during tapeout week.",
+    th:[["Leila Nasser","10 May","Build farm is on the tapeout regression. Release builds are queued behind it."],
+        ["Leila Nasser","21 May","Farm freed on the 19th. Candidate built and signed."]] },
+
+  { tm:"fw", id:"F-4121", cat:"dep", t:"Current profiling run for the hardware power tree", p:"D", o:"Ola Nyberg", due:"12 May", del:"20 May", d:8, ci:0,
+    cause:"Profiling needed a board build that arrived a week late.",
+    th:[["Ola Nyberg","11 May","No board to profile on. The rev B build is late."],
+        ["Ola Nyberg","20 May","Boards in on the 18th. Profile measured and handed to hardware."]] },
+
+  { tm:"fw", id:"F-4127", cat:"tool", t:"Debugger support for the new trace unit", p:"A", o:"Pavel Dvorak", due:"14 May", del:"20 May", d:6, ci:0,
+    cause:"The probe firmware that reads the trace unit was not released until the middle of the window.",
+    th:[["Pavel Dvorak","13 May","The probe firmware that understands the trace unit is not out yet."],
+        ["Pavel Dvorak","20 May","Released on the 18th. Support added."]] },
+
+  { tm:"fw", id:"F-4133", cat:"dep", t:"Sensor driver update for the revised register map", p:"B", o:"Aisha Bello", due:"15 May", del:"20 May", d:5, ci:0,
+    cause:"Waited on the same register map freeze as the production test program.",
+    th:[["Aisha Bello","14 May","Register map is being renumbered. Holding."],
+        ["Aisha Bello","20 May","Frozen map in. Driver updated."]] },
+
+  { tm:"fw", id:"F-4139", cat:"spec", t:"Bootloader partition layout for the new flash part", p:"C", o:"Ravi Sundaram", due:"18 May", del:"22 May", d:4, ci:0, uns:"The owner was inside the 2.4 release window and the row reached him after the cut-off.",
+    cause:"The flash part changed late in the board revision and the layout had to be redone.",
+    th:[["Ravi Sundaram","17 May","Flash part changed with the board revision. The partition layout does not fit."],
+        ["Ravi Sundaram","22 May","Relaid out against the new part."]] },
+
+  { tm:"fw", id:"F-4145", cat:"dep", t:"Regression suite update for the 2.4 release", p:"D", o:"Bruno Costa", due:"19 May", del:"22 May", d:3, ci:0,
+    cause:"Held for the release candidate, which was itself late out of the build farm.",
+    th:[["Bruno Costa","19 May","No candidate to run the suite against."],
+        ["Bruno Costa","22 May","Candidate landed. Suite updated and green."]] },
+
+  { tm:"fw", id:"F-4151", cat:"none", t:"Release note assembly for 2.4", p:"B", o:"Leila Nasser", due:"21 May", del:"23 May", d:2, ci:-1, uns:"Nothing in the thread to sign, and the owner was inside the release window.",
+    cause:"Two days late with no reason recorded.",
+    th:[["Leila Nasser","21 May","Writing."],["Leila Nasser","23 May","Published."]] },
+
+  { tm:"fw", id:"F-4157", cat:"none", t:"Driver documentation refresh", p:"A", o:"Mateo Rivas", due:"22 May", del:"24 May", d:2, ci:-1,
+    cause:"Two days late, nothing recorded.",
+    th:[["Mateo Rivas","22 May","Refreshing."],["Mateo Rivas","24 May","Merged."]] }
+];
+
+/* ============================================================
+   OPEN AND OVERDUE — past their date and not delivered at the
+   week's end. These are deliberately NOT in the monthly report,
+   which counts closed work only: an open task has no delivery
+   date, so it has no delay to count and no cause to sign. They
+   are the reason the weekly report exists at all.
+   ============================================================ */
+const OPEN = [
+  { tm:"ams", id:"T-2364", cat:"spec", t:"C-block extraction re-run after the second ECO", p:"C", o:"Sanjana Rao", due:"18 May",
+    th:[["Sanjana Rao","18 May","A second ECO landed. This is another full re-run, not a delta."],
+        ["Sanjana Rao","23 May","Running. Not done."]] },
+  { tm:"ams", id:"T-2368", cat:"queue", t:"Bandgap second-pass corner sweep", p:"C", o:"Wei Lin", due:"20 May",
+    th:[["Wei Lin","20 May","Corner sweep is behind two other matrices on the same bench."]] },
+  { tm:"ams", id:"T-2372", cat:"tool", t:"Jitter re-measurement of the four invalidated sessions", p:"D", o:"Mira Halvorsen", due:"21 May",
+    th:[["Mira Halvorsen","21 May","Three of four re-run. The fourth needs the low-current fixture back."]] },
+  { tm:"ams", id:"T-2376", cat:"process", t:"Layout queue plan for June", p:"A", o:"Ana Beck", due:"22 May",
+    th:[["Ana Beck","22 May","Cannot plan June until the C-block boundary is called final."]] },
+
+  { tm:"rtl", id:"R-3192", cat:"spec", t:"Power intent rewrite for the always-on island", p:"C", o:"Nikhil Barve", due:"18 May",
+    th:[["Nikhil Barve","18 May","Boundary moved again with the floorplan revision. This is the third rewrite."],
+        ["Nikhil Barve","24 May","Still open. Waiting for the boundary to be called final."]] },
+  { tm:"rtl", id:"R-3197", cat:"queue", t:"Regression triage backlog on the nightly farm", p:"D", o:"Owen Trask", due:"20 May",
+    th:[["Owen Trask","20 May","Two hundred failures overnight, most of them the same three."],
+        ["Owen Trask","23 May","Down to forty. Still open."]] },
+  { tm:"rtl", id:"R-3199", cat:"dep", t:"Bus width change review with the firmware team", p:"B", o:"Elif Demir", due:"21 May",
+    th:[["Elif Demir","21 May","Needs the firmware side in the room and they are in release week."],
+        ["Elif Demir","24 May","Rescheduled to the 27th."]] },
+
+  { tm:"ps", id:"P-2768", cat:"dep", t:"Second production lot correlation", p:"C", o:"Henrik Solberg", due:"17 May",
+    th:[["Henrik Solberg","17 May","Waiting on the lot to finish test."],
+        ["Henrik Solberg","22 May","Half the lot is through. Still open."]] },
+  { tm:"ps", id:"P-2771", cat:"queue", t:"Thermal chamber booking for the C-part sweep", p:"C", o:"Peter Iversen", due:"19 May",
+    th:[["Peter Iversen","19 May","Chamber is on the NFE sweep. Nothing to do but wait."]] },
+  { tm:"ps", id:"P-2774", cat:"none", t:"Trim register readback mismatch on two units", p:"A", o:"Amara Chen", due:"21 May",
+    th:[["Amara Chen","21 May","Two units read back different trim than was written. Investigating."]] },
+
+  { tm:"hw", id:"H-1857", cat:"queue", t:"Rev C thermal validation on the sealed enclosure", p:"A", o:"Ines Batista", due:"16 May",
+    th:[["Ines Batista","16 May","Thermal chamber is with post-silicon until the 25th."]] },
+  { tm:"hw", id:"H-1861", cat:"dep", t:"Second-source review for the regulator", p:"D", o:"Nadia Haddad", due:"20 May",
+    th:[["Nadia Haddad","20 May","Waiting on procurement to confirm the second source is orderable."]] },
+
+  { tm:"fw", id:"F-4162", cat:"none", t:"Release-blocking defect in the sleep path", p:"B", o:"Aisha Bello", due:"19 May",
+    th:[["Aisha Bello","19 May","Wake from deep sleep fails about one time in two hundred. No pattern yet."]] },
+  { tm:"fw", id:"F-4166", cat:"dep", t:"Driver handoff to the post-silicon bring-up team", p:"D", o:"Pavel Dvorak", due:"21 May",
+    th:[["Pavel Dvorak","21 May","Waiting on the bring-up boards to be reworked."]] },
+  { tm:"fw", id:"F-4169", cat:"spec", t:"Trace buffer sizing decision with hardware", p:"A", o:"Ola Nyberg", due:"22 May",
+    th:[["Ola Nyberg","22 May","Buffer size depends on the SRAM allocation, which is not final."]] }
+];
+
+/* ============================================================
+   MARCH AND APRIL — held as the two monthly reports they
+   produced, not as task records. The quarterly report reads
+   exactly this and nothing else, which is the second-pass rule
+   one level up: a summary written from the source drifts from
+   the tables printed beside it.
+
+   `cats` is the signed-cause breakdown that month's report
+   published. It sums to `delayed` because every delayed task
+   lands in exactly one of the six categories, including the
+   one that means the thread held no cause.
+   ============================================================ */
+const HISTORY = {
+  ams: {
+    mar: { closed:251, onTime:206, delayed:45, days:301, signed:27,
+           cats:{ queue:11, dep:9, spec:4, tool:5, process:2, none:14 } },
+    apr: { closed:259, onTime:219, delayed:40, days:274, signed:29,
+           cats:{ queue:10, dep:9, spec:4, tool:4, process:3, none:10 } }
+  },
+  rtl: {
+    mar: { closed:181, onTime:164, delayed:17, days:128, signed:8,
+           cats:{ queue:4, dep:4, spec:2, tool:1, process:1, none:5 } },
+    apr: { closed:188, onTime:173, delayed:15, days:113, signed:10,
+           cats:{ queue:3, dep:4, spec:2, tool:2, process:1, none:3 } }
+  },
+  ps: {
+    mar: { closed:139, onTime:124, delayed:15, days:108, signed:8,
+           cats:{ queue:4, dep:3, spec:2, tool:2, process:1, none:3 } },
+    apr: { closed:144, onTime:131, delayed:13, days:91, signed:9,
+           cats:{ queue:3, dep:3, spec:2, tool:2, process:1, none:2 } }
+  },
+  hw: {
+    mar: { closed:106, onTime:95, delayed:11, days:79, signed:5,
+           cats:{ queue:2, dep:3, spec:2, tool:1, process:1, none:2 } },
+    apr: { closed:112, onTime:102, delayed:10, days:70, signed:7,
+           cats:{ queue:2, dep:3, spec:1, tool:1, process:1, none:2 } }
+  },
+  fw: {
+    mar: { closed:121, onTime:108, delayed:13, days:92, signed:7,
+           cats:{ queue:2, dep:4, spec:2, tool:1, process:1, none:3 } },
+    apr: { closed:126, onTime:114, delayed:12, days:81, signed:8,
+           cats:{ queue:2, dep:4, spec:2, tool:1, process:1, none:2 } }
+  }
+};
+
+/* ============================================================
+   CRITICAL ISSUES — written by the model in the monthly second
+   pass, from the generated sheets rather than from the task
+   records. Each carries the rows it was drawn from.
+   ============================================================ */
+const ISSUES = {
+  ams: [
+    { sev:"crit", h:"One shared layout queue produced the month's two largest delays",
+      p:"The two longest overruns — the bandgap re-centre at 24 days and the AFE gain stage at 19 — spent 26 of their 43 late days waiting on layout capacity rather than on the work itself. Three further Project C rows queue behind the same floorplan revision. The distribution sheet shows Project C carrying the largest share of the month's delay days on a smaller share of its delayed tasks, which is the same queue seen from the other side.",
+      r:"Treat the C-block floorplan as a scheduled dependency with its own date, not as capacity that absorbs whatever arrives.",
+      s:["Sheet 3 · T-2214","Sheet 3 · T-2189","Sheet 5 · Project C"] },
+    { sev:"warn", h:"An unrecorded bench change invalidated four measurement sessions",
+      p:"The PLL lock-time regression resolved to 11 cm of cable added during a setup rebuild, and nine of its 17 late days were spent repeating measurements taken after the change. Two further verification rows reference the same bench in their threads. No sheet in this report would have caught it: the bench change was never a task.",
+      r:"Log bench configuration changes against the measurements they invalidate, so a regression can be attributed before it is investigated.",
+      s:["Sheet 3 · T-2263","Sheet 3 · T-2334","Sheet 2 · AMS Verification"] },
+    { sev:"warn", h:"Six delayed tasks publish without a confirmed cause",
+      p:"Six of 38 delayed tasks reached the cut-off unsigned and publish as “cause not confirmed”. Three of the six sit with owners who were travelling, on leave or unreachable during the signing window, and two more are the AMS Verification lead's own rows, left last on his list. This is an availability problem in the signing step, not a gap in the analysis.",
+      r:"Move signing out of the workbook and into a notification carrying the thread, so a signature does not require opening a file.",
+      s:["Sheet 3 · unsigned filter","Sheet 4 · coverage"] }
+  ],
+  rtl: [
+    { sev:"crit", h:"An interrupt map with no version contract cost 38 days across two teams",
+      p:"The interrupt controller freeze is 21 days late and every one of those days traces to a map that was published, then revised twice. The firmware side of the same handoff is 17 days late in a different team's report. Neither report can see the other, so this reads here as an RTL delay and there as a firmware delay, and the 38 days only add up at the quarter.",
+      r:"Give the interrupt map a version and a freeze date of its own, and treat a revision after freeze as a change request rather than an update.",
+      s:["Sheet 3 · R-3104","Sheet 5 · Project A"] },
+    { sev:"warn", h:"One formal licence is behind three of the month's fourteen delays",
+      p:"The crossing audit, the arbiter property set and part of the lint clean all queue on a single formal verification licence, together carrying 22 delay days. Each individual wait looks reasonable in its own thread; the pattern is only visible when the rows are counted together, which is what the distribution sheet is for.",
+      r:"Price a second licence against 22 delay days a month and take the answer to the tooling review, rather than to a lead.",
+      s:["Sheet 3 · R-3122","Sheet 3 · R-3152","Sheet 2 · Design verification"] }
+  ],
+  ps: [
+    { sev:"crit", h:"A board change that was never a task cost eighteen days",
+      p:"Bring-up on the third board ran as a design investigation for eleven days before an oscillator populated at the wrong frequency was found. The substitution happened in a build, and a build is not a task, so no sheet in this report could have pointed at it. This is the second time in three months that a configuration change nobody logged has been found by exhaustion rather than by search.",
+      r:"Require a build variance note as a task, so the one place a bring-up engineer looks first has something in it.",
+      s:["Sheet 3 · P-2701","Sheet 6 · recurring"] },
+    { sev:"warn", h:"One thermal chamber is the largest single source of delay days",
+      p:"The voltage and temperature sweep is 14 days late and all of it is chamber time that did not exist; a second sweep is still open past its date at the time of this run. Three parts share one chamber. This is the second month running the chamber leads the delay-day count for this team, and the first month it is written down in a cause a person signed.",
+      r:"Book chamber time as a scheduled resource with named owners per part, rather than first come first served.",
+      s:["Sheet 3 · P-2708","Sheet 5 · Project B"] }
+  ],
+  hw: [
+    { sev:"crit", h:"One connector decision appears twice, under two owners",
+      p:"The board re-spin at 16 days and the signal integrity closure at 12 are the same connector change, taken in a mechanical review with no hardware attendee. Counted as tasks they are two problems of similar size; counted as delay days they are one problem worth 28, which is nearly half the month. This is the clearest argument the report makes for ranking by delay days rather than by delayed task count.",
+      r:"Add a hardware attendee to the mechanical review, and treat a footprint change after route start as a change request with a date.",
+      s:["Sheet 3 · H-1802","Sheet 3 · H-1809","Sheet 2 · Board design"] },
+    { sev:"warn", h:"Compliance work waits on boards that are themselves late",
+      p:"The pre-scan and the safety file together carry 10 late days, both downstream of a build and a review board neither owner controls. Compliance has the smallest headcount on the team and the least slack, and it absorbs the schedule of everyone upstream of it without appearing in anyone else's report.",
+      r:"Schedule compliance from the board date rather than the target date, and publish the gap when the board moves.",
+      s:["Sheet 3 · H-1821","Sheet 3 · H-1839","Sheet 1 · Compliance"] }
+  ],
+  fw: [
+    { sev:"crit", h:"Two of the month's three largest delays are unfrozen inputs from other teams",
+      p:"The interrupt mask table at 17 days and the power management driver at 13 both waited on inputs owned elsewhere — a map revised twice, and an island boundary that moved with the floorplan. Thirty of the month's 70 delay days sit in those two rows, and the firmware work inside them is seven days. Nothing in this team's report can move either number.",
+      r:"Publish a dependency date for each cross-team input and report against that date, not against the delivery date the team was given.",
+      s:["Sheet 3 · F-4102","Sheet 3 · F-4109","Sheet 5 · Project C"] },
+    { sev:"warn", h:"Release engineering queues behind the tapeout regression every month",
+      p:"The release candidate build is 10 days late, all of it queued behind a regression that has priority on the shared farm during tapeout week. The regression suite update then waits on the candidate, so one queue produces two delayed rows. Both are predictable a month ahead and neither is planned for.",
+      r:"Reserve a release window on the farm in tapeout months, or move release builds off the shared farm entirely.",
+      s:["Sheet 3 · F-4115","Sheet 3 · F-4145","Sheet 2 · Release engineering"] }
+  ]
+};
+
+/* ============================================================
+   RECURRING BLOCKERS — the quarterly model output. The counts
+   under each are derived from the three monthly reports; the
+   paragraph and the recommendation are what the model adds.
+   Keyed by team and category, so a category that does not
+   reach the top three for a team is simply not written about.
+   ============================================================ */
+const CLUSTERS = {
+  ams: {
+    none:    { p:"Delayed tasks reaching publication with no cause anyone would sign fell from 14 in March to 6 in May. That is the whole of the coverage improvement, and it is the one line in this report that is about the reporting process rather than about the work.",
+               r:"Hold it. The remaining six are availability at the signing step, not missing explanation." },
+    queue:   { p:"The layout queue is the only recurring blocker that is falling — 11, then 10, then 7 — and it is falling because the C-block floorplan was given a date of its own in April. It is still the largest single category of delay days in the quarter.",
+               r:"Extend the same treatment to the second shared queue, corner simulation, which has not moved." },
+    dep:     { p:"Waiting on upstream work has not moved at all: 9, 9, 10 across the quarter. The report got substantially better at explaining these delays and no better at preventing them, which is the honest reading of a quarter in which coverage rose 24 points.",
+               r:"This is the one blocker that needs a change outside the reporting system. Take it to the programme review with the three-month count attached." }
+  },
+  rtl: {
+    dep:     { p:"Upstream waits are flat at 4, 4 and 4 and hold the two largest rows of the quarter. Both of the biggest are the same interrupt map, which also appears in the firmware team's report as its own largest row.",
+               r:"Version the cross-team interfaces and give each a freeze date. This is the only blocker here that another team can fix." },
+    queue:   { p:"Formal and simulation licence queues account for 11 delayed rows across the quarter. The pattern is stable and the cost is now measurable, which it was not before this report existed.",
+               r:"Take the three-month delay-day total to the tooling budget rather than arguing it per incident." },
+    none:    { p:"Rows publishing with no confirmed cause fell from 5 to 3. The remaining three are all short delays on rows whose owners were in tapeout reviews during the signing window.",
+               r:"Move the signing window off tapeout week for this team." }
+  },
+  ps: {
+    queue:   { p:"The thermal chamber leads the delay-day count in all three months, and no month's report said so until May, because a cause nobody signs never becomes a category. The pattern was there in March and invisible.",
+               r:"Schedule chamber time per part with named owners. The evidence for it is now three months deep." },
+    dep:     { p:"Upstream waits are steady at three a month and are almost entirely the analog trim map and the bench numbers behind it. Post-silicon starts when someone else finishes, and the report cannot change that.",
+               r:"Report post-silicon dates as offsets from the upstream date rather than as absolute dates." },
+    tool:    { p:"Fixtures away for calibration or repair cost two rows a month, every month. Each individually reads as bad luck; three months of it reads as a spares problem.",
+               r:"Hold a second low-current fixture. One quarter of delay days pays for it." }
+  },
+  hw: {
+    dep:     { p:"Three rows a month, every month, waiting on a build, a profile or a part confirmation from outside the team. Hardware has the smallest headcount of the five and the least slack to absorb it.",
+               r:"Give the board build its own reported date, so a slip in it stops being invisible until it lands in someone's row." },
+    spec:    { p:"Requirement churn rose from 2 to 2 to 2 rows but doubled in delay days, because May's churn was a connector change that landed after route start rather than before it. The count is stable and the cost is not.",
+               r:"Weight this category by delay days in the quarterly, not by row count. The row count is hiding the trend." },
+    none:    { p:"Two rows a month publish without a confirmed cause and they are consistently the compliance lead's own. She is the only signer for her group, so her rows have no second reader.",
+               r:"Name a deputy signer for single-person groups. This is a structural gap, not a habit." }
+  },
+  fw: {
+    dep:     { p:"Four rows a month, unchanged across the quarter, and they carry the largest delays every time. Firmware is downstream of RTL, hardware and post-silicon at once, and every one of those inputs moves independently.",
+               r:"Publish a single dependency board for firmware inputs. Four rows a month is the cost of not having one." },
+    spec:    { p:"Two rows a month on inputs that were published and then revised. The map and the flash part are both cases where the artefact arrived on time and the agreement about it did not.",
+               r:"Treat publication and freeze as separate dates. The firmware team can work against the second and not the first." },
+    none:    { p:"Rows with no confirmed cause fell from 3 to 2 and both remaining ones fall in the release window, when the release engineer is the person least able to stop and write.",
+               r:"Move this team's signing cut-off two days after its release date." }
+  }
+};
+
+/* ============================================================
+   RUN STEPS — the workflow is one sub-workflow with the window
+   as a parameter, so the shape of the run changes with it. The
+   weekly run does not touch the model twice; the quarterly run
+   does not touch the task API at all.
+   ============================================================ */
+const RUN_STEPS = {
+  weekly: [
+    { k:"clear",  kind:"rule",  n:"Clear prior weekly rows",                    secs:8 },
+    { k:"fetch",  kind:"rule",  n:"Fetch tasks due in the window",              secs:41 },
+    { k:"br1",    kind:"rule",  n:"Open and overdue",                           secs:0, branch:true },
+    { k:"br2",    kind:"rule",  n:"Closed late in the window",                  secs:0, branch:true },
+    { k:"rca",    kind:"model", n:"Root cause synthesis — over the threshold only", secs:96 },
+    { k:"write",  kind:"rule",  n:"Write the weekly sheets",                    secs:12 }
+  ],
+  monthly: [
+    { k:"clear",  kind:"rule",  n:"Clear prior dashboard rows",                 secs:12 },
+    { k:"fetch",  kind:"rule",  n:"Fetch tasks due in the window",              secs:128 },
+    { k:"br1",    kind:"rule",  n:"Efficiency per assignee",                    secs:0, branch:true },
+    { k:"br2",    kind:"rule",  n:"Group performance distribution",             secs:0, branch:true },
+    { k:"br3",    kind:"rule",  n:"Delayed task analysis",                      secs:232, branch:true },
+    { k:"rca",    kind:"model", n:"Root cause synthesis — worst decile only",   secs:171 },
+    { k:"second", kind:"model", n:"Second pass reads the generated sheets",     secs:153 },
+    { k:"write",  kind:"rule",  n:"Write the workbook",                         secs:28 }
+  ],
+  quarterly: [
+    { k:"clear",  kind:"rule",  n:"Clear prior quarterly rows",                 secs:9 },
+    { k:"fetch",  kind:"rule",  n:"Read the three published monthly reports",   secs:37 },
+    { k:"br1",    kind:"rule",  n:"Coverage and volume by month",               secs:0, branch:true },
+    { k:"br2",    kind:"rule",  n:"Signed causes grouped by category",          secs:0, branch:true },
+    { k:"rca",    kind:"model", n:"Cluster the recurring blockers",             secs:188 },
+    { k:"second", kind:"model", n:"Quarterly narrative and recommendations",    secs:142 },
+    { k:"write",  kind:"rule",  n:"Write the quarterly sheets",                 secs:15 }
+  ]
+};
+</script>
+
+<script>
+/* ============================================================
+   DERIVED FIGURES — every count on every sheet is computed
+   here, by rule, from the arrays above. Nothing below is a
+   literal, which is the point the run screen makes out loud.
+   Two parameters go in — team and window — and a report
+   comes out.
+   ============================================================ */
+const sum = a => a.reduce((x, y) => x + y, 0);
+const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function median(a) {
+  if (!a.length) return 0;
+  const s = a.slice().sort((x, y) => x - y), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+const teamOf = t => TEAMS.find(x => x.k === t);
+const cadOf = k => CADENCES.find(c => c.k === k);
+const personOf = n => ROSTER.find(r => r.n === n);
+const groupOf = n => personOf(n).g;
+const dayOf = s => parseInt(s, 10);
+
+/* The window is on the due date, not the delivery date. A task
+   due on 8 May and delivered on 1 June belongs to May's report
+   and is 24 days late; putting it in June's would report the
+   month it was rescued rather than the month it was missed. */
+const inWeek = r => dayOf(r.due) >= WEEKS[WEEK_INDEX][0] && dayOf(r.due) <= WEEKS[WEEK_INDEX][1];
+
+const closedFor = (tm, cad) =>
+  ROWS.filter(r => r.tm === tm && (cad === "weekly" ? inWeek(r) : true))
+      .slice().sort((a, b) => b.d - a.d);
+
+const openFor = tm => OPEN.filter(r => r.tm === tm)
+  .slice().sort((a, b) => dayOf(a.due) - dayOf(b.due));
+
+/* Days a still-open task has been past its date, at the close
+   of the reported week. */
+const overdueBy = r => WEEKS[WEEK_INDEX][1] - dayOf(r.due);
+
+/* Which rows get a written analysis. The rule is not the same
+   at every window, and that is deliberate: a decile of nine
+   rows is one row, and one paragraph is not a report. */
+function analysedIds(tm, cad) {
+  const rows = closedFor(tm, cad);
+  if (cad === "quarterly") return [];
+  if (cad === "weekly") return rows.filter(r => r.d >= 7).map(r => r.id);
+  const n = Math.max(2, Math.ceil(rows.length * 0.1));
+  return rows.slice(0, n).map(r => r.id);
+}
+
+/* Per-person and per-group counts, for one team and window. */
+function byPerson(tm, cad) {
+  const rows = closedFor(tm, cad);
+  return ROSTER.filter(p => p.tm === tm).map(p => {
+    const mine = rows.filter(x => x.o === p.n);
+    const onTime = cad === "weekly" ? p.ot[WEEK_INDEX] : sum(p.ot);
+    return { ...p, onTime, delayed: mine.length, completed: onTime + mine.length,
+             days: sum(mine.map(x => x.d)), med: median(mine.map(x => x.d)) };
+  });
+}
+function byGroup(tm, cad) {
+  const people = byPerson(tm, cad);
+  const rows = closedFor(tm, cad);
+  return teamOf(tm).groups.map(g => {
+    const ps = people.filter(p => p.g === g);
+    const rs = rows.filter(x => groupOf(x.o) === g);
+    return { g, people: ps.length, completed: sum(ps.map(p => p.completed)), onTime: sum(ps.map(p => p.onTime)),
+             delayed: rs.length, days: sum(rs.map(x => x.d)), med: median(rs.map(x => x.d)) };
+  });
+}
+const PROJECTS = ["A", "B", "C", "D"];
+function byProject(tm, cad) {
+  const rows = closedFor(tm, cad);
+  return PROJECTS.map(p => {
+    const rs = rows.filter(x => x.p === p);
+    return { p, delayed: rs.length, days: sum(rs.map(x => x.d)), ids: rs.map(x => x.id) };
+  });
+}
+function totals(tm, cad) {
+  const people = byPerson(tm, cad), rows = closedFor(tm, cad);
+  return { people: people.length,
+    completed: sum(people.map(p => p.completed)), onTime: sum(people.map(p => p.onTime)),
+    delayed: rows.length, days: sum(rows.map(r => r.d)), med: median(rows.map(r => r.d)),
+    comments: sum(rows.map(r => r.th.length)), open: openFor(tm).length };
+}
+
+/* The May report, in the shape March and April are held in, so
+   the quarterly can read three months without a special case. */
+function mayRecord(tm) {
+  const t = totals(tm, "monthly"), rows = closedFor(tm, "monthly");
+  const cats = {}; CAT_ORDER.forEach(c => cats[c] = 0);
+  rows.forEach(r => cats[r.cat]++);
+  return { closed: t.completed, onTime: t.onTime, delayed: t.delayed, days: t.days,
+           signed: rows.filter(r => state.signed[r.id]).length, cats };
+}
+const MONTH_KEYS = ["mar", "apr", "may"];
+const MONTH_NAMES = { mar: "March", apr: "April", may: "May" };
+function quarter(tm) {
+  return { mar: HISTORY[tm].mar, apr: HISTORY[tm].apr, may: mayRecord(tm) };
+}
+
+/* How the AMS report read before any of this existed: 8 of 38
+   specific, 6 "pending", 24 blank — the 21 per cent the case
+   study quotes. The four teams that had no standing report have
+   no before view, because there is nothing to show. */
+const BEFORE_TEXT = {
+  "T-2214": "Trim range insufficient after silicon",
+  "T-2189": "Waiting on LDO correlation",
+  "T-2263": "Bench issue",
+  "T-2315": "Fixture with vendor for repair",
+  "T-2175": "Noise budget re-opened",
+  "T-2251": "Rolled into the curvature work",
+  "T-2264": "ECO landed mid-extraction",
+  "T-2101": "Probe setup rebuilt"
+};
+const BEFORE_PENDING = ["T-2231", "T-2126", "T-2302", "T-2334", "T-2196", "T-2346"];
+const BEFORE_COVERAGE = { ams: 21, rtl: null, ps: null, hw: null, fw: null };
+
+/* ============================================================
+   STATE. Two parameters plus per-report progress. A run and a
+   publication belong to one team and one window, so they are
+   keyed by both; a signature belongs to a task, so it is not.
+   ============================================================ */
+const state = {
+  team: "ams", cad: "monthly", sheet: "run", persona: null,
+  ran: {}, running: false, published: {},
+  view: "after", filter: "all", open: null, signed: {}, draft: {}
+};
+const rkey = () => state.team + ":" + state.cad;
+const hasRun = () => !!state.ran[rkey()];
+const isPublished = () => !!state.published[rkey()];
+
+/* Personas: the leads of the team on screen, plus the compiler
+   who can sign nothing. Switching team switches the signers,
+   because a signature from another team is not a weaker
+   signature — it is not a signature at all. */
+function personas() {
+  const leads = ROSTER.filter(p => p.tm === state.team && p.lead)
+    .map(p => ({ id: p.n, name: p.n, role: p.g + " lead", tm: p.tm, g: p.g }));
+  return leads.concat([COMPILER]);
+}
+const personaOf = id => personas().find(p => p.id === id) || personas()[0];
+const me = () => personaOf(state.persona);
+const canSign = row => { const p = me(); return !!p.g && p.g === groupOf(row.o); };
+
+const teamRows = () => closedFor(state.team, state.cad);
+const signedCount = () => teamRows().filter(r => state.signed[r.id]).length;
+const coverage = () => pct(signedCount(), teamRows().length);
+
+const SHEETS = {
+  weekly: [
+    { k: "open",  num: "1", name: "Open and overdue",       sub: "rule" },
+    { k: "late",  num: "2", name: "Closed late this week",  sub: "rule + model" },
+    { k: "snap",  num: "3", name: "Week snapshot",          sub: "rule" }
+  ],
+  monthly: [
+    { k: "eff",     num: "1", name: "Efficiency per assignee", sub: "rule" },
+    { k: "team",    num: "2", name: "Group performance",       sub: "rule" },
+    { k: "delay",   num: "3", name: "Delay detail",            sub: "rule + model" },
+    { k: "metrics", num: "4", name: "Key metrics",             sub: "second pass" },
+    { k: "dist",    num: "5", name: "Project distribution",    sub: "second pass" },
+    { k: "issues",  num: "6", name: "Critical issues",         sub: "second pass" }
+  ],
+  quarterly: [
+    { k: "months",    num: "1", name: "The quarter in three reports", sub: "rule" },
+    { k: "blockers",  num: "2", name: "Recurring blockers",           sub: "second pass" },
+    { k: "where",     num: "3", name: "Where the quarter went",       sub: "rule" },
+    { k: "portfolio", num: "4", name: "Portfolio view",               sub: "process only" }
+  ]
+};
+const sheets = () => SHEETS[state.cad];
+
+/* ============================================================
+   CHROME
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+function renderParams() {
+  $("teamSeg").innerHTML = TEAMS.map(t =>
+    `<button data-team="${t.k}" aria-pressed="${state.team === t.k}" title="${esc(t.full)}"><b>${t.name}</b><span>${t.groups.length} groups</span></button>`).join("");
+  $("cadSeg").innerHTML = CADENCES.map(c =>
+    `<button data-cad="${c.k}" aria-pressed="${state.cad === c.k}"><b>${c.name}</b><span>${c.sub}</span></button>`).join("");
+  const t = teamOf(state.team), c = cadOf(state.cad), tot = totals(state.team, state.cad);
+  $("brandEyebrow").textContent = "Ixana · " + t.name + " · " + t.full;
+  $("windowChip").innerHTML = `<span class="dot accent"></span>Window <b>${c.window}</b>`;
+  $("sizeChip").innerHTML = state.cad === "quarterly"
+    ? `<span class="dot"></span>3 monthly reports read &middot; <b>0</b> task records fetched`
+    : `<span class="dot"></span><b>${tot.completed}</b> tasks in scope &middot; ${tot.delayed} late${state.cad === "weekly" ? " &middot; " + tot.open + " open past due" : ""}`;
+  const nSheets = sheets().length;
+  $("paramNote").innerHTML = state.cad === "quarterly"
+    ? `<b>${nSheets} sheets.</b> No task record is fetched. The quarterly reads the three monthly reports this team published and clusters the causes people already signed — the second-pass rule, one level up.`
+    : state.cad === "weekly"
+      ? `<b>${nSheets} sheets, no signature gate.</b> A written analysis goes to any row later than the window itself — seven days — because a decile of ${tot.delayed} rows is not a report. Open work past its date appears here and nowhere else.`
+      : `<b>${nSheets} sheets, signature gate on.</b> Written analysis runs on the worst decile, with a floor of two rows so a small team's report is never left with a single paragraph. ${tot.open} tasks still open past their date are named in the weekly and deliberately absent here.`;
+  document.querySelectorAll("[data-team]").forEach(b => b.onclick = () => setTeam(b.dataset.team));
+  document.querySelectorAll("[data-cad]").forEach(b => b.onclick = () => setCad(b.dataset.cad));
+}
+
+function setTeam(k) {
+  if (state.team === k) return;
+  state.team = k;
+  if (!personas().some(p => p.id === state.persona)) state.persona = personas()[0].id;
+  state.filter = "all"; state.view = "after"; state.open = null;
+  state.sheet = hasRun() ? sheets()[0].k : "run";
+  closeDrawer(); render();
+  toast(`${teamOf(k).name} — ${teamOf(k).full}. Same report, same rules, ${totals(k, state.cad).delayed} delayed tasks.`);
+}
+function setCad(k) {
+  if (state.cad === k) return;
+  state.cad = k;
+  state.filter = "all"; state.view = "after"; state.open = null;
+  state.sheet = hasRun() ? sheets()[0].k : "run";
+  closeDrawer(); render();
+  toast(`${cadOf(k).name} window — ${cadOf(k).window}. ${sheets().length} sheets, gate ${cadOf(k).gate ? "on" : "off"}.`);
+}
+
+function renderPersona() {
+  $("personaSel").innerHTML = personas().map(p =>
+    `<option value="${esc(p.id)}"${p.id === state.persona ? " selected" : ""}>${esc(p.name)} — ${esc(p.role)}</option>`).join("");
+}
+
+function renderChip() {
+  const c = $("stateChip"), rows = teamRows();
+  if (isPublished()) {
+    c.className = "chip state-live";
+    c.innerHTML = `<span class="dot good"></span>Published <b>v1</b> · one version`;
+  } else if (hasRun()) {
+    c.className = "chip state-draft";
+    c.innerHTML = cadOf(state.cad).gate
+      ? `<span class="dot warn"></span>Draft · <b>${signedCount()}/${rows.length}</b> signed`
+      : `<span class="dot warn"></span>Working draft · <b>unsigned</b>`;
+  } else {
+    c.className = "chip";
+    c.innerHTML = `<span class="dot"></span>Not yet run`;
+  }
+}
+
+function renderRail() {
+  const item = (k, num, name, sub, dis) =>
+    `<button class="rail-item" data-sheet="${k}" aria-current="${state.sheet === k}"${dis ? " disabled" : ""}>
+       <span class="rail-num">${num}</span>
+       <span><span class="rail-name">${name}</span><span class="rail-sub">${sub}</span></span>
+     </button>`;
+  const c = cadOf(state.cad), ss = sheets();
+  $("rail").innerHTML =
+    `<p class="rail-head">The run</p>` +
+    item("run", "&#9654;", c.name + " run", hasRun() ? "complete · " + c.runTime : "not started", false) +
+    `<div class="rail-sep"></div><p class="rail-head">${c.name} &middot; ${ss.length} sheets</p>` +
+    ss.map(s => item(s.k, s.num, s.name, s.sub, !hasRun())).join("") +
+    `<div class="rail-sep"></div>` +
+    item("publish", "&#8599;",
+      c.gate ? (state.cad === "quarterly" ? "Publish to the review" : "Publish to leadership") : "Send to the team",
+      isPublished() ? "published v1" : (c.gate ? "gate" : "no gate"), !hasRun());
+}
+
+function go(k) { state.sheet = k; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+</script>
+
+<script>
+/* ============================================================
+   RUN SCREEN. One sub-workflow, one window parameter, three
+   shapes. The weekly run reaches the model once; the quarterly
+   run never reaches the task API.
+   ============================================================ */
+function stepOut(s) {
+  const t = totals(state.team, state.cad), an = analysedIds(state.team, state.cad);
+  const rows = teamRows(), c = cadOf(state.cad), ns = sheets().length;
+  const ranked = rows.filter(r => r.ci >= 0).length;
+  const q = quarter(state.team);
+  const qDelayed = sum(MONTH_KEYS.map(k => q[k].delayed));
+  const qSigned = sum(MONTH_KEYS.map(k => q[k].signed));
+  const nCats = CAT_ORDER.filter(cat => sum(MONTH_KEYS.map(k => q[k].cats[cat])) > 0).length;
+  const openRows = openFor(state.team);
+  return ({
+    clear:  `${ns} sheets cleared · headers preserved`,
+    fetch:  state.cad === "quarterly"
+              ? `3 published monthly reports read · 0 task records fetched`
+              : `${t.completed} tasks due in the window · ${Math.ceil(t.completed / 70)} page${t.completed > 70 ? "s" : ""}${state.cad === "weekly" ? ` · ${t.open} still open past their date` : ""}`,
+    br1:    state.cad === "weekly" ? `${openRows.length} open past due · oldest ${openRows.length ? overdueBy(openRows[0]) : 0} days`
+            : state.cad === "quarterly" ? `3 months · ${qDelayed} delayed tasks · ${qSigned} signed causes`
+            : `${t.people} assignees · ${t.onTime} on time`,
+    br2:    state.cad === "weekly" ? `${t.delayed} closed late · ${t.days} delay days`
+            : state.cad === "quarterly" ? `${nCats} categories · ${qSigned} causes grouped`
+            : `${teamOf(state.team).groups.length} groups · ${t.days} delay days`,
+    br3:    `${t.delayed} delayed · ${t.comments} comments · candidate cause ranked in ${ranked} of them`,
+    rca:    state.cad === "quarterly"
+              ? `${Object.keys(CLUSTERS[state.team]).length} recurring blockers written · 0 new root causes`
+              : `${an.length} ${an.length === 1 ? "analysis" : "analyses"} written · ${t.delayed - an.length} rows left as a row and a link`,
+    second: state.cad === "quarterly"
+              ? `quarterly narrative and recommendations — from the three reports, not from tasks`
+              : `key metrics, project distribution and critical issues — from sheets 1–3, not the task API`,
+    write:  `${ns} sheets ${state.cad === "monthly" ? "rewritten" : "written"} · headers preserved · status: ${c.gate ? "draft, unsigned" : "working draft, never signed"}`
+  })[s.k] || "";
+}
+
+function nodeHTML(s, i) {
+  return `<div class="node" data-node="${s.k}">
+    <span class="node-mark">${i}</span>
+    <div>
+      <div class="node-title">${esc(s.n)} <span class="badge ${s.kind}">${s.kind}</span></div>
+      <div class="node-out" data-out="${s.k}"></div>
+    </div>
+    <span class="node-time" data-time="${s.k}"></span>
+  </div>`;
+}
+
+function renderRun() {
+  const c = cadOf(state.cad), t = teamOf(state.team), steps = RUN_STEPS[state.cad];
+  const main = steps.filter(s => !s.branch), br = steps.filter(s => s.branch);
+  const done = hasRun() && !state.running;
+  const tot = totals(state.team, state.cad);
+  const modelSteps = steps.filter(s => s.kind === "model").length;
+  let pipe = "", n = 0;
+  main.slice(0, 2).forEach(s => { pipe += (n ? '<div class="connector"></div>' : "") + nodeHTML(s, ++n); });
+  pipe += `<div class="connector"></div><p class="branch-label">${br.length === 2 ? "Two" : "Three"} parallel branches</p>`;
+  pipe += `<div class="branchset" style="grid-template-columns:repeat(${br.length},1fr)">${br.map((s, i) => nodeHTML(s, "3" + "abc"[i])).join("")}</div>`;
+  main.slice(2).forEach(s => { pipe += '<div class="connector"></div>' + nodeHTML(s, ++n + 2); });
+
+  $("pane").innerHTML = `
+    <div class="pane-head">
+      <p class="kicker">Workflow &middot; one n8n sub-workflow &middot; team and window are parameters</p>
+      <h2>The ${c.name.toLowerCase()} run &mdash; ${esc(t.name)} ${done ? '<span class="badge signed">complete</span>' : ""}</h2>
+      <p class="provenance">The same workflow runs for all five teams and all three windows. The line it draws is between <b>counting</b>, which stays deterministic, and <b>synthesis</b>, which goes to a model &mdash; and only ${modelSteps === 1 ? "one step" : modelSteps + " steps"} here ${modelSteps === 1 ? "is" : "are"} the second kind.</p>
+    </div>
+    <div class="run-wrap">
+      <div class="cadbanner${c.gate ? "" : " warn"}">
+        <span class="k">${c.name} &middot; ${c.window}</span>
+        ${c.forWhat}<br><br><b>What it is not.</b> ${c.notWhat}
+      </div>
+      <div class="run-cta">
+        <div class="copy">
+          <h3>${done ? `${esc(t.name)} ${c.name.toLowerCase()} run complete` : `Run the ${esc(t.name)} ${c.name.toLowerCase()} report`}</h3>
+          <p>${done
+            ? `${sheets().length} sheets written${c.gate ? `, ${tot.delayed} delayed tasks classified, ${analysedIds(state.team, state.cad).length} root-cause ${analysedIds(state.team, state.cad).length === 1 ? "analysis" : "analyses"} drafted. Nothing is signed yet, so nothing can publish yet.` : `. This window has no signature gate, so there is nothing to sign and nothing to wait for.`}`
+            : `Simulated at roughly 40&times; speed. The real run takes ${c.runTime}${state.cad === "quarterly" ? " against three published reports." : ` against ${tot.completed} tasks.`}`}</p>
+        </div>
+        <button class="btn primary" id="runBtn"${state.running ? " disabled" : ""}>${done ? "Run again" : "Run the report"}</button>
+        ${state.running ? '<button class="btn ghost" id="skipBtn">Skip to the result</button>' : ""}
+      </div>
+      <div class="pipeline">${pipe}</div>
+      <div class="legend-line">
+        <span class="badge rule">rule</span><span>counted from ${state.cad === "quarterly" ? "the three published monthly reports" : `the task records &mdash; ${tot.completed} tasks, ${tot.comments} comments`}</span>
+        <span class="badge model">model</span><span>gpt-4o-mini &mdash; ${state.cad === "quarterly" ? "clustering causes people already signed, and the quarterly narrative" : "root cause synthesis and dashboard narrative"}, nothing numeric</span>
+      </div>
+    </div>`;
+  if (done) steps.forEach(s => markNode(s, true));
+  $("runBtn").onclick = startRun;
+  if ($("skipBtn")) $("skipBtn").onclick = finishRun;
+}
+
+function markNode(s, done) {
+  const n = document.querySelector(`[data-node="${s.k}"]`);
+  if (!n) return;
+  n.classList.toggle("done", done);
+  n.classList.remove("active");
+  n.querySelector(".node-mark").innerHTML = done ? "&#10003;" : n.querySelector(".node-mark").textContent;
+  document.querySelector(`[data-out="${s.k}"]`).textContent = done ? stepOut(s) : "";
+  const t = document.querySelector(`[data-time="${s.k}"]`);
+  if (t && done && s.secs) t.textContent = `+${Math.floor(s.secs / 60)}m ${String(s.secs % 60).padStart(2, "0")}s`;
+}
+
+let runTimers = [];
+function startRun() {
+  runTimers.forEach(clearTimeout); runTimers = [];
+  const steps = RUN_STEPS[state.cad];
+  state.running = true; state.ran[rkey()] = false; state.published[rkey()] = false;
+  teamRows().forEach(r => { delete state.signed[r.id]; delete state.draft[r.id]; });
+  renderRun(); renderRail(); renderChip();
+  let t = 300;
+  steps.forEach((s, i) => {
+    const gap = s.k === "br3" ? 1500 : s.k === "rca" ? 1400 : s.k === "second" ? 1300 : 800;
+    runTimers.push(setTimeout(() => {
+      const n = document.querySelector(`[data-node="${s.k}"]`);
+      if (n) n.classList.add("active");
+    }, t));
+    t += gap;
+    runTimers.push(setTimeout(() => markNode(s, true), t));
+    t += 120;
+    if (i === steps.length - 1) runTimers.push(setTimeout(finishRun, t + 500));
+  });
+}
+
+function finishRun() {
+  runTimers.forEach(clearTimeout); runTimers = [];
+  const c = cadOf(state.cad);
+  state.running = false; state.ran[rkey()] = true;
+  state.sheet = state.cad === "monthly" ? "delay" : sheets()[0].k;
+  render();
+  toast(`Run complete in ${c.runTime} — ${sheets().length} sheets written, ${c.gate ? "0 causes signed" : "no signature at this window"}`);
+}
+
+/* ============================================================
+   SHEET HEADER
+   ============================================================ */
+function head(kicker, title, kind, prov) {
+  const b = {
+    "rule": '<span class="badge rule">rule</span>',
+    "model": '<span class="badge model">model</span>',
+    "rule + model": '<span class="badge rule">rule</span><span class="badge model">model</span>',
+    "second pass": '<span class="badge model">model &middot; reads the sheets</span>',
+    "process only": '<span class="badge rule">rule</span><span class="badge unconf">process metrics only</span>',
+    "before": '<span class="badge unconf">before &middot; 2025</span>'
+  }[kind] || "";
+  $("pane").innerHTML = `<div class="pane-head"><p class="kicker">${kicker}</p><h2>${title} ${b}</h2><p class="provenance">${prov}</p></div>`;
+}
+function sheetKicker(k) {
+  const ss = sheets(), i = ss.findIndex(s => s.k === k);
+  return `Sheet ${i + 1} of ${ss.length} · ${cadOf(state.cad).name} · ${teamOf(state.team).name}`;
+}
+
+/* ============================================================
+   WEEKLY 1 — open and overdue. The only sheet in the product
+   that names work which has not closed.
+   ============================================================ */
+function renderOpen() {
+  const rows = openFor(state.team);
+  head(sheetKicker("open"), "Open and overdue", "rule",
+    "Past their date and <b>not delivered</b>. These rows appear in no monthly report and never will: an open task has no delivery date, so it has no delay to count and no cause anyone could reasonably sign. They are the reason a weekly report exists.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="cadbanner"><span class="k">What this sheet is for</span>
+      A lead reads this on a Monday and can still change the outcome of every row on it. Everything in the monthly report has already happened.</div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Task</th><th>Project</th><th>Owner</th><th class="num">Due</th><th class="num">Open for</th><th>Category</th><th>Latest in the thread</th></tr></thead>
+      <tbody>${rows.map(r => `<tr>
+        <td><span class="id">${r.id}</span><br><span class="name">${esc(r.t)}</span></td>
+        <td class="mono" style="white-space:nowrap">Project ${r.p}</td>
+        <td class="owner">${esc(r.o)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(groupOf(r.o))}</span></td>
+        <td class="num">${r.due}</td>
+        <td class="num" style="color:${overdueBy(r) >= 6 ? "var(--crit)" : overdueBy(r) >= 4 ? "var(--warn)" : "var(--body)"}">${overdueBy(r)} d</td>
+        <td><span class="badge ${r.cat === "none" ? "unconf" : "rule"}">${CATS[r.cat].s}</span></td>
+        <td class="cause-cell"><span class="cause-text">${esc(r.th[r.th.length - 1][2])}</span>
+          <div class="cause-meta"><span>${esc(r.th[r.th.length - 1][0])} · ${esc(r.th[r.th.length - 1][1])}</span>
+          <button class="threadlink" data-open="${r.id}">thread (${r.th.length}) &rarr;</button></div></td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td colspan="4">${rows.length} open past due</td><td class="num">${rows.length ? Math.max(...rows.map(overdueBy)) : 0} d</td><td colspan="2">oldest</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>Deliberately not counted anywhere else.</b> Rolling open work into the monthly delay figures would let a task be reported late twice, once while open and once when it closes. The monthly report states how many rows it left out; it does not absorb them.</p>`);
+  document.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openDrawer(b.dataset.open));
+}
+
+/* ============================================================
+   WEEKLY 2 — closed late this week. Same rows the monthly will
+   count, at one seventh the size, with the analysis threshold
+   in place of the decile and no signature anywhere.
+   ============================================================ */
+function renderLate() {
+  const rows = teamRows(), an = analysedIds(state.team, state.cad);
+  head(sheetKicker("late"), "Closed late this week", "rule + model",
+    `Delivered inside the window and later than the date on them. A written analysis goes to any row <b>later than the window itself</b> &mdash; seven days &mdash; because the worst decile of ${rows.length} rows is one row, and one paragraph is not a report.`);
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="cadbanner warn"><span class="k">No signature at this window</span>
+      Every cause below is a draft and stays one. Signing weekly would cost each lead four times what signing a month costs, for a document that does not leave the team &mdash; and a signature nobody quotes teaches people that signing means nothing.</div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Task</th><th>Project</th><th>Owner</th><th class="num">Due</th><th class="num">Delivered</th><th class="num">Late</th><th>Category</th><th>Draft cause</th></tr></thead>
+      <tbody>${rows.map(r => {
+        const hasAn = an.includes(r.id);
+        return `<tr class="${hasAn ? "is-decile" : ""}">
+        <td><span class="id">${r.id}</span><br><span class="name">${esc(r.t)}</span></td>
+        <td class="mono" style="white-space:nowrap">Project ${r.p}</td>
+        <td class="owner">${esc(r.o)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(groupOf(r.o))}</span></td>
+        <td class="num">${r.due}</td><td class="num">${r.del}</td>
+        <td class="num" style="color:${r.d >= 7 ? "var(--crit)" : r.d >= 4 ? "var(--warn)" : "var(--body)"}">${r.d} d</td>
+        <td><span class="badge ${r.cat === "none" ? "unconf" : "rule"}">${CATS[r.cat].s}</span></td>
+        <td class="cause-cell">${r.cat === "none" ? '<span class="cause-unconf">No cause in this thread</span>' : `<span class="cause-text">${esc(r.cause)}</span>`}
+          <div class="cause-meta">
+            ${hasAn ? '<span class="badge decile">over the threshold</span><span class="badge model">model draft</span>' : '<span class="badge rule">row + link</span>'}
+            <button class="threadlink" data-open="${r.id}">thread (${r.th.length}) &rarr;</button>
+          </div></td></tr>`; }).join("")}
+      </tbody>
+      <tfoot><tr><td colspan="5">${rows.length} closed late</td><td class="num">${totals(state.team, state.cad).days} d</td><td colspan="2">${an.length} over the threshold</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note">${an.length
+      ? `<b>${an.length} of ${rows.length} rows crossed the threshold this week.</b> The rest arrive as a row and a link, which at this size is most of them &mdash; a lead who wants the story opens the thread, and the thread is one click away.`
+      : `<b>Nothing crossed the threshold this week, so the model wrote nothing.</b> That is the correct output and not a failure: the longest row here is ${rows.length ? Math.max(...rows.map(r => r.d)) : 0} days, and a paragraph about a ${rows.length ? Math.max(...rows.map(r => r.d)) : 0}-day slip is a paragraph nobody needs.`}</p>`);
+  document.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openDrawer(b.dataset.open));
+}
+
+/* ============================================================
+   WEEKLY 3 — the snapshot. Counts only, by group.
+   ============================================================ */
+function renderSnap() {
+  const gs = byGroup(state.team, state.cad), t = totals(state.team, state.cad);
+  const openRows = openFor(state.team);
+  head(sheetKicker("snap"), "Week snapshot", "rule",
+    "One week of closed work by group, with open-and-overdue counted beside it rather than mixed into it. <b>No person is named on this sheet</b>, at any window: the counts are an input to a resourcing conversation, not to a review of anybody.");
+  const maxDays = Math.max(1, ...gs.map(g => g.days));
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Group</th><th class="num">People</th><th class="num">Closed</th><th class="num">On time</th><th class="num">Late</th><th class="num">On&nbsp;time&nbsp;%</th><th class="num">Delay days</th><th class="num">Open past due</th><th style="width:150px">Share of the week</th></tr></thead>
+      <tbody>${gs.map(g => `<tr>
+        <td class="name">${esc(g.g)}</td>
+        <td class="num">${g.people}</td><td class="num">${g.completed}</td><td class="num">${g.onTime}</td><td class="num">${g.delayed}</td>
+        <td class="num">${pct(g.onTime, g.completed)}%</td><td class="num">${g.days}</td>
+        <td class="num">${openRows.filter(r => groupOf(r.o) === g.g).length}</td>
+        <td><div style="display:flex;align-items:center;gap:9px">
+          <span class="meterbar" style="flex:1"><i style="width:${(g.days / maxDays) * 100}%"></i></span>
+          <span class="mono" style="font-size:11px;color:var(--muted);width:34px;text-align:right">${pct(g.days, t.days)}%</span></div></td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td>${gs.length} groups</td><td class="num">${t.people}</td><td class="num">${t.completed}</td><td class="num">${t.onTime}</td><td class="num">${t.delayed}</td><td class="num">${pct(t.onTime, t.completed)}%</td><td class="num">${t.days}</td><td class="num">${openRows.length}</td><td></td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>A week is a small number.</b> One person's fortnight of leave moves a group's on-time rate by ten points at this size, which is exactly why this sheet is never published outside the team and never quoted. The monthly report is where a number is large enough to mean something.</p>`);
+}
+</script>
+
+<script>
+/* ============================================================
+   MONTHLY 1 — efficiency per assignee
+   ============================================================ */
+function renderEff() {
+  const ps = byPerson(state.team, "monthly"), t = totals(state.team, "monthly");
+  head(sheetKicker("eff"), "Efficiency per assignee", "rule",
+    "Counted from the task records. This sheet <b>counts and does not score</b>: ratings and ranking were the one thing cut from the published report, because a number a person is measured by needs an appeal route this workflow does not have.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Assignee</th><th>Group</th><th class="num">Completed</th><th class="num">On time</th><th class="num">Delayed</th><th class="num">On&nbsp;time&nbsp;%</th><th class="num">Median delay</th></tr></thead>
+      <tbody>${ps.map(p => `<tr>
+        <td class="name">${esc(p.n)}${p.lead ? ' <span class="badge rule" style="margin-left:4px">lead</span>' : ""}</td>
+        <td>${esc(p.g)}</td>
+        <td class="num">${p.completed}</td><td class="num">${p.onTime}</td><td class="num">${p.delayed}</td>
+        <td class="num">${pct(p.onTime, p.completed)}%</td>
+        <td class="num">${p.delayed ? p.med + " d" : "&mdash;"}</td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td colspan="2">${t.people} assignees</td><td class="num">${t.completed}</td><td class="num">${t.onTime}</td><td class="num">${t.delayed}</td><td class="num">${pct(t.onTime, t.completed)}%</td><td class="num">${t.med} d</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>Cut, deliberately:</b> individual performance ratings, on every team and at every window. The counts here are the input to a resourcing conversation, not to a review of a person &mdash; and the moment the sheet ranks people, every cause on sheet 3 becomes a defence rather than an explanation.</p>`);
+}
+
+/* ============================================================
+   MONTHLY 2 — group performance distribution
+   ============================================================ */
+function renderTeam() {
+  const gs = byGroup(state.team, "monthly"), t = totals(state.team, "monthly");
+  head(sheetKicker("team"), "Group performance distribution", "rule",
+    "The same records grouped by the team's own subdivisions. <b>Share of delay days</b> is the column that matters: delayed-task counts treat a two-day slip and a twenty-four-day slip as the same event, and they are not the same event.");
+  const maxDays = Math.max(1, ...gs.map(g => g.days));
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Group</th><th class="num">People</th><th class="num">Completed</th><th class="num">On time</th><th class="num">Delayed</th><th class="num">On&nbsp;time&nbsp;%</th><th class="num">Delay days</th><th style="width:180px">Share of the month</th></tr></thead>
+      <tbody>${gs.map(g => `<tr>
+        <td class="name">${esc(g.g)}</td>
+        <td class="num">${g.people}</td><td class="num">${g.completed}</td><td class="num">${g.onTime}</td><td class="num">${g.delayed}</td>
+        <td class="num">${pct(g.onTime, g.completed)}%</td><td class="num">${g.days}</td>
+        <td><div style="display:flex;align-items:center;gap:9px">
+          <span class="meterbar" style="flex:1"><i style="width:${(g.days / maxDays) * 100}%"></i></span>
+          <span class="mono" style="font-size:11px;color:var(--muted);width:34px;text-align:right">${pct(g.days, t.days)}%</span>
+        </div></td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td>${gs.length} groups</td><td class="num">${t.people}</td><td class="num">${t.completed}</td><td class="num">${t.onTime}</td><td class="num">${t.delayed}</td><td class="num">${pct(t.onTime, t.completed)}%</td><td class="num">${t.days}</td><td></td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>Group names are the team's own, and stop at the team boundary.</b> Five teams with different delivery flows were once asked to fit one shared vocabulary. What they share now is six cause categories and a report shape; everything below that is theirs, which is the only reason all five agreed to run it.</p>`);
+}
+
+/* ============================================================
+   MONTHLY 3 — delay detail. The hero, and the only sheet in the
+   product where a signature happens.
+   ============================================================ */
+function renderDelay() {
+  if (state.view === "before") return renderBefore();
+  const p = me(), rows0 = teamRows(), an = analysedIds(state.team, "monthly");
+  const before = BEFORE_COVERAGE[state.team];
+  const filters = [["all", "All " + rows0.length], ["decile", "Worst decile (" + an.length + ")"], ["unsigned", "Unsigned"], ["mine", p.g ? "Mine to sign" : "Mine (none)"]];
+  head(sheetKicker("delay"), "Delay detail", "rule + model",
+    "Counts and dates are computed. The <b>root cause</b> column is the only written thing in the workbook, and nothing in it publishes until a named person who owns the work signs it.");
+  const rows = rows0.filter(r =>
+    state.filter === "decile" ? an.includes(r.id) :
+    state.filter === "unsigned" ? !state.signed[r.id] :
+    state.filter === "mine" ? groupOf(r.o) === p.g : true);
+  const openN = openFor(state.team).length;
+
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="coverage">
+      <div>
+        <div class="figure">${coverage()}<small>%</small></div>
+        <div class="cap">of delayed tasks carry a signed cause</div>
+      </div>
+      <div class="track"><i style="width:${coverage()}%"></i>${before ? `<u style="left:${before}%" title="Before: ${before}%"></u>` : ""}</div>
+      <div class="marks">
+        <span><b>${signedCount()}</b> signed</span>
+        <span><b>${rows0.length - signedCount()}</b> will publish as “cause not confirmed”</span>
+        <span>${before ? `before: <b>${before}%</b>` : `before: <b>no standing report</b>`}</span>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="segmented" role="group" aria-label="Filter rows">
+        ${filters.map(([k, l]) => `<button data-filter="${k}" aria-pressed="${state.filter === k}">${l}</button>`).join("")}
+      </div>
+      ${before ? `<div class="segmented" role="group" aria-label="Report version">
+        <button data-view="after" aria-pressed="true">This run</button>
+        <button data-view="before">How it read in 2025</button>
+      </div>` : ""}
+      <button class="btn sm good" id="cutoffBtn">Apply the May cut-off</button>
+      <span class="mono" style="font-size:11px;color:var(--faint)">signs the ${rows0.filter(r => !r.uns).length} rows the real run signed</span>
+    </div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Task</th><th>Project</th><th>Owner</th><th class="num">Due</th><th class="num">Delivered</th><th class="num">Late</th><th>Root cause</th><th>Signed by</th></tr></thead>
+      <tbody>${rows.map(r => rowHTML(r, an)).join("")}</tbody>
+    </table></div>
+    <p class="sheet-note"><b>Why ${an.length} rows and not ${rows0.length}.</b> A full pass produced forty paragraphs a month and, in a two-week trial, the delivery manager read the first six. Written analysis runs on the worst decile with a floor of two rows, so a nine-row team is never left with a single paragraph. Everything below it keeps its delay and its thread. Separately, <b>${openN} tasks are still open past their date</b> and appear in this team's weekly, not here.</p>`);
+  bindDelay();
+}
+
+function rowHTML(r, an) {
+  const sig = state.signed[r.id];
+  const isOpen = state.open === r.id;
+  const hasAn = an.includes(r.id);
+  let cause, why;
+  if (sig) { cause = `<span class="cause-text">${esc(sig.cause)}</span>`; why = ""; }
+  else if (hasAn) { cause = `<span class="cause-text">${esc(r.cause)}</span>`; why = "unsigned — publishes as “cause not confirmed”"; }
+  else { cause = `<span class="cause-unconf">Cause not confirmed</span>`; why = r.ci >= 0 ? "candidate ranked in the thread" : "no cause in this thread"; }
+  return `<tr class="${hasAn ? "is-decile " : ""}${isOpen ? "is-open" : ""}">
+    <td><span class="id">${r.id}</span><br><span class="name">${esc(r.t)}</span></td>
+    <td class="mono" style="white-space:nowrap">Project ${r.p}</td>
+    <td class="owner">${esc(r.o)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(groupOf(r.o))}</span></td>
+    <td class="num">${r.due}</td><td class="num">${r.del}</td>
+    <td class="num" style="color:${r.d >= 15 ? "var(--crit)" : r.d >= 7 ? "var(--warn)" : "var(--body)"}">${r.d} d</td>
+    <td class="cause-cell">${cause}
+      <div class="cause-meta">
+        ${hasAn ? '<span class="badge decile">worst decile</span><span class="badge model">model draft</span>' : '<span class="badge rule">row + link</span>'}
+        <span class="badge ${r.cat === "none" ? "unconf" : "rule"}">${CATS[r.cat].s}</span>
+        <button class="threadlink" data-open="${r.id}">thread (${r.th.length}) &rarr;</button>
+        ${why ? `<span>${why}</span>` : ""}
+      </div></td>
+    <td class="sig-cell">${sig
+      ? `<span class="badge signed">signed</span><br><span class="sig-name">${esc(sig.by)}</span><span class="sig-when">${esc(sig.role)}</span>`
+      : `<button class="btn sm" data-open="${r.id}">${hasAn ? "Review &amp; sign" : "Confirm cause"}</button>`}</td>
+  </tr>`;
+}
+
+function bindDelay() {
+  document.querySelectorAll("[data-filter]").forEach(b => b.onclick = () => { state.filter = b.dataset.filter; render(); });
+  document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { state.view = b.dataset.view; render(); });
+  document.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openDrawer(b.dataset.open));
+  const c = $("cutoffBtn");
+  if (c) c.onclick = applyCutoff;
+}
+
+function applyCutoff() {
+  const rows = teamRows();
+  rows.forEach(r => {
+    if (r.uns) return;
+    const lead = ROSTER.find(p => p.tm === r.tm && p.lead && p.g === groupOf(r.o));
+    state.signed[r.id] = { by: lead.n, role: lead.g + " lead", cause: r.cause };
+  });
+  render();
+  toast(`Cut-off applied — ${signedCount()} of ${rows.length} signed (${coverage()}%). ${rows.length - signedCount()} rows will publish as “cause not confirmed”.`);
+}
+
+/* ---- the 2025 report, for the one team that had one ---- */
+function renderBefore() {
+  const rows = teamRows();
+  head(sheetKicker("delay"), "Delay detail", "before",
+    "The same tasks as they appeared in the report that circulated before this workflow existed &mdash; and only AMS has this view, because the other four teams had no standing report to compare against. The delay column was always right. The column beside it was blank four times in five.");
+  const body = rows.map(r => {
+    const txt = BEFORE_TEXT[r.id] ? `<span class="cause-text">${esc(BEFORE_TEXT[r.id])}</span>`
+      : BEFORE_PENDING.includes(r.id) ? `<span class="cause-unconf">Pending</span>`
+      : `<span class="cause-none">&nbsp;</span>`;
+    return `<tr><td><span class="id">${r.id}</span><br><span class="name">${esc(r.t)}</span></td>
+      <td class="mono">Project ${r.p}</td><td>${esc(r.o)}</td>
+      <td class="num">${r.due}</td><td class="num">${r.del}</td><td class="num">${r.d} d</td><td class="cause-cell">${txt}</td></tr>`;
+  }).join("");
+  const blank = rows.filter(r => !BEFORE_TEXT[r.id] && !BEFORE_PENDING.includes(r.id)).length;
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="before-banner">
+      <b>Jun&ndash;Nov 2025 &middot; the report as it was</b>
+      <span>${blank + BEFORE_PENDING.length} of ${rows.length} delayed tasks arrive with no stated cause. ${BEFORE_PENDING.length} read &ldquo;Pending&rdquo;, which counts as none. Three versions of this month were found in different inboxes.</span>
+    </div>
+    <div class="toolbar">
+      <div class="segmented" role="group" aria-label="Report version">
+        <button data-view="after">This run</button>
+        <button data-view="before" aria-pressed="true">How it read in 2025</button>
+      </div>
+    </div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Task</th><th>Project</th><th>Owner</th><th class="num">Due</th><th class="num">Delivered</th><th class="num">Late</th><th>Root cause</th></tr></thead>
+      <tbody>${body}</tbody></table></div>
+    <p class="sheet-note">There is no signature column here, because there was nothing to sign. The explanation for most of these rows existed the whole time, written by an engineer in a comment thread, and the process had no way to spend attention on forty threads a month. The four teams without a before view had a worse version of the same problem: nothing to compare against at all.</p>`);
+  bindDelay();
+}
+
+/* ============================================================
+   MONTHLY 4 — key metrics (second pass)
+   ============================================================ */
+function renderMetrics() {
+  const t = totals(state.team, "monthly"), gs = byGroup(state.team, "monthly"), pr = byProject(state.team, "monthly");
+  const rows = teamRows();
+  head(sheetKicker("metrics"), "Key metrics", "second pass",
+    "Written in the second pass, which reads <b>sheets 1&ndash;3 rather than the task records</b>. Every figure below is arithmetic over a cell in an earlier sheet, named under each tile. The model wrote the paragraph; it did not write a number.");
+  const worstGroup = gs.slice().sort((a, b) => b.days - a.days)[0];
+  const worstProj = pr.slice().sort((a, b) => b.days - a.days)[0];
+  const top2 = rows.slice(0, 2);
+  const tiles = [
+    [t.completed, "Tasks closed in the window", "Sheet 1 · sum of Completed"],
+    [pct(t.onTime, t.completed) + "%", "Delivered on time", "Sheet 1 · On time ÷ Completed"],
+    [t.delayed, "Delayed tasks", "Sheet 1 · sum of Delayed"],
+    [t.days, "Delay days in the month", "Sheet 3 · sum of Late"],
+    [t.med + " d", "Median delay when late", "Sheet 3 · median of Late"],
+    [coverage() + "%", "Delayed tasks with a signed cause", "Sheet 3 · signed ÷ delayed"]
+  ];
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tiles">${tiles.map(([v, l, p]) =>
+      `<div class="tile"><div class="v">${v}</div><div class="l">${l}</div><div class="p">${p}</div></div>`).join("")}</div>
+    <div class="narrative">
+      <p class="sec-label"><span class="badge model">model</span> dashboard narrative</p>
+      <p>${esc(worstGroup.g)} carries ${worstGroup.days} of the month&rsquo;s ${t.days} delay days across ${worstGroup.delayed} delayed tasks, and Project ${worstProj.p} accounts for ${pct(worstProj.days, t.days)} per cent of delay days on ${pct(worstProj.delayed, t.delayed)} per cent of delayed tasks. Two rows &mdash; ${esc(top2[0].id)} and ${esc(top2[1].id)} &mdash; hold ${top2[0].d + top2[1].d} delay days between them, and both spent most of that time waiting on something outside the work itself. On-time delivery across the window is ${pct(t.onTime, t.completed)} per cent, against ${t.open} tasks still open past their date and reported in the weekly.</p>
+      <p style="color:var(--muted);font-size:12.5px">This paragraph was written from sheets 1&ndash;3 after they were generated, never from the source records. That is deliberate: summaries written from the source drift from the tables printed beside them, and three of six AMS reports in 2025 contradicted their own numbers. The cost is on the other side &mdash; a correction made to a task after the run is invisible until next month.</p>
+    </div>
+    <p class="sheet-note"><b>The guardrail.</b> A model occasionally wrong about a count destroys trust far faster than one occasionally vague about a cause. So no count, percentage or median in any report this engine produces &mdash; any team, any window &mdash; passes through a model &mdash; not once, not as a formatting step.</p>`);
+}
+
+/* ============================================================
+   MONTHLY 5 — project distribution (second pass)
+   ============================================================ */
+function renderDist() {
+  const pr = byProject(state.team, "monthly"), t = totals(state.team, "monthly");
+  const before = BEFORE_COVERAGE[state.team];
+  const q = quarter(state.team);
+  head(sheetKicker("dist"), "Project distribution", "second pass",
+    `Delay concentrated by project, with root-cause coverage against ${before ? "the six-month average this workflow replaced" : "this team's own first run in March"}. The <b>faint mark on each bar is where the team sat before</b>.`);
+  const maxDays = Math.max(1, ...pr.map(p => p.days));
+  const prior = before || pct(q.mar.signed, q.mar.delayed);
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Project</th><th class="num">Delayed tasks</th><th class="num">Delay days</th><th style="width:150px">Share of delay days</th><th class="num">Signed causes</th><th style="width:210px">Coverage vs. ${before ? "2025" : "March"}</th></tr></thead>
+      <tbody>${pr.map(p => {
+        const signed = p.ids.filter(id => state.signed[id]).length;
+        const cov = pct(signed, p.delayed);
+        return `<tr>
+          <td class="name">Project ${p.p}</td>
+          <td class="num">${p.delayed}</td><td class="num">${p.days}</td>
+          <td><div style="display:flex;align-items:center;gap:9px">
+            <span class="meterbar" style="flex:1"><i style="width:${(p.days / maxDays) * 100}%"></i></span>
+            <span class="mono" style="font-size:11px;color:var(--muted);width:34px;text-align:right">${pct(p.days, t.days)}%</span></div></td>
+          <td class="num">${signed} / ${p.delayed}</td>
+          <td><div style="display:flex;align-items:center;gap:9px">
+            <span class="meterbar good" style="flex:1;position:relative;overflow:visible">
+              <i style="width:${cov}%"></i>
+              <u style="position:absolute;top:-3px;bottom:-3px;left:${prior}%;width:1px;background:var(--faint);text-decoration:none"></u>
+            </span>
+            <span class="mono" style="font-size:11px;color:${cov ? "var(--good)" : "var(--faint)"};width:62px;text-align:right">${prior}&rarr;${cov}%</span></div></td></tr>`;
+      }).join("")}</tbody>
+      <tfoot><tr><td>${PROJECTS.length} projects</td><td class="num">${t.delayed}</td><td class="num">${t.days}</td><td></td><td class="num">${signedCount()} / ${t.delayed}</td><td class="num">${prior}&rarr;${coverage()}%</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note">All five teams work the same four programmes, which is why a programme delay shows up in several reports at once and never adds up inside any one of them. <b>The quarterly is the only place it is counted as one number</b>, and that is the strongest argument for the window above this one existing at all.</p>`);
+}
+
+/* ============================================================
+   MONTHLY 6 — critical issues (second pass)
+   ============================================================ */
+function renderIssues() {
+  const items = ISSUES[state.team];
+  head(sheetKicker("issues"), "Critical issues and recommendations", "second pass",
+    `${items.length === 3 ? "Three" : "Two"} items, written from the generated sheets. Each carries the rows it was drawn from &mdash; <b>click a source to open it</b>. This is the section leadership acts on, which is exactly why it is also the section that had to become signable.`);
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="issues">${items.map(i => `
+      <div class="issue" style="display:flex;gap:14px">
+        <span class="sev" style="background:${i.sev === "crit" ? "var(--crit)" : "var(--warn)"}"></span>
+        <div style="flex:1;min-width:0">
+          <div class="top"><h4>${esc(i.h)}</h4><span class="badge model">model</span></div>
+          <p>${i.p}</p>
+          <div class="rec"><b>Recommendation.</b> ${esc(i.r)}</div>
+          <div class="srcs">${i.s.map(s => `<button data-src="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+        </div>
+      </div>`).join("")}</div>
+    <p class="sheet-note">Recommendations are not signed &mdash; they are advice, and advice that is wrong is argued with. A root cause is different: it is a claim about why a team missed a date, it gets quoted in a resourcing conversation, and a model cannot be asked what it meant.</p>`);
+  document.querySelectorAll("[data-src]").forEach(b => b.onclick = () => {
+    const m = b.dataset.src.match(/[A-Z]-\d+/);
+    if (m) { state.sheet = "delay"; state.view = "after"; state.filter = "all"; render(); openDrawer(m[0]); }
+    else if (b.dataset.src.includes("Sheet 6")) go("issues");
+    else if (b.dataset.src.includes("Sheet 5")) go("dist");
+    else if (b.dataset.src.includes("Sheet 4")) go("metrics");
+    else if (b.dataset.src.includes("Sheet 2")) go("team");
+    else if (b.dataset.src.includes("Sheet 1")) go("eff");
+    else { state.sheet = "delay"; state.filter = "unsigned"; render(); }
+  });
+}
+</script>
+
+<script>
+/* ============================================================
+   QUARTERLY 1 — the quarter in three monthly reports.
+   No task record is read on any of these four sheets.
+   ============================================================ */
+function renderMonths() {
+  const q = quarter(state.team), t = teamOf(state.team);
+  const mayPublished = !!state.published[state.team + ":monthly"];
+  head(sheetKicker("months"), "The quarter in three monthly reports", "rule",
+    "Three rows, one per published monthly report. <b>The task API is not called on this sheet or on any other sheet in this window</b> — the same rule that keeps the monthly narrative from drifting away from its own tables, applied one level up.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="cadbanner"><span class="k">Why it reads reports and not tasks</span>
+      A quarterly assembled from task records would silently disagree with the three monthly reports people already acted on. Reading the reports means the quarter can only ever say what was already published &mdash; and a month that was never published is <b>absent and stated as absent</b>, rather than quietly filled in.</div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Month</th><th class="num">Closed</th><th class="num">On time</th><th class="num">On&nbsp;time&nbsp;%</th><th class="num">Delayed</th><th class="num">Delay days</th><th class="num">Signed causes</th><th style="width:200px">Coverage</th></tr></thead>
+      <tbody>${MONTH_KEYS.map(k => {
+        const m = q[k], cov = pct(m.signed, m.delayed);
+        const absent = k === "may" && !mayPublished;
+        return `<tr>
+          <td class="name">${MONTH_NAMES[k]} 2026${absent ? ' <span class="badge unconf" style="margin-left:6px">not published</span>' : ""}</td>
+          <td class="num">${m.closed}</td><td class="num">${m.onTime}</td><td class="num">${pct(m.onTime, m.closed)}%</td>
+          <td class="num">${m.delayed}</td><td class="num">${m.days}</td>
+          <td class="num">${absent ? "&mdash;" : m.signed + " / " + m.delayed}</td>
+          <td><div style="display:flex;align-items:center;gap:9px">
+            <span class="meterbar good" style="flex:1"><i style="width:${absent ? 0 : cov}%"></i></span>
+            <span class="mono" style="font-size:11px;color:${absent ? "var(--warn)" : "var(--good)"};width:44px;text-align:right">${absent ? "n/a" : cov + "%"}</span></div></td></tr>`;
+      }).join("")}</tbody>
+      <tfoot><tr><td>Quarter</td>
+        <td class="num">${sum(MONTH_KEYS.map(k => q[k].closed))}</td>
+        <td class="num">${sum(MONTH_KEYS.map(k => q[k].onTime))}</td>
+        <td class="num">${pct(sum(MONTH_KEYS.map(k => q[k].onTime)), sum(MONTH_KEYS.map(k => q[k].closed)))}%</td>
+        <td class="num">${sum(MONTH_KEYS.map(k => q[k].delayed))}</td>
+        <td class="num">${sum(MONTH_KEYS.map(k => q[k].days))}</td>
+        <td class="num">${sum(MONTH_KEYS.map(k => q[k].signed))} / ${sum(MONTH_KEYS.map(k => q[k].delayed))}</td>
+        <td class="num">${pct(sum(MONTH_KEYS.map(k => q[k].signed)), sum(MONTH_KEYS.map(k => q[k].delayed)))}%</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note">${mayPublished
+      ? `<b>All three months published.</b> The quarter can be published, because every cause it will group has a name against it.`
+      : `<b>May is not published yet.</b> The quarterly gate will not pass until it is: a quarter assembled from two published reports and one draft is a quarter that contradicts itself the moment the third is signed. Switch to the monthly window for ${esc(t.name)}, apply the cut-off and publish, then come back.`}</p>`);
+}
+
+/* ============================================================
+   QUARTERLY 2 — recurring blockers. The model's only job at
+   this window: group causes people already signed, and say
+   which ones came back.
+   ============================================================ */
+function renderBlockers() {
+  const q = quarter(state.team), written = CLUSTERS[state.team];
+  const totalsByCat = CAT_ORDER.map(c => ({
+    c, per: MONTH_KEYS.map(k => q[k].cats[c]), total: sum(MONTH_KEYS.map(k => q[k].cats[c]))
+  })).sort((a, b) => b.total - a.total);
+  const top = totalsByCat.filter(x => written[x.c]);
+  const maxV = Math.max(1, ...totalsByCat.flatMap(x => x.per));
+  head(sheetKicker("blockers"), "Recurring blockers", "second pass",
+    "Signed causes from three published reports, grouped by the six categories all five teams share, and ordered by how often they came back. <b>No new root cause is written at this window</b> — every claim below was signed by a named person one or two months ago.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="clusters">${top.map(x => `
+      <div class="cluster">
+        <div class="top">
+          <h4>${esc(CATS[x.c].n)}</h4>
+          <span class="count mono">${x.total} rows this quarter</span>
+          <div class="spark" title="March, April, May">${x.per.map((v, i) => `<span class="${i === 2 ? "hi" : ""}" style="height:${Math.max(4, (v / maxV) * 26)}px"><i>${v}</i></span>`).join("")}</div>
+        </div>
+        <p>${esc(written[x.c].p)}</p>
+        <div class="rec" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--body)"><b style="color:var(--ink);font-weight:500">Recommendation.</b> ${esc(written[x.c].r)}</div>
+      </div>`).join("")}</div>
+    <p class="sheet-note"><b>What the six categories cost to agree.</b> The first draft had eleven, because each of the five teams wanted the distinctions their own work turns on. Eleven categories no two teams applied the same way produce a quarterly nobody believes. Six that everyone applies the same way produce this sheet &mdash; and every team gave up a distinction it cared about to get it.</p>`);
+}
+
+/* ============================================================
+   QUARTERLY 3 — where the quarter went. The rule-based table
+   the sheet above was written from.
+   ============================================================ */
+function renderWhere() {
+  const q = quarter(state.team);
+  const qDelayed = sum(MONTH_KEYS.map(k => q[k].delayed));
+  head(sheetKicker("where"), "Where the quarter went", "rule",
+    "The counts sheet 2 was written from, printed so the reading can be checked against them. Rows are the six shared categories; columns are the three published reports. <b>Nothing here passed through a model.</b>");
+  const rows = CAT_ORDER.map(c => ({ c, per: MONTH_KEYS.map(k => q[k].cats[c]), total: sum(MONTH_KEYS.map(k => q[k].cats[c])) }))
+    .sort((a, b) => b.total - a.total);
+  const trend = r => {
+    const d = r.per[2] - r.per[0];
+    return d < 0 ? `<span style="color:var(--good)">&darr; ${Math.abs(d)}</span>`
+         : d > 0 ? `<span style="color:var(--crit)">&uarr; ${d}</span>`
+         : `<span style="color:var(--muted)">flat</span>`;
+  };
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Cause category</th><th class="num">March</th><th class="num">April</th><th class="num">May</th><th class="num">Quarter</th><th class="num">Share</th><th class="num">March&rarr;May</th></tr></thead>
+      <tbody>${rows.map(r => `<tr${r.c === "none" ? ' style="background:rgba(201,151,63,0.04)"' : ""}>
+        <td class="name">${esc(CATS[r.c].n)}${r.c === "none" ? ' <span class="badge unconf" style="margin-left:6px">not a cause</span>' : ""}</td>
+        ${r.per.map(v => `<td class="num">${v}</td>`).join("")}
+        <td class="num">${r.total}</td>
+        <td class="num">${pct(r.total, qDelayed)}%</td>
+        <td class="num">${trend(r)}</td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td>6 categories</td>${MONTH_KEYS.map(k => `<td class="num">${q[k].delayed}</td>`).join("")}<td class="num">${qDelayed}</td><td class="num">100%</td><td></td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>The bottom row is the honest one.</b> &ldquo;No cause recorded&rdquo; is not a blocker, it is the report failing to explain itself, and it is the only line here that this engine can move on its own. Every other line needs somebody to change how the work is scheduled &mdash; which is the difference between a reporting improvement and a delivery improvement, and this page is the only place the two are told apart.</p>`);
+}
+
+/* ============================================================
+   QUARTERLY 4 — the portfolio view. The one sheet in the whole
+   product that puts the five teams on a page, and it reports
+   whether the process ran, not how anybody performed.
+   ============================================================ */
+function renderPortfolio() {
+  head(sheetKicker("portfolio"), "Portfolio view", "process only",
+    "Five teams, one page, <b>process metrics only</b>. Whether the report ran, whether it was published, and how many of its causes carry a name. Nothing on this sheet can be read as one team being better than another, because nothing on it is comparable between teams.");
+  const rows = TEAMS.map(t => {
+    const q = quarter(t.k);
+    const mayPub = !!state.published[t.k + ":monthly"];
+    const months = 2 + (mayPub ? 1 : 0);
+    const keys = mayPub ? MONTH_KEYS : ["mar", "apr"];
+    const delayed = sum(keys.map(k => q[k].delayed));
+    const signed = sum(keys.map(k => q[k].signed));
+    return { t, months, delayed, signed, cov: pct(signed, delayed), mayPub };
+  });
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div class="portfolio-note">
+      <b>Deliberately absent:</b> on-time rate, delay days, delayed-task counts, and any ordering of the five teams. Post-silicon work is bench hours against equipment; firmware work is release cycles; hardware is board spins with a fabrication slot in the middle. A number that means &ldquo;late&rdquo; in one of them does not mean &ldquo;late&rdquo; in another, and putting them in a column invites exactly the comparison this report exists to avoid.
+    </div>
+    <div class="tablewrap"><table class="sheet">
+      <thead><tr><th>Team</th><th>Groups</th><th class="num">Monthly reports published</th><th class="num">Causes signed</th><th style="width:200px">Coverage of published months</th></tr></thead>
+      <tbody>${rows.map(r => `<tr class="${r.t.k === state.team ? "is-open" : ""}">
+        <td class="name">${esc(r.t.name)}<br><span class="mono" style="font-size:10.5px;color:var(--faint)">${esc(r.t.full)}</span></td>
+        <td class="mono" style="font-size:11.5px">${r.t.groups.length}</td>
+        <td class="num">${r.months} / 3${r.mayPub ? "" : ' <span class="badge unconf" style="margin-left:6px">May draft</span>'}</td>
+        <td class="num">${r.signed} / ${r.delayed}</td>
+        <td><div style="display:flex;align-items:center;gap:9px">
+          <span class="meterbar good" style="flex:1"><i style="width:${r.cov}%"></i></span>
+          <span class="mono" style="font-size:11px;color:var(--good);width:38px;text-align:right">${r.cov}%</span></div></td></tr>`).join("")}
+      </tbody>
+      <tfoot><tr><td>5 teams</td><td class="mono" style="font-size:11.5px">${sum(TEAMS.map(t => t.groups.length))}</td>
+        <td class="num">${sum(rows.map(r => r.months))} / 15</td>
+        <td class="num">${sum(rows.map(r => r.signed))} / ${sum(rows.map(r => r.delayed))}</td>
+        <td class="num">${pct(sum(rows.map(r => r.signed)), sum(rows.map(r => r.delayed)))}%</td></tr></tfoot>
+    </table></div>
+    <p class="sheet-note"><b>Coverage is a process metric and it is the only one here.</b> It says how much of what the report claims has a name against it &mdash; which is a fact about the report, not about the team. It was the metric the four leads outside AMS were willing to be measured on, and the reason they agreed to run a report shape they had not asked for.</p>`);
+}
+
+/* ============================================================
+   PUBLISH — the gate, where there is one.
+   ============================================================ */
+function renderPublish() {
+  const c = cadOf(state.cad), t = teamOf(state.team), rows = teamRows();
+
+  if (!c.gate) {
+    head("The end of the run", `Send to the ${esc(t.name)} team channel`, "rule",
+      "There is no gate at this window, and that is the decision rather than an omission. <b>A weekly report is a working document.</b> It does not leave the team, nothing in it is quoted, and no cause in it carries a name.");
+    $("pane").insertAdjacentHTML("beforeend", `
+      <div style="max-width:760px">
+        <div class="run-cta" style="display:block">
+          <ul class="preflight">
+            <li><span class="k">01</span><span><b>${openFor(state.team).length}</b> tasks open past their date, named with their thread &mdash; the part a lead can still act on.</span></li>
+            <li><span class="k">02</span><span><b>${rows.length}</b> closed late in the window, ${analysedIds(state.team, "weekly").length} of them over the seven-day threshold.</span></li>
+            <li><span class="k">03</span><span><b>0</b> signatures. Nothing here is signed, and nothing here should be quoted outside the team.</span></li>
+            <li><span class="k">04</span><span><b>0</b> counts or percentages computed by a model.</span></li>
+          </ul>
+          <button class="btn primary" id="pubBtn">${isPublished() ? "Send again" : "Send to the team channel"}</button>
+        </div>
+        <p class="sheet-note" style="margin-top:18px"><b>What not having a gate costs.</b> A weekly figure can be quoted by somebody who does not know it is unsigned, and once quoted it is indistinguishable from a monthly one. The banner on every weekly sheet is the whole of the defence, and a banner is a weak defence &mdash; it is the open risk I would fix first.</p>
+      </div>`);
+    $("pubBtn").onclick = () => { state.published[rkey()] = true; render(); toast(`Sent to the ${t.name} channel — working draft, nothing signed.`); };
+    return;
+  }
+
+  if (state.cad === "quarterly") return renderQuarterlyGate();
+
+  const unsigned = rows.length - signedCount();
+  if (isPublished()) {
+    head("Published", `${esc(t.name)} monthly performance &mdash; May 2026`, "rule",
+      "This is what leadership receives. One version, replacing the last rather than joining it.");
+    $("pane").insertAdjacentHTML("beforeend", `
+      <div class="published-banner">
+        <div style="flex:1;min-width:240px">
+          <div class="t">Published to the ${esc(t.name)} leadership channel &middot; <b>v1</b></div>
+          <div class="s">${signedCount()} of ${rows.length} causes signed (${coverage()}%) &middot; ${unsigned} published as “cause not confirmed” &middot; 0 counts computed by a model</div>
+        </div>
+        <button class="btn sm" id="unpubBtn">Withdraw to draft</button>
+      </div>
+      <div class="tablewrap"><table class="sheet">
+        <thead><tr><th>Task</th><th>Project</th><th>Owner</th><th class="num">Late</th><th>Root cause</th><th>Signed by</th></tr></thead>
+        <tbody>${rows.map(r => {
+          const s = state.signed[r.id];
+          return `<tr><td><span class="id">${r.id}</span><br><span class="name">${esc(r.t)}</span></td>
+            <td class="mono">Project ${r.p}</td><td>${esc(r.o)}</td><td class="num">${r.d} d</td>
+            <td class="cause-cell">${s ? `<span class="cause-text">${esc(s.cause)}</span>` : `<span class="cause-unconf">Cause not confirmed</span>${r.uns ? `<div class="cause-meta">${esc(r.uns)}</div>` : ""}`}</td>
+            <td class="sig-cell">${s ? `<span class="sig-name">${esc(s.by)}</span><span class="sig-when">${esc(s.role)}</span>` : `<span class="badge unconf">unsigned</span>`}</td></tr>`;
+        }).join("")}</tbody></table></div>
+      <p class="sheet-note"><b>Never blank.</b> An empty cell reads as no delay to explain, and that is precisely how the old AMS report was misread &mdash; four blank cells in five taken as four fifths nothing-to-see. An unconfirmed cause says so, in the column where a cause belongs. <b>This publication is also what unlocks the quarterly</b> for this team.</p>`);
+    $("unpubBtn").onclick = () => { state.published[rkey()] = false; render(); toast("Withdrawn. The workbook is a draft again, and the quarterly gate has closed."); };
+    return;
+  }
+  head("The gate", "Publish to leadership", "rule",
+    "Publication is the only irreversible step, so it is the one with a checklist. The report failed, as agreed before the build, <b>if it ever went out carrying a root cause no named person had signed</b>.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div style="max-width:760px">
+      <div class="run-cta" style="display:block">
+        <ul class="preflight">
+          <li><span class="k">01</span><span><b>${rows.length}</b> delayed tasks in the window, all present in sheet 3 with their thread linked.</span></li>
+          <li><span class="k">02</span><span><b>${signedCount()}</b> causes signed by a named owner of the affected work.</span></li>
+          <li><span class="k">03</span><span><b>${unsigned}</b> will publish as “cause not confirmed” &mdash; stated as unconfirmed, never left blank.</span></li>
+          <li><span class="k">04</span><span><b>0</b> counts or percentages computed by a model.</span></li>
+          <li><span class="k">05</span><span><b>1</b> version circulates. This replaces the previous report rather than joining it in a second inbox.</span></li>
+          <li><span class="k">06</span><span><b>${openFor(state.team).length}</b> tasks still open past their date are stated as excluded, and reported in this team's weekly instead.</span></li>
+        </ul>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <button class="btn primary" id="pubBtn">${signedCount() ? "Publish v1" : "Publish anyway — every cause reads “not confirmed”"}</button>
+          ${signedCount() < rows.length ? `<button class="btn sm" id="jumpUnsigned">Review the ${unsigned} unsigned</button>` : ""}
+        </div>
+      </div>
+      <p class="sheet-note" style="margin-top:18px"><b>What the gate cost.</b> Publication waits on human review, and about one cause in seven ships unconfirmed &mdash; almost always one where the owner was travelling or inside a release. Signing lives in a workbook column, which is the wrong shape for it: a notification carrying the thread would have cost a day to build and taken that number close to zero.</p>
+    </div>`);
+  $("pubBtn").onclick = () => {
+    state.published[rkey()] = true; render();
+    toast(`Published v1 — ${coverage()}% of delayed tasks carry a signed cause. The ${t.name} quarterly is now unlocked.`);
+  };
+  if ($("jumpUnsigned")) $("jumpUnsigned").onclick = () => { state.sheet = "delay"; state.view = "after"; state.filter = "unsigned"; render(); };
+}
+
+function renderQuarterlyGate() {
+  const t = teamOf(state.team), q = quarter(state.team);
+  const mayPub = !!state.published[state.team + ":monthly"];
+  const qDelayed = sum(MONTH_KEYS.map(k => q[k].delayed)), qSigned = sum(MONTH_KEYS.map(k => q[k].signed));
+  if (isPublished()) {
+    head("Published", `${esc(t.name)} quarterly review pack &mdash; Mar to May 2026`, "rule",
+      "Three published reports, one page of patterns, and not one new claim about anybody's work.");
+    $("pane").insertAdjacentHTML("beforeend", `
+      <div class="published-banner">
+        <div style="flex:1;min-width:240px">
+          <div class="t">Published to the quarterly review &middot; <b>v1</b></div>
+          <div class="s">3 of 3 monthly reports read &middot; ${qSigned} of ${qDelayed} causes signed (${pct(qSigned, qDelayed)}%) &middot; 0 new root causes written &middot; 0 counts computed by a model</div>
+        </div>
+        <button class="btn sm" id="unpubBtn">Withdraw to draft</button>
+      </div>
+      <p class="sheet-note">Everything in this pack was already published once, signed by the person who owned the work, a month or two before the review. <b>Nobody is told anything at the review that they were not told at the time</b> &mdash; which was the condition the four leads outside AMS put on running a quarterly at all.</p>`);
+    $("unpubBtn").onclick = () => { state.published[rkey()] = false; render(); toast("Withdrawn to draft."); };
+    return;
+  }
+  head("The gate", "Publish to the quarterly review", "rule",
+    "The quarterly gate is not a signature, because nothing new is being claimed. It is a completeness check: <b>a quarter cannot be published from a month that has not been</b>.");
+  $("pane").insertAdjacentHTML("beforeend", `
+    <div style="max-width:760px">
+      <div class="run-cta" style="display:block">
+        <ul class="preflight">
+          <li><span class="k">01</span><span><b>${2 + (mayPub ? 1 : 0)} of 3</b> monthly reports for ${esc(t.name)} are published. ${mayPub ? "All three are readable." : "May is still a draft."}</span></li>
+          <li><span class="k">02</span><span><b>${qSigned}</b> signed causes across the quarter, ${pct(qSigned, qDelayed)} per cent of ${qDelayed} delayed tasks.</span></li>
+          <li><span class="k">03</span><span><b>0</b> new root causes written at this window. Every claim was signed at the time.</span></li>
+          <li><span class="k">04</span><span><b>0</b> task records fetched, and <b>0</b> counts computed by a model.</span></li>
+        </ul>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <button class="btn primary" id="pubBtn"${mayPub ? "" : " disabled"}>Publish the quarterly pack</button>
+          ${mayPub ? "" : `<button class="btn sm" id="goMonthly">Go and publish the May report</button>`}
+          <span class="gate-msg ${mayPub ? "ok" : "deny"}">${mayPub
+            ? "All three months are published. The pack can go out."
+            : "May is a draft. Publishing a quarter over it would produce a pack that contradicts itself the moment May is signed."}</span>
+        </div>
+      </div>
+      <p class="sheet-note" style="margin-top:18px"><b>What this gate cost.</b> One team missed a quarterly review in March because its month had not been signed off, and the review ran without them. That was the correct outcome and it was not a comfortable one &mdash; the alternative is a quarterly that quietly reports a draft as though it were a record.</p>
+    </div>`);
+  $("pubBtn").onclick = () => { state.published[rkey()] = true; render(); toast(`Quarterly pack published — ${pct(qSigned, qDelayed)}% of the quarter's causes carry a name.`); };
+  if ($("goMonthly")) $("goMonthly").onclick = () => { state.cad = "monthly"; state.sheet = hasRun() ? "publish" : "run"; render(); };
+}
+</script>
+
+<script>
+/* ============================================================
+   DRAWER — the thread, the draft, and the signature where one
+   exists. An open task has no delivery date, so it has no delay
+   and nothing to sign; it gets the thread and nothing else.
+   ============================================================ */
+function findRow(id) { return ROWS.find(x => x.id === id) || OPEN.find(x => x.id === id); }
+
+function openDrawer(id) {
+  const r = findRow(id);
+  if (!r) return;
+  state.open = id;
+  const isOpenRow = !r.d;
+  const p = me(), sig = state.signed[id], c = cadOf(state.cad);
+  const an = analysedIds(state.team, state.cad);
+  const hasAn = !isOpenRow && an.includes(id) && r.an;
+  const gate = c.gate && !isOpenRow;
+  const prefill = state.draft[id] !== undefined ? state.draft[id] : (sig ? sig.cause : (hasAn || r.ci >= 0 ? r.cause : ""));
+  const ev = (hasAn && r.ev) || [];
+
+  const thread = r.th.map((cm, i) => {
+    const isEv = ev.includes(i), isCand = !hasAn && i === r.ci;
+    return `<div class="comment${isCand ? " cand" : ""}${isEv ? " ev" : ""}">
+      <div class="meta"><b>${esc(cm[0])}</b><span>${esc(cm[1])}</span>
+        ${isEv ? '<span class="tag">used by the analysis</span>' : isCand ? '<span class="tag">ranked as the likely cause</span>' : ""}</div>
+      <p>${esc(cm[2])}</p></div>`;
+  }).join("");
+
+  let gateMsg, gateClass, canDo;
+  if (!gate) {
+    gateMsg = isOpenRow
+      ? "This task is still open. There is no delivery date, so there is no delay to count and no cause anybody could sign — it is here to be acted on, not recorded."
+      : `The ${c.name.toLowerCase()} window has no signature gate. Every cause at this window is a draft and stays one, because a signature nobody quotes teaches people that signing means nothing.`;
+    gateClass = "deny"; canDo = false;
+  } else if (sig) { gateMsg = `Signed by ${sig.by}, ${sig.role}. A signature can only be withdrawn by the person who gave it.`; gateClass = "ok"; canDo = sig.by === p.name; }
+  else if (!p.g) { gateMsg = "You are viewing as the report compiler. The compiler cannot sign — the signer has to own the affected work, or the signature is a formality rather than a review."; gateClass = "deny"; canDo = false; }
+  else if (!canSign(r)) { gateMsg = `This row belongs to ${groupOf(r.o)}. You cover ${p.g}, so this one is not yours to sign.`; gateClass = "deny"; canDo = false; }
+  else { gateMsg = "You own this work. Signing publishes this cause with your name printed beside it."; gateClass = ""; canDo = true; }
+
+  $("drawer").innerHTML = `
+    <div class="drawer-head">
+      <div class="row">
+        <div>
+          <span class="id mono" style="color:var(--muted);font-size:12px">${r.id}</span>
+          <span class="badge ${isOpenRow ? "unconf" : hasAn ? "decile" : "rule"}" style="margin-left:8px">${isOpenRow ? "open past due" : hasAn ? (state.cad === "weekly" ? "over the threshold" : "worst decile") : "row + link"}</span>
+          <span class="badge ${r.cat === "none" ? "unconf" : "rule"}" style="margin-left:6px">${CATS[r.cat].s}</span>
+          <h3>${esc(r.t)}</h3>
+        </div>
+        <button class="x-btn" id="drawerX" aria-label="Close">&times;</button>
+      </div>
+      <div class="drawer-facts">
+        <span>Owner <b>${esc(r.o)}</b></span><span>Group <b>${esc(groupOf(r.o))}</b></span>
+        <span>Project <b>${r.p}</b></span><span>Due <b>${r.due}</b></span>
+        ${isOpenRow
+          ? `<span>Status <b>open</b></span><span>Past due <b>${overdueBy(r)} days</b></span>`
+          : `<span>Delivered <b>${r.del}</b></span><span>Late <b>${r.d} days</b></span>`}
+      </div>
+    </div>
+    <div class="drawer-body">
+      ${hasAn ? `
+        <p class="sec-label"><span class="badge model">model</span> generated root cause analysis</p>
+        <div class="analysis"><p>${esc(r.an)}</p>
+          <div class="src">Drawn from comments ${ev.map(i => i + 1).join(" and ")} below &middot; gpt-4o-mini &middot; draft until ${gate ? "signed" : "the monthly run, where it can be signed"}</div></div>
+        <p class="sheet-note" style="margin:0 0 20px">${state.cad === "weekly"
+          ? "A weekly analysis goes only to rows later than the window itself. The claim is traceable in one click, which is what would make it something a person could defend — if this window asked anybody to."
+          : `${an.length} of ${teamRows().length} rows get this. The claim is traceable in one click, which is what makes it something a person can defend or retract.`}</p>`
+      : isOpenRow ? `
+        <p class="sec-label"><span class="badge rule">rule</span> still open, past its date</p>
+        <p class="sheet-note" style="margin:0 0 20px">This row is in the weekly report and in no monthly one. When it closes it will appear in that month's delay detail with a delivery date, a delay, and a cause somebody has to sign. Until then there is only the thread.</p>`
+      : `<p class="sec-label"><span class="badge rule">rule</span> no analysis was generated for this row</p>
+        <p class="sheet-note" style="margin:0 0 20px">This row is below the ${state.cad === "weekly" ? "seven-day threshold" : "worst decile"}, so it arrives as a delay and a link. ${r.ci >= 0
+          ? "A rule-based ranker has flagged the comment most likely to hold the explanation &mdash; highlighted below. Reading it and stating the cause is yours."
+          : "Nothing in this thread explains the delay. If you know the cause, write it; if you do not, leave it and it will publish as <b>&ldquo;cause not confirmed&rdquo;</b>."}</p>`}
+      <p class="sec-label">comment thread &middot; ${r.th.length} comments</p>
+      <div class="thread">${thread}</div>
+    </div>
+    <div class="drawer-foot">
+      ${isOpenRow ? "" : `<div class="field">
+        <label for="causeIn">Stated root cause &mdash; ${gate ? "published verbatim" : "draft only at this window"}</label>
+        <textarea id="causeIn" ${sig || !gate ? "readonly" : ""} placeholder="${r.ci >= 0 || hasAn ? "" : "No explanation in this thread. Write the cause you would stand behind, or leave it unconfirmed."}">${esc(prefill)}</textarea>
+      </div>`}
+      <div class="gate">
+        ${gate ? (sig
+          ? `<button class="btn sm" id="unsignBtn"${canDo ? "" : " disabled"}>Withdraw signature</button>`
+          : `<button class="btn good" id="signBtn"${canDo ? "" : " disabled"}>Sign as ${esc(p.name)}</button>
+             ${hasAn && canDo ? '<button class="btn sm ghost" id="returnBtn">Return to owner</button>' : ""}`) : ""}
+        <span class="gate-msg ${gateClass}">${gateMsg}</span>
+      </div>
+    </div>`;
+  $("drawer").classList.add("open"); $("drawer").setAttribute("aria-hidden", "false");
+  $("scrim").classList.add("open");
+  $("drawerX").onclick = closeDrawer;
+  const ta = $("causeIn");
+  if (ta && !sig && gate) ta.oninput = () => { state.draft[id] = ta.value; };
+  if ($("signBtn")) $("signBtn").onclick = () => {
+    const txt = (ta.value || "").trim();
+    if (!txt) { toast("A signature needs a cause. Write one, or leave the row unconfirmed."); return; }
+    state.signed[id] = { by: p.name, role: p.role, cause: txt };
+    closeDrawer(); render();
+    toast(`Signed — ${signedCount()} of ${teamRows().length} (${coverage()}%). Your name publishes beside it.`);
+  };
+  if ($("unsignBtn")) $("unsignBtn").onclick = () => {
+    delete state.signed[id]; closeDrawer(); render();
+    toast("Signature withdrawn. This row will publish as “cause not confirmed”.");
+  };
+  if ($("returnBtn")) $("returnBtn").onclick = () => {
+    closeDrawer();
+    toast(`Returned to ${r.o}. Unsigned at the cut-off, it publishes as “cause not confirmed”.`);
+  };
+  render(true);
+}
+
+function closeDrawer() {
+  state.open = null;
+  $("drawer").classList.remove("open"); $("drawer").setAttribute("aria-hidden", "true");
+  $("scrim").classList.remove("open");
+}
+
+/* ============================================================
+   TOAST + RENDER
+   ============================================================ */
+let toastT;
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 4600);
+}
+
+const RENDERERS = {
+  run: renderRun, publish: renderPublish,
+  open: renderOpen, late: renderLate, snap: renderSnap,
+  eff: renderEff, team: renderTeam, delay: renderDelay,
+  metrics: renderMetrics, dist: renderDist, issues: renderIssues,
+  months: renderMonths, blockers: renderBlockers, where: renderWhere, portfolio: renderPortfolio
+};
+
+function render(keepDrawer) {
+  const c = cadOf(state.cad), ss = sheets();
+  if (!hasRun() && state.sheet !== "run") state.sheet = "run";
+  if (state.sheet !== "run" && state.sheet !== "publish" && !ss.some(s => s.k === state.sheet)) state.sheet = ss[0].k;
+  if (state.team !== "ams" && state.view === "before") state.view = "after";
+  renderParams(); renderPersona(); renderChip(); renderRail();
+  (RENDERERS[state.sheet] || renderRun)();
+  if (hasRun() && state.sheet !== "run" && state.sheet !== "publish") {
+    const label = c.gate ? (state.cad === "quarterly" ? "quarterly review" : "leadership") : "team channel";
+    $("pane").insertAdjacentHTML("beforeend", `
+      <div class="publish-bar">
+        <span class="txt">${isPublished()
+          ? `Published as v1. Editing after publication produces a correction, not a second version in a second inbox.`
+          : c.gate
+            ? `Draft ${state.cad === "quarterly" ? "pack" : "workbook"}. ${state.cad === "quarterly"
+                ? (state.published[state.team + ":monthly"] ? "All three monthly reports are published, so the pack can go out." : "May is still a draft, so the quarterly gate is closed.")
+                : `${signedCount()} of ${teamRows().length} causes carry a signature; the rest publish as “cause not confirmed”.`}`
+            : `Working draft. This window has no signature and nothing in it should be quoted outside the team.`}</span>
+        <button class="btn ${isPublished() ? "" : "primary"}" id="goPublish">${isPublished() ? "View what was sent" : `Go to the ${label} step`}</button>
+      </div>`);
+    $("goPublish").onclick = () => go("publish");
+  }
+  document.querySelectorAll("[data-sheet]").forEach(b => b.onclick = () => go(b.dataset.sheet));
+  if (!keepDrawer && !state.open) closeDrawer();
+}
+
+/* ============================================================
+   INIT + DEEP LINKS
+   ============================================================ */
+$("personaSel").onchange = e => { state.persona = e.target.value; if (state.open) openDrawer(state.open); else render(); };
+$("scrim").onclick = closeDrawer;
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  const team = q.get("team"), cad = q.get("cad"), sheet = q.get("sheet"), task = q.get("task"), who = q.get("as");
+  if (team && TEAMS.some(t => t.k === team)) state.team = team;
+  if (cad && CADENCES.some(c => c.k === cad)) state.cad = cad;
+  if (task && !cad) {
+    const r = findRow(task);
+    if (r) { state.team = r.tm; if (!r.d) state.cad = "weekly"; }
+  }
+  state.persona = personas()[0].id;
+  if (who && personas().some(p => p.id === who)) state.persona = who;
+  if (q.get("view") === "before" && state.team === "ams") state.view = "before";
+  if (q.get("filter")) state.filter = q.get("filter");
+
+  /* A deep link lands on a populated report: the run is assumed
+     done and the cut-off applied, unless ?fresh=1 says not. */
+  if ((sheet || task) && q.get("fresh") !== "1") {
+    state.ran[rkey()] = true;
+    if (q.get("signed") !== "0" && cadOf(state.cad).gate) {
+      closedFor(state.team, state.cad).forEach(r => {
+        if (r.uns) return;
+        const lead = ROSTER.find(p => p.tm === r.tm && p.lead && p.g === groupOf(r.o));
+        state.signed[r.id] = { by: lead.n, role: lead.g + " lead", cause: r.cause };
+      });
+    }
+    if (q.get("state") === "published") {
+      state.published[rkey()] = true;
+      if (state.cad === "quarterly") {
+        state.ran[state.team + ":monthly"] = true;
+        state.published[state.team + ":monthly"] = true;
+        closedFor(state.team, "monthly").forEach(r => {
+          if (r.uns || state.signed[r.id]) return;
+          const lead = ROSTER.find(p => p.tm === r.tm && p.lead && p.g === groupOf(r.o));
+          state.signed[r.id] = { by: lead.n, role: lead.g + " lead", cause: r.cause };
+        });
+      }
+    }
+    /* A link that names only a task lands on the sheet that shows it. */
+    const fallback = state.cad === "monthly" ? "delay"
+      : state.cad === "weekly" ? (task && OPEN.some(r => r.id === task) ? "open" : "late")
+      : sheets()[0].k;
+    const ok = sheets().some(s => s.k === sheet) || sheet === "publish" || sheet === "run";
+    state.sheet = ok ? sheet : fallback;
+  }
+  render();
+  if (task && findRow(task)) openDrawer(task);
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

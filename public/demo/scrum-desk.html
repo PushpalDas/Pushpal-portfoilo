@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprint Desk — the Scrum ecosystem</title>
+<meta name="description" content="Interactive demo of the Scrum ecosystem: standup, backlog, burndown and review as four views of one task record, with a four-field write allow-list and a public ledger of every write.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Scrum ecosystem — interactive demo ("Sprint Desk").
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the AMS
+   dashboard demo, so the two read as the same product family.
+   Deliberately single-theme: an internal workspace, dark by
+   design, every colour painted explicitly so it holds on any
+   host ground.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 224px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+
+.persona {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 8px; padding: 3px 8px 3px 11px;
+}
+.persona label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.persona select {
+  background: transparent; border: 0; font-size: 12.5px; color: var(--ink);
+  padding: 4px 2px; max-width: 210px;
+}
+
+/* -- Shell ------------------------------------------------- */
+.shell { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); flex: 1; }
+.rail {
+  border-right: 1px solid var(--line);
+  padding: 16px 12px; display: flex; flex-direction: column; gap: 3px;
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 320px);
+}
+.rail h6 {
+  margin: 4px 8px 8px; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.rail button {
+  display: flex; align-items: baseline; gap: 9px;
+  width: 100%; text-align: left; background: transparent;
+  border: 1px solid transparent; border-radius: 7px;
+  padding: 8px 10px; color: var(--body); font-size: 13.5px; line-height: 1.35;
+}
+.rail button:hover { background: var(--surface-2); color: var(--ink); }
+.rail button[aria-current="true"] {
+  background: var(--accent-wash); border-color: var(--accent-dim); color: var(--ink); font-weight: 500;
+}
+.rail button .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 14px; }
+.rail button[aria-current="true"] .n { color: var(--accent); }
+.rail .rail-note {
+  margin: 14px 8px 0; font-size: 11.5px; line-height: 1.5; color: var(--faint);
+  border-top: 1px solid var(--line-soft); padding-top: 12px;
+}
+
+.pane { padding: 22px 26px 40px; min-width: 0; }
+
+/* -- Common blocks ---------------------------------------- */
+.head { margin-bottom: 18px; }
+.head h2 { margin: 0 0 5px; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); }
+.head p { margin: 0; max-width: 74ch; color: var(--body); font-size: 13.5px; }
+.head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+}
+
+.card {
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 10px; padding: 15px 16px; margin-bottom: 14px;
+}
+.card > h3 {
+  margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > h3 .sub { font-weight: 400; color: var(--muted); font-size: 12px; font-family: var(--mono); }
+
+.badge {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted);
+}
+.badge.read { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.badge.write { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.badge.derived { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 7px;
+  padding: 7px 13px; font-size: 12.5px; color: var(--ink);
+}
+.btn:hover { background: var(--surface-3); border-color: var(--faint); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.btn.primary:hover { background: #6f8afb; }
+.btn.sm { padding: 4px 9px; font-size: 11.5px; }
+.btn.ghost { background: transparent; }
+.btn.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.btn.warnb { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.btn[disabled] { opacity: 0.42; cursor: not-allowed; }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.t th {
+  text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  padding: 0 10px 7px 0; border-bottom: 1px solid var(--line);
+}
+table.t td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.t tr:last-child td { border-bottom: 0; }
+table.t td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.stat-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.stat {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 9px;
+  padding: 11px 14px; min-width: 132px; flex: 1;
+}
+.stat .v { font-family: var(--mono); font-size: 21px; color: var(--ink); letter-spacing: -0.02em; line-height: 1.15; }
+.stat .v small { font-size: 12px; color: var(--muted); letter-spacing: 0; }
+.stat .l { font-size: 11.5px; color: var(--muted); margin-top: 3px; line-height: 1.35; }
+.stat.ok .v { color: var(--good); }
+.stat.warn .v { color: var(--warn); }
+
+.note {
+  font-size: 12px; color: var(--muted); line-height: 1.6;
+  border-left: 2px solid var(--line); padding-left: 11px; margin: 12px 0 0;
+}
+.note b { color: var(--body); font-weight: 500; }
+
+/* -- Standup ---------------------------------------------- */
+.daystrip { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.daystrip .lbl {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint); margin-right: 4px;
+}
+.daybtn {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 6px;
+  padding: 5px 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+}
+.daybtn:hover { color: var(--ink); border-color: var(--faint); }
+.daybtn[aria-current="true"] { background: var(--accent-wash); border-color: var(--accent-dim); color: var(--accent); }
+.daybtn[disabled] { opacity: 0.3; }
+
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.person {
+  border: 1px solid var(--line); background: var(--surface); border-radius: 10px;
+  padding: 13px 14px; display: flex; flex-direction: column; gap: 9px;
+}
+.person.blocked { border-color: var(--crit-dim); }
+.person-top { display: flex; align-items: center; gap: 9px; }
+.av {
+  width: 26px; height: 26px; border-radius: 50%; flex: none;
+  background: var(--surface-3); border: 1px solid var(--line);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 10.5px; color: var(--body);
+}
+.person-top .nm { font-size: 13.5px; color: var(--ink); font-weight: 500; line-height: 1.2; }
+.person-top .rl { font-size: 11px; color: var(--faint); font-family: var(--mono); }
+.person-top .sp { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+.moves { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.moves li { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.45; }
+.moves .tag {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 5px; height: fit-content; flex: none; margin-top: 1px;
+  border: 1px solid var(--line); color: var(--muted);
+}
+.moves .tag.done { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.moves .tag.start { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.moves .tag.review { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.moves .tag.block { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.moves .tid { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.quiet { font-size: 12.5px; color: var(--faint); font-style: italic; }
+
+.blockbox {
+  border: 1px solid var(--crit-dim); background: var(--crit-wash);
+  border-radius: 8px; padding: 9px 11px; font-size: 12.5px; color: var(--body);
+}
+.blockbox .hd {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.11em; text-transform: uppercase;
+  color: var(--crit); margin-bottom: 4px;
+}
+.person-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 2px; }
+
+.readout {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  border: 1px solid var(--accent-dim); background: var(--accent-wash);
+  border-radius: 10px; padding: 12px 15px; margin-bottom: 16px;
+}
+.readout .big { font-family: var(--mono); font-size: 24px; color: var(--ink); line-height: 1; }
+.readout .txt { font-size: 12.5px; color: var(--body); max-width: 66ch; }
+.readout .txt b { color: var(--ink); font-weight: 500; }
+
+/* -- Planning --------------------------------------------- */
+.cap { display: flex; flex-direction: column; gap: 7px; }
+.caprow { display: grid; grid-template-columns: 116px 1fr 66px; align-items: center; gap: 10px; font-size: 12.5px; }
+.caprow .who { color: var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar { height: 9px; border-radius: 5px; background: var(--surface-3); overflow: hidden; position: relative; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 5px; }
+.bar i.over { background: var(--warn); }
+.bar i.free { background: var(--good-dim); }
+.caprow .fig { font-family: var(--mono); font-size: 11.5px; color: var(--muted); text-align: right; }
+
+.blrow { display: grid; grid-template-columns: 30px 1fr 88px 62px 96px; gap: 10px; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+.blrow:last-child { border-bottom: 0; }
+.blrow .rank { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.blrow .ttl { color: var(--ink); line-height: 1.35; }
+.blrow .ttl small { display: block; color: var(--faint); font-family: var(--mono); font-size: 10.5px; }
+.blrow.inn { opacity: 0.55; }
+.spread { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.spread .rng { position: relative; width: 62px; height: 6px; background: var(--surface-3); border-radius: 3px; }
+.spread .rng i { position: absolute; top: 0; height: 6px; background: var(--accent-dim); border-radius: 3px; }
+.spread .rng u { position: absolute; top: -2px; width: 2px; height: 10px; background: var(--accent); text-decoration: none; }
+.estin { width: 52px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
+  padding: 4px 6px; font-family: var(--mono); font-size: 12px; text-align: center; }
+
+/* -- Charts ------------------------------------------------ */
+.chartwrap { overflow-x: auto; }
+svg.chart { display: block; width: 100%; height: auto; min-width: 480px; }
+svg.chart .gl { stroke: var(--line); stroke-width: 1; }
+svg.chart .gt { fill: var(--faint); font-family: var(--mono); font-size: 10px; }
+svg.chart .lb { fill: var(--muted); font-family: var(--sans); font-size: 11px; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-size: 11.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 14px; height: 3px; border-radius: 2px; background: var(--accent); }
+.swatch.ideal { background: var(--faint); }
+.swatch.tasks { background: var(--good); }
+.swatch.scope { background: var(--warn); height: 9px; opacity: 0.35; }
+
+.toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; }
+.toggle button { background: transparent; border: 0; padding: 6px 12px; font-size: 12px; color: var(--muted); }
+.toggle button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent); }
+
+/* -- Drift ------------------------------------------------- */
+.artefact {
+  display: grid; grid-template-columns: 1fr 92px 92px; gap: 12px; align-items: center;
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 9px;
+  padding: 11px 14px; margin-bottom: 9px; font-size: 13px;
+}
+.artefact .nm { color: var(--ink); }
+.artefact .nm small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+.artefact .fig { font-family: var(--mono); font-size: 15px; text-align: right; }
+.artefact .fig small { display: block; font-size: 10px; color: var(--faint); letter-spacing: 0.08em; text-transform: uppercase; }
+.artefact.zero .fig.d { color: var(--good); }
+.artefact.old .fig.d { color: var(--crit); }
+
+/* -- Ledger ------------------------------------------------ */
+.allow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.lst { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+.lst li { display: flex; gap: 8px; align-items: baseline; }
+.lst .mk { font-family: var(--mono); font-size: 11px; flex: none; }
+.lst .mk.y { color: var(--good); }
+.lst .mk.n { color: var(--crit); }
+
+/* -- Drawer / toast ---------------------------------------- */
+.scrim {
+  position: fixed; inset: 0; background: rgba(4, 4, 6, 0.6); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity 0.16s; z-index: 60;
+}
+.scrim.on { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 94vw);
+  background: var(--surface); border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform 0.2s ease; z-index: 61;
+  overflow-y: auto; padding: 20px 22px 30px;
+}
+.drawer.on { transform: translateX(0); }
+.drawer h4 { margin: 0 0 3px; font-size: 15px; color: var(--ink); font-weight: 600; }
+.drawer .x-btn { position: absolute; top: 14px; right: 16px; background: transparent; border: 0; font-size: 22px; color: var(--muted); line-height: 1; }
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 14px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 15px; font-size: 12.5px; color: var(--ink);
+  opacity: 0; pointer-events: none; transition: opacity 0.18s, transform 0.18s; z-index: 80;
+  max-width: min(560px, 92vw); text-align: center;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* -- Footer ------------------------------------------------ */
+.foot { border-top: 1px solid var(--line); padding: 24px 26px 34px; background: var(--surface); }
+.foot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.foot h5 {
+  margin: 0 0 7px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.foot p { margin: 0 0 7px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf {
+  margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--line-soft);
+  font-size: 11.5px; color: var(--faint); line-height: 1.65;
+}
+.foot a { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .rail { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 10px; }
+  .rail h6, .rail .rail-note { display: none; }
+  .rail button { width: auto; white-space: nowrap; }
+  .grid2, .grid3, .allow, .foot-grid { grid-template-columns: minmax(0, 1fr); }
+  .pane { padding: 18px 16px 34px; }
+  .blrow { grid-template-columns: 26px 1fr 70px; }
+  .blrow .spread, .blrow .estcell { display: none; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ixana &middot; Platform squad &middot; Sprint ceremonies</span>
+        <h1>Sprint Desk</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>Sprint <b>41</b> &middot; 2&ndash;13 Mar 2026</span>
+      <span class="chip" id="dayChip"><span class="dot"></span>Day <b>6</b> of 10</span>
+      <span class="chip ok" id="driftChip" title="Ceremony artefacts are views of the task record, so there is no second copy that can disagree with it."><span class="dot good"></span><b>0</b> rows disagree with the record</span>
+      <div class="persona">
+        <label for="personaSel">Signed in as</label>
+        <select id="personaSel"></select>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Ceremonies"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A working recreation of the Scrum ecosystem described in the case study. The sprint, the people and every task are invented; the <b>structure, the write allow-list and the ceremony rules are the real ones</b>.</p>
+        <p>Standup, planning, burndown and review are four <b>views of one task record</b>. Nothing here keeps a second copy.</p>
+      </div>
+      <div>
+        <h5>The four decisions it makes visible</h5>
+        <p><b>1.</b> A ceremony is a view, not a document &mdash; every line on the standup board is a diff of the record, marked <span class="badge derived">derived</span>.</p>
+        <p><b>2.</b> Write-narrow, not read-only. Four fields are writable; everything else deep-links out and is marked <span class="badge read">read</span>.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>3.</b> Ceremony state attaches to the <b>task</b>, never to the person. The per-person column is a filter computed on read and never stored.</p>
+        <p><b>4.</b> The burndown is recomputed on read, so it can never become the artefact that disagrees. There is no retrospective board here, and section 04 of the case study says why.</p>
+      </div>
+    </div>
+    <p class="conf">All squads, people, tasks, estimates and figures on this page are invented for the demo. No individual&rsquo;s performance data appears here, and by design none could: the demo stores ceremony state against task ids only. The six-sprint drift audit shown under <b>Drift check</b> uses the same 218 rows / 61 disagreements quoted in section 02 of the case study.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Detail"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, internally consistent.
+   Sprint 41 runs ten working days; "today" is day 6.
+   18 tasks committed at planning (56 points), 3 pulled in
+   mid-sprint (5 points). Everything countable on every screen
+   is derived from these arrays at render time: the burndown,
+   the standup diff, the capacity meter and the review log all
+   read the same objects, which is the whole argument.
+   ============================================================ */
+
+const SPRINT = { n: 41, window: "2–13 Mar 2026", days: 10, today: 6,
+  goal: "OTA can resume after a dropped chunk, and the provisioning profile loader ships with docs." };
+
+/* cap = points this person has closed per sprint, median of the
+   last four, adjusted for booked leave. Not a target — the meter
+   compares commitment against it and says nothing about a person. */
+const TEAM = [
+  { id: "aarti",  n: "Aarti Kulkarni", r: "Squad lead",          cap: 3,  leave: "" },
+  { id: "ben",    n: "Ben Oyelaran",   r: "Firmware, bootloader", cap: 12, leave: "" },
+  { id: "sofia",  n: "Sofia Kalnina",  r: "Firmware",             cap: 12, leave: "" },
+  { id: "haruki", n: "Haruki Sato",    r: "Link driver",          cap: 9,  leave: "" },
+  { id: "imran",  n: "Imran Qureshi",  r: "Sensor HAL",           cap: 6,  leave: "2 days leave, days 7–8" },
+  { id: "elena",  n: "Elena Duarte",   r: "Provisioning",         cap: 6,  leave: "" },
+  { id: "tobias", n: "Tobias Wren",    r: "OTA",                  cap: 9,  leave: "" },
+  { id: "meera",  n: "Meera Pillai",   r: "SDK and docs",         cap: 5,  leave: "" }
+];
+
+const PERSONAS = [
+  { id: "aarti",  name: "Aarti Kulkarni", role: "Squad lead — runs the ceremonies", see: "all" },
+  { id: "tobias", name: "Tobias Wren",    role: "Engineer",                              see: "all" },
+  { id: "vikram", name: "Vikram Sundaram", role: "Engineering director",                 see: "all" },
+  { id: "rhea",   name: "Rhea Malhotra",  role: "Head of people operations",             see: "none" }
+];
+
+/* st: state at "today". close: day it closed (null = still open).
+   add: day it entered the sprint (0 = committed at planning).
+   start: day work began. rev: day it entered review.
+   blk: [fromDay, toDay | null, reason]                          */
+const TASKS = [
+  { id:"T-4102", t:"Boot ROM: secure-boot key rotation path",          o:"sofia",  p:5, add:0, start:1, close:2 },
+  { id:"T-4103", t:"UART bring-up log: drop the per-byte flush",       o:"ben",    p:2, add:0, start:1, close:1 },
+  { id:"T-4108", t:"Wi-R link driver: retry back-off on NACK storms",  o:"haruki", p:5, add:0, start:1, close:3 },
+  { id:"T-4110", t:"Host SDK: rename the pairing callbacks",           o:"meera",  p:1, add:0, start:1, close:1 },
+  { id:"T-4112", t:"Sensor HAL: 6-axis IMU FIFO watermark",            o:"imran",  p:3, add:0, start:2, close:4 },
+  { id:"T-4115", t:"Provisioning profile loader",                      o:"elena",  p:3, add:0, start:2, close:5 },
+  { id:"T-4118", t:"Firmware OTA: resume after a dropped chunk",       o:"tobias", p:8, add:0, start:1, close:null,
+    blk:[3, null, "Signing service change is with IT (ticket IT-3391). No owner assigned yet."] },
+  { id:"T-4121", t:"Power path: idle-mode current regression",         o:"sofia",  p:3, add:0, start:4, close:6 },
+  { id:"T-4124", t:"CI: split the flash-timing suite off the PR gate", o:"ben",    p:3, add:0, start:1, close:2 },
+  { id:"T-4126", t:"Bond-pad map for the YR31 EVB revision",           o:"haruki", p:3, add:0, start:3, close:5,
+    blk:[3, 4, "Waiting on the EVB mechanical drawing revision."] },
+  { id:"T-4129", t:"Link stats: expose retry counters over debug port",o:"elena",  p:2, add:0, start:3, close:4 },
+  { id:"T-4131", t:"SDK sample: paired-sensor walkthrough",            o:"meera",  p:3, add:0, start:3, rev:5, close:null },
+  { id:"T-4133", t:"Log ring buffer: fix the wrap on power cycle",     o:"imran",  p:3, add:0, start:2, close:3 },
+  { id:"T-4136", t:"Bootloader: fall back to previous slot on CRC fail",o:"ben",   p:5, add:0, start:5, close:null },
+  { id:"T-4139", t:"Docs: provisioning profile reference",             o:"meera",  p:1, add:0, start:6, close:6 },
+  { id:"T-4141", t:"Flash driver: erase-suspend during OTA",           o:"sofia",  p:3, add:0, start:null, close:null,
+    blk:[5, null, "Waiting on the erase-suspend errata note from the flash vendor."] },
+  { id:"T-4144", t:"Debug port: rate-limit the trace stream",          o:"aarti",  p:2, add:0, start:3, close:4 },
+  { id:"T-4147", t:"SDK: drop the deprecated pairing shim",            o:"ben",    p:1, add:0, start:null, close:null },
+  { id:"T-4152", t:"Hotfix: pairing timeout on the 3001 EVB",          o:"haruki", p:3, add:3, start:3, close:4 },
+  { id:"T-4155", t:"Expose battery level in the SDK sample",           o:"elena",  p:1, add:5, start:null, close:null },
+  { id:"T-4158", t:"Revert the trace rate-limit default",              o:"aarti",  p:1, add:6, start:6, close:null }
+];
+
+/* Backlog below the sprint line. sp = the squad's own history for
+   comparable tasks: [low, high, median, n]. There is no model
+   estimate anywhere in this product; section 04 says why.        */
+const BACKLOG = [
+  { id:"B-4160", t:"OTA: delta updates instead of full images",       area:"Bootloader / OTA", p:8,    sp:[5,13,8,6] },
+  { id:"B-4161", t:"Host SDK: async pairing API",                     area:"SDK and docs",     p:5,    sp:[3,8,5,9] },
+  { id:"B-4162", t:"Provisioning: bulk profile import",               area:"Provisioning",     p:3,    sp:[2,5,3,7] },
+  { id:"B-4163", t:"Wi-R driver: multi-peer session table",           area:"Link driver",      p:null, sp:[5,13,8,4] },
+  { id:"B-4164", t:"CI: nightly power regression on the EVB",         area:"Firmware",         p:5,    sp:[3,8,5,5] },
+  { id:"B-4165", t:"Debug port: structured trace format",             area:"Firmware",         p:3,    sp:[2,5,3,8] },
+  { id:"B-4166", t:"SDK: Python bindings for the sensor HAL",         area:"SDK and docs",     p:null, sp:[3,13,5,3] },
+  { id:"B-4167", t:"Bootloader: rollback counter in OTP",             area:"Bootloader / OTA", p:3,    sp:[2,5,3,6] },
+  { id:"B-4168", t:"Docs: SDK migration guide for the 3001",          area:"SDK and docs",     p:2,    sp:[1,3,2,11] },
+  { id:"B-4169", t:"Link driver: adaptive rate selection",            area:"Link driver",      p:13,   sp:[8,21,13,3] },
+  { id:"B-4170", t:"Sensor HAL: magnetometer support",                area:"Sensor HAL",       p:5,    sp:[3,8,5,6] },
+  { id:"B-4171", t:"CI: flake quarantine for the flash suite",        area:"Firmware",         p:2,    sp:[1,3,2,9] }
+];
+
+/* The audit that produced this product: six sprints, three
+   hand-maintained artefacts, every row diffed against the task
+   record at the moment the ceremony ended. Same figures as
+   section 02 of the case study.                                */
+const AUDIT = {
+  sprints: 6, checked: 218, off: 61,
+  rows: [
+    { a: "Standup document", checked: 82, off: 24,
+      eg: "The doc had T‑3902 in review; the record had closed it two days earlier. Two people planned around the doc." },
+    { a: "Backlog sheet", checked: 71, off: 22,
+      eg: "The sheet ranked T‑3877 fourth for the sprint; the record had it out of the sprint entirely." },
+    { a: "Burndown chart", checked: 65, off: 15,
+      eg: "The chart still counted T‑3910's five points after the task was split into three, so the line fell twice for one piece of work." }
+  ]
+};
+
+const VIEWS = [
+  { id: "standup",  n: "01", label: "Standup" },
+  { id: "planning", n: "02", label: "Sprint planning" },
+  { id: "burndown", n: "03", label: "Burndown" },
+  { id: "review",   n: "04", label: "Sprint review" },
+  { id: "drift",    n: "05", label: "Drift check" },
+  { id: "ledger",   n: "06", label: "Write ledger" }
+];
+
+/* Four writable fields, one allow-list. Everything else is read. */
+const WRITABLE = [
+  ["sprint",  "Which sprint a task sits in"],
+  ["rank",    "Its order inside the sprint"],
+  ["blocked", "Blocked, with a reason and who is asked"],
+  ["state",   "todo / doing / in review / done"]
+];
+const NOT_WRITABLE = [
+  ["Title, description, acceptance criteria", "Edited where the work is described"],
+  ["Estimate", "Typed by a person at planning, never after"],
+  ["Assignee", "Changing who owns work is a conversation, not a drag"],
+  ["Due date and dependencies", "Owned by the schedule, not by a ceremony"],
+  ["Comments and attachments", "The thread stays in the tool of record"],
+  ["Anything about a person", "No field on this system is keyed to a human being"]
+];
+</script>
+
+<script>
+/* ============================================================
+   STATE + derivation. Every number rendered anywhere comes
+   through one of these functions, so the four views cannot
+   disagree with each other by construction.
+   ============================================================ */
+
+const state = {
+  view: "standup",
+  day: SPRINT.today,
+  persona: "aarti",
+  unit: "points",          // burndown unit: points | tasks
+  oldWay: false,           // drift check: replay the pre-launch audit
+  pulled: [],              // backlog ids pulled into the sprint in this session
+  ests: {},                // estimates typed in this session
+  writes: []               // the session's write ledger
+};
+
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const person = (id) => TEAM.find((m) => m.id === id) || { n: id, r: "" };
+const initials = (n) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+const persona = () => PERSONAS.find((p) => p.id === state.persona);
+
+/* --- task state as of day D ------------------------------- */
+function stateOn(t, d) {
+  if (t.add > d) return "out";
+  if (t.close !== null && t.close <= d) return "done";
+  if (t.rev !== undefined && t.rev <= d) return "review";
+  if (t.start !== null && t.start !== undefined && t.start <= d) return "doing";
+  return "todo";
+}
+function blockedOn(t, d) {
+  if (!t.blk) return null;
+  const [from, to, why] = t.blk;
+  if (from > d) return null;
+  if (to !== null && to < d) return null;
+  return { since: from, days: d - from + 1, why };
+}
+/* live sprint = the committed set, plus anything pulled in during
+   this session. Pulled items count as scope added today.        */
+function sprintTasks() {
+  const extra = state.pulled.map((id) => {
+    const b = BACKLOG.find((x) => x.id === id);
+    return { id: b.id, t: b.t, o: null, p: state.ests[b.id] ?? b.p ?? 0, add: state.day, start: null, close: null, pulled: true };
+  });
+  return TASKS.concat(extra);
+}
+function committedPoints() { return sprintTasks().filter((t) => t.add === 0).reduce((a, t) => a + t.p, 0); }
+function scopeAdded(d) { return sprintTasks().filter((t) => t.add > 0 && t.add <= d).reduce((a, t) => a + t.p, 0); }
+function closedBy(d, unit) {
+  const ts = sprintTasks().filter((t) => t.close !== null && t.close <= d);
+  return unit === "tasks" ? ts.length : ts.reduce((a, t) => a + t.p, 0);
+}
+function remaining(d, unit) {
+  const base = unit === "tasks"
+    ? sprintTasks().filter((t) => t.add === 0).length
+    : committedPoints();
+  const added = unit === "tasks"
+    ? sprintTasks().filter((t) => t.add > 0 && t.add <= d).length
+    : scopeAdded(d);
+  return base + added - closedBy(d, unit);
+}
+/* everything that changed for one person between D-1 and D */
+function movesFor(id, d) {
+  const out = [];
+  for (const t of sprintTasks()) {
+    if (t.o !== id) continue;
+    const now = stateOn(t, d), was = stateOn(t, d - 1);
+    if (now !== was && now !== "out") {
+      out.push({ t, kind: now === "done" ? "done" : now === "review" ? "review" : "start", now, was });
+    }
+    const b = blockedOn(t, d), pb = blockedOn(t, d - 1);
+    if (b && !pb) out.push({ t, kind: "block", b });
+  }
+  return out;
+}
+function openFor(id, d) {
+  return sprintTasks().filter((t) => t.o === id && ["doing", "review"].includes(stateOn(t, d)));
+}
+/* the counter this product is scored on: how many items a person
+   would have had to read out loud that the record already holds */
+function alreadyInRecord(d) {
+  return TEAM.reduce((a, m) => a + movesFor(m.id, d).length + openFor(m.id, d).length, 0);
+}
+function medianClosedSize(d) {
+  const ps = sprintTasks().filter((t) => t.close !== null && t.close <= d).map((t) => t.p).sort((a, b) => a - b);
+  if (!ps.length) return 0;
+  const m = ps.length / 2;
+  return ps.length % 2 ? ps[Math.floor(m)] : (ps[m - 1] + ps[m]) / 2;
+}
+function logWrite(field, target, detail) {
+  state.writes.unshift({ field, target, detail, by: persona().name, at: "Day " + state.day });
+}
+
+/* --- chrome ----------------------------------------------- */
+function toast(msg) {
+  const el = $("#toast");
+  el.innerHTML = msg;
+  el.classList.add("on");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove("on"), 3600);
+}
+function openDrawer(html) {
+  $("#drawer").innerHTML = '<button class="x-btn" id="drawerX" aria-label="Close">&times;</button>' + html;
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden", "false");
+  $("#scrim").classList.add("on");
+  $("#drawerX").onclick = closeDrawer;
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  $("#scrim").classList.remove("on");
+}
+
+/* Deep links are how the case study points at one screen. A sandboxed host
+   can refuse history writes, and that must not stop the render. */
+function syncUrl() {
+  try {
+    const u = new URL(location.href);
+    u.searchParams.set("tab", state.view);
+    u.searchParams.set("day", state.day);
+    history.replaceState(null, "", u);
+  } catch (e) { /* no addressable URL here; the app still works */ }
+}
+
+function renderChrome() {
+  $("#rail").innerHTML =
+    '<h6>Ceremonies</h6>' +
+    VIEWS.map((v) =>
+      `<button data-view="${v.id}" aria-current="${state.view === v.id}"><span class="n">${v.n}</span>${esc(v.label)}</button>`
+    ).join("") +
+    '<p class="rail-note">There is no retrospective here. It is the hardest cut in the case study, and the reason is that a retro board inside the tool of record is read by people it was not written for.</p>';
+  $("#rail").querySelectorAll("button").forEach((b) => {
+    b.onclick = () => { state.view = b.dataset.view; render(); };
+  });
+
+  $("#dayChip").innerHTML = `<span class="dot ${state.day === SPRINT.today ? "accent" : "warn"}"></span>Day <b>${state.day}</b> of ${SPRINT.days}`;
+
+  const sel = $("#personaSel");
+  if (!sel.options.length) {
+    sel.innerHTML = PERSONAS.map((p) => `<option value="${p.id}">${esc(p.name)} — ${esc(p.role)}</option>`).join("");
+    sel.onchange = () => {
+      state.persona = sel.value;
+      render();
+      const p = persona();
+      if (p.see === "none") {
+        toast("Signed in as head of people operations. The per-person filter is off for <b>everyone</b>, including her — that is the concession in section 05, not a permission level.");
+      } else {
+        toast("Signed in as " + esc(p.name) + ". Every persona sees the same ceremony archive; there is no lead-only view.");
+      }
+    };
+  }
+  sel.value = state.persona;
+}
+
+function render() {
+  renderChrome();
+  syncUrl();
+  const pane = $("#pane");
+  pane.innerHTML = ({
+    standup: viewStandup, planning: viewPlanning, burndown: viewBurndown,
+    review: viewReview, drift: viewDrift, ledger: viewLedger
+  })[state.view]();
+  ({ standup: wireStandup, planning: wirePlanning, burndown: wireBurndown,
+     review: () => {}, drift: wireDrift, ledger: () => {} })[state.view]();
+  pane.scrollIntoView({ block: "nearest" });
+}
+</script>
+
+<script>
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+/* ---------- 01 Standup ------------------------------------ */
+function viewStandup() {
+  const d = state.day;
+  const items = alreadyInRecord(d);
+  const blocked = TEAM.map((m) => openFor(m.id, d).concat(sprintTasks().filter((t) => t.o === m.id && stateOn(t, d) === "todo")))
+    .flat().filter((t) => blockedOn(t, d)).length;
+
+  const cards = TEAM.map((m) => {
+    const mv = movesFor(m.id, d);
+    const open = openFor(m.id, d);
+    const blks = sprintTasks().filter((t) => t.o === m.id && blockedOn(t, d));
+    const pts = sprintTasks().filter((t) => t.o === m.id && t.close !== null && t.close <= d).reduce((a, t) => a + t.p, 0);
+    return `
+      <article class="person${blks.length ? " blocked" : ""}">
+        <div class="person-top">
+          <span class="av">${esc(initials(m.n))}</span>
+          <span><span class="nm">${esc(m.n)}</span><br><span class="rl">${esc(m.r)}</span></span>
+          <span class="sp">${pts} pts closed</span>
+        </div>
+        ${mv.length ? `<ul class="moves">${mv.map((x) => x.kind === "block"
+          ? `<li><span class="tag block">blocked</span><span><span class="tid">${x.t.id}</span> ${esc(x.t.t)}</span></li>`
+          : `<li><span class="tag ${x.kind}">${x.now === "done" ? "closed" : x.now === "review" ? "in review" : "started"}</span><span><span class="tid">${x.t.id}</span> ${esc(x.t.t)}</span></li>`
+        ).join("")}</ul>` : `<p class="quiet">Nothing moved since day ${d - 1}. The board says so, so nobody has to.</p>`}
+        ${open.length ? `<ul class="moves">${open.map((t) =>
+          `<li><span class="tag">on today</span><span><span class="tid">${t.id}</span> ${esc(t.t)}</span></li>`).join("")}</ul>` : ""}
+        ${blks.map((t) => { const b = blockedOn(t, d); return `
+          <div class="blockbox">
+            <div class="hd">Blocked ${b.days} day${b.days > 1 ? "s" : ""} · ${t.id}</div>
+            ${esc(b.why)}
+          </div>`; }).join("")}
+        <div class="person-actions">
+          <button class="btn sm" data-act="detail" data-who="${m.id}"${persona().see === "none" ? " disabled" : ""}>Open this person's tasks</button>
+          <button class="btn sm warnb" data-act="flag" data-who="${m.id}">Flag a blocker</button>
+        </div>
+      </article>`;
+  }).join("");
+
+  return `
+    <div class="head">
+      <div class="kicker">Ceremony 01 &middot; daily standup &middot; 9 minutes</div>
+      <h2>Standup, day ${d}</h2>
+      <p>Every line below is a diff of the task record between day ${d - 1} and day ${d}. Nobody typed any of it, and nobody needs to say it out loud. The two things the record cannot know &mdash; <b>what is blocking you</b> and <b>what you want to ask for</b> &mdash; are the only inputs this screen takes.</p>
+    </div>
+
+    <div class="daystrip">
+      <span class="lbl">Replay the sprint</span>
+      ${Array.from({ length: SPRINT.days }, (_, i) => i + 1).map((n) =>
+        `<button class="daybtn" data-day="${n}" aria-current="${n === d}"${n > SPRINT.today ? " disabled title='Not reached yet — the sprint is on day 6'" : ""}>Day ${n}</button>`).join("")}
+    </div>
+
+    <div class="readout">
+      <span class="big mono">${items}</span>
+      <span class="txt"><b>${items} item${items === 1 ? "" : "s"} on this board were already in the record.</b> Before this workspace, a person read each of them aloud from a document that had been updated by hand. The audit put that at 61% of standup minutes; it now runs at 11%, and what is left is blockers &mdash; the part a record cannot hold.</span>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v">${closedBy(d, "points")}<small> / ${committedPoints() + scopeAdded(d)} pts</small></div><div class="l">Closed by end of day ${d}</div></div>
+      <div class="stat"><div class="v">${remaining(d, "points")}<small> pts</small></div><div class="l">Remaining, recomputed on read</div></div>
+      <div class="stat ${blocked ? "warn" : "ok"}"><div class="v">${blocked}</div><div class="l">Tasks blocked right now</div></div>
+      <div class="stat ok"><div class="v">0</div><div class="l">Copies of this board kept anywhere</div></div>
+    </div>
+
+    <div class="people">${cards}</div>
+
+    <p class="note"><b>Why the cards carry no per-person history.</b> Ceremony state is stored against the task id. This column is a filter computed when the page renders and thrown away afterwards, which is why a blocker reads as <i>&ldquo;T&#8209;4118 has been blocked four days&rdquo;</i> and never as <i>&ldquo;Tobias has been blocked four days.&rdquo;</i> Section 05 of the case study is the argument that produced this.</p>`;
+}
+
+function wireStandup() {
+  document.querySelectorAll(".daybtn").forEach((b) => {
+    if (b.disabled) return;
+    b.onclick = () => { state.day = +b.dataset.day; render(); };
+  });
+  document.querySelectorAll('[data-act="detail"]').forEach((b) => {
+    b.onclick = () => {
+      const m = person(b.dataset.who), d = state.day;
+      const ts = sprintTasks().filter((t) => t.o === m.id);
+      openDrawer(`
+        <h4>${esc(m.n)}</h4>
+        <p class="mono" style="color:var(--muted);font-size:12px;margin:0 0 14px">${esc(m.r)} · filter computed on read · not stored</p>
+        <table class="t"><thead><tr><th>Task</th><th>Pts</th><th>State, day ${d}</th></tr></thead><tbody>
+        ${ts.map((t) => `<tr><td><span class="mono" style="color:var(--faint)">${t.id}</span> ${esc(t.t)}</td><td class="num">${t.p}</td><td class="num">${stateOn(t, d)}</td></tr>`).join("")}
+        </tbody></table>
+        <p class="note">This panel is generated from the task rows above and disappears when you close it. There is no per-person table in the database, no per-person export, and no way for a manager to ask this system what someone did last quarter — the task history that could answer it lives in the tool of record, where it always did.</p>`);
+    };
+  });
+  document.querySelectorAll('[data-act="flag"]').forEach((b) => {
+    b.onclick = () => {
+      const m = person(b.dataset.who);
+      const open = openFor(m.id, state.day);
+      const t = open[0] || sprintTasks().find((x) => x.o === m.id && stateOn(x, state.day) !== "done");
+      if (!t) { toast("Nothing open for " + esc(m.n) + " on day " + state.day + "."); return; }
+      logWrite("blocked", t.id, "Flagged blocked from the standup board, with a reason and an ask.");
+      toast(`Wrote <b>blocked = true</b> to <b>${t.id}</b>. One of four writable fields. It is on the write ledger, and it attaches to the task — not to ${esc(m.n.split(" ")[0])}.`);
+      render();
+    };
+  });
+}
+
+/* ---------- 02 Sprint planning ---------------------------- */
+function viewPlanning() {
+  const d = state.day;
+  const cap = TEAM.reduce((a, m) => a + m.cap, 0);
+  const committed = committedPoints() + state.pulled.reduce((a, id) => {
+    const b = BACKLOG.find((x) => x.id === id);
+    return a + (state.ests[id] ?? b.p ?? 0);
+  }, 0);
+  const pct = Math.round((committed / cap) * 100);
+
+  const capRows = TEAM.map((m) => {
+    const load = sprintTasks().filter((t) => t.o === m.id).reduce((a, t) => a + t.p, 0);
+    const w = Math.min(100, (load / m.cap) * 100);
+    const over = load > m.cap;
+    return `<div class="caprow">
+      <span class="who">${esc(m.n)}</span>
+      <span class="bar"><i class="${over ? "over" : ""}" style="width:${w}%"></i></span>
+      <span class="fig">${load} / ${m.cap}${m.leave ? " ⚠" : ""}</span>
+    </div>`;
+  }).join("");
+
+  const rows = BACKLOG.map((b, i) => {
+    const inn = state.pulled.includes(b.id);
+    const est = state.ests[b.id] ?? b.p;
+    const [lo, hi, med, n] = b.sp;
+    const scale = (v) => Math.min(100, (v / 21) * 100);
+    return `<div class="blrow${inn ? " inn" : ""}">
+      <span class="rank mono">${String(i + 1).padStart(2, "0")}</span>
+      <span class="ttl">${esc(b.t)}<small>${b.id} · ${esc(b.area)}</small></span>
+      <span class="spread" title="What this squad's comparable tasks actually took">
+        <span class="rng"><i style="left:${scale(lo)}%;width:${scale(hi) - scale(lo)}%"></i><u style="left:${scale(med)}%"></u></span>
+        ${lo}–${hi}
+      </span>
+      <span class="estcell">${est === null || est === undefined
+        ? `<input class="estin mono" data-est="${b.id}" placeholder="?" inputmode="numeric">`
+        : `<span class="mono" style="color:var(--ink)">${est} pts</span>`}</span>
+      <span>${inn
+        ? `<button class="btn sm ghost" data-pull-out="${b.id}">Remove</button>`
+        : `<button class="btn sm" data-pull="${b.id}"${est === null || est === undefined ? " disabled title='Estimate it first — a person types this number'" : ""}>Pull in</button>`}</span>
+    </div>`;
+  }).join("");
+
+  return `
+    <div class="head">
+      <div class="kicker">Ceremony 02 &middot; sprint planning &middot; 55 minutes</div>
+      <h2>Planning the sprint from the same records</h2>
+      <p>The backlog order, the capacity meter and the sprint contents are one dataset seen three ways. Pulling an item in writes two of the four writable fields &mdash; <span class="badge write">sprint</span> and <span class="badge write">rank</span> &mdash; and nothing else.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v">${committed}<small> pts</small></div><div class="l">Committed this sprint</div></div>
+      <div class="stat"><div class="v">${cap}<small> pts</small></div><div class="l">Capacity &mdash; each person's own median over four sprints</div></div>
+      <div class="stat ${pct > 100 ? "warn" : "ok"}"><div class="v">${pct}%</div><div class="l">Commitment against capacity</div></div>
+      <div class="stat"><div class="v">${scopeAdded(SPRINT.days)}<small> pts</small></div><div class="l">Arrived after day 1, against 6 pts of deliberate slack</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Capacity <span class="badge derived">derived</span> <span class="sub">points per person, this sprint</span></h3>
+        <div class="cap">${capRows}</div>
+        <p class="note">Capacity is the median a person actually closed over the last four sprints, minus booked leave &mdash; <b>Imran Qureshi</b> carries two days, which is why his line is six. The squad commits to about ninety per cent of that and leaves the rest for what arrives; five points arrived, and <b>Haruki Sato</b> is two over his line because he took the 3001 hotfix on day 3. The meter says so on day 3 rather than at a retrospective five days later. It is a planning input and never a score: no view here ranks people, and no export produces a per-person row.</p>
+      </div>
+      <div class="card">
+        <h3>Sprint goal <span class="badge read">read</span></h3>
+        <p style="margin:0 0 10px;font-size:13px;color:var(--ink)">${esc(SPRINT.goal)}</p>
+        <p class="note" style="margin-top:0"><b>Why there is no suggested estimate.</b> A model that proposes story points is the demo everyone asks for, and it was cut. An estimate is a commitment a team makes to itself; the moment a machine proposes the number, the team stops owning it and velocity starts measuring the model. What shipped instead is the bar to the left of each row: <b>what this squad's comparable tasks actually took</b>, with the median marked. A person still types the number.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Backlog <span class="badge read">read</span> <span class="sub">ordered · history from the last six sprints</span></h3>
+      ${rows}
+      <p class="note">Try pulling two or three items in and watch the capacity meter and the burndown&rsquo;s scope band move together &mdash; they are reading the same rows. An unestimated item cannot be pulled in until someone types a number.</p>
+    </div>`;
+}
+
+function wirePlanning() {
+  document.querySelectorAll("[data-est]").forEach((i) => {
+    i.onchange = () => {
+      const v = parseInt(i.value, 10);
+      if (!Number.isFinite(v) || v <= 0) { toast("Story points are a positive number a person decides on."); return; }
+      state.ests[i.dataset.est] = v;
+      toast("Estimate recorded as typed. Nothing proposed it.");
+      render();
+    };
+  });
+  document.querySelectorAll("[data-pull]").forEach((b) => {
+    if (b.disabled) return;
+    b.onclick = () => {
+      const id = b.dataset.pull;
+      state.pulled.push(id);
+      logWrite("sprint", id, "Pulled into sprint 41 at planning.");
+      logWrite("rank", id, "Ranked at the end of the sprint order.");
+      toast("Pulled <b>" + id + "</b> in. Two writes: <b>sprint</b> and <b>rank</b>. The burndown scope band moved because it reads the same row.");
+      render();
+    };
+  });
+  document.querySelectorAll("[data-pull-out]").forEach((b) => {
+    b.onclick = () => {
+      const id = b.dataset.pullOut;
+      state.pulled = state.pulled.filter((x) => x !== id);
+      logWrite("sprint", id, "Removed from sprint 41.");
+      render();
+    };
+  });
+}
+
+/* ---------- 03 Burndown ----------------------------------- */
+function burndownSvg() {
+  const W = 700, H = 300, L = 42, R = 16, T = 16, B = 34;
+  const unit = state.unit;
+  const days = SPRINT.days;
+  const base = unit === "tasks" ? sprintTasks().filter((t) => t.add === 0).length : committedPoints();
+  const yMax = Math.ceil((base + 6) / 10) * 10;
+  const x = (d) => L + (d / days) * (W - L - R);
+  const y = (v) => T + (1 - v / yMax) * (H - T - B);
+
+  const upto = Math.min(state.day, SPRINT.today);
+  const act = [], scope = [];
+  for (let d = 0; d <= upto; d++) {
+    act.push([x(d), y(remaining(d, unit))]);
+    const added = unit === "tasks"
+      ? sprintTasks().filter((t) => t.add > 0 && t.add <= d).length
+      : scopeAdded(d);
+    scope.push([x(d), y(remaining(d, unit) - added), added]);
+  }
+
+  const grid = [];
+  for (let i = 0; i <= 4; i++) {
+    const v = (yMax / 4) * i;
+    grid.push(`<line class="gl" x1="${L}" y1="${y(v)}" x2="${W - R}" y2="${y(v)}"/><text class="gt" x="${L - 8}" y="${y(v) + 3.5}" text-anchor="end">${v}</text>`);
+  }
+  const xt = [];
+  for (let d = 0; d <= days; d += 2) xt.push(`<text class="gt" x="${x(d)}" y="${H - B + 18}" text-anchor="middle">${d === 0 ? "start" : "d" + d}</text>`);
+
+  const band = scope.map((p) => `${p[0]},${p[1]}`).join(" ") + " " + act.slice().reverse().map((p) => `${p[0]},${p[1]}`).join(" ");
+
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Sprint 41 burndown in ${unit}">
+    <title>Sprint 41 burndown, ${unit}. Ideal line from ${base} to zero over ten days; actual through day ${upto}; the shaded band is work added after day 1.</title>
+    ${grid.join("")}${xt.join("")}
+    <polygon points="${band}" fill="var(--warn)" opacity="0.22"/>
+    <line x1="${x(0)}" y1="${y(base)}" x2="${x(days)}" y2="${y(0)}" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="5 5"/>
+    <polyline points="${act.map((p) => p.join(",")).join(" ")}" fill="none" stroke="${unit === "tasks" ? "var(--good)" : "var(--accent)"}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${act.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i === act.length - 1 ? 4 : 2.6}" fill="${unit === "tasks" ? "var(--good)" : "var(--accent)"}"/>`).join("")}
+    <text class="lb" x="${x(upto) + 8}" y="${y(remaining(upto, unit)) - 8}">${remaining(upto, unit)} ${unit === "tasks" ? "tasks" : "pts"} left</text>
+  </svg>`;
+}
+
+function viewBurndown() {
+  const d = Math.min(state.day, SPRINT.today);
+  const idealPts = Math.round((committedPoints() * (1 - d / SPRINT.days)) * 10) / 10;
+  const med = medianClosedSize(d);
+  return `
+    <div class="head">
+      <div class="kicker">Ceremony 03 &middot; the line everyone looks at</div>
+      <h2>Burndown, recomputed on read</h2>
+      <p>Nothing on this chart is stored. Every point is summed from the task rows when the page renders, which is why it cannot become the artefact that disagrees with the record &mdash; the failure that put fifteen of the audit&rsquo;s sixty-one bad rows on a burndown chart.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="v">${remaining(d, "points")}<small> pts</small></div><div class="l">Remaining, end of day ${d}</div></div>
+      <div class="stat"><div class="v">${idealPts}<small> pts</small></div><div class="l">Where the ideal line sits</div></div>
+      <div class="stat ${scopeAdded(d) / committedPoints() > 0.15 ? "warn" : ""}"><div class="v">${Math.round((scopeAdded(d) / committedPoints()) * 100)}%</div><div class="l">Scope added after day 1</div></div>
+      <div class="stat ok"><div class="v">${med}<small> pts</small></div><div class="l">Median size of a closed task &mdash; the guardrail</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Sprint 41 <span class="badge derived">derived</span>
+        <span class="sub">count in</span>
+        <span class="toggle" role="group" aria-label="Burndown unit">
+          <button data-unit="points" aria-pressed="${state.unit === "points"}">Story points</button>
+          <button data-unit="tasks" aria-pressed="${state.unit === "tasks"}">Task count</button>
+        </span>
+      </h3>
+      <div class="chartwrap">${burndownSvg()}</div>
+      <div class="legend">
+        <span><i class="swatch"></i> Remaining, actual</span>
+        <span><i class="swatch ideal"></i> Ideal from the commitment</span>
+        <span><i class="swatch scope"></i> Work added after day 1</span>
+      </div>
+      <p class="note"><b>Why both units are here.</b> A burndown counted in tasks rewards closing small ones, and the cheapest way to make the line look right is to split work until it is. So the product shows both and watches the gap: when the task line falls faster than the points line, someone is slicing. Sprint 41&rsquo;s median closed task is <b>${med} points</b>, unchanged across the four sprints since launch &mdash; the guardrail the case study reports, and the reason the adoption number is worth anything.</p>
+    </div>
+
+    <div class="card">
+      <h3>What moved the line</h3>
+      <table class="t"><thead><tr><th>Day</th><th>Closed</th><th>Pulled in</th><th>Remaining</th></tr></thead><tbody>
+      ${Array.from({ length: d }, (_, i) => i + 1).map((n) => {
+        const closed = sprintTasks().filter((t) => t.close === n);
+        const added = sprintTasks().filter((t) => t.add === n);
+        return `<tr>
+          <td class="num">Day ${n}</td>
+          <td>${closed.length ? closed.map((t) => `<span class="mono" style="color:var(--faint)">${t.id}</span> ${esc(t.t)} <span class="mono" style="color:var(--good)">+${t.p}</span>`).join("<br>") : "—"}</td>
+          <td>${added.length ? added.map((t) => `<span class="mono" style="color:var(--faint)">${t.id}</span> ${esc(t.t)} <span class="mono" style="color:var(--warn)">+${t.p}</span>`).join("<br>") : "—"}</td>
+          <td class="num">${remaining(n, "points")} pts</td>
+        </tr>`;
+      }).join("")}
+      </tbody></table>
+    </div>`;
+}
+
+function wireBurndown() {
+  document.querySelectorAll("[data-unit]").forEach((b) => {
+    b.onclick = () => { state.unit = b.dataset.unit; render(); };
+  });
+}
+
+/* ---------- 04 Sprint review ------------------------------ */
+function viewReview() {
+  const d = state.day;
+  const done = sprintTasks().filter((t) => t.close !== null && t.close <= d).sort((a, b) => a.close - b.close);
+  const open = sprintTasks().filter((t) => t.close === null && t.add <= d);
+  return `
+    <div class="head">
+      <div class="kicker">Ceremony 04 &middot; sprint review</div>
+      <h2>What actually closed</h2>
+      <p>The review agenda is the closed list, in the order it closed, read straight off the record. Preparing it takes nobody any time, which is the only reason it is accurate.</p>
+    </div>
+
+    <div class="card">
+      <h3>Sprint goal</h3>
+      <p style="margin:0;font-size:13.5px;color:var(--ink)">${esc(SPRINT.goal)}</p>
+      <p class="note">Half of it is done: the provisioning profile loader (T‑4115) and its reference docs (T‑4139) both closed. OTA resume (T‑4118) has been blocked on the signing service since day 3 and will not make the sprint. The desk states that; it does not soften it, and it does not let anyone re-order the goal after the fact.</p>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Closed <span class="sub">${done.length} tasks · ${done.reduce((a, t) => a + t.p, 0)} points</span></h3>
+        <table class="t"><thead><tr><th>Day</th><th>Task</th><th>Owner</th><th>Pts</th></tr></thead><tbody>
+        ${done.map((t) => `<tr><td class="num">${t.close}</td><td><span class="mono" style="color:var(--faint)">${t.id}</span> ${esc(t.t)}</td><td>${esc(person(t.o).n.split(" ")[0])}</td><td class="num">${t.p}</td></tr>`).join("")}
+        </tbody></table>
+      </div>
+      <div class="card">
+        <h3>Still open <span class="sub">${open.length} tasks · ${open.reduce((a, t) => a + t.p, 0)} points</span></h3>
+        <table class="t"><thead><tr><th>Task</th><th>State</th><th>Pts</th></tr></thead><tbody>
+        ${open.map((t) => { const b = blockedOn(t, d); return `<tr>
+          <td><span class="mono" style="color:var(--faint)">${t.id}</span> ${esc(t.t)}${b ? `<br><span style="color:var(--crit);font-size:11.5px">blocked ${b.days} days · ${esc(b.why)}</span>` : ""}</td>
+          <td class="num">${stateOn(t, d)}</td><td class="num">${t.p}</td></tr>`; }).join("")}
+        </tbody></table>
+      </div>
+    </div>
+
+    <p class="note">Carry-over is not written here. Whatever is still open when the sprint ends returns to the backlog at its existing rank, and re-ranking it is a decision taken at the next planning &mdash; by a person, in the ceremony, on the record.</p>`;
+}
+
+/* ---------- 05 Drift check -------------------------------- */
+function viewDrift() {
+  const old = state.oldWay;
+  const rows = AUDIT.rows.map((r) => `
+    <div class="artefact ${old ? "old" : "zero"}">
+      <span class="nm">${esc(r.a)}<small>${old ? esc(r.eg) : "A view of the task record. There is no second copy to disagree."}</small></span>
+      <span class="fig">${old ? r.checked : "—"}<small>rows checked</small></span>
+      <span class="fig d">${old ? r.off : "0"}<small>disagreed</small></span>
+    </div>`).join("");
+
+  return `
+    <div class="head">
+      <div class="kicker">The product's own scoreboard</div>
+      <h2>Drift check</h2>
+      <p>Before this workspace, three artefacts were maintained by hand beside the task record. I diffed each of them against the record at the moment its ceremony ended, across six sprints. ${AUDIT.off} of ${AUDIT.checked} rows disagreed &mdash; and every one of them was a decision somebody made from the wrong number.</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat ${old ? "warn" : "ok"}"><div class="v">${old ? AUDIT.off : 0}</div><div class="l">Rows disagreeing with the record</div></div>
+      <div class="stat"><div class="v">${old ? 3 : 0}<small> of 3</small></div><div class="l">Ceremony artefacts maintained by hand</div></div>
+      <div class="stat"><div class="v">${old ? AUDIT.sprints : 4}</div><div class="l">${old ? "Sprints audited" : "Sprints since launch"}</div></div>
+      <div class="stat"><div class="v">${old ? "28%" : "0%"}</div><div class="l">Share of checked rows that disagreed</div></div>
+    </div>
+
+    <div class="card">
+      <h3>${old ? "Sprints 27–32 — three hand-maintained artefacts" : "Sprint 41 — three views of one record"}
+        <span class="sub">${old ? "audit" : "live"}</span></h3>
+      ${rows}
+      <div style="margin-top:12px">
+        <button class="btn ${old ? "primary" : ""}" id="oldBtn">${old ? "Back to the live sprint" : "Show the old way — replay the audit"}</button>
+      </div>
+      <p class="note"><b>Zero is not an achievement, and the case study says so.</b> Drift is zero because the second copy no longer exists, which is what removing it means &mdash; not a thing the software does well. The number worth reporting is what removing it cost and what it bought: <b>${AUDIT.off} bad rows a quarter gone</b>, a standup down from eighteen minutes to nine, and a planning meeting down from ninety-five to fifty-five. Those are on the case study&rsquo;s metric strip; this panel is only here so the claim can be checked rather than believed.</p>
+    </div>`;
+}
+
+function wireDrift() {
+  $("#oldBtn").onclick = () => { state.oldWay = !state.oldWay; render(); };
+}
+
+/* ---------- 06 Write ledger ------------------------------- */
+function viewLedger() {
+  return `
+    <div class="head">
+      <div class="kicker">The boundary, written down</div>
+      <h2>Write ledger</h2>
+      <p>The Gantt dashboard next door is read-only permanently, and that was the right call there. A ceremony is different: its entire purpose is to change state, and a read-only ceremony tool sends people to a second tab &mdash; where the hand-maintained document comes straight back. So this one writes, narrowly, through a single allow-list module, and lists every write it makes.</p>
+    </div>
+
+    <div class="allow">
+      <div class="card">
+        <h3>Writable <span class="badge write">write</span> <span class="sub">four fields, one module</span></h3>
+        <ul class="lst">${WRITABLE.map(([f, w]) => `<li><span class="mk y">✓</span><span><b style="color:var(--ink)">${esc(f)}</b> &mdash; ${esc(w)}</span></li>`).join("")}</ul>
+      </div>
+      <div class="card">
+        <h3>Never writable <span class="badge read">read</span> <span class="sub">deep-links to the tool of record</span></h3>
+        <ul class="lst">${NOT_WRITABLE.map(([f, w]) => `<li><span class="mk n">✕</span><span><b style="color:var(--ink)">${esc(f)}</b> &mdash; ${esc(w)}</span></li>`).join("")}</ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>This session <span class="sub">${state.writes.length} write${state.writes.length === 1 ? "" : "s"}</span></h3>
+      ${state.writes.length ? `<table class="t"><thead><tr><th>Field</th><th>Task</th><th>What</th><th>By</th><th>When</th></tr></thead><tbody>
+        ${state.writes.map((w) => `<tr><td class="num" style="color:var(--warn)">${esc(w.field)}</td><td class="num">${esc(w.target)}</td><td>${esc(w.detail)}</td><td>${esc(w.by)}</td><td class="num">${esc(w.at)}</td></tr>`).join("")}
+      </tbody></table>` : `<p class="quiet">No writes yet. Flag a blocker on the standup board, or pull a backlog item into the sprint, and it will appear here.</p>`}
+      <p class="note">The same ledger runs in the product, visible to everyone in the squad rather than to leads. It is the answer to the fair question <i>&ldquo;what did this thing just do to my workspace?&rdquo;</i> &mdash; and it is what made the four-field boundary a claim someone could check instead of a promise I made in a review.</p>
+    </div>`;
+}
+</script>
+
+<script>
+/* boot: honour ?tab= and ?day= so a case study can deep-link a screen */
+(function () {
+  const q = new URLSearchParams(location.search || "");
+  const tab = q.get("tab");
+  if (tab && VIEWS.some((v) => v.id === tab)) state.view = tab;
+  const day = parseInt(q.get("day"), 10);
+  if (Number.isFinite(day) && day >= 1 && day <= SPRINT.today) state.day = day;
+  const who = q.get("as");
+  if (who && PERSONAS.some((p) => p.id === who)) state.persona = who;
+  $("#scrim").onclick = closeDrawer;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  render();
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

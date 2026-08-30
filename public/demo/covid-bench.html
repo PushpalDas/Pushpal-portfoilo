@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Non-contact Monitoring — The Bench</title>
+<meta name="description" content="The bench feasibility study behind Ricky Kids' non-contact COVID monitoring: which parameters a non-contact channel could obtain, under which conditions, and how many gowning cycles that would actually remove. An engineering study; no patient took part.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Shared shell for the Ricky Kids demos. Palette and type are
+   inherited from the portfolio's case-study system so the demos
+   read as one family with the case studies that link them.
+   Single-theme by design: these are bench tools, dark, with
+   every colour painted so nothing borrows a host background.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--body);
+  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input, textarea { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app {
+  min-height: 100vh; max-width: 1340px; margin: 0 auto;
+  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
+  display: flex; flex-direction: column;
+}
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+
+.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params .spacer { flex: 1; }
+
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
+.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.segmented button:last-child { border-right: 0; }
+.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented button:hover { color: var(--ink); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] span { color: var(--accent); }
+
+.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
+.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
+.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
+.provenance b { color: var(--body); font-weight: 500; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
+  letter-spacing: .13em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+}
+.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
+.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
+.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
+.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
+.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
+.btn:disabled { opacity: .38; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
+.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
+.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
+.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
+.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
+.btn.ghost { background: transparent; }
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
+.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+
+.note {
+  margin-top: 14px; font-size: 12.5px; color: var(--muted);
+  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+}
+.note b { color: var(--body); font-weight: 500; }
+.note.warn { border-left-color: var(--warn); }
+.note.crit { border-left-color: var(--crit); }
+.note.good { border-left-color: var(--good); }
+
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+table.sheet thead th {
+  background: var(--surface-2); color: var(--muted);
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .11em; text-transform: uppercase;
+  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.sheet tbody tr:last-child td { border-bottom: 0; }
+table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
+table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+table.sheet .name { color: var(--ink); }
+table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
+table.sheet tfoot .num { text-align: right; }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
+.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
+.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
+
+.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
+.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
+.meterbar.good > i { background: var(--good); }
+.meterbar.crit > i { background: var(--crit); }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
+
+.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.foot p b { color: var(--body); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.crit { border-color: var(--crit-dim); }
+
+@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+</style>
+
+<style>
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 18px; align-items: start; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+.matrix { display: grid; grid-template-columns: 176px repeat(4, 1fr); gap: 4px; }
+.matrix .h { font-family: var(--mono); font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); display: grid; place-items: center; text-align: center; padding: 6px 3px; }
+.matrix .rh { justify-content: flex-start; text-align: left; font-size: 12.5px; font-family: var(--sans); letter-spacing: 0; text-transform: none; color: var(--body); padding-left: 2px; }
+.matrix .rh small { display: block; font-family: var(--mono); font-size: 9.5px; color: var(--faint); text-transform: uppercase; letter-spacing: .08em; }
+.matrix .cell { border: 1px solid var(--line); border-radius: 7px; padding: 11px 4px; text-align: center; font-family: var(--mono); font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; }
+.matrix .cell.pass { border-color: var(--good-dim); background: var(--good-wash); color: var(--good); }
+.matrix .cell.marginal { border-color: var(--warn-dim); background: var(--warn-wash); color: var(--warn); }
+.matrix .cell.fail { border-color: var(--crit-dim); background: var(--crit-wash); color: var(--crit); }
+.matrix .cell.none { border-color: #2b2b36; background: #101015; color: var(--faint); }
+.matrix .cell.here { outline: 2px solid var(--accent); outline-offset: 1px; }
+.matrix .rh.off { opacity: .38; }
+.matrix .cell.off { opacity: .28; }
+
+.paramrow { display: flex; align-items: center; gap: 9px; }
+.paramrow input { accent-color: var(--accent); width: 15px; height: 15px; }
+
+.round { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; }
+.round .big { font-family: var(--mono); font-size: 38px; font-weight: 600; line-height: 1; letter-spacing: -.02em; }
+.round .big.ok { color: var(--good); } .round .big.no { color: var(--crit); }
+.round .sub { font-size: 13px; color: var(--body); margin-top: 8px; }
+
+.entrybar { display: flex; height: 28px; border-radius: 7px; overflow: hidden; border: 1px solid var(--line); margin-top: 10px; }
+.entrybar > span { display: grid; place-items: center; font-family: var(--mono); font-size: 10px; white-space: nowrap; overflow: hidden; min-width: 62px; }
+.entrybar .saved { background: var(--good-wash); color: var(--good); }
+.entrybar .stay { background: rgba(91,124,250,.22); color: #cdd7ff; }
+.entrybar .other { background: var(--surface-2); color: var(--muted); }
+
+.dial { display: grid; grid-template-columns: 112px 1fr 66px; gap: 10px; align-items: center; padding: 6px 0; }
+.dial label { font-size: 13px; color: var(--body); }
+.dial label small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.dial .v { font-family: var(--mono); font-size: 14px; color: var(--ink); text-align: right; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Isolation wards</span>
+        <h1>Non-contact monitoring &mdash; the bench</h1>
+      </div>
+      <span class="chip"><span class="dot accent"></span>24 bench sessions &middot; 6 healthy volunteers</span>
+      <span class="chip crit"><span class="dot crit"></span><b>0</b> patients, ever</span>
+      <span class="chip" id="stateChip"></span>
+    </div>
+    <div class="params">
+      <span class="plabel">Condition</span>
+      <div class="segmented" id="conds" role="group" aria-label="Bench condition"></div>
+      <span class="spacer"></span>
+      <span class="chip"><span class="dot"></span>Reference: a commercial contact monitor</span>
+    </div>
+    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
+      <b>This is an engineering agreement study, not a clinical one.</b> It measures how far each non-contact channel sits from a contact instrument on the same volunteer in the same minute. It says nothing about diagnosis, and nothing here was ever used on a patient.</p>
+  </header>
+
+  <main class="pane">
+    <div class="pane-head">
+      <p class="kicker">Bench feasibility &middot; the premise, not the prototype</p>
+      <h2>How many gowning cycles does this actually remove?</h2>
+      <p class="provenance">Fifty-eight per cent of entries into an isolation room exist only to read numbers off a patient, and each one costs about nine and a half minutes of gowning and doffing around a minute of measurement. <b>A device removes that entry only if it removes every reason to go in.</b></p>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <h3 style="margin:0 0 4px;font-size:14px;color:var(--ink);font-weight:600">What a non-contact channel could obtain</h3>
+        <p style="margin:0 0 12px;font-size:12.5px;color:var(--muted)">Tick the parameters this round has to report. The highlighted column is the bench condition selected above.</p>
+        <div class="matrix" id="matrix"></div>
+        <p class="note" id="matrixNote"></p>
+      </div>
+
+      <div>
+        <div class="round">
+          <div class="big" id="skipV">—</div>
+          <div class="sub" id="skipSub"></div>
+          <div class="entrybar" id="entrybar"></div>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--muted)">
+            <span>observation <b style="color:var(--ink)">58%</b></span>
+            <span>medication <b style="color:var(--ink)">27%</b></span>
+            <span>request <b style="color:var(--ink)">15%</b></span>
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:14px 16px;margin-top:14px" id="dials"></div>
+
+        <div class="tiles" style="grid-template-columns:1fr;margin-top:14px">
+          <div class="tile" id="minTile"><div class="v" id="minV">—</div><div class="l">Staff minutes saved per patient per day</div><div class="p">9.5 min per observation entry</div></div>
+          <div class="tile crit"><div class="v">0 of 2</div><div class="l">Escalation parameters reachable without contact</div><div class="p">oxygen saturation, blood pressure</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="verdict" style="margin-top:18px"></div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>The feasibility question from the case study, made arithmetic &mdash; <b>not the device</b>. There is no hardware here and no reading is taken. It replays which channels the bench could and could not obtain, and turns that into the only number that mattered: how many entries into a room the design would actually have removed.</p>
+      </div>
+      <div>
+        <h5>The finding, in one move</h5>
+        <p>Leave every parameter ticked, as a standard round requires, and the saving is zero at every condition. <b>Oxygen saturation and blood pressure have no non-contact route at all</b>, so somebody still gowns up and goes in.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p>Untick those two and the device looks excellent. That is exactly the framing our own materials used, and it is the one the study does not support.</p>
+      </div>
+    </div>
+    <p class="conf">Student research at SRM Kattankulathur with collaborators at Jadavpur University and VIT Vellore. This is an engineering feasibility study on a bench: six healthy volunteers, scripted conditions, a commercial contact monitor as reference. No patient took part at any point, nothing here was clinically evaluated, and no diagnostic, therapeutic or clinical claim is made or implied. Every figure on this page is invented for this sample and reconciled with the case study.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — the status grid published in the case study.
+   pass = within the agreed margin · marginal = outside it but
+   still tracking · fail = no usable agreement · none = there
+   was no non-contact path we could build at all.
+   ============================================================ */
+const CONDS = [
+  { k: "still", n: "Still", sub: "seated, 1.2 m" },
+  { k: "small", n: "Small movement", sub: "shifting" },
+  { k: "repos", n: "Repositioning", sub: "turning in bed" },
+  { k: "far", n: "Beyond 2 m", sub: "across the room" }
+];
+
+const PARAMS = [
+  { k: "temp",  n: "Skin temperature", sub: "infrared element", cells: ["pass", "pass", "marginal", "marginal"] },
+  { k: "resp",  n: "Respiration rate", sub: "camera, chest motion", cells: ["pass", "marginal", "fail", "fail"] },
+  { k: "pulse", n: "Pulse rate", sub: "camera, colour change", cells: ["marginal", "fail", "fail", "fail"] },
+  { k: "spo2",  n: "Oxygen saturation", sub: "escalation parameter", cells: ["none", "none", "none", "none"] },
+  { k: "bp",    n: "Blood pressure", sub: "escalation parameter", cells: ["none", "none", "none", "none"] }
+];
+
+const MIX = { obs: 58, med: 27, req: 15 };
+const ENTRY_MIN = 9.5;
+
+const DIALS = [
+  { k: "rounds", n: "Observation rounds", sub: "per patient per day", min: 2, max: 24, val: 12, fmt: (v) => v + " / day" }
+];
+
+const state = { cond: "still", need: { temp: true, resp: true, pulse: true, spo2: true, bp: true }, rounds: 12 };
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const ci = () => CONDS.findIndex((c) => c.k === state.cond);
+const needed = () => PARAMS.filter((p) => state.need[p.k]);
+/* a round is skippable only if every parameter it reports clears
+   the agreed margin at this condition — marginal is not clear */
+const blocking = () => needed().filter((p) => p.cells[ci()] !== "pass");
+const skippable = () => needed().length > 0 && blocking().length === 0;
+</script>
+<script>
+function renderConds() {
+  $("conds").innerHTML = CONDS.map((c) =>
+    `<button data-c="${c.k}" aria-pressed="${state.cond === c.k}"><b>${esc(c.n)}</b><span>${esc(c.sub)}</span></button>`).join("");
+  document.querySelectorAll("[data-c]").forEach((b) => (b.onclick = () => { state.cond = b.dataset.c; render(); }));
+}
+
+function renderMatrix() {
+  const i = ci();
+  const LABEL = { pass: "within margin", marginal: "outside margin", fail: "no agreement", none: "no path exists" };
+  $("matrix").innerHTML =
+    `<span class="h"></span>` + CONDS.map((c, j) => `<span class="h">${esc(c.n)}${j === i ? " ●" : ""}</span>`).join("") +
+    PARAMS.map((p) => {
+      const on = state.need[p.k];
+      return `<span class="rh ${on ? "" : "off"}"><span class="paramrow"><input type="checkbox" id="p-${p.k}" ${on ? "checked" : ""} aria-label="${esc(p.n)}"><span>${esc(p.n)}<small>${esc(p.sub)}</small></span></span></span>` +
+        p.cells.map((v, j) => `<span class="cell ${v} ${j === i ? "here" : ""} ${on ? "" : "off"}">${LABEL[v]}</span>`).join("");
+    }).join("");
+  PARAMS.forEach((p) => ($("p-" + p.k).onchange = (e) => { state.need[p.k] = e.target.checked; render(); }));
+  const b = blocking();
+  $("matrixNote").innerHTML = b.length
+    ? `<b>${b.length} of ${needed().length} required parameters do not clear the margin at &ldquo;${esc(CONDS[ci()].n.toLowerCase())}&rdquo;:</b> ${b.map((x) => esc(x.n.toLowerCase())).join(", ")}. A round reporting any of them still needs somebody in the room.`
+    : needed().length
+      ? `<b>Every required parameter clears the margin at this condition.</b> A round reporting only these could be taken from outside the room.`
+      : `<b>Nothing selected.</b> Tick at least one parameter a round has to report.`;
+}
+
+function renderDials() {
+  $("dials").innerHTML = DIALS.map((d) =>
+    `<div class="dial"><label for="d-${d.k}">${esc(d.n)}<small>${esc(d.sub)}</small></label>
+     <input type="range" id="d-${d.k}" min="${d.min}" max="${d.max}" value="${state[d.k]}" aria-label="${esc(d.n)}">
+     <span class="v" id="v-${d.k}">${d.fmt(state[d.k])}</span></div>`).join("");
+  DIALS.forEach((d) => ($("d-" + d.k).oninput = (e) => { state[d.k] = Number(e.target.value); render(); }));
+}
+
+function renderRound() {
+  const ok = skippable();
+  const savedPct = ok ? MIX.obs : 0;
+  $("skipV").className = "big " + (ok ? "ok" : "no");
+  $("skipV").textContent = savedPct + "%";
+  $("skipSub").innerHTML = ok
+    ? `of entries removed &mdash; every routine observation could be taken from outside the room.`
+    : `of entries removed. The observation round still has to happen, so the gowning cycle happens with it.`;
+  $("entrybar").innerHTML =
+    (ok ? `<span class="saved" style="flex:${MIX.obs}">observation saved</span>` : `<span class="stay" style="flex:${MIX.obs}">observation stays</span>`) +
+    `<span class="other" style="flex:${MIX.med}">medication</span><span class="other" style="flex:${MIX.req}">request</span>`;
+  const mins = ok ? Math.round(state.rounds * ENTRY_MIN) : 0;
+  $("minV").textContent = mins ? mins + " min" : "0";
+  $("minTile").className = "tile " + (mins ? "good" : "crit");
+  const c = $("stateChip");
+  c.className = "chip " + (ok ? "good" : "crit");
+  c.innerHTML = `<span class="dot ${ok ? "good" : "crit"}"></span>${ok ? "Round can be taken remotely" : "Somebody still goes in"}`;
+}
+
+function renderVerdict() {
+  const b = blocking(), noPath = b.filter((x) => x.cells[ci()] === "none");
+  let html;
+  if (!needed().length) {
+    html = `<div class="note"><b>Tick the parameters a round has to report.</b> A standard observation in these wards reports all five.</div>`;
+  } else if (noPath.length) {
+    html = `<div class="note crit"><b>${noPath.map((x) => esc(x.n.toLowerCase())).join(" and ")} ${noPath.length > 1 ? "have" : "has"} no non-contact route at all</b> &mdash; not a worse reading, no reading. Those are the two parameters staff escalate on, and they are the reason this study concluded against its own premise. No amount of standoff, sensor or processing changes a column that was never buildable; a morning's reading before the stand was designed would have said so.</div>`;
+  } else if (b.length) {
+    html = `<div class="note warn"><b>${b.map((x) => esc(x.n.toLowerCase())).join(", ")} sit outside the agreed margin at this condition.</b> The channel is still tracking, which is the tempting result &mdash; the agreement bar was set under the movement a real patient produces rather than under stillness, precisely because anyone can pass stillness.</div>`;
+  } else {
+    html = `<div class="note good"><b>This round could be taken from outside the room</b> &mdash; ${Math.round(state.rounds * ENTRY_MIN)} staff minutes per patient per day, and the gowning cycle with them. It is also not the round these wards run: a standard observation reports oxygen saturation and blood pressure, and this configuration reports neither.</div>`;
+  }
+  $("verdict").innerHTML = html;
+}
+
+let toastT;
+function toast(msg, crit) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (crit ? " crit" : "");
+  clearTimeout(toastT); toastT = setTimeout(() => (t.className = "toast"), 5200);
+}
+
+function render() { renderConds(); renderMatrix(); renderDials(); renderRound(); renderVerdict(); }
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  if (CONDS.some((c) => c.k === q.get("cond"))) state.cond = q.get("cond");
+  const need = q.get("need");
+  if (need !== null) {
+    const set = new Set(need.split(",").filter(Boolean));
+    PARAMS.forEach((p) => (state.need[p.k] = set.has(p.k)));
+  }
+  const r = Number(q.get("rounds"));
+  if (r >= 2 && r <= 24) state.rounds = r;
+  render();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

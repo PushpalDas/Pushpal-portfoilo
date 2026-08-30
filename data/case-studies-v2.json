@@ -3937,7 +3937,7 @@
             ],
             "note": "The review stage, running. The reviewer’s scores are what the model emitted; the approve-or-reject verdict beside them is not stored — it is computed on the page by the product’s own rule, so changing any score changes the verdict. The diff is the same line-level comparison the product uses, and it shows the one change that matters: the sentence naming an owner for the release channel replaced by an explicit unknown that names the question it came from. The brief, the plan and the objections are an invented run.",
             "image": "/static/images/project/prd-review.jpg",
-            "alt": "The review stage on round two: the planner and reviewer models named at the top with the pairing marked distinct, a ten-criterion scorecard reading zero fail and two partial with the reviewer’s written objection under each, the line diff against the previous draft beside it, and the plan below marked approved and frozen at version two.",
+            "alt": "The review stage on round two: the planner and reviewer models named at the top with the pairing marked distinct, a ten-criterion scorecard reading zero fail and two partial with the reviewer’s written note under every criterion it objected to, the line diff against the previous draft beside it, and the plan below marked approved and frozen at version two.",
             "href": "/demo/prd-os?view=review&round=2",
             "hrefLabel": "Open this review in the demo"
           },
@@ -5130,7 +5130,7 @@
             "kind": "figure",
             "chart": {
               "form": "groupedHBar",
-              "title": "Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, two internal engineering documents yield 8 of 9 with 1",
+              "title": "Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4",
               "max": 16,
               "unit": "count, one run each",
               "seriesNames": [
@@ -5141,17 +5141,17 @@
                 {
                   "name": "Candidate concepts found",
                   "a": 7,
-                  "b": 9
+                  "b": 6
                 },
                 {
                   "name": "Claimable without more detail",
                   "a": 1,
-                  "b": 8
+                  "b": 5
                 },
                 {
                   "name": "Parameters quarantined",
                   "a": 15,
-                  "b": 1
+                  "b": 4
                 }
               ]
             },
@@ -6694,15 +6694,11 @@
       "timeline": "Jan 2024 – Dec 2025",
       "stage": "In production — launched December 2025"
     },
-    "confidentiality": "Silicon work. The part number, specification, launch announcement and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.",
+    "confidentiality": "Silicon work. The part number, specification and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.",
     "evidence": [
       {
         "label": "Wi-R NFE product page",
         "url": "https://www.ixana.ai/products/chips/wi-r-nfe"
-      },
-      {
-        "label": "XA-NFE2001 launch announcement",
-        "url": "https://www.ixana.ai/news/ixana-launches-wi-r-nfe"
       },
       {
         "label": "Technical paper (arXiv)",
@@ -7077,7 +7073,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part number, specification, launch announcement and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation."
   },
   "wi-r-reference-designs": {
     "slug": "wi-r-reference-designs",
@@ -12063,7 +12059,7 @@
               [
                 "Occlusion would be the main error",
                 "Two-up flagged as three-up dominates errors",
-                "64 of 105 errors"
+                "64 of 114 errors"
               ],
               [
                 "Footage would be usable throughout",
@@ -12323,7 +12319,7 @@
               "colLabel": "Model said",
               "marginLabel": "correct"
             },
-            "caption": "Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones, not the whole error set: the remaining 27 of the 105 are 19 single-rider clips over-counted to two and 8 clips where the motorcycle detector missed the vehicle outright, so no count was written at all."
+            "caption": "Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones, not the whole error set: the remaining 36 of the 114 are 20 two-rider clips under-counted to one, 12 single-rider clips called two, 3 called three or more, and 1 three-up clip called a single rider."
           },
           {
             "kind": "definition",

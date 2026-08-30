@@ -246,3 +246,67 @@ DOI ("the demo is the paper" stays first).
 **Copy-edit pass: clean.** 17 rows counted ✓. Table render check in Phase 5.
 
 ## Phase 1 status: COMPLETE for all 37 + appendix. Zero TODO(pushpal) notes remain in source.
+
+
+---
+
+# PHASE 2 — parity results (in-repo demos, verified by line-level read + re-execution)
+
+## In-repo demo parity verdicts
+- **P6 neuroadapt**: all numeric claims MATCH (0.82/0.82/1.00/8.6; CV 3.16/1.07; 102/120=0.85;
+  87%; flat correlogram verified by execution). FIXED: ?unit range-checked (was white-screening).
+  Phase-4 notes: ?metric/?format unvalidated; view=ask is DEMO-ONLY (acceptable).
+- **P10 quantum-simulator**: 32 tests (22+10) pass re-executed; 11-qubit refusal asserted; deep
+  links MATCH. FIXED: three residual "quadruples/four times" strings -> doubling.
+- **P11 procurement-desk**: dataset exact (23/21/2/0; median 0.6 d; 4 blocked; 4 exceptions).
+  Phase-4: gate 3 "1 of 1" hard-coded (count from s.silent); PR-2043 delivered so "next action
+  names a person" fails on the s06 deep link (re-seed in-flight w/ 7 transitions); syncUrl strips
+  item/amount/try.
+- **P15 team-performance**: all MATCH (84%=32/38; 6/8/7 steps; no-cause faller 14->10->6).
+  Phase-4: honor ?as before default persona so T-2214 signing refusal is reachable.
+- **P16 scrum-desk**: all MATCH (218/61; 82/24 71/22 65/15; 2 blocked; T-4141 2 days).
+- **P18 clickup-audit**: all MATCH (380 entries, answer at 268; 9 July records; 9.2%; 401 on
+  tamper; Wed 26 Aug 2026 verified). Phase-4: validate ?field.
+- **P21 salary-bands**: 3 banded/4 refused; 56k spread; suppression 4<8; zero-weight blr rows all
+  MATCH. Phase-4 fixes: (a) self-reported must carry the lowest weight (S5 recruiter currently
+  lower), (b) one global per-method weight table, (c) band-strip P25/P50 + floorCheck strings
+  through fig() or soften "every figure clickable", (d) cite the hard-coded "25th" numeral.
+- **P22 prd-os**: 40 rules pass; 44->41 rows; 6m40s/3.2->1.4/68% re-executed; SameModelError.
+  FIXED (case study): scorecard alt text -> "written note under every criterion it objected to".
+- **P23 ai-lawyer**: costs/times/corpus re-executed ($1.77/$2.31; 5m12s; 91%<->14%). FIXED (case
+  study): engineering-doc run 8-of-9-with-1 -> 5-of-6-with-4 (demo values load-bearing).
+  Phase-4: add 507-test (447+60) stat line; align gaps-tab copy (support level vs 112(a) grade);
+  validate ?tab.
+- **P30 ornithopter**: FIXED: stale bird rates -> 29/67/83/88; two-thirds headline; speed dial
+  capped 12 m/s; ?preset=honest deep-links; aria-pressed tracked. 103-min deficit cross-check ok.
+- **P32 radar-error-budget**: swings/totals MATCH (1.46/5.73 re-derived). Phase-4: add 0.5 dB
+  positioning pass mark (s05 guardrail); name u-blox NEO-M8N on bom preset; add the four
+  reported->attributed pairs (1.8->1.5, 1.4->1.1, 1.1->0.9, 2.2->1.9); asymmetric bounds;
+  margin framing for demanded 0.35 vs closure 0.36.
+- **P33 covid-bench**: all-ticked -> zero saving in every condition MATCHES. Phase-4: footer
+  "untick those two" needs pulse too; state "four of these five" design scope; add +/-1.4 breaths,
+  3.5/4.8 phase split, and a real gowning-cycles count.
+- **P34 rider-count**: privacy invariant VERIFIED (zero img/video/canvas/base64/url() anywhere).
+  FIXED (case study): 105 -> 114 with real remainder (20/12/3/1). Phase-4: validate ?cell;
+  surface the 31% drop-and-remount figure; 1,840 = daylight+overcast set (framing note).
+- **P36 sludge-envelope**: cleanest — densities 1.02/1.18/1.42; margins 0.03/0.27 verbatim.
+  Phase-4: stall-events vs runs denominators; bind 7-of-9 to tether extraction.
+
+## External surface verdicts (WebFetch batch)
+- ixana.ai chips/wi-r-ban: YR31 + YR23 spec rows MATCH exactly. products/dev-kits: both kits
+  listed. chips/wi-r-nfe: XA-NFE2001 row MATCHES (0.08 nJ/bit x 5 Mbit/s ~ 0.4 mW).
+- **F2.1 — XA-NFE3001 live page says "Up to 30 Mbit/s, <1 ms"** while the case study and the
+  Feb 2026 announcement both say 20 Mbit/s PHY / ~13.5 goodput / <0.2 ms / <6 mW (announcement
+  fetched, MATCHES verbatim incl. 100 MB ~ 59 s). Live page lists a newer bin.
+  **AUTHOR-CONFIRM AC-7:** keep announcement-anchored figures (default), or update to 30?
+- **F2.2 — P8 launch-announcement link 404s**; no equivalent on the live blog. FIXED: link
+  removed; notes adjusted. **AUTHOR-CONFIRM AC-8:** restore if a real URL exists.
+- blog/wi-r-technology-white-paper OK (sources the 50x NFC claim). reference-designs page OK.
+  arXiv 2512.07167 OK. Vimeo x2 reachable, titles match (playback behind bot-check — confirm in
+  browser). YouTube S4G_99Yn2M4 title fragment "Bhaja Gauranga" (confirm walkthrough in browser);
+  8etIl_0wj0I inconclusive (browser). eegrab WishKey brochure PDF reachable (1.6 MB). ECS DOI OK
+  (Pushpal Das first author). ShareOK OK. IEEE DOIs resolve.
+- **F2.3 — github.com/PushpalDas/Ixana-Wiki 404s.** FIXED: card href removed.
+  **AUTHOR-CONFIRM AC-3b:** restore if private/renamed.
+- Pending browser pass: xana-nine deep links (P3/17/19/25/26/27), Drive folder (P6),
+  patents.google + mqtt.org (P33), YouTube confirmations.
