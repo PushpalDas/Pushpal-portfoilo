@@ -7,277 +7,376 @@
 <meta name="description" content="Interactive recreation of the design review behind Ricky Kids' assistive play kit: three interactions, fourteen classroom criteria, two special-education teachers, and the stop test the review turned on. No child took part in this project.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;0,6..12,800;1,6..12,400;1,6..12,600&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
-   Shared shell for the Ricky Kids demos. Palette and type are
-   inherited from the portfolio's case-study system so the demos
-   read as one family with the case studies that link them.
-   Single-theme by design: these are bench tools, dark, with
-   every colour painted so nothing borrows a host background.
+   Autism kit — the bench review.
+   Identity: warm, sensory-considerate, rigorous. A cream ground,
+   muted terracotta / sage / dusty-blue, genuinely rounded
+   geometry and slow soft motion — because the kit itself had to
+   be calm — while the review it carries is a strict 3 × 14
+   matrix. Single-theme by design: every colour painted.
    ============================================================ */
 :root {
-  color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+  --bg: #FAF5EC;            /* oat ground */
+  --surface: #FFFDF7;       /* card cream */
+  --surface-2: #F1EADC;     /* toasted panel */
+  --code: #F4EDDE;          /* g-code paper */
+  --line: #E2D8C6;
+  --line-soft: #ECE4D4;
+  --ink: #33291C;           /* 13.1:1 on bg */
+  --body: #4E4335;          /* 8.9:1 */
+  --muted: #6A5D49;         /* 5.9:1 — smallest text tokens stop here */
+  --faint: #8A7C67;         /* decorative marks + disabled only, never copy */
+  --accent: #34598A;        /* dusty blue, 6.6:1 */
+  --accent-soft: rgba(52, 89, 138, .09);
+  --accent-line: #B9C8DC;
+  --ok: #41663A;            /* sage, 6.1:1 */
+  --ok-soft: rgba(90, 122, 64, .12);
+  --ok-line: #C2D1B3;
+  --warn: #7F5A17;          /* ochre, 5.7:1 */
+  --warn-soft: rgba(170, 128, 42, .13);
+  --warn-line: #DECB9C;
+  --crit: #9C4A2F;          /* terracotta, 5.6:1 */
+  --crit-soft: rgba(178, 92, 62, .10);
+  --crit-line: #E2BCA9;
+  /* chart series — categorical, validated (CVD + 3:1 fills) */
+  --series-p: #2F5FA8;
+  --series-c: #4A7A2F;
+  --series-g: #C97951;
+  --sans: "Nunito Sans", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r-sm: 10px; --r-md: 16px; --r-lg: 22px;
+  --shadow: 0 1px 2px rgba(87, 72, 50, .05), 0 8px 24px rgba(87, 72, 50, .07);
+  --ease: cubic-bezier(.32, .72, .28, 1);
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0; background: var(--bg); color: var(--body);
-  font-family: var(--sans); font-size: 14px; line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 button { font: inherit; color: inherit; cursor: pointer; }
-select, input, textarea { font: inherit; color: inherit; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
-  display: flex; flex-direction: column;
+.app { min-height: 100vh; max-width: 1360px; margin: 0 auto; display: flex; flex-direction: column; }
+
+/* -- Top bar ------------------------------------------------ */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(250, 245, 236, .9); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
 }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
-.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+.topbar-row { display: flex; align-items: center; gap: 10px; padding: 13px 24px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 2px; margin-right: auto; }
+.brand .eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 17.5px; font-weight: 800; letter-spacing: -.01em; color: var(--ink); }
 
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
   border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border-radius: 999px; padding: 5px 13px;
+  font-size: 12.5px; font-weight: 600; color: var(--muted); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
+.chip b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
+.chip.good { border-color: var(--ok-line); color: var(--ok); background: var(--ok-soft); }
+.chip.good b { color: var(--ok); }
+.chip.warn { border-color: var(--warn-line); color: var(--warn); background: var(--warn-soft); }
+.chip.warn b { color: var(--warn); }
+.chip.crit { border-color: var(--crit-line); color: var(--crit); background: var(--crit-soft); }
+.chip.crit b { color: var(--crit); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); flex: none; }
+.dot.good { background: var(--ok); } .dot.warn { background: var(--warn); }
 .dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
 
-.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
-.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+.params { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 10px 24px 12px; }
+.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .params .spacer { flex: 1; }
-.params .chip { flex: none; }
 
-.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
-.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
-.segmented button:last-child { border-right: 0; }
-.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
+.segmented {
+  display: inline-flex; flex-wrap: wrap; gap: 3px; padding: 4px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2);
+}
+.segmented button {
+  background: none; border: 0; border-radius: 10px; padding: 7px 15px;
+  font-size: 13px; font-weight: 700; color: var(--muted); text-align: left;
+  transition: background .3s var(--ease), color .3s var(--ease), box-shadow .3s var(--ease);
+}
 .segmented button:hover { color: var(--ink); }
-.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
+.segmented button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.segmented button span { display: block; font-family: var(--mono); font-size: 9px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 1px; }
 .segmented button[aria-pressed="true"] span { color: var(--accent); }
 
-.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
-.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
-.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
-.provenance b { color: var(--body); font-weight: 500; }
+.paramnote { padding: 0 24px 12px; font-size: 13px; color: var(--muted); margin: 0; max-width: 96ch; }
+.paramnote b { color: var(--body); font-weight: 700; }
+
+/* -- Pane --------------------------------------------------- */
+.pane { flex: 1; min-width: 0; padding: 28px 24px 44px; }
+.pane-head { padding-bottom: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--line); }
+.pane-head .kicker { font-family: var(--mono); font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin: 0 0 7px; }
+.pane-head h2 { margin: 0; font-size: 25px; font-weight: 800; letter-spacing: -.015em; color: var(--ink); }
+.provenance { margin: 8px 0 0; font-size: 13.5px; color: var(--muted); max-width: 82ch; }
 
 .badge {
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-  letter-spacing: .13em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--muted); white-space: nowrap;
 }
-.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
-.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
-.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
-.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
-.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
 
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 12px; padding: 9px 16px; font-size: 13.5px; font-weight: 700;
+  box-shadow: 0 1px 2px rgba(87, 72, 50, .05);
+  transition: border-color .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
 }
-.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
-.btn:disabled { opacity: .38; cursor: not-allowed; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
-.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
-.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
-.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
-.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
-.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
-.btn.ghost { background: transparent; }
-
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
+.btn:hover:not(:disabled) { border-color: #CDBFA6; background: #FFFEFB; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #FFFDF7; }
+.btn.primary:hover:not(:disabled) { background: #3E67A0; border-color: #3E67A0; }
+.btn.crit { background: var(--crit-soft); border-color: var(--crit-line); color: var(--crit); }
+.btn.crit:hover:not(:disabled) { background: rgba(178, 92, 62, .17); border-color: var(--crit); }
+.btn.sm { padding: 6px 12px; font-size: 12.5px; border-radius: 10px; }
+.btn.ghost { background: transparent; box-shadow: none; }
 
 .note {
-  margin-top: 14px; font-size: 12.5px; color: var(--muted);
-  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+  margin-top: 16px; font-size: 13px; color: var(--muted); line-height: 1.65;
+  border-left: 3px solid var(--line); border-radius: 2px; padding-left: 14px; max-width: 84ch;
 }
-.note b { color: var(--body); font-weight: 500; }
-.note.warn { border-left-color: var(--warn); }
-.note.crit { border-left-color: var(--crit); }
-.note.good { border-left-color: var(--good); }
+.note b { color: var(--body); font-weight: 700; }
 
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
-table.sheet thead th {
-  background: var(--surface-2); color: var(--muted);
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
-  letter-spacing: .11em; text-transform: uppercase;
-  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
-}
-table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-table.sheet tbody tr:last-child td { border-bottom: 0; }
-table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
-table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-table.sheet .name { color: var(--ink); }
-table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
-table.sheet tfoot .num { text-align: right; }
-
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
-.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
-.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
-.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
-
-.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
-.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-.meterbar.good > i { background: var(--good); }
-.meterbar.crit > i { background: var(--crit); }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
-.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
-
-.toast {
-  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45);
-}
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.crit { border-color: var(--crit-dim); }
-
-@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
-</style>
-
-<style>
-/* -- Bench layout ----------------------------------------- */
-.bench { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 18px; align-items: start; }
+/* -- Bench layout ------------------------------------------- */
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 448px; gap: 24px; align-items: start; }
 @media (max-width: 1080px) { .bench { grid-template-columns: 1fr; } }
 
-.stage-wrap { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; overflow: hidden; }
-.stage-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
-.stage-head .t { font-size: 13.5px; color: var(--ink); font-weight: 500; margin-right: auto; }
-.stage-body { padding: 18px 16px; }
+.stage-wrap { border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); }
+.stage-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 13px 18px; border-bottom: 1px solid var(--line-soft); background: var(--surface-2); }
+.stage-head .t { font-size: 13.5px; color: var(--ink); font-weight: 700; margin-right: auto; }
+.stage-body { padding: 20px 18px; }
 
-/* Letter keypad, shared by the prompt and the gantry */
-.keys { display: flex; gap: 6px; flex-wrap: wrap; }
+/* Letter keypad */
+.keys { display: flex; gap: 7px; flex-wrap: wrap; }
 .keys button {
-  width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line);
-  background: var(--surface-2); color: var(--body); font-size: 15px; font-weight: 500;
+  width: 44px; height: 44px; border-radius: 14px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--body); font-size: 16px; font-weight: 700;
+  box-shadow: 0 1px 2px rgba(87, 72, 50, .04);
+  transition: border-color .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
 }
-.keys button:hover { border-color: #35354a; color: var(--ink); }
-.keys button[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent-dim); color: var(--accent); }
+.keys button:hover { border-color: #CDBFA6; color: var(--ink); }
+.keys button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
 
 /* The prompt card a child would see */
 .prompt {
-  display: grid; grid-template-columns: 128px 1fr; gap: 18px; align-items: center;
-  border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2);
-  padding: 20px; min-height: 172px;
+  display: grid; grid-template-columns: 132px 1fr; gap: 20px; align-items: center;
+  border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface-2);
+  padding: 22px; min-height: 176px;
+  transition: background .4s var(--ease);
 }
+@media (max-width: 480px) { .prompt { grid-template-columns: 1fr; justify-items: start; } }
 .prompt .glyph {
-  font-size: 84px; line-height: 1; font-weight: 600; color: var(--ink);
-  display: grid; place-items: center; height: 128px;
-  background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+  font-size: 84px; line-height: 1; font-weight: 800; color: var(--ink);
+  display: grid; place-items: center; width: 132px; height: 132px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
 }
-.prompt .word { font-size: 26px; color: var(--ink); font-weight: 600; letter-spacing: -.01em; }
-.prompt .sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
-.prompt.idle .glyph { color: var(--faint); }
-.speaker { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.prompt .word { font-size: 27px; color: var(--ink); font-weight: 800; letter-spacing: -.01em; }
+.prompt .sub { font-size: 13.5px; color: var(--muted); margin-top: 5px; }
+.prompt.idle .glyph { color: var(--faint); box-shadow: none; }
+.speaker { display: inline-flex; align-items: center; gap: 9px; margin-top: 14px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
 .wave { display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; }
-.wave i { width: 3px; background: var(--accent-dim); border-radius: 1px; height: 4px; display: block; }
-.wave.on i { background: var(--accent); animation: w .9s ease-in-out infinite; }
-.wave.on i:nth-child(2) { animation-delay: .12s } .wave.on i:nth-child(3) { animation-delay: .24s }
-.wave.on i:nth-child(4) { animation-delay: .36s } .wave.on i:nth-child(5) { animation-delay: .48s }
-@keyframes w { 0%,100% { height: 4px } 50% { height: 16px } }
+.wave i { width: 3px; background: var(--accent-line); border-radius: 2px; height: 5px; display: block; }
+.wave.on i { background: var(--accent); animation: w 1.4s ease-in-out infinite; }
+.wave.on i:nth-child(2) { animation-delay: .16s } .wave.on i:nth-child(3) { animation-delay: .32s }
+.wave.on i:nth-child(4) { animation-delay: .48s } .wave.on i:nth-child(5) { animation-delay: .64s }
+@keyframes w { 0%, 100% { height: 5px } 50% { height: 16px } }
 
 /* Teacher tablet queue */
-.queue { display: flex; flex-direction: column; gap: 8px; }
-.qrow { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); padding: 9px 12px; }
-.qrow .g { font-family: var(--mono); font-size: 15px; color: var(--ink); width: 22px; }
-.qrow .w { font-size: 13px; color: var(--body); flex: 1; }
-.qrow.done { opacity: .5; }
-.qrow.now { border-color: var(--accent-dim); background: var(--accent-wash); }
+.queue { display: flex; flex-direction: column; gap: 9px; }
+.qrow {
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface);
+  padding: 11px 15px; transition: opacity .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+}
+.qrow .g { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--ink); width: 24px; }
+.qrow .w { font-size: 13.5px; font-weight: 600; color: var(--body); flex: 1; }
+.qrow.done { opacity: .48; }
+.qrow.now { border-color: var(--accent); background: var(--accent-soft); }
 
 /* Gantry */
-.gantry { display: grid; grid-template-columns: 330px minmax(0,1fr); gap: 16px; }
+.gantry { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 18px; }
 @media (max-width: 720px) { .gantry { grid-template-columns: 1fr; } }
-.plot { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 10px; }
+.plot { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); padding: 12px; box-shadow: var(--shadow); }
 .gcode {
-  border: 1px solid var(--line); border-radius: 10px; background: var(--bg);
-  font-family: var(--mono); font-size: 11px; color: var(--muted);
-  height: 258px; overflow-y: auto; padding: 10px 12px; line-height: 1.7;
+  border: 1px solid var(--line); border-radius: var(--r-md); background: var(--code);
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  height: 262px; overflow-y: auto; padding: 12px 14px; line-height: 1.75;
 }
-.gcode div.cur { color: var(--accent); }
+.gcode div { border-radius: 6px; padding: 0 6px; margin: 0 -6px; }
+.gcode div.cur { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
 .gcode div.done { color: var(--body); }
-.axis { display: flex; gap: 16px; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 10px; }
-.axis b { color: var(--ink); font-weight: 500; }
+.axis { display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 10px; font-variant-numeric: tabular-nums; }
+.axis b { color: var(--ink); font-weight: 600; }
 
-/* Criteria sheet */
-.crit-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
-.crit-head .score { font-family: var(--mono); font-size: 22px; font-weight: 600; color: var(--ink); }
-.crit-head .of { font-size: 12px; color: var(--muted); }
-.crit { display: flex; flex-direction: column; gap: 6px; }
-.crow { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: start; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 9px 11px; }
-.crow .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); padding-top: 3px; }
-.crow .c { font-size: 12.5px; color: var(--body); }
-.crow .d { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
-.crow.not { border-color: var(--crit-dim); background: var(--crit-wash); }
-.crow.cond { border-color: var(--warn-dim); }
-.crow .say { font-size: 12px; color: var(--muted); margin-top: 6px; font-style: italic; }
+/* The test bar + verdict */
+.stopbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 18px; }
+.stopbar .cap { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; color: var(--muted); }
+.verdict {
+  border-radius: var(--r-md); padding: 16px 18px 16px 20px; font-size: 13.5px; margin-top: 16px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--body);
+  position: relative; overflow: hidden; box-shadow: var(--shadow);
+  animation: rise .45s var(--ease);
+}
+.verdict::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--line); }
+.verdict.crit { border-color: var(--crit-line); }
+.verdict.crit::before { background: var(--crit); }
+.verdict.crit b { color: var(--crit); }
+.verdict.good { border-color: var(--ok-line); }
+.verdict.good::before { background: var(--ok); }
+.verdict.good b { color: var(--ok); }
+.verdict b { color: var(--ink); font-weight: 800; }
+@keyframes rise { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 
-.stopbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
-.verdict { border-radius: 10px; padding: 13px 15px; font-size: 13px; margin-top: 14px; border: 1px solid var(--line); background: var(--surface-2); color: var(--body); }
-.verdict.crit { border-color: var(--crit-dim); background: var(--crit-wash); }
-.verdict.good { border-color: var(--good-dim); background: var(--good-wash); }
-.verdict b { color: var(--ink); font-weight: 500; }
+/* -- Sign-off + criteria matrix ----------------------------- */
+.signoff {
+  display: flex; gap: 18px; align-items: flex-start;
+  border: 1px solid var(--ok-line); background: var(--surface); border-radius: var(--r-lg);
+  padding: 17px 19px; box-shadow: var(--shadow); margin-bottom: 18px;
+}
+.signoff .so-num { font-family: var(--mono); font-size: 34px; font-weight: 600; color: var(--ok); line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.signoff .so-num span { display: block; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-top: 4px; font-weight: 400; }
+.signoff .so-lead { margin: 0 0 9px; font-size: 13.5px; font-weight: 800; color: var(--ink); line-height: 1.4; }
+.so-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.so-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 11px; border: 1px solid;
+}
+.so-pill.ok { color: var(--ok); border-color: var(--ok-line); background: var(--ok-soft); }
+.so-pill.no { color: var(--crit); border-color: var(--crit-line); background: var(--crit-soft); }
+.so-pill svg { flex: none; }
+
+.crit-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.crit-head .score { font-family: var(--mono); font-size: 24px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.crit-head .of { font-size: 12.5px; color: var(--muted); }
+
+.matrix { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); overflow: hidden; box-shadow: var(--shadow); }
+.mhead {
+  display: grid; grid-template-columns: 30px 1fr repeat(3, 38px); gap: 0 8px; align-items: end;
+  padding: 10px 14px 8px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+}
+.mhead .mh-c { font-family: var(--mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted); grid-column: 2; }
+.mh-i {
+  background: none; border: 0; border-radius: 8px; padding: 4px 0 3px;
+  font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--muted); text-align: center;
+  border-bottom: 2px solid transparent;
+  transition: color .3s var(--ease), border-color .3s var(--ease);
+}
+.mh-i:hover { color: var(--ink); }
+.mh-i[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.mlegend { padding: 7px 14px; font-family: var(--mono); font-size: 10px; letter-spacing: .04em; color: var(--muted); background: var(--surface-2); border-bottom: 1px solid var(--line-soft); }
+.mlegend b { color: var(--body); font-weight: 600; }
+
+.mrow {
+  display: grid; grid-template-columns: 30px 1fr repeat(3, 38px); gap: 0 8px; align-items: start;
+  padding: 10px 14px; border-bottom: 1px solid var(--line-soft); position: relative;
+}
+.mrow:last-child { border-bottom: 0; }
+.mrow::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent; }
+.mrow.not::before { background: var(--crit); }
+.mrow.cond::before { background: var(--warn); }
+.mrow .n { font-family: var(--mono); font-size: 10.5px; color: var(--muted); padding-top: 3px; font-variant-numeric: tabular-nums; }
+.mrow .c { font-size: 13px; font-weight: 600; color: var(--body); line-height: 1.45; }
+.mrow.not .c, .mrow.cond .c { color: var(--ink); }
+.mrow .d { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+.mrow .d .vd { font-weight: 600; letter-spacing: .08em; }
+.mrow .d .vd.cond { color: var(--warn); } .mrow .d .vd.not { color: var(--crit); }
+.mrow .ctx { font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-top: 5px; font-variant-numeric: tabular-nums; }
+.mrow .say {
+  font-size: 12.5px; color: var(--body); margin: 8px 0 2px; font-style: italic; line-height: 1.55;
+  border-left: 2px solid var(--line); border-radius: 1px; padding-left: 10px; max-width: 46ch;
+}
+.mrow.not .say { border-left-color: var(--crit-line); }
+.mrow.cond .say { border-left-color: var(--warn-line); }
+.mrow .say i { font-style: normal; font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: block; margin-top: 3px; }
+.mk { display: grid; place-items: center; padding-top: 2px; border-radius: 8px; }
+.mk svg { display: block; opacity: .55; width: 13px; height: 13px; transition: opacity .3s var(--ease), width .3s var(--ease), height .3s var(--ease); }
+.mk.on { background: rgba(87, 72, 50, .055); }
+.mk.on svg { opacity: 1; width: 17px; height: 17px; }
+
+/* -- Six-dimension chart ------------------------------------ */
+.dims { margin-top: 34px; }
+.dims-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+@media (max-width: 860px) { .dims-grid { grid-template-columns: 1fr; } }
+.chartcard { border: 1px solid var(--line); background: var(--surface); border-radius: var(--r-lg); padding: 20px 22px; box-shadow: var(--shadow); }
+.chartcard h3 { margin: 0 0 3px; font-size: 16px; font-weight: 800; color: var(--ink); }
+.chartcard .chsub { margin: 0 0 14px; font-size: 12.5px; color: var(--muted); }
+.chlegend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12px; font-weight: 700; color: var(--body); }
+.chlegend span { display: inline-flex; align-items: center; gap: 7px; }
+.chlegend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.dgroup { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 12px; align-items: center; padding: 7px 0; }
+@media (max-width: 480px) { .dgroup { grid-template-columns: 1fr; gap: 4px; } }
+.dgroup + .dgroup { border-top: 1px solid var(--line-soft); }
+.dlabel { font-size: 12.5px; font-weight: 700; color: var(--body); line-height: 1.35; }
+.dlabel .tag-stop {
+  display: inline-block; font-family: var(--mono); font-size: 8.5px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--crit);
+  border: 1px solid var(--crit-line); background: var(--crit-soft);
+  border-radius: 999px; padding: 1px 7px; margin-top: 3px;
+}
+.dbars { display: flex; flex-direction: column; gap: 2px; padding: 3px 44px 3px 0; position: relative; }
+.dbars::before {
+  content: ""; position: absolute; inset: 0 44px 0 0;
+  background-image: linear-gradient(to right, var(--line-soft) 1px, transparent 1px);
+  background-size: 20% 100%; border-right: 1px solid var(--line-soft);
+}
+.dbar { display: flex; align-items: center; gap: 8px; height: 11px; position: relative; }
+.dbar i { display: block; height: 9px; border-radius: 0 4px 4px 0; flex: none; transition: width .5s var(--ease); }
+.dbar b { font-family: var(--mono); font-size: 10.5px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1; }
+.chaxis { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 12px; margin-top: 4px; }
+@media (max-width: 480px) { .chaxis { grid-template-columns: 1fr; } }
+.chaxis .ticks { display: flex; justify-content: space-between; margin-right: 44px; font-family: var(--mono); font-size: 9.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chaxis .ticks span { transform: translateX(-2px); }
+.chcaption { margin: 14px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; max-width: 72ch; }
+.chcaption b { color: var(--body); font-weight: 700; }
+
+.costcard { border: 1px solid var(--line); background: var(--surface-2); border-radius: var(--r-lg); padding: 20px 22px; }
+.costcard h3 { margin: 0 0 10px; font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.costcard .cv { font-family: var(--mono); font-size: 26px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.costcard .cv small { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.costcard .vs { margin: 8px 0; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.costcard .cv.target { color: var(--warn); font-size: 20px; }
+.costcard p { margin: 12px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+
+/* -- Footer ------------------------------------------------- */
+.foot { border-top: 1px solid var(--line); margin-top: 14px; padding: 28px 24px 44px; background: var(--surface-2); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; max-width: 1100px; }
+.foot h5 { margin: 0 0 9px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 13px; color: var(--muted); line-height: 1.65; }
+.foot p b { color: var(--body); font-weight: 700; }
+.foot .conf { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); max-width: 100ch; line-height: 1.65; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px);
+  background: var(--ink); border-radius: 999px;
+  padding: 11px 20px; font-size: 13px; font-weight: 600; color: var(--bg); z-index: 80; max-width: min(620px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .35s var(--ease), transform .35s var(--ease);
+  box-shadow: 0 12px 32px rgba(51, 41, 28, .28);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
 </style>
 
 <div class="app">
@@ -287,17 +386,17 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
         <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Assistive play</span>
         <h1>Autism kit &mdash; the bench review</h1>
       </div>
-      <span class="chip"><span class="dot accent"></span>Bench review &middot; <b>Q4 2021</b></span>
-      <span class="chip good"><span class="dot good"></span><b>0</b> sessions with children</span>
+      <span class="chip"><span class="dot accent"></span>Bench review &middot; <b>Q4&nbsp;2021</b></span>
+      <span class="chip good"><span class="dot good"></span><b>0</b>&nbsp;sessions with children</span>
       <span class="chip" id="verdictChip"></span>
     </div>
     <div class="params">
       <span class="plabel">Interaction</span>
       <div class="segmented" id="tabs" role="group" aria-label="Interaction"></div>
       <span class="spacer"></span>
-      <span class="chip"><span class="dot"></span><b>2</b> teachers &middot; <b>14</b> criteria</span>
+      <span class="chip"><span class="dot"></span><b>2</b>&nbsp;teachers &middot; <b>14</b>&nbsp;criteria</span>
     </div>
-    <p class="paramnote" id="paramNote" style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0"></p>
+    <p class="paramnote" id="paramNote"></p>
   </header>
 
   <main class="pane">
@@ -311,26 +410,57 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
         <div class="stage-wrap">
           <div class="stage-head">
             <span class="t" id="stageTitle"></span>
-            <span class="badge rule" id="stageBadge"></span>
+            <span class="badge" id="stageBadge"></span>
           </div>
           <div class="stage-body" id="stage"></div>
         </div>
         <div class="stopbar">
           <button class="btn crit" id="pullBtn">The child pulls their hand away</button>
           <button class="btn sm" id="stopBtn">Teacher presses stop</button>
-          <span class="mono" style="font-size:11px;color:var(--faint)">the test the review turned on</span>
+          <span class="cap">the test the review turned on</span>
         </div>
         <div id="verdict"></div>
       </div>
       <div>
+        <div class="signoff">
+          <div class="so-num">2<span>of 3</span></div>
+          <div>
+            <p class="so-lead">Interactions both teachers would put in front of a child</p>
+            <div class="so-pills">
+              <span class="so-pill ok"><svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><path d="M1.8 5.8l2.4 2.6 5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Visual &amp; sound prompts</span>
+              <span class="so-pill ok"><svg width="11" height="11" viewBox="0 0 11 11" aria-hidden="true"><path d="M1.8 5.8l2.4 2.6 5-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Teacher-assigned content</span>
+              <span class="so-pill no"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2l6 6M8 2l-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Guided-writing gantry</span>
+            </div>
+          </div>
+        </div>
         <div class="crit-head">
           <span class="score" id="critScore"></span>
           <span class="of">of 14 classroom criteria met, agreed by both teachers</span>
         </div>
-        <div class="crit" id="crit"></div>
+        <div id="crit"></div>
         <p class="note"><b>The criteria are theirs, not ours.</b> Fourteen checks these two teachers already apply to anything entering their classroom. We would have measured whether the kit worked; they measured whether it can be stopped, cleaned and predicted.</p>
       </div>
     </div>
+
+    <section class="dims" aria-label="The review averaged into six dimensions">
+      <div class="dims-grid">
+        <figure class="chartcard" style="margin:0">
+          <h3>The review, averaged into six dimensions</h3>
+          <p class="chsub">Mean of the fourteen criteria per dimension, scored 1&ndash;5 and agreed by both teachers.</p>
+          <div class="chlegend" id="chLegend"></div>
+          <div id="chart"></div>
+          <div class="chaxis" aria-hidden="true"><span></span><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>
+          <figcaption class="chcaption"><b>The gantry collapses on the two axes that are about stopping</b> &mdash; safety in use and child independence, both at 2 of 5 &mdash; and those are the axes the review turned on. On teacher control it is nearly the equal of the others: the stop button works. The button was never the question.</figcaption>
+        </figure>
+        <aside class="costcard">
+          <h3>What the bench unit cost</h3>
+          <div class="cv">&#8377;10,000 <small>in parts, roughly</small></div>
+          <div class="vs">against the teachers&rsquo; line</div>
+          <div class="cv target">under &#8377;5,000 <small>at volume</small></div>
+          <p>Criterion 13&rsquo;s context: a public centre buys nothing above that line, and the prompt interaction clears it only by running on a tablet the centre already owns.</p>
+        </aside>
+      </div>
+    </section>
   </main>
 
   <footer class="foot">
@@ -345,8 +475,8 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
         <p>A stop button is not the same thing, and the difference is the reason the gantry was not built again.</p>
       </div>
       <div>
-        <h5 style="visibility:hidden">more</h5>
-        <p><b>No child took part in any part of this project.</b> Nothing here is a clinical, therapeutic or educational-outcome claim, and none could be made from a design review: two practitioners said which of three ideas they would allow into a classroom.</p>
+        <h5>What was signed off</h5>
+        <p><b>No child took part in any part of this project.</b> Nothing here is a clinical, therapeutic or educational-outcome claim, and none could be made from a design review: two practitioners said which of three ideas they would allow into a classroom &mdash; the prompts and the teacher-assigned content, and not the gantry.</p>
       </div>
     </div>
     <p class="conf">Student work at SRM Kattankulathur. The prototype, its hardware and the involvement of teachers from an autism care centre are real; the teachers and the centre are not named. No child appears anywhere in this project, no reading or observation of a child exists, and every criterion, verdict, quotation and figure on this page is invented for the sample. The letter paths are our own and the G-code is generated from them at render time.</p>
@@ -420,10 +550,27 @@ const CRITERIA = [
     say: { gantry: "It survives. It does not stay square, and out of square it drags." } },
   { n: "13", dim: "Cost to a centre", c: "Affordable to a public centre under ₹5,000",
     v: { prompt: "cond", content: "cond", gantry: "cond" },
+    ctx: "Bench unit: about ₹10,000 in parts · target under ₹5,000 at volume",
     say: { prompt: "Only if it runs on a tablet the centre already owns." } },
   { n: "14", dim: "Cost to a centre", c: "Repairable with parts available locally",
     v: { prompt: "met", content: "met", gantry: "cond" },
     say: { gantry: "The steppers and the driver board, yes. The lead screws, not here." } }
+];
+
+/* The fourteen criteria averaged into the six dimensions,
+   1–5, agreed by both teachers. Rendered once as the chart. */
+const DIMS = [
+  { d: "Safety in use",        stop: true,  v: { prompt: 5, content: 5, gantry: 2 } },
+  { d: "Predictable response", stop: false, v: { prompt: 5, content: 4, gantry: 3 } },
+  { d: "Teacher control",      stop: false, v: { prompt: 4, content: 5, gantry: 4 } },
+  { d: "Child independence",   stop: true,  v: { prompt: 4, content: 2, gantry: 2 } },
+  { d: "Robustness",           stop: false, v: { prompt: 4, content: 3, gantry: 2 } },
+  { d: "Cost to a centre",     stop: false, v: { prompt: 4, content: 3, gantry: 2 } }
+];
+const SERIES = [
+  { k: "prompt",  label: "Visual prompts",  color: "var(--series-p)" },
+  { k: "content", label: "Assigned content", color: "var(--series-c)" },
+  { k: "gantry",  label: "Gantry",          color: "var(--series-g)" }
 ];
 
 /* Letter strokes on a 0–100 grid, y down. Our own paths; the
@@ -446,7 +593,7 @@ const KEYS = Object.keys(LETTERS);
 /* The session a teacher pushed to the kit from the tablet. */
 const SESSION = ["A", "T", "C", "H", "O"];
 
-const state = { tab: "prompt", letter: "A", playing: false, stopped: null, step: 0, qi: 0 };
+const state = { tab: "prompt", letter: "A", playing: false, stopped: null, step: 0, qi: 0, pullStep: null };
 
 /* ============================================================
    DERIVED
@@ -504,7 +651,7 @@ function renderTabs() {
   const t = tally(state.tab);
   const chip = $("verdictChip");
   chip.className = "chip " + (t.not === 0 ? "good" : t.not > 3 ? "crit" : "warn");
-  chip.innerHTML = `<span class="dot ${t.not === 0 ? "good" : t.not > 3 ? "crit" : "warn"}"></span><b>${t.met}</b> of 14 met &middot; ${t.not} not met`;
+  chip.innerHTML = `<span class="dot ${t.not === 0 ? "good" : t.not > 3 ? "crit" : "warn"}"></span><b>${t.met}</b>&nbsp;of 14 met &middot; ${t.not} not met`;
   $("paramNote").innerHTML = state.tab === "gantry"
     ? `<b>Five criteria not met, and four of the five are the same criterion twice over:</b> what happens when a child wants it to stop. Press the red button below and watch the stage, not the scoresheet.`
     : `<b>Nothing here holds a child.</b> Press the red button below: the interaction ends because there was never anything to disengage from.`;
@@ -513,22 +660,64 @@ function renderTabs() {
 function setTab(k) {
   if (state.tab === k) return;
   stopRun();
-  state.tab = k; state.stopped = null; state.step = 0; state.qi = 0;
+  state.tab = k; state.stopped = null; state.step = 0; state.qi = 0; state.pullStep = null;
   render();
 }
 
+/* The 3 × 14 matrix. Columns P / C / G are the interactions;
+   the active interaction's column is emphasised, and its
+   teachers' quotes are the ones shown. */
+const COLS = ["prompt", "content", "gantry"];
+const COLNAME = { prompt: "Visual and sound prompts", content: "Teacher-assigned content", gantry: "Guided-writing gantry" };
+function mark(v, on) {
+  const c = v === "met" ? "var(--ok)" : v === "cond" ? "var(--warn)" : "var(--crit)";
+  const inner = v === "met"
+    ? `<circle cx="8" cy="8" r="5.4" fill="${c}"/>`
+    : v === "cond"
+      ? `<circle cx="8" cy="8" r="5" fill="none" stroke="${c}" stroke-width="1.7"/><path d="M8 3a5 5 0 0 0 0 10z" fill="${c}"/>`
+      : `<circle cx="8" cy="8" r="5.6" fill="none" stroke="${c}" stroke-width="1.7"/><path d="M5.9 5.9l4.2 4.2M10.1 5.9l-4.2 4.2" stroke="${c}" stroke-width="1.7" stroke-linecap="round"/>`;
+  return `<svg viewBox="0 0 16 16" aria-hidden="true">${inner}</svg>`;
+}
+const VWORD = { met: "met", cond: "with a condition", not: "not met" };
 function renderCriteria() {
   const k = state.tab, t = tally(k);
   $("critScore").textContent = t.met;
-  $("crit").innerHTML = CRITERIA.map((c) => {
+  const head = `<div class="mhead" role="row">
+      <span></span><span class="mh-c">Criterion</span>
+      ${COLS.map((c) => `<button class="mh-i" data-mcol="${c}" aria-pressed="${c === k}" title="${esc(COLNAME[c])}" aria-label="Show ${esc(COLNAME[c])}">${c[0].toUpperCase()}</button>`).join("")}
+    </div>
+    <div class="mlegend"><b>P</b> visual prompts &middot; <b>C</b> assigned content &middot; <b>G</b> gantry &mdash; tap a column to switch</div>`;
+  const rows = CRITERIA.map((c) => {
     const v = c.v[k], say = c.say && c.say[k];
-    return `<div class="crow ${v}">
+    return `<div class="mrow ${v}" role="row">
       <span class="n">${c.n}</span>
-      <div><div class="c">${esc(c.c)}</div><div class="d">${esc(c.dim)}</div>
-        ${say ? `<div class="say">&ldquo;${esc(say)}&rdquo;</div>` : ""}</div>
-      <span class="badge ${v}">${v === "met" ? "met" : v === "cond" ? "with a condition" : "not met"}</span>
+      <div>
+        <div class="c">${esc(c.c)}</div>
+        <div class="d">${esc(c.dim)}${v !== "met" ? ` &middot; <span class="vd ${v}">${VWORD[v]}</span>` : ""}</div>
+        ${c.ctx ? `<div class="ctx">${esc(c.ctx)}</div>` : ""}
+        ${say ? `<div class="say">&ldquo;${esc(say)}&rdquo;<i>one of the teachers</i></div>` : ""}
+      </div>
+      ${COLS.map((col) => `<span class="mk ${col === k ? "on" : ""}" role="img" aria-label="${esc(COLNAME[col])}: ${VWORD[c.v[col]]}">${mark(c.v[col], col === k)}</span>`).join("")}
     </div>`;
   }).join("");
+  $("crit").innerHTML = `<div class="matrix" role="table" aria-label="Fourteen criteria against three interactions">${head}${rows}</div>`;
+  document.querySelectorAll("[data-mcol]").forEach((b) => (b.onclick = () => setTab(b.dataset.mcol)));
+}
+
+/* The six-dimension chart — static, rendered once. */
+function renderDims() {
+  $("chLegend").innerHTML = SERIES.map((s) =>
+    `<span><i style="background:${s.color}"></i>${esc(s.label)}</span>`).join("");
+  $("chart").innerHTML = DIMS.map((g, gi) => `
+    <div class="dgroup">
+      <div class="dlabel">${esc(g.d)}${g.stop ? `<br><span class="tag-stop">stop axis</span>` : ""}</div>
+      <div class="dbars">${SERIES.map((s) => {
+        const v = g.v[s.k];
+        return `<div class="dbar" title="${esc(s.label)} — ${esc(g.d)}: ${v} of 5">
+          <i style="width:${v * 20}%;background:${s.color}"></i><b>${v}</b>
+        </div>`;
+      }).join("")}</div>
+    </div>`).join("");
 }
 </script>
 <script>
@@ -541,7 +730,7 @@ function keypad() {
 }
 function bindKeys() {
   document.querySelectorAll("[data-key]").forEach((b) => (b.onclick = () => {
-    state.letter = b.dataset.key; state.stopped = null;
+    state.letter = b.dataset.key; state.stopped = null; state.pullStep = null;
     if (state.tab === "gantry") { PATH = buildPath(state.letter); state.step = 0; }
     render(); if (state.tab === "gantry") startRun(); else playPrompt();
   }));
@@ -561,7 +750,7 @@ function renderPrompt() {
         <div class="speaker"><span class="wave ${state.playing ? "on" : ""}"><i></i><i></i><i></i><i></i><i></i></span>${state.playing ? "speaking" : "silent"}</div>
       </div>
     </div>
-    <div style="margin-top:16px">${keypad()}</div>
+    <div style="margin-top:18px">${keypad()}</div>
     <p class="note"><b>Fixed length, fixed order, no response to the child.</b> The teachers scored predictability at the top: a child managing surprise all day does not need a device that reacts to them.</p>`;
   bindKeys();
 }
@@ -579,14 +768,14 @@ function renderContent() {
     <div class="queue">${SESSION.map((k, i) => {
       const cls = state.stopped ? (i < state.qi ? "done" : "") : i < state.qi ? "done" : i === state.qi ? "now" : "";
       return `<div class="qrow ${cls}"><span class="g">${k}</span><span class="w">${k} for ${esc(LETTERS[k].word)}</span>
-        <span class="mono" style="font-size:10.5px;color:var(--faint)">${i < state.qi ? "done" : i === state.qi && !state.stopped ? "now" : "queued"}</span></div>`;
+        <span class="mono" style="font-size:10.5px;color:var(--muted)">${i < state.qi ? "done" : i === state.qi && !state.stopped ? "now" : "queued"}</span></div>`;
     }).join("")}</div>
-    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
       <button class="btn sm" id="advBtn"${state.qi >= SESSION.length || state.stopped ? " disabled" : ""}>Advance the session</button>
       <button class="btn sm ghost" id="resetQ">Reset the queue</button>
-      <span class="mono" style="font-size:11px;color:var(--faint);align-self:center">assigned by the teacher, pushed over the local network</span>
+      <span class="mono" style="font-size:11px;color:var(--muted);align-self:center">assigned by the teacher, pushed over the local network</span>
     </div>
-    <p class="note"><b>The device chooses nothing.</b> Which letters, in which order, for how long — all of it is set on the tablet before the session starts. That is criterion 07, and it is why this interaction scored where it did on teacher control and lost a point on independence.</p>`;
+    <p class="note"><b>The device chooses nothing.</b> Which letters, in which order, for how long — all of it is set on the tablet before the session starts. That is criterion 07, and it is why this interaction scored where it did on teacher control and lost a point on independence. Both teachers signed this one off — the second of the two interactions they would put in front of a child — with the tablet staying in the teacher's hands.</p>`;
   $("advBtn").onclick = () => { if (state.qi < SESSION.length) state.qi++; state.stopped = null; render(); };
   $("resetQ").onclick = () => { state.qi = 0; state.stopped = null; render(); };
 }
@@ -596,7 +785,7 @@ function renderGantry() {
   $("stageTitle").innerHTML = tabOf("gantry").stage;
   $("stageBadge").textContent = "grbl · 600 mm/min";
   const L = LETTERS[state.letter];
-  const guide = L.s.map((st) => `<polyline points="${st.map((p) => p[0] + "," + p[1]).join(" ")}" fill="none" stroke="#23232d" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  const guide = L.s.map((st) => `<polyline points="${st.map((p) => p[0] + "," + p[1]).join(" ")}" fill="none" stroke="#DFD4BE" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
   $("stage").innerHTML = `
     <div class="gantry">
       <div>
@@ -612,11 +801,11 @@ function renderGantry() {
           <span>X <b id="ax">0.0</b> mm</span><span>Y <b id="ay">0.0</b> mm</span>
           <span>pen <b id="apen">up</b></span><span>stroke <b id="astroke">—</b> of ${L.s.length}</span>
         </div>
-        <div style="margin-top:14px">${keypad()}</div>
+        <div style="margin-top:16px">${keypad()}</div>
       </div>
       <div>
         <div class="gcode" id="gcode"></div>
-        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
           <button class="btn sm" id="runBtn">${state.playing ? "Running…" : "Trace the letter"}</button>
           <button class="btn sm ghost" id="rewind">Rewind</button>
         </div>
@@ -625,19 +814,31 @@ function renderGantry() {
     <p class="note"><b>Lead screws, not belts.</b> We chose them for precision. A belt slips under load, which we treated as a defect — and a teacher pointed out that slipping is the only reason a belt-driven version would have been arguable at all.</p>`;
   $("gcode").innerHTML = PATH.g.map((l, i) => `<div data-g="${i}">${esc(l)}</div>`).join("");
   $("runBtn").onclick = startRun;
-  $("rewind").onclick = () => { stopRun(); state.step = 0; state.stopped = null; render(); };
+  $("rewind").onclick = () => { stopRun(); state.step = 0; state.stopped = null; state.pullStep = null; render(); };
   bindKeys();
   paint();
 }
 
+/* Trace painter. After a pull-away, everything the machine drew
+   past the moment the hand left is painted terracotta — the part
+   of the letter nobody asked it to finish. */
 function paint() {
   const i = Math.min(state.step, PATH.steps.length - 1), s = PATH.steps[i];
   const drawn = $("drawn"); if (!drawn) return;
-  const byStroke = {};
-  for (let j = 0; j <= i; j++) { const p = PATH.steps[j]; if (!p.pen) continue; (byStroke[p.s] = byStroke[p.s] || []).push(p.x + "," + p.y); }
-  drawn.innerHTML = Object.values(byStroke).map((pts) =>
-    `<polyline points="${pts.join(" ")}" fill="none" stroke="#5b7cfa" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
-  $("pen").innerHTML = `<circle cx="${s.x}" cy="${s.y}" r="${s.pen ? 3.1 : 2.2}" fill="${s.pen ? "#f2f3f6" : "#4a4e5e"}"/>`;
+  const groups = {};
+  for (let j = 0; j <= i; j++) {
+    const p = PATH.steps[j]; if (!p.pen) continue;
+    const after = state.pullStep != null && j > state.pullStep;
+    const key = p.s + (after ? "|b" : "|a");
+    if (after && !groups[key] && groups[p.s + "|a"]) {
+      groups[key] = [groups[p.s + "|a"][groups[p.s + "|a"].length - 1]];
+    }
+    (groups[key] = groups[key] || []).push(p.x + "," + p.y);
+  }
+  drawn.innerHTML = Object.entries(groups).map(([key, pts]) =>
+    `<polyline points="${pts.join(" ")}" fill="none" stroke="${key.endsWith("|b") ? "#9C4A2F" : "#34598A"}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`).join("");
+  const afterNow = state.pullStep != null && i > state.pullStep;
+  $("pen").innerHTML = `<circle cx="${s.x}" cy="${s.y}" r="${s.pen ? 3.1 : 2.2}" fill="${s.pen ? (afterNow ? "#9C4A2F" : "#33291C") : "#8A7C67"}"/>`;
   $("ax").textContent = (s.x * 1.2).toFixed(1);
   $("ay").textContent = ((100 - s.y) * 1.2).toFixed(1);
   $("apen").textContent = s.pen ? "down" : "up";
@@ -650,7 +851,7 @@ function paint() {
 
 let runT;
 function startRun() {
-  stopRun(); state.stopped = null; state.playing = true; state.step = 0;
+  stopRun(); state.stopped = null; state.playing = true; state.step = 0; state.pullStep = null;
   $("runBtn").textContent = "Running…";
   runT = setInterval(() => {
     state.step++;
@@ -667,12 +868,12 @@ function stopRun() { clearInterval(runT); runT = null; state.playing = false; cl
 function pullAway() {
   if (state.tab === "prompt") {
     stopRun(); state.playing = false; state.stopped = "pull"; render();
-    verdict("good", "<b>The prompt ends.</b> There was nothing to disengage from — the child was looking at a card, not attached to a machine. Criteria 01, 02 and 10 are met for exactly this reason, and it is why this is the interaction both teachers would put in front of a child.");
+    verdict("good", "<b>The prompt ends.</b> There was nothing to disengage from — the child was looking at a card, not attached to a machine. Criteria 01, 02 and 10 are met for exactly this reason, and it is why this is one of the two interactions both teachers would allow.");
     return;
   }
   if (state.tab === "content") {
     stopRun(); state.stopped = "pull"; render();
-    verdict("good", "<b>The session stops where it is.</b> The tablet is the only thing running and the teacher is holding it. What this interaction loses is criterion 09 — a child cannot run it alone, because somebody has to drive the tablet.");
+    verdict("good", "<b>The session stops where it is.</b> The tablet is the only thing running and the teacher is holding it. What this interaction loses is criterion 09 — a child cannot run it alone, because somebody has to drive the tablet. It is the other of the two interactions both teachers signed off, on the condition that stays true.");
     return;
   }
   /* the gantry: it finishes the stroke, because it cannot know */
@@ -681,10 +882,11 @@ function pullAway() {
   const endOfStroke = PATH.steps.findIndex((p, i) => i > state.step && p.s !== from.s);
   const target = endOfStroke === -1 ? PATH.steps.length - 1 : endOfStroke - 1;
   stopRun(); state.stopped = "pull"; state.playing = true;
+  state.pullStep = Math.min(state.step, PATH.steps.length - 1);
   runT = setInterval(() => {
     state.step++;
     if (state.step >= target) { state.step = target; stopRun(); state.playing = false; render();
-      verdict("crit", "<b>The stage completed the stroke.</b> A lead screw carries the same force whether the hand in the jig is concentrating or leaving, and nothing in this design reads the difference. This is criterion 01, marked <b>not met</b> by both teachers, and criteria 02, 09 and 10 fail for the same reason. We had a stop button. They wanted a machine where stopping <i>is</i> the child pulling their hand away — and that is a different machine, which we did not build.");
+      verdict("crit", "<b>The stage completed the stroke.</b> The terracotta length on the plot is what the machine drew after the hand had gone. A lead screw carries the same force whether the hand in the jig is concentrating or leaving, and nothing in this design reads the difference. This is criterion 01, marked <b>not met</b> by both teachers, and criteria 02, 09 and 10 fail for the same reason. We had a stop button. They wanted a machine where stopping <i>is</i> the child pulling their hand away — and that is a different machine, which we did not build.");
       return; }
     paint();
   }, 26);
@@ -733,6 +935,7 @@ $("stopBtn").onclick = teacherStop;
   if (tab && INTERACTIONS.some((i) => i.k === tab)) state.tab = tab;
   if (LETTERS[letter]) state.letter = letter;
   PATH = buildPath(state.letter);
+  renderDims();
   render();
   if (state.tab === "gantry" && q.get("test") === "pull") {
     /* Land mid-stroke with the stage moving, then run the test the
