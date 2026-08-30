@@ -7,295 +7,465 @@
 <meta name="description" content="Interactive recreation of the Ricky Kids sludge test lane: a density dial, three drive configurations, and the traction limit below which a track fluidises what it stands on.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Chivo+Mono:wght@400;500;600&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
-   Shared shell for the Ricky Kids demos. Palette and type are
-   inherited from the portfolio's case-study system so the demos
-   read as one family with the case studies that link them.
-   Single-theme by design: these are bench tools, dark, with
-   every colour painted so nothing borrows a host background.
+   P36 — Sludge test lane. Tactile field engineering.
+   A workshop instrument on khaki paper: deep umber ink, clay,
+   olive and rust on a warm neutral ground. Single-theme light
+   by intent — a bench sheet is a lit sheet — every colour
+   painted explicitly.
    ============================================================ */
 :root {
-  color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+  --bg: #d7cdb4;            /* khaki paper ground */
+  --surface: #e7e0cc;       /* raised plate */
+  --surface-2: #efe9d8;     /* lightest sheet */
+  --well: #c7bc9e;          /* recessed groove / lane */
+  --line: #a89b7c;          /* machined edge */
+  --hairline: #beb397;
+  --ink: #2a2013;           /* deep umber */
+  --body-ink: #42351f;
+  --dim: #5d4f36;
+  --accent: #a34a17;        /* clay — interaction, focus, the dial */
+  --accent-deep: #7f3810;
+  --accent-wash: rgba(163, 74, 23, 0.10);
+  --ok: #52601c;            /* olive — the drive that held */
+  --ok-deep: #3f4b15;
+  --ok-wash: rgba(82, 96, 28, 0.13);
+  --warn: #8a5c12;          /* ochre */
+  --warn-wash: rgba(138, 92, 18, 0.11);
+  --crit: #99290f;          /* rust — fluidised, stalled, buried */
+  --crit-deep: #7a2009;
+  --crit-wash: rgba(153, 41, 15, 0.09);
+  --sludge: #b3a170;        /* the medium itself */
+  --sludge-line: #9c8a58;
+  --sans: "Bricolage Grotesque", "Segoe UI", Arial, sans-serif;
+  --mono: "Chivo Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r-s: 3px; --r-m: 6px; --r-l: 10px;
+  --plate: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 3px rgba(42,32,19,.18);
+  --recess: inset 0 1px 3px rgba(42,32,19,.30);
 }
 
 * { box-sizing: border-box; }
+html { background: var(--bg); }
 body {
-  margin: 0; background: var(--bg); color: var(--body);
+  margin: 0; background: var(--bg); color: var(--body-ink);
   font-family: var(--sans); font-size: 14px; line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-s); }
 button { font: inherit; color: inherit; cursor: pointer; }
-select, input, textarea { font: inherit; color: inherit; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-.app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
-  display: flex; flex-direction: column;
+.kicker {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
 }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
-.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
 
+.app { max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+/* ---- masthead: a stamped workshop plate ---- */
+.masthead { padding: 26px 0 0; border-bottom: 3px solid var(--ink); }
+.mast-row { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.brand { margin-right: auto; }
+.brand .eyebrow { display: block; margin-bottom: 8px; }
+.brand h1 {
+  margin: 0; font-size: clamp(27px, 4.6vw, 40px); font-weight: 800;
+  letter-spacing: .015em; text-transform: uppercase; color: var(--ink); line-height: 1.02;
+}
+.brand .sub {
+  margin: 5px 0 0; font-family: var(--mono); font-size: 12.5px;
+  color: var(--accent-deep); letter-spacing: .04em;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-bottom: 4px; }
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border: 1px solid var(--line); background: var(--surface-2);
+  border-radius: 999px; padding: 4px 11px;
+  font-size: 11px; font-family: var(--mono); font-variant-numeric: tabular-nums;
+  color: var(--body-ink); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
-.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+.chip b { color: var(--ink); font-weight: 600; }
+.chip.good { border-color: var(--ok); color: var(--ok-deep); background: var(--ok-wash); }
+.chip.crit { border-color: var(--crit); color: var(--crit-deep); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex: none; }
+.dot.good { background: var(--ok); } .dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+.mast-note {
+  margin: 16px 0 0; padding: 10px 0 14px; border-top: 1px solid var(--hairline);
+  font-size: 12.5px; color: var(--dim); max-width: 90ch;
+}
+.mast-note b { color: var(--ink); font-weight: 600; }
 
-.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
-.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
-.params .spacer { flex: 1; }
+/* ---- the density dial: the instrument ---- */
+.instrument {
+  margin: 22px 0 20px; border: 1px solid var(--line); border-radius: var(--r-l);
+  background: var(--surface); box-shadow: var(--plate); padding: 16px 18px 14px;
+}
+.inst-top { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.inst-id { display: flex; flex-direction: column; gap: 2px; }
+.inst-id small { font-size: 12px; color: var(--dim); font-weight: 400; }
+.readout {
+  display: flex; align-items: baseline; gap: 7px;
+  border: 1px solid var(--line); border-radius: var(--r-m); background: var(--surface-2);
+  box-shadow: var(--recess); padding: 4px 12px;
+}
+.readout .rv {
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-size: 30px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; line-height: 1.15;
+}
+.readout .ru { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.inst-medium { margin-left: auto; font-size: 12.5px; color: var(--dim); text-align: right; }
+.inst-medium .mname { font-family: var(--mono); font-size: 11.5px; color: var(--body-ink); }
+.inst-medium b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 
-.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
-.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
+.dialzone { position: relative; padding: 0 10px; margin-top: 14px; }
+.scale { position: relative; height: 118px; }
+.zone { position: absolute; top: 20px; height: 30px; border-radius: 2px; }
+.zone.fluid {
+  background: repeating-linear-gradient(-45deg, rgba(153,41,15,.13) 0 4px, rgba(153,41,15,0) 4px 10px);
+}
+.zone.hold { background: var(--ok-wash); }
+.zone > span {
+  position: absolute; top: -18px; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+}
+.zone.fluid > span { left: 0; color: var(--crit-deep); }
+.zone.hold > span { right: 0; color: var(--ok-deep); }
+.groove {
+  position: absolute; left: 0; right: 0; top: 40px; height: 8px;
+  background: var(--well); border-radius: 4px; box-shadow: var(--recess);
+}
+.tk { position: absolute; width: 1px; background: var(--dim); }
+.tk.minor { top: 52px; height: 5px; opacity: .5; }
+.tk.major { top: 50px; height: 9px; }
+.tk.major b {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 9.5px; font-weight: 400;
+  font-variant-numeric: tabular-nums; color: var(--dim);
+}
+.bound { position: absolute; top: 12px; height: 48px; width: 2px; background: var(--crit); }
+.bound > span {
+  position: absolute; top: -13px; left: 5px; font-family: var(--mono); font-size: 9.5px;
+  font-weight: 500; letter-spacing: .06em; color: var(--crit-deep); white-space: nowrap;
+}
+.pin { position: absolute; top: 74px; width: 0; }
+.pin > i {
+  position: absolute; left: -5px; top: 0; width: 0; height: 0;
+  border-left: 5px solid transparent; border-right: 5px solid transparent;
+  border-bottom: 7px solid var(--ink);
+}
+.pin > span {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  text-align: center; font-family: var(--mono); font-size: 9.5px; color: var(--body-ink);
+  line-height: 1.45; white-space: nowrap;
+}
+.pin > span b { display: block; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+#dial {
+  -webkit-appearance: none; appearance: none;
+  position: absolute; left: 0; top: 12px; width: 100%; height: 64px;
+  margin: 0; background: transparent; cursor: ew-resize;
+}
+#dial::-webkit-slider-runnable-track { height: 64px; background: transparent; }
+#dial::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 56px; margin-top: 4px;
+  border-radius: 4px; border: 1px solid var(--ink); cursor: ew-resize;
+  background:
+    linear-gradient(var(--accent) 0 0) 50% 0 / 2px 100% no-repeat,
+    repeating-linear-gradient(90deg, #4a3a22 0 2px, #2f2413 2px 4px);
+  box-shadow: 0 2px 4px rgba(42,32,19,.4), inset 0 1px 0 rgba(255,255,255,.22);
+}
+#dial::-moz-range-track { height: 64px; background: transparent; }
+#dial::-moz-range-thumb {
+  width: 20px; height: 56px; border-radius: 4px; border: 1px solid var(--ink); cursor: ew-resize;
+  background:
+    linear-gradient(var(--accent) 0 0) 50% 0 / 2px 100% no-repeat,
+    repeating-linear-gradient(90deg, #4a3a22 0 2px, #2f2413 2px 4px);
+  box-shadow: 0 2px 4px rgba(42,32,19,.4);
+}
+#dial:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.detents {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--hairline);
+}
+.segmented {
+  display: inline-flex; border: 1px solid var(--ink); border-radius: var(--r-m);
+  overflow: hidden; background: var(--surface-2); box-shadow: 0 2px 0 rgba(42,32,19,.28);
+}
+.segmented button {
+  border: 0; border-right: 1px solid var(--line); padding: 7px 14px; text-align: left;
+  background: linear-gradient(#f2ecdc, #e3dbc4); color: var(--body-ink);
+}
 .segmented button:last-child { border-right: 0; }
-.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
-.segmented button:hover { color: var(--ink); }
-.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
-.segmented button[aria-pressed="true"] span { color: var(--accent); }
-
-.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
-.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
-.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
-.provenance b { color: var(--body); font-weight: 500; }
-
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-  letter-spacing: .13em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+.segmented button:hover { background: linear-gradient(#f6f1e3, #e9e2cd); }
+.segmented button b { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.segmented button span {
+  display: block; margin-top: 1px; font-family: var(--mono); font-size: 9.5px;
+  font-variant-numeric: tabular-nums; letter-spacing: .05em; color: var(--dim);
 }
-.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
-.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
-.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
-.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
-.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
+.segmented button[aria-pressed="true"] {
+  background: var(--ink); box-shadow: inset 0 2px 4px rgba(0,0,0,.45);
+}
+.segmented button[aria-pressed="true"] b { color: var(--surface-2); }
+.segmented button[aria-pressed="true"] span { color: #cbbfa2; }
+.detents .hint { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .04em; }
 
+/* ---- section head ---- */
+.pane-head { margin: 26px 0 18px; }
+.pane-head h2 {
+  margin: 6px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -.01em; color: var(--ink);
+}
+.provenance { margin: 8px 0 0; font-size: 13px; color: var(--dim); max-width: 84ch; }
+.provenance b { color: var(--ink); font-weight: 600; }
+
+/* ---- the envelope chart ---- */
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) 356px; gap: 20px; align-items: start; }
+
+.envcard {
+  border: 1px solid var(--line); border-radius: var(--r-l); background: var(--surface);
+  box-shadow: var(--plate); padding: 16px 18px;
+}
+.bands { display: flex; flex-direction: column; gap: 13px; margin-top: 12px; }
+.band, .axisrow { display: grid; grid-template-columns: 164px minmax(0, 1fr) 104px; gap: 14px; align-items: center; }
+.band .n { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.band .n small {
+  display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--dim); margin-top: 3px;
+}
+.band .lane {
+  position: relative; height: 30px; border-radius: var(--r-s);
+  background: var(--well); box-shadow: var(--recess);
+}
+.band .env {
+  position: absolute; top: 4px; bottom: 4px; border-radius: 2px;
+  background: rgba(42, 32, 19, 0.12); border: 1px solid var(--dim);
+}
+.band .env.own { background: var(--ok-wash); border-color: var(--ok); border-width: 1.5px; }
+.band .run {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 11px; height: 11px; border-radius: 50%;
+}
+.band .run.ok { background: var(--ok); border: 2px solid var(--surface-2); box-shadow: 0 0 0 1px var(--ok-deep); }
+.band .run.no { background: var(--surface-2); border: 2.5px solid var(--crit); }
+.band .now { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--accent); }
+.band .now::after {
+  content: ""; position: absolute; top: -4px; left: -3px; width: 0; height: 0;
+  border-left: 4px solid transparent; border-right: 4px solid transparent;
+  border-top: 5px solid var(--accent);
+}
+.band .st { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 11px; text-align: right; }
+.band .st.ok { color: var(--ok-deep); } .band .st.no { color: var(--crit-deep); }
+.axisrow { margin-top: 8px; }
+.axisrow .ax { position: relative; height: 18px; }
+.axisrow .ax i { position: absolute; top: 0; width: 1px; height: 5px; background: var(--dim); }
+.axisrow .ax i b {
+  position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 9px; font-weight: 400;
+  font-variant-numeric: tabular-nums; color: var(--dim);
+}
+.axisrow .ax i.b { background: var(--crit); width: 2px; height: 7px; }
+.axisrow .ax i.b b { color: var(--crit-deep); font-weight: 600; top: 7px; }
+.axisrow .u { font-family: var(--mono); font-size: 9.5px; color: var(--dim); text-align: right; align-self: start; }
+.caption {
+  margin: 12px 0 0; font-family: var(--mono); font-size: 10px; line-height: 1.7;
+  color: var(--dim); letter-spacing: .01em; max-width: 78ch;
+}
+
+/* ---- verdicts ---- */
+.note {
+  margin-top: 15px; font-size: 12.5px; color: var(--body-ink); max-width: 84ch;
+  border-left: 3px solid var(--line); border-radius: 0 var(--r-s) var(--r-s) 0;
+  padding: 8px 12px; background: rgba(42,32,19,.04);
+}
+.note b { color: var(--ink); font-weight: 600; }
+.note.warn { border-left-color: var(--warn); background: var(--warn-wash); }
+.note.crit { border-left-color: var(--crit); background: var(--crit-wash); }
+.note.good { border-left-color: var(--ok); background: var(--ok-wash); }
+
+/* ---- buttons ---- */
+.actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; align-items: center; }
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+  border: 1px solid var(--ink); border-radius: var(--r-m);
+  background: linear-gradient(#f2ecdc, #e3dbc4); color: var(--ink);
+  padding: 8px 15px; font-size: 13px; font-weight: 600;
+  box-shadow: 0 2px 0 rgba(42,32,19,.3);
+  transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
 }
-.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
-.btn:disabled { opacity: .38; cursor: not-allowed; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
-.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
-.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
-.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
-.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
-.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
-.btn.ghost { background: transparent; }
-
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
-
-.note {
-  margin-top: 14px; font-size: 12.5px; color: var(--muted);
-  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+.btn:hover:not(:disabled) { background: linear-gradient(#f6f1e3, #e9e2cd); }
+.btn:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 0 rgba(42,32,19,.3); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary {
+  background: linear-gradient(#b45520, var(--accent)); border-color: var(--accent-deep);
+  color: #f7f0e2; text-shadow: 0 1px 0 rgba(42,32,19,.3);
 }
-.note b { color: var(--body); font-weight: 500; }
-.note.warn { border-left-color: var(--warn); }
-.note.crit { border-left-color: var(--crit); }
-.note.good { border-left-color: var(--good); }
+.btn.primary:hover:not(:disabled) { background: linear-gradient(#bd5c25, #ab4f1a); }
+.btn.sm { padding: 6px 11px; font-size: 12px; }
+.actions .hint { font-family: var(--mono); font-size: 10px; color: var(--dim); letter-spacing: .04em; }
 
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
-table.sheet thead th {
-  background: var(--surface-2); color: var(--muted);
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
-  letter-spacing: .11em; text-transform: uppercase;
-  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+/* ---- the tank ---- */
+.tank {
+  border: 1px solid var(--line); border-radius: var(--r-l); background: var(--surface);
+  box-shadow: var(--plate); padding: 14px 14px 12px; margin: 0;
+  transition: border-color .2s ease;
 }
-table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-table.sheet tbody tr:last-child td { border-bottom: 0; }
-table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
-table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-table.sheet .name { color: var(--ink); }
-table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
-table.sheet tfoot .num { text-align: right; }
+.tank.stalled { border-color: var(--crit); box-shadow: var(--plate), 0 0 0 1px var(--crit); }
+.tank svg { display: block; width: 100%; border-radius: var(--r-s); }
+.svglabel { font-family: var(--mono); font-size: 7px; fill: var(--dim); letter-spacing: .04em; }
+.svglabel.crit { fill: var(--crit-deep); font-weight: 600; }
+.sink {
+  display: flex; gap: 14px; align-items: baseline; margin-top: 10px; flex-wrap: wrap;
+  font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 11px; color: var(--dim);
+}
+.sink b { color: var(--ink); font-weight: 600; }
+.tile {
+  border: 1px solid var(--crit); border-left-width: 4px; border-radius: var(--r-m);
+  background: var(--surface); box-shadow: var(--plate); padding: 13px 15px; margin-top: 14px;
+}
+.tile .v {
+  font-family: var(--mono); font-variant-numeric: tabular-nums;
+  font-size: 25px; font-weight: 600; color: var(--crit-deep); letter-spacing: -.01em; line-height: 1.1;
+}
+.tile .l { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-top: 5px; }
+.tile .p {
+  margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--hairline);
+  font-size: 11.5px; color: var(--dim); line-height: 1.6;
+}
+.tile .p b { color: var(--body-ink); font-weight: 600; }
 
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
-.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
-.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
-.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
-
-.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
-.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-.meterbar.good > i { background: var(--good); }
-.meterbar.crit > i { background: var(--crit); }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
+/* ---- footer ---- */
+.foot { border-top: 3px solid var(--ink); margin-top: 30px; padding: 20px 0 40px; }
 .foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+.foot p b { color: var(--body-ink); font-weight: 600; }
+.foot .conf { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--hairline); font-size: 11.5px; color: var(--dim); max-width: 92ch; }
 
+/* ---- toast ---- */
 .toast {
   position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface-2); border: 1px solid var(--ink); border-radius: var(--r-m);
   padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
   opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+  box-shadow: 0 6px 18px rgba(42,32,19,.35);
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.crit { border-color: var(--crit-dim); }
+.toast.crit { border-color: var(--crit); border-left-width: 4px; }
 
-@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
-</style>
+/* ---- responsive ---- */
+@media (max-width: 1020px) {
+  .grid2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .band, .axisrow { grid-template-columns: 1fr; gap: 6px; }
+  .band .st { text-align: left; }
+  .axisrow .n, .axisrow .u { display: none; }
+  .bands { gap: 18px; }
+  .inst-medium { margin-left: 0; text-align: left; }
+}
+@media (max-width: 460px) {
+  .zone > span { display: none; }
+  .readout .rv { font-size: 25px; }
+}
 
-<style>
-.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 18px; align-items: start; }
-@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
-
-.dialbar { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
-.dialbar .top { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-.dialbar .val { font-family: var(--mono); font-size: 28px; font-weight: 600; color: var(--ink); line-height: 1; }
-.dialbar .unit { font-size: 13px; color: var(--muted); }
-.dialbar .medium { margin-left: auto; font-size: 13px; color: var(--body); }
-
-.scale { position: relative; height: 54px; margin-top: 18px; }
-.scale .rule { position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: var(--surface-3); }
-.scale .bound { position: absolute; top: 0; bottom: 18px; width: 2px; background: var(--crit); }
-.scale .bound span { position: absolute; top: -17px; left: -1px; font-family: var(--mono); font-size: 10px; color: var(--crit); white-space: nowrap; }
-.scale .tick { position: absolute; top: 4px; width: 1px; height: 10px; background: var(--faint); }
-.scale .tick span { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
-
-.bands { display: flex; flex-direction: column; gap: 12px; }
-.band { display: grid; grid-template-columns: 190px 1fr 118px; gap: 14px; align-items: center; }
-.band .n { font-size: 13.5px; color: var(--body); }
-.band .n small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
-.band .lane { position: relative; height: 26px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--line); }
-.band .env { position: absolute; top: 0; bottom: 0; border-radius: 5px; background: rgba(91,124,250,.18); border: 1px solid var(--accent-dim); }
-.band .env.own { background: var(--good-wash); border-color: var(--good-dim); }
-.band .run { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 9px; height: 9px; border-radius: 50%; }
-.band .run.ok { background: var(--good); } .band .run.no { background: var(--crit); }
-.band .now { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); }
-.band .st { font-family: var(--mono); font-size: 11.5px; text-align: right; }
-.band .st.ok { color: var(--good); } .band .st.no { color: var(--crit); }
-
-.tank { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 12px; }
-.sink { display: flex; gap: 14px; align-items: baseline; margin-top: 10px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
-.sink b { color: var(--ink); font-weight: 500; }
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
 </style>
 
 <div class="app">
-  <header class="topbar">
-    <div class="topbar-row">
+  <header class="masthead">
+    <div class="mast-row">
       <div class="brand">
-        <span class="eyebrow">Ricky Kids &middot; SRM Kattankulathur &middot; Field robotics</span>
-        <h1>Sludge test lane &mdash; the operating envelope</h1>
+        <span class="eyebrow kicker">Ricky Kids &middot; SRM Kattankulathur &middot; Field robotics &mdash; test-tank study</span>
+        <h1>Sludge test lane</h1>
+        <p class="sub">&mdash; the operating envelope</p>
       </div>
-      <span class="chip"><span class="dot accent"></span>Test tank &middot; <b>27 runs</b></span>
-      <span class="chip"><span class="dot"></span>3 media &middot; 3 drives &middot; 3 runs each</span>
-      <span class="chip" id="stateChip"></span>
+      <div class="chips">
+        <span class="chip"><span class="dot accent"></span>Test tank &middot; <b>27 runs</b></span>
+        <span class="chip"><span class="dot"></span>3 media &middot; 3 drives &middot; 3 runs each</span>
+        <span class="chip"><span class="dot crit"></span>Traction limit <b>1.15 g/cm³</b></span>
+        <span class="chip" id="stateChip"></span>
+      </div>
     </div>
-    <div class="params">
-      <span class="plabel">Medium</span>
-      <div class="segmented" id="media" role="group" aria-label="Medium"></div>
-      <span class="spacer"></span>
-      <span class="chip"><span class="dot crit"></span>Traction limit <b>1.15 g/cm³</b></span>
-    </div>
-    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
-      <b>The project name assumes traversing is possible.</b> The cheapest thing we could do was spend the first quarter building a tank and trying to disprove our own title. Move the dial below the dashed line and run the lane.</p>
+    <p class="mast-note"><b>The project name assumes traversing is possible.</b> The cheapest thing we could do was spend the first quarter building a tank and trying to disprove our own title. Move the dial below the traction limit and run the lane.</p>
   </header>
 
-  <main class="pane">
-    <div class="pane-head">
-      <p class="kicker">One lane, one vehicle, three graded sludge analogues</p>
-      <h2>What the medium does to the drive</h2>
-      <p class="provenance">The variable was the medium; the vehicle stayed fixed. A drive that has to be hauled back on its tether has <b>added an entry to the job rather than removed one</b> — that was the pass mark, agreed before any of this was built.</p>
-    </div>
-
-    <div class="dialbar">
-      <div class="top">
-        <span class="val" id="dVal">1.02</span><span class="unit">g/cm³ &mdash; density of the medium in the lane</span>
-        <span class="medium" id="dMedium"></span>
+  <main>
+    <section class="instrument" aria-label="Density dial">
+      <div class="inst-top">
+        <div class="inst-id">
+          <span class="kicker">Density dial</span>
+          <small>medium in the lane &mdash; the one variable of the study</small>
+        </div>
+        <div class="readout"><span class="rv" id="dVal">1.02</span><span class="ru">g/cm³</span></div>
+        <div class="inst-medium" id="dMedium"></div>
       </div>
-      <input type="range" id="dial" min="95" max="165" value="102" step="1" style="width:100%" aria-label="Medium density">
-      <div class="scale" id="scale"></div>
+      <div class="dialzone">
+        <div class="scale" id="scale" aria-hidden="true"></div>
+        <input type="range" id="dial" min="95" max="165" value="102" step="1" aria-label="Medium density in grams per cubic centimetre">
+      </div>
+      <div class="detents">
+        <span class="kicker">detents</span>
+        <div class="segmented" id="media" role="group" aria-label="Medium"></div>
+        <span class="hint">or drag the pointer anywhere between the mixed analogues</span>
+      </div>
+    </section>
+
+    <div class="pane-head">
+      <span class="kicker">One lane, one vehicle, three graded sludge analogues</span>
+      <h2>What the medium does to the drive</h2>
+      <p class="provenance">The variable was the medium; the vehicle stayed fixed. A drive that has to be hauled back on its tether has <b>added an entry to the job rather than removed one</b> &mdash; that was the pass mark, agreed before any of this was built.</p>
     </div>
 
     <div class="grid2">
       <div>
-        <div class="bands" id="bands"></div>
-        <div id="verdict" style="margin-top:16px"></div>
-        <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+        <div class="envcard">
+          <span class="kicker">Drives vs traction &mdash; one shared density axis</span>
+          <div class="bands" id="bands"></div>
+          <div class="axisrow" id="axis"></div>
+          <p class="caption">Bands: each drive's modelled hold envelope, in a medium left alone. Dots: the three media &mdash; filled olive where that drive completed the lane, open rust where it did not. Clay rule: the dialled density. The band and the dots only agree at the settled analogue.</p>
+        </div>
+        <div id="verdict"></div>
+        <div class="actions">
           <button class="btn primary" id="runBtn">Run the lane</button>
           <button class="btn sm" id="revBtn" disabled>Reverse out of the stall</button>
-          <span class="mono" style="font-size:11px;color:var(--faint);align-self:center">tracked drive, 9 runs per medium</span>
+          <span class="hint">simulates the tracked drive at the dialled density</span>
         </div>
       </div>
       <div>
-        <div class="tank">
-          <svg viewBox="0 0 240 150" width="100%" style="display:block">
-            <defs><pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <rect width="8" height="8" fill="#12121a"/><line x1="0" y1="0" x2="0" y2="8" stroke="#1b1b24" stroke-width="4"/></pattern></defs>
-            <rect x="4" y="4" width="232" height="142" fill="none" stroke="#23232d"/>
-            <rect id="med" x="5" y="60" width="230" height="85" fill="url(#hatch)"/>
-            <line id="surface" x1="5" y1="60" x2="235" y2="60" stroke="#3a3a4a" stroke-width="1.5"/>
+        <figure class="tank" id="tankCard">
+          <svg viewBox="0 0 240 150" role="img" aria-label="Side view of the test tank: the vehicle sinking into the medium against the 60 millimetre track height">
+            <defs>
+              <pattern id="sludgeFill" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(-16)">
+                <rect width="10" height="10" fill="#b3a170"/>
+                <line x1="0" y1="2.5" x2="10" y2="2.5" stroke="#9c8a58" stroke-width="1.6"/>
+                <line x1="0" y1="7" x2="10" y2="7" stroke="#a6935f" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect x="4" y="4" width="232" height="142" fill="#efe9d8" stroke="#2a2013" stroke-width="2"/>
+            <rect id="med" x="5" y="60" width="230" height="85" fill="url(#sludgeFill)"/>
+            <line id="surface" x1="5" y1="60" x2="235" y2="60" stroke="#2a2013" stroke-width="1.5"/>
+            <text class="svglabel" x="10" y="56">surface</text>
             <g id="veh"></g>
-            <line id="trackline" x1="0" y1="0" x2="0" y2="0" stroke="var(--crit)" stroke-dasharray="3 3" stroke-width="1"/>
+            <rect id="murk" x="5" y="60" width="230" height="85" fill="#b3a170" opacity="0.52" pointer-events="none"/>
+            <line id="trackline" x1="0" y1="0" x2="0" y2="0" stroke="var(--crit)" stroke-dasharray="4 3" stroke-width="1.2"/>
+            <text class="svglabel crit" x="231" y="82" text-anchor="end">60 mm &mdash; track height</text>
           </svg>
-          <div class="sink">
-            <span>sinkage <b id="sinkV">—</b> mm</span><span>track height <b>60</b> mm</span><span id="sinkState">idle</span>
-          </div>
-        </div>
-        <p class="note" id="sinkNote"><b>Sinkage is measured while the drive runs, not after it.</b> In six of nine tracked runs it never stabilised — the drive kept turning, the medium kept thinning, and the vehicle kept going down.</p>
-        <div class="tiles" style="grid-template-columns:1fr;margin-top:16px">
-          <div class="tile crit"><div class="v">2 of 9</div><div class="l">Tracked stalls the vehicle recovered from unaided (guardrail)</div><div class="p">reversing dug it in deeper in 7 of 9</div></div>
+          <figcaption class="sink">
+            <span>sinkage <b id="sinkV">&mdash;</b> mm</span><span>track height <b>60</b> mm</span><span id="sinkState">idle</span>
+          </figcaption>
+        </figure>
+        <p class="note" id="sinkNote"><b>Sinkage is measured while the drive runs, not after it.</b> Six of the nine tracked runs never completed the lane &mdash; the drive kept turning, the medium kept thinning, and the vehicle kept going down.</p>
+        <div class="tile">
+          <div class="v">2 of 9</div>
+          <div class="l">Stall events the vehicle recovered from unaided &mdash; the pass mark</div>
+          <div class="p"><b>Stalls are events, not runs:</b> nine stall events across the nine tracked runs &mdash; a run can stall twice. The other seven ended with the vehicle pulled out on its tether, after reversing dug each of them in deeper. Six of the nine runs never completed the lane.</div>
         </div>
       </div>
     </div>
@@ -312,8 +482,8 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
         <p>Put the dial at the fresh analogue and run the lane with tracks. The medium thins under the drive, sinkage passes the track height, and the vehicle stops being on a surface and starts being in a fluid.</p>
       </div>
       <div>
-        <h5 style="visibility:hidden">more</h5>
-        <p><b>The band and the runs are two different things.</b> The tracked envelope is where a track can hold in a medium left alone. The dots are where it actually completed the lane — and the two only meet at the settled analogue.</p>
+        <h5>The band and the dots</h5>
+        <p><b>The band and the runs are two different things.</b> The tracked envelope is where a track can hold in a medium left alone. The dots are where it actually completed the lane &mdash; and the two only meet at the settled analogue.</p>
       </div>
     </div>
     <p class="conf">Student research at SRM Kattankulathur with a collaborator at Jadavpur University, entered in the 2021-22 Technology Infusion Grand Challenge. The vehicle was modelled and costed and no version of it was ever put into a live sewer. Every density, sinkage figure, run count and success rate on this page is invented and reconciled with the case study.</p>
@@ -346,6 +516,7 @@ const DRIVES = [
 ];
 
 const state = { d: 1.02, running: false, stalled: false, sink: 0, t: 0 };
+const REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -378,11 +549,30 @@ function renderMedia() {
   }));
 }
 
+/* The instrument scale: engraved once — zones, ticks, the traction
+   limit, and the three media pinned where they sit on the axis. */
 function renderScale() {
+  const majors = [], minors = [];
+  for (let v = 100; v <= 160; v += 10) majors.push(v / 100);
+  for (let v = 95; v <= 165; v += 5) if (v % 10 !== 0) minors.push(v / 100);
   $("scale").innerHTML =
-    `<div class="rule"></div>
-     <div class="bound" style="left:${posOf(BOUND)}%"><span>1.15 &mdash; traction limit</span></div>` +
-    MEDIA.map((m) => `<div class="tick" style="left:${posOf(m.d)}%"><span>${esc(m.n)}</span></div>`).join("");
+    `<div class="zone fluid" style="left:0;width:${posOf(BOUND)}%"><span>tracks fluidise</span></div>
+     <div class="zone hold" style="left:${posOf(BOUND)}%;right:0"><span>tracks can hold</span></div>
+     <div class="groove"></div>` +
+    minors.map((v) => `<i class="tk minor" style="left:${posOf(v)}%"></i>`).join("") +
+    majors.map((v) => `<i class="tk major" style="left:${posOf(v)}%"><b>${v.toFixed(2)}</b></i>`).join("") +
+    `<div class="bound" style="left:${posOf(BOUND)}%"><span>1.15 &mdash; traction limit</span></div>` +
+    MEDIA.map((m) => `<div class="pin" style="left:${posOf(m.d)}%"><i></i><span>${esc(m.n)}<b>${m.d.toFixed(2)}</b></span></div>`).join("");
+}
+
+function renderAxis() {
+  const majors = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6];
+  $("axis").innerHTML =
+    `<span class="n" aria-hidden="true"></span>
+     <span class="ax" aria-hidden="true">` +
+    majors.map((v) => `<i style="left:${posOf(v)}%"><b>${v.toFixed(1)}</b></i>`).join("") +
+    `<i class="b" style="left:${posOf(BOUND)}%"><b>1.15</b></i></span>
+     <span class="u">g/cm³</span>`;
 }
 
 function renderBands() {
@@ -426,40 +616,52 @@ function drawTank() {
   const mmToPx = 0.42;                 /* 150 px of tank ≈ 355 mm of depth */
   const bodyY = surfaceY + s * mmToPx; /* the vehicle rides down as it sinks */
   const x = 30 + (state.running || state.stalled ? state.t : 0) * 1.55;
+  const below = state.d < BOUND;
   $("veh").innerHTML =
-    `<rect x="${x - 22}" y="${bodyY - 26}" width="44" height="18" rx="3" fill="#1c1c25" stroke="#3a3a4a"/>
-     <rect x="${x - 26}" y="${bodyY - 8}" width="52" height="9" rx="4" fill="${state.d < BOUND ? "#5e3628" : "#235c4b"}" stroke="${state.d < BOUND ? "#d0745a" : "#3fae8b"}"/>
-     <circle cx="${x - 15}" cy="${bodyY - 3.5}" r="3" fill="#0b0b10"/><circle cx="${x + 15}" cy="${bodyY - 3.5}" r="3" fill="#0b0b10"/>`;
+    `<path d="M 8 10 Q ${((x - 20) + 8) / 2} ${bodyY - 4} ${x - 20} ${bodyY - 22}" fill="none" stroke="#6b5b3e" stroke-width="1.1"/>
+     <rect x="${x - 22}" y="${bodyY - 26}" width="44" height="18" rx="2.5" fill="#3a2d19" stroke="#2a2013"/>
+     <rect x="${x - 26}" y="${bodyY - 8}" width="52" height="9" rx="4" fill="${below ? "#8a2c10" : "#4c5a1e"}" stroke="${below ? "#99290f" : "#3f4b15"}"/>
+     <circle cx="${x - 15}" cy="${bodyY - 3.5}" r="3" fill="#efe9d8" opacity=".85"/><circle cx="${x + 15}" cy="${bodyY - 3.5}" r="3" fill="#efe9d8" opacity=".85"/>`;
   const tl = $("trackline");
   tl.setAttribute("x1", 5); tl.setAttribute("x2", 235);
   tl.setAttribute("y1", surfaceY + TRACK_H * mmToPx); tl.setAttribute("y2", surfaceY + TRACK_H * mmToPx);
   $("sinkV").textContent = Math.round(s);
   $("sinkState").textContent = state.stalled ? "stalled — tracks buried" : state.running ? "running" : s > TRACK_H ? "would bury the tracks" : "idle";
-  $("sinkState").style.color = s > TRACK_H ? "var(--crit)" : "var(--muted)";
+  $("sinkState").style.color = s > TRACK_H ? "var(--crit-deep)" : "var(--dim)";
+  $("sinkState").style.fontWeight = s > TRACK_H ? "600" : "400";
+  $("tankCard").classList.toggle("stalled", state.stalled);
 }
 
 let runT;
+function stepRun(target) {
+  state.t += 1.6;
+  /* below the limit the drive keeps thinning what it stands on,
+     so sinkage does not settle — it follows the drive */
+  state.sink += state.d < BOUND ? (target - state.sink) * 0.06 + 0.9 : (target - state.sink) * 0.10;
+  drawTank();
+  const buried = state.sink >= TRACK_H;
+  if (buried && state.d < BOUND) { stall(); return true; }
+  if (state.t >= 118) { finish(); return true; }
+  return false;
+}
 function runLane() {
   clearInterval(runT);
   state.running = true; state.stalled = false; state.t = 0; state.sink = sinkAt(state.d) * 0.35;
   $("revBtn").disabled = true; $("runBtn").textContent = "Running…"; $("runBtn").disabled = true;
   const target = sinkAt(state.d);
-  runT = setInterval(() => {
-    state.t += 1.6;
-    /* below the limit the drive keeps thinning what it stands on,
-       so sinkage does not settle — it follows the drive */
-    state.sink += state.d < BOUND ? (target - state.sink) * 0.06 + 0.9 : (target - state.sink) * 0.10;
-    drawTank();
-    const buried = state.sink >= TRACK_H;
-    if (buried && state.d < BOUND) { stall(); return; }
-    if (state.t >= 118) { finish(); return; }
-  }, 40);
+  if (REDUCED) {
+    /* reduced motion: same physics, no animation — jump straight
+       to where the run ends */
+    while (!stepRun(target)) { /* advance to the outcome */ }
+    return;
+  }
+  runT = setInterval(() => { stepRun(target); }, 40);
 }
 function stall() {
   clearInterval(runT); state.running = false; state.stalled = true;
   $("runBtn").textContent = "Run the lane"; $("runBtn").disabled = false; $("revBtn").disabled = false;
   drawTank();
-  $("verdict").innerHTML = `<div class="note crit"><b>Stalled at ${Math.round(state.t)}% of the lane.</b> Sinkage passed the ${TRACK_H} mm track height while the drive was still turning. The pass mark was self-recovery, and this run has not met it — <b>seven of nine stalls got worse when we reversed</b>. Try it.</div>`;
+  $("verdict").innerHTML = `<div class="note crit"><b>Stalled at ${Math.round(state.t)}% of the lane.</b> Sinkage passed the ${TRACK_H} mm track height while the drive was still turning. The pass mark was self-recovery, and this run has not met it — of the nine stall events in the tracked runs, only two recovered unaided; <b>the other seven ended with the vehicle pulled out on its tether, after reversing dug them in deeper</b>. Try it.</div>`;
   toast("Stalled. Sinkage passed the track height while the drive was running — the medium under the tracks is thinner than the medium beside them.", true);
 }
 function finish() {
@@ -470,7 +672,7 @@ function finish() {
 }
 function reverseOut() {
   state.sink += 16; state.t = Math.max(0, state.t - 6); drawTank();
-  $("verdict").innerHTML = `<div class="note crit"><b>Reversing dug it in ${Math.round(state.sink)} mm.</b> The track works the medium in the other direction and thins it further, so the vehicle goes down rather than back. This is the seven-of-nine result, and it is why the guardrail was self-recovery rather than distance travelled: a vehicle that has to be hauled out on its tether has added an entry to the job.</div>`;
+  $("verdict").innerHTML = `<div class="note crit"><b>Reversing dug it in ${Math.round(state.sink)} mm.</b> The track works the medium in the other direction and thins it further, so the vehicle goes down rather than back. Seven of the nine stall events ended exactly here — worse for reversing, then pulled out on the tether — and it is why the guardrail was self-recovery rather than distance travelled: a vehicle that has to be hauled out on its tether has added an entry to the job.</div>`;
 }
 function reset() { clearInterval(runT); state.running = false; state.stalled = false; state.t = 0; state.sink = sinkAt(state.d); $("revBtn").disabled = true; $("runBtn").disabled = false; $("runBtn").textContent = "Run the lane"; }
 
@@ -482,9 +684,12 @@ function toast(msg, crit) {
 
 function render() {
   $("dVal").textContent = state.d.toFixed(2);
+  $("dial").setAttribute("aria-valuetext", state.d.toFixed(2) + " g/cm³");
   const m = onMedium();
-  $("dMedium").innerHTML = m ? `<span class="mono" style="color:var(--body)">${esc(m.label)}</span> &middot; sinkage measured <b style="color:var(--ink)">${m.sink} mm</b> over 9 runs` : `<span class="mono" style="color:var(--faint)">between the mixed analogues</span>`;
-  renderMedia(); renderScale(); renderBands(); renderVerdict(); drawTank();
+  $("dMedium").innerHTML = m
+    ? `<span class="mname">${esc(m.label)}</span> &middot; sinkage measured <b>${m.sink} mm</b> over 9 runs`
+    : `<span class="mname">between the mixed analogues</span> &middot; sinkage interpolated`;
+  renderMedia(); renderBands(); renderVerdict(); drawTank();
 }
 
 $("dial").oninput = (e) => { state.d = Number(e.target.value) / 100; reset(); render(); };
@@ -492,6 +697,7 @@ $("runBtn").onclick = runLane;
 $("revBtn").onclick = reverseOut;
 
 (function init() {
+  renderScale(); renderAxis();
   const q = new URLSearchParams(location.search);
   const d = Number(q.get("d"));
   if (d >= MIN && d <= MAX) state.d = d;

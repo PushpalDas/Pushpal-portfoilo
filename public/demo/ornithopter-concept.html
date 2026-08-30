@@ -7,287 +7,422 @@
 <meta name="description" content="The SRM UAV ornithopter proposal, made arithmetic: patrol radius against endurance, the airframes a 24/7 shift pattern needs, and the observer trial the disguise actually passed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
-   Shared shell for the Ricky Kids demos. Palette and type are
-   inherited from the portfolio's case-study system so the demos
-   read as one family with the case studies that link them.
-   Single-theme by design: these are bench tools, dark, with
-   every colour painted so nothing borrows a host background.
+   ORNITHOPTER — field notebook, mission-planning edition.
+   One theme, deliberately: a club logbook is paper. Every
+   colour is painted; nothing borrows a host background.
+   Type: Big Shoulders Display (stencil/drafting headings)
+   + Courier Prime (the typewriter that filled the form in).
    ============================================================ */
 :root {
-  color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+  /* semantic palette */
+  --bg: #e6dabc;            /* the desk the sheet lies on */
+  --surface: #f1e8d2;       /* the sheet itself */
+  --surface-2: #e9dec2;     /* filled-in panel */
+  --surface-3: #ded1ad;     /* pressed / recessed */
+  --border: #b4a37c;        /* pencil-weight rule */
+  --border-soft: #cdbf9c;   /* faint rule */
+  --text: #2b2318;          /* iron-gall ink */
+  --dim: #5c5140;           /* faded ink — 5.6:1 on the sheet */
+  --faint: #857757;         /* decoration only, never body copy */
+  --accent: #1e4a6e;        /* drafting-ink blue */
+  --accent-wash: rgba(30, 74, 110, 0.14);
+  --ok: #3f6631;            /* map-marker green */
+  --ok-wash: rgba(63, 102, 49, 0.14);
+  --warn: #7d5310;          /* amber pencil */
+  --warn-wash: rgba(125, 83, 16, 0.15);
+  --crit: #98291f;          /* the stamp pad */
+  --crit-wash: rgba(152, 41, 31, 0.12);
+  --rule-blue: rgba(30, 74, 110, 0.16);   /* ruled/grid texture ink */
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --mono: "Courier Prime", "Courier New", Courier, monospace;
+  /* scale: 11 / 13.5 / 15 / 18 / 26 / 40 on a 4px rhythm */
 }
 
 * { box-sizing: border-box; }
+html { background: var(--bg); }
 body {
-  margin: 0; background: var(--bg); color: var(--body);
-  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.6;
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
 button { font: inherit; color: inherit; cursor: pointer; }
-select, input, textarea { font: inherit; color: inherit; }
-.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+b, strong { font-weight: 700; color: var(--text); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
-  display: flex; flex-direction: column;
+/* ---------- the sheet ---------- */
+.sheet {
+  max-width: 1220px; margin: 0 auto; min-height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border-soft); border-right: 1px solid var(--border-soft);
+  box-shadow: 0 0 0 1px rgba(43,35,24,.04), 0 24px 60px rgba(43,35,24,.18);
+  position: relative;
 }
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
-.brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -.012em; color: var(--ink); }
+/* the notebook's red margin rule */
+.sheet::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 26px; width: 1px;
+  background: rgba(152, 41, 31, 0.28); pointer-events: none;
+}
+@media (max-width: 560px) { .sheet::before { left: 14px; } }
 
+/* ---------- masthead: the form header ---------- */
+.mast { padding: 20px 32px 0 46px; border-bottom: 2px solid var(--text); }
+.mast-meta {
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim);
+  border-bottom: 1px solid var(--border-soft); padding-bottom: 8px;
+}
+.mast h1 {
+  margin: 14px 0 4px; font-family: var(--display); font-weight: 700;
+  font-size: clamp(26px, 4.6vw, 40px); line-height: 1.02;
+  letter-spacing: .015em; text-transform: uppercase; color: var(--text);
+}
+.mast h1 em { font-style: normal; color: var(--crit); }
+.lede { margin: 8px 0 0; max-width: 72ch; color: var(--dim); }
+.lede b { color: var(--text); }
+
+.stamps { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 16px; }
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border: 1px solid var(--border); background: transparent;
+  padding: 3px 10px; font-size: 11px; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--dim); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); } .dot.warn { background: var(--warn); }
-.dot.crit { background: var(--crit); } .dot.accent { background: var(--accent); }
+.chip b { font-weight: 700; color: var(--text); }
+.chip.good { border-color: var(--ok); color: var(--ok); background: var(--ok-wash); }
+.chip.crit { border-color: var(--crit); color: var(--crit); background: var(--crit-wash); }
+.chip.crit b { color: var(--crit); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dim); flex: none; }
+.dot.good { background: var(--ok); } .dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
 
-.params { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 9px 20px; border-top: 1px solid var(--line-soft); background: var(--surface); }
-.params .plabel { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
-.params .spacer { flex: 1; }
-
-.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--surface); }
-.segmented button { background: none; border: 0; padding: 6px 13px; font-size: 12.5px; color: var(--muted); border-right: 1px solid var(--line); }
-.segmented button:last-child { border-right: 0; }
-.segmented button[aria-pressed="true"] { background: var(--surface-3); color: var(--ink); }
-.segmented button:hover { color: var(--ink); }
-.segmented button span { display: block; font-family: var(--mono); font-size: 9px; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
-.segmented button[aria-pressed="true"] span { color: var(--accent); }
-
-.pane { flex: 1; min-width: 0; padding: 22px 20px 40px; }
-.pane-head { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 18px; }
-.pane-head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-.pane-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -.015em; color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.provenance { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); max-width: 82ch; }
-.provenance b { color: var(--body); font-weight: 500; }
-
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-  letter-spacing: .13em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; border: 1px solid; white-space: nowrap;
+/* ---------- preset index-tabs ---------- */
+.tabs-row {
+  display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
+  padding: 0 32px 0 46px; margin-top: -1px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(var(--surface), var(--surface-2));
 }
-.badge.rule { color: #8f96ab; border-color: #2b2b36; background: #14141a; }
-.badge.model { color: var(--accent); border-color: var(--accent-dim); background: var(--accent-wash); }
-.badge.met { color: var(--good); border-color: var(--good-dim); background: var(--good-wash); }
-.badge.cond { color: var(--warn); border-color: var(--warn-dim); background: var(--warn-wash); }
-.badge.not { color: var(--crit); border-color: var(--crit-dim); background: var(--crit-wash); }
-
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 7px; padding: 8px 14px; font-size: 13px; font-weight: 500;
-  transition: border-color .15s ease, background .15s ease, color .15s ease;
+.tabs-label {
+  font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--faint); padding-bottom: 12px; margin-right: 2px;
 }
-.btn:hover:not(:disabled) { border-color: #35354a; background: var(--surface-3); }
-.btn:disabled { opacity: .38; cursor: not-allowed; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #f7f9ff; }
-.btn.primary:hover:not(:disabled) { background: #6d8afb; border-color: #6d8afb; }
-.btn.good { background: var(--good-wash); border-color: var(--good-dim); color: var(--good); }
-.btn.crit { background: var(--crit-wash); border-color: var(--crit-dim); color: var(--crit); }
-.btn.crit:hover:not(:disabled) { background: rgba(208,116,90,.2); border-color: var(--crit); }
-.btn.sm { padding: 5px 10px; font-size: 12px; border-radius: 6px; }
-.btn.ghost { background: transparent; }
-
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 18px 20px; }
-.card h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.card p { margin: 0; font-size: 13px; color: var(--muted); max-width: 68ch; }
-
-.note {
-  margin-top: 14px; font-size: 12.5px; color: var(--muted);
-  border-left: 2px solid var(--line); padding-left: 12px; max-width: 84ch;
+.tabs { display: flex; align-items: flex-end; gap: 6px; flex-wrap: wrap; }
+.tabs button {
+  appearance: none; border: 1px solid var(--border); border-bottom: none;
+  border-radius: 6px 6px 0 0; background: var(--surface-3);
+  padding: 8px 16px 9px; text-align: left; color: var(--dim);
+  position: relative; top: 0; transition: background .15s ease, color .15s ease;
 }
-.note b { color: var(--body); font-weight: 500; }
-.note.warn { border-left-color: var(--warn); }
-.note.crit { border-left-color: var(--crit); }
-.note.good { border-left-color: var(--good); }
-
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
-table.sheet { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
-table.sheet thead th {
-  background: var(--surface-2); color: var(--muted);
-  font-family: var(--mono); font-size: 10px; font-weight: 500;
-  letter-spacing: .11em; text-transform: uppercase;
-  text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap;
+.tabs button b {
+  display: block; font-family: var(--display); font-weight: 600; font-size: 15px;
+  letter-spacing: .05em; text-transform: uppercase; color: inherit; line-height: 1.1;
 }
-table.sheet tbody td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-table.sheet tbody tr:last-child td { border-bottom: 0; }
-table.sheet tbody tr:hover td { background: rgba(255,255,255,.017); }
-table.sheet .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-table.sheet .name { color: var(--ink); }
-table.sheet tfoot td { padding: 10px 12px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--body); background: var(--surface-2); }
-table.sheet tfoot .num { text-align: right; }
-
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 14px 16px; }
-.tile .v { font-family: var(--mono); font-size: 23px; font-weight: 600; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.tile .l { font-size: 12.5px; color: var(--body); margin-top: 6px; }
-.tile .p { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line-soft); font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: .04em; }
-.tile.good .v { color: var(--good); } .tile.crit .v { color: var(--crit); } .tile.warn .v { color: var(--warn); }
-
-.meterbar { height: 5px; border-radius: 3px; background: var(--surface-3); overflow: hidden; min-width: 60px; }
-.meterbar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); }
-.meterbar.good > i { background: var(--good); }
-.meterbar.crit > i { background: var(--crit); }
-
-input[type="range"] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid #0d0d12; cursor: pointer; }
-
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
-.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
-
-.toast {
-  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80; max-width: min(620px, 90vw);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+.tabs button span { display: block; font-size: 10.5px; letter-spacing: .04em; color: var(--faint); margin-top: 2px; }
+.tabs button:hover { color: var(--text); }
+.tabs button[aria-pressed="true"] {
+  background: var(--surface); color: var(--text); top: 1px;
+  border-color: var(--text); box-shadow: 0 1px 0 var(--surface);
 }
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.crit { border-color: var(--crit-dim); }
+.tabs button[aria-pressed="true"] span { color: var(--accent); }
+.tabs-target { margin-left: auto; padding-bottom: 12px; }
 
-@media (prefers-reduced-motion: reduce) { * { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
-</style>
+/* ---------- body layout ---------- */
+.pane { padding: 24px 32px 40px 46px; }
+.kicker {
+  margin: 0 0 4px; font-size: 10.5px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--faint);
+}
+h2.section, h3.section {
+  margin: 0; font-family: var(--display); font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--text);
+}
+h2.section { font-size: 26px; line-height: 1.05; }
+h3.section { font-size: 18px; margin-bottom: 10px; }
+h3.section .no {
+  display: inline-block; min-width: 22px; margin-right: 6px;
+  border: 1px solid var(--text); text-align: center; font-size: 13px;
+  vertical-align: 2px; padding: 0 3px;
+}
+.provenance { margin: 8px 0 0; color: var(--dim); max-width: 78ch; }
+.provenance b { color: var(--text); }
+.pane-head { border-bottom: 1px solid var(--border-soft); padding-bottom: 16px; margin-bottom: 20px; }
 
-<style>
-.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 400px; gap: 18px; align-items: start; }
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) 380px; gap: 28px; align-items: start; }
 @media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
 
-.dials { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
-.dial { display: grid; grid-template-columns: 150px 1fr 118px; gap: 14px; align-items: center; padding: 7px 0; }
-.dial label { font-size: 13px; color: var(--body); }
-.dial label small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-top: 2px; }
-.dial .v { font-family: var(--mono); font-size: 14px; color: var(--ink); text-align: right; }
+/* ---------- the planning table (dials) ---------- */
+.dials {
+  border: 1px solid var(--border); background: var(--surface);
+  margin-bottom: 24px;
+}
+.dials-head {
+  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  padding: 8px 14px; border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
+}
+.dial {
+  display: grid; grid-template-columns: 168px 1fr 110px; gap: 16px; align-items: center;
+  padding: 9px 14px; border-bottom: 1px dashed var(--border-soft);
+}
+.dial:last-child { border-bottom: 0; }
+.dial label { font-size: 13px; color: var(--text); font-weight: 700; }
+.dial label small {
+  display: block; font-weight: 400; font-size: 11px; letter-spacing: .02em;
+  color: var(--dim); margin-top: 1px;
+}
+.dial .v {
+  font-size: 15px; font-weight: 700; color: var(--accent); text-align: right;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .dial { grid-template-columns: 1fr 92px; }
+  .dial label { grid-column: 1 / -1; }
+}
 
-/* the mission, drawn */
-.mission { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 12px; }
-.legendrow { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 10px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
-.legendrow i { display: inline-block; width: 10px; height: 4px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+input[type="range"] {
+  -webkit-appearance: none; appearance: none; width: 100%;
+  height: 18px; background: transparent; outline-offset: 4px;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px; background: var(--border);
+  background-image: repeating-linear-gradient(90deg, var(--dim) 0 1px, transparent 1px 10%);
+}
+input[type="range"]::-moz-range-track {
+  height: 2px; background: var(--border);
+  background-image: repeating-linear-gradient(90deg, var(--dim) 0 1px, transparent 1px 10%);
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 15px; height: 15px; margin-top: -6.5px;
+  border-radius: 50%; background: var(--accent);
+  border: 2px solid var(--surface); box-shadow: 0 0 0 1.5px var(--accent); cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+  border: 2px solid var(--surface); box-shadow: 0 0 0 1.5px var(--accent); cursor: pointer;
+}
 
-/* time budget bar */
-.budget { display: flex; height: 30px; border-radius: 7px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); }
-.budget > span { display: grid; place-items: center; font-family: var(--mono); font-size: 10.5px; white-space: nowrap; overflow: hidden; min-width: 84px; }
-.budget .out { background: rgba(91,124,250,.30); color: #cdd7ff; }
-.budget .loiter { background: var(--good-wash); color: var(--good); }
-.budget .back { background: rgba(91,124,250,.30); color: #cdd7ff; }
-.budget .deficit { background: var(--crit-wash); color: var(--crit); }
+/* ---------- the mission ruler ---------- */
+.ruler-wrap { border: 1px solid var(--border); background: var(--surface); padding: 14px; }
+.budget {
+  display: flex; height: 40px; border: 1px solid var(--text);
+  background: var(--surface-2); position: relative; overflow: hidden;
+}
+/* ruler ticks over the whole bar */
+.budget::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(43,35,24,.30) 0 1px, transparent 1px 10%),
+    repeating-linear-gradient(90deg, rgba(43,35,24,.16) 0 1px, transparent 1px 2%);
+  background-size: 100% 8px, 100% 4px;
+  background-repeat: no-repeat;
+}
+.budget > span {
+  display: grid; place-items: center; font-size: 11px; font-weight: 700;
+  letter-spacing: .02em; white-space: nowrap; overflow: hidden; min-width: 78px;
+}
+.budget .out, .budget .back { background: var(--accent-wash); color: var(--accent); box-shadow: inset -1px 0 0 var(--border); }
+.budget .loiter { background: var(--ok-wash); color: var(--ok); box-shadow: inset -1px 0 0 var(--border); }
+.budget .deficit {
+  color: var(--crit);
+  background: repeating-linear-gradient(45deg, var(--crit-wash) 0 6px, rgba(152,41,31,.03) 6px 12px);
+}
+.ruler-scale {
+  display: flex; justify-content: space-between; margin-top: 5px;
+  font-size: 10.5px; color: var(--dim); letter-spacing: .04em;
+}
+.legendrow { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; font-size: 11px; color: var(--dim); }
+.legendrow i { display: inline-block; width: 14px; height: 9px; border: 1px solid var(--border); margin-right: 6px; vertical-align: -1px; }
 
-.fleet { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 10px; max-height: 132px; overflow: hidden; }
-.fleet i { width: 11px; height: 11px; border-radius: 2px; background: var(--accent-dim); display: block; }
-.fleet i.over { background: var(--crit-dim); }
+/* ---------- verdict: logbook entry, or the stamp ---------- */
+.verdictbox {
+  border: 1px solid var(--border); border-left: 3px solid var(--dim);
+  background: var(--surface-2); padding: 12px 16px; color: var(--dim); font-size: 13px;
+}
+.verdictbox b { color: var(--text); }
+.verdictbox.good { border-left-color: var(--ok); }
+.verdictbox.warn { border-left-color: var(--warn); }
+.verdictbox.crit { border-left-color: var(--crit); background: transparent; }
+.stamp {
+  display: inline-block; margin: 2px 0 10px; padding: 6px 14px;
+  font-family: var(--display); font-weight: 700; font-size: clamp(20px, 3vw, 27px);
+  letter-spacing: .09em; text-transform: uppercase; color: var(--crit);
+  border: 3px double var(--crit); transform: rotate(-2deg);
+  transform-origin: left center; background: var(--crit-wash);
+}
+.stamp.anim { animation: stamp-in .22s cubic-bezier(.2, 1.6, .4, 1) both; }
+.stamp.sub { font-size: 16px; padding: 3px 10px; margin: 0 0 8px; }
+@keyframes stamp-in {
+  from { transform: rotate(-6deg) scale(1.7); opacity: 0; }
+  to   { transform: rotate(-2deg) scale(1); opacity: 1; }
+}
 
-.verdictbox { border-radius: 10px; padding: 14px 16px; font-size: 13.5px; border: 1px solid var(--line); background: var(--surface-2); color: var(--body); }
-.verdictbox.crit { border-color: var(--crit-dim); background: var(--crit-wash); }
-.verdictbox.good { border-color: var(--good-dim); background: var(--good-wash); }
-.verdictbox b { color: var(--ink); font-weight: 500; }
+/* ---------- fleet: pins on the planning board ---------- */
+.board {
+  border: 1px solid var(--border); background: var(--surface);
+  background-image:
+    linear-gradient(var(--rule-blue) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule-blue) 1px, transparent 1px);
+  background-size: 22px 22px; background-position: -1px -1px;
+  padding: 14px; min-height: 78px;
+}
+.fleet { display: flex; flex-wrap: wrap; gap: 5px; max-height: 132px; overflow: hidden; align-items: center; }
+.fleet i {
+  width: 12px; height: 12px; border-radius: 50%; display: block;
+  background: var(--accent); border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--accent), 1px 1px 0 rgba(43,35,24,.25);
+}
+.fleet i.over { background: var(--crit); box-shadow: 0 0 0 1px var(--crit), 1px 1px 0 rgba(43,35,24,.25); }
+.fleet .more { font-size: 11px; color: var(--dim); margin-left: 6px; }
 
-.curve { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 12px; }
+.note {
+  margin-top: 12px; font-size: 12.5px; color: var(--dim);
+  border-left: 2px solid var(--border); padding-left: 12px; max-width: 82ch;
+}
+.note b { color: var(--text); }
+.note.good { border-left-color: var(--ok); }
+.note.crit { border-left-color: var(--crit); }
+
+/* ---------- computed fields (right column) ---------- */
+.field {
+  border: 1px solid var(--border); background: var(--surface);
+  padding: 12px 16px 12px; margin-bottom: 12px; position: relative;
+}
+.field::before {
+  content: ""; position: absolute; top: 4px; left: 4px; right: 4px;
+  border-top: 1px solid var(--border-soft);
+}
+.field .l {
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 2px;
+}
+.field .v {
+  font-size: 30px; font-weight: 700; line-height: 1.1; color: var(--text);
+  font-variant-numeric: tabular-nums; letter-spacing: -.01em;
+}
+.field .p { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border-soft); font-size: 11px; color: var(--dim); }
+.field.good .v { color: var(--ok); }
+.field.warn .v { color: var(--warn); }
+.field.crit .v { color: var(--crit); }
+
+/* ---------- observer trial chart ---------- */
+.curve { border: 1px solid var(--border); background: var(--surface); padding: 12px 12px 8px; }
+.curve .cap { font-size: 11px; color: var(--dim); margin: 0 0 6px; letter-spacing: .04em; }
+.curve svg { display: block; }
+
+/* ---------- footer: back matter ---------- */
+.foot { border-top: 2px solid var(--text); padding: 22px 32px 42px 46px; background: var(--surface-2); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; max-width: 1080px; }
+.foot h5 {
+  margin: 0 0 8px; font-family: var(--display); font-weight: 600; font-size: 15px;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--text);
+}
+.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--dim); }
+.foot p b { color: var(--text); }
+.foot .conf {
+  margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--border);
+  font-size: 11.5px; color: var(--dim); max-width: 96ch;
+}
+
+/* ---------- toast: the slip taped to the page ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px) rotate(-.5deg);
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 14px 18px 12px; font-size: 12.5px; color: var(--text);
+  z-index: 80; max-width: min(600px, 90vw);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
+  box-shadow: 0 10px 28px rgba(43,35,24,.3);
+}
+.toast::before {
+  content: ""; position: absolute; top: -9px; left: 50%; transform: translateX(-50%) rotate(-2deg);
+  width: 74px; height: 17px; background: rgba(43,35,24,.13);
+  border-left: 1px dashed rgba(43,35,24,.2); border-right: 1px dashed rgba(43,35,24,.2);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0) rotate(-.5deg); }
+.toast.crit { border-color: var(--crit); border-left-width: 3px; }
+
+@media (max-width: 560px) {
+  .mast { padding: 16px 16px 0 26px; }
+  .tabs-row { padding: 0 16px 0 26px; }
+  .pane { padding: 20px 16px 32px 26px; }
+  .foot { padding: 20px 16px 36px 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
 </style>
 
-<div class="app">
-  <header class="topbar">
-    <div class="topbar-row">
-      <div class="brand">
-        <span class="eyebrow">SRM UAV &middot; SRM Kattankulathur &middot; Surveillance</span>
-        <h1>Ornithopter &mdash; the concept against the airframe</h1>
-      </div>
+<div class="sheet">
+  <header class="mast">
+    <div class="mast-meta">
+      <span>SRM UAV &middot; SRM Kattankulathur &middot; Surveillance</span>
+      <span>CONOPS worksheet &middot; form B-2</span>
+    </div>
+    <h1>Ornithopter &mdash; the concept <em>against</em> the airframe</h1>
+    <p class="lede"><b>The proposal asks for 24/7 border cover from an hour of endurance and 25&nbsp;km of reach.</b> Those two numbers are in the same document and they do not fit together &mdash; which is checkable on paper, before a motor is chosen.</p>
+    <div class="stamps">
       <span class="chip"><span class="dot accent"></span>From the project proposal</span>
       <span class="chip crit"><span class="dot crit"></span><b>0</b> operators &middot; nothing recorded was used</span>
       <span class="chip" id="stateChip"></span>
     </div>
-    <div class="params">
-      <span class="plabel">Preset</span>
-      <div class="segmented" id="presets" role="group" aria-label="Preset"></div>
-      <span class="spacer"></span>
-      <span class="chip"><span class="dot"></span>Proposal target <b>1 h &middot; 25 km</b></span>
-    </div>
-    <p style="padding:8px 20px 10px;font-size:12px;color:var(--muted);border-top:1px solid var(--line-soft);background:#0b0b10;margin:0">
-      <b>The proposal asks for 24/7 border cover from an hour of endurance and 25 km of reach.</b> Those two numbers are in the same document and they do not fit together &mdash; which is checkable on paper, before a motor is chosen.</p>
   </header>
+
+  <div class="tabs-row">
+    <span class="tabs-label">File under</span>
+    <div class="tabs" id="presets" role="group" aria-label="Preset"></div>
+    <span class="chip tabs-target"><span class="dot"></span>Proposal target <b>1&nbsp;h &middot; 25&nbsp;km</b></span>
+  </div>
 
   <main class="pane">
     <div class="pane-head">
       <p class="kicker">Concept of operations &middot; arithmetic only, nothing flown here</p>
-      <h2>What the concept costs in airframes</h2>
-      <p class="provenance">Several aircraft flying in shifts, live video to a ground station, a 25 km patrol radius covering 1,962 km². <b>Set the endurance to what actually flew</b> and watch the fleet the same promise needs.</p>
+      <h2 class="section">What the concept costs in airframes</h2>
+      <p class="provenance">Several aircraft flying in shifts, live video to a ground station, a 25&nbsp;km patrol radius covering 1,962&nbsp;km&sup2;. <b>Set the endurance to what actually flew</b> and watch the fleet the same promise needs.</p>
     </div>
 
-    <div class="dials" id="dials"></div>
+    <div class="dials">
+      <div class="dials-head"><span>Planning inputs</span><span>pencil, not policy &mdash; drag anything</span></div>
+      <div id="dials"></div>
+    </div>
 
     <div class="grid2">
       <div>
-        <h3 style="margin:0 0 10px;font-size:14px;color:var(--ink);font-weight:600">Where the hour goes</h3>
-        <div class="budget" id="budget"></div>
-        <div class="legendrow">
-          <span><i style="background:rgba(91,124,250,.5)"></i>transit out and back</span>
-          <span><i style="background:#3fae8b"></i>time actually on station</span>
-          <span><i style="background:#d0745a"></i>endurance the concept does not have</span>
+        <h3 class="section"><span class="no">1</span>Where the hour goes</h3>
+        <div class="ruler-wrap">
+          <div class="budget" id="budget"></div>
+          <div class="ruler-scale" id="budgetScale"></div>
+          <div class="legendrow">
+            <span><i style="background:var(--accent-wash)"></i>transit out and back</span>
+            <span><i style="background:var(--ok-wash)"></i>time actually on station</span>
+            <span><i style="background:repeating-linear-gradient(45deg, var(--crit-wash) 0 4px, transparent 4px 8px)"></i>endurance the concept does not have</span>
+          </div>
         </div>
-        <div id="verdict" style="margin-top:16px"></div>
+        <div id="verdict" style="margin-top:18px"></div>
 
-        <h3 style="margin:22px 0 8px;font-size:14px;color:var(--ink);font-weight:600">Airframes to hold one station continuously</h3>
-        <p style="margin:0 0 8px;font-size:12.5px;color:var(--muted)">One aircraft on station at all times means the rest are in transit, on the ground or charging. Each square is an airframe.</p>
-        <div class="fleet" id="fleet"></div>
+        <h3 class="section" style="margin-top:26px"><span class="no">2</span>Airframes to hold one station continuously</h3>
+        <p style="margin:0 0 10px;font-size:12.5px;color:var(--dim)">One aircraft on station at all times means the rest are in transit, on the ground or charging. Each pin is an airframe.</p>
+        <div class="board"><div class="fleet" id="fleet"></div></div>
         <p class="note" id="fleetNote"></p>
       </div>
 
       <div>
-        <div class="tiles" style="grid-template-columns:1fr">
-          <div class="tile" id="fleetTile"><div class="v" id="fleetV">—</div><div class="l">Airframes for the border segment</div><div class="p" id="fleetP"></div></div>
-          <div class="tile" id="loiterTile"><div class="v" id="loiterV">—</div><div class="l">Time on station per sortie</div><div class="p">endurance minus transit both ways</div></div>
-          <div class="tile"><div class="v" id="reqV">—</div><div class="l">Endurance the concept actually needs</div><div class="p">for ten minutes on station at this reach</div></div>
-        </div>
+        <div class="field" id="fleetTile"><div class="l">Airframes for the border segment</div><div class="v" id="fleetV">&mdash;</div><div class="p" id="fleetP"></div></div>
+        <div class="field" id="loiterTile"><div class="l">Time on station per sortie</div><div class="v" id="loiterV">&mdash;</div><div class="p">endurance minus transit both ways</div></div>
+        <div class="field"><div class="l">Endurance the concept actually needs</div><div class="v" id="reqV">&mdash;</div><div class="p">for ten minutes on station at this reach</div></div>
 
-        <h3 style="margin:20px 0 8px;font-size:14px;color:var(--ink);font-weight:600">The half that worked</h3>
+        <h3 class="section" style="margin-top:24px"><span class="no">3</span>The half that worked</h3>
         <div class="curve">
-          <svg viewBox="0 0 340 170" width="100%" style="display:block">
+          <p class="cap">Observers saying &ldquo;a bird&rdquo;, % &mdash; by viewing distance</p>
+          <svg viewBox="0 0 340 170" width="100%" role="img" aria-label="Observer trial: share of observers identifying the aircraft as a bird, at 20, 40, 60 and 80 metres, against the 60 percent bar">
             <g id="curveG"></g>
           </svg>
         </div>
@@ -300,14 +435,14 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
     <div class="foot-grid">
       <div>
         <h5>What this demo is</h5>
-        <p>The concept of operations from the project's own proposal, made arithmetic. <b>The 25 km patrol radius, the 1,962 km² figure, the shift pattern and the one-hour target are the proposal's</b>; the cruise speed, turnaround and the flight results are invented for this sample and reconciled with the case study.</p>
+        <p>The concept of operations from the project's own proposal, made arithmetic. <b>The 25&nbsp;km patrol radius, the 1,962&nbsp;km&sup2; figure, the shift pattern and the one-hour target are the proposal's</b>; the cruise speed, turnaround and the flight results are invented for this sample and reconciled with the case study.</p>
       </div>
       <div>
         <h5>The finding, in one move</h5>
-        <p>Press <b>the airframe that flew</b>. Forty-one seconds does not shrink the concept — it removes it: the aircraft cannot reach the patrol radius at all, so no number of airframes buys the coverage.</p>
+        <p>Press <b>the airframe that flew</b>. Forty-one seconds does not shrink the concept &mdash; it removes it: the aircraft cannot reach the patrol radius at all, so no number of airframes buys the coverage.</p>
       </div>
       <div>
-        <h5 style="visibility:hidden">more</h5>
+        <h5 aria-hidden="true" style="visibility:hidden">more</h5>
         <p>This is the check that costs an afternoon and comes before a gearbox. The proposal's own two headline numbers disagree with each other, and nothing had to be built to find that out.</p>
       </div>
     </div>
@@ -396,11 +531,13 @@ function renderBudget() {
       `<span class="out" style="flex:${t / total}">out ${fmtT(t)}</span>` +
       `<span class="loiter" style="flex:${l / total}">on station ${fmtT(l)}</span>` +
       `<span class="back" style="flex:${t / total}">back ${fmtT(t)}</span>`;
+    $("budgetScale").innerHTML = `<span>0</span><span>whole sortie &mdash; ${fmtT(total)}</span>`;
   } else {
     const need = 2 * t, deficit = need - e;
     el.innerHTML =
       `<span class="out" style="flex:${e / need}">endurance ${fmtT(e)}</span>` +
       `<span class="deficit" style="flex:${deficit / need}">short by ${fmtT(deficit)} before it reaches the station</span>`;
+    $("budgetScale").innerHTML = `<span>0</span><span>transit alone, both ways &mdash; ${fmtT(need)}</span>`;
   }
 }
 
@@ -408,44 +545,48 @@ function renderFleet() {
   const f = fleet(), p = perStation();
   const el = $("fleet");
   if (f === Infinity) {
-    el.innerHTML = "";
+    el.innerHTML = `<span class="stamp sub${prevNoReach ? "" : " anim"}">no pins to place</span>`;
     $("fleetNote").innerHTML = `<b>There is no fleet size that works.</b> The aircraft cannot reach the patrol radius and return, so no number of them keeps a station covered. This is not a scaling problem — it is the concept and the airframe describing different aircraft.`;
+    $("fleetNote").className = "note crit";
     $("fleetV").textContent = "—";
-    $("fleetTile").className = "tile crit";
+    $("fleetTile").className = "field crit";
     $("fleetP").textContent = "the aircraft never reaches the station";
     return;
   }
   const show = Math.min(p, 60);
   el.innerHTML = Array.from({ length: show }, (_, i) => `<i class="${p > 8 ? "over" : ""}"></i>`).join("") +
-    (p > show ? `<span class="mono" style="font-size:11px;color:var(--faint);align-self:center;margin-left:6px">+${p - show} more</span>` : "");
+    (p > show ? `<span class="more">+${p - show} more</span>` : "");
+  $("fleetNote").className = "note";
   $("fleetNote").innerHTML = `<b>${p} airframe${p === 1 ? "" : "s"} per station</b> to keep one aircraft on station continuously, at ${fmtT(loiterS())} on station per sortie and a ${state.turnaround}-minute turnaround. ${stations()} station${stations() === 1 ? "" : "s"} covers ${state.segment} km at a ${state.reach} km radius.`;
   $("fleetV").textContent = f;
-  $("fleetTile").className = "tile " + (f > 40 ? "crit" : f > 12 ? "warn" : "good");
+  $("fleetTile").className = "field " + (f > 40 ? "crit" : f > 12 ? "warn" : "good");
   $("fleetP").textContent = `${p} per station × ${stations()} station${stations() === 1 ? "" : "s"}`;
 }
 
 function renderTiles() {
   const l = loiterS();
   $("loiterV").textContent = l > 0 ? fmtT(l) : "none";
-  $("loiterTile").className = "tile " + (l > 600 ? "good" : l > 0 ? "warn" : "crit");
+  $("loiterTile").className = "field " + (l > 600 ? "good" : l > 0 ? "warn" : "crit");
   $("reqV").textContent = fmtT(required());
   const c = $("stateChip"), ok = l > 0;
   c.className = "chip " + (ok ? "good" : "crit");
   c.innerHTML = `<span class="dot ${ok ? "good" : "crit"}"></span>${ok ? "Reaches the station" : "Never reaches the station"}`;
 }
 
+let prevNoReach = false; /* stamp animates only on the transition into the crit state */
 function renderVerdict() {
   const t = transitS(), l = loiterS(), e = state.endurance;
   let html;
   if (l <= 0) {
     const rangeM = Math.round(e * state.speed);
-    html = `<div class="verdictbox crit"><b>The aircraft does not reach the patrol radius.</b> ${fmtT(e)} at ${state.speed} m/s carries it ${rangeM >= 1000 ? (rangeM / 1000).toFixed(1) + " km" : rangeM + " m"} &mdash; the station is ${state.reach} km away. Ten minutes on station at this reach needs <b>${fmtT(required())}</b> of endurance, and the proposal asks for one hour. <b>The two headline numbers in the same document do not fit together</b>, and finding that out cost no hardware at all.</div>`;
+    html = `<div class="verdictbox crit"><div class="stamp${prevNoReach ? "" : " anim"}">Never reaches the station</div><p style="margin:0"><b>The aircraft does not reach the patrol radius.</b> ${fmtT(e)} at ${state.speed} m/s carries it ${rangeM >= 1000 ? (rangeM / 1000).toFixed(1) + " km" : rangeM + " m"} &mdash; the station is ${state.reach} km away. Ten minutes on station at this reach needs <b>${fmtT(required())}</b> of endurance, and the proposal asks for one hour. <b>The two headline numbers in the same document do not fit together</b>, and finding that out cost no hardware at all.</p></div>`;
   } else if (l < 600) {
-    html = `<div class="verdictbox"><b>It reaches the station with ${fmtT(l)} to spare.</b> Transit eats ${fmtT(2 * t)} of ${fmtT(e)}. Under ten minutes on station, a sortie is a photograph rather than a patrol &mdash; and the shift pattern the proposal describes needs ${perStation()} airframes per station to keep even that continuous.</div>`;
+    html = `<div class="verdictbox warn"><b>It reaches the station with ${fmtT(l)} to spare.</b> Transit eats ${fmtT(2 * t)} of ${fmtT(e)}. Under ten minutes on station, a sortie is a photograph rather than a patrol &mdash; and the shift pattern the proposal describes needs ${perStation()} airframes per station to keep even that continuous.</div>`;
   } else {
     html = `<div class="verdictbox good"><b>${fmtT(l)} on station per sortie.</b> Transit costs ${fmtT(2 * t)} of ${fmtT(e)}, and ${perStation()} airframes hold one station continuously. This is the configuration the concept of operations assumes &mdash; and it assumes an aircraft that was never built.</div>`;
   }
   $("verdict").innerHTML = html;
+  prevNoReach = l <= 0;
 }
 
 function renderCurve() {
@@ -454,13 +595,15 @@ function renderCurve() {
   const py = (v) => T + (1 - v / 100) * (H - T - B);
   const pts = OBSERVER.y.map((v, i) => `${px(i)},${py(v)}`).join(" ");
   const bar = py(OBSERVER.bar);
+  const F = "Courier Prime, Courier New, monospace";
   $("curveG").innerHTML =
-    [0, 25, 50, 75, 100].map((g) => `<line x1="${L}" y1="${py(g)}" x2="${W - R}" y2="${py(g)}" stroke="#1b1b24"/><text x="${L - 6}" y="${py(g) + 3}" text-anchor="end" fill="#4a4e5e" font-size="8" font-family="IBM Plex Mono, monospace">${g}</text>`).join("") +
-    `<line x1="${L}" y1="${bar}" x2="${W - R}" y2="${bar}" stroke="#c9973f" stroke-dasharray="3 3"/>` +
-    `<text x="${W - R}" y="${bar - 4}" text-anchor="end" fill="#c9973f" font-size="8" font-family="IBM Plex Mono, monospace">60% — the bar we set</text>` +
-    `<polyline points="${pts}" fill="none" stroke="#3fae8b" stroke-width="2"/>` +
-    OBSERVER.y.map((v, i) => `<circle cx="${px(i)}" cy="${py(v)}" r="3.2" fill="${v >= OBSERVER.bar ? "#3fae8b" : "#d0745a"}"/><text x="${px(i)}" y="${py(v) - 8}" text-anchor="middle" fill="#b4bacb" font-size="8.5" font-family="IBM Plex Mono, monospace">${v}%</text>`).join("") +
-    OBSERVER.x.map((d, i) => `<text x="${px(i)}" y="${H - 8}" text-anchor="middle" fill="#6e7385" font-size="8.5" font-family="IBM Plex Mono, monospace">${d} m</text>`).join("");
+    [0, 25, 50, 75, 100].map((g) => `<line x1="${L}" y1="${py(g)}" x2="${W - R}" y2="${py(g)}" stroke="rgba(30,74,110,.18)"/><text x="${L - 6}" y="${py(g) + 3}" text-anchor="end" fill="#5c5140" font-size="8" font-family="${F}">${g}</text>`).join("") +
+    `<line x1="${L}" y1="${bar}" x2="${W - R}" y2="${bar}" stroke="#7d5310" stroke-dasharray="3 3"/>` +
+    `<text x="${W - R}" y="${bar - 4}" text-anchor="end" fill="#7d5310" font-size="8" font-family="${F}">60% — the bar we set</text>` +
+    `<polyline points="${pts}" fill="none" stroke="#3f6631" stroke-width="2"/>` +
+    OBSERVER.y.map((v, i) => `<circle cx="${px(i)}" cy="${py(v)}" r="3.4" fill="${v >= OBSERVER.bar ? "#3f6631" : "#98291f"}" stroke="#f1e8d2" stroke-width="1"/><text x="${px(i)}" y="${py(v) - 8}" text-anchor="middle" fill="#2b2318" font-size="8.5" font-weight="700" font-family="${F}">${v}%</text>`).join("") +
+    OBSERVER.x.map((d, i) => `<text x="${px(i)}" y="${H - 8}" text-anchor="middle" fill="#5c5140" font-size="8.5" font-family="${F}">${d} m</text>`).join("") +
+    `<text x="${W - R}" y="${H - 8}" text-anchor="end" fill="#857757" font-size="7.5" font-family="${F}">distance</text>`;
 }
 
 let toastT;

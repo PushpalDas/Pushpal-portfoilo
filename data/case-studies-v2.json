@@ -10939,7 +10939,7 @@
               {
                 "image": "/static/images/project/ricky-kids-covid-demo-bench.jpg",
                 "label": "The premise, checked.",
-                "caption": "Tick the parameters a round has to report and the saving is zero at every condition, because oxygen saturation and blood pressure have no non-contact route at all. Untick those two and the device looks excellent — which is the framing our own materials used, and the one the study does not support.",
+                "caption": "Tick the parameters a round has to report and the saving is zero at every condition, because oxygen saturation and blood pressure have no non-contact route at all. Untick those two — and pulse, which was marginal at best — and the device looks excellent, which is the framing our own materials used, and the one the study does not support.",
                 "href": "/demo/covid-bench",
                 "hrefLabel": "Open the bench",
                 "alt": "The bench demo: a five-parameter by four-condition status grid with oxygen saturation and blood pressure reading 'no path exists' throughout, and a panel reading 0 per cent of entries removed."
@@ -11403,7 +11403,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Traverse success is the share of runs completing the full test lane under the vehicle's own power in a given medium. It excludes runs aborted for tether tangles, which were a property of our tank rather than of the drive. A stall counts as recovered only if forward motion resumed without tension on the tether."
+            "text": "Traverse success is the share of runs completing the full test lane under the vehicle's own power in a given medium. It excludes runs aborted for tether tangles, which were a property of our tank rather than of the drive. Stalls are counted as events rather than runs — a run can stall twice, which is how nine tracked runs produced nine stall events — and a stall counts as recovered only if forward motion resumed without tension on the tether."
           },
           {
             "kind": "config",
