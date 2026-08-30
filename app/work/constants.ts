@@ -819,6 +819,7 @@ export const workItems: WorkItem[] = [
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
 		image: 'Gemini_Generated_Image_orqf1borqf1borqf.png',
 		slug: 'ricky-kids-envi-city',
+		demoUrl: '/demo/envi-city',
 		href: 'https://drive.google.com/drive/u/0/folders/1XhqFiIQJZtQN9ZVzuRBbMfDo5szeg9W0',
 		color: '#dbeafe',
 	},

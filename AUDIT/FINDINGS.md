@@ -353,3 +353,9 @@ stored images capture correctly (popover open, ask answered, Gantt view, invoice
 tab). DECISION: stored Tier-A screenshots are KEPT — they depict the source-of-truth app; the
 fix is the deploy, not the images. Re-verify against live after the author pushes (one capture
 run: scratchpad/capture-xana.mjs).
+
+- **F2.5 — Google Drive evidence links are not public.** Both
+  drive.google.com/drive/u/0/folders/1B0mtA9… (P6 "Demo recording and project documents") and
+  …/1XhqFiIQ… (P37 card href) 302 to a Google sign-in — a reviewer hits a login wall.
+  **AUTHOR-CONFIRM AC-DRIVE:** set both folders to "anyone with the link can view", or drop the
+  links. Left in place (they may be intentionally semi-private); flagged for launch.
