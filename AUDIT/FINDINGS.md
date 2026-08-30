@@ -82,3 +82,84 @@ median 11 d match P1's before-values ✓; 26/41 non-silicon consistent in two pl
 **External to verify:** chips/wi-r-ban; blog/wi-r-technology-white-paper.
 **Note:** §06 Gallery item labeled "Untitled" — cosmetic; check how it renders (candidate fix:
 give the network diagram its caption as title). AUTHOR-CONFIRM if renaming changes meaning.
+
+## P6 — NeuroAdapt (C-bespoke)
+**Rubric verdict: Pass.** 102/120=0.85 ✓; 87%≥80% bar ✓; 19/14/11/3 of 22 coherent; four burst
+definitions (0.82/0.82/1.00/8.6) ✓. No open Qs. Parity + redesign pending (deep links:
+?view=definitions&metric=burst&unit=1, view=run, view=units&unit=1, view=population&pair=4-5,
+view=export&format=nwb). Whitepaper + Drive link to verify.
+
+## P9 — Soil mineral (D-gap)
+Card copy stands alone. **AUTHOR-CONFIRM AC-9:** keep card-only, or commission a case study?
+Implemented default: left as card-only (no slug, renders no detail page).
+
+## P10 — Quantum Gate Simulator (C-bespoke)
+**Rubric verdict: Pass-with-edits.** Curve {4,15,62,121,244,610,1420} over x {4,6,8,9,10,11,12} =
+~2×/qubit; "about four per qubit" contradicted the data → "roughly doubling with each added qubit"
+in JSON caption + demo HTML (public/demo/quantum-simulator.html). 244 ms vs 200 budget ✓; 32=22+10 ✓.
+
+## P11 — Procurement Orchestrator (B-ixana)
+**Rubric verdict: Pass.** 21/23, 0/23, 2/23, 3.6→0.6 d, 4 blocked above-ceiling, 4 exceptions/1
+silent failure all internally consistent. Parity/redesign pending; 7 deep links incl.
+?view=gates&as=priya. Invariant: no supplier/price/requester surfaced beyond invented personas.
+
+## P12 — WishKey (A-lock)
+**Rubric verdict: Pass-with-edits.** Open-Q resolutions:
+- Marimekko band merge → declared deliberate in caption. TODO deleted.
+- 0.1 (660 slots vs 3,420 keys) → keys-per-bunch sentence in How-we-counted (~5 keys per tagged
+  bunch behind 660 locks); §06 "thirty tagged keys" → "thirty tagged key bunches".
+  **AUTHOR-CONFIRM AC-12:** is the bunch model the real configuration? One-line answer suffices.
+- Unattributed removal mechanics → defined (tag-out with no authenticated session).
+External: eegrab.com brochure PDF + YouTube 8etIl_0wj0I to verify.
+
+## P13 — Wi-R reference designs (A-lock)
+**Rubric verdict: Pass-with-edits.** Open-Q 0.2 (table vs funnel) → funnel now ends at 0
+(27→24→11→5→0; drops 3/13/6/5 = exactly the table rows), title + caption state the stage
+definitions. Rounding fixed: 79/31/23% → 78/30/22% (21/27, 8/27, 6/27). TODO deleted.
+External: 2 Vimeo links + reference-designs page to verify.
+
+## P14 — Smart watch (A/D-gap)
+**Rubric verdict: Pass.** BOM shares sum 100 ✓; ₹820<₹900 ✓. Page already states "no public
+product page to link" honestly. **AUTHOR-CONFIRM AC-14:** accept absent evidence link as stated,
+or add a board-photo gallery item? Default: left as-is (note already covers it).
+
+## P15 — Team performance reporting (B-ixana)
+**Rubric verdict: Pass.** 69/82=84% ✓; 32/38=84% ✓; 66 h = four teams without standing report ✓.
+Parity/redesign pending; 7 deep links.
+
+## P16 — Scrum ecosystem (B-ixana)
+**Rubric verdict: Pass.** 61 of 218 (24+22+15 / 82+71+65) ✓ 28% ✓; 37.4 h split ✓; 61%→11% state
+minutes coherent with 18→9 median. Parity/redesign pending (sprint day 6, sprint 41, 4 tabs).
+
+## P17 — Flow Tracker (A-lock, xana-nine)
+**Rubric verdict: Pass-with-edits.** Both 0.3 TODOs resolved in How-we-counted: three populations
+defined (3 Monday-review leads / 31 adoption denominator / 11 calendar sample); 71%-vs-4.2% gap
+closed (accuracy sampled over all tasks, corrections only touch reviewed stages). TODOs deleted.
+External deep links to verify: team=rtl&mode=wrong&stage=9; panel=3&task=ps-04; board=1;
+?q=Why%20is%20the%20AMS%20layout%20behind%3F; behavioral claims (best-engineer refusal).
+
+## P18 — ClickUp Activity Tracker (B-ixana)
+**Rubric verdict: Pass-with-edits.** 123h/41≈3h ✓; 41−31=10 ✓. Open Q (future-dated series) →
+caption now "first seven weeks live, Jun–Jul 2026". TODO deleted. Parity/redesign pending
+(?q=Aug+14, view=feed 380-entry task, view=questions, view=ingest, raw-event filter link).
+
+## P19 — Video library (A-lock, xana-nine)
+**Rubric verdict: Pass-with-edits.** Open-Q resolutions: §09 31% → 11% (78/690); funnel caption →
+"Mar–Aug 2026 — the first five months after launch"; 0.6 headcount trajectory added to
+How-we-counted. 38/212=18%, 244/690=35% ✓. TODOs deleted.
+External: ?q=milliwatts, ?v=meeting-integration&ask=1, &tab=notes.
+
+## P20 — Calendar sync (D-gap)
+**Rubric verdict: Pass-with-edits.** Both 0.5 TODOs resolved in How-we-counted: 6/month = externally
+visible rate vs diary 11/fortnight all-clash count; Outlook tenant = the smaller 12-mailbox tenant
+(keeps §05 CEO line coherent). TODOs deleted.
+**AUTHOR-CONFIRM AC-20:** recommend a small Tier-B demo (/demo/calendar-sync): a dry-run preview
+screen (per-event action list), the opaque-block rendering, and the 12→1 credential scope panel —
+three screens, invented data, xana-nine tokens. Alternatively one line on the page stating why no
+public demo exists. Default implemented: neither (page ships as-is); decision is the author's.
+
+## P21 — AI Salary Generator (B-ixana)
+**Rubric verdict: Pass-with-edits.** 6/26=23% ✓; 4-of-7 refusals ✓ vs two flat families ✓
+(refused families' only reqs). CONTRADICTION fixed: "three job families" (meta.stage) and "seven
+families" (tradeoff) vs five in the chart → both now say five. Parity/redesign pending
+(?view=floor&role=dv4-sj; evidence/band/equity/cross-market links; slots-unfilled behavior).

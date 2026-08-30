@@ -1,0 +1,1961 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Gate Simulator</title>
+<meta name="description" content="Interactive demo of the 10-qubit quantum gate simulator: the state-vector engine ported to the browser, Bloch spheres that update as you place a gate, the qubit ceiling measured live against its 200 ms budget, and the 32-test physics suite run in the page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   Quantum gate simulator - interactive demo.
+   Palette and type inherited from the portfolio's case-study
+   system (app/work/[slug]/case-study-v2.css) and from the
+   NeuroAdapt and team-performance demos, so the family reads as
+   one product. Single dark theme, every colour painted.
+
+   Gate colours are the prototype's own, lifted verbatim from
+   frontend/src/app/components/GateToolbar.tsx.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #08080b;
+  --surface: #101015;
+  --surface-2: #16161d;
+  --surface-3: #1c1c25;
+  --line: #23232d;
+  --line-soft: #17171e;
+  --ink: #f2f3f6;
+  --body: #b4bacb;
+  --muted: #6e7385;
+  --faint: #4a4e5e;
+  --accent: #5b7cfa;
+  --accent-dim: #2c3a73;
+  --accent-wash: rgba(91, 124, 250, 0.11);
+  --good: #3fae8b;
+  --good-dim: #235c4b;
+  --good-wash: rgba(63, 174, 139, 0.12);
+  --warn: #c9973f;
+  --warn-dim: #6b5220;
+  --warn-wash: rgba(201, 151, 63, 0.12);
+  --crit: #d0745a;
+  --crit-dim: #5e3628;
+  --crit-wash: rgba(208, 116, 90, 0.12);
+  --vec: #00f0ff;
+  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --rail: 244px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--body);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+select, input { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* -- App chrome ------------------------------------------- */
+.app {
+  min-height: 100vh;
+  max-width: 1340px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line-soft);
+  border-right: 1px solid var(--line-soft);
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(8, 8, 11, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-row { display: flex; align-items: center; gap: 12px; padding: 11px 20px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted);
+}
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 11px;
+  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 500; }
+.chip.state-ruo { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.chip.state-ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.chip.state-over { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--good); }
+.dot.warn { background: var(--warn); }
+.dot.crit { background: var(--crit); }
+.dot.accent { background: var(--accent); }
+
+/* -- Layout ----------------------------------------------- */
+.shell { display: flex; align-items: stretch; flex: 1; min-height: 0; }
+
+.rail {
+  width: var(--rail); flex: none;
+  border-right: 1px solid var(--line);
+  padding: 16px 0 40px;
+  background: var(--bg);
+}
+.rail-group { padding: 0 0 18px; }
+.rail-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--faint);
+  padding: 0 20px 7px;
+}
+.rail-item {
+  display: flex; align-items: baseline; gap: 9px; width: 100%;
+  padding: 8px 20px; border: 0; background: transparent; text-align: left;
+  border-left: 2px solid transparent; color: var(--body); font-size: 13px;
+}
+.rail-item:hover { background: var(--surface); color: var(--ink); }
+.rail-item[aria-current="true"] {
+  border-left-color: var(--accent); background: var(--accent-wash); color: var(--ink); font-weight: 500;
+}
+.rail-item .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 15px; }
+.rail-item[aria-current="true"] .n { color: var(--accent); }
+.rail-item .sub { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+.rail-note {
+  margin: 4px 20px 0; padding: 11px 12px;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  font-size: 11.5px; line-height: 1.5; color: var(--muted);
+}
+.rail-note b { color: var(--body); font-weight: 500; }
+
+.pane { flex: 1; min-width: 0; padding: 22px 26px 64px; }
+
+/* -- Headings + shared blocks ----------------------------- */
+.pane-head { margin-bottom: 18px; }
+.pane-head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 5px;
+}
+.pane-head h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -0.015em; }
+.pane-head p { margin: 0; max-width: 74ch; font-size: 13px; color: var(--body); }
+
+.card {
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); padding: 16px 18px; margin-bottom: 16px;
+}
+.card > h3 {
+  margin: 0 0 3px; font-size: 13.5px; font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > .sub { margin: 0 0 13px; font-size: 12px; color: var(--muted); max-width: 82ch; }
+.card.tight { padding: 13px 15px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid2 > .card { margin-bottom: 0; }
+@media (max-width: 1080px) { .grid2 { grid-template-columns: 1fr; } }
+
+.badge {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted);
+  white-space: nowrap;
+}
+.badge.rule { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
+.badge.good { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
+.badge.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
+.badge.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+
+.note {
+  border-left: 2px solid var(--line); padding: 2px 0 2px 12px;
+  font-size: 12px; color: var(--muted); max-width: 88ch;
+}
+.note.warn { border-left-color: var(--warn-dim); color: var(--warn); }
+.note.good { border-left-color: var(--good-dim); }
+.note.accent { border-left-color: var(--accent-dim); }
+.note + .note { margin-top: 9px; }
+
+.btn {
+  border: 1px solid var(--line); background: var(--surface-2);
+  border-radius: 7px; padding: 6px 12px; font-size: 12.5px; color: var(--body);
+}
+.btn:hover { border-color: var(--faint); color: var(--ink); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 500; }
+.btn.primary:hover { background: #6b89ff; }
+.btn.sm { padding: 3px 9px; font-size: 11.5px; }
+.btn[aria-pressed="true"] { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--ink); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+.toolrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.toolrow .spacer { margin-left: auto; }
+.sel {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 7px;
+  padding: 5px 9px; font-size: 12.5px;
+}
+
+/* -- Gate palette ----------------------------------------- */
+.palette { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.pal-group .pal-label {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--faint); margin-bottom: 7px;
+}
+.pal-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+.gate-btn {
+  width: 40px; height: 40px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--surface-2);
+  font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--body);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.gate-btn:hover { border-color: var(--gate-color); color: var(--ink); }
+.gate-btn[aria-pressed="true"] {
+  border-color: var(--gate-color); background: var(--gate-dim); color: #fff;
+}
+
+/* -- Circuit grid ----------------------------------------- */
+.circuit-wrap { overflow-x: auto; padding-bottom: 4px; }
+.circuit { display: inline-block; min-width: 100%; }
+.crow { display: flex; align-items: stretch; }
+.clabel {
+  width: 84px; flex: none; display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+  padding-right: 8px;
+}
+.clabel .q { color: var(--body); }
+.ket {
+  border: 1px solid var(--line); background: var(--surface-2); border-radius: 5px;
+  padding: 1px 5px; font-family: var(--mono); font-size: 11.5px; color: var(--ink);
+}
+.ket:hover { border-color: var(--accent-dim); background: var(--accent-wash); }
+.chcell {
+  width: 52px; height: 20px; flex: none; text-align: center;
+  font-family: var(--mono); font-size: 9.5px; color: var(--faint);
+}
+.ccell {
+  width: 52px; height: 52px; flex: none; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.ccell.click { cursor: pointer; }
+.ccell.click:hover .wire { background: var(--accent-dim); }
+.ccell.click:hover::after {
+  content: ""; position: absolute; inset: 7px; border-radius: 7px;
+  border: 1px dashed var(--accent-dim);
+}
+.ccell.pending::after {
+  content: ""; position: absolute; inset: 7px; border-radius: 7px;
+  border: 1px solid var(--accent); background: var(--accent-wash);
+}
+.wire { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+.chip-gate {
+  position: relative; z-index: 2; width: 32px; height: 32px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 600; color: #fff;
+  border: 0; cursor: pointer; padding: 0;
+}
+.chip-gate:hover { filter: brightness(1.18); }
+.ctrl-dot {
+  position: relative; z-index: 2; width: 13px; height: 13px; border-radius: 50%;
+  border: 0; cursor: pointer; padding: 0;
+}
+.conn { position: absolute; left: 50%; width: 2px; transform: translateX(-50%); z-index: 1; }
+
+/* -- Bloch spheres ---------------------------------------- */
+.spheres { display: grid; grid-template-columns: repeat(auto-fit, minmax(146px, 1fr)); gap: 10px; }
+.sphere-cell {
+  border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2);
+  padding: 7px 7px 8px; touch-action: none;
+}
+.sphere-cell svg { display: block; width: 100%; height: auto; cursor: grab; }
+.sphere-cap {
+  font-family: var(--mono); font-size: 10.5px; color: var(--muted);
+  display: flex; justify-content: space-between; gap: 6px; padding: 2px 3px 0;
+}
+.sphere-cap b { color: var(--body); font-weight: 500; }
+.sphere-cell.entangled { border-color: var(--warn-dim); background: var(--warn-wash); }
+.sphere-cell.entangled .sphere-cap b { color: var(--warn); }
+
+/* -- Histograms ------------------------------------------- */
+.hist { display: flex; flex-direction: column; gap: 4px; }
+.hrow { display: grid; grid-template-columns: 82px 1fr 64px; gap: 9px; align-items: center; }
+.hkey { font-family: var(--mono); font-size: 11.5px; color: var(--body); }
+.htrack { display: block; height: 15px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.hbar { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+.hbar.shots { background: var(--good); }
+.hcap {
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--faint); margin-bottom: 7px;
+}
+.hval { font-family: var(--mono); font-size: 11.5px; color: var(--muted); text-align: right; }
+
+/* -- Tables ----------------------------------------------- */
+table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+table.t th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  padding: 0 10px 7px 0; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+table.t td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+table.t tr:last-child td { border-bottom: 0; }
+table.t td.num, table.t th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+table.t td.k { font-family: var(--mono); color: var(--ink); }
+
+/* -- Library ---------------------------------------------- */
+.lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(266px, 1fr)); gap: 12px; }
+.lib-card {
+  border: 1px solid var(--line); border-radius: 9px; background: var(--surface-2);
+  padding: 13px 14px; text-align: left; display: flex; flex-direction: column; gap: 6px;
+}
+.lib-card:not(:disabled):hover { border-color: var(--accent-dim); background: var(--accent-wash); }
+.lib-card:disabled { opacity: 0.45; cursor: not-allowed; }
+.lib-card .lh { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lib-card .ln { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.lib-card .ld { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.lib-card .lm { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+/* -- Charts ----------------------------------------------- */
+.chart { width: 100%; height: auto; display: block; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.swatch { width: 14px; height: 2px; border-radius: 2px; display: inline-block; }
+
+/* -- Tests ------------------------------------------------ */
+.testgroup { margin-bottom: 15px; }
+.testgroup h4 {
+  margin: 0 0 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+  color: var(--muted); font-weight: 500;
+}
+.trow {
+  display: grid; grid-template-columns: 16px 1fr auto; gap: 9px; align-items: baseline;
+  padding: 4px 0; border-bottom: 1px solid var(--line-soft);
+}
+.trow:last-child { border-bottom: 0; }
+.trow .tk { font-family: var(--mono); font-size: 12px; }
+.trow .tk.pass { color: var(--good); }
+.trow .tk.fail { color: var(--crit); }
+.trow .tn { font-family: var(--mono); font-size: 11.5px; color: var(--body); }
+.trow .tt { font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+
+/* -- Footer ----------------------------------------------- */
+.foot {
+  border-top: 1px solid var(--line); padding: 18px 26px 40px;
+  font-size: 12px; line-height: 1.65; color: var(--muted); max-width: 108ch;
+}
+.foot b { color: var(--body); font-weight: 500; }
+
+@media (max-width: 900px) {
+  .shell { flex-direction: column; }
+  .rail { width: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 14px; }
+  .pane { padding: 18px 16px 48px; }
+  .foot { padding: 18px 16px 40px; }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <div class="eyebrow">Quantum gate simulator &middot; state-vector engine</div>
+        <h1 id="title">10-qubit circuit builder</h1>
+      </div>
+      <span class="chip" id="chipQubits"></span>
+      <span class="chip" id="chipTime"></span>
+      <span class="chip state-ruo"><span class="dot warn"></span>0 learners &mdash; never released</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Sections"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+<script>
+/* ============================================================
+   Quantum gate simulator - interactive demo.
+
+   The engine below is a line-for-line port of the prototype's
+   Python backend - backend/simulation/gates.py and engine.py -
+   into typed arrays. It builds the full 2^n x 2^n operator for
+   every gate by Kronecker product, exactly as NumPy does there,
+   and multiplies it into the state vector. That is a slow way to
+   simulate a circuit, and keeping it slow is the point: the cost
+   curve in section 05 of the case study is a property of this
+   construction, so a port that quietly optimised it would make
+   the one measured claim on the page uncheckable.
+
+   Nothing here is a stored result. Every amplitude, probability,
+   Bloch vector, shot count and timing on this page is computed
+   in your browser when the screen renders.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. GATES  (port of backend/simulation/gates.py)
+   ------------------------------------------------------------ */
+var SQ = Math.SQRT1_2;
+
+function mat(d, re, im) {
+  return { d: d, re: Float64Array.from(re), im: Float64Array.from(im) };
+}
+
+var Z16 = new Array(16).fill(0);
+
+var SINGLE = {
+  X: mat(2, [0, 1, 1, 0], [0, 0, 0, 0]),
+  Y: mat(2, [0, 0, 0, 0], [0, -1, 1, 0]),
+  Z: mat(2, [1, 0, 0, -1], [0, 0, 0, 0]),
+  H: mat(2, [SQ, SQ, SQ, -SQ], [0, 0, 0, 0]),
+  S: mat(2, [1, 0, 0, 0], [0, 0, 0, 1]),
+  T: mat(2, [1, 0, 0, Math.cos(Math.PI / 4)], [0, 0, 0, Math.sin(Math.PI / 4)])
+};
+
+var MULTI = {
+  CNOT: mat(4, [1,0,0,0, 0,1,0,0, 0,0,0,1, 0,0,1,0], Z16),
+  CZ:   mat(4, [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,-1], Z16),
+  SWAP: mat(4, [1,0,0,0, 0,0,1,0, 0,1,0,0, 0,0,0,1], Z16)
+};
+
+var IDENTITY = mat(2, [1, 0, 0, 1], [0, 0, 0, 0]);
+
+/* The nine gates the API advertises, in the order gates.py lists
+   them. The tests below check this list is exactly nine. */
+var GATE_INFO = [
+  { name: 'X',    num_qubits: 1, description: 'Pauli-X (NOT) gate' },
+  { name: 'Y',    num_qubits: 1, description: 'Pauli-Y gate' },
+  { name: 'Z',    num_qubits: 1, description: 'Pauli-Z gate' },
+  { name: 'H',    num_qubits: 1, description: 'Hadamard gate' },
+  { name: 'S',    num_qubits: 1, description: 'S (phase pi/2) gate' },
+  { name: 'T',    num_qubits: 1, description: 'T (phase pi/4) gate' },
+  { name: 'CNOT', num_qubits: 2, description: 'Controlled-NOT gate' },
+  { name: 'CZ',   num_qubits: 2, description: 'Controlled-Z gate' },
+  { name: 'SWAP', num_qubits: 2, description: 'SWAP gate' }
+];
+
+/* Palette, verbatim from GateToolbar.tsx. */
+var GATE_UI = {
+  H:    { label: 'H',  color: '#6366f1', desc: 'Hadamard' },
+  X:    { label: 'X',  color: '#ef4444', desc: 'Pauli-X' },
+  Y:    { label: 'Y',  color: '#f97316', desc: 'Pauli-Y' },
+  Z:    { label: 'Z',  color: '#3b82f6', desc: 'Pauli-Z' },
+  S:    { label: 'S',  color: '#8b5cf6', desc: 'S phase' },
+  T:    { label: 'T',  color: '#a855f7', desc: 'T phase' },
+  CNOT: { label: 'CX', color: '#10b981', desc: 'Controlled-NOT' },
+  CZ:   { label: 'CZ', color: '#14b8a6', desc: 'Controlled-Z' },
+  SWAP: { label: 'SW', color: '#f59e0b', desc: 'SWAP' }
+};
+var SINGLE_ORDER = ['H', 'X', 'Y', 'Z', 'S', 'T'];
+var MULTI_ORDER = ['CNOT', 'CZ', 'SWAP'];
+
+function gateColor(name) { return (GATE_UI[name] || {}).color || '#666'; }
+function isMulti(name) { return MULTI_ORDER.indexOf(name) !== -1; }
+
+/* Kronecker product of two dense complex matrices. */
+function kron(A, B) {
+  var p = A.d, q = B.d, n = p * q;
+  var re = new Float64Array(n * n), im = new Float64Array(n * n);
+  for (var i = 0; i < p; i++) {
+    for (var j = 0; j < p; j++) {
+      var ar = A.re[i * p + j], ai = A.im[i * p + j];
+      if (ar === 0 && ai === 0) continue;
+      for (var k = 0; k < q; k++) {
+        var row = (i * q + k) * n + j * q;
+        for (var l = 0; l < q; l++) {
+          var br = B.re[k * q + l], bi = B.im[k * q + l];
+          re[row + l] = ar * br - ai * bi;
+          im[row + l] = ar * bi + ai * br;
+        }
+      }
+    }
+  }
+  return { d: n, re: re, im: im };
+}
+
+/* build_single_qubit_operator - I (x) ... (x) G (x) ... (x) I */
+function buildSingleOp(gate, target, n) {
+  var acc = target === 0 ? gate : IDENTITY;
+  for (var q = 1; q < n; q++) acc = kron(acc, q === target ? gate : IDENTITY);
+  return acc;
+}
+
+/* build_two_qubit_operator - the basis-by-basis construction the
+   Python uses, so arbitrary (non-adjacent, reversed) qubit pairs
+   work without reordering the register. */
+function buildTwoOp(gate, a, b, n) {
+  var dim = 1 << n;
+  var re = new Float64Array(dim * dim), im = new Float64Array(dim * dim);
+  var bits = new Array(n);
+  for (var i = 0; i < dim; i++) {
+    for (var q = 0; q < n; q++) bits[q] = (i >> (n - 1 - q)) & 1;
+    var inIdx = bits[a] * 2 + bits[b];
+    var sa = bits[a], sb = bits[b];
+    for (var oa = 0; oa < 2; oa++) {
+      for (var ob = 0; ob < 2; ob++) {
+        var outIdx = oa * 2 + ob;
+        var cr = gate.re[outIdx * 4 + inIdx], ci = gate.im[outIdx * 4 + inIdx];
+        if (cr === 0 && ci === 0) continue;
+        bits[a] = oa; bits[b] = ob;
+        var j = 0;
+        for (var q2 = 0; q2 < n; q2++) j = (j << 1) | bits[q2];
+        bits[a] = sa; bits[b] = sb;
+        re[j * dim + i] += cr;
+        im[j * dim + i] += ci;
+      }
+    }
+  }
+  return { d: dim, re: re, im: im };
+}
+
+function matvec(M, xr, xi) {
+  var d = M.d, yr = new Float64Array(d), yi = new Float64Array(d);
+  for (var i = 0; i < d; i++) {
+    var sr = 0, si = 0, row = i * d;
+    for (var j = 0; j < d; j++) {
+      var ar = M.re[row + j], ai = M.im[row + j];
+      if (ar === 0 && ai === 0) continue;
+      var br = xr[j], bi = xi[j];
+      sr += ar * br - ai * bi;
+      si += ar * bi + ai * br;
+    }
+    yr[i] = sr; yi[i] = si;
+  }
+  return [yr, yi];
+}
+
+/* ------------------------------------------------------------
+   2. THE SIMULATOR  (port of backend/simulation/engine.py)
+   ------------------------------------------------------------ */
+var MAX_QUBITS = 10;
+
+function SimError(msg) { var e = new Error(msg); e.isValueError = true; return e; }
+
+function Simulator(numQubits, initialStates) {
+  if (numQubits < 1 || numQubits > MAX_QUBITS) {
+    throw SimError('num_qubits must be between 1 and ' + MAX_QUBITS + ', got ' + numQubits);
+  }
+  this.n = numQubits;
+  this.dim = 1 << numQubits;
+  this.re = new Float64Array(this.dim);
+  this.im = new Float64Array(this.dim);
+  this.initialIndex = 0;
+  if (initialStates && initialStates.length) {
+    if (initialStates.length !== numQubits) throw SimError('length of initial_states must match num_qubits');
+    for (var i = 0; i < numQubits; i++) {
+      var bit = initialStates[i];
+      if (bit !== 0 && bit !== 1) throw SimError('initial states must be 0 or 1');
+      /* MSB is qubit 0, as in the Python. */
+      this.initialIndex |= (bit << (numQubits - 1 - i));
+    }
+  }
+  this.re[this.initialIndex] = 1;
+}
+
+Simulator.prototype.reset = function () {
+  this.re = new Float64Array(this.dim);
+  this.im = new Float64Array(this.dim);
+  this.re[this.initialIndex] = 1;
+};
+
+Simulator.prototype.applyGate = function (gateName, target, control) {
+  gateName = String(gateName).toUpperCase();
+  var op;
+  if (SINGLE[gateName]) {
+    if (target < 0 || target >= this.n) {
+      throw SimError('Target qubit ' + target + ' out of range [0, ' + (this.n - 1) + ']');
+    }
+    op = buildSingleOp(SINGLE[gateName], target, this.n);
+  } else if (MULTI[gateName]) {
+    if (control === null || control === undefined) throw SimError('Gate ' + gateName + ' requires a control qubit');
+    if (target < 0 || target >= this.n) {
+      throw SimError('Target qubit ' + target + ' out of range [0, ' + (this.n - 1) + ']');
+    }
+    if (control < 0 || control >= this.n) {
+      throw SimError('Control qubit ' + control + ' out of range [0, ' + (this.n - 1) + ']');
+    }
+    if (control === target) throw SimError('Control and target qubits must be different');
+    op = buildTwoOp(MULTI[gateName], control, target, this.n);
+  } else {
+    throw SimError('Unknown gate: ' + gateName);
+  }
+  var y = matvec(op, this.re, this.im);
+  this.re = y[0];
+  this.im = y[1];
+};
+
+function ketLabel(i, n) {
+  var s = i.toString(2);
+  while (s.length < n) s = '0' + s;
+  return s;
+}
+
+Simulator.prototype.getProbabilities = function () {
+  var out = {};
+  for (var i = 0; i < this.dim; i++) {
+    var p = this.re[i] * this.re[i] + this.im[i] * this.im[i];
+    if (p > 1e-10) out[ketLabel(i, this.n)] = Math.round(p * 1e8) / 1e8;
+  }
+  return out;
+};
+
+Simulator.prototype.getStateVector = function () {
+  var out = [];
+  for (var i = 0; i < this.dim; i++) {
+    if (Math.sqrt(this.re[i] * this.re[i] + this.im[i] * this.im[i]) > 1e-10) {
+      out.push({
+        label: ketLabel(i, this.n),
+        real: Math.round(this.re[i] * 1e8) / 1e8,
+        imag: Math.round(this.im[i] * 1e8) / 1e8
+      });
+    }
+  }
+  return out;
+};
+
+/* r_i = <psi| sigma_i |psi>, one full 2^n x 2^n operator per axis
+   per qubit. Thirty of them at the ceiling - which is where most
+   of the 244 ms in the case study goes. */
+Simulator.prototype.getBlochVectors = function () {
+  var vectors = {};
+  for (var i = 0; i < this.n; i++) {
+    var r = [];
+    var axes = ['X', 'Y', 'Z'];
+    for (var a = 0; a < 3; a++) {
+      var op = buildSingleOp(SINGLE[axes[a]], i, this.n);
+      var y = matvec(op, this.re, this.im);
+      var s = 0;
+      for (var k = 0; k < this.dim; k++) s += this.re[k] * y[0][k] + this.im[k] * y[1][k];
+      r.push(Math.round(s * 1e4) / 1e4);
+    }
+    vectors[String(i)] = r;
+  }
+  return vectors;
+};
+
+/* np.random.choice over the probability distribution. Seeded here
+   so a deep link lands on the same shots twice; the prototype
+   leaves it unseeded. */
+function mulberry(seed) {
+  var t = seed >>> 0;
+  return function () {
+    t = (t + 0x6d2b79f5) >>> 0;
+    var r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+Simulator.prototype.measure = function (shots, seed) {
+  var rnd = mulberry(seed === undefined ? 20260601 : seed);
+  var cum = new Float64Array(this.dim), run = 0;
+  for (var i = 0; i < this.dim; i++) {
+    run += this.re[i] * this.re[i] + this.im[i] * this.im[i];
+    cum[i] = run;
+  }
+  var counts = {};
+  for (var s = 0; s < shots; s++) {
+    var u = rnd() * run, lo = 0, hi = this.dim - 1;
+    while (lo < hi) { var mid = (lo + hi) >> 1; if (cum[mid] < u) lo = mid + 1; else hi = mid; }
+    var k = ketLabel(lo, this.n);
+    counts[k] = (counts[k] || 0) + 1;
+  }
+  var sorted = {};
+  Object.keys(counts).sort().forEach(function (k) { sorted[k] = counts[k]; });
+  return sorted;
+};
+
+/* ------------------------------------------------------------
+   3. THE API LAYER  (port of simulation/router.py + schemas.py)
+
+   The prototype's front end never touches the simulator directly;
+   it posts a circuit to FastAPI. That boundary is ported too,
+   validation and status codes included, because ten of the
+   thirty-two tests are about the boundary rather than the physics.
+   ------------------------------------------------------------ */
+function apiSimulate(body) {
+  /* Pydantic field validation -> 422 before the handler runs. */
+  var n = body.num_qubits;
+  if (typeof n !== 'number' || n < 1 || n > 10) {
+    return { status: 422, json: { detail: 'num_qubits: input should be between 1 and 10' } };
+  }
+  var shots = body.shots === undefined ? 1024 : body.shots;
+  if (typeof shots !== 'number' || shots < 1 || shots > 10000) {
+    return { status: 422, json: { detail: 'shots: input should be between 1 and 10000' } };
+  }
+  var ops = body.operations || [];
+  for (var i = 0; i < ops.length; i++) {
+    if (typeof ops[i].target !== 'number' || ops[i].target < 0) {
+      return { status: 422, json: { detail: 'operations: target must be >= 0' } };
+    }
+  }
+  try {
+    var sim = new Simulator(n, body.initial_states || []);
+    for (var j = 0; j < ops.length; j++) {
+      sim.applyGate(ops[j].gate, ops[j].target, ops[j].control === undefined ? null : ops[j].control);
+    }
+    return {
+      status: 200,
+      json: {
+        state_vector: sim.getStateVector(),
+        probabilities: sim.getProbabilities(),
+        measurements: sim.measure(shots, body.seed),
+        bloch_vectors: sim.getBlochVectors(),
+        num_qubits: n
+      }
+    };
+  } catch (e) {
+    if (e.isValueError) return { status: 400, json: { detail: e.message } };
+    return { status: 500, json: { detail: 'Simulation error: ' + e.message } };
+  }
+}
+
+function apiGates() { return { status: 200, json: GATE_INFO.slice() }; }
+function apiRoot() { return { status: 200, json: { message: 'Quantum Gate Simulation API', version: '0.1.0' } }; }
+
+/* ------------------------------------------------------------
+   4. THE PREBUILT LIBRARY  (frontend/src/app/lib/circuitData.ts)
+
+   Four circuits are built and four are labelled coming soon,
+   which is what the prototype shipped. Showing the empty ones
+   greyed rather than hiding them is the honest state of it.
+   ------------------------------------------------------------ */
+function op(gate, target, control, step) {
+  return { gate: gate, target: target, control: control === undefined ? null : control, step: step };
+}
+
+var LIBRARY = [
+  {
+    id: 'superposition', name: 'Superposition', category: 'Fundamentals',
+    description: 'Creates equal superposition across all basis states using Hadamard gates.',
+    detail: 'A Hadamard on each qubit initialised in |0⟩ gives an equal superposition of all 2ⁿ basis states. With two qubits that is four states at 25% each. It is the opening move of nearly every quantum algorithm.',
+    qubits: 2, initial: [0, 0], ops: [op('H', 0, null, 0), op('H', 1, null, 0)], ready: true
+  },
+  {
+    id: 'bell-state', name: 'Bell State', category: 'Entanglement and teleportation',
+    description: 'Creates a maximally entangled EPR pair between two qubits using H + CNOT.',
+    detail: 'H on qubit 0 then CNOT with qubit 0 as control gives (|00⟩ + |11⟩)/√2. Measuring one qubit fixes the other. This is the circuit where both Bloch spheres go blank - see the entanglement screen.',
+    qubits: 2, initial: [0, 0], ops: [op('H', 0, null, 0), op('CNOT', 1, 0, 1)], ready: true
+  },
+  {
+    id: 'ghz-state', name: 'GHZ State', category: 'Entanglement and teleportation',
+    description: 'Extends entanglement to three qubits - a key resource for error correction.',
+    detail: 'H on qubit 0 then cascading CNOTs gives (|000⟩ + |111⟩)/√2. Genuine multipartite entanglement rather than three pairwise-entangled qubits: measuring any one collapses all three.',
+    qubits: 3, initial: [0, 0, 0], ops: [op('H', 0, null, 0), op('CNOT', 1, 0, 1), op('CNOT', 2, 0, 2)], ready: true
+  },
+  {
+    id: 'quantum-teleportation', name: 'Quantum Teleportation', category: 'Entanglement and teleportation',
+    description: 'Transfers an arbitrary qubit state using entanglement and classical communication.',
+    detail: 'Qubits 1 and 2 are entangled into a Bell pair, then qubit 0 - the state being sent, here prepared as |1⟩ — is entangled with qubit 1 and measured. The classically-conditioned X and Z corrections on qubit 2 are the part this engine cannot do: it has no mid-circuit measurement, so the circuit stops at the four gates before them.',
+    qubits: 3, initial: [1, 0, 0],
+    ops: [op('H', 1, null, 0), op('CNOT', 2, 1, 1), op('CNOT', 1, 0, 2), op('H', 0, null, 3)], ready: true
+  },
+  {
+    id: 'half-adder', name: 'Half Adder', category: 'Arithmetic circuits',
+    description: 'Adds two single-qubit inputs, producing a sum and carry output.',
+    detail: 'Needs a Toffoli (CCNOT) for the carry bit. The engine has no three-qubit gate, so this one is a name and a description and nothing else.',
+    qubits: 4, initial: [0, 0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'full-adder', name: 'Full Adder', category: 'Arithmetic circuits',
+    description: 'Adds three inputs (A, B, carry-in) and outputs sum and carry-out.',
+    detail: 'Same blocker as the half adder, plus a second Toffoli.',
+    qubits: 6, initial: [0, 0, 0, 0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'quantum-multiplier', name: 'Quantum Multiplier', category: 'Arithmetic circuits',
+    description: 'Multiplies two quantum registers using repeated addition circuits.',
+    detail: 'Eight qubits of adders. Both the missing Toffoli and the qubit ceiling are in the way.',
+    qubits: 8, initial: [0, 0, 0, 0, 0, 0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'deutsch-jozsa', name: 'Deutsch-Jozsa', category: 'Algorithms',
+    description: 'Determines whether a function is constant or balanced in a single query.',
+    detail: 'Needs an oracle - a gate the user supplies - and the builder has no way to define one.',
+    qubits: 3, initial: [0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'bernstein-vazirani', name: 'Bernstein-Vazirani', category: 'Algorithms',
+    description: 'Finds a hidden binary string encoded in a function using a single query.',
+    detail: 'Same oracle problem.',
+    qubits: 4, initial: [0, 0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'grovers-search', name: "Grover's Search", category: 'Algorithms',
+    description: 'Searches an unsorted database quadratically faster than classical algorithms.',
+    detail: 'Oracle plus a diffusion operator built from multi-controlled gates. The furthest of the eight from working.',
+    qubits: 4, initial: [0, 0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'bit-flip-code', name: 'Bit-Flip Code', category: 'Error correction',
+    description: 'Encodes one logical qubit into three physical qubits against bit-flip errors.',
+    detail: 'The encoder is two CNOTs and would run today. The correction needs syndrome measurement mid-circuit, which the engine does not have.',
+    qubits: 3, initial: [0, 0, 0], ops: [], ready: false
+  },
+  {
+    id: 'phase-flip-code', name: 'Phase-Flip Code', category: 'Error correction',
+    description: 'Protects against single phase-flip errors using three-qubit redundancy.',
+    detail: 'Same missing piece as the bit-flip code, wrapped in Hadamards.',
+    qubits: 3, initial: [0, 0, 0], ops: [], ready: false
+  }
+];
+
+function libraryById(id) {
+  for (var i = 0; i < LIBRARY.length; i++) if (LIBRARY[i].id === id) return LIBRARY[i];
+  return null;
+}
+
+/* ------------------------------------------------------------
+   5. STATE
+   ------------------------------------------------------------ */
+var VIEWS = [
+  { id: 'circuit',     n: '01', label: 'Circuit',       sub: 'Place a gate, watch the spheres' },
+  { id: 'library',     n: '02', label: 'Library',       sub: 'Prebuilt, and editable' },
+  { id: 'entanglement',n: '03', label: 'Entanglement',  sub: 'Why a sphere goes blank' },
+  { id: 'ceiling',     n: '04', label: 'The ceiling',   sub: 'Measured against 200 ms' },
+  { id: 'tests',       n: '05', label: 'Physics tests', sub: '32 tests, run here' }
+];
+
+/* The section 05 curve, measured on the deployed Python engine
+   in Jun 2026. Reproduced here so the browser can be held
+   against it rather than replace it. */
+var DEPLOYED = { x: [4, 6, 8, 9, 10, 11, 12], y: [4, 15, 62, 121, 244, 610, 1420] };
+var BUDGET = 200;
+
+var state = {
+  view: 'circuit',
+  n: 2,
+  initial: [0, 0],
+  ops: [],
+  gate: null,
+  pending: null,
+  shots: 1024,
+  seed: 20260601,
+  loaded: null,
+  cam: { yaw: 0.62, pitch: 0.42 },
+  spin: true,
+  computing: false,
+  result: null,
+  ms: 0,
+  bench: null,
+  benchRunning: false,
+  tests: null,
+  ent: 'bell'
+};
+
+var nextOpId = 0;
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function fmt(v, d) { return Number(v).toFixed(d === undefined ? 1 : d); }
+
+/* ------------------------------------------------------------
+   6. RUNNING THE CIRCUIT
+
+   There is no run button. Every edit calls this, and the screen
+   repaints with whatever it cost - which is the section 05
+   argument made continuously rather than asserted once.
+   ------------------------------------------------------------ */
+function runSim() {
+  var ops = state.ops.slice().sort(function (a, b) { return a.step - b.step; });
+  var body = {
+    num_qubits: state.n,
+    initial_states: state.initial.slice(0, state.n),
+    operations: ops.map(function (o) { return { gate: o.gate, target: o.target, control: o.control }; }),
+    shots: state.shots,
+    seed: state.seed
+  };
+  var t0 = performance.now();
+  var res = apiSimulate(body);
+  state.ms = performance.now() - t0;
+  state.result = res.status === 200 ? res.json : null;
+  state.error = res.status === 200 ? null : res.json.detail;
+}
+
+/* A 10-qubit edit takes most of a second in a browser, so the
+   pending state is painted before the engine blocks the thread. */
+function recompute() {
+  if (state.n >= 9) {
+    state.computing = true;
+    render();
+    setTimeout(function () { state.computing = false; runSim(); render(); }, 16);
+  } else {
+    runSim();
+    render();
+  }
+}
+
+/* ------------------------------------------------------------
+   7. BLOCH SPHERE
+
+   An orthographic projection of the unit sphere, drawn from the
+   (rx, ry, rz) the engine returns. Drag any sphere to turn all
+   of them; the prototype spins each one on its own axis with
+   drei's OrbitControls, which is the same geometry with a nicer
+   renderer behind it.
+   ------------------------------------------------------------ */
+function project(p) {
+  var cy = Math.cos(state.cam.yaw), sy = Math.sin(state.cam.yaw);
+  var x = p[0] * cy - p[1] * sy;
+  var y = p[0] * sy + p[1] * cy;
+  var z = p[2];
+  var cp = Math.cos(state.cam.pitch), sp = Math.sin(state.cam.pitch);
+  return [x, -(z * cp - y * sp), y * cp + z * sp];
+}
+
+function circlePath(fn, R, cx, cy, wantFront) {
+  var d = '', pen = false;
+  for (var i = 0; i <= 96; i++) {
+    var t = (i / 96) * Math.PI * 2;
+    var p = project(fn(t));
+    var front = p[2] >= 0;
+    if (front !== wantFront) { pen = false; continue; }
+    var X = cx + p[0] * R, Y = cy + p[1] * R;
+    d += (pen ? 'L' : 'M') + fmt(X, 1) + ' ' + fmt(Y, 1) + ' ';
+    pen = true;
+  }
+  return d;
+}
+
+function axisLine(vec, R, cx, cy) {
+  var a = project([-vec[0] * 1.16, -vec[1] * 1.16, -vec[2] * 1.16]);
+  var b = project([vec[0] * 1.16, vec[1] * 1.16, vec[2] * 1.16]);
+  return { x1: cx + a[0] * R, y1: cy + a[1] * R, x2: cx + b[0] * R, y2: cy + b[1] * R };
+}
+
+function sphereSVG(r, size) {
+  size = size || 132;
+  var cx = size / 2, cy = size / 2, R = size * 0.335;
+  var len = Math.sqrt(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
+  var s = '<svg viewBox="0 0 ' + size + ' ' + size + '" role="img">';
+
+  var rings = [
+    function (t) { return [Math.cos(t), Math.sin(t), 0]; },
+    function (t) { return [Math.cos(t), 0, Math.sin(t)]; },
+    function (t) { return [0, Math.cos(t), Math.sin(t)]; }
+  ];
+  for (var i = 0; i < 3; i++) {
+    s += '<path d="' + circlePath(rings[i], R, cx, cy, false) + '" fill="none" stroke="#2a2a36" stroke-width="0.8" stroke-dasharray="2 3"/>';
+  }
+  s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + fmt(R, 1) + '" fill="rgba(255,255,255,0.035)" stroke="#33333f" stroke-width="1"/>';
+  var axes = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+  for (var a = 0; a < 3; a++) {
+    var L = axisLine(axes[a], R, cx, cy);
+    s += '<line x1="' + fmt(L.x1, 1) + '" y1="' + fmt(L.y1, 1) + '" x2="' + fmt(L.x2, 1) + '" y2="' + fmt(L.y2, 1) + '" stroke="#3a3a48" stroke-width="0.8"/>';
+  }
+  for (var j = 0; j < 3; j++) {
+    s += '<path d="' + circlePath(rings[j], R, cx, cy, true) + '" fill="none" stroke="#3d3d4b" stroke-width="0.9"/>';
+  }
+
+  /* Axis labels, at the poles and the two equatorial eigenstates. */
+  var labels = [
+    { p: [0, 0, 1.34], t: '|0⟩', c: '#8d92a4' },
+    { p: [0, 0, -1.34], t: '|1⟩', c: '#8d92a4' },
+    { p: [1.32, 0, 0], t: '|+⟩', c: '#5c6070' },
+    { p: [0, 1.32, 0], t: '|+i⟩', c: '#5c6070' }
+  ];
+  for (var k = 0; k < labels.length; k++) {
+    var lp = project(labels[k].p);
+    s += '<text x="' + fmt(cx + lp[0] * R, 1) + '" y="' + fmt(cy + lp[1] * R + 3, 1) + '" fill="' + labels[k].c +
+      '" font-size="8.5" font-family="IBM Plex Mono, monospace" text-anchor="middle">' + labels[k].t + '</text>';
+  }
+
+  if (len < 0.02) {
+    /* An entangled qubit has no individual Bloch vector. Drawing
+       one anyway would teach the wrong thing for a nicer picture. */
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="none" stroke="#c9973f" stroke-width="1.4" stroke-dasharray="2 2"/>';
+  } else {
+    if (len < 0.985) {
+      s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + fmt(R * len, 1) +
+        '" fill="rgba(201,151,63,0.09)" stroke="#6b5220" stroke-width="0.8" stroke-dasharray="2 2"/>';
+    }
+    var v = project(r);
+    var vx = cx + v[0] * R, vy = cy + v[1] * R;
+    s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + fmt(vx, 1) + '" y2="' + fmt(vy, 1) +
+      '" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>';
+    s += '<circle cx="' + fmt(vx, 1) + '" cy="' + fmt(vy, 1) + '" r="3.4" fill="#00f0ff"/>';
+  }
+  s += '<circle cx="' + cx + '" cy="' + cy + '" r="1.3" fill="#5c6070"/>';
+  s += '</svg>';
+  return s;
+}
+
+function blochOf(i) {
+  if (!state.result || !state.result.bloch_vectors) return [0, 0, 1];
+  return state.result.bloch_vectors[String(i)] || [0, 0, 1];
+}
+
+function spheresHTML() {
+  var out = '<div class="spheres" id="spheres">';
+  for (var i = 0; i < state.n; i++) {
+    var r = blochOf(i);
+    var len = Math.sqrt(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]);
+    out += '<div class="sphere-cell' + (len < 0.02 ? ' entangled' : '') + '" data-sphere="' + i + '" data-r="' + r.join(',') + '">' +
+      sphereSVG(r) +
+      '<div class="sphere-cap"><span>q' + i + '</span><b>' +
+      (len < 0.02 ? 'no vector' : '|r| ' + fmt(len, 2)) + '</b></div></div>';
+  }
+  return out + '</div>';
+}
+
+/* ------------------------------------------------------------
+   8. THE CIRCUIT SCREEN
+   ------------------------------------------------------------ */
+function paletteHTML() {
+  function group(label, names) {
+    var h = '<div class="pal-group"><div class="pal-label">' + label + '</div><div class="pal-btns">';
+    names.forEach(function (g) {
+      var ui = GATE_UI[g];
+      h += '<button class="gate-btn" data-gate="' + g + '" title="' + esc(ui.desc) + '" aria-pressed="' +
+        (state.gate === g) + '" style="--gate-color:' + ui.color + ';--gate-dim:' + ui.color + '33">' + ui.label + '</button>';
+    });
+    return h + '</div></div>';
+  }
+  return '<div class="palette">' + group('Single qubit', SINGLE_ORDER) + group('Multi qubit', MULTI_ORDER) + '</div>';
+}
+
+function gridHTML() {
+  var maxStep = -1;
+  state.ops.forEach(function (o) { if (o.step > maxStep) maxStep = o.step; });
+  var steps = Math.max(maxStep + 2, 8);
+
+  var at = {};
+  state.ops.forEach(function (o) {
+    at[o.target + '-' + o.step] = o;
+    if (o.control !== null && o.control !== undefined) at[o.control + '-' + o.step] = o;
+  });
+
+  var h = '<div class="circuit-wrap"><div class="circuit">';
+  h += '<div class="crow"><div class="clabel"></div>';
+  for (var s = 0; s < steps; s++) h += '<div class="chcell">' + s + '</div>';
+  h += '</div>';
+
+  for (var q = 0; q < state.n; q++) {
+    h += '<div class="crow"><div class="clabel"><span class="q">q' + q + '</span>' +
+      '<button class="ket" data-ket="' + q + '" title="Click to flip the initial state">|' + (state.initial[q] || 0) + '⟩</button></div>';
+    for (var st = 0; st < steps; st++) {
+      var o = at[q + '-' + st];
+      var isTarget = o && o.target === q;
+      var isControl = o && o.control === q && !isTarget;
+      var isPending = state.pending && state.pending.control === q && state.pending.step === st;
+      h += '<div class="ccell' + (state.gate ? ' click' : '') + (isPending ? ' pending' : '') +
+        '" data-cell="' + q + '-' + st + '"><div class="wire"></div>';
+      if (o && o.control !== null && o.control !== undefined) {
+        var lo = Math.min(o.control, o.target), hi = Math.max(o.control, o.target);
+        if (q === lo) {
+          h += '<div class="conn" style="background:' + gateColor(o.gate) + ';height:' + ((hi - lo) * 52) + 'px;top:50%"></div>';
+        }
+      }
+      if (isTarget) {
+        var glyph = o.gate === 'CNOT' ? '⊕' : o.gate === 'SWAP' ? '×' : GATE_UI[o.gate].label;
+        h += '<button class="chip-gate" data-del="' + o.id + '" style="background:' + gateColor(o.gate) +
+          '" title="' + o.gate + ' — click to remove">' + glyph + '</button>';
+      } else if (isControl) {
+        h += '<button class="ctrl-dot" data-del="' + o.id + '" style="background:' + gateColor(o.gate) +
+          '" title="' + o.gate + ' control — click to remove"></button>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+  }
+  return h + '</div></div>';
+}
+
+function histHTML(entries, total, cls, unit) {
+  var max = 0;
+  entries.forEach(function (e) { if (e[1] > max) max = e[1]; });
+  var shown = entries.slice(0, 12);
+  var h = '<div class="hist">';
+  shown.forEach(function (e) {
+    var pct = max > 0 ? (e[1] / max) * 100 : 0;
+    var val = unit === 'pct' ? fmt(e[1] * 100, 1) + '%' : String(e[1]);
+    h += '<div class="hrow"><span class="hkey">|' + e[0] + '⟩</span>' +
+      '<span class="htrack"><span class="hbar ' + cls + '" style="width:' + fmt(pct, 1) + '%"></span></span>' +
+      '<span class="hval">' + val + '</span></div>';
+  });
+  h += '</div>';
+  if (entries.length > shown.length) {
+    h += '<p class="note" style="margin-top:10px">' + (entries.length - shown.length) +
+      ' further basis states carry the remaining ' +
+      (unit === 'pct'
+        ? fmt(entries.slice(12).reduce(function (a, e) { return a + e[1]; }, 0) * 100, 1) + '%'
+        : entries.slice(12).reduce(function (a, e) { return a + e[1]; }, 0) + ' shots') +
+      '. The table below is the full state.</p>';
+  }
+  return h;
+}
+
+function amplitudeStr(e) {
+  if (Math.abs(e.imag) < 1e-9) return fmt(e.real, 4);
+  if (Math.abs(e.real) < 1e-9) return fmt(e.imag, 4) + 'i';
+  return fmt(e.real, 4) + (e.imag >= 0 ? ' + ' : ' − ') + fmt(Math.abs(e.imag), 4) + 'i';
+}
+
+function viewCircuit() {
+  var h = '<div class="pane-head"><div class="kicker">01 &middot; Circuit</div>' +
+    '<h2>Build it and watch the state move</h2>' +
+    '<p>Pick a gate, then click a cell. Two-qubit gates want a control first and a target second. ' +
+    'The spheres and the histograms below are recomputed on every edit &mdash; there is no run button, because a run button turns exploration into submission.</p></div>';
+
+  h += '<div class="toolrow">' +
+    '<button class="btn sm" id="qMinus"' + (state.n <= 1 ? ' disabled' : '') + '>&minus;</button>' +
+    '<span class="chip"><b>' + state.n + '</b> qubit' + (state.n > 1 ? 's' : '') + ' &middot; ' + (1 << state.n) + ' amplitudes</span>' +
+    '<button class="btn sm" id="qPlus"' + (state.n >= 10 ? ' disabled' : '') + '>+</button>' +
+    '<button class="btn sm" id="doReset">Reset</button>' +
+    '<span class="spacer"></span>' +
+    '<label class="chip" style="gap:8px">shots <select class="sel" id="shotSel" style="padding:1px 4px">' +
+    [256, 1024, 4096, 10000].map(function (s) {
+      return '<option value="' + s + '"' + (state.shots === s ? ' selected' : '') + '>' + s + '</option>';
+    }).join('') + '</select></label>' +
+    '<button class="btn sm" id="doResample">Resample</button>' +
+    '<button class="btn sm" id="doSpin" aria-pressed="' + state.spin + '">Spin</button>' +
+    '</div>';
+
+  if (state.n >= 10) {
+    h += '<p class="note warn" style="margin-bottom:14px">Ten is the ceiling and it is not configurable. ' +
+      'The state vector doubles per qubit and the operators the engine builds for it quadruple; eleven would put the update past the point where it still feels attached to the click.</p>';
+  }
+
+  if (state.loaded) {
+    var lib = libraryById(state.loaded);
+    h += '<p class="note accent" style="margin-bottom:14px"><b>' + esc(lib.name) + '</b> loaded as an editable circuit, not a playback. ' +
+      'Every gate below can be removed, moved or added to &mdash; modifying something correct is an easier first move than construction.</p>';
+  }
+
+  h += '<div class="card">' + paletteHTML() +
+    (state.gate
+      ? '<p class="note accent" style="margin-top:13px">' +
+        (state.pending
+          ? 'Now click the <b>target</b> for ' + state.pending.gate + ' — the connector will be drawn between the two.'
+          : isMulti(state.gate)
+            ? 'Click a cell to set the <b>control</b> qubit for ' + state.gate + '.'
+            : 'Click a cell to place <b>' + state.gate + '</b>. Click a placed gate to remove it.') + '</p>'
+      : '<p class="note" style="margin-top:13px">Nothing selected. Pick a gate above, or load one of the prebuilt circuits from the library.</p>') +
+    '</div>';
+
+  h += '<div class="card"><h3>Circuit <span class="badge rule">' + state.ops.length + ' gate' +
+    (state.ops.length === 1 ? '' : 's') + '</span></h3>' +
+    '<p class="sub">Click a qubit’s ket to flip its initial state between |0⟩ and |1⟩. Columns are time steps; gates in the same column act at the same moment.</p>' +
+    gridHTML() + '</div>';
+
+  if (state.computing) {
+    h += '<div class="card"><h3>Computing<span class="badge warn">' + (1 << state.n) + '-dimensional state</span></h3>' +
+      '<p class="sub">Building ' + (3 * state.n + state.ops.length) + ' operators of ' + (1 << state.n) + ' × ' + (1 << state.n) +
+      '. This is the part the case study measured.</p></div>';
+    return h;
+  }
+
+  if (state.error) {
+    h += '<div class="card"><h3>The engine refused this circuit <span class="badge crit">400</span></h3><p class="sub">' +
+      esc(state.error) + '</p></div>';
+    return h;
+  }
+
+  var probs = Object.keys(state.result.probabilities)
+    .map(function (k) { return [k, state.result.probabilities[k]]; })
+    .sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0]); });
+  var meas = Object.keys(state.result.measurements)
+    .map(function (k) { return [k, state.result.measurements[k]]; })
+    .sort(function (a, b) { return b[1] - a[1] || a[0].localeCompare(b[0]); });
+  var totalShots = meas.reduce(function (a, e) { return a + e[1]; }, 0);
+
+  h += '<div class="grid2" style="margin-bottom:16px">';
+  h += '<div class="card"><h3>Qubit states</h3>' +
+    '<p class="sub">One Bloch sphere per qubit, drawn from the expectation values the engine returns. Drag any sphere to turn all of them.</p>' +
+    spheresHTML() + '</div>';
+  h += '<div class="card"><h3>Measurement <span class="badge rule">' + totalShots + ' shots</span></h3>' +
+    '<p class="sub">Exact probabilities above, sampled counts below. They sit beside the spheres rather than behind a tab, because the point is the link between the geometry and the outcome.</p>' +
+    '<div class="hcap">Exact probability</div>' + histHTML(probs, 1, '', 'pct') +
+    '<div style="height:17px"></div>' +
+    '<div class="hcap">Sampled counts &middot; ' + totalShots + ' shots</div>' +
+    histHTML(meas, totalShots, 'shots', 'count') + '</div>';
+  h += '</div>';
+
+  h += '<div class="card"><h3>State vector <span class="badge rule">' + state.result.state_vector.length +
+    ' non-zero of ' + (1 << state.n) + '</span></h3>' +
+    '<p class="sub">Complex amplitudes, rounded to eight decimal places as the API returns them. Anything below 1e-10 in magnitude is dropped.</p>' +
+    '<table class="t"><thead><tr><th>Basis state</th><th>Amplitude</th><th class="num">Probability</th></tr></thead><tbody>';
+  state.result.state_vector.slice(0, 16).forEach(function (e) {
+    var m = e.real * e.real + e.imag * e.imag;
+    h += '<tr><td class="k">|' + e.label + '⟩</td><td class="k">' + amplitudeStr(e) +
+      '</td><td class="num">' + fmt(m * 100, 1) + '%</td></tr>';
+  });
+  h += '</tbody></table>';
+  if (state.result.state_vector.length > 16) {
+    h += '<p class="note" style="margin-top:11px">' + (state.result.state_vector.length - 16) +
+      ' further amplitudes not listed.</p>';
+  }
+  h += '<p class="note" style="margin-top:12px">This edit cost <b>' + fmt(state.ms, 1) + ' ms</b> against the 200 ms budget the team agreed before building &mdash; ' +
+    (state.ms <= BUDGET
+      ? 'inside it, so the picture still feels attached to the click.'
+      : 'past it, which is what the ceiling screen is about.') + '</p>';
+  h += '</div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   9. THE LIBRARY
+   ------------------------------------------------------------ */
+function viewLibrary() {
+  var h = '<div class="pane-head"><div class="kicker">02 &middot; Library</div>' +
+    '<h2>Prebuilt circuits, loaded as editable</h2>' +
+    '<p>A blank grid is a wall. Loading a Bell or GHZ state gives you something correct to modify, which is a much easier first move than construction. ' +
+    'Four of the twelve run; the other eight are named and described and do nothing, which is how the prototype shipped.</p></div>';
+
+  var cats = [];
+  LIBRARY.forEach(function (c) { if (cats.indexOf(c.category) === -1) cats.push(c.category); });
+  cats.forEach(function (cat) {
+    var ready = LIBRARY.filter(function (c) { return c.category === cat && c.ready; }).length;
+    var all = LIBRARY.filter(function (c) { return c.category === cat; });
+    h += '<div class="card"><h3>' + esc(cat) + ' <span class="badge ' + (ready ? 'good' : 'warn') + '">' +
+      ready + ' of ' + all.length + ' built</span></h3><div class="lib">';
+    all.forEach(function (c) {
+      h += '<button class="lib-card" data-load="' + c.id + '"' + (c.ready ? '' : ' disabled') + '>' +
+        '<span class="lh"><span class="ln">' + esc(c.name) + '</span>' +
+        (c.ready ? '' : '<span class="badge warn">coming soon</span>') + '</span>' +
+        '<span class="lm">' + c.qubits + ' qubits &middot; ' + (c.ready ? c.ops.length + ' gates' : 'no gates') + '</span>' +
+        '<span class="ld">' + esc(c.description) + '</span>' +
+        '<span class="ld" style="color:var(--faint)">' + esc(c.detail) + '</span>' +
+        '</button>';
+    });
+    h += '</div></div>';
+  });
+
+  h += '<p class="note warn">The eight unbuilt circuits are blocked on two missing pieces rather than on time: the engine has no three-qubit gate, ' +
+    'so nothing needing a Toffoli can be expressed, and it has no mid-circuit measurement, so no error-correction circuit can close its loop. ' +
+    'Both were known when the list was written.</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   10. ENTANGLEMENT
+
+   Callout two on the case study says an entangled qubit is drawn
+   as an unresolved sphere, because the honest representation of
+   one is that it has no individual Bloch vector. This screen is
+   that claim with the arithmetic shown: the same two qubits, one
+   gate apart, computed here.
+   ------------------------------------------------------------ */
+var ENT_CASES = {
+  product: {
+    name: 'Product state', n: 2, initial: [0, 0],
+    ops: [op('H', 0, null, 0)],
+    line: 'H on q0 and nothing else. The two qubits are independent, so each one has a Bloch vector of its own and both sit on the surface.'
+  },
+  partial: {
+    name: 'Partly entangled', n: 2, initial: [0, 0],
+    ops: [op('H', 0, null, 0), op('T', 0, null, 1), op('H', 0, null, 2), op('CNOT', 1, 0, 3)],
+    line: 'H, T, H on q0 puts it in an uneven superposition before the CNOT, so the entanglement is real but not maximal. The vectors shorten rather than vanish.'
+  },
+  bell: {
+    name: 'Bell state', n: 2, initial: [0, 0],
+    ops: [op('H', 0, null, 0), op('CNOT', 1, 0, 1)],
+    line: 'One CNOT more than the product state. Both vectors collapse to length zero: the pair has a definite state and neither qubit does.'
+  },
+  ghz: {
+    name: 'GHZ state', n: 3, initial: [0, 0, 0],
+    ops: [op('H', 0, null, 0), op('CNOT', 1, 0, 1), op('CNOT', 2, 0, 2)],
+    line: 'The same collapse across three qubits at once. Nothing pairwise is happening here — measuring any one of them fixes all three.'
+  }
+};
+
+function computeCase(c) {
+  var sim = new Simulator(c.n, c.initial);
+  c.ops.forEach(function (o) { sim.applyGate(o.gate, o.target, o.control); });
+  return { bloch: sim.getBlochVectors(), probs: sim.getProbabilities(), n: c.n };
+}
+
+function vlen(r) { return Math.sqrt(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]); }
+
+function viewEntanglement() {
+  var c = ENT_CASES[state.ent] || ENT_CASES.bell;
+  var r = computeCase(c);
+
+  var h = '<div class="pane-head"><div class="kicker">03 &middot; Entanglement</div>' +
+    '<h2>Why an entangled qubit is drawn blank</h2>' +
+    '<p>Hiding this would give a nicer picture and teach the wrong thing. An entangled qubit has no Bloch vector of its own, ' +
+    'and the length of the vector the engine returns is exactly how much of a state that qubit still has by itself.</p></div>';
+
+  h += '<div class="toolrow">';
+  ['product', 'partial', 'bell', 'ghz'].forEach(function (k) {
+    h += '<button class="btn sm" data-ent="' + k + '" aria-pressed="' + (state.ent === k) + '">' + ENT_CASES[k].name + '</button>';
+  });
+  h += '</div>';
+
+  h += '<div class="grid2" style="margin-bottom:16px">';
+  h += '<div class="card"><h3>' + esc(c.name) + ' <span class="badge rule">' + c.ops.length + ' gates</span></h3>' +
+    '<p class="sub">' + esc(c.line) + '</p><div class="spheres">';
+  for (var i = 0; i < r.n; i++) {
+    var v = r.bloch[String(i)];
+    var L = vlen(v);
+    h += '<div class="sphere-cell' + (L < 0.02 ? ' entangled' : '') + '" data-r="' + v.join(',') + '">' +
+      sphereSVG(v) + '<div class="sphere-cap"><span>q' + i + '</span><b>' +
+      (L < 0.02 ? 'no vector' : '|r| ' + fmt(L, 3)) + '</b></div></div>';
+  }
+  h += '</div></div>';
+
+  h += '<div class="card"><h3>What the numbers say</h3>' +
+    '<p class="sub">Vector length runs from 1 for a qubit in a state of its own to 0 for a maximally entangled one. ' +
+    'Purity is (1 + |r|²)/2 — the same fact in the form the literature states it.</p>' +
+    '<table class="t"><thead><tr><th>Qubit</th><th class="num">rx</th><th class="num">ry</th><th class="num">rz</th><th class="num">|r|</th><th class="num">Purity</th></tr></thead><tbody>';
+  for (var j = 0; j < r.n; j++) {
+    var w = r.bloch[String(j)], Lw = vlen(w);
+    h += '<tr><td class="k">q' + j + '</td><td class="num">' + fmt(w[0], 3) + '</td><td class="num">' + fmt(w[1], 3) +
+      '</td><td class="num">' + fmt(w[2], 3) + '</td><td class="num">' + fmt(Lw, 3) +
+      '</td><td class="num">' + fmt((1 + Lw * Lw) / 2, 3) + '</td></tr>';
+  }
+  h += '</tbody></table>';
+  var pk = Object.keys(r.probs).sort();
+  h += '<p class="note" style="margin-top:13px">The whole state is still perfectly definite: ' +
+    pk.map(function (k) { return '|' + k + '⟩ at ' + fmt(r.probs[k] * 100, 1) + '%'; }).join(', ') +
+    '. Nothing has been lost — the information moved from the qubits into the correlation between them, ' +
+    'which is precisely what a per-qubit picture cannot hold.</p>';
+  h += '</div></div>';
+
+  h += '<p class="note accent">Switch between the four and watch only the sphere lengths change. ' +
+    'The product state and the Bell state differ by one gate and by everything.</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   11. THE CEILING
+
+   Section 05 agreed a 200 ms budget before building, measured the
+   engine against it afterwards, and set the cap at ten. This runs
+   the same measurement in your browser so the shape of that curve
+   is something you watched rather than something you were told.
+   ------------------------------------------------------------ */
+var BENCH_POINTS = [4, 6, 8, 9, 10];
+
+function benchOne(n, runs) {
+  var times = [];
+  for (var i = 0; i < runs; i++) {
+    var t0 = performance.now();
+    var sim = new Simulator(n);
+    sim.applyGate('H', 0, null);
+    sim.applyGate('CNOT', 1, 0);
+    sim.getProbabilities();
+    sim.getStateVector();
+    sim.getBlochVectors();
+    times.push(performance.now() - t0);
+  }
+  times.sort(function (a, b) { return a - b; });
+  return times[Math.floor(times.length / 2)];
+}
+
+function runBench() {
+  state.bench = [];
+  state.benchRunning = true;
+  render();
+  var i = 0;
+  function step() {
+    if (i >= BENCH_POINTS.length) {
+      state.benchRunning = false;
+      render();
+      return;
+    }
+    var n = BENCH_POINTS[i];
+    benchOne(n, 1); /* warm the code path before timing it */
+    state.bench.push({ n: n, ms: benchOne(n, n >= 9 ? 3 : 5) });
+    i++;
+    render();
+    setTimeout(step, 30);
+  }
+  setTimeout(step, 30);
+}
+
+function ceilingChart() {
+  var W = 720, H = 300, ml = 54, mr = 18, mt = 14, mb = 34;
+  var pw = W - ml - mr, ph = H - mt - mb;
+  var browserMax = 0;
+  (state.bench || []).forEach(function (b) { if (b.ms > browserMax) browserMax = b.ms; });
+  var yMax = Math.max(1500, Math.ceil((browserMax * 1.12) / 250) * 250);
+  var xs = function (q) { return ml + ((q - 4) / 8) * pw; };
+  var ys = function (v) { return mt + ph - (Math.min(v, yMax) / yMax) * ph; };
+
+  var s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="State vector computation time against qubit count">';
+  var ticks = [];
+  for (var t = 0; t <= yMax; t += yMax / 5) ticks.push(t);
+  ticks.forEach(function (v) {
+    s += '<line x1="' + ml + '" y1="' + fmt(ys(v), 1) + '" x2="' + (W - mr) + '" y2="' + fmt(ys(v), 1) + '" stroke="#1a1a22" stroke-width="1"/>';
+    s += '<text x="' + (ml - 8) + '" y="' + fmt(ys(v) + 3.5, 1) + '" fill="#4a4e5e" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="end">' + Math.round(v) + '</text>';
+  });
+  [4, 6, 8, 9, 10, 11, 12].forEach(function (q) {
+    s += '<text x="' + fmt(xs(q), 1) + '" y="' + (H - 12) + '" fill="#6e7385" font-size="10.5" font-family="IBM Plex Mono, monospace" text-anchor="middle">' + q + '</text>';
+  });
+  s += '<text x="' + (ml - 8) + '" y="' + (mt - 3) + '" fill="#4a4e5e" font-size="9.5" font-family="IBM Plex Mono, monospace" text-anchor="end">ms</text>';
+
+  /* The budget the team agreed before any of this was measured. */
+  s += '<line x1="' + ml + '" y1="' + fmt(ys(BUDGET), 1) + '" x2="' + (W - mr) + '" y2="' + fmt(ys(BUDGET), 1) +
+    '" stroke="#c9973f" stroke-width="1.2" stroke-dasharray="5 4"/>';
+  s += '<text x="' + (ml + 6) + '" y="' + fmt(ys(BUDGET) - 6, 1) + '" fill="#c9973f" font-size="10" font-family="IBM Plex Mono, monospace">200 ms interactivity budget</text>';
+
+  function series(xsArr, ysArr, color, dash) {
+    var d = '';
+    for (var i = 0; i < xsArr.length; i++) {
+      d += (i ? 'L' : 'M') + fmt(xs(xsArr[i]), 1) + ' ' + fmt(ys(ysArr[i]), 1) + ' ';
+    }
+    var out = '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="2"' +
+      (dash ? ' stroke-dasharray="4 3"' : '') + ' stroke-linejoin="round"/>';
+    for (var j = 0; j < xsArr.length; j++) {
+      out += '<circle cx="' + fmt(xs(xsArr[j]), 1) + '" cy="' + fmt(ys(ysArr[j]), 1) + '" r="3.2" fill="' + color + '"/>';
+    }
+    return out;
+  }
+
+  s += series(DEPLOYED.x, DEPLOYED.y, '#6e7385', true);
+  if (state.bench && state.bench.length) {
+    s += series(state.bench.map(function (b) { return b.n; }), state.bench.map(function (b) { return b.ms; }), '#5b7cfa', false);
+    var last = state.bench[state.bench.length - 1];
+    s += '<text x="' + fmt(xs(last.n) - 8, 1) + '" y="' + fmt(ys(last.ms) - 9, 1) +
+      '" fill="#5b7cfa" font-size="10.5" font-family="IBM Plex Mono, monospace" text-anchor="end">' + fmt(last.ms, 0) + ' ms</text>';
+  }
+  s += '<text x="' + fmt(xs(10), 1) + '" y="' + fmt(ys(244) - 8, 1) + '" fill="#8d92a4" font-size="10" font-family="IBM Plex Mono, monospace" text-anchor="middle">244</text>';
+  s += '</svg>';
+  return s;
+}
+
+function viewCeiling() {
+  var h = '<div class="pane-head"><div class="kicker">04 &middot; The ceiling</div>' +
+    '<h2>Where the picture stops feeling attached to the click</h2>' +
+    '<p>The team agreed before building that the interaction failed if state-vector computation at the chosen ceiling went past 200 ms. ' +
+    'The engine builds a full 2ⁿ × 2ⁿ operator for every gate and three more per qubit for the Bloch vectors, so the cost quadruples with each qubit added. ' +
+    'Run it here and the same shape comes back on different hardware.</p></div>';
+
+  h += '<div class="toolrow">' +
+    '<button class="btn primary" id="doBench"' + (state.benchRunning ? ' disabled' : '') + '>' +
+    (state.benchRunning ? 'Measuring…' : state.bench ? 'Measure again' : 'Measure it in this browser') + '</button>' +
+    (state.bench && !state.benchRunning ? '<span class="chip"><span class="dot accent"></span>median of 5 runs, 3 at nine and ten</span>' : '') +
+    '</div>';
+
+  h += '<div class="card"><h3>State vector computation time against qubit count</h3>' +
+    '<p class="sub">Grey dashed: the deployed Python and NumPy engine, measured Jun 2026, median of 20 runs per point — the curve section 05 of the case study carries. ' +
+    'Blue: this browser, measured just now on the same circuit and the same readout.</p>' +
+    ceilingChart() +
+    '<div class="legend"><span><i class="swatch" style="background:#6e7385"></i>Deployed engine (Python, NumPy)</span>' +
+    '<span><i class="swatch" style="background:#5b7cfa"></i>This browser (JavaScript)</span>' +
+    '<span><i class="swatch" style="background:#c9973f"></i>200 ms budget</span></div></div>';
+
+  if (state.bench && state.bench.length) {
+    h += '<div class="card"><h3>Both curves, and what each step costs</h3>' +
+      '<p class="sub">The growth column is the ratio to the previous measured point. The engine builds operators of size 4ⁿ, so a single qubit added is expected to cost roughly four times as much.</p>' +
+      '<table class="t"><thead><tr><th>Qubits</th><th class="num">Amplitudes</th><th class="num">Deployed</th><th class="num">This browser</th><th class="num">Growth</th><th>Against budget</th></tr></thead><tbody>';
+    state.bench.forEach(function (b, i) {
+      var di = DEPLOYED.x.indexOf(b.n);
+      var prev = i > 0 ? state.bench[i - 1] : null;
+      var stepQ = prev ? b.n - prev.n : 0;
+      var growth = prev ? Math.pow(b.ms / prev.ms, 1 / stepQ) : null;
+      h += '<tr><td class="k">' + b.n + '</td><td class="num">' + (1 << b.n) + '</td>' +
+        '<td class="num">' + (di >= 0 ? DEPLOYED.y[di] + ' ms' : '—') + '</td>' +
+        '<td class="num">' + fmt(b.ms, 1) + ' ms</td>' +
+        '<td class="num">' + (growth ? '×' + fmt(growth, 2) + '/qubit' : '—') + '</td>' +
+        '<td>' + (b.ms <= BUDGET ? '<span class="badge good">inside</span>' : '<span class="badge crit">over</span>') + '</td></tr>';
+    });
+    h += '</tbody></table>';
+
+    var crossed = null;
+    for (var i2 = 0; i2 < state.bench.length; i2++) {
+      if (state.bench[i2].ms > BUDGET) { crossed = state.bench[i2].n; break; }
+    }
+    var atTen = null;
+    state.bench.forEach(function (b) { if (b.n === 10) atTen = b.ms; });
+    h += '<p class="note ' + (crossed && crossed <= 10 ? 'warn' : '') + '" style="margin-top:13px">' +
+      (crossed
+        ? 'In this browser the budget is first crossed at <b>' + crossed + ' qubits</b>. On the deployed engine it was crossed at ten, at 244 ms.'
+        : 'This browser stayed inside the budget across every point measured, which the deployed engine did not.') +
+      (atTen !== null
+        ? ' At the ceiling itself this browser took <b>' + fmt(atTen, 0) + ' ms</b> against the deployed engine’s 244 ms — a factor of ' +
+          fmt(atTen / 244, 1) + '.'
+        : '') +
+      '</p>';
+    h += '<p class="note">The two curves are not meant to match. This is JavaScript in a browser tab and that was Python and NumPy on a server, ' +
+      'and the gap between them is the decision recorded in section 03: the numerics were put on the server precisely because linear algebra ' +
+      'in the render loop makes both the maths and the rendering slow. What transfers is the shape — cost roughly doubling with each added qubit — ' +
+      'and the conclusion that follows from it, which is that the ceiling had to be set somewhere near ten and could not be left to the user.</p>';
+    h += '</div>';
+  } else {
+    h += '<p class="note">Nothing measured yet. The run takes a few seconds, and most of it is the last point.</p>';
+  }
+
+  h += '<div class="card"><h3>What the measurement settled, and what it did not</h3>' +
+    '<p class="sub">Section 05 of the case study, checkable against the table above.</p>' +
+    '<table class="t"><thead><tr><th>Claim</th><th>Standing</th></tr></thead><tbody>' +
+    '<tr><td>The cap was chosen before the curve was measured.</td><td>Ten was a guess. It landed just past the budget line rather than inside it.</td></tr>' +
+    '<tr><td>Eleven qubits would have broken the premise.</td><td>610 ms on the deployed engine, three times the budget. The engine refuses eleven, so this demo cannot re-measure it.</td></tr>' +
+    '<tr><td>By the letter of the budget, ten fails it.</td><td>Correct. The honest cap was nine at 121 ms. Ten was kept because the overshoot was imperceptible in use — a revision made silently at the time, and stated out loud here.</td></tr>' +
+    '</tbody></table></div>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   12. THE PHYSICS TESTS
+
+   The guardrail from section 05: a faster renderer computing the
+   wrong state would have been worse than a slow one, so the suite
+   ran on every change to the engine. All thirty-two are here —
+   twenty-two against the engine, ten against the API boundary —
+   ported assertion for assertion from backend/tests.
+   ------------------------------------------------------------ */
+function assert(cond, msg) { if (!cond) throw new Error(msg || 'assertion failed'); }
+function assertRaises(fn, match) {
+  try { fn(); } catch (e) {
+    if (match && String(e.message).indexOf(match) === -1) throw new Error('raised, but not matching "' + match + '": ' + e.message);
+    return;
+  }
+  throw new Error('expected a ValueError, none raised');
+}
+function eqProbs(probs, expected) {
+  var pk = Object.keys(probs).sort(), ek = Object.keys(expected).sort();
+  assert(pk.join(',') === ek.join(','), 'basis states ' + JSON.stringify(probs) + ' != ' + JSON.stringify(expected));
+  for (var i = 0; i < pk.length; i++) assert(Math.abs(probs[pk[i]] - expected[pk[i]]) < 1e-9, 'probability ' + pk[i]);
+}
+function near(a, b) { return Math.abs(a - b) < 1e-6; }
+
+var TESTS = [
+  ['TestSingleQubitGates', 'test_x_gate_flips_zero_to_one', function () {
+    var s = new Simulator(1); s.applyGate('X', 0); eqProbs(s.getProbabilities(), { '1': 1 });
+  }],
+  ['TestSingleQubitGates', 'test_x_gate_flips_one_to_zero', function () {
+    var s = new Simulator(1); s.applyGate('X', 0); s.applyGate('X', 0); eqProbs(s.getProbabilities(), { '0': 1 });
+  }],
+  ['TestSingleQubitGates', 'test_hadamard_creates_superposition', function () {
+    var s = new Simulator(1); s.applyGate('H', 0); var p = s.getProbabilities();
+    assert(near(p['0'] || 0, 0.5) && near(p['1'] || 0, 0.5), 'not an even superposition');
+  }],
+  ['TestSingleQubitGates', 'test_z_gate_phase_flip', function () {
+    var s = new Simulator(1); s.applyGate('H', 0); s.applyGate('Z', 0); s.applyGate('H', 0);
+    eqProbs(s.getProbabilities(), { '1': 1 }); /* H·Z·H = X */
+  }],
+  ['TestSingleQubitGates', 'test_y_gate', function () {
+    var s = new Simulator(1); s.applyGate('Y', 0); eqProbs(s.getProbabilities(), { '1': 1 });
+  }],
+  ['TestSingleQubitGates', 'test_s_gate', function () {
+    var s = new Simulator(1); s.applyGate('S', 0); eqProbs(s.getProbabilities(), { '0': 1 });
+  }],
+  ['TestSingleQubitGates', 'test_t_gate', function () {
+    var s = new Simulator(1); s.applyGate('T', 0); eqProbs(s.getProbabilities(), { '0': 1 });
+  }],
+  ['TestSingleQubitGates', 'test_gate_on_second_qubit', function () {
+    var s = new Simulator(2); s.applyGate('X', 1); eqProbs(s.getProbabilities(), { '01': 1 });
+  }],
+
+  ['TestMultiQubitGates', 'test_cnot_no_flip_when_control_zero', function () {
+    var s = new Simulator(2); s.applyGate('CNOT', 1, 0); eqProbs(s.getProbabilities(), { '00': 1 });
+  }],
+  ['TestMultiQubitGates', 'test_cnot_flips_when_control_one', function () {
+    var s = new Simulator(2); s.applyGate('X', 0); s.applyGate('CNOT', 1, 0); eqProbs(s.getProbabilities(), { '11': 1 });
+  }],
+  ['TestMultiQubitGates', 'test_bell_state', function () {
+    var s = new Simulator(2); s.applyGate('H', 0); s.applyGate('CNOT', 1, 0);
+    var p = s.getProbabilities();
+    assert(near(p['00'] || 0, 0.5) && near(p['11'] || 0, 0.5), 'not a Bell state');
+    assert(!('01' in p) && !('10' in p), 'odd-parity terms present');
+  }],
+  ['TestMultiQubitGates', 'test_cz_gate', function () {
+    var s = new Simulator(2); s.applyGate('X', 0); s.applyGate('X', 1); s.applyGate('CZ', 1, 0);
+    eqProbs(s.getProbabilities(), { '11': 1 }); /* phase only, probabilities unchanged */
+  }],
+  ['TestMultiQubitGates', 'test_swap_gate', function () {
+    var s = new Simulator(2); s.applyGate('X', 0); s.applyGate('SWAP', 1, 0); eqProbs(s.getProbabilities(), { '01': 1 });
+  }],
+
+  ['TestSimulatorMethods', 'test_reset', function () {
+    var s = new Simulator(2); s.applyGate('X', 0); s.reset(); eqProbs(s.getProbabilities(), { '00': 1 });
+  }],
+  ['TestSimulatorMethods', 'test_measure_returns_valid_counts', function () {
+    var s = new Simulator(1); s.applyGate('H', 0);
+    var m = s.measure(1000, 7), total = 0;
+    Object.keys(m).forEach(function (k) { assert(k === '0' || k === '1', 'unexpected key ' + k); total += m[k]; });
+    assert(total === 1000, 'shots summed to ' + total);
+  }],
+  ['TestSimulatorMethods', 'test_get_state_vector', function () {
+    var sv = new Simulator(1).getStateVector();
+    assert(sv.length === 1, 'expected one entry');
+    assert(sv[0].label === '0' && sv[0].real === 1 && sv[0].imag === 0, 'wrong entry');
+  }],
+  ['TestSimulatorMethods', 'test_invalid_qubit_count', function () {
+    assertRaises(function () { new Simulator(0); });
+    assertRaises(function () { new Simulator(11); });
+  }],
+  ['TestSimulatorMethods', 'test_unknown_gate', function () {
+    assertRaises(function () { new Simulator(1).applyGate('FAKE', 0); }, 'Unknown gate');
+  }],
+  ['TestSimulatorMethods', 'test_target_out_of_range', function () {
+    assertRaises(function () { new Simulator(2).applyGate('X', 5); }, 'out of range');
+  }],
+  ['TestSimulatorMethods', 'test_multi_gate_missing_control', function () {
+    assertRaises(function () { new Simulator(2).applyGate('CNOT', 1); }, 'requires a control');
+  }],
+
+  ['TestThreeQubitCircuits', 'test_ghz_state', function () {
+    var s = new Simulator(3); s.applyGate('H', 0); s.applyGate('CNOT', 1, 0); s.applyGate('CNOT', 2, 0);
+    var p = s.getProbabilities();
+    assert(near(p['000'] || 0, 0.5) && near(p['111'] || 0, 0.5), 'not a GHZ state');
+    assert(Object.keys(p).length === 2, 'expected exactly two terms');
+  }],
+  ['TestThreeQubitCircuits', 'test_gate_on_non_adjacent_qubits', function () {
+    var s = new Simulator(3); s.applyGate('X', 0); s.applyGate('CNOT', 2, 0);
+    eqProbs(s.getProbabilities(), { '101': 1 });
+  }],
+
+  ['TestSimulateEndpoint', 'test_simple_simulation', function () {
+    var r = apiSimulate({ num_qubits: 1, operations: [{ gate: 'X', target: 0 }] });
+    assert(r.status === 200, 'status ' + r.status);
+    assert(r.json.num_qubits === 1 && r.json.probabilities['1'] === 1, 'wrong body');
+  }],
+  ['TestSimulateEndpoint', 'test_bell_state_simulation', function () {
+    var r = apiSimulate({ num_qubits: 2, operations: [{ gate: 'H', target: 0 }, { gate: 'CNOT', target: 1, control: 0 }] });
+    assert(r.status === 200, 'status ' + r.status);
+    assert(near(r.json.probabilities['00'] || 0, 0.5) && near(r.json.probabilities['11'] || 0, 0.5), 'not a Bell state');
+  }],
+  ['TestSimulateEndpoint', 'test_empty_circuit', function () {
+    var r = apiSimulate({ num_qubits: 2, operations: [] });
+    assert(r.status === 200 && r.json.probabilities['00'] === 1, 'empty circuit is not |00>');
+  }],
+  ['TestSimulateEndpoint', 'test_invalid_qubit_count', function () {
+    assert(apiSimulate({ num_qubits: 0, operations: [] }).status === 422, 'expected 422');
+  }],
+  ['TestSimulateEndpoint', 'test_too_many_qubits', function () {
+    assert(apiSimulate({ num_qubits: 11, operations: [] }).status === 422, 'expected 422');
+  }],
+  ['TestSimulateEndpoint', 'test_invalid_gate_name', function () {
+    assert(apiSimulate({ num_qubits: 1, operations: [{ gate: 'INVALID', target: 0 }] }).status === 400, 'expected 400');
+  }],
+  ['TestSimulateEndpoint', 'test_custom_shots', function () {
+    var r = apiSimulate({ num_qubits: 1, operations: [{ gate: 'H', target: 0 }], shots: 100 });
+    var total = 0;
+    Object.keys(r.json.measurements).forEach(function (k) { total += r.json.measurements[k]; });
+    assert(r.status === 200 && total === 100, 'shots summed to ' + total);
+  }],
+
+  ['TestGatesEndpoint', 'test_get_gates', function () {
+    var r = apiGates();
+    assert(r.status === 200 && r.json.length === 9, 'expected nine gates');
+    var names = r.json.map(function (g) { return g.name; }).sort().join(',');
+    assert(names === ['X', 'Y', 'Z', 'H', 'S', 'T', 'CNOT', 'CZ', 'SWAP'].sort().join(','), 'wrong gate set');
+  }],
+  ['TestGatesEndpoint', 'test_gate_structure', function () {
+    apiGates().json.forEach(function (g) {
+      assert('name' in g && 'num_qubits' in g && 'description' in g, 'missing field on ' + g.name);
+    });
+  }],
+  ['TestRootEndpoint', 'test_root', function () {
+    var r = apiRoot();
+    assert(r.status === 200 && 'version' in r.json, 'no version on root');
+  }]
+];
+
+function runTests() {
+  var results = [];
+  TESTS.forEach(function (t) {
+    var t0 = performance.now(), passed = true, err = null;
+    try { t[2](); } catch (e) { passed = false; err = e.message; }
+    results.push({ group: t[0], name: t[1], pass: passed, err: err, ms: performance.now() - t0 });
+  });
+  state.tests = results;
+}
+
+function viewTests() {
+  var h = '<div class="pane-head"><div class="kicker">05 &middot; Physics tests</div>' +
+    '<h2>The guardrail, run in this page</h2>' +
+    '<p>Correctness was the condition on the whole approach: a faster renderer computing the wrong state would have been worse than a slow one, ' +
+    'so this suite ran on every change to the engine. All thirty-two are ported here assertion for assertion — twenty-two against the simulator, ten against the API boundary.</p></div>';
+
+  h += '<div class="toolrow"><button class="btn primary" id="doTests">' +
+    (state.tests ? 'Run them again' : 'Run all 32') + '</button>';
+  if (state.tests) {
+    var passed = state.tests.filter(function (r) { return r.pass; }).length;
+    var total = state.tests.reduce(function (a, r) { return a + r.ms; }, 0);
+    h += '<span class="chip ' + (passed === state.tests.length ? 'state-ok' : 'state-over') + '">' +
+      '<span class="dot ' + (passed === state.tests.length ? 'good' : 'crit') + '"></span>' +
+      passed + ' of ' + state.tests.length + ' passing &middot; ' + fmt(total, 0) + ' ms</span>';
+  }
+  h += '</div>';
+
+  if (!state.tests) {
+    h += '<p class="note">Not run yet. The suite takes a few milliseconds; the prototype’s Python run takes 1.34 seconds, most of which is importing NumPy and FastAPI.</p>';
+    return h;
+  }
+
+  var groups = [];
+  state.tests.forEach(function (r) { if (groups.indexOf(r.group) === -1) groups.push(r.group); });
+  h += '<div class="card">';
+  groups.forEach(function (g) {
+    var rows = state.tests.filter(function (r) { return r.group === g; });
+    var ok = rows.filter(function (r) { return r.pass; }).length;
+    h += '<div class="testgroup"><h4>' + g + ' <span class="badge ' + (ok === rows.length ? 'good' : 'crit') + '">' +
+      ok + '/' + rows.length + '</span></h4>';
+    rows.forEach(function (r) {
+      h += '<div class="trow"><span class="tk ' + (r.pass ? 'pass' : 'fail') + '">' + (r.pass ? '✓' : '✗') + '</span>' +
+        '<span class="tn">' + r.name + (r.pass ? '' : ' — <span style="color:var(--crit)">' + esc(r.err) + '</span>') + '</span>' +
+        '<span class="tt">' + fmt(r.ms, 2) + ' ms</span></div>';
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+
+  h += '<p class="note good">Passing tests are a statement about the engine and nothing else. ' +
+    'They say the Bell state has the amplitudes it should and that the API rejects eleven qubits. ' +
+    'They say nothing at all about whether watching a Bloch sphere move teaches anyone anything, which is the claim the prototype was built to test and never did.</p>';
+  return h;
+}
+
+/* ------------------------------------------------------------
+   13. CHROME, WIRING, DEEP LINKS
+   ------------------------------------------------------------ */
+function renderRail() {
+  var h = '<div class="rail-group"><div class="rail-label">Simulator</div>';
+  VIEWS.forEach(function (v) {
+    h += '<button class="rail-item" data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '">' +
+      '<span class="n">' + v.n + '</span><span>' + v.label + '<span class="sub">' + v.sub + '</span></span></button>';
+  });
+  h += '</div><div class="rail-note"><b>Prototype, never released.</b> The engine, the renderer and the circuit library are complete and working. ' +
+    'No learner has used any of it, so the claim it was built to test is exactly as unproven as it was in December.</div>';
+  $('rail').innerHTML = h;
+}
+
+function renderFoot() {
+  $('foot').innerHTML =
+    '<b>What this is.</b> The prototype’s simulation engine, ported from Python and NumPy into the browser and running here. ' +
+    'Every amplitude, probability, Bloch vector, shot count and timing on this page is computed when the screen renders — nothing is a stored figure. ' +
+    'The engine builds the full 2ⁿ × 2ⁿ operator for each gate by Kronecker product exactly as the deployed one does, because the cost of doing it that way is the finding in section 05 and an optimised port would have made that claim uncheckable.' +
+    '<br><br><b>Two places it departs from the shipped prototype, both deliberate.</b> The prototype has a Run button; this does not, because the design argument in section 04 is that feedback has to arrive with the placement to be worth anything, and a demo of that argument should be subject to it. ' +
+    'And the deployed engine runs on a server: section 03 records that decision, taken so linear algebra would not sit in the render loop. This page does the opposite by necessity — it is one file — so the milliseconds you measure on the ceiling screen are this browser’s, not the deployed engine’s. The deployed curve is drawn beside them for comparison rather than replaced by them.' +
+    '<br><br><b>What it is not.</b> Not a released product and not a teaching tool in use. Zero learners have opened it, the usage figures on the case study page are invented placeholders, and the technical characteristics — ten qubits, nine gates, 32 tests, the 200 ms budget — are the real ones.';
+}
+
+function render() {
+  renderRail();
+  var fn = { circuit: viewCircuit, library: viewLibrary, entanglement: viewEntanglement, ceiling: viewCeiling, tests: viewTests }[state.view] || viewCircuit;
+  $('pane').innerHTML = fn();
+  $('chipQubits').innerHTML = '<span class="dot accent"></span>' + state.n + ' qubit' + (state.n > 1 ? 's' : '') +
+    ' &middot; cap <b>10</b>';
+  var over = state.ms > BUDGET;
+  $('chipTime').className = 'chip ' + (state.computing ? 'state-ruo' : over ? 'state-over' : 'state-ok');
+  $('chipTime').innerHTML = '<span class="dot ' + (state.computing ? 'warn' : over ? 'crit' : 'good') + '"></span>' +
+    (state.computing ? 'computing…' : 'last update <b>' + fmt(state.ms, 1) + ' ms</b> / 200');
+  wire();
+}
+
+function setView(id) {
+  state.view = id;
+  state.loaded = null;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function loadCircuit(id) {
+  var c = libraryById(id);
+  if (!c || !c.ready) return;
+  state.n = c.qubits;
+  state.initial = c.initial.slice();
+  state.ops = c.ops.map(function (o) {
+    return { id: 'op-' + (nextOpId++), gate: o.gate, target: o.target, control: o.control, step: o.step };
+  });
+  state.gate = null;
+  state.pending = null;
+  state.view = 'circuit';
+  state.loaded = id;
+  runSim();
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function placeGate(q, step) {
+  if (!state.gate) return;
+  if (isMulti(state.gate)) {
+    if (!state.pending) {
+      state.pending = { gate: state.gate, control: q, step: step };
+      render();
+      return;
+    }
+    if (q === state.pending.control) return;
+    state.ops.push({ id: 'op-' + (nextOpId++), gate: state.pending.gate, target: q, control: state.pending.control, step: state.pending.step });
+    state.pending = null;
+  } else {
+    state.ops.push({ id: 'op-' + (nextOpId++), gate: state.gate, target: q, control: null, step: step });
+  }
+  state.loaded = null;
+  recompute();
+}
+
+function wire() {
+  document.querySelectorAll('[data-view]').forEach(function (b) {
+    b.onclick = function () { setView(b.dataset.view); };
+  });
+  document.querySelectorAll('[data-gate]').forEach(function (b) {
+    b.onclick = function () {
+      state.gate = state.gate === b.dataset.gate ? null : b.dataset.gate;
+      state.pending = null;
+      render();
+    };
+  });
+  document.querySelectorAll('[data-cell]').forEach(function (c) {
+    c.onclick = function () {
+      var p = c.dataset.cell.split('-');
+      placeGate(parseInt(p[0], 10), parseInt(p[1], 10));
+    };
+  });
+  document.querySelectorAll('[data-del]').forEach(function (b) {
+    b.onclick = function (e) {
+      e.stopPropagation();
+      state.ops = state.ops.filter(function (o) { return o.id !== b.dataset.del; });
+      state.loaded = null;
+      recompute();
+    };
+  });
+  document.querySelectorAll('[data-ket]').forEach(function (b) {
+    b.onclick = function () {
+      var q = parseInt(b.dataset.ket, 10);
+      state.initial[q] = state.initial[q] === 1 ? 0 : 1;
+      state.loaded = null;
+      recompute();
+    };
+  });
+  document.querySelectorAll('[data-load]').forEach(function (b) {
+    b.onclick = function () { loadCircuit(b.dataset.load); };
+  });
+  document.querySelectorAll('[data-ent]').forEach(function (b) {
+    b.onclick = function () { state.ent = b.dataset.ent; render(); };
+  });
+
+  var qp = $('qPlus');
+  if (qp) qp.onclick = function () {
+    if (state.n >= 10) return;
+    state.n++;
+    while (state.initial.length < state.n) state.initial.push(0);
+    state.loaded = null;
+    recompute();
+  };
+  var qm = $('qMinus');
+  if (qm) qm.onclick = function () {
+    if (state.n <= 1) return;
+    state.n--;
+    state.ops = state.ops.filter(function (o) {
+      return o.target < state.n && (o.control === null || o.control < state.n);
+    });
+    state.initial = state.initial.slice(0, state.n);
+    state.pending = null;
+    state.loaded = null;
+    recompute();
+  };
+  var rs = $('doReset');
+  if (rs) rs.onclick = function () {
+    state.ops = [];
+    state.pending = null;
+    state.gate = null;
+    state.loaded = null;
+    state.initial = new Array(state.n).fill(0);
+    recompute();
+  };
+  var ss = $('shotSel');
+  if (ss) ss.onchange = function () { state.shots = parseInt(ss.value, 10); recompute(); };
+  var rsm = $('doResample');
+  if (rsm) rsm.onclick = function () { state.seed = (state.seed * 1664525 + 1013904223) >>> 0; recompute(); };
+  var sp = $('doSpin');
+  if (sp) sp.onclick = function () { state.spin = !state.spin; render(); };
+  var bn = $('doBench');
+  if (bn) bn.onclick = runBench;
+  var tt = $('doTests');
+  if (tt) tt.onclick = function () { runTests(); render(); };
+
+  wireSpheres();
+}
+
+/* Drag any sphere and the whole set turns with it, so the qubits
+   stay comparable rather than each drifting to its own angle. */
+var dragging = null;
+function wireSpheres() {
+  document.querySelectorAll('.sphere-cell').forEach(function (cell) {
+    cell.onpointerdown = function (e) {
+      dragging = { x: e.clientX, y: e.clientY };
+      cell.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    };
+    cell.onpointermove = function (e) {
+      if (!dragging) return;
+      state.cam.yaw += (e.clientX - dragging.x) * 0.011;
+      state.cam.pitch = Math.max(-1.35, Math.min(1.35, state.cam.pitch + (e.clientY - dragging.y) * 0.009));
+      dragging = { x: e.clientX, y: e.clientY };
+      paintSpheres();
+    };
+    cell.onpointerup = cell.onpointercancel = function () { dragging = null; };
+  });
+}
+
+function paintSpheres() {
+  var cells = document.querySelectorAll('.sphere-cell');
+  for (var i = 0; i < cells.length; i++) {
+    var raw = cells[i].dataset.r;
+    var r = raw ? raw.split(',').map(Number) : blochOf(parseInt(cells[i].dataset.sphere, 10));
+    var svg = cells[i].querySelector('svg');
+    if (svg) svg.outerHTML = sphereSVG(r);
+  }
+}
+
+var lastSpin = 0;
+function spinLoop(t) {
+  requestAnimationFrame(spinLoop);
+  if (!state.spin || dragging || state.computing || state.benchRunning) return;
+  if (state.view !== 'circuit' && state.view !== 'entanglement') return;
+  if (state.n > 4 && state.view === 'circuit') return;
+  if (t - lastSpin < 55) return;
+  lastSpin = t;
+  state.cam.yaw += 0.014;
+  paintSpheres();
+}
+
+/* ------------------------------------------------------------
+   14. DEEP LINKS
+
+   The case study links each screenshot to the state it pictures,
+   so every screen this page can show is reachable by URL.
+   ------------------------------------------------------------ */
+(function init() {
+  var q = new URLSearchParams(location.search);
+  var v = q.get('view');
+  if (v && VIEWS.some(function (x) { return x.id === v; })) state.view = v;
+  if (q.get('case') && ENT_CASES[q.get('case')]) state.ent = q.get('case');
+  if (q.get('spin') === '0') state.spin = false;
+
+  var c = q.get('circuit');
+  if (c && libraryById(c) && libraryById(c).ready) {
+    var lib = libraryById(c);
+    state.n = lib.qubits;
+    state.initial = lib.initial.slice();
+    state.ops = lib.ops.map(function (o) {
+      return { id: 'op-' + (nextOpId++), gate: o.gate, target: o.target, control: o.control, step: o.step };
+    });
+    if (!v) state.view = 'circuit';
+    state.loaded = c;
+  } else {
+    var n = parseInt(q.get('q'), 10);
+    if (n >= 1 && n <= 10) { state.n = n; state.initial = new Array(n).fill(0); }
+  }
+  if (q.get('gate') && GATE_UI[q.get('gate')]) state.gate = q.get('gate');
+
+  renderFoot();
+  runSim();
+  render();
+
+  if (q.get('run') === '1') {
+    if (state.view === 'tests') { runTests(); render(); }
+    if (state.view === 'ceiling') runBench();
+  }
+  requestAnimationFrame(spinLoop);
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

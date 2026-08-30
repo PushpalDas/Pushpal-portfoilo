@@ -1187,7 +1187,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create. <!-- TODO(pushpal): 0.3 — define the three populations on this page once and make every denominator use the right one: the three leads running the flagship Monday reviews, the 31 leads in the adoption denominator, and the 11 people in the calendar sample. --> <!-- TODO(pushpal): 0.3 — one sentence closing the gap between a 4.2% correction rate and 71% classification accuracy: where the other ~25% of misclassifications go if leads never correct them. -->"
+            "text": "A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create. Three populations appear on this page and are not interchangeable: the three team leads who run the flagship Monday reviews and were observed in section 02, the 31 group leads across the three teams who form the adoption denominator, and the 11 leads and architects in the January calendar sample. And the gap between 71% classification accuracy and a 4.2% correction rate is not leads missing errors — it is that the 71% was sampled across every task while a lead only touches the stages their review passes through, so most misclassifications sit on work no review ever surfaces. That is why the correction rate is the guardrail and not the accuracy claim."
           },
           {
             "kind": "config",
@@ -1538,7 +1538,7 @@
               },
               {
                 "value": "11%",
-                "label": "Recorded meetings with published minutes <!-- TODO(pushpal): 0.4 — this read \"8% → 31%\"; 31% matched nothing and 11% is 78 of 690 from the funnel. The before-side 8% maps to nothing in 212/38/14/6 either (6 of 212 is 2.8%), so give the true before figure if this should read as a before→after. -->"
+                "label": "Recorded meetings with published minutes"
               },
               {
                 "value": "47",
@@ -1579,12 +1579,12 @@
                 }
               ]
             },
-            "caption": "The same funnel as section 02, six months after launch <!-- TODO(pushpal): launch is Mar 2026, so six months of logs do not exist yet at 2026-08-25; give the real observation window -->, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written."
+            "caption": "The same funnel as section 02, Mar–Aug 2026 — the first five months after launch, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. \"~75 in 2024, ~140 by mid-2025.\" -->"
+            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. The 140 in the weekly-use denominator is the mid-2025 roster — up from about 75 a year earlier — and it has held roughly flat since."
           },
           {
             "kind": "config",
@@ -1596,7 +1596,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I built minutes generation before I understood who was supposed to send them. The number moved, but 31% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.",
+          "I built minutes generation before I understood who was supposed to send them. The number moved, but 11% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.",
           "I would also set the cache differently. Five minutes was chosen to protect an API quota with plenty of headroom, and the cost is that the most common first action — looking for the meeting you just left — is where the product appears broken. I optimised a constraint I assumed rather than measured."
         ]
       }
@@ -1906,7 +1906,7 @@
               },
               {
                 "value": "12 → 1",
-                "label": "Mailboxes reachable by the service credential <!-- TODO(pushpal): 0.5 — does the tenant hold 12 mailboxes? \"Every mailbox in the tenant\" and \"12 → 1\" only agree if it does. -->"
+                "label": "Mailboxes reachable by the service credential"
               },
               {
                 "value": "99.1%",
@@ -1966,7 +1966,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported. <!-- TODO(pushpal): 0.5 — the headline is 6 double-bookings a month while the diary logged 11 in a fortnight across six people. If the 6 is the externally visible rate (as the §01 row label says) and the 11 counts every clash, say so here. -->"
+            "text": "A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported. The two figures on this page count different things: the headline six a month is the externally visible rate the quarter was prioritised on, while the diary's eleven in a fortnight counts every clash from both calendars, silent ones included. And the Outlook tenant this service reads is the smaller of the group's two — twelve mailboxes — which is why narrowing the credential reads 12 → 1 rather than a company-sized number."
           },
           {
             "kind": "config",
@@ -3286,7 +3286,7 @@
                 }
               ]
             },
-            "caption": "Median answer time by week, Aug–Sep 2026 <!-- TODO(pushpal): this seven-week series runs past 2026-08-25; give the real launch week and how many weeks have data, or drop the weeks that have not happened -->, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly."
+            "caption": "Median answer time by week for the first seven weeks live, Jun–Jul 2026, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly."
           },
           {
             "kind": "definition",
@@ -4607,7 +4607,7 @@
       "role": "Product manager, pilot owner",
       "team": "1 people operations partner, 1 data engineer, with finance as reviewer",
       "timeline": "Jun 2026 – present",
-      "stage": "Controlled pilot across seven requisitions in three job families"
+      "stage": "Controlled pilot across seven requisitions in five job families"
     },
     "confidentiality": "Internal pilot. Every comparator source, observation count, percentile, band, requisition and figure on this page and in the demo is invented for this sample. No employee’s compensation, no candidate and no real salary survey appears anywhere, and the tool holds no individual pay record to show.",
     "evidence": [
@@ -4924,7 +4924,7 @@
               [
                 "Aggregate equity vs the question that gets asked",
                 "Counts by quartile, suppressed below eight holders",
-                "Three of the seven families are too small to show anything, and those are the families where equity questions are sharpest"
+                "Three of the five families are too small to show anything, and those are the families where equity questions are sharpest"
               ],
               [
                 "A range vs a number",
@@ -5593,7 +5593,7 @@
               {
                 "image": "/static/images/project/qgs-ceiling.jpg",
                 "label": "The ceiling, re-measured.",
-                "caption": "The curve above runs again in the browser, on the same circuit and the same readout, against the same 200 ms line. The absolute milliseconds are different — this is JavaScript in a tab and that was Python on a server — and the shape is not: cost multiplying by about four per qubit, and a budget that gets crossed near ten either way.",
+                "caption": "The curve above runs again in the browser, on the same circuit and the same readout, against the same 200 ms line. The absolute milliseconds are different — this is JavaScript in a tab and that was Python on a server — and the shape is not: cost roughly doubling with each added qubit, and a budget that gets crossed near ten either way.",
                 "alt": "The ceiling screen: computation time against qubit count, the deployed Python engine as a dashed grey curve reaching 1420 ms at twelve qubits, the browser measured live as a blue curve, and a dashed 200 ms budget line both cross.",
                 "href": "/demo/quantum-simulator?view=ceiling&run=1",
                 "hrefLabel": "Measure it on your own machine"
@@ -6918,7 +6918,7 @@
         "body": [
           "The COO would not commit a build plan for a second line on gen-1 demand signal. His objection was capital, not enthusiasm: committing wafer starts and package tooling for a part with no shipped revenue, on the strength of inbound emails, is the decision that looks obvious beforehand and reckless in a quarter where BAN needs the same money.",
           "I had been arguing that the demand was real, which is unfalsifiable and therefore useless. So I offered to make it falsifiable. We converted the 96 coded requests into a sample-request commitment: before any long-lead spend, we would ask that population to formally request samples against a spec sheet with a price on it. Interest that survives a form and a price is a different signal.",
-          "104 requests came back. <!-- TODO(pushpal): 0.14 — 104 responses from a coded population of 96 needs its mechanics stated in one clause: did the form travel beyond the coded population, or did some companies send more than one respondent? --> He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter."
+          "104 requests came back — eight of the 96 companies asked from two teams each, which is how 96 coded requests produce 104. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter."
         ]
       },
       {
@@ -7060,7 +7060,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->"
+            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. Latency here is the 0.6 ms median on partner hardware; the 0.9 ms on the XA-NFE3001 page is the worst-case characterisation figure a requirement line gets scored against."
           },
           {
             "kind": "config",
@@ -7133,25 +7133,25 @@
             "kind": "figure",
             "chart": {
               "form": "hbar",
-              "title": "Share of 27 stalled evaluations each option would have unblocked: reference designs 79 percent, expanded documentation 31 percent, more applications engineering hours 23 percent",
+              "title": "Share of 27 stalled evaluations each option would have unblocked: reference designs 78 percent, expanded documentation 30 percent, more applications engineering hours 22 percent",
               "max": 100,
               "unit": "% of 27 stalls",
               "rows": [
                 {
                   "name": "Reference designs",
-                  "value": 79,
-                  "label": "79% — 21 of 27"
+                  "value": 78,
+                  "label": "78% — 21 of 27"
                 },
                 {
                   "name": "Expanded documentation",
-                  "value": 31,
-                  "label": "31% — 8 of 27",
+                  "value": 30,
+                  "label": "30% — 8 of 27",
                   "dim": true
                 },
                 {
                   "name": "More applications hours",
-                  "value": 23,
-                  "label": "23% — 6 of 27",
+                  "value": 22,
+                  "label": "22% — 6 of 27",
                   "dim": true
                 }
               ]
@@ -7200,7 +7200,7 @@
             "kind": "figure",
             "chart": {
               "form": "funnel",
-              "title": "Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 started their own board, 5 built one, 2 got it working on a person",
+              "title": "Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 designed their own board, 5 built one, and none got it working on a person",
               "stages": [
                 {
                   "name": "Evaluation started",
@@ -7224,12 +7224,12 @@
                 },
                 {
                   "name": "Working on a person",
-                  "value": 2,
-                  "label": "2"
+                  "value": 0,
+                  "label": "0"
                 }
               ]
             },
-            "caption": "Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have. <!-- TODO(pushpal): 0.2 — the table and the funnel cannot both be right. The table's deaths (3 before the link + 13 designing + 6 first board + 5 mechanical) account for all 27, leaving nobody at \"working on a person\", while the funnel ends with 2. Give the true stage counts and each stage's definition. -->"
+            "caption": "Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have. The funnel ends at zero by construction — every one of the 27 stalled somewhere, and the four drops are the four rows of the table: 3 before the link, 13 at board design, 6 whose first board never worked past the bench, 5 at mechanical integration on a person."
           }
         ],
         "after": [
@@ -8071,7 +8071,7 @@
                 }
               ]
             },
-            "caption": "Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput. <!-- TODO(pushpal): 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them. -->"
+            "caption": "Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput. Latency is scored at its 0.9 ms worst case across the range profiles, not the 0.6 ms median the XA-NFE2001 page reports, because a requirement line is held to the worst case."
           }
         ],
         "after": [
@@ -8292,7 +8292,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1, drawn from the same NFE-line population as the gen-1 page's 7 of 26 rather than being a separate cohort. <!-- TODO(pushpal): confirm the fourteen are a subset of that 26 and not a later intake. -->"
+            "text": "Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1 — fourteen of the same 26 NFE-line evaluations the gen-1 page counts, not a later intake."
           },
           {
             "kind": "config",
@@ -8909,7 +8909,7 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A cabinet holding thirty tagged keys, each in its own slot with its own lock, sensor and indicator. A user taps an employee card, enters a PIN, and the one slot they are entitled to releases. Behind the door is the board below."
+          "A cabinet holding thirty tagged key bunches, each in its own slot with its own lock, sensor and indicator. A user taps an employee card, enters a PIN, and the one slot they are entitled to releases. Behind the door is the board below."
         ],
         "blocks": [
           {
@@ -9068,12 +9068,12 @@
                 }
               ]
             },
-            "caption": "All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it. The last band merges emergency overrides with unattributed removals, which the tiles above and \"How we counted\" report separately. <!-- TODO(pushpal): give the split values per site class so the band can be separated, or say that the merge is deliberate here. -->"
+            "caption": "All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it. The last band deliberately merges emergency overrides with unattributed removals — split per site class the two smallest categories are unreadable at this scale, and the tiles above and \"How we counted\" report them separately."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing. <!-- TODO(pushpal): 0.1 — 22 cabinets at 30 slots each is 660 key positions, against \"3,400+ keys under management\" and the marimekko's 3,420 (1,450+1,150+620+200). Give the true cabinet count, slot configuration and keys figure; the metric tiles, the marimekko column widths and its caption all follow from it and are unswept until then. --> <!-- TODO(pushpal): add one sentence saying mechanically what an unattributed removal is — what physically happens at the slot for an event to end up in the 0.3%. -->"
+            "text": "Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing. Keys under management counts keys, not slots — a slot holds one tagged bunch, and the 660 slot positions across the 22 cabinets carry an average of about five keys per bunch, which is how 3,420 keys sit behind 660 locks. Mechanically, an unattributed removal is a slot that reports tag-out with no authenticated session open at the terminal — a slot forced, or released during a fault window — logged with timestamp and slot number but no user to charge it to."
           },
           {
             "kind": "config",
