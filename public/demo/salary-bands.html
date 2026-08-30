@@ -7,360 +7,443 @@
 <meta name="description" content="Interactive demo of the salary benchmarking and offer drafting pilot: weighted market bands computed by rule, a rationale written by a model, an evidence floor that refuses rather than guesses, and a source behind every figure on the page.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
    AI Salary Generator — interactive demo ("Band Desk").
-   Palette and type inherited from the portfolio's case-study
-   system (app/work/[slug]/case-study-v2.css) and from the
-   Request Desk, Sprint Desk and team performance demos, so the
-   family reads as one product. Deliberately single-theme: an
-   internal HR surface, dark by design, every colour painted
-   explicitly so it holds on any host ground.
+   Native sibling of the XANA house system: warm near-black
+   ground, one orange accent, bordered-not-shadowed cards, dense
+   13px type with mono tabular numerics. Deliberately single-
+   theme: an internal HR surface, dark by design, every colour
+   painted explicitly so it holds on any host ground.
+   The layout is a requisition list where refusals are the
+   first-class object — a refusal is the product working, and it
+   wears the accent, never the error red.
    ============================================================ */
 :root {
   color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #5b7cfa;
-  --accent-dim: #2c3a73;
-  --accent-wash: rgba(91, 124, 250, 0.11);
-  --good: #3fae8b;
-  --good-dim: #235c4b;
-  --good-wash: rgba(63, 174, 139, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #d0745a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(208, 116, 90, 0.12);
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-  --rail: 236px;
+  --bg: #0E0805;
+  --surface: #1A1410;
+  --surface-2: #221A14;
+  --surface-3: #2A2420;
+  --deep: #140F0B;
+  --line: #3A3028;
+  --line-hover: #5A4838;
+  --line-soft: #2A2018;
+  --hairline: rgba(255, 255, 255, 0.06);
+  --ink: #FFFFFF;
+  --body-c: #E0D0C0;
+  --warm: #E8E0D8;
+  --dim: #A89888;
+  --faint: #8C8175;
+  --accent: #FF6321;
+  --accent-soft: #FF8A56;
+  --accent-cite: #FF8C5A;
+  --accent-deep: #CD3D00;
+  --accent-line: rgba(255, 99, 33, 0.38);
+  --accent-line-dim: rgba(255, 99, 33, 0.22);
+  --accent-wash: rgba(255, 99, 33, 0.09);
+  --ok: #22C55E;
+  --ok-line: rgba(34, 197, 94, 0.40);
+  --ok-wash: rgba(34, 197, 94, 0.09);
+  --warn: #FFB020;
+  --warn-line: rgba(255, 176, 32, 0.42);
+  --warn-wash: rgba(255, 176, 32, 0.10);
+  --crit: #FF6B6B;
+  --crit-line: rgba(239, 68, 68, 0.45);
+  --crit-wash: rgba(239, 68, 68, 0.10);
+  --sans: Geist, Arial, Helvetica, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --dur: 200ms;
+  --oute: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * { box-sizing: border-box; }
 
 body {
-  margin: 0; background: var(--bg); color: var(--body);
-  font-family: var(--sans); font-size: 14px; line-height: 1.55;
+  margin: 0; background: var(--bg); color: var(--body-c);
+  font-family: var(--sans); font-size: 13px; line-height: 1.55;
+  letter-spacing: -0.1px;
   -webkit-font-smoothing: antialiased;
 }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
-button { font: inherit; color: inherit; cursor: pointer; }
-select, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+button { font: inherit; color: inherit; cursor: pointer; letter-spacing: inherit; }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* -- App chrome ------------------------------------------- */
-.app {
-  min-height: 100vh; max-width: 1340px; margin: 0 auto;
-  border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft);
-  display: flex; flex-direction: column;
-}
+.app { min-height: 100vh; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; border-left: 1px solid var(--hairline); border-right: 1px solid var(--hairline); }
+
+/* -- Top bar: blurred, orange underline on the active view --- */
 .topbar {
   position: sticky; top: 0; z-index: 40;
-  background: rgba(8, 8, 11, 0.95); backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  background: rgba(14, 8, 5, 0.78); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hairline);
 }
-.topbar-row { display: flex; align-items: center; gap: 11px; padding: 11px 20px; flex-wrap: wrap; }
-.brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
+.tb-row { display: flex; align-items: center; gap: 12px; padding: 13px 22px 9px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 2px; margin-right: auto; }
 .brand .eyebrow {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--muted);
+  text-transform: uppercase; color: var(--dim);
 }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+.brand h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.5px; color: var(--ink); }
 
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
   border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 11px; font-family: var(--mono); color: var(--body-c); white-space: nowrap;
 }
-.chip b { color: var(--ink); font-weight: 500; }
-.chip.ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip.warn { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.chip.crit { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
-.dot.good { background: var(--good); }
-.dot.warn { background: var(--warn); }
-.dot.crit { background: var(--crit); }
+.chip b { color: var(--ink); font-weight: 600; }
+.chip.ok { border-color: var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.chip.ref { border-color: var(--accent-line); border-style: dashed; color: var(--accent-soft); background: var(--accent-wash); }
+.chip.quiet { color: var(--dim); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex: none; }
+.dot.good { background: var(--ok); }
 .dot.accent { background: var(--accent); }
 
-.rolepick {
-  display: flex; align-items: center; gap: 8px;
-  border: 1px solid var(--line); background: var(--surface);
-  border-radius: 8px; padding: 3px 8px 3px 11px;
+.tabs { display: flex; gap: 22px; padding: 0 22px; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  position: relative; background: transparent; border: 0; padding: 8px 1px 11px;
+  font-size: 13px; font-weight: 600; letter-spacing: -0.25px; color: var(--faint);
+  white-space: nowrap; transition: color var(--dur);
 }
-.rolepick label {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--muted);
+.tab:hover { color: var(--ink); }
+.tab[aria-current="true"] { color: var(--ink); }
+.tab[aria-current="true"]::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent);
 }
-.rolepick select { background: transparent; border: 0; font-size: 12.5px; color: var(--ink); padding: 4px 2px; max-width: 300px; }
-.paramnote { margin: 0; padding: 0 20px 10px; font-size: 11.5px; color: var(--faint); max-width: 108ch; }
-.paramnote b { color: var(--muted); font-weight: 500; }
+.tab .tn { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--faint); margin-right: 6px; }
+.tab[aria-current="true"] .tn { color: var(--accent); }
 
-/* -- Shell ------------------------------------------------- */
-.shell { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); flex: 1; }
+/* -- Shell: requisition rail + pane -------------------------- */
+.shell { display: grid; grid-template-columns: 288px minmax(0, 1fr); flex: 1; }
 .rail {
-  border-right: 1px solid var(--line); padding: 16px 12px;
-  display: flex; flex-direction: column; gap: 3px;
-  background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 320px);
+  border-right: 1px solid var(--line-soft); padding: 16px 12px 26px;
+  display: flex; flex-direction: column; gap: 4px; background: var(--bg);
 }
 .rail h6 {
-  margin: 4px 8px 8px; font-family: var(--mono); font-size: 10px;
+  margin: 2px 10px 8px; font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500;
 }
-.rail button {
-  display: flex; align-items: baseline; gap: 9px; width: 100%; text-align: left;
-  background: transparent; border: 1px solid transparent; border-radius: 7px;
-  padding: 8px 10px; color: var(--body); font-size: 13.5px; line-height: 1.35;
+.reqitem {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: 1px solid transparent; border-radius: 12px;
+  padding: 10px 12px 12px;
+  transition: background var(--dur), border-color var(--dur);
 }
-.rail button:hover { background: var(--surface-2); color: var(--ink); }
-.rail button[aria-current="true"] { background: var(--accent-wash); border-color: var(--accent-dim); color: var(--ink); font-weight: 500; }
-.rail button .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); flex: none; width: 14px; }
-.rail button[aria-current="true"] .n { color: var(--accent); }
-.rail button .tag { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--faint); }
-.rail button[aria-current="true"] .tag { color: var(--accent); }
+.reqitem:hover { background: var(--surface); border-color: var(--line-soft); }
+.reqitem[aria-current="true"] { background: var(--accent-wash); border-color: var(--accent-line-dim); }
+.ri-top { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+.ri-title { display: block; margin-top: 4px; font-size: 13px; color: var(--warm); line-height: 1.35; }
+.reqitem[aria-current="true"] .ri-title { color: var(--ink); font-weight: 500; }
+.ri-meta { display: block; margin-top: 2px; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.rtag {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 2px 8px; white-space: nowrap;
+}
+.rtag.ok { border: 1px solid var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.rtag.ref { border: 1px dashed var(--accent-line); color: var(--accent-soft); background: transparent; }
+.mini { position: relative; display: block; height: 6px; margin-top: 9px; border-radius: 999px; background: var(--deep); border: 1px solid var(--line-soft); overflow: hidden; }
+.mini i { position: absolute; top: 0; bottom: 0; }
+.mini .mini-mkt { background: rgba(255, 255, 255, 0.07); }
+.mini .mini-off { background: linear-gradient(90deg, var(--accent-deep), var(--accent)); border-radius: 999px; }
+.mini.held { background: transparent; border: 1px dashed #4A3E33; }
 .rail .rail-note {
-  margin: 14px 8px 0; font-size: 11.5px; line-height: 1.5; color: var(--faint);
+  margin: 12px 10px 0; font-size: 11.5px; line-height: 1.5; color: var(--faint);
   border-top: 1px solid var(--line-soft); padding-top: 12px;
 }
 
-.pane { padding: 22px 26px 40px; min-width: 0; }
+.pane { padding: 24px 28px 44px; min-width: 0; }
 
-/* -- Common blocks ---------------------------------------- */
+/* -- Common blocks ------------------------------------------- */
 .head { margin-bottom: 18px; }
-.head h2 { margin: 0 0 5px; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); }
-.head p { margin: 0; max-width: 78ch; color: var(--body); font-size: 13.5px; }
+.head h2 { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; color: var(--ink); }
+.head p { margin: 0; max-width: 76ch; color: var(--dim); font-size: 13px; line-height: 1.6; }
 .head .kicker {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 7px;
 }
 
-.card { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 15px 16px; margin-bottom: 14px; }
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 15px 16px; margin-bottom: 14px; }
 .card > h3 {
-  margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink);
+  margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.1px;
   display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
 }
-.card > h3 .sub { font-weight: 400; color: var(--muted); font-size: 12px; font-family: var(--mono); }
-.card > p { margin: 0 0 10px; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+.card > h3 .sub { font-weight: 400; color: var(--faint); font-size: 11.5px; font-family: var(--mono); }
+.card > p { margin: 0 0 10px; font-size: 12.5px; color: var(--dim); max-width: 88ch; line-height: 1.6; }
 .card > p:last-child { margin-bottom: 0; }
+.card > p b, .head p b { color: var(--warm); font-weight: 500; }
 
 .badge {
-  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
-  border-radius: 4px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 2.5px 9px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap;
 }
-.badge.rule { border-color: var(--accent-dim); color: var(--accent); background: var(--accent-wash); }
-.badge.model { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
-.badge.ok { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.badge.bad { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
+.badge.rule { border-color: var(--accent-line); color: var(--accent-soft); background: var(--accent-wash); }
+.badge.model { border-color: var(--warn-line); color: var(--warn); background: var(--warn-wash); }
+.badge.ok { border-color: var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.badge.ref { border-color: var(--accent-line); border-style: dashed; color: var(--accent-soft); background: transparent; }
+.badge.warn { border-color: var(--warn-line); color: var(--warn); background: var(--warn-wash); }
+.badge.bad { border-color: var(--crit-line); color: var(--crit); background: var(--crit-wash); }
 
-.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(212px, 1fr)); gap: 12px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(216px, 1fr)); gap: 12px; }
 
-/* -- Tables ------------------------------------------------ */
+/* -- Tables -------------------------------------------------- */
+.tablewrap { overflow-x: auto; margin: 12px -16px -15px; border-top: 1px solid var(--line-soft); border-radius: 0 0 11px 11px; }
+.tablewrap.tight { margin-top: 0; }
 table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tablewrap table { min-width: 560px; }
 thead th {
-  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--faint); font-weight: 500;
-  padding: 0 10px 7px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); font-weight: 600;
+  padding: 8px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft); white-space: nowrap;
 }
-tbody td { padding: 9px 10px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
 tbody tr:last-child td { border-bottom: 0; }
-tbody tr.click { cursor: pointer; }
+tbody tr.click { cursor: pointer; transition: background var(--dur); }
 tbody tr.click:hover { background: var(--surface-2); }
-tbody tr.stale td { background: rgba(201, 151, 63, 0.05); }
-td .t { color: var(--ink); }
-td .sub { display: block; color: var(--faint); font-size: 11.5px; margin-top: 2px; }
+td .t { color: var(--warm); }
+td .sub { display: block; color: var(--faint); font-size: 11px; margin-top: 2px; }
 .num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
-.srcid { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+th.num { text-align: right; }
+.srcid { font-family: var(--mono); font-size: 11px; color: var(--accent-cite); }
 
-/* -- Cited figure ------------------------------------------ */
+/* -- Cited figure: the house citation grammar, inline -------- */
 .fig {
   font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink);
-  background: none; border: 0; border-bottom: 1px dashed var(--accent-dim);
-  padding: 0 1px; cursor: pointer;
+  background: none; border: 0; border-bottom: 1px dashed var(--accent-line);
+  padding: 0 1px; cursor: pointer; transition: color var(--dur), background var(--dur);
 }
-.fig:hover { border-bottom-style: solid; color: var(--accent); }
-.fig sup { font-size: 9px; color: var(--accent); margin-left: 2px; letter-spacing: .04em; }
-.uncited { color: var(--crit); border-bottom: 1px dashed var(--crit-dim); }
+.fig:hover { border-bottom-style: solid; color: var(--accent-soft); background: var(--accent-wash); }
+.fig sup { font-size: 8.5px; color: var(--accent-cite); margin-left: 2px; letter-spacing: 0.04em; }
+.uncited { font-family: var(--mono); color: var(--crit); border-bottom: 1px dashed var(--crit-line); }
 
-/* -- Band strip -------------------------------------------- */
-.band { margin: 6px 0 4px; }
+/* -- Band strip: hero surface #1 ----------------------------- */
+.band { margin: 8px 0 4px; }
 .band-track {
-  position: relative; height: 52px; border-radius: 8px;
-  background: linear-gradient(90deg, var(--surface-2), var(--surface-3));
-  border: 1px solid var(--line);
+  position: relative; height: 76px; border-radius: 12px;
+  background: var(--deep); border: 1px solid var(--line); overflow: hidden;
 }
-.band-fill { position: absolute; top: 0; bottom: 0; background: var(--accent-wash); border-left: 1px solid var(--accent-dim); border-right: 1px solid var(--accent-dim); }
-.band-offer { position: absolute; top: 0; bottom: 0; background: rgba(63, 174, 139, 0.18); border-left: 2px solid var(--good); border-right: 2px solid var(--good); }
+.band-fill {
+  position: absolute; top: 12px; bottom: 12px; background: rgba(255, 255, 255, 0.045);
+  border-left: 1px solid var(--line-hover); border-right: 1px solid var(--line-hover);
+}
+.band-offer {
+  position: absolute; top: 0; bottom: 0;
+  background: linear-gradient(90deg, rgba(205, 61, 0, 0.30), rgba(255, 99, 33, 0.30));
+  border-left: 2px solid var(--accent-deep); border-right: 2px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(255, 99, 33, 0.16);
+}
+.band-res {
+  position: absolute; top: 0; bottom: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255, 255, 255, 0.05) 6px 7px);
+  border-right: 1px dashed var(--line-hover);
+}
+.band-res b {
+  position: absolute; top: 7px; left: 8px; font-family: var(--mono); font-weight: 500;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); white-space: nowrap;
+}
 .band-tick { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
-.band-tick i {
-  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  font-family: var(--mono); font-size: 10.5px; color: var(--muted); font-style: normal; white-space: nowrap; padding-top: 5px;
-}
-.band-tick.p50 { background: var(--accent); }
-.band-tick.p50 i { color: var(--accent); }
-.band-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-top: 26px; }
-.band-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 11.5px; color: var(--muted); }
-.band-legend span { display: inline-flex; align-items: center; gap: 6px; }
-.sw { width: 11px; height: 11px; border-radius: 3px; flex: none; }
-.sw.mkt { background: var(--accent-wash); border: 1px solid var(--accent-dim); }
-.sw.off { background: rgba(63, 174, 139, 0.18); border: 1px solid var(--good); }
-.sw.res { background: var(--surface-3); border: 1px dashed var(--line); }
+.band-tick.p50 { width: 2px; background: var(--accent); }
+.band-labels { position: relative; height: 22px; margin-top: 6px; }
+.band-labels span { position: absolute; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--dim); white-space: nowrap; }
+.band-labels span.p50 { color: var(--accent-soft); }
+.band-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-top: 4px; }
+.band-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 11.5px; color: var(--dim); }
+.band-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 12px; height: 12px; border-radius: 4px; flex: none; }
+.sw.mkt { background: rgba(255, 255, 255, 0.045); border: 1px solid var(--line-hover); }
+.sw.off { background: linear-gradient(90deg, rgba(205, 61, 0, 0.4), rgba(255, 99, 33, 0.4)); border: 1px solid var(--accent-line); }
+.sw.res { background: repeating-linear-gradient(135deg, transparent 0 4px, rgba(255, 255, 255, 0.09) 4px 5px); border: 1px dashed var(--line-hover); }
 
-/* -- Offer summary ----------------------------------------- */
-.offerhead {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px;
-  background: var(--line-soft); border: 1px solid var(--line); border-radius: 10px;
-  overflow: hidden; margin-bottom: 14px;
+/* -- Refusal panel: hero surface #2 -------------------------- */
+.refusal {
+  border: 1px solid var(--line); background: var(--deep); border-radius: 16px;
+  padding: 18px 20px; margin-bottom: 14px;
 }
-.offerhead > div { background: var(--surface); padding: 13px 15px; }
+.refusal .ref-kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.refusal h3 { margin: 0 0 12px; font-size: 17px; font-weight: 600; letter-spacing: -0.25px; color: var(--ink); }
+.ref-rule { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--line-soft); }
+.ref-id {
+  font-family: var(--mono); font-size: 21px; font-weight: 600; color: var(--accent);
+  border: 1px dashed var(--accent-line); border-radius: 10px; padding: 6px 11px; flex: none; line-height: 1;
+  background: var(--accent-wash);
+}
+.ref-rule .ref-name { display: block; font-size: 13px; font-weight: 600; color: var(--warm); }
+.ref-rule .ref-got { display: block; font-size: 12.5px; color: var(--body-c); margin-top: 4px; line-height: 1.7; }
+.ref-rule .ref-why { display: block; font-size: 12px; color: var(--faint); margin-top: 4px; line-height: 1.55; }
+.ref-clear { margin: 12px 0 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: 12.5px; color: var(--body-c); line-height: 1.6; }
+.ref-clear b { color: var(--warm); font-weight: 600; }
+.ref-note { margin: 12px 0 0; font-size: 12px; color: var(--faint); line-height: 1.6; max-width: 84ch; }
+.ref-note b { color: var(--dim); font-weight: 500; }
+
+.pass-strip {
+  border: 1px solid var(--ok-line); background: var(--ok-wash); border-radius: 12px;
+  padding: 12px 15px; margin-bottom: 14px;
+}
+.pass-strip h4 { margin: 0 0 5px; font-size: 13px; color: var(--ok); font-weight: 600; }
+.pass-strip p { margin: 0; font-size: 12.5px; color: var(--body-c); }
+.pass-strip p b { color: var(--warm); font-weight: 500; }
+
+/* -- Offer summary tiles ------------------------------------- */
+.offerhead { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.offerhead > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
 .offerhead h6 {
-  margin: 0 0 6px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.13em;
-  text-transform: uppercase; color: var(--faint); font-weight: 500;
+  margin: 0; padding: 7px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--dim); font-weight: 600;
 }
-.offerhead .val { color: var(--ink); font-size: 19px; font-family: var(--mono); line-height: 1.25; }
-.offerhead .val small { display: block; color: var(--muted); font-size: 11.5px; margin-top: 4px; font-family: var(--mono); }
-.offerhead .val.range { color: var(--good); }
+.offerhead .val { color: var(--ink); font-size: 19px; font-family: var(--mono); line-height: 1.3; padding: 11px 14px 13px; }
+.offerhead .val small { display: block; color: var(--faint); font-size: 11px; margin-top: 5px; font-family: var(--mono); }
+.offerhead .val.range .fig { color: var(--accent); }
 
 .rationale {
-  border-left: 2px solid var(--warn-dim); padding: 2px 0 2px 14px; margin: 2px 0 0;
-  color: var(--body); font-size: 13px; line-height: 1.65;
+  border: 1px solid var(--line); background: var(--deep); border-radius: 12px;
+  padding: 14px 18px; margin: 2px 0 0;
+  color: var(--warm); font-size: 13.5px; line-height: 1.7;
 }
-.rationale p { margin: 0 0 9px; }
+.rationale p { margin: 0 0 10px; }
 .rationale p:last-child { margin-bottom: 0; }
+.rationale.raw { color: var(--dim); background: var(--surface-2); border-style: dashed; }
 
-/* -- Equity ------------------------------------------------ */
-.quart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
-.quart > div { background: var(--surface); padding: 12px 13px; }
-.quart h6 { margin: 0 0 6px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.quart .c { font-family: var(--mono); font-size: 22px; color: var(--ink); }
-.quart .c small { font-size: 11.5px; color: var(--muted); }
-.quart.hit { outline: 1px solid var(--good-dim); }
+/* -- Equity -------------------------------------------------- */
+.quart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.quart > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.quart h6 {
+  margin: 0; padding: 6px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-weight: 600;
+}
+.quart .c { font-family: var(--mono); font-size: 23px; color: var(--ink); padding: 10px 12px 12px; }
+.quart .c small { font-size: 11px; color: var(--faint); }
+.quart .hit { border-color: var(--accent-line-dim); }
+.quart .hit .c { color: var(--accent); }
 
-/* -- Refusal ----------------------------------------------- */
-.block { border: 1px solid var(--crit-dim); background: var(--crit-wash); border-radius: 9px; padding: 13px 15px; margin-bottom: 14px; }
-.block h4 { margin: 0 0 6px; font-size: 13px; color: var(--crit); font-weight: 600; }
-.block p { margin: 0; font-size: 12.5px; color: var(--body); }
-.block p + p { margin-top: 8px; }
-.pass { border: 1px solid var(--good-dim); background: var(--good-wash); border-radius: 9px; padding: 13px 15px; margin-bottom: 14px; }
-.pass h4 { margin: 0 0 6px; font-size: 13px; color: var(--good); font-weight: 600; }
-.pass p { margin: 0; font-size: 12.5px; color: var(--body); }
-
+/* -- Floor rules list ---------------------------------------- */
 .rules { list-style: none; margin: 0; padding: 0; }
 .rules li {
-  display: flex; gap: 11px; align-items: flex-start;
-  padding: 10px 0; border-bottom: 1px solid var(--line-soft);
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 11px 0; border-bottom: 1px solid var(--line-soft);
 }
 .rules li:last-child { border-bottom: 0; }
 .rules .mk {
-  font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
-  border-radius: 4px; padding: 2px 7px; flex: none; margin-top: 1px;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 3px 9px; flex: none; margin-top: 1px;
 }
-.rules .mk.ok { border: 1px solid var(--good-dim); color: var(--good); background: var(--good-wash); }
-.rules .mk.no { border: 1px solid var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
-.rules .r-t { display: block; color: var(--ink); font-size: 13px; }
-.rules .r-s { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; }
+.rules .mk.ok { border: 1px solid var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.rules .mk.no { border: 1px dashed var(--accent-line); color: var(--accent-soft); background: var(--accent-wash); }
+.rules .r-t { display: block; color: var(--warm); font-size: 13px; font-weight: 500; }
+.rules .r-s { display: block; color: var(--dim); font-size: 12px; margin-top: 3px; line-height: 1.6; }
 
-/* -- Tiles ------------------------------------------------- */
-.tile { border: 1px solid var(--line); border-radius: 9px; padding: 13px 15px; background: var(--surface); }
-.tile h4 { margin: 0 0 7px; font-size: 12px; color: var(--ink); font-weight: 600; }
-.tile .n { font-family: var(--mono); font-size: 25px; color: var(--ink); line-height: 1.1; }
-.tile .n small { font-size: 12px; color: var(--muted); }
-.tile .why { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
-.tile.ok { border-color: var(--good-dim); } .tile.ok .n { color: var(--good); }
-.tile.no { border-color: var(--crit-dim); } .tile.no .n { color: var(--crit); }
+/* -- Stat tiles ---------------------------------------------- */
+.tile { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.tile h4 {
+  margin: 0; padding: 7px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-size: 10px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-weight: 600;
+}
+.tile .tb { padding: 11px 14px 13px; }
+.tile .n { font-family: var(--mono); font-size: 27px; font-weight: 600; color: var(--accent); line-height: 1.1; }
+.tile .n small { font-size: 11.5px; color: var(--faint); font-weight: 400; }
+.tile .why { font-size: 11.5px; color: var(--dim); margin-top: 8px; line-height: 1.55; }
 
-/* -- Buttons ----------------------------------------------- */
-.btn { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 7px; padding: 7px 13px; font-size: 12.5px; }
-.btn:hover { background: var(--surface-3); }
-.btn.primary { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--accent); }
-.btn.primary:hover { background: rgba(91, 124, 250, 0.18); }
-.btn.small { padding: 4px 9px; font-size: 11.5px; }
-.btn[aria-pressed="true"] { border-color: var(--warn-dim); background: var(--warn-wash); color: var(--warn); }
-.btnrow { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
-.btnrow .hint { font-size: 11.5px; color: var(--faint); max-width: 62ch; }
+/* -- Buttons ------------------------------------------------- */
+.btn {
+  border: 1px solid var(--line); background: var(--surface); color: var(--body-c);
+  border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 500;
+  transition: color var(--dur), border-color var(--dur), background var(--dur);
+}
+.btn:hover { color: var(--ink); border-color: var(--line-hover); background: var(--surface-2); }
+.btn[aria-pressed="true"] { border-color: var(--warn-line); background: var(--warn-wash); color: var(--warn); }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.btnrow .hint { font-size: 11.5px; color: var(--faint); max-width: 60ch; line-height: 1.5; }
 
-/* -- Drawer ------------------------------------------------ */
-.scrim { position: fixed; inset: 0; background: rgba(4,4,7,.62); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity .18s ease; z-index: 60; }
+/* -- Drawer -------------------------------------------------- */
+.scrim {
+  position: fixed; inset: 0; background: rgba(8, 4, 2, 0.62); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity var(--dur) ease; z-index: 60;
+}
 .scrim.show { opacity: 1; pointer-events: auto; }
 .drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; width: min(580px, 94vw);
-  background: var(--surface); border-left: 1px solid var(--line);
-  transform: translateX(100%); transition: transform .22s cubic-bezier(.4,0,.2,1);
-  z-index: 70; overflow-y: auto; padding: 20px 22px 40px;
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 94vw);
+  background: var(--deep); border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform 0.3s var(--oute);
+  z-index: 70; overflow-y: auto; padding: 22px 24px 44px;
 }
 .drawer.show { transform: none; }
-.drawer h3 { margin: 0 0 4px; font-size: 16px; color: var(--ink); font-weight: 600; }
-.drawer .dsub { font-family: var(--mono); font-size: 11.5px; color: var(--muted); margin: 0 0 16px; }
-.drawer .x { position: absolute; top: 14px; right: 16px; background: transparent; border: 0; color: var(--muted); font-size: 20px; line-height: 1; padding: 4px 8px; }
-.drawer .x:hover { color: var(--ink); }
-.calc { font-family: var(--mono); font-size: 12px; color: var(--body); line-height: 1.9; }
-.calc b { color: var(--ink); }
-.calc .op { color: var(--faint); }
-
-/* -- Footer ------------------------------------------------ */
-.foot { border-top: 1px solid var(--line); margin-top: 10px; padding: 22px 20px 40px; background: #06060a; }
-.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; max-width: 1100px; }
-.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.foot p { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.foot p b { color: var(--body); font-weight: 500; }
-.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); max-width: 92ch; }
-
-/* -- Toast ------------------------------------------------- */
-.toast {
-  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 20px);
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 8px;
-  padding: 10px 16px; font-size: 13px; color: var(--ink); z-index: 80;
-  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  box-shadow: 0 12px 32px rgba(0,0,0,.45); max-width: min(600px, 92vw);
+.drawer h3 { margin: 0 0 4px; font-size: 21px; font-family: var(--mono); color: var(--ink); font-weight: 600; }
+.drawer .dsub { font-family: var(--mono); font-size: 11px; color: var(--dim); margin: 0 0 16px; }
+.drawer .x {
+  position: absolute; top: 14px; right: 16px; background: transparent; border: 0;
+  color: var(--dim); font-size: 20px; line-height: 1; padding: 5px 9px; border-radius: 999px;
+  transition: color var(--dur), background var(--dur);
 }
-.toast.show { opacity: 1; transform: translate(-50%, 0); }
-.toast.bad { border-color: var(--crit-dim); }
+.drawer .x:hover { color: var(--ink); background: var(--surface-2); }
+.calc { font-family: var(--mono); font-size: 12px; color: var(--body-c); line-height: 1.95; font-variant-numeric: tabular-nums; }
+.calc b { color: var(--ink); font-weight: 600; }
+.calc .op { color: var(--faint); }
+.calc .sum { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; }
+.calc .post { margin-top: 8px; }
 
-/* -- Responsive -------------------------------------------- */
-@media (max-width: 900px) {
+/* -- Footer -------------------------------------------------- */
+.foot { border-top: 1px solid var(--hairline); margin-top: 10px; padding: 24px 22px 44px; background: var(--deep); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 1160px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12px; color: var(--dim); line-height: 1.65; }
+.foot p b { color: var(--body-c); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line-soft); font-size: 11.5px; color: var(--faint); max-width: 96ch; line-height: 1.6; }
+
+/* -- Responsive ---------------------------------------------- */
+@media (max-width: 1024px) {
   .shell { grid-template-columns: 1fr; }
-  .rail { border-right: 0; border-bottom: 1px solid var(--line); flex-direction: row; overflow-x: auto; gap: 6px; padding: 10px 12px; background: var(--surface); }
+  .rail { border-right: 0; border-bottom: 1px solid var(--line-soft); flex-direction: row; overflow-x: auto; gap: 8px; padding: 12px 14px; background: var(--surface); }
   .rail h6, .rail .rail-note { display: none; }
-  .rail button { width: auto; white-space: nowrap; }
-  .rail button .tag { display: none; }
-  .pane { padding: 18px 16px 34px; }
+  .reqitem { width: 232px; flex: none; background: var(--bg); border-color: var(--line-soft); }
+  .pane { padding: 20px 18px 36px; }
+}
+@media (max-width: 768px) {
+  .tb-row { padding: 11px 16px 8px; }
+  .tabs { padding: 0 16px; gap: 16px; }
   .quart { grid-template-columns: repeat(2, 1fr); }
+  .head h2 { font-size: 19px; }
+  .ref-id { font-size: 17px; padding: 5px 9px; }
+}
+@media (max-width: 420px) {
+  .pane { padding: 16px 12px 32px; }
+  .card { padding: 13px 13px; }
+  .tablewrap { margin: 12px -13px -13px; }
+}
+
+/* -- Reduced motion: everything still lands, instantly ------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 </style>
 
 <div class="app">
   <header class="topbar">
-    <div class="topbar-row">
+    <div class="tb-row">
       <div class="brand">
         <span class="eyebrow">Ixana &middot; HR tooling &middot; Controlled pilot</span>
         <h1>Band Desk</h1>
       </div>
-      <span class="chip ok" title="Every percentile, band edge and offer figure on this page is computed by rule from the comparator rows. The model writes the rationale and nothing else."><span class="dot good"></span><b>0</b> figures written by a model</span>
+      <span class="chip quiet"><span class="dot"></span>Pilot day &middot; 28 Aug 2026</span>
+      <span class="chip ok" title="Every percentile, band edge and offer figure on this page is computed by rule from the comparator rows. The model writes the rationale and nothing else."><span class="dot good"></span><b>0</b>&nbsp;figures written by a model</span>
       <span class="chip" id="citeChip"><span class="dot accent"></span>Every figure cited</span>
-      <div class="rolepick">
-        <label for="roleSel">Requisition</label>
-        <select id="roleSel"></select>
-      </div>
     </div>
-    <p class="paramnote" id="paramNote"></p>
+    <nav class="tabs" id="tabs" aria-label="Views"></nav>
   </header>
 
   <div class="shell">
-    <nav class="rail" id="rail" aria-label="Views"></nav>
+    <nav class="rail" id="rail" aria-label="Requisitions"></nav>
     <main class="pane" id="pane"></main>
   </div>
 
@@ -368,7 +451,7 @@ td .sub { display: block; color: var(--faint); font-size: 11.5px; margin-top: 2p
     <div class="foot-grid">
       <div>
         <h5>What this demo is</h5>
-        <p>A working recreation of the salary benchmarking and offer drafting pilot described in the case study. <b>Every figure on every screen is clickable, and every click ends at the comparator rows and the arithmetic that produced it.</b> The comparator data is invented; the weighting rule, the evidence floor and the refusals are the real ones.</p>
+        <p>A working recreation of the salary benchmarking and offer drafting pilot described in the case study. <b>Every computed figure on the requisition you have open &mdash; every percentile, band edge, observation count, weight and spread &mdash; is clickable, and every click ends at the comparator rows and the arithmetic that produced it.</b> The only bare numerals are the floor&rsquo;s own thresholds and the internal band edges: those cite an agreement with people operations and finance, not a computation, and the screens say so where they appear. The comparator data is invented; the weight table, the evidence floor and the refusals are the real ones.</p>
       </div>
       <div>
         <h5>The four rules it makes visible</h5>
@@ -377,27 +460,27 @@ td .sub { display: block; color: var(--faint); font-size: 11.5px; margin-top: 2p
       </div>
       <div>
         <h5 style="visibility:hidden">more</h5>
-        <p><b>3.</b> Four evidence-floor rules can each refuse a whole role. A refusal names the rule and what would clear it; it never widens the band to cover thin data.</p>
-        <p><b>4.</b> It drafts a range and never a number, and the range stops at the market midpoint. Paying above that is a decision a person makes and signs, not a default the tool hands over.</p>
+        <p><b>3.</b> Four evidence-floor rules can each refuse a whole role. A refusal names the rule and what would clear it; it never widens the band to cover thin data. A refusal here wears the product&rsquo;s own colour, not an error state, because it is the product working.</p>
+        <p><b>4.</b> It drafts a range and never a number, and the range stops at the market median. Paying above that is a decision a person makes and signs, not a default the tool hands over.</p>
       </div>
     </div>
-    <p class="conf">Every comparator source, observation count, percentile, band, role, requisition and figure on this page is invented for the demo. No employee's pay, no candidate, no real survey and no real offer appears here, and by design none could: the tool holds aggregate comparator rows, never individual compensation records. The internal distribution on the equity screen is suppressed below eight people in a band, which is the same rule the pilot runs.</p>
+    <p class="conf">Every comparator source, observation count, percentile, band, role, requisition and figure on this page is invented for the demo. No employee&rsquo;s pay, no candidate, no real survey and no real offer appears here, and by design none could: the tool holds aggregate comparator rows, never individual compensation records. The internal distribution on the equity screen is suppressed below eight people in a band, which is the same rule the pilot runs.</p>
   </footer>
 </div>
 
 <div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Source detail"></aside>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Source detail" tabindex="-1"></aside>
 
 <script>
 /* ============================================================
-   DATA — invented, internally consistent.
+   DATA + pure derivation. No DOM in this block — it is the part
+   a test can swallow whole.
 
    Seven requisitions opened during the pilot. Three cleared the
-   evidence floor and were banded; four were refused, each by a
-   different rule. Every percentile shown anywhere in this demo
-   is computed from the SOURCES rows at render time — nothing is
-   stored, which is why no figure can drift from its citation.
+   evidence floor and were banded; four were refused. Every
+   percentile shown anywhere in this demo is computed from the
+   SOURCES rows at render time — nothing is stored, which is why
+   no figure can drift from its citation.
    ============================================================ */
 
 const TODAY = "28 Aug 2026";
@@ -412,49 +495,70 @@ const FLOOR = [
   { id: "F4", n: "Inter-source spread at the median within 20%", d: "When sources disagree that far they are not measuring the same job, and averaging them invents a market that does not exist." }
 ];
 
-/* method: how the figure was obtained — this is what decides the
-   weight, and it is on the screen next to every row.           */
+/* ONE weight table for the whole pilot. A weight belongs to a
+   collection method, never to a role: a role's shares are these
+   fixed weights renormalised over the methods present at market
+   weight, so the ratio between methods never changes. Self-
+   reported is the lowest-weighted method and is never dropped
+   where a feed exists.                                         */
+const METHODS = {
+  survey:    { w: 0.40, n: "Employer-reported survey",  why: "The job level is matched by the survey rather than claimed by the respondent. Also the most expensive and the slowest, which is why it is never the only source." },
+  offers:    { w: 0.20, n: "Our own accepted offers",   why: "Real accepted base at hire — a source, not the answer. Weighting our own history higher is how a band drifts away from the market it is supposed to measure, one hire at a time." },
+  posted:    { w: 0.18, n: "Posted-range midpoints",    why: "Verifiable and current, but a posted floor is an advertisement — consistently the lowest source in every role in this pilot." },
+  recruiter: { w: 0.12, n: "Recruiter-supplied offers", why: "Candidate-declared and agency-relayed: twice removed from a payroll, and the agency has a side." },
+  self:      { w: 0.10, n: "Self-reported aggregators", why: "Who chooses to report is not random. Least weight, never dropped where a feed exists — the direction of the bias is the useful part." }
+};
+
+/* m: the collection method — this is what decides the weight,
+   and it is on the screen next to every row. Rows marked
+   local:false are held and shown at zero market weight.       */
 const SOURCES = {
   "de4-sj": [
-    { id: "S1", n: "Paid semiconductor compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3,  obs: 41, w: 0.35, p25: 172, p50: 189, p75: 208 },
-    { id: "S2", n: "Self-reported salary aggregator",        method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 63, w: 0.15, p25: 168, p50: 192, p75: 221 },
-    { id: "S3", n: "Disclosed ranges in public postings",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 22, w: 0.20, p25: 165, p50: 183, p75: 205 },
-    { id: "S4", n: "Our own accepted offers",                method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 9,  w: 0.20, p25: 170, p50: 185, p75: 199 },
-    { id: "S5", n: "Recruiter-supplied competing offers",    method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 14, w: 0.10, p25: 175, p50: 195, p75: 214 }
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3,  obs: 41, p25: 172, p50: 189, p75: 208 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 63, p25: 168, p50: 192, p75: 221 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 22, p25: 165, p50: 183, p75: 205 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 9,  p25: 170, p50: 185, p75: 199 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 14, p25: 175, p50: 195, p75: 214 }
   ],
   "fw3-sj": [
-    { id: "S1", n: "Paid semiconductor compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 38, w: 0.40, p25: 149, p50: 163, p75: 181 },
-    { id: "S3", n: "Disclosed ranges in public postings",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 31, w: 0.25, p25: 145, p50: 158, p75: 174 },
-    { id: "S4", n: "Our own accepted offers",                method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 12, w: 0.20, p25: 150, p50: 161, p75: 176 },
-    { id: "S5", n: "Recruiter-supplied competing offers",    method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 17, w: 0.15, p25: 148, p50: 167, p75: 186 }
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 38, p25: 149, p50: 163, p75: 181 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 31, p25: 145, p50: 158, p75: 174 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 12, p25: 150, p50: 161, p75: 176 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 17, p25: 148, p50: 167, p75: 186 }
   ],
   "pm5-sj": [
-    { id: "S1", n: "Paid cross-industry compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 29, w: 0.40, p25: 197, p50: 219, p75: 246 },
-    { id: "S2", n: "Self-reported salary aggregator",        method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 24, w: 0.15, p25: 192, p50: 221, p75: 252 },
-    { id: "S3", n: "Disclosed ranges in public postings",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 11, w: 0.25, p25: 195, p50: 214, p75: 238 },
-    { id: "S4", n: "Our own accepted offers",                method: "Internal, accepted base at hire",         date: "Last 18 months", age: 7, obs: 7,  w: 0.20, p25: 199, p50: 217, p75: 240 }
+    { id: "S1", n: "Paid cross-industry compensation survey", m: "survey",   method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 29, p25: 197, p50: 219, p75: 246 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 24, p25: 192, p50: 221, p75: 252 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 11, p25: 195, p50: 214, p75: 238 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 7, obs: 7,  p25: 199, p50: 217, p75: 240 }
   ],
   "rf5-sj": [
-    { id: "S1", n: "Paid semiconductor compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 4, w: 0.60, p25: 208, p50: 231, p75: 259 },
-    { id: "S5", n: "Recruiter-supplied competing offers",    method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 3, w: 0.40, p25: 215, p50: 244, p75: 271 }
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 4, p25: 208, p50: 231, p75: 259 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 3, p25: 215, p50: 244, p75: 271 }
   ],
   "de4-blr": [
-    { id: "S4", n: "Our own accepted offers (Bengaluru)",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 8, obs: 6, w: 1.00, p25: 34, p50: 41, p75: 49, local: true },
-    { id: "S1", n: "Paid semiconductor survey (San Jose)",   method: "Employer-reported, different market",     date: "H1 2026", age: 3, obs: 41, w: 0, p25: 172, p50: 189, p75: 208, local: false },
-    { id: "S3", n: "Disclosed ranges (San Jose postings)",   method: "Posted range midpoint, different market", date: "Jun–Aug 2026", age: 1, obs: 22, w: 0, p25: 165, p50: 183, p75: 205, local: false }
+    { id: "S4", n: "Our own accepted offers (Bengaluru)",    m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 8, obs: 6, p25: 34, p50: 41, p75: 49, local: true },
+    { id: "S1", n: "Paid semiconductor survey (San Jose)",   m: "survey",    method: "Employer-reported, different market",     date: "H1 2026", age: 3, obs: 41, p25: 172, p50: 189, p75: 208, local: false },
+    { id: "S3", n: "Disclosed ranges (San Jose postings)",   m: "posted",    method: "Posted range midpoint, different market", date: "Jun–Aug 2026", age: 1, obs: 22, p25: 165, p50: 183, p75: 205, local: false }
   ],
   "tw3-sj": [
-    { id: "S1", n: "Paid cross-industry compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2025", age: 19, obs: 26, w: 0.55, p25: 96, p50: 108, p75: 124 },
-    { id: "S3", n: "Disclosed ranges in public postings",    method: "Posted range midpoint, transparency filings", date: "Jul–Aug 2026", age: 1, obs: 8, w: 0.30, p25: 101, p50: 112, p75: 129 },
-    { id: "S4", n: "Our own accepted offers",                method: "Internal, accepted base at hire",         date: "Last 18 months", age: 11, obs: 3, w: 0.15, p25: 99, p50: 107, p75: 118 }
+    { id: "S1", n: "Paid cross-industry compensation survey", m: "survey",   method: "Employer-reported, matched to a job level", date: "H1 2025", age: 19, obs: 26, p25: 96, p50: 108, p75: 124 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jul–Aug 2026", age: 1, obs: 8, p25: 101, p50: 112, p75: 129 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 11, obs: 3, p25: 99, p50: 107, p75: 118 }
   ],
   "dv4-sj": [
-    { id: "S1", n: "Paid semiconductor compensation survey", method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 19, w: 0.40, p25: 146, p50: 158, p75: 172 },
-    { id: "S2", n: "Self-reported salary aggregator",        method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 28, w: 0.25, p25: 172, p50: 191, p75: 218 },
-    { id: "S3", n: "Disclosed ranges in public postings",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 14, w: 0.20, p25: 196, p50: 214, p75: 239 },
-    { id: "S5", n: "Recruiter-supplied competing offers",    method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 12, w: 0.15, p25: 168, p50: 186, p75: 205 }
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 19, p25: 146, p50: 158, p75: 172 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 28, p25: 172, p50: 191, p75: 218 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 14, p25: 196, p50: 214, p75: 239 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 12, p25: 168, p50: 186, p75: 205 }
   ]
 };
+
+/* Wire the global table onto the rows. A row from another
+   market carries zero weight no matter what its method earns. */
+Object.keys(SOURCES).forEach(function (rid) {
+  SOURCES[rid].forEach(function (s) { s.w = s.local === false ? 0 : METHODS[s.m].w; });
+});
 
 /* Internal band and the aggregate distribution of people in it.
    Counts only, never individuals, and suppressed below 8.      */
@@ -479,34 +583,35 @@ const ROLES = [
 ];
 
 /* The rationale the model wrote for each banded role. Prose
-   only — every numeral in it is a {figure} token replaced at
-   render time with the computed value and its citation, so the
-   model cannot state a number that the rules did not produce.  */
+   only — every market numeral in it is a {figure} token replaced
+   at render time with the computed value and its citation, so
+   the model cannot state a number that the rules did not
+   produce.                                                     */
 const RATIONALE = {
   "de4-sj": [
-    "The market for this level is unusually well evidenced: {sources} independent sources covering {obs} observations, none of them older than six months except our own hiring record. The paid survey and our accepted offers agree closely at the median, which is the pair most worth agreeing.",
-    "The five sources disagree by {gap} at the median, and the self-reported aggregator is the highest of them — which is also why it carries the least weight, since who chooses to report is not random. Dropping it entirely would move the band by less than that spread.",
-    "A draft opening at {low} and closing at {high} places a standard hire between the market 25th percentile and the median, inside the existing internal band for the family. Anything above the median is reserved: it needs a named reason and a second approver, because the comparator set supports the band, not the position within it."
+    "The market for this level is unusually well evidenced: {sources} independent sources covering {obs} observations, with our own hiring record the oldest of them and nothing close to the staleness line. The paid survey and our accepted offers agree closely at the median, which is the pair most worth agreeing.",
+    "The {sources} sources disagree by {gap} at the median, and the self-reported aggregator is the highest of them — which is also why its method carries the least weight, since who chooses to report is not random. Dropping it entirely would move the band by less than that spread.",
+    "A draft opening at {low} and closing at {high} places a standard hire between the market's lower quartile and its median, inside the existing internal band for the family. Anything above the median is reserved: it needs a named reason and a second approver, because the comparator set supports the band, not the position within it."
   ],
   "fw3-sj": [
-    "Four sources and {obs} observations, disagreeing by {gap} at the median. Postings sit lowest of the four, which is the pattern across every role in this pilot — a posted range floor is an advertisement, not a market.",
-    "The internal band for this family is narrower than the market spread. The draft therefore closes at the market median rather than the internal midpoint, and a candidate at the top of the range would enter above two thirds of the current holders.",
+    "{sources} sources and {obs} observations, disagreeing by {gap} at the median. Postings sit lowest of them, which is the pattern across every role in this pilot — a posted range floor is an advertisement, not a market.",
+    "The internal band for this family is narrower than the market spread. The draft therefore closes at the market median rather than the internal midpoint, and a candidate at the top of the range would enter in the upper half of the current holders.",
     "A draft of {low} to {high} is defensible on this evidence. What it cannot tell you is whether this particular candidate should sit at the top of it — that judgement is not in the comparator rows and the tool does not pretend otherwise."
   ],
   "pm5-sj": [
-    "This requisition is flagged competitive, which widens the draft to the market median rather than closing below it, and nothing else — the flag changes one rule and is recorded on the requisition so the widening can be traced later.",
-    "Evidence is thinner than for the engineering roles: {sources} sources and {obs} observations, and our own accepted offers contribute only seven. The band is honest but wider than it looks, and the {gap} spread between sources at the median is the number to watch rather than the median itself.",
-    "A draft of {low} to {high} clears the internal band floor. The internal population is four people, so no distribution is shown on the equity screen — below eight the tool suppresses it rather than describing individuals."
+    "This requisition is flagged competitive, which widens the draft to close above the market median rather than at it, and nothing else — the flag changes one rule and is recorded on the requisition so the widening can be traced later.",
+    "Evidence is thinner than for the engineering roles: {sources} sources and {obs} observations, and our own accepted offers contribute only {ownObs} of them. The band is honest but wider than it looks, and the {gap} spread between sources at the median is the number to watch rather than the median itself.",
+    "A draft of {low} to {high} clears the internal band floor. The internal population is under the suppression line, so no distribution is shown on the equity screen — below eight people in a band the tool suppresses counts rather than describing individuals."
   ]
 };
 
 const VIEWS = [
-  { id: "requisition", n: "01", label: "Requisition",     tag: "input" },
-  { id: "evidence",    n: "02", label: "Market evidence", tag: "source" },
-  { id: "band",        n: "03", label: "The band",        tag: "rule" },
-  { id: "equity",      n: "04", label: "Internal equity", tag: "rule" },
-  { id: "offer",       n: "05", label: "Offer draft",     tag: "draft" },
-  { id: "floor",       n: "06", label: "Evidence floor",  tag: "gate" }
+  { id: "requisition", n: "01", label: "Requisition" },
+  { id: "evidence",    n: "02", label: "Market evidence" },
+  { id: "band",        n: "03", label: "The band" },
+  { id: "equity",      n: "04", label: "Internal equity" },
+  { id: "offer",       n: "05", label: "Offer draft" },
+  { id: "floor",       n: "06", label: "Evidence floor" }
 ];
 
 /* Pilot record. Every one of these is a count against its
@@ -519,11 +624,72 @@ const PILOT = {
     { req: "REQ-2203", why: "Candidate had a scarce mixed-signal skill the level does not describe. The level was wrong, not the band, and the requisition was re-levelled afterwards." }
   ]
 };
+
+const CLEAR = {
+  "rf5-sj": "One further independent source with nine or more observations. A paid survey module for the family was quoted and is the open decision.",
+  "de4-blr": "Local comparator rows for the Bengaluru market. The San Jose sources are held and shown, and carry no weight, because a labelled cross-market adjustment was cut from scope.",
+  "tw3-sj": "A current survey for the family, or enough posted ranges to carry the weight the 19-month-old survey is holding.",
+  "dv4-sj": "A level review first. Sources this far apart at the median are describing different jobs, and the band cannot fix that."
+};
+
+/* --- pure derivations, parameterised by role id ------------- */
+function srcsFor(id) { return SOURCES[id] || []; }
+function weightedFor(id) { return srcsFor(id).filter(function (s) { return s.w > 0; }); }
+
+function bandFor(id) {
+  const ws = weightedFor(id);
+  const tw = ws.reduce(function (a, s) { return a + s.w; }, 0) || 1;
+  const at = function (key) { return ws.reduce(function (a, s) { return a + s[key] * s.w; }, 0) / tw; };
+  return { p25: at("p25"), p50: at("p50"), p75: at("p75"), sources: ws.length, obs: ws.reduce(function (a, s) { return a + s.obs; }, 0), tw: tw };
+}
+
+/* A standard hire is drafted from the market 25th percentile to
+   the market median — the range stops at the median. A
+   requisition flagged competitive closes at the median plus a
+   third of the gap to the 75th, and the flag is recorded on the
+   requisition rather than applied silently.                    */
+function draftFor(id) {
+  const b = bandFor(id);
+  const r = ROLES.find(function (x) { return x.id === id; });
+  const high = r.comp ? b.p50 + (b.p75 - b.p50) / 3 : b.p50;
+  return { low: b.p25, high: high, reserved: [high, b.p75], competitive: r.comp };
+}
+
+/* The spread between the highest and lowest weighted source at
+   the median — the one quantity the rationale is allowed to talk
+   about, computed here so the prose cannot state a disagreement
+   the rows do not support. It is also what rule F4 tests.      */
+function gapFor(id) {
+  const ws = weightedFor(id);
+  if (ws.length < 2) return 0;
+  const p50 = ws.map(function (s) { return s.p50; });
+  return Math.max.apply(null, p50) - Math.min.apply(null, p50);
+}
+
+/* Everything the four floor rules need, in one pass. The stale
+   share is a share of the weight actually present, because that
+   is the weight the stale source would lead.                   */
+function floorStats(id) {
+  const rows = srcsFor(id);
+  const ws = rows.filter(function (s) { return s.w > 0; });
+  const tw = ws.reduce(function (a, s) { return a + s.w; }, 0) || 1;
+  const obs = ws.reduce(function (a, s) { return a + s.obs; }, 0);
+  const stale = ws.filter(function (s) { return s.age > 12; });
+  const staleShare = stale.reduce(function (a, s) { return a + s.w; }, 0) / tw;
+  const p50s = ws.map(function (s) { return s.p50; });
+  const med = p50s.length ? p50s.slice().sort(function (a, b) { return a - b; })[Math.floor(p50s.length / 2)] : 0;
+  const spreadAbs = p50s.length > 1 ? Math.max.apply(null, p50s) - Math.min.apply(null, p50s) : 0;
+  const spread = med ? spreadAbs / med : 0;
+  const held = rows.filter(function (s) { return s.local === false; });
+  const oks = [ws.length >= 3, obs >= 12, staleShare <= 0.25, p50s.length > 1 && spread <= 0.20];
+  return { ws: ws, tw: tw, obs: obs, stale: stale, staleShare: staleShare, p50s: p50s, med: med, spreadAbs: spreadAbs, spread: spread, held: held, oks: oks, pass: oks.every(Boolean) };
+}
+const passesFloor = function (id) { return floorStats(id).pass; };
 </script>
 
 <script>
 /* ============================================================
-   STATE + derivation.
+   STATE, chrome and citation plumbing.
    ============================================================ */
 
 const state = { view: "offer", role: "de4-sj", showModel: false };
@@ -531,83 +697,36 @@ const state = { view: "offer", role: "de4-sj", showModel: false };
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const role = () => ROLES.find((r) => r.id === state.role) || ROLES[0];
-const srcs = () => SOURCES[state.role] || [];
-const weighted = () => srcs().filter((s) => s.w > 0);
+const srcs = () => srcsFor(state.role);
+const weighted = () => weightedFor(state.role);
+const band = () => bandFor(state.role);
+const draft = () => draftFor(state.role);
 const k = (v) => "$" + Math.round(v) + "k";
+const pct = (v) => Math.round(v * 100) + "%";
 
-/* --- the band, computed ------------------------------------ */
-function band() {
-  const ws = weighted();
-  const tw = ws.reduce((a, s) => a + s.w, 0) || 1;
-  const at = (key) => ws.reduce((a, s) => a + s[key] * s.w, 0) / tw;
-  return { p25: at("p25"), p50: at("p50"), p75: at("p75"), sources: ws.length, obs: ws.reduce((a, s) => a + s.obs, 0) };
-}
-
-/* --- the evidence floor, evaluated ------------------------- */
-function floorCheck(id) {
-  const rows = SOURCES[id] || [];
-  const ws = rows.filter((s) => s.w > 0);
-  const obs = ws.reduce((a, s) => a + s.obs, 0);
-  const staleWeight = ws.filter((s) => s.age > 12).reduce((a, s) => a + s.w, 0);
-  const p50s = ws.map((s) => s.p50);
-  const med = p50s.length ? p50s.slice().sort((a, b) => a - b)[Math.floor(p50s.length / 2)] : 0;
-  const spread = med ? (Math.max.apply(null, p50s) - Math.min.apply(null, p50s)) / med : 0;
-  const nonLocal = rows.some((s) => s.local === false);
-  return [
-    { r: FLOOR[0], ok: ws.length >= 3, got: ws.length + " weighted source" + (ws.length === 1 ? "" : "s") +
-        (nonLocal ? ", " + rows.filter((s) => s.local === false).length + " more from another market carrying no weight" : "") },
-    { r: FLOOR[1], ok: obs >= 12, got: obs + " observation" + (obs === 1 ? "" : "s") },
-    { r: FLOOR[2], ok: staleWeight <= 0.25, got: staleWeight > 0
-        ? Math.round(staleWeight * 100) + "% of weight from a source over 12 months old"
-        : "no weighted source over 12 months old" },
-    { r: FLOOR[3], ok: p50s.length > 1 && spread <= 0.20, got: p50s.length > 1
-        ? "medians " + p50s.map((v) => Math.round(v)).join(", ") + " — spread " + Math.round(spread * 100) + "% of the median"
-        : "only one weighted median, spread cannot be evaluated" }
-  ];
-}
-const passesFloor = (id) => floorCheck(id).every((c) => c.ok);
-
-/* --- the draft range, computed ------------------------------ */
-/* A standard hire is drafted from the market 25th percentile to
-   the market median. A requisition flagged competitive closes at
-   the median plus a third of the gap to the 75th, and the flag is
-   recorded on the requisition rather than applied silently.     */
-function draft() {
-  const b = band();
-  const r = role();
-  const high = r.comp ? b.p50 + (b.p75 - b.p50) / 3 : b.p50;
-  return { low: b.p25, high: high, reserved: [high, b.p75], competitive: r.comp };
-}
-
-/* --- cited figure ------------------------------------------ */
-/* Nothing renders a number except this. A figure with no cite
-   list renders as a refusal, which is why the screen cannot
-   quietly show an uncited value.                              */
+/* --- cited figure ------------------------------------------- */
+/* Nothing renders a computed number except this. A figure with
+   no cite list renders as a refusal, which is why the screen
+   cannot quietly show an uncited value.                        */
 function fig(value, cite, note) {
   if (value === null || value === undefined || !cite || !cite.length) {
-    return '<span class="uncited mono" title="No source — this figure will not render">no source</span>';
+    return '<span class="uncited" title="No source — this figure will not render">no source</span>';
   }
-  /* A long citation list is collapsed to its range so the figure stays
-     readable; the click still opens every row it stands on. */
+  /* A long citation list is collapsed to its range so the figure
+     stays readable; the click still opens every row behind it. */
   const mark = cite.length > 3 ? cite[0] + "–" + cite[cite.length - 1] : cite.join(" ");
   return '<button class="fig" data-cite="' + esc(cite.join(",")) + '" data-note="' + esc(note || "") +
     '" data-val="' + esc(String(value)) + '" title="Sources ' + esc(cite.join(", ")) + '">' +
     esc(String(value)) + "<sup>" + esc(mark) + "</sup></button>";
 }
 
-function toast(msg, bad) {
-  const t = $("#toast");
-  t.innerHTML = msg;
-  t.className = "toast show" + (bad ? " bad" : "");
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => { t.className = "toast"; }, 5200);
-}
 function openDrawer(html) {
   const d = $("#drawer");
   d.innerHTML = '<button class="x" aria-label="Close">&times;</button>' + html;
   d.classList.add("show"); d.setAttribute("aria-hidden", "false");
   $("#scrim").classList.add("show");
   $(".x", d).onclick = closeDrawer;
+  d.focus();
 }
 function closeDrawer() {
   $("#drawer").classList.remove("show");
@@ -620,6 +739,28 @@ function syncUrl() {
   u.searchParams.set("role", state.role);
   history.replaceState(null, "", u);
 }
+
+/* --- the floor, formatted with citations --------------------- */
+/* Each "got" string routes its numerals through fig(), so even
+   the refusal's evidence is clickable back to the rows.
+   Only ever rendered for the open requisition.                 */
+function floorCheck(id) {
+  const st = floorStats(id);
+  const ids = st.ws.map((s) => s.id);
+  const gots = [
+    fig(String(st.ws.length), ids, "sources") + " weighted source" + (st.ws.length === 1 ? "" : "s") +
+      (st.held.length ? ", " + fig(String(st.held.length), st.held.map((s) => s.id), "held") + " more from another market carrying no weight" : ""),
+    fig(String(st.obs), ids, "obs") + " observation" + (st.obs === 1 ? "" : "s"),
+    st.staleShare > 0
+      ? fig(pct(st.staleShare), st.stale.map((s) => s.id), "stale") + " of weight carried by a source over 12 months old"
+      : "no weighted source over 12 months old",
+    st.p50s.length > 1
+      ? "medians " + st.ws.map((s) => fig(String(Math.round(s.p50)), [s.id], "src50")).join(", ") +
+        " — spread " + fig(pct(st.spread), ids, "spread") + " of the mid median"
+      : "only one weighted median — a spread cannot even be evaluated, which is itself the refusal"
+  ];
+  return FLOOR.map((r, i) => ({ r: r, ok: st.oks[i], got: gots[i] }));
+}
 </script>
 
 <script>
@@ -627,18 +768,30 @@ function syncUrl() {
    VIEWS
    ============================================================ */
 
-function refusalBanner() {
+/* Hero surface #2: the refusal. It names the failed rule, shows
+   the cited evidence for the failure, and says what would clear
+   it. Deliberately not an error state — accent, dashed, calm.  */
+function refusalPanel() {
+  const st = floorStats(state.role);
+  if (st.pass) return "";
   const checks = floorCheck(state.role);
   const failed = checks.filter((c) => !c.ok);
-  if (!failed.length) return "";
-  return '<div class="block">' +
-    "<h4>No band for this role &mdash; " + failed.length + " evidence-floor rule" + (failed.length === 1 ? "" : "s") + " not met</h4>" +
-    failed.map((c) => "<p><b>" + esc(c.r.id) + " &middot; " + esc(c.r.n) + ".</b> Currently " + esc(c.got) + ". " + esc(c.r.d) + "</p>").join("") +
-    "<p>The tool does not widen a band to cover thin evidence, and does not fall back to a neighbouring role. It says what is missing and stops. <b>Open 06 Evidence floor</b> for what would clear it.</p>" +
-  "</div>";
+  return '<section class="refusal">' +
+    '<div class="ref-kicker">The output &mdash; a refusal, not an error</div>' +
+    "<h3>No band for " + esc(role().req) + " &middot; " +
+      (failed.length === 1 ? "rule " + esc(failed[0].r.id) + " not met" : failed.length + " floor rules not met") + "</h3>" +
+    failed.map((c) =>
+      '<div class="ref-rule"><span class="ref-id">' + esc(c.r.id) + "</span><div>" +
+      '<span class="ref-name">' + esc(c.r.n) + "</span>" +
+      '<span class="ref-got">Currently ' + c.got + ".</span>" +
+      '<span class="ref-why">' + esc(c.r.d) + "</span>" +
+      "</div></div>").join("") +
+    '<p class="ref-clear"><b>What would clear it.</b> ' + esc(CLEAR[state.role] || "") + "</p>" +
+    '<p class="ref-note">The tool does not widen a band to cover thin evidence, and does not fall back to a neighbouring role. It says what is missing and stops. <b>06 Evidence floor</b> has all four rules and the other refusals.</p>' +
+  "</section>";
 }
 
-/* -- 01 Requisition ----------------------------------------- */
+/* -- 01 Requisition ------------------------------------------ */
 function viewRequisition() {
   const r = role();
   const ok = passesFloor(r.id);
@@ -651,7 +804,7 @@ function viewRequisition() {
 
     '<div class="card">' +
       "<h3>Inputs <span class=\"badge rule\">deterministic</span></h3>" +
-      "<table><tbody>" +
+      '<div class="tablewrap tight"><table><tbody>' +
         "<tr><td style=\"width:220px\">Job family and level</td><td class=\"t\">" + esc(r.title) + "</td></tr>" +
         "<tr><td>Location</td><td class=\"t\">" + esc(r.loc) + " &mdash; comparator rows must be local to this market</td></tr>" +
         "<tr><td>Currency</td><td class=\"t\">" + esc(r.cur) + ", base salary only. Equity and bonus are out of scope and named as such in the draft.</td></tr>" +
@@ -660,33 +813,35 @@ function viewRequisition() {
           : '<span class="badge">not set</span> — the draft closes at the market median') + "</td></tr>" +
         "<tr><td>Hiring manager</td><td class=\"t\">" + esc(r.hm) + "</td></tr>" +
         "<tr><td>Opened</td><td class=\"t\">" + esc(r.opened) + "</td></tr>" +
-      "</tbody></table>" +
+      "</tbody></table></div>" +
     "</div>" +
 
-    (ok ? '<div class="pass"><h4>Evidence floor cleared</h4><p>All four rules pass on the comparator set for this role, so a band was computed. Open <b>02 Market evidence</b> for the rows it used, or go straight to <b>05 Offer draft</b>.</p></div>' : refusalBanner()) +
+    (ok
+      ? '<div class="pass-strip"><h4>Evidence floor cleared</h4><p>All four rules pass on the comparator set for this role, so a band was computed. Open <b>02 Market evidence</b> for the rows it used, or go straight to <b>05 Offer draft</b>.</p></div>'
+      : refusalPanel()) +
 
     '<div class="card">' +
       "<h3>All seven pilot requisitions <span class=\"sub\">Aug 2026</span></h3>" +
-      "<table><thead><tr><th>Req</th><th>Role</th><th>Location</th><th>Opened</th><th class=\"num\">Sources</th><th class=\"num\">Obs</th><th>Outcome</th></tr></thead><tbody>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Req</th><th>Role</th><th>Location</th><th>Opened</th><th class="num">Sources</th><th class="num">Obs</th><th>Outcome</th></tr></thead><tbody>' +
       ROLES.map((x) => {
-        const w = (SOURCES[x.id] || []).filter((s) => s.w > 0);
-        const obs = w.reduce((a, s) => a + s.obs, 0);
-        const good = passesFloor(x.id);
+        const st = floorStats(x.id);
         return '<tr class="click" data-role="' + x.id + '">' +
           "<td><span class=\"srcid\">" + esc(x.req) + "</span></td>" +
           "<td class=\"t\">" + esc(x.title) + (x.comp ? ' <span class="badge model">competitive</span>' : "") + "</td>" +
-          "<td>" + esc(x.loc) + "</td><td>" + esc(x.opened) + "</td>" +
-          '<td class="num">' + w.length + '</td><td class="num">' + obs + "</td>" +
-          "<td>" + (good ? '<span class="badge ok">banded</span>' : '<span class="badge bad">refused</span>') + "</td></tr>";
+          "<td>" + esc(x.loc) + "</td><td class=\"num\" style=\"text-align:left\">" + esc(x.opened) + "</td>" +
+          '<td class="num">' + st.ws.length + '</td><td class="num">' + st.obs + "</td>" +
+          "<td>" + (st.pass ? '<span class="badge ok">banded</span>' : '<span class="badge ref">refused</span>') + "</td></tr>";
       }).join("") +
-      "</tbody></table>" +
+      "</tbody></table></div>" +
     "</div>";
 }
 
 /* -- 02 Market evidence -------------------------------------- */
 function viewEvidence() {
   const rows = srcs();
+  const st = floorStats(state.role);
   const b = band();
+  const cites = st.ws.map((s) => s.id);
   return '' +
     '<div class="head">' +
       '<div class="kicker">02 &middot; The comparator rows</div>' +
@@ -694,47 +849,54 @@ function viewEvidence() {
       "<p>Every row the band is computed from, with how the figure was obtained, when, over how many observations, and what weight the method earns it. This screen exists so that a band can be argued with rather than believed &mdash; the argument is always about a row.</p>" +
     "</div>" +
 
-    refusalBanner() +
+    refusalPanel() +
 
     '<div class="card">' +
-      "<h3>Sources for " + esc(role().title) + " <span class=\"sub\">" + esc(role().loc) + "</span> <span class=\"badge rule\">weights are fixed by method, not chosen per role</span></h3>" +
-      "<table><thead><tr><th>Ref</th><th>Source and method</th><th>As of</th><th class=\"num\">Obs</th><th class=\"num\">Weight</th><th class=\"num\">P25</th><th class=\"num\">P50</th><th class=\"num\">P75</th></tr></thead><tbody>" +
+      "<h3>Sources for " + esc(role().title) + " <span class=\"sub\">" + esc(role().loc) + "</span> <span class=\"badge rule\">weights fixed by method, not chosen per role</span></h3>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Ref</th><th>Source and method</th><th>As of</th><th class="num">Obs</th><th class="num">Method wt</th><th class="num">In this band</th><th class="num">P25</th><th class="num">P50</th><th class="num">P75</th></tr></thead><tbody>' +
       rows.map((s) => {
         const stale = s.age > 12;
         const zero = s.w === 0;
-        return '<tr class="click' + (stale ? " stale" : "") + '" data-src="' + s.id + '">' +
+        return '<tr class="click" data-src="' + s.id + '">' +
           "<td><span class=\"srcid\">" + s.id + "</span></td>" +
           "<td class=\"t\">" + esc(s.n) +
-            (stale ? ' <span class="badge bad">' + s.age + " months old</span>" : "") +
-            (zero ? ' <span class="badge bad">different market — no weight</span>' : "") +
+            (stale ? ' <span class="badge warn">' + s.age + " months old</span>" : "") +
+            (zero ? ' <span class="badge ref">different market — no weight</span>' : "") +
             "<span class=\"sub\">" + esc(s.method) + "</span></td>" +
           "<td>" + esc(s.date) + "</td>" +
           '<td class="num">' + s.obs + "</td>" +
-          '<td class="num">' + (zero ? "&mdash;" : Math.round(s.w * 100) + "%") + "</td>" +
+          '<td class="num">' + (zero ? "&mdash;" : pct(METHODS[s.m].w)) + "</td>" +
+          '<td class="num">' + (zero ? "&mdash;" : pct(s.w / st.tw)) + "</td>" +
           '<td class="num">' + k(s.p25) + '</td><td class="num">' + k(s.p50) + '</td><td class="num">' + k(s.p75) + "</td>" +
         "</tr>";
       }).join("") +
-      "</tbody></table>" +
-      (passesFloor(state.role)
-        ? "<p style=\"margin-top:12px\">Weighted across " + b.sources + " sources and " + b.obs +
-          " observations: P25 " + k(b.p25) + ", P50 " + k(b.p50) + ", P75 " + k(b.p75) +
+      "</tbody></table></div>" +
+      (st.pass
+        ? "<p style=\"margin-top:12px\">Weighted across " + fig(String(b.sources), cites, "sources") + " sources and " + fig(String(b.obs), cites, "obs") +
+          " observations: P25 " + fig(k(b.p25), cites, "p25") + ", P50 " + fig(k(b.p50), cites, "p50") + ", P75 " + fig(k(b.p75), cites, "p75") +
           ". Every one of those three is a weighted mean of the column above it &mdash; press a figure anywhere in this demo to see the arithmetic.</p>"
         : "<p style=\"margin-top:12px\">No weighted band is computed for this role, so the three percentile figures do not exist to display. That is the intended output, not a gap in the screen.</p>") +
     "</div>" +
 
     '<div class="card">' +
-      "<h3>Why the weights are what they are <span class=\"badge rule\">fixed by method</span></h3>" +
-      "<p><b>Employer-reported survey data carries the most weight</b> because the job level is matched by the survey rather than claimed by the respondent. It is also the most expensive and the slowest, which is why it is never the only source.</p>" +
-      "<p><b>Self-reported aggregators carry the least</b> and are never dropped. Who chooses to report is not random, and the direction of that bias is the useful part &mdash; it is consistently the highest source at the 75th percentile across every role in this pilot.</p>" +
-      "<p><b>Our own accepted offers are a source, not the answer.</b> Weighting our own history highly is how a band drifts away from a market it is supposed to be measuring, one hire at a time.</p>" +
+      "<h3>One weight table for the whole pilot <span class=\"badge rule\">fixed by method</span></h3>" +
+      "<p>A weight belongs to a collection method, never to a role. A role&rsquo;s shares are these fixed weights renormalised over the methods present at market weight, so the ratio between methods never changes &mdash; the &ldquo;in this band&rdquo; column above is this table divided by what showed up.</p>" +
+      '<div class="tablewrap"><table><thead><tr><th>Method</th><th class="num">Fixed weight</th><th>Why it earns it</th></tr></thead><tbody>' +
+      Object.keys(METHODS).map((key) => {
+        const m = METHODS[key];
+        return "<tr><td class=\"t\" style=\"white-space:nowrap\">" + esc(m.n) + "</td>" +
+          '<td class="num">' + pct(m.w) + "</td>" +
+          "<td style=\"max-width:52ch\">" + esc(m.why) + "</td></tr>";
+      }).join("") +
+      "</tbody></table></div>" +
     "</div>";
 }
 
-/* -- 03 The band --------------------------------------------- */
+/* -- 03 The band: hero surface #1 ----------------------------- */
 function viewBand() {
   if (!passesFloor(state.role)) {
     return '<div class="head"><div class="kicker">03 &middot; Computed by rule</div><h2>The band</h2>' +
-      "<p>Nothing is computed for this role. A refusal is the output.</p></div>" + refusalBanner();
+      "<p>Nothing is computed for this role. A refusal is the output.</p></div>" + refusalPanel();
   }
   const b = band();
   const d = draft();
@@ -752,13 +914,18 @@ function viewBand() {
     "</div>" +
 
     '<div class="card">' +
-      "<h3>" + esc(role().title) + " &middot; " + esc(role().loc) + ' <span class="badge rule">weighted mean of ' + ws.length + " sources</span></h3>" +
+      "<h3>" + esc(role().title) + " &middot; " + esc(role().loc) + ' <span class="badge rule">weighted mean of ' + ws.length + " sources</span>" +
+      (d.competitive ? ' <span class="badge model">competitive — closes above the median</span>' : "") + "</h3>" +
       '<div class="band"><div class="band-track">' +
         '<div class="band-fill" style="left:' + pos(b.p25) + "%;width:" + (pos(b.p75) - pos(b.p25)) + '%"></div>' +
+        '<div class="band-res" style="left:' + pos(d.high) + "%;width:" + (pos(b.p75) - pos(d.high)) + '%"><b>reserved</b></div>' +
         '<div class="band-offer" style="left:' + pos(d.low) + "%;width:" + (pos(d.high) - pos(d.low)) + '%"></div>' +
-        '<div class="band-tick" style="left:' + pos(b.p25) + '%"><i>P25 ' + k(b.p25) + "</i></div>" +
-        '<div class="band-tick p50" style="left:' + pos(b.p50) + '%"><i>P50 ' + k(b.p50) + "</i></div>" +
-        '<div class="band-tick" style="left:' + pos(b.p75) + '%"><i>P75 ' + k(b.p75) + "</i></div>" +
+        '<div class="band-tick p50" style="left:' + pos(b.p50) + '%"></div>' +
+      "</div>" +
+      '<div class="band-labels">' +
+        '<span style="left:' + pos(b.p25) + '%">P25 ' + fig(k(b.p25), cites, "p25") + "</span>" +
+        '<span class="p50" style="left:' + pos(b.p50) + '%">P50 ' + fig(k(b.p50), cites, "p50") + "</span>" +
+        '<span style="left:' + pos(b.p75) + '%">P75 ' + fig(k(b.p75), cites, "p75") + "</span>" +
       "</div>" +
       '<div class="band-scale"><span>' + k(lo) + "</span><span>" + k(hi) + "</span></div>" +
       '<div class="band-legend">' +
@@ -770,7 +937,7 @@ function viewBand() {
 
     '<div class="card">' +
       "<h3>Every figure, and what is behind it</h3>" +
-      "<table><thead><tr><th>Figure</th><th class=\"num\">Value</th><th>Rule that produced it</th><th>Sources</th></tr></thead><tbody>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Figure</th><th class="num">Value</th><th>Rule that produced it</th><th>Sources</th></tr></thead><tbody>' +
         "<tr><td class=\"t\">Market 25th percentile</td><td class=\"num\">" + fig(k(b.p25), cites, "p25") + "</td><td>Weighted mean of each source's P25, weights fixed by method</td><td>" + cites.join(", ") + "</td></tr>" +
         "<tr><td class=\"t\">Market median</td><td class=\"num\">" + fig(k(b.p50), cites, "p50") + "</td><td>Weighted mean of each source's P50</td><td>" + cites.join(", ") + "</td></tr>" +
         "<tr><td class=\"t\">Market 75th percentile</td><td class=\"num\">" + fig(k(b.p75), cites, "p75") + "</td><td>Weighted mean of each source's P75</td><td>" + cites.join(", ") + "</td></tr>" +
@@ -779,7 +946,7 @@ function viewBand() {
           (d.competitive ? "Median plus a third of the gap to P75 — this requisition is flagged competitive" : "The market median. Above it is reserved.") +
           "</td><td>" + cites.join(", ") + "</td></tr>" +
         "<tr><td class=\"t\">Observations behind the band</td><td class=\"num\">" + fig(String(b.obs), cites, "obs") + "</td><td>Sum of the observation counts of the weighted sources</td><td>" + cites.join(", ") + "</td></tr>" +
-      "</tbody></table>" +
+      "</tbody></table></div>" +
       "<p style=\"margin-top:11px\">Six figures, six citations. There is no seventh figure on this screen, because a number that could not carry a citation would not have been rendered.</p>" +
     "</div>";
 }
@@ -788,9 +955,18 @@ function viewBand() {
 function viewEquity() {
   const inl = INTERNAL[state.role];
   const ok = passesFloor(state.role);
-  const b = ok ? band() : null;
   const d = ok ? draft() : null;
+  const cites = ok ? weighted().map((s) => s.id) : [];
   const suppressed = !inl.q;
+  /* Which quartile of the internal band the drafted high lands in,
+     and the counts either side of it — computed, not asserted.  */
+  let qi = 0, ahead = 0, behind = 0;
+  if (ok && inl.q) {
+    const qw = (inl.band[1] - inl.band[0]) / 4;
+    qi = Math.min(3, Math.max(0, Math.floor((d.high - inl.band[0]) / qw)));
+    ahead = inl.q.slice(0, qi).reduce((a, v) => a + v, 0);
+    behind = inl.q.slice(qi + 1).reduce((a, v) => a + v, 0);
+  }
 
   return '' +
     '<div class="head">' +
@@ -800,9 +976,9 @@ function viewEquity() {
     "</div>" +
 
     '<div class="card">' +
-      "<h3>" + esc(inl.family) + ' <span class="sub">internal band ' + k(inl.band[0]) + " &ndash; " + k(inl.band[1]) + "</span></h3>" +
+      "<h3>" + esc(inl.family) + ' <span class="sub">internal band ' + k(inl.band[0]) + " &ndash; " + k(inl.band[1]) + " &middot; a policy, not a computation</span></h3>" +
       (ok
-        ? "<p>The draft opens at " + k(d.low) + " and closes at " + k(d.high) + ". Against the internal band that is " +
+        ? "<p>The draft opens at " + fig(k(d.low), cites, "p25") + " and closes at " + fig(k(d.high), cites, d.competitive ? "comp" : "p50") + ". Against the internal band that is " +
           (d.low >= inl.band[0] ? "above the floor" : "<b style=\"color:var(--crit)\">below the floor</b>") + " and " +
           (d.high <= inl.band[1] ? "inside the ceiling" : "<b style=\"color:var(--crit)\">above the ceiling</b>") +
           ", so no band exception is required. Where a draft falls outside, the tool says so here and the requisition cannot proceed on the draft alone.</p>"
@@ -811,17 +987,18 @@ function viewEquity() {
 
     '<div class="card">' +
       "<h3>Where current holders sit <span class=\"sub\">" + inl.holders + " people in band</span> " +
-        (suppressed ? '<span class="badge bad">suppressed</span>' : '<span class="badge rule">counts only</span>') + "</h3>" +
+        (suppressed ? '<span class="badge ref">suppressed</span>' : '<span class="badge rule">counts only</span>') + "</h3>" +
       (suppressed
         ? "<p>Fewer than eight people hold this band, so the distribution is not shown. At " + inl.holders +
           " people a quartile count is close enough to naming someone, and the person it would name is the one furthest from the middle. The band edges above are still shown, because they are a policy, not a person.</p>"
         : '<div class="quart">' +
             ["Below P25", "P25 – P50", "P50 – P75", "Above P75"].map((lbl, i) =>
-              '<div class="' + (ok && i === 1 ? "hit" : "") + '"><h6>' + esc(lbl) + '</h6><div class="c">' + inl.q[i] +
+              '<div class="' + (ok && i === qi ? "hit" : "") + '"><h6>' + esc(lbl) + '</h6><div class="c">' + inl.q[i] +
               " <small>of " + inl.holders + "</small></div></div>").join("") +
           "</div>" +
-          (ok ? "<p style=\"margin-top:11px\">A hire at the top of the drafted range would enter in the second quartile of the internal band, ahead of " +
-            inl.q[0] + " current holders and behind " + (inl.q[2] + inl.q[3]) +
+          (ok ? "<p style=\"margin-top:11px\">A hire at the top of the drafted range would enter in the " +
+            ["first", "second", "third", "fourth"][qi] + " quartile of the internal band, ahead of " +
+            ahead + " current holder" + (ahead === 1 ? "" : "s") + " and behind " + behind +
             ". That sentence is the entire output of this screen &mdash; there is no per-person view behind it to open.</p>" : "")) +
     "</div>" +
 
@@ -836,7 +1013,7 @@ function viewEquity() {
 function viewOffer() {
   if (!passesFloor(state.role)) {
     return '<div class="head"><div class="kicker">05 &middot; The draft</div><h2>Offer draft</h2>' +
-      "<p>No draft is produced for this role, and no partial one either.</p></div>" + refusalBanner() +
+      "<p>No draft is produced for this role, and no partial one either.</p></div>" + refusalPanel() +
       '<div class="card"><h3>What a recruiter gets instead</h3>' +
       "<p>The refusal above, in the requisition, with the rule that failed and the specific thing that would clear it. The alternative &mdash; a wide band with a caveat under it &mdash; was tried first and read as a band, because a caveat is not a number and the number is what gets pasted into the approval.</p></div>";
   }
@@ -845,13 +1022,15 @@ function viewOffer() {
   const d = draft();
   const ws = weighted();
   const cites = ws.map((s) => s.id);
+  const own = ws.find((s) => s.id === "S4");
 
   const tokens = {
     sources: fig(String(b.sources), cites, "sources"),
     obs: fig(String(b.obs), cites, "obs"),
     low: fig(k(d.low), cites, "p25"),
     high: fig(k(d.high), cites, d.competitive ? "comp" : "p50"),
-    gap: fig(k(Math.abs(gapFor(state.role))), cites, "gap")
+    gap: fig(k(Math.abs(gapFor(state.role))), cites, "gap"),
+    ownObs: own ? fig(String(own.obs), ["S4"], "obs") : '<span class="uncited">no source</span>'
   };
   const prose = (RATIONALE[state.role] || []).map((p) =>
     "<p>" + p.replace(/\{(\w+)\}/g, (m, key) => tokens[key] || m) + "</p>").join("");
@@ -874,7 +1053,7 @@ function viewOffer() {
 
     '<div class="card">' +
       "<h3>Rationale <span class=\"badge model\">written by a model</span> <span class=\"badge rule\">every figure inside it computed</span></h3>" +
-      "<p>The model was given the computed band and the comparator rows and asked for an argument, not for a number. Each numeral below is a token the renderer replaced with a computed figure and its citation &mdash; the model could not have written a different one, because it never wrote one at all.</p>" +
+      "<p>The model was given the computed band and the comparator rows and asked for an argument, not for a number. Each market numeral below is a token the renderer replaced with a computed figure and its citation &mdash; the model could not have written a different one, because it never wrote one at all.</p>" +
       '<div class="rationale">' + prose + "</div>" +
       '<div class="btnrow">' +
         '<button class="btn" id="toggleModel" aria-pressed="' + state.showModel + '">' +
@@ -882,8 +1061,8 @@ function viewOffer() {
         '<span class="hint">The raw output is the same prose with the tokens still in it. That is the whole guardrail: the model produced a shape, and the rules filled it.</span>' +
       "</div>" +
       (state.showModel
-        ? '<div class="card" style="margin:12px 0 0;background:var(--surface-2)"><h3>Raw model output <span class="badge model">before token replacement</span></h3>' +
-          '<div class="rationale" style="border-left-color:var(--line)">' +
+        ? '<div style="margin-top:12px"><h3 style="margin:0 0 8px;font-size:12px;color:var(--ink);display:flex;gap:9px;align-items:center">Raw model output <span class="badge model">before token replacement</span></h3>' +
+          '<div class="rationale raw">' +
           (RATIONALE[state.role] || []).map((p) => "<p>" + esc(p) + "</p>").join("") + "</div></div>"
         : "") +
     "</div>" +
@@ -891,20 +1070,9 @@ function viewOffer() {
     '<div class="card">' +
       "<h3>What the draft deliberately does not say</h3>" +
       "<p><b>A single number.</b> A point figure would be quoted as the offer and the range would be forgotten by the second email. The range is the output and the position inside it is a decision with a name on it.</p>" +
-      "<p><b>Anything about this candidate.</b> The comparator rows describe a market and a level. Nothing in them knows who applied, and a tool that inferred a number from a résumé would be doing the one part of this that has to stay with a person.</p>" +
+      "<p><b>Anything about this candidate.</b> The comparator rows describe a market and a level. Nothing in them knows who applied, and a tool that inferred a number from a r&eacute;sum&eacute; would be doing the one part of this that has to stay with a person.</p>" +
       "<p><b>Total compensation.</b> Base only, said plainly, because a blended figure is where a defensible band quietly becomes an indefensible one.</p>" +
     "</div>";
-}
-
-/* The spread between the highest and lowest weighted source at
-   the median — the one quantity the rationale is allowed to talk
-   about, computed here so the prose cannot state a disagreement
-   the rows do not support. It is also what rule F4 tests.      */
-function gapFor(id) {
-  const ws = (SOURCES[id] || []).filter((s) => s.w > 0);
-  if (ws.length < 2) return 0;
-  const p50 = ws.map((s) => s.p50);
-  return Math.max.apply(null, p50) - Math.min.apply(null, p50);
 }
 
 /* -- 06 Evidence floor --------------------------------------- */
@@ -920,39 +1088,40 @@ function viewFloor() {
 
     '<div class="card">' +
       "<h3>" + esc(role().title) + " &middot; " + esc(role().loc) + " <span class=\"sub\">" + esc(role().req) + "</span> " +
-        (passesFloor(state.role) ? '<span class="badge ok">all four clear</span>' : '<span class="badge bad">refused</span>') + "</h3>" +
+        (passesFloor(state.role) ? '<span class="badge ok">all four clear</span>' : '<span class="badge ref">refused</span>') + "</h3>" +
       '<ul class="rules">' +
         checks.map((c) =>
-          "<li><span class=\"mk " + (c.ok ? "ok" : "no") + "\">" + (c.ok ? "pass" : "fail") + "</span><span>" +
+          "<li><span class=\"mk " + (c.ok ? "ok" : "no") + "\">" + (c.ok ? "pass" : "refuses") + "</span><span>" +
           '<span class="r-t">' + esc(c.r.id) + " &middot; " + esc(c.r.n) + "</span>" +
-          '<span class="r-s">' + esc(c.got) + " &mdash; " + esc(c.r.d) + "</span></span></li>").join("") +
+          '<span class="r-s">Currently ' + c.got + " &mdash; " + esc(c.r.d) + "</span></span></li>").join("") +
       "</ul>" +
     "</div>" +
 
     '<div class="card">' +
       "<h3>The four roles the pilot refused <span class=\"sub\">of seven requisitions</span></h3>" +
       "<p>Between them these four fire every one of the rules, which is the reason all four survived review: a floor whose later rules never refuse anything is not a floor, it is a comment. Press a row to open that requisition.</p>" +
-      "<table><thead><tr><th>Req</th><th>Role</th><th>Rule that refused it</th><th>What would clear it</th></tr></thead><tbody>" +
+      '<div class="tablewrap"><table><thead><tr><th>Req</th><th>Role</th><th>Rule that refused it</th><th>What would clear it</th></tr></thead><tbody>' +
       refused.map((x) => {
-        const f = floorCheck(x.id).filter((c) => !c.ok);
+        const st = floorStats(x.id);
+        const f = FLOOR.filter((r, i) => !st.oks[i]);
         return '<tr class="click" data-role="' + x.id + '">' +
           "<td><span class=\"srcid\">" + esc(x.req) + "</span></td>" +
           "<td class=\"t\">" + esc(x.title) + "<span class=\"sub\">" + esc(x.loc) + "</span></td>" +
-          "<td>" + f.map((c) => '<span class="badge bad">' + esc(c.r.id) + "</span> " + esc(c.r.n)).join("<br>") + "</td>" +
-          "<td>" + esc(CLEAR[x.id] || "") + "</td></tr>";
+          "<td>" + f.map((c) => '<span class="badge ref">' + esc(c.id) + "</span> " + esc(c.n)).join("<br>") + "</td>" +
+          "<td style=\"max-width:40ch\">" + esc(CLEAR[x.id] || "") + "</td></tr>";
       }).join("") +
-      "</tbody></table>" +
+      "</tbody></table></div>" +
     "</div>" +
 
     '<div class="card">' +
       "<h3>Pilot record <span class=\"sub\">18 drafts, Jun &ndash; Aug 2026</span> <span class=\"badge\">counts, not rates</span></h3>" +
       '<div class="grid3">' +
-        tile("Offer drafts produced", PILOT.drafts, "", "The denominator for everything else on this screen. Eighteen drafts can show whether the contract holds and cannot support a rate.", "") +
-        tile("Drafts where every figure carried a source", PILOT.cited, "of " + PILOT.drafts, "The thing the tool exists for. A single uncited figure in a published draft would stop the pilot.", "ok") +
-        tile("Roles refused at the floor", PILOT.refused, "of 7", "Four refusals in seven requisitions is high, and it is the number people operations found hardest to accept before they saw which four.", "") +
-        tile("Offers made outside the drafted range", PILOT.outside, "of " + PILOT.drafts, "Both were approved above the range with a named reason. One of them turned out to be a levelling error rather than a band error.", "") +
-        tile("Figures written by a model", PILOT.modelFigures, "", "Zero, and this is the guardrail: a model that is occasionally wrong about a salary figure destroys the tool faster than one that is occasionally vague about a market.", "ok") +
-        tile("Median time to a defensible range", PILOT.afterHours, "hours", "From " + PILOT.beforeDays + " days. The days were never spent computing anything — they were spent finding somebody who could say where the last number came from.", "") +
+        tile("Offer drafts produced", PILOT.drafts, "", "The denominator for everything else on this screen. Eighteen drafts can show whether the contract holds and cannot support a rate.") +
+        tile("Drafts where every figure carried a source", PILOT.cited, "of " + PILOT.drafts, "The thing the tool exists for. A single uncited figure in a published draft would stop the pilot.") +
+        tile("Roles refused at the floor", PILOT.refused, "of 7", "Four refusals in seven requisitions is high, and it is the number people operations found hardest to accept before they saw which four.") +
+        tile("Offers made outside the drafted range", PILOT.outside, "of " + PILOT.drafts, "Both were approved above the range with a named reason. One of them turned out to be a levelling error rather than a band error.") +
+        tile("Figures written by a model", PILOT.modelFigures, "", "Zero, and this is the guardrail: a model that is occasionally wrong about a salary figure destroys the tool faster than one that is occasionally vague about a market.") +
+        tile("Median time to a defensible range", PILOT.afterHours, "hours", "From " + PILOT.beforeDays + " days. The days were never spent computing anything — they were spent finding somebody who could say where the last number came from.") +
       "</div>" +
     "</div>" +
 
@@ -962,43 +1131,58 @@ function viewFloor() {
     "</div>";
 }
 
-const CLEAR = {
-  "rf5-sj": "One further independent source with nine or more observations. A paid survey module for the family was quoted and is the open decision.",
-  "de4-blr": "Local comparator rows for the Bengaluru market. The San Jose sources are held and shown, and carry no weight, because a labelled cross-market adjustment was cut from scope.",
-  "tw3-sj": "A current survey for the family, or enough posted ranges to carry the weight the 19-month-old survey is holding.",
-  "dv4-sj": "A level review first. Sources this far apart at the median are describing different jobs, and the band cannot fix that."
-};
-
-function tile(label, value, sub, why, cls) {
-  return '<div class="tile ' + (cls || "") + '"><h4>' + esc(label) + "</h4>" +
-    '<div class="n">' + esc(String(value)) + (sub ? " <small>" + esc(sub) + "</small>" : "") + "</div>" +
-    '<div class="why">' + esc(why) + "</div></div>";
+function tile(label, value, sub, why) {
+  return '<div class="tile"><h4>' + esc(label) + "</h4>" +
+    '<div class="tb"><div class="n">' + esc(String(value)) + (sub ? " <small>" + esc(sub) + "</small>" : "") + "</div>" +
+    '<div class="why">' + esc(why) + "</div></div></div>";
 }
 
 /* -- citation drawer ----------------------------------------- */
 function citeDrawer(cites, note, val) {
   const ids = cites.split(",");
-  const rows = srcs().filter((s) => ids.indexOf(s.id) > -1 && s.w > 0);
+  const all = srcs().filter((s) => ids.indexOf(s.id) > -1);
+  const rows = note === "held" ? all : all.filter((s) => s.w > 0);
   const tw = rows.reduce((a, s) => a + s.w, 0) || 1;
-  const key = { p25: "p25", p50: "p50", comp: "p50" }[note] || null;
+  const st = floorStats(state.role);
+  const key = { p25: "p25", p50: "p50", p75: "p75", comp: "p50" }[note] || null;
 
   let calc = "";
   if (key) {
-    calc = rows.map((s) => '<div><b>' + s.id + "</b> <span class=\"op\">" + k(s[key]) + " &times; " +
-      Math.round(s.w * 100) + "%</span> = " + (s[key] * s.w).toFixed(1) + "</div>").join("") +
-      '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px"><b>Sum</b> ' +
-      rows.reduce((a, s) => a + s[key] * s.w, 0).toFixed(1) + ' <span class="op">&divide; total weight ' + tw.toFixed(2) + "</span> = <b>" +
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + k(s[key]) + " &times; " +
+      pct(s.w) + " method weight</span> = " + (s[key] * s.w).toFixed(1) + "</div>").join("") +
+      '<div class="sum"><b>Sum</b> ' +
+      rows.reduce((a, s) => a + s[key] * s.w, 0).toFixed(1) + ' <span class="op">&divide; methods present ' + tw.toFixed(2) + "</span> = <b>" +
       k(rows.reduce((a, s) => a + s[key] * s.w, 0) / tw) + "</b></div>" +
-      (note === "comp" ? '<div style="margin-top:8px"><span class="op">competitive flag:</span> median + (P75 &minus; median) &divide; 3 = <b>' + k(draft().high) + "</b></div>" : "");
+      '<div class="post"><span class="op">the division is the renormalisation: one fixed weight table, shared by every role, scaled over the methods that showed up.</span></div>' +
+      (note === "comp" ? '<div class="post"><span class="op">competitive flag:</span> median + (P75 &minus; median) &divide; 3 = <b>' + k(draft().high) + "</b></div>" : "");
   } else if (note === "obs") {
     calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + s.obs + " observations</span></div>").join("") +
-      '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px"><b>Total</b> ' + rows.reduce((a, s) => a + s.obs, 0) + "</div>";
+      '<div class="sum"><b>Total</b> ' + rows.reduce((a, s) => a + s.obs, 0) + "</div>";
   } else if (note === "gap") {
     const p50 = rows.map((s) => s.p50);
     calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">median</span> " + k(s.p50) + "</div>").join("") +
-      '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px"><b>Highest</b> ' + k(Math.max.apply(null, p50)) +
+      '<div class="sum"><b>Highest</b> ' + k(Math.max.apply(null, p50)) +
       ' <span class="op">&minus;</span> <b>lowest</b> ' + k(Math.min.apply(null, p50)) + " = <b>" + k(Math.max.apply(null, p50) - Math.min.apply(null, p50)) +
-      '</b></div><div style="margin-top:8px"><span class="op">rule F4 tests this against 20% of the median.</span></div>';
+      '</b></div><div class="post"><span class="op">rule F4 tests this against 20% of the mid median.</span></div>';
+  } else if (note === "spread") {
+    const p50 = rows.map((s) => s.p50);
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">median</span> " + k(s.p50) + "</div>").join("") +
+      '<div class="sum"><b>Highest</b> ' + k(Math.max.apply(null, p50)) + ' <span class="op">&minus;</span> <b>lowest</b> ' + k(Math.min.apply(null, p50)) +
+      " = <b>" + k(st.spreadAbs) + "</b> <span class=\"op\">&divide; mid median " + k(st.med) + "</span> = <b>" + pct(st.spread) + "</b></div>" +
+      '<div class="post"><span class="op">rule F4 allows 20%. ' +
+      (st.spread > 0.20 ? "This is over the line, so the role is refused — sources this far apart are not measuring the same job." : "Inside the line.") + "</span></div>";
+  } else if (note === "stale") {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + s.age + " months old &middot; method weight</span> " + pct(s.w) + "</div>").join("") +
+      '<div class="sum"><b>Stale weight</b> ' + rows.reduce((a, s) => a + s.w, 0).toFixed(2) +
+      ' <span class="op">&divide; weight present ' + st.tw.toFixed(2) + "</span> = <b>" + pct(st.staleShare) + "</b></div>" +
+      '<div class="post"><span class="op">rule F3 allows 25% from sources over 12 months old. ' +
+      (st.staleShare > 0.25 ? "This source would lead the band, so the role is refused." : "Inside the line.") + "</span></div>";
+  } else if (note === "held") {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + esc(s.method) + "</span></div>").join("") +
+      '<div class="post"><span class="op">Held and shown at zero market weight: the comparator must be local to the requisition&rsquo;s market, and a labelled cross-market adjustment was cut from scope. They stay on screen because the tempting thing to do with them is exactly what the rule forbids.</span></div>';
+  } else if (note === "src50") {
+    calc = "<div><b>" + rows[0].id + "</b> <span class=\"op\">reports a median of</span> <b>" + k(rows[0].p50) + "</b> <span class=\"op\">for this role, as published.</span></div>" +
+      '<div class="post"><span class="op">No arithmetic — rule F4 compares these medians to each other before any averaging is allowed to happen.</span></div>';
   } else if (note === "sources") {
     calc = "<div>" + rows.length + " sources carry weight. Sources held but not weighted are listed on <b>02 Market evidence</b> and are excluded from every figure.</div>";
   } else {
@@ -1009,46 +1193,61 @@ function citeDrawer(cites, note, val) {
     "<h3>" + esc(val) + "</h3>" +
     '<p class="dsub">' + esc(role().title) + " &middot; " + esc(role().loc) + " &middot; " + ids.length + " source" + (ids.length === 1 ? "" : "s") + "</p>" +
     '<div class="card"><h3>The arithmetic <span class="badge rule">no model in this path</span></h3><div class="calc">' + calc + "</div></div>" +
-    '<div class="card"><h3>The rows behind it</h3><table><thead><tr><th>Ref</th><th>Source</th><th>As of</th><th class="num">Obs</th><th class="num">Weight</th></tr></thead><tbody>' +
+    '<div class="card"><h3>The rows behind it</h3><div class="tablewrap tight"><table><thead><tr><th>Ref</th><th>Source</th><th>As of</th><th class="num">Obs</th><th class="num">Weight</th></tr></thead><tbody>' +
       rows.map((s) => "<tr><td><span class=\"srcid\">" + s.id + "</span></td><td class=\"t\">" + esc(s.n) +
         "<span class=\"sub\">" + esc(s.method) + "</span></td><td>" + esc(s.date) + '</td><td class="num">' + s.obs +
-        '</td><td class="num">' + Math.round(s.w * 100) + "%</td></tr>").join("") +
-    "</tbody></table></div>" +
-    '<div class="card"><h3>Why this can be followed</h3><p style="color:var(--body);font-size:12.5px;margin:0">Every figure in this tool ends here, at a row with a date, an observation count and a method. That is the whole product: the band is not more accurate than the spreadsheet it replaced, it is <b>answerable</b>, and the argument in the approval meeting is now about a row rather than about who remembers what.</p></div>'
+        '</td><td class="num">' + (s.w ? pct(s.w) : "&mdash;") + "</td></tr>").join("") +
+    "</tbody></table></div></div>" +
+    '<div class="card"><h3>Why this can be followed</h3><p style="color:var(--body-c);font-size:12.5px;margin:0;line-height:1.6">Every figure in this tool ends here, at a row with a date, an observation count and a method. That is the whole product: the band is not more accurate than the spreadsheet it replaced, it is <b style="color:var(--warm)">answerable</b>, and the argument in the approval meeting is now about a row rather than about who remembers what.</p></div>'
   );
 }
 
 /* -- chrome + router ----------------------------------------- */
-function renderChrome() {
-  const sel = $("#roleSel");
-  if (!sel.dataset.built) {
-    sel.innerHTML = ROLES.map((r) => '<option value="' + r.id + '">' + esc(r.req + " — " + r.title + ", " + r.loc.split(",")[0]) + "</option>").join("");
-    sel.dataset.built = "1";
-    sel.onchange = () => { state.role = sel.value; render(); };
+function railItem(r) {
+  const st = floorStats(r.id);
+  let viz, tag;
+  if (st.pass) {
+    const b = bandFor(r.id), d = draftFor(r.id);
+    const span = (b.p75 - b.p25) || 1;
+    const lo = b.p25 - span * 0.3, hi = b.p75 + span * 0.18;
+    const pos = (v) => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+    viz = '<span class="mini" aria-hidden="true">' +
+      '<i class="mini-mkt" style="left:' + pos(b.p25).toFixed(1) + "%;width:" + (pos(b.p75) - pos(b.p25)).toFixed(1) + '%"></i>' +
+      '<i class="mini-off" style="left:' + pos(d.low).toFixed(1) + "%;width:" + (pos(d.high) - pos(d.low)).toFixed(1) + '%"></i>' +
+      "</span>";
+    tag = '<span class="rtag ok">banded</span>';
+  } else {
+    const failed = FLOOR.filter((f, i) => !st.oks[i]).map((f) => f.id);
+    viz = '<span class="mini held" aria-hidden="true"></span>';
+    tag = '<span class="rtag ref">refused &middot; ' + failed.join(" ") + "</span>";
   }
-  sel.value = state.role;
+  return '<button class="reqitem" data-role="' + r.id + '" aria-current="' + (state.role === r.id) + '">' +
+    '<span class="ri-top"><span class="srcid">' + esc(r.req) + "</span>" + tag + "</span>" +
+    '<span class="ri-title">' + esc(r.title) + "</span>" +
+    '<span class="ri-meta">' + esc(r.loc.split(",")[0]) + " &middot; " + st.ws.length + " src &middot; " + st.obs + " obs" + (r.comp ? " &middot; competitive" : "") + "</span>" +
+    viz + "</button>";
+}
 
+function renderChrome() {
   const ok = passesFloor(state.role);
-  $("#citeChip").className = "chip " + (ok ? "ok" : "crit");
-  $("#citeChip").innerHTML = '<span class="dot ' + (ok ? "good" : "crit") + '"></span>' +
-    (ok ? "Every figure cited" : "No band — evidence floor");
+  const cc = $("#citeChip");
+  cc.className = "chip " + (ok ? "ok" : "ref");
+  cc.innerHTML = ok
+    ? '<span class="dot good"></span>Every figure cited'
+    : '<span class="dot accent"></span>Refused at the floor &mdash; that is the output';
 
-  $("#rail").innerHTML = "<h6>Views</h6>" + VIEWS.map((v) =>
-    '<button data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '">' +
-      '<span class="n">' + v.n + "</span><span>" + esc(v.label) + '</span><span class="tag">' + esc(v.tag) + "</span></button>"
-  ).join("") +
-  '<p class="rail-note">Switch requisition in the top right. Three of the seven were banded and four were refused &mdash; the refusals are the more interesting screens.</p>';
-
-  document.querySelectorAll("#rail button").forEach((b) => {
+  $("#tabs").innerHTML = VIEWS.map((v) =>
+    '<button class="tab" data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '"><span class="tn">' + v.n + "</span>" + esc(v.label) + "</button>"
+  ).join("");
+  document.querySelectorAll("#tabs .tab").forEach((b) => {
     b.onclick = () => { state.view = b.dataset.view; render(); };
   });
 
-  const r = role();
-  $("#paramNote").innerHTML = "<b>" + esc(r.req) + " &middot; " + esc(r.title) + ", " + esc(r.loc) + ".</b> " +
-    (ok
-      ? "Evidence floor cleared on all four rules, so a band exists and every figure on it resolves to a comparator row."
-      : "Refused at the evidence floor, so no band and no draft exist for this requisition &mdash; which is an output, not a gap.") +
-    " Nothing on any screen is stored: the band, the draft and the floor result are recomputed from the comparator rows each time.";
+  $("#rail").innerHTML = "<h6>Requisitions &middot; Aug 2026</h6>" + ROLES.map(railItem).join("") +
+    '<p class="rail-note">Three banded, four refused. A dashed track is a requisition the evidence floor refused &mdash; the more interesting screens, and deliberately not an error state.</p>';
+  document.querySelectorAll("#rail .reqitem").forEach((b) => {
+    b.onclick = () => { state.role = b.dataset.role; render(); };
+  });
 }
 
 function render() {
@@ -1065,17 +1264,28 @@ function render() {
   document.querySelectorAll("tr[data-src]").forEach((tr) => {
     tr.onclick = () => {
       const s = srcs().find((x) => x.id === tr.dataset.src);
+      const st = floorStats(state.role);
       openDrawer(
-        "<h3>" + esc(s.n) + "</h3>" +
+        "<h3 style=\"font-family:var(--sans);font-size:17px\">" + esc(s.n) + "</h3>" +
         '<p class="dsub">' + esc(s.id) + " &middot; " + esc(s.date) + " &middot; " + s.obs + " observations</p>" +
-        '<div class="card"><h3>Method</h3><p style="color:var(--body);font-size:12.5px;margin:0">' + esc(s.method) + "</p></div>" +
-        '<div class="card"><h3>What it contributes</h3><table><tbody>' +
-          "<tr><td>Weight</td><td class=\"t\">" + (s.w ? Math.round(s.w * 100) + "% — fixed by method, not chosen for this role" : "none — held for reference only") + "</td></tr>" +
+        '<div class="card"><h3>Method</h3><p style="color:var(--body-c);font-size:12.5px;margin:0">' + esc(s.method) + "</p></div>" +
+        '<div class="card"><h3>What it contributes</h3><div class="tablewrap tight"><table><tbody>' +
+          "<tr><td style=\"width:130px\">Weight</td><td class=\"t\">" + (s.w
+            ? pct(METHODS[s.m].w) + " by method — fixed for the whole pilot, renormalised to " + pct(s.w / st.tw) + " of this band over the methods present"
+            : "none — held for reference only, a different market") + "</td></tr>" +
           "<tr><td>Age</td><td class=\"t\">" + s.age + " months" + (s.age > 12 ? " — over the 12-month line in rule F3" : "") + "</td></tr>" +
           "<tr><td>P25 / P50 / P75</td><td class=\"t\">" + k(s.p25) + " / " + k(s.p50) + " / " + k(s.p75) + "</td></tr>" +
-        "</tbody></table></div>"
+        "</tbody></table></div></div>"
       );
     };
+  });
+  /* rows are real click targets for the keyboard too */
+  document.querySelectorAll("tr.click").forEach((tr) => {
+    tr.tabIndex = 0;
+    tr.setAttribute("role", "button");
+    tr.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tr.click(); }
+    });
   });
   document.querySelectorAll("button.fig").forEach((b) => {
     b.onclick = () => citeDrawer(b.dataset.cite, b.dataset.note, b.dataset.val);
