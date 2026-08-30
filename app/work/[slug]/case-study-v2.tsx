@@ -13,11 +13,66 @@
  * data/case-studies-v2.json.
  */
 
+import type { ReactNode } from 'react';
 import { STATUS_CONFIG } from '../constants';
 import CaseStudyBack from './case-study-back';
 import Chart from './case-study-charts';
 import type { CaseStudyBlock, CaseStudyV2 } from './case-study-types';
 import './case-study-v2.css';
+
+/**
+ * "Open in the demo ↗" — attached to a screen that has a running surface
+ * behind it. One treatment wherever it appears, so a link under a screenshot
+ * always means the same thing: this is the working software, not a picture of
+ * it. Absent on figures that were never a screen, like an architecture
+ * diagram.
+ */
+function DemoLink({ href, label }: { href: string; label?: string }) {
+	return (
+		<a
+			className='demo-link'
+			href={href}
+			target='_blank'
+			rel='noopener noreferrer'
+		>
+			{label ?? 'Open in the demo'} ↗
+		</a>
+	);
+}
+
+/**
+ * A screenshot of something that is running becomes the way into it. The
+ * picture is the biggest, most obviously clickable thing on the page, so
+ * a reader who wants the real screen reaches for it before they reach for
+ * the sentence underneath — the text link stays, for anyone scanning the
+ * caption instead. Screens with no live surface behind them render bare,
+ * and are not clickable, which keeps the affordance honest.
+ */
+function ShotFrame({
+	href,
+	label,
+	children,
+}: {
+	href?: string;
+	label?: string;
+	children: ReactNode;
+}) {
+	if (!href) return <>{children}</>;
+	return (
+		<a
+			className='shot-link'
+			href={href}
+			target='_blank'
+			rel='noopener noreferrer'
+			aria-label={`${label ?? 'Open in the demo'} (opens in a new tab)`}
+		>
+			{children}
+			<span className='shot-link-cue' aria-hidden='true'>
+				{label ?? 'Open in the demo'} ↗
+			</span>
+		</a>
+	);
+}
 
 function Block({ block }: { block: CaseStudyBlock }) {
 	switch (block.kind) {
@@ -132,13 +187,15 @@ function Block({ block }: { block: CaseStudyBlock }) {
 				<>
 					<div className='shot'>
 						{block.image ? (
-							// biome-ignore lint/performance/noImgElement: static asset inside a fixed-ratio frame
-							<img
-								className='shot-photo'
-								src={block.image}
-								alt={block.alt ?? ''}
-								loading='lazy'
-							/>
+							<ShotFrame href={block.href} label={block.hrefLabel}>
+								{/* biome-ignore lint/performance/noImgElement: static asset inside a fixed-ratio frame */}
+								<img
+									className='shot-photo'
+									src={block.image}
+									alt={block.alt ?? ''}
+									loading='lazy'
+								/>
+							</ShotFrame>
 						) : (
 							<div className='shot-img'>{block.placeholder}</div>
 						)}
@@ -153,7 +210,12 @@ function Block({ block }: { block: CaseStudyBlock }) {
 							))}
 						</ol>
 					</div>
-					<p className='shot-note'>{block.note}</p>
+					<p className='shot-note'>
+						{block.note}
+						{block.href && (
+							<DemoLink href={block.href} label={block.hrefLabel} />
+						)}
+					</p>
 				</>
 			);
 
@@ -189,19 +251,24 @@ function Block({ block }: { block: CaseStudyBlock }) {
 						{block.items.map((it) => (
 							<figure key={it.caption}>
 								{it.image ? (
-									// biome-ignore lint/performance/noImgElement: static asset, fixed frame
-									<img
-										className='gallery-img'
-										src={it.image}
-										alt={it.label ?? it.caption}
-										loading='lazy'
-									/>
+									<ShotFrame href={it.href} label={it.hrefLabel}>
+										{/* biome-ignore lint/performance/noImgElement: static asset, fixed frame */}
+										<img
+											className='gallery-img'
+											src={it.image}
+											alt={it.label ?? it.caption}
+											loading='lazy'
+										/>
+									</ShotFrame>
 								) : (
 									<div className='ph'>{it.placeholder}</div>
 								)}
 								<figcaption>
 									{it.label && <b className='gallery-label'>{it.label}</b>}
 									{it.caption}
+									{it.href && (
+										<DemoLink href={it.href} label={it.hrefLabel} />
+									)}
 								</figcaption>
 							</figure>
 						))}

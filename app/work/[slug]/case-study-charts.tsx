@@ -2797,7 +2797,133 @@ function Sequence({
 	);
 }
 
-// ── Dispatcher ──────────────────────────────────────────────────
+/**
+ * Two curves with the space between them shaded: the upper is a total, the
+ * lower is the part of it that was doing something useful, and the band is
+ * the waste. Drawn this way because neither line alone is the finding —
+ * the total falling could be a smaller team, and the lower line is flat.
+ */
+function GapArea({ spec }: { spec: Extract<ChartSpec, { form: 'gapArea' }> }) {
+	const L = 48;
+	const R = 668;
+	const T = 20;
+	const B = 186;
+	const n = spec.xLabels.length;
+	const x = (i: number) => L + (i / Math.max(1, n - 1)) * (R - L);
+	const y = (v: number) => B - (v / spec.yMax) * (B - T);
+	const band =
+		spec.upper.points.map((p, i) => `${x(i)},${y(p)}`).join(' ') +
+		' ' +
+		[...spec.lower.points]
+			.reverse()
+			.map((p, i) => `${x(n - 1 - i)},${y(p)}`)
+			.join(' ');
+	const mid = Math.round((n - 1) / 2);
+	return (
+		<Frame title={spec.title} height={244}>
+			{[0, 0.5, 1].map((f) => (
+				<line
+					key={f}
+					className='g-line'
+					x1={L}
+					y1={y(spec.yMax * f)}
+					x2={R}
+					y2={y(spec.yMax * f)}
+				/>
+			))}
+			{[0, 0.5, 1].map((f) => (
+				<text
+					key={f}
+					className='g-lbl'
+					x={L - 8}
+					y={y(spec.yMax * f) + 4}
+					textAnchor='end'
+				>
+					{Math.round(spec.yMax * f)}
+				</text>
+			))}
+			<polygon points={band} fill={WARN} fillOpacity='0.22' />
+			{spec.marker && (
+				<g>
+					<line
+						x1={x(spec.marker.index) + (R - L) / (2 * (n - 1))}
+						y1={T - 6}
+						x2={x(spec.marker.index) + (R - L) / (2 * (n - 1))}
+						y2={B}
+						stroke={ACCENT_DIM}
+						strokeWidth='1'
+						strokeDasharray='4 4'
+					/>
+					<text
+						className='g-lbl'
+						x={x(spec.marker.index) + (R - L) / (2 * (n - 1)) + 6}
+						y={T + 4}
+					>
+						{spec.marker.label}
+					</text>
+				</g>
+			)}
+			<polyline
+				fill='none'
+				stroke={CUT}
+				strokeWidth='2'
+				strokeLinejoin='round'
+				points={spec.upper.points.map((p, i) => `${x(i)},${y(p)}`).join(' ')}
+			/>
+			<polyline
+				fill='none'
+				stroke={SHIP}
+				strokeWidth='2'
+				strokeLinejoin='round'
+				points={spec.lower.points.map((p, i) => `${x(i)},${y(p)}`).join(' ')}
+			/>
+			<text
+				className='g-val'
+				x={x(mid)}
+				y={(y(spec.upper.points[mid]) + y(spec.lower.points[mid])) / 2 + 4}
+				textAnchor='middle'
+			>
+				{spec.gapLabel}
+			</text>
+			{spec.xLabels.map((lbl, i) => (
+				<text
+					key={lbl}
+					className='g-lbl'
+					x={x(i)}
+					y={B + 20}
+					textAnchor={i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}
+				>
+					{lbl}
+				</text>
+			))}
+			{[
+				{ name: spec.upper.name, color: CUT },
+				{ name: spec.lower.name, color: SHIP },
+			].map((sr, i) => (
+				<g key={sr.name}>
+					<rect
+						x={L + i * 260}
+						y='222'
+						width='10'
+						height='10'
+						rx='2'
+						fill={sr.color}
+					/>
+					<text className='g-lbl' x={L + i * 260 + 16} y='231'>
+						{sr.name}
+					</text>
+				</g>
+			))}
+			{spec.yUnit && (
+				<text className='g-lbl' x={R} y='231' textAnchor='end'>
+					{spec.yUnit}
+				</text>
+			)}
+		</Frame>
+	);
+}
+
+// \u2500\u2500 Dispatcher \u2500\u2500────────────────────────────────────────────────
 
 export default function Chart({ spec }: { spec: ChartSpec }) {
 	switch (spec.form) {
@@ -2871,6 +2997,8 @@ export default function Chart({ spec }: { spec: ChartSpec }) {
 			return <Confusion spec={spec} />;
 		case 'sequence':
 			return <Sequence spec={spec} />;
+		case 'gapArea':
+			return <GapArea spec={spec} />;
 		default:
 			return null;
 	}

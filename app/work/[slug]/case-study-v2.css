@@ -516,6 +516,81 @@
 	border-bottom: 1px solid var(--line);
 }
 
+/* A screenshot that has a running surface behind it is itself the link.
+   The cue sits on the image rather than beside it, so the affordance is
+   attached to the thing you would click. */
+.cs2 .shot-link {
+	display: block;
+	position: relative;
+	text-decoration: none;
+}
+
+.cs2 .shot-link .shot-photo,
+.cs2 .shot-link .gallery-img {
+	transition: opacity 0.2s ease;
+}
+
+.cs2 .shot-link:hover .shot-photo,
+.cs2 .shot-link:hover .gallery-img,
+.cs2 .shot-link:focus-visible .shot-photo,
+.cs2 .shot-link:focus-visible .gallery-img {
+	opacity: 0.82;
+}
+
+.cs2 .shot-link-cue {
+	position: absolute;
+	right: 12px;
+	bottom: 12px;
+	display: inline-block;
+	max-width: calc(100% - 24px);
+	padding: 6px 11px;
+	border: 1px solid var(--accent-dim);
+	border-radius: 6px;
+	background: rgba(8, 8, 11, 0.86);
+	backdrop-filter: blur(6px);
+	color: var(--accent);
+	font-size: 12.5px;
+	line-height: 1.3;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	opacity: 0;
+	transform: translateY(4px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
+}
+
+.cs2 .shot-link:hover .shot-link-cue,
+.cs2 .shot-link:focus-visible .shot-link-cue {
+	opacity: 1;
+	transform: none;
+}
+
+/* Touch and keyboard-only readers never get a hover, so the cue is
+   always visible for them rather than a secret. */
+@media (hover: none) {
+	.cs2 .shot-link-cue {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cs2 .shot-link .shot-photo,
+	.cs2 .shot-link .gallery-img,
+	.cs2 .shot-link-cue {
+		transition: none;
+	}
+}
+
+/* The gallery tile keeps its border on the anchor, not the image, so the
+   frame and the click target are the same rectangle. */
+.cs2 .gallery .shot-link {
+	border-radius: 8px;
+	overflow: hidden;
+}
+
 .cs2 .callouts {
 	list-style: none;
 	margin: 0;
@@ -558,6 +633,21 @@
 	font-size: 13.5px;
 	color: var(--muted);
 	margin-top: 12px;
+}
+
+/* The link to the running surface behind a screenshot. Sits on its own line
+   under the caption it belongs to, so it reads as a way out of the page
+   rather than as part of the sentence above it. */
+.cs2 .demo-link {
+	display: block;
+	width: fit-content;
+	margin-top: 8px;
+	font-size: 13px;
+	border-bottom: 1px solid var(--accent-dim);
+}
+
+.cs2 .demo-link:hover {
+	border-bottom-color: var(--accent);
 }
 
 /* ── Metric tiles ────────────────────────────────────────── */

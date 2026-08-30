@@ -464,6 +464,26 @@ export type ChartSpec =
 			legend: { ok: string; abort: string; fail: string };
 			marker?: { afterIndex: number; label: string };
 	  }
+	/**
+	 * Two curves over a shared x-axis with the area between them shaded —
+	 * for a finding that is the *gap* rather than either series. The lower
+	 * curve is a component of the upper one, so the band closing is the
+	 * result. Distinct from `dualLine`, which compares two independent
+	 * series and says nothing about the space between them, and from
+	 * `thresholdCurves`, where the reference is a fixed budget rather than
+	 * a second measurement.
+	 */
+	| {
+			form: 'gapArea';
+			title: string;
+			yMax: number;
+			yUnit?: string;
+			xLabels: string[];
+			upper: { name: string; points: number[] };
+			lower: { name: string; points: number[] };
+			gapLabel: string;
+			marker?: { index: number; label: string };
+	  }
 	| {
 			form: 'waffle';
 			title: string;
@@ -530,7 +550,9 @@ export type CaseStudyBlock =
 			items: { lead: string; text: string }[];
 			note?: string;
 	  }
-	/** Annotated screen or board photo with 3–4 numbered decision callouts */
+	/** Annotated screen or board photo with 3–4 numbered decision callouts.
+	 *  `href` attaches the running surface behind the screenshot, so a reader
+	 *  can open the thing rather than only read about it. */
 	| {
 			kind: 'shot';
 			image?: string;
@@ -538,6 +560,8 @@ export type CaseStudyBlock =
 			alt?: string;
 			callouts: { lead: string; text: string }[];
 			note: string;
+			href?: string;
+			hrefLabel?: string;
 	  }
 	/** Outcome metric tiles — six per full case study, never configuration */
 	| { kind: 'metrics'; items: { value: string; sub?: string; label: string }[] }
@@ -558,6 +582,9 @@ export type CaseStudyBlock =
 				placeholder?: string;
 				label?: string;
 				caption: string;
+				/** The live surface this screen is a picture of. */
+				href?: string;
+				hrefLabel?: string;
 			}[];
 			note?: string;
 	  }
