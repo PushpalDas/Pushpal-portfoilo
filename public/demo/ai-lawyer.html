@@ -7,50 +7,59 @@
 <meta name="description" content="Interactive recreation of the patentgen prototype: the intake containment gate, a drafting run stage by stage, the gap list, claims, the critic ring, §1.84 drawings, the filing package, and the corpus-coverage verdict that decides whether any of it means anything.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap">
 </head>
 <body>
 <!-- ARTIFACT-BODY-START -->
 <style>
 /* ============================================================
    AI Lawyer / patentgen — interactive recreation.
-   Palette and type inherited from the portfolio's case-study
-   system and from the sibling demos, so the family reads as one
-   product. Single dark theme, every colour painted explicitly.
+   Native sibling of the XANA system: warm brown-black ground,
+   one #FF6321 accent with its #CD3D00→#FF6321 gradient reserved
+   for primary actions and hero numbers, Geist for UI text and
+   Geist Mono for anything a lawyer or an auditor would quote.
+   Elevation is a surface colour plus a 1px warm border, never a
+   shadow. Single dark theme, every colour painted explicitly.
 
    The prototype's own UI is a light, document-like surface an
    attorney reads for long stretches. This is the portfolio's
-   dark shell wearing the same information architecture: the same
-   sections, the same badges, the same verbatim blocks, and the
-   same refusal wording.
+   warm dark shell wearing the same information architecture: the
+   same sections, the same badges, the same verbatim blocks, and
+   the same refusal wording.
    ============================================================ */
 :root {
   color-scheme: dark;
-  --bg: #08080b;
-  --surface: #101015;
-  --surface-2: #16161d;
-  --surface-3: #1c1c25;
-  --line: #23232d;
-  --line-soft: #17171e;
-  --ink: #f2f3f6;
-  --body: #b4bacb;
-  --muted: #6e7385;
-  --faint: #4a4e5e;
-  --accent: #b8873f;
-  --accent-dim: #5e4520;
-  --accent-wash: rgba(184, 135, 63, 0.11);
-  --good: #5f9a54;
-  --good-dim: #2f5228;
-  --good-wash: rgba(95, 154, 84, 0.12);
-  --warn: #c9973f;
-  --warn-dim: #6b5220;
-  --warn-wash: rgba(201, 151, 63, 0.12);
-  --crit: #c05e4a;
-  --crit-dim: #5e3628;
-  --crit-wash: rgba(192, 94, 74, 0.12);
-  --blue: #5b7cfa;
-  --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --bg: #0E0805;
+  --surface: #1A1410;
+  --surface-2: #221A14;
+  --surface-3: #140F0B;
+  --line: #3A3028;
+  --line-soft: #2A2018;
+  --line-hover: #5A4838;
+  --ink: #FFFFFF;
+  --body: #C0B6AC;
+  --bright: #E8E0D8;
+  --muted: #8A817A;
+  --faint: #6E655E;
+  --accent: #FF6321;
+  --accent-deep: #CD3D00;
+  --accent-soft: #FF8A56;
+  --accent-dim: rgba(255, 99, 33, 0.38);
+  --accent-wash: rgba(255, 99, 33, 0.09);
+  --grad: linear-gradient(90deg, #CD3D00, #FF6321);
+  --good: #22C55E;
+  --good-dim: rgba(34, 197, 94, 0.40);
+  --good-wash: rgba(34, 197, 94, 0.08);
+  --warn: #FFB020;
+  --warn-dim: rgba(255, 176, 32, 0.42);
+  --warn-wash: rgba(255, 176, 32, 0.08);
+  --crit: #FF6B6B;
+  --crit-dim: rgba(239, 68, 68, 0.45);
+  --crit-wash: rgba(239, 68, 68, 0.09);
+  --blue: #8B5CF6;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sans: "Geist", Arial, Helvetica, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -60,16 +69,23 @@ body {
   background: var(--bg);
   color: var(--body);
   font-family: var(--sans);
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+::selection { background: rgba(255, 99, 33, 0.30); color: #fff; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 button { font: inherit; color: inherit; cursor: pointer; }
+button, .btn, .chip, .opt, input, select, tbody tr.clickable {
+  transition: color 0.2s var(--ease), background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
 select, input { font: inherit; color: inherit; }
-a { color: var(--accent); }
+a { color: var(--accent-soft); }
 .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.kicker { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* -- App chrome ------------------------------------------- */
@@ -83,63 +99,77 @@ a { color: var(--accent); }
   flex-direction: column;
 }
 
-.topbar { position: sticky; top: 0; z-index: 40; background: rgba(8,8,11,0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-.topbar-row { display: flex; align-items: center; gap: 10px; padding: 11px 20px; flex-wrap: wrap; }
+/* The signature top bar: warm translucent ground, heavy blur, and the
+   active view carried by a 2px orange underline rather than a filled tab. */
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(14, 8, 5, 0.72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--line-soft); }
+.topbar-row { display: flex; align-items: center; gap: 12px; padding: 12px 20px; flex-wrap: wrap; }
+.applogo {
+  width: 32px; height: 32px; flex: none; border-radius: 10px;
+  background: linear-gradient(135deg, #CD3D00, #FF6321);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 16px; font-weight: 600; color: #fff;
+  user-select: none;
+}
 .brand { display: flex; flex-direction: column; gap: 1px; margin-right: auto; }
 .brand .eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.25px; color: var(--ink); }
 
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
   border: 1px solid var(--line); background: var(--surface);
-  border-radius: 999px; padding: 5px 11px;
-  font-size: 11.5px; font-family: var(--mono); color: var(--body); white-space: nowrap;
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 11px; font-family: var(--mono); color: var(--body); white-space: nowrap;
 }
 .chip b { color: var(--ink); font-weight: 500; }
 .chip.warnish { border-color: var(--warn-dim); color: var(--warn); background: var(--warn-wash); }
 .chip.critish { border-color: var(--crit-dim); color: var(--crit); background: var(--crit-wash); }
 .chip.goodish { border-color: var(--good-dim); color: var(--good); background: var(--good-wash); }
-.chip button { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 2px; font-family: var(--mono); font-size: 11.5px; }
+.chip button { background: none; border: 0; padding: 0; color: inherit; text-decoration: underline; text-underline-offset: 2px; font-family: var(--mono); font-size: 11px; }
 
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
 .dot.good { background: var(--good); } .dot.warn { background: var(--warn); } .dot.crit { background: var(--crit); }
 
 /* -- View tabs -------------------------------------------- */
-.viewbar { display: flex; gap: 2px; padding: 0 14px; overflow-x: auto; border-bottom: 1px solid var(--line); background: var(--surface); }
+.viewbar { display: flex; gap: 2px; padding: 0 14px; overflow-x: auto; border-bottom: 1px solid var(--line-soft); background: transparent; }
 .viewbar button {
-  background: none; border: 0; border-bottom: 2px solid transparent;
-  padding: 10px 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap;
+  position: relative; background: none; border: 0;
+  padding: 11px 12px; font-size: 12.5px; font-weight: 500; letter-spacing: -0.1px;
+  color: var(--muted); white-space: nowrap;
+  transition: color 0.2s var(--ease);
 }
-.viewbar button:hover { color: var(--body); }
-.viewbar button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
-.viewbar .vb-count { font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-left: 6px; }
+.viewbar button::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--accent); opacity: 0; transition: opacity 0.2s var(--ease); }
+.viewbar button:hover { color: var(--ink); }
+.viewbar button[aria-current="page"] { color: var(--ink); }
+.viewbar button[aria-current="page"]::after { opacity: 1; }
+.viewbar .vb-count { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-left: 6px; }
 
 /* -- Layout ----------------------------------------------- */
-.main { flex: 1; padding: 22px 20px 60px; }
+.main { flex: 1; padding: 24px 20px 60px; }
+.main.enter > * { animation: rise 0.32s var(--ease) both; }
 .stack > * + * { margin-top: 20px; }
-.lede { max-width: 76ch; color: var(--body); }
-.lede b { color: var(--ink); font-weight: 500; }
+.lede { max-width: 76ch; color: var(--body); font-size: 13.5px; }
+.lede b { color: var(--bright); font-weight: 500; }
 
 h2.sec {
-  margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--muted);
   display: flex; align-items: baseline; gap: 10px;
-  border-top: 1px solid var(--line); padding-top: 16px;
+  border-top: 1px solid var(--line-soft); padding-top: 16px;
 }
-h2.sec .n { font-family: var(--mono); font-size: 10.5px; color: var(--faint); letter-spacing: 0; }
-h3.sub { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--body); }
+h2.sec .n { font-family: var(--mono); font-size: 10.5px; color: var(--accent); letter-spacing: 0; }
+h3.sub { margin: 0 0 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--body); }
 
-.panel { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
+.panel { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; }
 .panel-pad { padding: 16px 18px; }
 .panel + .panel { margin-top: 14px; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
 
-.note { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
+.note { font-size: 12px; color: var(--muted); max-width: 80ch; }
 .note b { color: var(--body); font-weight: 500; }
-.note code, .lede code { font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
+.note code, .lede code { font-family: var(--mono); font-size: 11.5px; color: var(--accent-soft); }
 
 /* -- Alerts ----------------------------------------------- */
-.alert { border-radius: 8px; border: 1px solid; padding: 15px 17px; }
+.alert { border-radius: 12px; border: 1px solid; padding: 15px 17px; }
 .alert h3 { margin: 0 0 6px; font-size: 13px; font-weight: 600; }
 .alert p { margin: 6px 0 0; font-size: 12.5px; max-width: 80ch; }
 .alert.stop { border-color: var(--crit-dim); background: var(--crit-wash); }
@@ -148,43 +178,52 @@ h3.sub { margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.0
 .alert.warn h3 { color: var(--warn); }
 .alert.ok { border-color: var(--good-dim); background: var(--good-wash); }
 .alert.ok h3 { color: var(--good); }
-.alert.plain { border-color: var(--line); background: var(--surface-2); }
+.alert.plain { border-color: var(--line); background: var(--surface); }
 .alert.plain h3 { color: var(--ink); }
+
+/* The intake refusal is the front door, and it is a legal ruling, not a
+   toast. It gets the heaviest treatment on the page: a solid red rule, a
+   letter-spaced mono headline, and a slow red glow that reads as "live".
+   The glow is the page's only looping animation and reduced-motion kills it. */
+.alert.gate { border-left: 3px solid var(--crit); animation: pulse-crit 2.6s ease-in-out infinite; }
+.alert.gate h3 { font-size: 14px; letter-spacing: 0.08em; }
 
 /* Verbatim output — a refusal, a violation, a check failure. Quoted, never
    paraphrased: the exact wording is the actionable part, and rewording a
    legal refusal in friendlier prose loses what makes it actionable. */
 pre.verbatim {
   margin: 12px 0 0; padding: 12px 14px; overflow-x: auto;
-  white-space: pre-wrap; border: 1px solid var(--line);
-  background: var(--surface-3); border-radius: 6px;
+  white-space: pre-wrap; border: 1px solid var(--line-soft);
+  background: var(--surface-3); border-radius: 8px;
   font-family: var(--mono); font-size: 11.5px; line-height: 1.65; color: var(--body);
 }
 
-/* -- Badges ----------------------------------------------- */
+/* -- Badges — rounded-full, tinted-accent form ------------- */
 .badge {
   display: inline-flex; align-items: center; gap: 5px;
-  border: 1px solid var(--line); color: var(--muted);
-  border-radius: 4px; padding: 2px 7px;
-  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em;
+  border: 1px solid var(--line); background: rgba(255, 255, 255, 0.03); color: var(--muted);
+  border-radius: 999px; padding: 2px 8px;
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
 }
-.badge.good { border-color: var(--good-dim); color: var(--good); }
-.badge.warn { border-color: var(--warn-dim); color: var(--warn); }
-.badge.stop { border-color: var(--crit-dim); color: var(--crit); }
-.badge.accent { border-color: var(--accent-dim); color: var(--accent); }
+.badge.good { border-color: var(--good-dim); background: var(--good-wash); color: var(--good); }
+.badge.warn { border-color: var(--warn-dim); background: var(--warn-wash); color: var(--warn); }
+.badge.stop { border-color: var(--crit-dim); background: var(--crit-wash); color: var(--crit); }
+.badge.accent { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--accent-soft); }
 .badgerow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 
 /* -- Tables ----------------------------------------------- */
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
 table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
 th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
-thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 500; background: var(--surface-2); }
+thead th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #B0B0B0; font-weight: 500; background: var(--surface-2); }
 tbody tr:last-child td { border-bottom: 0; }
 tbody tr.clickable { cursor: pointer; }
 tbody tr.clickable:hover { background: var(--surface-2); }
 td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
 tr.selected { background: var(--accent-wash); }
-tfoot td { font-family: var(--mono); color: var(--ink); border-top: 1px solid var(--line); }
+/* The total row is the line an auditor signs: orange, bold, on the header
+   surface — the same move the house tables make on their key rows. */
+tfoot td { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; border-top: 1px solid var(--line); background: var(--surface-2); }
 
 /* -- Definition lists ------------------------------------- */
 dl.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 12px 22px; margin: 0; }
@@ -194,34 +233,38 @@ dl.fields dd .mono { font-size: 12px; }
 
 /* -- Buttons ---------------------------------------------- */
 .btn {
-  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  border-radius: 6px; padding: 8px 14px; font-size: 13px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--bright);
+  border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 500;
 }
-.btn:hover { border-color: var(--accent-dim); background: var(--surface-3); }
-.btn.primary { border-color: var(--accent-dim); background: var(--accent-wash); color: var(--accent); font-weight: 500; }
-.btn.primary:hover { background: rgba(184,135,63,0.18); }
-.btn.small { padding: 5px 10px; font-size: 12px; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:hover { border-color: var(--line-hover); background: var(--surface-2); color: var(--ink); }
+/* The gradient is reserved for the primary action and hero numbers. */
+.btn.primary { border: 0; background: linear-gradient(90deg, #CD3D00, #FF6321); color: #fff; font-weight: 600; padding: 9px 16px; }
+.btn.primary:hover { background: linear-gradient(90deg, #E04500, #FF7331); box-shadow: 0 4px 12px rgba(255, 99, 33, 0.16); }
+.btn.small { padding: 5px 10px; font-size: 11.5px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 .btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
 /* -- Forms ------------------------------------------------ */
 .field { display: flex; flex-direction: column; gap: 5px; }
 .field > label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
 .field input, .field select {
-  background: var(--surface-3); border: 1px solid var(--line); border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
   padding: 8px 10px; font-size: 13px; color: var(--ink);
 }
+.field input:hover, .field select:hover { border-color: var(--line-hover); }
+.field input:focus, .field select:focus { border-color: var(--accent-dim); }
 .opt {
-  display: block; border: 1px solid var(--line); border-radius: 8px;
-  padding: 12px 14px; background: var(--surface-2); cursor: pointer;
+  display: block; border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; background: var(--surface); cursor: pointer;
 }
 .opt + .opt { margin-top: 8px; }
-.opt:hover { border-color: var(--faint); }
+.opt:hover { border-color: var(--line-hover); }
 .opt.chosen { border-color: var(--accent-dim); background: var(--accent-wash); }
 .opt-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
 .opt-head .name { font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
 .opt-why { margin: 7px 0 0 25px; font-size: 12.5px; color: var(--muted); max-width: 74ch; }
 .opt input { accent-color: var(--accent); }
+input[type="range"] { accent-color: var(--accent); background: transparent; border: 0; padding: 0; }
 
 /* -- Stage / run progress --------------------------------- */
 .stage { display: grid; grid-template-columns: 22px 1fr auto; gap: 12px; align-items: start; padding: 9px 0; border-bottom: 1px solid var(--line-soft); }
@@ -234,12 +277,12 @@ dl.fields dd .mono { font-size: 12px; }
 .stage .t { font-family: var(--mono); font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
 .substages { margin: 6px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 3px; }
 .substages li { font-size: 12px; color: var(--faint); display: flex; gap: 8px; align-items: baseline; }
-.substages li.done { color: var(--muted); } .substages li.active { color: var(--accent); }
+.substages li.done { color: var(--muted); } .substages li.active { color: var(--accent-soft); }
 
-.bar { height: 4px; border-radius: 999px; background: var(--surface-3); overflow: hidden; }
-.bar > i { display: block; height: 100%; background: var(--accent); transition: width 0.18s linear; }
+.bar { height: 5px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--grad); border-radius: 999px; transition: width 0.18s linear; }
 
-.eventlog { max-height: 220px; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-3); padding: 10px 12px; font-family: var(--mono); font-size: 11.5px; line-height: 1.8; }
+.eventlog { max-height: 220px; overflow-y: auto; border: 1px solid var(--line-soft); border-radius: 8px; background: var(--surface-3); padding: 10px 12px; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
 .eventlog div { color: var(--muted); }
 .eventlog div b { color: var(--body); font-weight: 500; }
 .eventlog div .ts { color: var(--faint); }
@@ -248,8 +291,8 @@ dl.fields dd .mono { font-size: 12px; }
 .claim { padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
 .claim:last-child { border-bottom: 0; }
 .claim-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-.claim-head .n { font-family: var(--mono); font-size: 13px; color: var(--accent); font-variant-numeric: tabular-nums; }
-.claim-head .preamble { color: var(--ink); font-weight: 500; }
+.claim-head .n { font-family: var(--mono); font-size: 13px; color: var(--accent); font-variant-numeric: tabular-nums; font-weight: 600; }
+.claim-head .preamble { color: var(--ink); font-weight: 500; letter-spacing: -0.1px; }
 .claim .trans { margin: 3px 0 0 24px; font-size: 12.5px; color: var(--muted); }
 .claim ul { margin: 6px 0 0; padding: 0 0 0 24px; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 /* A claim reads as a hanging block: the preamble sets the margin and each
@@ -257,11 +300,11 @@ dl.fields dd .mono { font-size: 12px; }
    to scan, which is most of what reading a claim set is. */
 .claim li { padding-left: 2.4rem; text-indent: -2.4rem; font-size: 13px; line-height: 1.62; }
 .claim li .el { font-family: var(--mono); color: var(--muted); }
-.claim mark { background: var(--accent-wash); color: var(--accent); border-radius: 2px; padding: 0 2px; }
+.claim mark { background: var(--accent-wash); color: var(--accent-soft); border-radius: 3px; padding: 0 2px; }
 .numeral { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--accent); }
 
 /* -- Critic ring ------------------------------------------ */
-.round { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.round { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
 .round + .round { margin-top: 14px; }
 .round-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 11px 16px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
 .round-head h4 { margin: 0; font-size: 13px; color: var(--ink); font-weight: 600; }
@@ -282,26 +325,29 @@ dl.fields dd .mono { font-size: 12px; }
 .hbars { display: flex; flex-direction: column; gap: 9px; }
 .hbar { display: grid; grid-template-columns: 210px 1fr 92px; gap: 12px; align-items: center; font-size: 12.5px; }
 .hbar .nm { color: var(--body); }
-.hbar .track { height: 15px; background: #20202a; border-radius: 3px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
-.hbar .fill { height: 100%; background: #7d6c4d; }
-.hbar.hi .fill { background: var(--accent); }
+.hbar .track { height: 15px; background: var(--surface-2); border-radius: 4px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line-soft); }
+.hbar .fill { height: 100%; background: #7A5A42; }
+.hbar.hi .fill { background: var(--grad); }
 .hbar.good .fill { background: var(--good); }
 .hbar .val { font-family: var(--mono); font-size: 12px; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 640px) { .hbar { grid-template-columns: 118px 1fr 70px; gap: 8px; font-size: 11.5px; } }
 
-/* -- Metric tiles ----------------------------------------- */
+/* -- Metric tiles — the house stat-tile grammar: a bordered card
+   whose hero number is big, mono, and orange. --------------- */
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
-.tile { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 13px 15px; }
-.tile .v { font-family: var(--mono); font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.tile .s { font-family: var(--mono); font-size: 11px; color: var(--accent); margin-top: 1px; }
-.tile .l { font-size: 12px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+.tile { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 14px 16px; }
+.tile .v { font-family: var(--mono); font-size: 26px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1.15; }
+.tile .s { font-family: var(--mono); font-size: 11px; color: var(--accent-soft); margin-top: 1px; }
+.tile .l { font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
 
-/* -- Result tabs ------------------------------------------ */
-.rtabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
-.rtabs button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 9px 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
-.rtabs button:hover { color: var(--body); }
-.rtabs button[aria-current="true"] { color: var(--ink); border-bottom-color: var(--accent); }
-.rtabs .c { font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-left: 5px; }
+/* -- Result tabs — same underline grammar as the view bar --- */
+.rtabs { display: flex; gap: 2px; overflow-x: auto; border-bottom: 1px solid var(--line-soft); margin-bottom: 18px; }
+.rtabs button { position: relative; background: none; border: 0; padding: 9px 12px; font-size: 12.5px; font-weight: 500; letter-spacing: -0.1px; color: var(--muted); white-space: nowrap; transition: color 0.2s var(--ease); }
+.rtabs button::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--accent); opacity: 0; transition: opacity 0.2s var(--ease); }
+.rtabs button:hover { color: var(--ink); }
+.rtabs button[aria-current="true"] { color: var(--ink); }
+.rtabs button[aria-current="true"]::after { opacity: 1; }
+.rtabs .c { font-family: var(--mono); font-size: 10px; color: var(--faint); margin-left: 5px; }
 
 /* -- Prose (gaps, package) -------------------------------- */
 .prose { max-width: 78ch; font-size: 13px; }
@@ -312,27 +358,46 @@ dl.fields dd .mono { font-size: 12px; }
 .prose ul, .prose ol { margin: 0 0 10px; padding-left: 20px; }
 .prose li { margin-bottom: 6px; color: var(--muted); }
 .prose li b, .prose p b { color: var(--body); font-weight: 500; }
-.prose code { font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--surface-3); padding: 1px 4px; border-radius: 3px; }
+.prose code { font-family: var(--mono); font-size: 12px; color: var(--accent-soft); background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
 
-/* -- Drawing sheet ---------------------------------------- */
-.sheet { background: #ffffff; border-radius: 4px; padding: 8px; overflow-x: auto; }
+/* -- Drawing sheet — the one deliberately light surface: a §1.84 sheet is
+   white paper, and rendering it dark would falsify what the lint measures. */
+.sheet { background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 10px; overflow-x: auto; }
 .sheet svg { display: block; width: 100%; height: auto; max-width: 780px; margin: 0 auto; }
 
 /* -- Footer ----------------------------------------------- */
-.foot { border-top: 1px solid var(--line); margin-top: 44px; padding: 20px; font-size: 12px; color: var(--faint); max-width: 100ch; }
+.foot { border-top: 1px solid var(--line-soft); margin-top: 44px; padding: 20px; font-size: 11.5px; color: var(--faint); max-width: 100ch; }
 .foot p { margin: 0 0 8px; }
 .foot b { color: var(--muted); font-weight: 500; }
+
+/* -- Motion ------------------------------------------------ */
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes pulse-crit {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  50% { box-shadow: 0 6px 24px rgba(239, 68, 68, 0.14); }
+}
 
 @media (max-width: 700px) {
   .topbar-row { padding: 10px 14px; }
   .main { padding: 18px 14px 50px; }
   .critic { border-right: 0; border-bottom: 1px solid var(--line-soft); }
 }
+
+/* Purposeful motion only, and none of it for someone who asked for none. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 </style>
 
 <div class="app">
   <header class="topbar">
     <div class="topbar-row">
+      <div class="applogo" aria-hidden="true">§</div>
       <div class="brand">
         <span class="eyebrow">Ixana · patentgen · prototype</span>
         <h1>AI Lawyer — patent drafting run</h1>
@@ -983,8 +1048,11 @@ function readURL() {
   if (v && VIEWS.some((x) => x.id === v)) S.view = v;
   const src = p.get('src');
   if (src && SOURCES.some((x) => x.id === src)) S.src = src;
+  // Validated against the known result tabs: an unknown value falls back to
+  // `gaps` instead of being kept, so a bogus deep link neither renders a
+  // blank tab nor gets written back into the URL as if it were real.
   const tab = p.get('tab');
-  if (tab) S.tab = tab;
+  if (tab && RESULT_TABS.some((x) => x.id === tab)) S.tab = tab;
   const c = p.get('corpus');
   if (c === 'wide' || c === 'narrow') S.corpus = c;
   const st = p.get('status');
@@ -1018,7 +1086,13 @@ function go(view, extra) {
   S.view = view;
   if (extra) Object.assign(S, extra);
   render();
-  document.getElementById('view').focus({ preventScroll: true });
+  const host = document.getElementById('view');
+  // Replay the entry rise only on a view change — never on the per-keystroke
+  // re-renders of the intake form, which would flicker under a typist.
+  host.classList.remove('enter');
+  void host.offsetWidth;
+  host.classList.add('enter');
+  host.focus({ preventScroll: true });
   window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
 }
 
@@ -1160,7 +1234,7 @@ function viewIntake() {
     (info.mayProcess || S.intake.override.trim().length > 0);
 
   return '<div class="stack">' +
-    '<div class="alert stop" role="alert">' +
+    '<div class="alert stop gate" role="alert">' +
       '<h3 class="mono">RUN REFUSED — no intake decision on record</h3>' +
       '<p>Nothing may be transmitted to a model or to BigQuery until a human answers one question: ' +
       '<b style="color:var(--ink)">is this document already public?</b></p>' +
@@ -1456,7 +1530,7 @@ function viewResult() {
       badge('critics ' + rev.stop, rev.stop === 'clean' ? 'good' : 'warn') +
       badge('filable', 'good') +
     '</div>' +
-    '<h2 style="margin:0 0 4px;font-size:19px;color:var(--ink);font-weight:600;letter-spacing:-0.012em">' +
+    '<h2 style="margin:0 0 4px;font-size:20px;color:var(--ink);font-weight:600;letter-spacing:-0.3px">' +
       'DIS-0416 — Contact-gated wake and low-rate keying for a body-coupled wearable link</h2>' +
     '<dl class="fields" style="margin-top:14px">' +
       '<div><dt>run</dt><dd class="mono" style="font-size:12px">20260826T091412Z-4f1c8ad2</dd></div>' +
@@ -1499,8 +1573,9 @@ function tabGaps() {
       '<h4>Concepts that cannot be claimed yet</h4>' +
       GAPS.blockedConcepts.map((c) =>
         '<div class="panel panel-pad" style="margin-bottom:10px">' +
-        '<p style="color:var(--ink);margin-bottom:8px">' + c.statement + '</p>' +
-        '<p style="margin-bottom:6px"><b>Support level:</b> <code>' + c.support + '</code></p>' +
+        '<p style="color:var(--ink);margin-bottom:10px">' + c.statement + '</p>' +
+        '<div style="margin-bottom:8px"><div class="kicker" style="margin-bottom:3px">§112(a) support</div>' +
+        '<code>' + c.support + '</code></div>' +
         '<p style="margin:0"><b>Why:</b> ' + c.why + '</p></div>').join('') +
 
       '<h4>Questions for the inventor</h4>' +
@@ -1715,8 +1790,8 @@ function figureSVG() {
   // The control line to the disconnect switch. A finer dash than the device
   // outline, so a wire routed near the boundary does not read as a second one.
   const CTL = 'fill:none;stroke:#111;stroke-width:1.2;stroke-dasharray:2 3';
-  const TX = 'fill:#111;font-family:Inter,system-ui,sans-serif;font-size:11.5px';
-  const NUM = 'fill:#111;font-family:Inter,system-ui,sans-serif;font-size:13px;font-weight:600';
+  const TX = 'fill:#111;font-family:Arial,Helvetica,sans-serif;font-size:11.5px';
+  const NUM = 'fill:#111;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:600';
   const box = (x, y, w, h, label, sub) =>
     '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" style="' + S1 + '"/>' +
     '<text x="' + (x + w / 2) + '" y="' + (y + h / 2 + (sub ? -4 : 4)) + '" text-anchor="middle" style="' + TX + '">' + label + '</text>' +
@@ -2051,6 +2126,8 @@ function viewRuns() {
   return '<div class="stack">' +
     '<p class="lede">Seven runs. Browsing them is free and does not need the backend running at all, because the read plane reads the run directories straight off disk. ' +
     '<b>The three worth opening are not the successful one.</b></p>' +
+    '<p class="note"><span class="mono" style="color:var(--body)">507 tests</span> across the pipeline and the web UI — 447 Python, 60 frontend. ' +
+    'The refusal below, the AND-of-clearances, and the nested token accounting are all behaviours those tests pin down.</p>' +
 
     '<div class="tablewrap"><table><thead><tr>' +
     '<th>Run</th><th>State</th><th class="num">Duration</th><th class="num">Cost</th><th class="num">Claims</th><th>Package</th><th>What it shows</th>' +
@@ -2152,6 +2229,7 @@ document.getElementById('foot').innerHTML =
 
 readURL();
 render();
+document.getElementById('view').classList.add('enter');
 // `?play=1` is a live run, not a paused one. Without this the flag would
 // render the Pause button over a timer that was never started.
 if (S.view === 'run' && S.run.playing) startRun();
