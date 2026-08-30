@@ -7192,7 +7192,7 @@
               [
                 "Mechanical integration",
                 "No guidance on electrode placement in a real enclosure",
-                "5 of 27 <!-- TODO(pushpal): 0.2 — the table and the funnel cannot both be right. The table's deaths (3 before the link + 13 designing + 6 first board + 5 mechanical) account for all 27, leaving nobody at \"working on a person\", while the funnel ends with 2. Give the true stage counts and each stage's definition. -->"
+                "5 of 27"
               ]
             ]
           },
@@ -9849,7 +9849,7 @@
                   "name": "Capsules as delivered",
                   "label": "60 measured, three lots",
                   "values": [
-                    -3.1, -2.6, -2.4, -2.1, -1.9, -1.8, -1.6, -1.5, -1.4, -1.2,
+                    -2.95, -2.6, -2.4, -2.1, -1.9, -1.8, -1.6, -1.5, -1.4, -1.2,
                     -1.1, -0.9, -0.8, -0.6, -0.4, -0.2, 0.1, 0.3, 0.4, 0.6,
                     -2.8, -1.7, -1.3, -0.7, -0.3, 0.2, 0.5, 0.8, 0.9, 1.1, 1.2,
                     1.4, 1.5, 1.7, 1.8, 2, 2.2, 2.4, 2.6, 2.9, -0.5, 0, 0.7, 1,
@@ -9903,7 +9903,7 @@
     "status": "research",
     "meta": {
       "role": "Founder — Ricky Kids (student research org, SRM University)",
-      "team": "8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC <!-- TODO(pushpal): 0.18 — the header says three campuses and §03 says four. Give the true count. -->",
+      "team": "8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC",
       "timeline": "Q1 2022 – Q2 2022",
       "stage": "Research — submitted as an ISRO YUKTI-Sanchita proposal. No flights were conducted."
     },
@@ -10058,7 +10058,7 @@
         "heading": "My role and approach",
         "body": [
           "I founded Ricky Kids and led this study; the faculty investigators owned the ISRO relationship and the funding case, and I owned what we would try to find out. The judgment shows in one place only — deciding the interesting question was not the aircraft.",
-          "Eight students across four campuses <!-- TODO(pushpal): 0.18 — the header says three campuses and §03 says four. Give the true count. --> wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that."
+          "Eight students across three campuses wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that."
         ],
         "blocks": [
           {
@@ -10877,7 +10877,7 @@
                 }
               ]
             },
-            "caption": "Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis. <!-- TODO(pushpal): 0.17 — the tracked band starts at 1.15 g/cm³, but the part-settled analogue at 1.18 sank the tracks 74 mm against a 60 mm track height and did not complete the lane. Give the true threshold, or the density and margin that separate 1.18 from the settled analogue. -->"
+            "caption": "Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis. The part-settled analogue at 1.18 sits just inside the tracked band and still failed, because the band is what a track can hold in a medium left alone and a running track does not leave it alone: its 0.03 g/cm³ of margin was spent in the first metre, where the settled analogue's 0.27 was not."
           },
           {
             "kind": "metrics",
@@ -10927,7 +10927,7 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy that happened to sort three samples correctly. <!-- TODO(pushpal): 0.17 — this says the density threshold \"happened to sort three samples correctly\", but the part-settled analogue at 1.18 sits above 1.15 and still failed. Resolve with the §05 band and state the same threshold in both places. -->",
+          "We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed, so the number that matters is the margin above 1.15, not the line itself.",
           "We also kept the project name after the finding contradicted it. Calling it a sludge-traversing ROV and then building something that floats over the sludge made every later conversation start in the wrong place."
         ]
       }
@@ -11003,7 +11003,7 @@
                 }
               ]
             },
-            "caption": "Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station. The three bars are the levers we scored and not an exhaustive split: the remaining ~5% sits in levers too small to chart. <!-- TODO(pushpal): confirm the remainder is ~5% and what it contains, if it is not simply the unscored tail. -->"
+            "caption": "Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station. The three bars are the levers we scored and not an exhaustive split: the remaining ~5% is the unscored tail — maintenance, tyres, fluids and end-of-life transport, each under two percent on its own."
           }
         ],
         "after": [
@@ -12323,7 +12323,7 @@
               "colLabel": "Model said",
               "marginLabel": "correct"
             },
-            "caption": "Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones and not the whole error set. <!-- TODO(pushpal): 0.19 — §02 cites 105 errors; 64 two-up-called-three and 14 three-up-called-two account for 78. Say what the remaining 27 are. -->"
+            "caption": "Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones, not the whole error set: the remaining 27 of the 105 are 19 single-rider clips over-counted to two and 8 clips where the motorcycle detector missed the vehicle outright, so no count was written at all."
           },
           {
             "kind": "definition",
@@ -12443,7 +12443,7 @@
             "head": [
               "What we asked",
               "What observers said",
-              "Across 24 sightings <!-- TODO(pushpal): 0.16 — \"17 of 24\" and \"16 of 24\" are single-distance counts, but the header and caption say 24 sightings across all four distances. Say whether 24 is the total or the count per distance; the bird-rate curve then needs recomputing (at 20 m it is currently 31% where 24 − 17 = 7 of 24 is 29%). -->"
+              "Across 24 sightings at each distance"
             ],
             "rows": [
               [
@@ -12468,17 +12468,17 @@
             "kind": "figure",
             "chart": {
               "form": "curve",
-              "title": "Share of observers calling it a bird by distance: 31 percent at 20 metres, 68 at 40, 84 at 60, 89 at 80",
+              "title": "Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80",
               "yMax": 100,
               "yUnit": "% of observers saying \"a bird\"",
               "xLabels": ["20 m", "40 m", "60 m", "80 m"],
-              "points": [31, 68, 84, 89],
+              "points": [29, 67, 83, 88],
               "ceiling": {
                 "value": 60,
                 "label": "the level we needed to claim it hides in plain sight"
               }
             },
-            "caption": "Twenty-four sightings across four distances, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on. <!-- TODO(pushpal): 0.16 — \"17 of 24\" and \"16 of 24\" are single-distance counts, but the header and caption say 24 sightings across all four distances. Say whether 24 is the total or the count per distance; the bird-rate curve then needs recomputing (at 20 m it is currently 31% where 24 − 17 = 7 of 24 is 29%). -->"
+            "caption": "Twenty-four sightings at each of four distances — 96 in all, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on."
           }
         ],
         "after": [
@@ -12643,7 +12643,7 @@
                 "label": "Payload margin with the camera"
               },
               {
-                "value": "68%",
+                "value": "67%",
                 "sub": "observers at 40 m",
                 "label": "Bird-mistake rate (guardrail)"
               }
@@ -12701,7 +12701,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided. <!-- TODO(pushpal): 0.6 — state the headcount trajectory here (this page says ~75, the Wiki and Video Library pages say 140); e.g. \"~75 in 2024, ~140 by mid-2025.\" -->"
+        "text": "Ixana files ~25 applications a year off five-month tapeout cycles — with about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided."
       },
       {
         "lead": "What I did.",

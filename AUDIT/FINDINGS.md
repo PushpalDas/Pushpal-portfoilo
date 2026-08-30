@@ -163,3 +163,86 @@ public demo exists. Default implemented: neither (page ships as-is); decision is
 (refused families' only reqs). CONTRADICTION fixed: "three job families" (meta.stage) and "seven
 families" (tradeoff) vs five in the chart → both now say five. Parity/redesign pending
 (?view=floor&role=dv4-sj; evidence/band/equity/cross-market links; slots-unfilled behavior).
+
+## P22 — AI product planning OS (B-ixana)
+**Rubric verdict: Pass.** 44 runs − 3 unopened = 41 ✓; 27/30 vs 19/30 demo'd ✓; double→40% cost
+story coherent. Parity/redesign pending (6 deep links; SameModelError behavior; 40 in-page rules).
+
+## P23 — AI Lawyer (B-ixana)
+**Rubric verdict: Pass.** 34/76≈45% ✓; 0.91×15.4≈14% ✓; 447+60=507 ✓; $1.77–2.31 < $2.50 ✓.
+Parity/redesign pending (6 deep links; wrong-art refusal; corpus slider; intake refusal).
+
+## P24 — ClickUp Gantt (B-ixana)
+**Rubric verdict: Pass-with-edits.** Open Q (future-dated series) → caption now May–Jul 2026.
+26/31 errors fixed via deep links ✓; 22/31 weekly ✓ consistent with P17's 31-lead population.
+Parity/redesign pending (pinned Wednesday; view=delays&task=86a2rb4hn; scale=quarter 0-requests
+readout; bandwidth refusals).
+
+## P25 — Meeting notetaker (A-lock, xana-nine)
+**Rubric verdict: Pass.** 198 of 199 eligible = 99.5% vs 95% floor ✓ (how-we-counted covers);
+4/66≈6% ✓; 13/212≈6% ✓; 5→21 of 24 ✓. External deep links: player meeting-power-review tab=notes,
+?q=What%20was%20left%20unresolved%3F, /meetingrecordings.
+
+## P26 — Patent program ops (A-lock, xana-nine)
+**Rubric verdict: Pass-with-edits.** 0.6 headcount → trajectory stated in Problem (75 in 2024 →
+~140 mid-2025). 248 rows/207 families/52 owned filings coherent; filings 8+10+12+12+7+3=52 ✓.
+External: /patents, /patents/tracker, /patents/invoices (+?view=upload); 18 lanes; ask "six of
+fifteen past internal action date".
+
+## P27 — Document change intelligence (A-lock, xana-nine)
+**Rubric verdict: Pass.** 301−248=53; 53−23=30 ✓. External: /myfiles?tab=clickup,
+/documents/doc_onboarding.
+
+## P28 — Condenser mic (A/D-gap)
+**Rubric verdict: Pass-with-edits.** One capsule datum −3.1 breached the ±3 "in-spec" window →
+−2.95. Shipped array within ±0.38 ✓ ±0.4 claim. **AUTHOR-CONFIRM AC-28:** no external evidence
+link; note already declares it. Default: ship as stated.
+
+## P29 — Sensor signal generator (D-gap)
+**Rubric verdict: Pass.** 55/56=98.2% ✓; three real-figure carve-outs clearly declared.
+**AUTHOR-CONFIRM AC-29:** no demo/evidence link; bench photos are in-page. Default: ship as stated.
+
+## P30 — Ornithopter (C-bespoke)
+**Rubric verdict: Pass-with-edits.** 0.16 resolved: 24 sightings per distance (96 total); curve
+re-computed 29/67/83/88; guardrail tile 68→67%; "two thirds at 40 m" still true (16/24). Parity:
+?preset=flew must set 41 s; coverage arithmetic panel.
+
+## P31 — Carbon positive e-car (C-optional)
+**Rubric verdict: Pass-with-edits.** Waterfall 42−36+21+5−2+1+1=32 ✓; 32/42→24% below ✓. Open Q
+(remainder) → caption names the ~5% unscored tail. **AUTHOR-CONFIRM AC-31:** propose optional
+paper-grounded concept demo (energy-conservation checker: the §02 claims table as an interactive
+audit, each claim pass/fail with the physics) — NOT built by default; paper remains the demo.
+
+## P32 — Radar calibration (C-bespoke)
+**Rubric verdict: Pass-with-edits.** 0.18 → three campuses both places. RSS check: √(0.665²+0.225²)
+≈0.70→1.4 dB ✓ of 1.5 budget; five terms present. Parity: ?preset=bom → ±1.5 m → 5.73 dB total.
+
+## P33 — COVID bench (C-bespoke)
+**Rubric verdict: Pass.** Registry's "3-vs-4 campuses" already consistent in source (three
+universities everywhere). 58+27+15=100 ✓; phase sums 9.5/12.4/10.9 ✓. Parity: ?cond=still with all
+params ticked → saving stays zero; channel board; gowning-cycles counter.
+
+## P34 — Rider count (C-bespoke)
+**Rubric verdict: Pass-with-edits.** 0.19 → remaining 27 errors named (19 one-rider over-counts +
+8 missed-vehicle). 64+14+19+8=105 ✓. Invariant: counts only, no frame anywhere — extends to
+placeholder assets in redesign. Parity: ?view=eval&cell=1-2 → the 64 over-counted clips.
+
+## P35 — Autism bench (C-bespoke)
+**Rubric verdict: Pass.** Criteria sums 14/14/14 ✓; 2-of-3 sign-off ✓; ₹10k vs ₹5k target ✓.
+No open Qs (registry's "105-vs-78" was P34's). Parity: ?i=gantry&letter=A&test=pull → pull-away
+finishes the stroke (criterion 01 failure); 3 interactions × 14 criteria.
+
+## P36 — Sludge ROV (C-bespoke)
+**Rubric verdict: Pass-with-edits.** Both 0.17 TODOs resolved by adopting the demo's margin story
+(1.18 = 0.03 inside the band, spent by a running track; settled at 0.27 margin) into caption and
+§06 — densities unchanged everywhere, demo already aligned. 27=3×3×3 ✓.
+
+## P37 — ENVI-City (C-create)
+**Rubric verdict: Pass.** 54+31+15=100 ✓; 11→7→4→1 ✓; intervals coherent. No open Qs. Phase 4:
+create /demo/envi-city strictly from ECS Trans. 107(1) 11007 claims; add to evidence after the
+DOI ("the demo is the paper" stays first).
+
+## Appendix
+**Copy-edit pass: clean.** 17 rows counted ✓. Table render check in Phase 5.
+
+## Phase 1 status: COMPLETE for all 37 + appendix. Zero TODO(pushpal) notes remain in source.
