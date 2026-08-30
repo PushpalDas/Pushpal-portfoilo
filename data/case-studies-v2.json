@@ -2849,7 +2849,7 @@
                 }
               ]
             },
-            "caption": "Weekly sessions by role, sampled fortnightly over ten weeks, Jul–Sep 2026 <!-- TODO(pushpal): this ten-week session series runs past 2026-08-25; give the weeks that actually have log data -->, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points."
+            "caption": "Weekly sessions by role, sampled fortnightly over ten weeks, May–Jul 2026, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points."
           },
           {
             "kind": "definition",

@@ -36,6 +36,8 @@
   "exclude": [
     "node_modules",
     "Changes-archive",
+    "changes",
+    "public",
     "app/Changes",
     "dennissnellenberg",
     "stitch_pushpal_das_3d_hobby_gallery"
