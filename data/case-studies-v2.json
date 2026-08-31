@@ -10460,7 +10460,7 @@
           },
           {
             "kind": "para",
-            "text": "Cutting the matched-pair product is what set the tier, and it is the one decision that still costs us sales. A pair has to match in more than level: the trim makes two microphones agree at 1 kHz and says nothing about whether they agree at 8 kHz or thirty degrees off axis, which is exactly what a stereo pair is for. Selling pairs honestly would have meant screening capsules for response shape as well as sensitivity — a second rejection criterion, and inventory held while a partner is found for each unit. We ship singles, and the review that costs us most says the microphone is very good and cannot be bought twice."
+            "text": "Cutting the matched-pair product is what set the tier, and it still costs us sales. A pair has to match in more than level: the trim makes two microphones agree at 1 kHz and says nothing about 8 kHz or thirty degrees off axis — exactly what a stereo pair is for. Selling pairs honestly meant screening for response shape as well as sensitivity: a second rejection criterion, and inventory held while a partner is found for each unit. We ship singles, and the review that costs us most says the microphone is very good and cannot be bought twice."
           }
         ]
       },
@@ -10468,9 +10468,9 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The acoustics consultant on the team told me the trim was dishonest, and he had a real argument. I was calibrating the number we print, at one frequency, against a reference — and a capsule wrong in the shape of its response rather than in its level can be trimmed until it reports correct sensitivity and still sound wrong. His phrase was that I had built a device for making the datasheet true.",
+          "The acoustics consultant told me the trim was dishonest, and he had a real argument. I was calibrating the number we print, at one frequency, against a reference — and a capsule wrong in the shape of its response can be trimmed to report correct sensitivity and still sound wrong. His phrase: I had built a device for making the datasheet true.",
           "I had been defending the trim as an accuracy measure, which conceded his point without noticing. So I took his frame: if a trim can move a bad capsule into spec, the problem is the acceptance test, not the trim. I changed what acceptance means — from sensitivity inside a window to the response curve inside an envelope at five frequencies — so a capsule wrong in shape fails whatever the trim is set to.",
-          "He agreed, then added a rule I had not planned to accept. A capsule needing more than half the trim range is rejected rather than trimmed in: the trim may correct, never rescue. That rule takes capsule acceptance from about 91% of a delivered lot to 74%, and the scrapped parts are ones the supplier is entitled to call good. It is the most expensive sentence on this page and I would not now ship without it."
+          "He agreed, then added a rule I had not planned to accept: a capsule needing more than half the trim range is rejected rather than trimmed in — the trim may correct, never rescue. That takes capsule acceptance from about 91% of a delivered lot to 74%, and the scrapped parts are ones the supplier is entitled to call good. It is the most expensive sentence on this page and I would not now ship without it."
         ]
       },
       {
@@ -10739,7 +10739,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "The envelope test checks five frequencies, and I chose them because they were the ones our rig could sweep quickly. A capsule can pass all five and misbehave between them, which is precisely the failure the envelope was introduced to catch — so the test samples the argument rather than making it. A continuous sweep against a mask would have cost seconds per unit on a bench already running.",
+          "The envelope test checks five frequencies, chosen because our rig could sweep them quickly. A capsule can pass all five and misbehave between them — precisely the failure the envelope exists to catch — so the test samples the argument rather than making it. A continuous sweep against a mask would have cost seconds per unit on a bench already running.",
           "I also characterised on-axis response properly, published a tolerance for it, and never did the same off axis. Fixing the pattern to cardioid was right, but off-axis behaviour is most of what someone in an untreated room hears, so the reviews that go badly are about rooms and I gave those reviewers no published number to check their impression against."
         ]
       }
