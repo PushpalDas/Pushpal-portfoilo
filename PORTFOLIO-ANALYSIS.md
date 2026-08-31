@@ -1,64 +1,77 @@
-# Product Portfolio — Pushpal Das (full case-study export)
+# Portfolio — complete analysis export
 
-_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-09-01. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
+_Every product in the portfolio at maximum available depth, compiled from the repository on 2026-09-01. Regenerate with `python scripts/export-analysis.py`._
+
+## Scope
+
+**Included — 37 products** plus the program-overview page: everything that files under **Silicon & systems** and **AI programs & platforms** on `/work`, which between them contain everything under **Prototypes & research** (every prototype and research entry is a product on one of the two tracks).
+
+**Excluded — 17 entries.** The earlier engineering and hardware builds that file under **Others**. They are card-level only in the source: one sentence each, no case study, no demo. Excluded at the author's instruction.
 
 ## How to read this
 
 - **Track** — `silicon` (chips, dev kits, hardware systems) or `ai` (AI programs, internal platforms, automation).
-- **Status** — `production` (shipped externally) · `internal` (shipped inside the company) · `customer-testing` · `prototype` · `research`.
-- Every case study follows the same nine-part structure, so sections are directly comparable across products.
-- **Chart data** is rendered as tables rather than images, so the underlying numbers are readable.
-- **Confidentiality notes** are quoted on each product. Several internal and silicon products state outright that certain figures are anonymised, relative, or invented placeholders for a public sample — read those before treating any number as fact.
+- **Status** — `production` (shipped externally) · `internal` (shipped inside the company) · `customer-testing` · `prototype` · `research`. Status is the maturity claim, and the case-study format changes with it.
+- **Evidence class**, on every fact in a skim layer — this is the honesty scheme, and the most important column in the file:
+  - **A** — public & verifiable: live spec pages, arXiv/DOI, patents, papers, anything demonstrable in a linked demo or video.
+  - **B** — real but protected: true, but the page cannot show the raw evidence; figures are anonymised or relative by design.
+  - **C** — reconstructed: an invented placeholder for this public sample. The page says so where it appears.
+- **Charts are exported as data tables**, not images, so the underlying numbers are readable.
+- **This is a sample portfolio.** Figures on cards and case-study pages are invented placeholders and screens are recreations, except where an entry says otherwise. Read each product's confidentiality and sample notes before treating any number as fact.
+- Each product carries, in order: the card record · the skim layer with evidence classes · the authored case study in full · the earlier long-form record where one survives · and a demo dossier — the rewrite, the design note, and the text extracted from the demo file itself.
 
 ## Index
 
-| # | Product | Company | Years | Track | Status | Domain |
-|---|---|---|---|---|---|---|
-| 1 | Wi-R Body Area Network — YR31 | Ixana | 2024 - present | silicon | production | Silicon |
-| 2 | Wi-R Dev Kits — BAN YR23 and NFE XA-NFE2001 | Ixana | 2024 - present | silicon | production | Developer hardware |
-| 3 | Ixana-Wiki — multifile RAG knowledge platform | Ixana | 2025 | ai | internal | Internal platform |
-| 4 | Dāsa — citation-grounded scripture engine | ISKCON (International Society for Krishna Consciousness) | 2026 - present | ai | research | Applied AI |
-| 5 | Wi-R Body Area Network — YR23 | Ixana | 2024 - present | silicon | production | Silicon |
-| 6 | NeuroAdapt — spike-train feature extraction for a science compiler | NeuroAdapt, IISc Bangalore | 2023 - present | ai | research | Research tooling |
-| 7 | Wi-R Near Field Electric — XA-NFE3001 | Ixana | 2024 - present | silicon | production | Silicon |
-| 8 | Wi-R Near Field Electric — XA-NFE2001 | Ixana | 2024 - 2026 | silicon | production | Silicon |
-| 9 | Accurate estimation of mineral present in soil | IIRS-ISRO, Govt. of India | 2022 | ai | internal | Remote sensing |
-| 10 | Quantum Gate Simulator — interactive 10-qubit circuit builder | Personal | 2026 - present | ai | prototype | Learning tools |
-| 11 | Procurement Orchestrator — M365-native request workflow | Ixana | 2026 | ai | customer-testing | Procurement ops |
-| 12 | WishKey — Key Management System | EEGRAB | 2023 | silicon | production | Access control |
-| 13 | Wi-R reference designs — video smartglasses and tactical headset | Ixana | 2024 - 2026 | silicon | production | Wearable systems |
-| 14 | Cost-effective smart watch | EEGRAB | 2023 | silicon | production | Consumer wearable |
-| 15 | Team performance reporting — five teams, three windows | Ixana | 2026 | ai | internal | Delivery reporting |
-| 16 | Scrum ecosystem — one workspace for sprint ceremonies | Ixana | 2026 | ai | internal | Agile tooling |
-| 17 | Flow Tracker — real-time delivery pipeline diagnostics | Ixana | 2026 | ai | internal | Engineering ops |
-| 18 | ClickUp Activity Tracker — task change audit trail | Ixana | 2026 | ai | internal | Audit tooling |
-| 19 | Video library and meeting recordings | Ixana | 2026 | ai | internal | Meeting intelligence |
-| 20 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation |
-| 21 | AI Salary Generator | Ixana | 2026 - present | ai | customer-testing | HR tooling |
-| 22 | AI product planning operating system | Ixana | 2026 | ai | internal | Planning tooling |
-| 23 | AI Lawyer — multi-agent patent drafting system | Ixana | 2026 | ai | prototype | Legal tooling |
-| 24 | ClickUp reporting and Gantt dashboard | Ixana | 2026 | ai | internal | PM tooling |
-| 25 | In-house meeting notetaker | Ixana | 2026 | ai | internal | Meeting intelligence |
-| 26 | Patent program operations | Ixana | 2026 | ai | internal | Patent operations |
-| 27 | Document change intelligence | Ixana | 2026 | ai | internal | Documentation ops |
-| 28 | Condenser microphone | EEGRAB | 2024 | silicon | production | Audio hardware |
-| 29 | Sensor signal generator | SLB | 2023 | silicon | production | Test engineering |
-| 30 | Ornithopter for surveillance | SRM UAV | 2021 - 2023 | silicon | prototype | Aerial robotics |
-| 31 | Carbon positive e-car | Ricky Kids | 2020 | silicon | research | Sustainable mobility |
-| 32 | UAV-aided weather radar calibration | NIT Tiruchirapalli  & SRM University | 2022 | silicon | research | Weather instrumentation |
-| 33 | Non-contact COVID patient monitoring | Ricky Kids | 2021 | silicon | research | Health sensing |
-| 34 | Triple riding avoidance | Ricky Kids | 2022 | ai | internal | Road safety |
-| 35 | Toys for autistic kids | Ricky Kids | 2021 - 2023 | silicon | prototype | Assistive play |
-| 36 | Sludge-traversing ROV | Ricky Kids | 2022 | silicon | research | Field robotics |
-| 37 | ENVI-City — sustainable smart city concept | Ricky Kids | 2022 | silicon | research | Urban concept |
+| # | Product | Company | Years | Track | Status | Domain | Case study | Demo |
+|---|---|---|---|---|---|---|---|---|
+| 1 | Wi-R Body Area Network — YR31 | Ixana | 2024 - present | silicon | production | Silicon | yes | external |
+| 2 | Wi-R Dev Kits — BAN YR23 and NFE XA-NFE2001 | Ixana | 2024 - present | silicon | production | Developer hardware | yes | external |
+| 3 | Ixana-Wiki — multifile RAG knowledge platform | Ixana | 2025 | ai | internal | Internal platform | yes | external |
+| 4 | Dāsa — citation-grounded scripture engine | ISKCON (International Society for Krishna Consciousness) | 2026 - present | ai | research | Applied AI | yes | — |
+| 5 | Wi-R Body Area Network — YR23 | Ixana | 2024 - present | silicon | production | Silicon | yes | external |
+| 6 | NeuroAdapt — spike-train feature extraction for a science compiler | NeuroAdapt, IISc Bangalore | 2023 - present | ai | research | Research tooling | yes | internal |
+| 7 | Wi-R Near Field Electric — XA-NFE3001 | Ixana | 2024 - present | silicon | production | Silicon | yes | external |
+| 8 | Wi-R Near Field Electric — XA-NFE2001 | Ixana | 2024 - 2026 | silicon | production | Silicon | yes | external |
+| 9 | Accurate estimation of mineral present in soil | IIRS-ISRO, Govt. of India | 2022 | ai | internal | Remote sensing | — | — |
+| 10 | Quantum Gate Simulator — interactive 10-qubit circuit builder | Personal | 2026 - present | ai | prototype | Learning tools | yes | internal |
+| 11 | Procurement Orchestrator — M365-native request workflow | Ixana | 2026 | ai | customer-testing | Procurement ops | yes | internal |
+| 12 | WishKey — Key Management System | EEGRAB | 2023 | silicon | production | Access control | yes | external |
+| 13 | Wi-R reference designs — video smartglasses and tactical headset | Ixana | 2024 - 2026 | silicon | production | Wearable systems | yes | external |
+| 14 | Cost-effective smart watch | EEGRAB | 2023 | silicon | production | Consumer wearable | yes | — |
+| 15 | Team performance reporting — five teams, three windows | Ixana | 2026 | ai | internal | Delivery reporting | yes | internal |
+| 16 | Scrum ecosystem — one workspace for sprint ceremonies | Ixana | 2026 | ai | internal | Agile tooling | yes | internal |
+| 17 | Flow Tracker — real-time delivery pipeline diagnostics | Ixana | 2026 | ai | internal | Engineering ops | yes | external |
+| 18 | ClickUp Activity Tracker — task change audit trail | Ixana | 2026 | ai | internal | Audit tooling | yes | internal |
+| 19 | Video library and meeting recordings | Ixana | 2026 | ai | internal | Meeting intelligence | yes | external |
+| 20 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation | yes | — |
+| 21 | AI Salary Generator | Ixana | 2026 - present | ai | customer-testing | HR tooling | yes | internal |
+| 22 | AI product planning operating system | Ixana | 2026 | ai | internal | Planning tooling | yes | internal |
+| 23 | AI Lawyer — multi-agent patent drafting system | Ixana | 2026 | ai | prototype | Legal tooling | yes | internal |
+| 24 | ClickUp reporting and Gantt dashboard | Ixana | 2026 | ai | internal | PM tooling | yes | internal |
+| 25 | In-house meeting notetaker | Ixana | 2026 | ai | internal | Meeting intelligence | yes | external |
+| 26 | Patent program operations | Ixana | 2026 | ai | internal | Patent operations | yes | external |
+| 27 | Document change intelligence | Ixana | 2026 | ai | internal | Documentation ops | yes | external |
+| 28 | Condenser microphone | EEGRAB | 2024 | silicon | production | Audio hardware | yes | — |
+| 29 | Sensor signal generator | SLB | 2023 | silicon | production | Test engineering | yes | — |
+| 30 | Ornithopter for surveillance | SRM UAV | 2021 - 2023 | silicon | prototype | Aerial robotics | yes | internal |
+| 31 | Carbon positive e-car | Ricky Kids | 2020 | silicon | research | Sustainable mobility | yes | — |
+| 32 | UAV-aided weather radar calibration | NIT Tiruchirapalli  & SRM University | 2022 | silicon | research | Weather instrumentation | yes | internal |
+| 33 | Non-contact COVID patient monitoring | Ricky Kids | 2021 | silicon | research | Health sensing | yes | internal |
+| 34 | Triple riding avoidance | Ricky Kids | 2022 | ai | internal | Road safety | yes | internal |
+| 35 | Toys for autistic kids | Ricky Kids | 2021 - 2023 | silicon | prototype | Assistive play | yes | internal |
+| 36 | Sludge-traversing ROV | Ricky Kids | 2022 | silicon | research | Field robotics | yes | internal |
+| 37 | ENVI-City — sustainable smart city concept | Ricky Kids | 2022 | silicon | research | Urban concept | yes | internal |
 
 ## Distribution
 
-- **Total products:** 37 (plus 17 engineering/hardware builds, in the appendix)
+- **Products exported:** 37 (+ 1 program overview). **17 engineering builds excluded.**
 - **By track:** ai 20 · silicon 17
 - **By status:** internal 14 · production 10 · research 7 · prototype 4 · customer-testing 2
+- **Prototypes & research:** 11 — silicon 7 · ai 4
 - **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli  & SRM University 1
 - **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Procurement ops 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
+- **With an authored case study:** 36 of 37
+- **With a demo:** 30 (17 interactive recreations hosted here, the rest external)
 
 ---
 
@@ -74,16 +87,30 @@ _Complete export of every product and its case study, compiled from `app/work/co
 | Track | silicon |
 | Domain | Silicon |
 | Status | production |
+| Tier | 1 |
+| Card image | `Image__2_.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–present · Silicon |
 | Role | Product owner of the gen-2 definition — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the YR23 program |
 | Timeline | Jun 2024 – Nov 2025 |
 | Stage | In production — the higher-rate part on the BAN line, alongside YR23 |
-| Link | https://www.ixana.ai/products/chips/wi-r-ban |
+| Demo | https://www.ixana.ai/products/chips/wi-r-ban |
+| External link | https://www.ixana.ai/products/chips/wi-r-ban |
 
 **Positioning.** The second spin: four times the rate and a fifth of the latency, bought with a deliberate step backwards on energy per bit.
 
 **Outcome (card copy).** Second-generation body-area silicon that holds an on-body link in the single-digit milliwatt class, roughly a tenth of the radio budget it replaces.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The hard part was refusing changes.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | 20 Mbit/s · sub-0.2 ms — shipped silicon, on the public spec row |
+| A | A — public & verifiable | Gen-1 kept in production beside it, so nobody was forced to move |
+| A | A — public & verifiable | 0.12 → 0.20 nJ/bit spent deliberately to buy rate |
 
 **Problem.** YR23 shipped and sold, and its own deferred list was the roadmap: a higher-rate mode, and on-die trim storage. The field agreed. The video use case carrying the volume was rate-bound at 5 Mbit/s, and the bring-up friction YR23 documented — a manual trim pass on 19 of 24 boards — cost a week every time.
 
@@ -103,7 +130,7 @@ A second spin is the easiest programme in the world to justify badly: everyone h
 
 The commercial stake settled it. The volume tier of the segment YR23 opened is video smartglasses, and at 5 Mbit/s that design compresses hard enough that compression becomes the product problem. Rate was the constraint holding back the only application with consumer volume behind it.
 
-**Figure — Link rate available to a head-worn design: Wi-Fi 100 Mbit/s, Wi-R BAN YR31 20 Mbit/s, ultra-wideband 10 Mbit/s, Wi-R BAN YR23 5 Mbit/s, Bluetooth LE 2 Mbit/s**
+**Figure — Link rate available to a head-worn design: Wi-Fi 100 Mbit/s, Wi-R BAN YR31 20 Mbit/s, ultra-wideband 10 Mbit/s, Wi-R BAN YR23 5 Mbit/s, Bluetooth LE 2 Mbit/s**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -128,7 +155,7 @@ I collected every change request, field issue and evaluation complaint against Y
 | "Test cost is visible in our BOM" | Per-unit test time at volume | 6 of 63, all from teams past prototype |
 | Assorted convenience requests | Real, individually small, collectively a second gen-1 | 31 of 63 |
 
-**Figure — Sixty-three YR23 change requests grouped and ranked by evaluations unblocked against validation weeks: on-die trim 12, higher rate 8, test-time reduction 7, and the long tail spread thin below the cut line**
+**Figure — Sixty-three YR23 change requests grouped and ranked by evaluations unblocked against validation weeks: on-die trim 12, higher rate 8, test-time reduction 7, and the long tail spread thin below the cut line**  `form: dotplot`
 
 | name | value | n |
 |---|---|---|
@@ -213,7 +240,7 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 | 0.12 → 0.20 (nJ/bit) | Energy per bit, traded deliberately for rate |
 | 94% (parity with YR23) | Interop across the installed host base (guardrail) |
 
-**Figure — Change from YR23 to YR31 by measure: latency down 80 percent, bring-up time down 82 percent, test time down 38 percent, yield up 21 percent, and energy per bit up 67 percent as a deliberate regression**
+**Figure — Change from YR23 to YR31 by measure: latency down 80 percent, bring-up time down 82 percent, test time down 38 percent, yield up 21 percent, and energy per bit up 67 percent as a deliberate regression**  `form: diverging`
 
 | name | value | label | good |
 |---|---|---|---|
@@ -237,6 +264,10 @@ I would also have published the declined list earlier. Ranking in public is what
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are invented placeholders — none of that class of data is ever published — and should be replaced with real data before this page is used. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/chips/wi-r-ban>
+
 ---
 
 ### 2. Wi-R Dev Kits — BAN YR23 and NFE XA-NFE2001
@@ -249,16 +280,30 @@ I would also have published the declined list earlier. Ranking in public is what
 | Track | silicon |
 | Domain | Developer hardware |
 | Status | production |
+| Tier | 3 |
+| Card image | `Image__10_.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–2026 · Developer hardware |
 | Role | Product manager, dev kit program |
 | Team | 3 hardware engineers, 1 firmware engineer, 1 applications engineer |
 | Timeline | Mar 2024 – Feb 2026 |
 | Stage | Shipping, sold through the product page |
-| Link | https://www.ixana.ai/products/dev-kits |
+| Demo | https://www.ixana.ai/products/dev-kits |
+| External link | https://www.ixana.ai/products/dev-kits |
 
 **Positioning.** Turned two pieces of evaluation silicon into a kit a partner engineer can unbox and get an on-body link running the same day.
 
 **Outcome (card copy).** Turned Wi-R eval silicon into a shipping dev kit built around one acceptance bar: open the box, reach an on-body link the same day — every variable that killed early bring-ups fixed inside it.
+
+**Skim layer — the pull, and the three facts under it**
+
+> It is the only metric sales, engineering and I argued about in the same units.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Shipping kit, sold through the public product page |
+| A | A — public & verifiable | One number on the box: time to first link |
+| A | A — public & verifiable | Both Wi-R families — BAN first, NFE on shared tooling |
 
 **Problem.** Wi-R worked in our lab and almost nowhere else. Every partner evaluation began with their engineer reproducing a body-coupled link from a datasheet, and the first six took a median of 28.5 days — most of it spent on electrode placement and grounding rather than on evaluating the technology.
 
@@ -280,7 +325,7 @@ Three ways of getting Wi-R into partner hands were on the table for FY25: an ons
 
 I sized the three against the constraint that actually bound us: applications engineering capacity. Three engineers could bring up a body-coupled link, and each option consumed them differently.
 
-**Figure — Partner evaluations supportable per quarter with the same three applications engineers: onsite bring-up 2, reference design 4, dev kit 12**
+**Figure — Partner evaluations supportable per quarter with the same three applications engineers: onsite bring-up 2, reference design 4, dev kit 12**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -303,7 +348,7 @@ I timed the first six partner evaluations end to end, from silicon delivery to f
 | Grounded the board to bench earth | Return path through the bench, not the body | 4 of 6; 9 tickets, all filed as "no link" |
 | Measured with a scope probe on the electrode | Probe capacitance loaded the node and hid the signal | 3 of 6; 6 tickets |
 
-**Figure — Days from silicon delivery to first sustained on-body link across the first six partner evaluations, ranging from 49 days down to 18**
+**Figure — Days from silicon delivery to first sustained on-body link across the first six partner evaluations, ranging from 49 days down to 18**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -392,7 +437,7 @@ Before tooling was committed we agreed the program failed on two conditions: few
 | 96% | Kits passing the out-of-box link test at final QA |
 | 3.2% | Kits returned under RMA (guardrail) |
 
-**Figure — Cumulative dev kits shipped by quarter, from 4 in the first quarter to 62 by the sixth, against a pre-agreed floor of 40**
+**Figure — Cumulative dev kits shipped by quarter, from 4 in the first quarter to 62 by the sixth, against a pre-agreed floor of 40**  `form: cumulative`
 
 | Q3 24 | Q4 24 | Q1 25 | Q2 25 | Q3 25 | Q4 25 |
 |---|---|---|---|---|---|
@@ -414,6 +459,10 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are invented placeholders and should be replaced with real data before this page is used. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/dev-kits>
+
 ---
 
 ### 3. Ixana-Wiki — multifile RAG knowledge platform
@@ -426,16 +475,29 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 | Track | ai |
 | Domain | Internal platform |
 | Status | internal |
+| Tier | 1 |
+| Card image | `Gemini_Generated_Image_anlzx7anlzx7anlz.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2025 · Internal platform |
 | Role | Product manager, delivery owner |
 | Team | 4 engineers, 1 designer |
 | Timeline | Jan – Aug 2025 |
 | Stage | Live, company-wide |
-| Link | https://xana-nine.vercel.app/ |
+| Demo | https://xana-nine.vercel.app/ |
 
 **Positioning.** One place to find every document, meeting, task and patent record — instead of five tools and a colleague who might remember.
 
 **Outcome (card copy).** Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Fixing search in OneDrive alone would have moved almost nothing.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo — search an invented workspace yourself |
+| A | A — public & verifiable | Five sources under one index; a citation opens the exact passage |
+| B | B — real but protected | Security shipped in v1: Azure AD, JWT, signed media URLs |
 
 **Problem.** Company knowledge lived in five disconnected systems. People spent a median of nine minutes hunting for a document before giving up and asking someone — or rewriting it from scratch.
 
@@ -453,7 +515,7 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 
 Three internal problems were on the table for the first half of 2025: knowledge search, an onboarding documentation rebuild, and automated meeting notes. All three had vocal advocates. I sized each by the same measure — engineering and operations hours lost per month — using calendar sampling and a two-week diary study with nine people.
 
-**Figure — Estimated hours lost per month: knowledge search 340, onboarding docs 90, meeting notes 60**
+**Figure — Estimated hours lost per month: knowledge search 340, onboarding docs 90, meeting notes 60**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -476,7 +538,7 @@ I interviewed 14 people across engineering, operations and legal, and shadowed f
 | Asked a colleague | Answer stayed in a DM, never written down | The same 4 people fielded most requests |
 | Rewrote the document | Duplicates made the next search worse | 3 versions of one spec found in audit |
 
-**Figure — Of 14 people interviewed: 11 started with a guess, 12 searched three or more tools, 9 asked a colleague, 6 recreated a document**
+**Figure — Of 14 people interviewed: 11 started with a guess, 12 searched three or more tools, 9 asked a colleague, 6 recreated a document**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -573,7 +635,7 @@ Before build, we agreed this failed if fewer than half the company used it in th
 | 5 | Systems unified into one index |
 | −61% | Duplicate docs created (guardrail) |
 
-**Figure — Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70**
+**Figure — Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70**  `form: lineArea`
 
 | Week 1 | Week 4 | Week 7 | Week 10 |
 |---|---|---|---|
@@ -595,6 +657,63 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 
 > **Note on this sample.** This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | Product delivery owner |
+| teamSize | Team details not published |
+| dateRange | Internal platform |
+
+**Tags** — `Knowledge management` · `Enterprise search` · `Document management` · `RAG search` · `Workflow integrations` · `Access control`
+
+> **Confidential.** Internal product — screens are recreations or diagrams, and figures are limited to material cleared for this portfolio.
+
+**TL;DR.** Problem: Ixana’s files, meeting records, ClickUp docs, and operational data were spread across separate systems, which made company knowledge hard to find and use.
+
+What we did: I led delivery of a single internal knowledge platform that pulled content from OneDrive, ClickUp, Teams, efficiency trackers, and patent records into one searchable repository with hybrid search, AI answers, secure access, and role-based content flows.
+
+Result: The team shipped an enterprise knowledge base with search, chat, video transcript navigation, analytics, and admin sync operations running in production on AWS with security controls documented and core vulnerabilities addressed.
+
+**Role and approach.** What I owned: I owned delivery of the product scope across ingestion, search, access, and user workflows. I aligned the platform around one goal: give internal teams one place to find documents, meeting context, task analytics, and patent records. I drove decisions on source coverage, search experience, sync operations, security requirements, and production readiness so the backend services, frontend flows, and background jobs worked as one product.
+
+Tradeoffs I navigated: I balanced breadth of coverage against reliability by bringing multiple high-value systems into one platform while keeping each connector modular and schedulable. I balanced answer quality against speed by using hybrid retrieval and structured context assembly instead of relying on generation alone. I balanced ease of access against data protection by requiring Azure AD authentication, signed media URLs, and tighter endpoint controls for previews and streaming.
+
+**What was built.** I delivered an internal knowledge platform for Ixana that combined document management, enterprise search, and AI-assisted question answering in one interface. It served employees who needed to search files, browse ClickUp documentation, review meeting recordings with transcript cues, check task and efficiency analytics, and track patent invoice records. The product pulled content from OneDrive and SharePoint, ClickUp, Microsoft Teams transcripts, efficiency and task trackers, and patent data sources. Users could run general search, ask questions through a chat interface with cited source context, preview files securely, jump through meeting recordings by timestamp, and access dashboards for operational reporting. The platform also included scheduled background sync jobs and admin controls to trigger ingestion when needed.
+
+**Impact context.** The team shipped an internal knowledge base with search, chat, transcript navigation, operational views, and admin sync controls. The current record does not include verified adoption, time-saved, or business-outcome measurements. Technical configuration is presented separately rather than being described as product impact.
+
+**Reflection.** Instrumentation should be defined in the first release so future product decisions can be made from adoption, search-success, and source-coverage evidence. The current record documents delivery but not a formal retrospective, so this page does not invent one.
+
+**Key decisions**
+
+- I prioritized a unified repository across OneDrive, ClickUp, Teams, efficiency data, and patent invoices instead of solving only for document search. That choice increased delivery scope, but it matched the real user problem of knowledge being fragmented across tools.
+- I chose hybrid retrieval over keyword-only or vector-only search. This gave the product a better path to handle both exact matches and semantic lookup across mixed content types.
+- I treated security as part of delivery, not a follow-up. Azure AD authentication, JWT validation, signed short-lived media access, and documented fixes to endpoint authentication and CORS reduced risk for an internal system serving sensitive company content.
+
+| Value | Label |
+|---|---|
+| 1000 | Characters per document chunk |
+| 200 | Characters of chunk overlap |
+| 768 | Embedding dimensions |
+| 4o-mini | OpenAI model used for generated answers |
+| 3 | PM2 services in production |
+
+**Media referenced**
+
+- `image` mermaid-diagram.png architecture of data storing
+- `image` mermaid-diagram__1_.png architecture of vector search
+- `video`
+
+- [Github](https://github.com/PushpalDas/Ixana-Wiki)
+
+</details>
+
+**Demo**
+
+External: <https://xana-nine.vercel.app/>
+
 ---
 
 ### 4. Dāsa — citation-grounded scripture engine
@@ -607,6 +726,9 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 | Track | ai |
 | Domain | Applied AI |
 | Status | research |
+| Tier | 1 |
+| Card image | `Image__1_.jpg` |
+| Card colour | #dbeafe |
 | Context | ISKCON · 2026 · Applied AI |
 | Role | Product lead, fidelity owner |
 | Team | 4 people |
@@ -616,6 +738,16 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 **Positioning.** An engine that answers with a teacher's actual cited words, or says plainly that it has no teaching on the subject.
 
 **Outcome (card copy).** A deterministic guard strips any citation retrieval never returned — fabrication is prevented by architecture, not reduced by prompting — and a distance gate makes refusal a first-class answer.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Refusal is the feature.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Fabricated citations stripped by code — architecture, not prompting |
+| A | A — public & verifiable | Separate retrieval lanes so lecture volume cannot crowd out scripture |
+| A | A — public & verifiable | Product walkthrough on video |
 
 **Problem.** A teacher’s work sits across roughly seventy books, thousands of letters and hundreds of hours of recordings, with nowhere to ask a question and get his actual words back with a source. A general model answers every such question fluently — precisely the failure: a plausible paraphrase attributed to a named person is worse than no answer.
 
@@ -633,7 +765,7 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 
 Three approaches were available: fine-tune a model on the corpus, build retrieval over it, or hand-curate an answer library. We scored them on the only axis that matters here — what happens when someone asks a question the corpus does not address, where a confident wrong answer does real harm.
 
-**Figure — Of 40 deliberately out-of-scope questions, correct refusals by approach: retrieval with a distance gate 37, hand-curated library 40 but tiny coverage, fine-tuned model 6**
+**Figure — Of 40 deliberately out-of-scope questions, correct refusals by approach: retrieval with a distance gate 37, hand-curated library 40 but tiny coverage, fine-tuned model 6**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -684,7 +816,7 @@ _Recreated interface. Layout is accurate; the question, answer and citation show
 
 We agreed before the evaluation ran that fabricated citations had to reach zero rather than merely fall — a low rate is still a product that occasionally puts words in his mouth. Correct refusal was the guardrail, because a system can trivially reach zero fabrications by refusing everything, so the two were always measured together.
 
-**Figure — Retrieval quality by question category after re-ranking, ranging from 0.71 on grief to 0.93 on philosophy, against a 0.75 acceptance line**
+**Figure — Retrieval quality by question category after re-ranking, ranging from 0.71 on grief to 0.93 on philosophy, against a 0.75 acceptance line**  `form: dotplot`
 
 | name | value | n |
 |---|---|---|
@@ -722,6 +854,65 @@ I would also have set the evaluation at 100 questions from the start. The 20-que
 
 > **Note on this sample.** This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and all evaluation figures on this page are invented placeholders for this sample. I'm glad to walk through the real engine and its evaluation in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | Product Lead |
+| teamSize | 4 people |
+| dateRange | May 31 - Present  |
+| organization | Personal |
+
+**Tags** — `RAG` · `Retrieval` · `LLM Evaluation` · `Information Retrieval` · `Product Strategy` · `System Design` · `Data Pipelines` · `Fidelity & Trust` · `Non-Profit Tech` · `Applied AI`
+
+**TL;DR.** Problem: Śrīla Prabhupāda's teachings are scattered across ~70 books, thousands of letters, and hours of recordings — nowhere to reliably ask a question and get his actual words back, with a source, and no invention.
+
+What we did: Built a citation-grounded RAG engine over his books, Bhāgavatam, letters, and lectures (32,209 chunks), with a relevance gate that refuses out-of-scope questions and a deterministic guard that strips any fabricated citation — then designed and prototyped the full product experience (landing page, chat app, constellation-themed temple locator) on top of it.
+
+Result: Retrieval validated at nDCG@6 0.840 on 100 questions, 0 fabricated citations across 100 answers, and a working frontend — with one clear next step: build the API layer connecting the two, since the engine and the interface are both ready but not yet wired together.
+
+**Role and approach.** What I owned: Product direction and the fidelity bar for Dāsa end-to-end — defining what "faithful" means technically (grounded retrieval, zero fabrication), curating and prioritizing the corpus, directing the UX/visual identity, and sequencing the roadmap between engineering and design.
+
+Tradeoffs I navigated: Warmth vs. verifiability — once I approved a first-person "his voice" answer mode for emotional accessibility, I had to also mandate that his real, cited words stay visibly attached to every such answer, or the product's core promise quietly breaks. And build-speed vs. rigor — I chose to hold the line on validating retrieval at real scale (n=100, not n=20) before letting the team treat it as "done," even though it slowed the path to a visible demo.
+
+**What was built.** Dāsa is a citation-grounded RAG application that returns Śrīla Prabhupāda's actual words in answer to a question — never a paraphrase, never an invention. A person asks in plain language ("Why do I suffer?", "What is the soul?"); the system retrieves the passage(s) that genuinely address it from a 32,209-chunk corpus spanning his books (Bhagavad-gītā As It Is, Śrīmad-Bhāgavatam through his own translation cutoff), letters, and verified lecture transcripts, then answers with that source cited — or explicitly refuses if no real teaching exists on the topic, rather than guessing.
+
+Under the hood: a dense retriever (bge-m3) pulls candidates from book and lecture "lanes" separately so scripture is never crowded out by the much larger lecture volume, an LLM re-ranker reorders them by relevance, a calibrated distance gate blocks out-of-corpus questions before generation even runs, and a deterministic citation guard strips any verse reference the model cites that wasn't actually retrieved. The result can be delivered either as a grounded third-person answer or, optionally, in Śrīla Prabhupāda's first-person voice — with his real cited words always shown alongside, so the warmth of that voice never substitutes for verifiability.
+
+Around that engine, we designed and prototyped the full product experience: a cosmic, constellation-themed landing page and chat interface where every answer visually "ignites" its source among the stars, adaptive framing that detects which of four types of seeker (per Bhagavad-gītā 7.16) is asking rather than making the user pick a persona, and a temple-locator feature connecting devotees to real ISKCON centres near them.
+
+It serves three audiences: devotees worldwide seeking guidance without always having someone to ask, newcomers who want an honest, unfiltered introduction to his teachings, and scholars or preachers who need to cite him with confidence rather than double-check every quote by hand.
+
+**Impact context.** IMPACT CONTEXT
+
+For the customer: doubling the corpus and validating retrieval at scale means a devotee asking about grief, a guru, or death — previously our weakest categories — now reliably gets a real, cited teaching instead of a near-miss or a false refusal. Eliminating fabricated citations (17→0) is what makes the product safe to actually put in front of people: a scholar or preacher can cite an answer with confidence instead of double-checking every reference by hand.
+
+For the team: scaling the eval set from 20 to 100 questions turned "we think retrieval is good" into a defensible engineering claim — it caught two real problems (a hard retrieval gap, a re-ranker regression on conversational sources) that the smaller set was too small to ever surface, so we're now fixing bugs the data actually found rather than ones we guessed at.
+
+For the business: this is the evidence base that justifies moving from "promising prototype" to "ready for a private beta" — the hardest, highest-risk technical question for a faithfulness-first product (can we trust it not to invent his words, at scale) now has a validated, board-defensible answer rather than a one confined to a handful of hand-picked examples.
+
+**Key decisions**
+
+- Made refusal a feature, not a failure. Instead of asking "how do we get the model to always answer," I set the bar as "the model must say 'no teaching found' when it doesn't have one" — a relevance gate, not a courtesy. That reframed the whole engineering problem around fidelity instead of coverage.
+- Cut the corpus at the point of purity, not the point of size. I chose to include Śrīmad-Bhāgavatam only through Canto 10.13 — exactly where Śrīla Prabhupāda personally stopped translating before his disciples completed the rest — even though that meant leaving real content on the table. Completeness lost to fidelity on purpose.
+- Rejected the "choose a persona" pattern. Early UI thinking leaned toward letting users pick how Dāsa "talks to them." I redirected it: Dāsa doesn't perform a persona — it detects which of the four seekers (Bhagavad-gītā 7.16: Ārta, Arthārthī, Jijñāsu, Jñānī) is asking, the way he actually did, and adapts. Same truth, different door in.
+
+| Value | Label |
+|---|---|
+| 15,746 → 32,209 chunks (2x)  | Corpus scale |
+| 0.614 → 0.840 nDCG@6 (+37%) | Retrieval quality (n=100, reranked) |
+| 17 → 0 per 100 answers | Fabricated citations eliminated |
+| 20 → 100 questions (5x) | Evaluation set scaled |
+
+**Media referenced**
+
+- `video` https://www.youtube.com/watch?v=S4G_99Yn2M4
+- `image` Image__1_.jpg
+- `image` mermaid-diagram__5_.png
+
+</details>
+
 ---
 
 ### 5. Wi-R Body Area Network — YR23
@@ -734,16 +925,30 @@ I would also have set the evaluation at 100 questions from the start. The 20-que
 | Track | silicon |
 | Domain | Silicon |
 | Status | production |
+| Tier | 3 |
+| Card image | `Image__3_.jpg` |
+| Card colour | #ffedd5 |
 | Context | Ixana · 2024–present · Silicon |
 | Role | Owner of first-silicon scope and launch gates — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | 5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US |
 | Timeline | Feb 2023 – May 2024 |
 | Stage | In production — the part under the BAN dev kit and every on-body reference design since |
-| Link | https://www.ixana.ai/products/chips/wi-r-ban |
+| Demo | https://www.ixana.ai/products/chips/wi-r-ban |
+| External link | https://www.ixana.ai/products/chips/wi-r-ban |
 
 **Positioning.** The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, the silicon under the shipping dev kit and both published reference designs.
 
 **Outcome (card copy).** The first Wi-R body-area part to reach customer hardware — the silicon under the BAN dev kit and every on-body reference design that followed.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Validation capacity set the tapeout date.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | 0.12 nJ/bit at 5 Mbit/s — the public specification |
+| A | A — public & verifiable | The silicon under the shipping dev kit and both reference designs |
+| A | A — public & verifiable | The security model is physics: ~0.1 m off-body containment |
 
 **Problem.** Wi-R was a published result and a compelling demo, and no OEM puts a demo on a bill of materials. Turning it into a part meant committing to numbers across a whole data-rate ladder, on a date, against a specification an engineer could draw a schematic from before silicon existed.
 
@@ -764,7 +969,7 @@ The commercial stake was specific: a hearables OEM and an AR-wearables maker had
 
 What those teams were weighing was an energy budget. A wearable running for days off a small cell spends most of it on the radio, and every alternative on their shortlist sits an order of magnitude or more above Wi-R on energy per bit.
 
-**Figure — Energy per bit relative to Wi-R BAN: Wi-Fi and Bluetooth LE 83 times higher, ultra-wideband 8 times higher**
+**Figure — Energy per bit relative to Wi-R BAN: Wi-Fi and Bluetooth LE 83 times higher, ultra-wideband 8 times higher**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -787,7 +992,7 @@ Rather than ask engineers how bring-up went, I audited the bench logs from the f
 | Compared against the reference board | Reference had a trim nobody had documented | 8 of 24; the single longest stall |
 | Filed it as a silicon bug | Most were board or setup issues, not the die | 26 of 41 escapes closed without a die change |
 
-**Figure — Days from board build to first stable on-body link across 24 evaluation boards, clustered between 7 and 14 days against a 14-day gate**
+**Figure — Days from board build to first stable on-body link across 24 evaluation boards, clustered between 7 and 14 days against a 14-day gate**  `form: histogram`
 
 | name | value |
 |---|---|
@@ -875,7 +1080,7 @@ Before tapeout we agreed first silicon failed on one condition: if it could not 
 | 4 | OEM programs designed in before the dev kit existed |
 | 94% (of link attempts across 7 host platforms) | Interop pass rate across host platforms (guardrail) |
 
-**Figure — The 41 post-tapeout escapes by category: analogue front-end trim 15, link state machine 11, host interface timing 7, power sequencing 5, clock lock 2, other 1 — three categories carry 80 percent**
+**Figure — The 41 post-tapeout escapes by category: analogue front-end trim 15, link state machine 11, host interface timing 7, power sequencing 5, clock lock 2, other 1 — three categories carry 80 percent**  `form: pareto`
 
 | name | value |
 |---|---|
@@ -902,6 +1107,10 @@ I would also publish the errata differently. Shipping workarounds in the driver 
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/chips/wi-r-ban>
+
 ---
 
 ### 6. NeuroAdapt — spike-train feature extraction for a science compiler
@@ -914,16 +1123,30 @@ I would also publish the errata differently. Shipping workarounds in the driver 
 | Track | ai |
 | Domain | Research tooling |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_xejg8vxejg8vxejg.png` |
+| Card colour | #dbeafe |
 | Context | IISc Bangalore · 2023–2026 · Research tooling |
 | Role | Product lead, module design |
 | Team | 3 researchers, 1 engineer |
 | Timeline | Oct 2023 – Mar 2026 |
 | Stage | Research — validated on simulated data only |
-| Link | /demo/neuroadapt |
+| Demo | /demo/neuroadapt |
+| External link | https://drive.google.com/drive/u/0/folders/1B0mtA9-xkNbbo6ZUXztuHZiMmlovNtLw |
 
 **Positioning.** Replaced ad-hoc analysis scripts with one defined feature set, so two labs computing burst index finally mean the same thing.
 
 **Outcome (card copy).** Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A better burst index is a fifth definition.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Every figure on the page recomputes live in the demo — nothing stored |
+| A | A — public & verifiable | One metric name, four published definitions: 0.82 / 0.82 / 1.00 / 8.6 |
+| A | A — public & verifiable | Whitepaper PDF on-page; validated on simulated data only |
 
 **Problem.** Spike-train analysis has no standard vocabulary. We audited 22 published analyses and found four incompatible definitions of burst index and three of synchrony in use, each in a private script — so two papers can report the same metric name for different quantities.
 
@@ -944,7 +1167,7 @@ I would also publish the errata differently. Shipping workarounds in the driver 
 
 The obvious contribution here is a better analysis method. We chose the less interesting one — standardising the existing methods — because the audit suggested the bottleneck was not analytical power but the inability to compare two results. A better burst index is a fifth definition.
 
-**Figure — Of 22 audited published analyses: 19 used a private script, 14 could not be reproduced from the paper alone, 11 reported a metric under a name used differently elsewhere, 3 published their code**
+**Figure — Of 22 audited published analyses: 19 used a private script, 14 could not be reproduced from the paper alone, 11 reported a metric under a name used differently elsewhere, 3 published their code**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1008,7 +1231,7 @@ _The demo runs the whitepaper’s validation design in the browser from fixed se
 
 We agreed before running anything that the pipeline failed unless it recovered all three planted structures — a synchronous pair, a bursting unit and a regular one — with the top two components carrying at least 80% of variance. Definitional drift was the guardrail: any metric shipped without a written definition in the output would reproduce the problem we were fixing, and that count has stayed at zero.
 
-**Figure — Unit loadings on the first two principal components: the bursting unit alone on PC1, the synchronous pair together on PC2, the other two at the origin**
+**Figure — Unit loadings on the first two principal components: the bursting unit alone on PC1, the synchronous pair together on PC2, the other two at the origin**  `form: scatter`
 
 | x | y | group |
 |---|---|---|
@@ -1043,6 +1266,87 @@ I would also have started the definitional conversation with more than two group
 
 > **Note on this sample.** This is academic research validated on simulated data. The report in section 04 and every figure on this page come from the whitepaper’s validation dataset — five units, ten seconds, three planted structures — re-run in the demo, where the numbers are computed in the browser rather than stored. No real recording and no unpublished collaborator result is shown. I’m glad to walk through the real module and its validation in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | NeuroAdapt, IISc Bangalore |
+| organization | IISc Bangalore |
+
+**Tags** — `Electrophysiology` · `Spike Train Analysis` · `Feature Extraction` · `Neuroscience` · `Retrieval-Augmented Generation`
+
+**TL;DR.** Problem: The lack of standardization in spike train analysis leads to inconsistent definitions, ad-hoc custom scripts, and poor reproducibility across neuroscientific studies.
+
+What we did: I developed NeuroAdapt, a modular feature extraction pipeline and science compiler framework that ingests sorted spike trains to extract standardized unit-level and population-level metrics.
+
+Result: On simulated validation data, the pipeline accurately captured key neural dynamics, explaining 87% of population variance in two principal components and identifying synchronous firing with a peak cross-correlation of 0.85.
+
+**Role and approach.** What I owned: I led the design and implementation of NeuroAdapt, defining the pipeline architecture for ingesting sorted spike trains, computing standardized unit- and population-level metrics, and delivering automated analysis via multimodal RAG and LangChain agent frameworks.
+
+Key decisions:
+Adopted a two-tiered feature extraction model: Separated single-unit analysis from population-level dynamics to allow modular metric additions without disrupting existing workflows.
+Combined automated report generation with multimodal RAG: Generated standardized PDF summaries interpreted by GPT-4o-mini and indexed them into Weaviate using text-embedding-3-large to enable natural language querying.
+Standardized storage via Neurodata Without Borders (NWB): Formatted outputs into NWB and open formats to ensure direct integration into existing neuroscience data pipelines.
+
+Tradeoffs I navigated: Automated coverage vs. specialized flexibility — focused on providing a comprehensive baseline of standardized metrics while allowing researchers to export structured tables and NWB modules for custom downstream hypothesis testing.
+
+**What was built.** NeuroAdapt is a standardized spike-train feature extraction pipeline and science compiler module designed for neuroscientists and data analysts. It ingests sorted spike trains from sources like Kilosort or SpikeInterface and computes unit-level metrics (such as firing rate, ISI coefficient of variation, burst index, and Fano factor) alongside population-level metrics (such as pairwise cross-correlations, synchrony indices, and principal component analysis). The solution automates visualization generation, uses GPT-4o-mini to interpret figures, compiles multi-page PDF reports, and provides natural language query interfaces using a multimodal RAG system built on Weaviate and LangChain.
+
+**Impact context.** The quantitative outputs validate NeuroAdapt's ability to accurately detect ground-truth spiking patterns, such as distinguishing bursty from regular firing and isolating low-dimensional population dynamics. By standardizing these metrics and embedding them directly into NWB files or searchable vector databases, NeuroAdapt eliminates custom ad-hoc scripts and enables reproducible hypothesis testing across neuroscientific studies.
+
+**Reflection.** Standardizing the feature extraction layer fills a critical gap between raw spike sorting and downstream hypothesis testing. Moving forward, integrating standardized spike metrics directly with AI-driven behavioral modeling will allow full automation of the science compiler vision.
+
+**Key decisions**
+
+- Adopted a two-tiered feature extraction model to separate single-neuron statistics from population dynamics, ensuring modularity and seamless pipeline extension.
+- Integrated automated PDF report generation with multimodal Retrieval-Augmented Generation (RAG) using GPT-4o and Weaviate, enabling domain experts to query complex electrophysiology results through natural language.
+- Standardized output formats around Neurodata Without Borders (NWB) and structured CSV/JSON, guaranteeing end-to-end traceability and reproducibility across experiments.
+
+| Value | Label |
+|---|---|
+| 87% | Population variance explained by top two principal components |
+| 0.85 | Peak cross-correlation for synchronous neuron pair |
+| 102 | Coincident spike pairs detected at zero lag |
+
+**Media referenced**
+
+- `image`
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/neuroadapt` |
+| File | `public/demo/neuroadapt.html`  (105.6 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | NeuroAdapt Feature Extraction |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Run NA-2026-000148
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> NeuroAdapt Feature Extraction NeuroAdapt · spike-train feature extraction Run NA-2026-000148 Simulated data
+
+_Design note — NeuroAdapt:_
+
+**Identity (3 lines):** Instrument-grade scientific tooling on paper: a pale lab-grey ground with ink-dark serif prose, hairline rules and 2 px corners, reading like a well-set methods section that happens to be alive. One saturated teal is the only signal on the page — the selected definition, the planted synchronous pair, the zero-lag bar, the active nav position — everything else is a five-step grey ramp. The masthead carries the run itself: a 26 px ribbon of all five seeded spike trains, drawn from the same data as every figure, so even the ornament is a measurement.
+
+**Tokens:** Type — "Source Serif 4" (prose/headings, Georgia fallback) + "IBM Plex Mono" (every numeral, formula, field path; tabular-nums throughout). Palette — bg #f5f4ef, surface #fffefb, surface-2 #f0eee7, line #d8d4c6, ink #191812, body #3a3930, muted #6d6a5d, faint #8a8677; accent teal #0b6e64 / deep #084f48; good #3d6b2f, warn #8a5c12, crit #a2331b; unit ramp #23221a / #7d7969 / #aaa593 / #0b6e64 / #55a094 (the sync pair alone gets the accent).
+
+**Signature interaction:** The definitions view is the centrepiece — four published definitions of "burst index" set as side-by-side columns separated by hairline gutters, each led by a 34–52 px mono numeral, so 0.82 / 0.82 / 1.00 / 8.6 collide typographically before a single word is read; the NeuroAdapt column carries a 3 px teal top rule and a "NeuroAdapt ships this" tag while the others are stamped "published use". Switching metric or subject recomputes the collision live from the same spike array.
+
+**Deliberate omissions:** No dark theme — a lab report is a lit sheet; light is painted explicitly. No per-unit categorical rainbow — units are a grey ramp with teal reserved for the planted signal, so figures stay near-monochrome. No hover tooltips beyond the existing grounding-check marks; no decorative animation (one 200 ms pane fade, killed under prefers-reduced-motion along with smooth scrolling). Parity verified headlessly: CV 3.16/1.07, 102/120 = 0.85, PC1+PC2 86.9%, burst defs 0.82/0.82/1.00/8.6, nine stages/two model, nine preprocessing choices, UNDEFINED_EMITS 0, determinism hash compare, injector withholds, raw-array toggles; new guards — ?metric anything-but-sync ⇒ burst, ?format outside nwb/csv/json ⇒ nwb, ?unit still clamped 1–5.
+
 ---
 
 ### 7. Wi-R Near Field Electric — XA-NFE3001
@@ -1055,16 +1359,30 @@ I would also have started the definitional conversation with more than two group
 | Track | silicon |
 | Domain | Silicon |
 | Status | production |
+| Tier | 3 |
+| Card image | `Image__8_.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–present · Silicon |
 | Role | Owner of the gen-2 specification review — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the XA-NFE2001 programme |
 | Timeline | Mar 2025 – Feb 2026 |
 | Stage | In production — the higher-throughput part on the NFE line, alongside XA-NFE2001 |
-| Link | https://www.ixana.ai/products/chips/wi-r-nfe |
+| Demo | https://www.ixana.ai/products/chips/wi-r-nfe |
+| External link | https://www.ixana.ai/products/chips/wi-r-nfe |
 
 **Positioning.** A gen-2 the pipeline asked for: 13.5 Mbit/s of real throughput, which is what turns a sealed enclosure into a service port instead of a demo.
 
 **Outcome (card copy).** Successor near-field part: 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — a 100 MB firmware image inside a one-minute service window, on the same sub-6 mW budget.
+
+**Skim layer — the pull, and the three facts under it**
+
+> They were one number.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — the announcement's figures |
+| A | A — public & verifiable | 100 MB in about 59 s: inside the one-minute service window |
+| A | A — public & verifiable | RF-silent; the Faraday-cage limit is in the datasheet, in writing |
 
 **Problem.** XA-NFE2001 opened the near-field line and then kept losing the same argument. Fourteen evaluations reached a requirement sheet and stopped, and reading those sheets against our characterisation data showed why: partners were sizing real payloads, and at gen-1 throughput a 100 MB firmware image took nearly four minutes.
 
@@ -1085,7 +1403,7 @@ The case for this spin was unusual: I did not have to make it. Fourteen evaluati
 
 The alternative was a gen-1 derivative for a new consumer segment — cheaper, lower rate, high volume. A real opportunity, with the property that makes speculative markets seductive: nobody can prove the number wrong. The pipeline number was written by people who had already qualified the part.
 
-**Figure — Annual units by opportunity: 480 thousand named in the stalled evaluations' own requirement sheets, 200 thousand estimated for a gen-1 consumer derivative, 90 thousand already shipping on gen-1**
+**Figure — Annual units by opportunity: 480 thousand named in the stalled evaluations' own requirement sheets, 200 thousand estimated for a gen-1 consumer derivative, 90 thousand already shipping on gen-1**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1108,7 +1426,7 @@ Fourteen evaluations had supplied a written requirement sheet before stalling, s
 | Sub-millisecond latency | Met, comfortably | 12 of 14 |
 | Operation at 1–5 cm through a sealed wall | Met, but tuned for longer range than asked | 8 of 14 |
 
-**Figure — Gen-1 measured against the six requirement lines the sheets specified: latency and range pass, throughput and payload time fail by a wide margin**
+**Figure — Gen-1 measured against the six requirement lines the sheets specified: latency and range pass, throughput and payload time fail by a wide margin**  `form: gateBars`
 
 | name | value | target | max | label | targetLabel | pass |
 |---|---|---|---|---|---|---|
@@ -1195,7 +1513,7 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 | 1–15 cm (from 5–25 cm) | Operating range, tightened to buy throughput |
 | 0 | Gen-1 sockets lost or forced to requalify (guardrail) |
 
-**Figure — Transfer time against payload size: gen-1 leaves the one-minute service window between 25 and 50 megabytes, gen-2 stays inside it to 100 megabytes**
+**Figure — Transfer time against payload size: gen-1 leaves the one-minute service window between 25 and 50 megabytes, gen-2 stays inside it to 100 megabytes**  `form: thresholdCurves`
 
 | series | 25 MB | 50 MB | 100 MB |
 |---|---|---|---|
@@ -1218,6 +1536,10 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/chips/wi-r-nfe>
+
 ---
 
 ### 8. Wi-R Near Field Electric — XA-NFE2001
@@ -1230,16 +1552,30 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 | Track | silicon |
 | Domain | Silicon |
 | Status | production |
+| Tier | 3 |
+| Card image | `Image__9_.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–2026 · Silicon |
 | Role | Owner of second-line delivery against one validation pool — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the BAN program, running both lines concurrently |
 | Timeline | Jan 2024 – Dec 2025 |
 | Stage | In production — launched December 2025 |
-| Link | https://www.ixana.ai/products/chips/wi-r-nfe |
+| Demo | https://www.ixana.ai/products/chips/wi-r-nfe |
+| External link | https://www.ixana.ai/products/chips/wi-r-nfe |
 
 **Positioning.** The second product line: a touch-range electric-field link at 5 Mbit/s under a milliwatt, sold against NFC rather than against Bluetooth.
 
 **Outcome (card copy).** The near-field electric part that moved Wi-R from a lab demonstration to a component a partner could design into a product.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Choosing the comparison is choosing the buyer.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | 5 Mbit/s under a milliwatt — the public spec |
+| A | A — public & verifiable | Over 50× NFC energy efficiency — the published comparison |
+| A | A — public & verifiable | The physics written up on arXiv: 2512.07167 |
 
 **Problem.** One product line makes a company a bet. Wi-R had proven itself on the body, and the demand arriving through the front door was increasingly not body-worn — device-to-device, at touch range, from buyers who had already rejected NFC on throughput and Bluetooth on emissions.
 
@@ -1260,7 +1596,7 @@ The commercial question was whether Ixana was a one-line company. A single line 
 
 The buyers were already there, and they were not asking for a body-area network. A secure-payments device maker and an industrial-handheld OEM wanted the same thing: move a firmware image between two devices held near each other, without an exposed port and without lighting up a radio. Their incumbent was NFC, and what they disliked was the clock.
 
-**Figure — Time to complete a 4 MB provisioning transaction including link setup: Bluetooth LE 35 seconds, NFC 65 seconds, Wi-R NFE 8 seconds**
+**Figure — Time to complete a 4 MB provisioning transaction including link setup: Bluetooth LE 35 seconds, NFC 65 seconds, Wi-R NFE 8 seconds**  `form: stackedBars`
 
 | name |
 |---|
@@ -1282,7 +1618,7 @@ I did not run a study for this one. I coded eighteen months of inbound evaluatio
 | Range figures for a non-worn case | Device-to-device at 10–20 cm | 19 of 96 asked for off-body range |
 | A part with no radio emissions | Provisioning inside an RF-quiet facility | 14 of 96, concentrated in defence and industrial |
 
-**Figure — Of 96 inbound evaluation requests coded by intended use: 54 were device-to-device rather than body-worn, 22 asked explicitly for a faster NFC, 19 needed off-body range, 14 required no radio emissions**
+**Figure — Of 96 inbound evaluation requests coded by intended use: 54 were device-to-device rather than body-worn, 22 asked explicitly for a faster NFC, 19 needed off-body range, 14 required no radio emissions**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1368,7 +1704,7 @@ Before the build plan was committed we agreed the line failed on one condition: 
 | 0.6 ms | Median end-to-end latency on partner hardware |
 | 0 | BAN milestones missed while the second line spun up (guardrail) |
 
-**Figure — Interop pass rate across four host platforms and three range profiles: 11 of 12 configurations above 85 percent, with the 25 cm profile on the low-power MCU the single weak cell at 62 percent**
+**Figure — Interop pass rate across four host platforms and three range profiles: 11 of 12 configurations above 85 percent, with the 25 cm profile on the low-power MCU the single weak cell at 62 percent**  `form: heatmap`
 
 |  | 5 cm profile | 15 cm profile | 25 cm profile |
 |---|---|---|---|
@@ -1391,19 +1727,26 @@ I would also have run the sample-request test earlier. It settled section 05 in 
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/chips/wi-r-nfe>
+
 ---
 
 ### 9. Accurate estimation of mineral present in soil
 
 | Field | Value |
 |---|---|
-| Slug | _(no case study)_ |
+| Slug | _(none — slug derived from title)_ |
 | Company | IIRS-ISRO, Govt. of India |
 | Years | 2022 |
 | Track | ai |
 | Domain | Remote sensing |
 | Status | internal |
-| Link | https://drive.google.com/drive/u/0/folders/1tYViz5kUrsL5PZ_9DsghxZ1uno1qYQzs |
+| Tier | 4 |
+| Card image | `Image__5_.jpg` |
+| Card colour | #dbeafe |
+| External link | https://drive.google.com/drive/u/0/folders/1tYViz5kUrsL5PZ_9DsghxZ1uno1qYQzs |
 
 **Outcome (card copy).** Hyperspectral workflow that estimated surface mineral abundance from satellite bands, taking a field-sampling round out of the survey loop.
 
@@ -1421,16 +1764,29 @@ _No long-form case study on file — card-level entry only._
 | Track | ai |
 | Domain | Learning tools |
 | Status | prototype |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_dafj5odafj5odafj.png` |
+| Card colour | #dbeafe |
 | Context | Personal · 2026 · Learning tools |
 | Role | Product lead, personal project |
 | Team | 2 people |
 | Timeline | Jan – Jun 2026 |
 | Stage | Prototype — complete and working, never released to learners |
-| Link | /demo/quantum-simulator |
+| Demo | /demo/quantum-simulator |
 
 **Positioning.** A working 10-qubit circuit builder with live Bloch-sphere rendering, built to make state evolution visible — and never put in front of a learner.
 
 **Outcome (card copy).** A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A run button turns exploration into submission.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: ten qubits, spheres update as you place a gate |
+| A | A — public & verifiable | 32 physics tests run in the page itself |
+| A | A — public & verifiable | Never released — the teaching claim stays deliberately untested |
 
 **Problem.** People learning quantum logic can compute what a gate does and cannot see it. Observing a teaching session and surveying 31 learners found 24 could apply a Hadamard correctly on paper and 7 could describe what it did to the state vector.
 
@@ -1444,7 +1800,7 @@ _No long-form case study on file — card-level entry only._
 
 Three ways to attack the intuition gap: better static diagrams, an annotated notebook, or an interactive simulator. The first two are far cheaper and share a disqualifying property — the learner does not choose what happens next. I sized the options by how many distinct states a learner could explore in twenty minutes, exploration being the mechanism the idea rests on.
 
-**Figure — Distinct states a learner can reach in a twenty-minute session: interactive simulator 40 or more, annotated notebook 12, static diagram set 6**
+**Figure — Distinct states a learner can reach in a twenty-minute session: interactive simulator 40 or more, annotated notebook 12, static diagram set 6**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1505,7 +1861,7 @@ _The demo is the prototype’s Python state-vector engine ported into a single f
 
 We agreed before building that the interaction failed if state-vector computation at the ceiling exceeded a 200ms budget — beyond that a placement stops feeling connected to its result. Correctness was the guardrail: a fast renderer computing the wrong state is worse than a slow one, so the physics suite ran on every engine change.
 
-**Figure — State vector computation time against qubit count, rising from 4 milliseconds at four qubits to 1420 at twelve, against a 200 millisecond interactivity budget**
+**Figure — State vector computation time against qubit count, rising from 4 milliseconds at four qubits to 1420 at twelve, against a 200 millisecond interactivity budget**  `form: curve`
 
 | 4 | 6 | 8 | 9 | 10 | 11 | 12 |
 |---|---|---|---|---|---|---|
@@ -1538,6 +1894,77 @@ I would also have measured the qubit ceiling first. It shaped every other decisi
 
 > **Note on this sample.** This is a personal prototype that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the prototype’s own engine so they can be checked. I’m glad to walk through the full prototype, backend and 3D renderer included, in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `Quantum Computing` · `FastAPI` · `Next.js` · `Three.js` · `NumPy`
+
+**TL;DR.** Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.
+
+What we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.
+
+Result: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.
+
+**Role and approach.** What I owned: I led product scope, technical requirements, and milestone execution across backend numerical logic and frontend visualization components. I aligned system design between Python matrix operations, the drag-and-drop circuit builder grid, and the prebuilt algorithm library.
+
+Tradeoffs I navigated: Simulation capacity vs. interface responsiveness. I capped the backend state vector engine at 10 qubits to keep matrix operations fast on NumPy while ensuring smooth, instant rendering of 3D Bloch spheres on client devices.
+
+**What was built.** A web application for constructing, simulating, and visualizing quantum circuits. Users can place single-qubit and multi-qubit gates on an interactive timeline grid. The system calculates complex state vectors, probabilities, measurement shot distributions, and 3D Bloch sphere coordinates for each qubit. It serves students, educators, and developers learning quantum logic.
+
+**Impact context.** These outcomes confirm accurate physics calculations and sub-second validation, enabling users to test circuits with reliable performance.
+
+**Key decisions**
+
+- I chose a FastAPI and NumPy backend for state vector operations rather than client-side JavaScript execution to maintain fast linear algebra processing isolated from UI rendering.
+- I selected Three.js and React Three Fiber for state visualization to give users interactive 3D Bloch spheres instead of static 2D vector tables.
+- I structured a prebuilt circuit library with pre-loaded instruction sets to help users quickly verify standard quantum algorithms such as Bell and GHZ states.
+
+| Value | Label |
+|---|---|
+| 10 | Maximum qubit simulation capacity |
+| 32 | Passed backend test cases |
+| 1.34s | Total test suite execution time |
+
+**Media referenced**
+
+- `image` mermaid-diagram__6_.png
+- `image`
+- `video`
+
+- [Github](https://github.com/PushpalDas/Quantum-Gate-Simulator)
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/quantum-simulator` |
+| File | `public/demo/quantum-simulator.html`  (95.9 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Quantum Gate Simulator |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  10-qubit circuit builder
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Quantum Gate Simulator Quantum gate simulator · state-vector engine 10-qubit circuit builder 0 learners — never released
+
+_Design note — Quantum Gate Simulator:_
+
+**Identity (3 lines).** Luminous-dark lab: a deep blue-black ground (`#060913`, never pure black) on which quantum state is rendered as light — Bloch vectors, amplitude bars and probability readouts glow while the chrome stays matte. Two hues split the physics: cyan for coherent single-qubit state, magenta for entanglement (a qubit that has surrendered its state to a correlation reads magenta everywhere — sphere marker, cell tint, shot histogram). The circuit grid sits in a recessed near-black well with crisp 1px wires and crosshair targeting; gate chips are small physical tiles with a top-light gradient, inner keyline and drop shadow, in the prototype's own verbatim gate colours.
+
+**Tokens.** Fonts: Space Grotesk (UI, 400–700) + JetBrains Mono (kets, amplitudes, every number; `tabular-nums` on all numeric columns), Google Fonts with real fallback stacks. Palette on `:root`: bg `#060913`, well `#04070e`, surface `#0b101d`/`#0f1626`/`#151d31`, line `#1b2540`, ink `#eef3fc`, body `#b1bdd6`, muted `#7e8fb0` (≈5:1 on surface), accent cyan `#54e1ff`, accent-2 magenta `#ff5fd0`, ok `#43e8a9`, warn `#f0b45c`, crit `#ff8578`; radius scale 5/9/13px; glow shadows `0 0 12px` at ~0.3 alpha. Chart recoloured to match: deployed grey `#8496b8` dashed, browser cyan with underglow, budget amber.
+
+**Signature interaction.** Placing a gate: the palette tile lifts on hover and arms with a colour-matched glow when pressed; the grid cursor becomes a crosshair, the hovered cell draws a dashed reticle, a pending two-qubit control cell locks solid cyan with a halo — and the instant the gate lands, the glowing Bloch vectors and both histograms recompute with no run button, every bar sliding in ≤180ms (all transitions 120–180ms, interruptible, killed wholesale under `prefers-reduced-motion`, which also disables idle sphere spin and smooth scrolling).
+
+**Deliberately did not do.** No WebGL/canvas spheres — the orthographic SVG projection stays, restyled with an underglow stroke rather than filters, so drag-to-rotate stays cheap and instant (the 10-qubit cap protects exactly this). Did not touch the engine, the API layer, the 32 tests, the library data, or the gate colour constants (documented as lifted verbatim from GateToolbar.tsx — glyphs stay ink/white for contrast, hue carried by a colour bar and glow instead). Kept the amber mixed-state ring distinct from magenta entanglement (different physics, different hue). No animated background, no SVG glow filters (perf), no dark/light theming — single dark theme, every colour painted. Functional fix shipped: `?circuit=<not-ready id>` no longer loads silently; it opens the circuit (or library) view with a warn note quoting the library card's own reason text. Verified headlessly post-redesign: 32/32 tests pass (22 simulator + 10 API), 11-qubit refusal (422), Bell = {00: 0.5, 11: 0.5}, seeded shots deterministic, 4 runnable / 8 greyed with reasons, all documented deep links (`view/case/circuit/run/q/gate/spin`) land as before.
+
 ---
 
 ### 11. Procurement Orchestrator — M365-native request workflow
@@ -1550,16 +1977,29 @@ I would also have measured the qubit ceiling first. It shaped every other decisi
 | Track | ai |
 | Domain | Procurement ops |
 | Status | customer-testing |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_ene5eiene5eiene5__1_.png` |
+| Card colour | — |
 | Context | Ixana · 2026 · Procurement ops |
 | Role | Product manager, pilot owner |
 | Team | 2 operations analysts, 1 platform administrator |
 | Timeline | Apr 2026 – present |
 | Stage | Controlled pilot across three internal organisations |
-| Link | /demo/procurement-desk |
+| Demo | /demo/procurement-desk |
 
 **Positioning.** A pilot whose operating contract is the product: one named owner within a business day, no transition without evidence, and launch gates written before the first request.
 
 **Outcome (card copy).** In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A named person is the difference between a status and an answer.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: launch gates counted from the requests, never stored |
+| A | A — public & verifiable | At or above the ceiling, submission is refused outright |
+| A | A — public & verifiable | No transition writes without evidence attached |
 
 **Problem.** A physical-goods request entered a process with no named owner. Nineteen interviews and a thread analysis of 63 completed requests found a median of 4 chase emails each, and 22 of the 63 progressed with no recorded approval — not because anyone bypassed a control, but because none existed.
 
@@ -1578,7 +2018,7 @@ I would also have measured the qubit ceiling first. It shaped every other decisi
 
 The obvious answer was a procurement platform, and the company had looked at three. I argued for one quarter proving the operating model on tooling we own: every failure in the thread analysis was one of accountability, and a platform bought to fix that tends to reproduce it with better reporting.
 
-**Figure — Weeks to a working process under each option: lean pilot on existing tooling 5, extend the finance system 14, buy a procurement platform 26**
+**Figure — Weeks to a working process under each option: lean pilot on existing tooling 5, extend the finance system 14, buy a procurement platform 26**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1601,7 +2041,7 @@ I interviewed 19 people who had raised a request in the previous six months, the
 | Waited for approval | Approval sometimes verbal or absent | 22 of 63 progressed with no recorded approval |
 | Asked when it would arrive | No verified ETA existed anywhere | 17 of 19 interviewed raised this unprompted |
 
-**Figure — Across 63 completed request threads: 51 had no acknowledgement, 34 had an unclear owner throughout, 22 progressed without a recorded approval, 9 were rebuilt in a spreadsheet**
+**Figure — Across 63 completed request threads: 51 had no acknowledgement, 34 had an unclear owner throughout, 22 progressed without a recorded approval, 9 were rebuilt in a spreadsheet**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1701,7 +2141,7 @@ The numbers below come from 23 completed requests across three organisations —
 | 2 (of 23) | Requesters who still chased by email |
 | 1 | Silent flow failure, caught by the daily check (guardrail) |
 
-**Figure — Pilot performance against each pre-agreed launch gate: assignment 21 of 23 against a target of 23, approval integrity 23 of 23, failure resolution 1 of 1 within a day, volume 23 against a floor of 20**
+**Figure — Pilot performance against each pre-agreed launch gate: assignment 21 of 23 against a target of 23, approval integrity 23 of 23, failure resolution 1 of 1 within a day, volume 23 against a floor of 20**  `form: gateBars`
 
 | name | value | target | max | label | targetLabel | pass |
 |---|---|---|---|---|---|---|
@@ -1732,6 +2172,93 @@ I would also have measured chasing from the start rather than month two. The num
 
 > **Note on this sample.** This is an internal pilot. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample — every one is quoted against its sample size because a pilot this small cannot support a rate. No supplier, price or requester is shown. I'm glad to walk through the real pilot and its gates in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| dateRange | 21 July 2026 |
+
+**Tags** — `Procurement operations` · `Workflow design` · `Microsoft 365` · `Approval management` · `Pilot delivery` · `Operational controls`
+
+**TL;DR.** Problem: Delayed procurement and poor communication meant requesters had to chase procurement for ownership, status, ETA, approvals, and tracking.
+
+What we did: I defined a lean Microsoft 365-native pilot for physical-goods requests that gave one source of truth, clear ownership, deterministic statuses, controlled updates, reminders, and escalation without adding a heavy custom platform.
+
+Result: The pilot was set up to support multiple organisations at fewer than 10 requests per week, with launch gates including 100% assignment within one business day and zero requests ordered without valid approval, missing owners, silent flow failures, or unresolved known incorrect status beyond one business day.
+
+**Role and approach.** What I owned: I owned the v1 pilot scope, the operating model, and the launch contract for a procurement request workflow across multiple internal organisations in one Microsoft 365 tenant. I set the product goals, defined the in-scope request type as physical goods only, established the status model, approval policy, reminder and escalation rules, access requirements, pilot phases, launch gates, and scale triggers. I also set the architecture direction for a lean implementation using Microsoft Lists, SharePoint, Power Automate, and an Outlook shared mailbox rather than a larger control-plane build.
+
+Tradeoffs I navigated: I balanced speed to pilot against control depth by choosing short flows, daily integrity checks, and human verification over a more complex platform. I balanced requester visibility against operational risk by making the request list the source of truth while limiting requester edits to avoid status drift. I balanced automation against governance by automating routing, reminders, and approvals where rules were deterministic, while keeping supplier choice, ordering, and critical fact verification with humans. I also balanced management visibility against alert fatigue by showing all ageing work after three business days but sending direct escalations only for no progress, breached deadlines, or delivery risk.
+
+**What was built.** I defined a lean pilot for an internal procurement workflow that let employees submit physical-goods requests and track them without chasing procurement directly. The product served requesters, procurement owners, approvers, escalation managers, and support administrators across multiple internal organisations in the same Microsoft 365 tenant.
+
+The solution centered on a canonical Procurement Requests list, supported by routing and approver maps, a separate Shipments list, and an Activity and Exceptions list. Requesters had a submission form and a personal request view showing owner, status, next action, desired arrival date, verified ETA, approval state, shipment details, and timeline. Procurement worked from a single queue with controlled actions for assignment, information requests, quote and order updates, shipment and tracking updates, delivery, correction, cancellation, reopen, and exception handling. Managers had a grouped visibility view for ageing work, delayed requests, escalations, and unresolved exceptions.
+
+I also defined the operating rules behind the workflow. Those rules covered routing, approval thresholds, status transitions, evidence requirements, reminders, escalation, notification content, access controls, audit history, integrity checks, and failure recovery. The implementation sequence moved from decision workshop and configuration through happy-path build, controls, testing, controlled pilot, and production exit.
+
+**Impact context.** These targets defined whether the pilot solved the real operating problem, not just whether the workflow ran. The focus was on reducing requester chasing, making ownership visible within one business day, preventing unauthorised ordering, eliminating silent failures, and stopping teams from falling back to spreadsheets and email. The scale triggers also made clear when the lean Microsoft 365 approach should give way to a heavier architecture.
+
+**Reflection.** The spec showed that the core risk was not feature breadth. It was trust. If ownership was guessed, status went stale, approvals were wrong, or failures were silent, users would return to email and spreadsheets. The design therefore favored verified facts, explicit authority boundaries, exception visibility, and daily operational review over deeper automation. It also made clear that communication quality had to be measured directly, since a technically working pilot could still fail if requesters kept chasing procurement.
+
+**Key decisions**
+
+- I chose a Microsoft 365-native v1 architecture using Microsoft Lists Form, SharePoint Lists and views or a simple Power Apps interface, short Power Automate flows, and an Outlook shared mailbox. I made that call because the expected volume was fewer than 10 requests per week, so a lean setup was enough and avoided the cost and complexity of Azure SQL, Service Bus, a custom API, or AI in the critical path.
+- I limited v1 to physical goods, one item type per request, one financial approval stage, manual supplier selection, and manual verification of shipment and tracking. I made that call to keep the pilot focused on the main pain points of ownership, next action, delivery visibility, reminders, and escalation rather than trying to solve the full procurement lifecycle.
+- I made the workflow deterministic and evidence-based, with blocking rules for missing routing or approval maps and a requirement that status changes carry actor, timestamp, source, and evidence. I made that call to prevent silent failure, guessed ownership, stale dashboards, and orders progressing without valid approval.
+
+| Value | Label |
+|---|---|
+| 1 | Business day to assign one accountable procurement owner |
+| 3 | Business days before every open request appears in management visibility |
+| 2 | Business days recommended for approval response due |
+| 5 | Business days recommended for approval expiry |
+| 100% | Target for requests assigned within one business day |
+| 20 | Minimum pilot requests for production exit |
+| 50 | Requests per week trigger to revisit the architecture |
+| 90 | Days after launch used for the pre-mortem assumption |
+
+**Media referenced**
+
+- `image` mermaid-diagram__7_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/procurement-desk` |
+| File | `public/demo/procurement-desk.html`  (102.6 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Request Desk — the Procurement Orchestrator pilot |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Request Desk
+h5  What this demo is
+h5  The four rules it makes visible
+h5  more
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Request Desk — the Procurement Orchestrator pilot Ixana · Procurement ops · Controlled pilot Request Desk 23 completed pilot requests 0 ordered unapproved Ceiling $5,000 Signed in as What this demo is A working recreation of the M365-native procurement pilot described in the case study. One canonical request list is the source of truth; every screen here is a view of it. The lists, flows and mailbox are simulated; the operating contract, the field rules and the gates are the real ones. The four rules it makes visible 1. A request is assigned to a named person , never to a queue. “Procurement” counts as unassigned, on this screen and in the gate. 2. Every status change carries actor, timestamp, source and evidence. A transition with no evidence cannot be recorded — try it in the queue. more 3. The value ceiling is a blocking validation, not a warning. A request at or above the finance threshold cannot enter the pilot, so the pilot cannot weaken a control it never touches. 4. Requesters read everything and write nothing. They add information through a controlled path; they cannot move a status, which is what kept the old list untrustworthy. All organisations, requesters, owners, suppliers, items, prices, dates and figures on this page are invented for the demo. No supplier, price or requester from the real pilot appears here. The 23 completed requests reproduce the counts quoted in section 08 of the case study — 21 assigned inside a business day, 0 ordered unapproved, 2 requesters who still chased by email, 1 silent flow failure caught by the daily check — so the gate screen can be checked rather than taken on trust.
+
+_Design note — Procurement Orchestrator (Tier B):_
+
+**Identity (3 lines).** Reads as a native sibling of the deployed xana-nine app: the same warm brown-black ground under bordered-not-shadowed `#1A1410` cards, one `#FF6321` accent with the `#CD3D00→#FF6321` gradient held back for primary actions, hero numbers and the persona avatar, dense 13px UI with mono tabular numerics and uppercase tracked kickers, and a translucent blurred top bar whose active view carries the 2px orange underline. The layout is this product's own — no xana screen is copied: a role-switched operations surface where the persona chip (gradient avatar + bold name in a rounded-full pill) sits top-right as the master switch, the seven views run as flat top-bar links instead of xana's icon rail, the four launch gates render as a computed board of big mono numbers over target-ticked tracks, and the request timeline is the hero object — every transition wearing its evidence as an orange citation-style chip, the house `[n]`-chip grammar repurposed as audit trail. Single-theme dark by design; every colour painted explicitly.
+
+**Tokens.** Ground `#0E0805`; surfaces `#1A1410` / `#221A14` (table-header strips, hover) / `#2A2420` / `#140F0B` (drawer, inputs); borders `#3A3028`, hover `#5A4838`, hairline `rgba(255,255,255,.06)` / `#2A2018`; text `#FFFFFF` / `#E0E0E0` / prose `#E8E0D8` / warm `#C0B6AC` / `#A89888` / `#808080` / `#606060`; accent `#FF6321` + deep `#CD3D00` (gradient `90deg` on primary buttons, `135deg` on the logo tile and avatar) + soft `#FF8A56` / citation `#FF8C5A`; semantic `#22C55E` / `#F59E0B`–`#FFB020` / `#EF4444` (soft `#F87171`) in xana's tinted-chip form (border ~35–45%, wash 8–10%); radii 8 (buttons/inputs), 12 (cards/tables), 999 (chips, pills, persona); glow `0 4px 12px rgba(255,99,33,.16)`; motion `200ms cubic-bezier(0.16,1,0.3,1)`, drawer/toast at 350ms on the same ease; fonts Geist + Geist Mono (Google Fonts) over Arial/Helvetica and ui-monospace stacks — the pair xana actually loads. Added what xana lacks: a full `prefers-reduced-motion: reduce` block collapsing every transition/animation, and visible `:focus-visible` rings (accent, 2px) the brief requires.
+
+**Signature interaction.** Recording a transition: the drawer slides in on the house ease, demands a document reference, and refuses the write outright when the field is blank or the owner is the team mailbox — and on success the toast confirms actor, time and the evidence ref set as an orange mono citation chip, while every chip, gate number and gate bar on all seven views recomputes from the one canonical list (deliver PR-2043 live and the board moves to 22 of 24 / 24 of 24 / 1 of 1 / 24 ≥ 20).
+
+**Deliberate omissions.** Did not copy any xana screen, route, copy, the XANA wordmark or gradient-text logo, or the top-nav + 64px icon-rail combination (grammar kept, structure and items invented). No charts — the gates are counts against targets, so they render as number-plus-track, not decorated graphs. No shadows for elevation (surface + 1px border only, per the system; the toast alone casts one). No skeletons/spinners — the demo is synchronous, so loading theatre would be fake. No pane-entrance animation — every write re-renders the pane, and replaying an entrance on each write is noise; motion lives only in drawer, scrim, toast and hover micro-moves. **Functional fixes landed:** (1) Gate 3 is now computed from the exceptions data (`silentResolved` of `silent` guardrail entries), so "every number counted from the requests in this demo" is true of all four gates. (2) PR-2043 re-seeded one step short of delivery — ordered, ETA 25 Aug verified (15-week factory lead), exactly 7 recorded transitions, next action naming dana to receipt the goods — and PR-2061 promoted to a delivered request (assigned 4h, approval AP-158, GR-4532) so the section-06 deep link no longer opens a "Complete." request. (3) `syncUrl` now keeps `item/amount/type/try` live in the URL on the submit view (cleaning them elsewhere), so a ceiling refusal is shareable as a link. **Arithmetic re-verified headlessly after the re-seed:** 23 completed / 21 assigned ≤1 day / 2 chased / 0 unapproved / median 0.6 d; gates read 21 of 23, 23 of 23, 1 of 1, 23 ≥ 20; header chips 23 / 0 / $5,000; exceptions tiles 4 raised, 1 silent, 0 unresolved; 4 ceiling refusals; every completed request carries an approval event; all 7 views render under all 4 personas; in-flight queue = PR-2043 ordered, PR-2062 approval, PR-2063 assigned, PR-2064/65 submitted.
+
 ---
 
 ### 12. WishKey — Key Management System
@@ -1744,16 +2271,30 @@ I would also have measured chasing from the start rather than month two. The num
 | Track | silicon |
 | Domain | Access control |
 | Status | production |
+| Tier | 3 |
+| Card image | `Image__1_.png` |
+| Card colour | #dbeafe |
 | Context | EEGRAB · 2023 · Access control |
 | Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 4 engineers — me, firmware, Android, mechanical — with the CTO carrying the commercial side |
 | Timeline | Q1 2023 – Q4 2023 |
 | Stage | In production — shipping as a catalogue product through installer partners |
-| Link | https://www.youtube.com/watch?v=8etIl_0wj0I |
+| Demo | https://www.youtube.com/watch?v=8etIl_0wj0I |
+| External link | https://eegrab.com/wp-content/uploads/2021/brochure/Wishkey_brochure.pdf |
 
 **Positioning.** An electronic key cabinet that makes a key impossible to take anonymously, replacing a paper register nobody could reconcile.
 
 **Outcome (card copy).** Replaced a paper key register with an audited electronic cabinet, shipped as a catalogue product with per-key accountability.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The record had to become the act.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Catalogue product — public brochure and demo video |
+| A | A — public & verifiable | Per-slot locking: every slot senses, locks and reports alone |
+| A | A — public & verifiable | My own board design on-page: 16 channels, optocoupled drive |
 
 **Problem.** Facilities that run on physical keys — data-centre halls, plants, commercial estates, substations — control them with a wall board and a clipboard register. Reading twelve months of those pages against the actual key sets, a third of rows named nobody legible.
 
@@ -1774,7 +2315,7 @@ The cost of a lost key is never the key. It is rekeying every lock that key open
 
 Three products could have addressed it. I scored them on one thing — the share of key-removal events that would produce an attributable record without somebody choosing to write one. A control that works only when people comply is not a control.
 
-**Figure — Share of key-removal events producing an attributable record without voluntary compliance: electronic cabinet 96 percent, access-control integration 41 percent, tablet logbook 23 percent**
+**Figure — Share of key-removal events producing an attributable record without voluntary compliance: electronic cabinet 96 percent, access-control integration 41 percent, tablet logbook 23 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1797,7 +2338,7 @@ I interviewed facility managers and the installers who service their sites, then
 | Be filled in at the moment of issue | Whole days written in one hand, after the fact | 4 of 6 sites |
 | Reconcile to the physical key set | Keys hanging that no row accounted for | 19 keys in total |
 
-**Figure — Days between a key being issued and a return being recorded, from twelve months of paper register pages: 41 percent same day, 8 percent never recorded**
+**Figure — Days between a key being issued and a return being recorded, from twelve months of paper register pages: 41 percent same day, 8 percent never recorded**  `form: histogram`
 
 | name | value |
 |---|---|
@@ -1886,7 +2427,7 @@ We agreed before build that this failed if any key could leave a cabinet without
 | 2.1 (per 1,000 draws) | Emergency mechanical overrides used |
 | 1 day → 2 h | Commissioning time per cabinet |
 
-**Figure — Outcome of key-removal events by site class, column width proportional to keys under management: attribution is near-total everywhere, punctuality is worst at utility substations**
+**Figure — Outcome of key-removal events by site class, column width proportional to keys under management: attribution is near-total everywhere, punctuality is worst at utility substations**  `form: marimekko`
 
 | name |
 |---|
@@ -1909,6 +2450,10 @@ I would also have made the mechanical override self-evidencing rather than proce
 
 > **Note on this sample.** Sample portfolio page. Every figure here is invented and reconciled to be internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.youtube.com/watch?v=8etIl_0wj0I>
+
 ---
 
 ### 13. Wi-R reference designs — video smartglasses and tactical headset
@@ -1921,16 +2466,30 @@ I would also have made the mechanical override self-evidencing rather than proce
 | Track | silicon |
 | Domain | Wearable systems |
 | Status | production |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_ef658pef658pef65.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–2026 · Wearable systems |
 | Role | Owner of what “done” meant for a copyable design — program manager, reference design delivery (HW/FW US · applications and validation across both sites) |
 | Team | The same 5 functions as the chip programs, plus 3 applications engineers carrying the live evaluations |
 | Timeline | Jan 2025 – Feb 2026 |
 | Stage | In production — design files released to evaluating teams |
-| Link | https://www.ixana.ai/products/reference-designs |
+| Demo | https://www.ixana.ai/products/reference-designs |
+| External link | https://www.ixana.ai/products/reference-designs |
 
 **Positioning.** Two complete designs an OEM can copy, built to kill the objection that stalls every silicon evaluation: great chip, no path to a product.
 
 **Outcome (card copy).** Reference designs proving Wi-R carries live video to smartglasses and voice to a tactical radio over the body rather than the air.
+
+**Skim layer — the pull, and the three facts under it**
+
+> No amount of attention transfers a skill — only a design they can copy does.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Both designs public and complete: schematic, layout, BOM, firmware |
+| A | A — public & verifiable | Two live demonstrations on video |
+| A | A — public & verifiable | Release gated on an outside team rebuilding from the files alone |
 
 **Problem.** The chips worked and the dev kits proved the link, and evaluations still died. Reviewing 27 that stalled showed almost none failed on the technology: they failed after the kit worked, when a team had to turn a working link into a wearable — an antenna-less RF layout problem nobody on staff had done.
 
@@ -1952,7 +2511,7 @@ By late 2024 the technology objection was answered: the BAN part in production, 
 
 The commercial stake is straightforward. An evaluation that stalls between datasheet and prototype is not a slow design-in, it is a lost one — the engineer who championed us gets reassigned, and the next conversation starts in a colder room. Three options were on the table, scored against the same 27 stalled evaluations.
 
-**Figure — Share of 27 stalled evaluations each option would have unblocked: reference designs 78 percent, expanded documentation 30 percent, more applications engineering hours 22 percent**
+**Figure — Share of 27 stalled evaluations each option would have unblocked: reference designs 78 percent, expanded documentation 30 percent, more applications engineering hours 22 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -1975,7 +2534,7 @@ I took every evaluation that had gone quiet for more than sixty days — 27 of t
 | First board built | Worked on the bench, not on a person | 6 of 27 |
 | Mechanical integration | No guidance on electrode placement in a real enclosure | 5 of 27 |
 
-**Figure — Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 designed their own board, 5 built one, and none got it working on a person**
+**Figure — Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 designed their own board, 5 built one, and none got it working on a person**  `form: funnel`
 
 | name | value | label |
 |---|---|---|
@@ -2061,7 +2620,7 @@ We agreed before starting that a reference design failed if a team outside Ixana
 | 4 → 12 | Evaluations running concurrently |
 | 9.4 → 9.1 h (per eval) | Applications support hours per evaluation (guardrail) |
 
-**Figure — Datasheet to working demo, broken into phases: eleven weeks before the reference designs, three weeks after, with board design falling from three weeks to none**
+**Figure — Datasheet to working demo, broken into phases: eleven weeks before the reference designs, three weeks after, with board design falling from three weeks to none**  `form: stackedHBar`
 
 | name | values | label |
 |---|---|---|
@@ -2082,6 +2641,10 @@ I would also have published the mechanical guidance as a first-class file rather
 
 > **Note on this sample.** This is a sample portfolio page about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are invented placeholders and should be replaced with real data before this page is used. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation.
 
+**Demo**
+
+External: <https://www.ixana.ai/products/reference-designs>
+
 ---
 
 ### 14. Cost-effective smart watch
@@ -2094,6 +2657,9 @@ I would also have published the mechanical guidance as a first-class file rather
 | Track | silicon |
 | Domain | Consumer wearable |
 | Status | production |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_io6t60io6t60io6t.png` |
+| Card colour | #dbeafe |
 | Context | EEGRAB · 2023 · Consumer wearable |
 | Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 3 — me, a firmware engineer and a mechanical designer, with the CTO carrying the commercial side |
@@ -2103,6 +2669,15 @@ I would also have published the mechanical guidance as a first-class file rather
 **Positioning.** A watch that loses in the shop and wins on the wrist: the colour screen went, and a week of battery came back with it.
 
 **Outcome (card copy).** Cut the smartwatch bill of materials to a price Indian retail could carry while keeping heart-rate sensing and phone notifications.
+
+**Skim layer — the pull, and the three facts under it**
+
+> In this tier the bracket is the product.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | The real board on-page: nRF52840, discrete antenna, two crystals |
+| A | A — public & verifiable | The display trade pays twice — the cost line and the battery line |
 
 **Problem.** At the bottom of the smartwatch market the specification is written by the price. We opened nine watches from the band we wanted to sell into: seven had spent about a third of their bill of materials on a colour screen, and eight claimed a week of battery that measured two to four days in use.
 
@@ -2118,7 +2693,7 @@ In a price-set tier the margin is won in the bill of materials, not in the shop,
 
 One third of it sat behind the glass. That makes the display the product decision and everything else a rounding error, which is uncomfortable, because the display is also the only part of a watch a buyer evaluates before paying.
 
-**Figure — Share of the first build's bill of materials by subsystem: display and driver 34 percent, processor and radio 22 percent, battery and charging 16 percent, enclosure 15 percent, sensors 13 percent**
+**Figure — Share of the first build's bill of materials by subsystem: display and driver 34 percent, processor and radio 22 percent, battery and charging 16 percent, enclosure 15 percent, sensors 13 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2143,7 +2718,7 @@ I bought nine watches from the retail band we were aiming at, opened all of them
 | SpO2 on the packaging | The same front end as heart rate, one wavelength | 5 of 9 |
 | A proprietary charging cradle | A return waiting to happen, and no spare sold | 6 of 9 |
 
-**Figure — Bill of materials by subsystem, tier median from the teardowns against our target: display 390 rupees against 190, processor and radio 250 against 195**
+**Figure — Bill of materials by subsystem, tier median from the teardowns against our target: display 390 rupees against 190, processor and radio 250 against 195**  `form: pairedBars`
 
 | name | before | after |
 |---|---|---|
@@ -2229,7 +2804,7 @@ We agreed before build that this failed if a unit could not be landed under ₹9
 | 3 (heart rate, motion, temperature) | Sensor channels |
 | 4 (three bands plus the final) | Board revisions to production |
 
-**Figure — Route through the cost and battery trade space across four board revisions, from 1,180 rupees and three days to 820 rupees and nine days**
+**Figure — Route through the cost and battery trade space across four board revisions, from 1,180 rupees and three days to 820 rupees and nine days**  `form: trajectory`
 
 | name | x | y | note |
 |---|---|---|---|
@@ -2266,16 +2841,29 @@ I also accepted the charging cradle. The teardowns told me a proprietary connect
 | Track | ai |
 | Domain | Delivery reporting |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Image__14_.jpg` |
+| Card colour | #ddd6fe |
 | Context | Ixana · 2026 · Delivery reporting |
 | Role | Product manager, delivery owner |
 | Team | 1 automation engineer, with the five delivery leads as reviewers |
 | Timeline | Jan – May 2026 |
 | Stage | Live across five teams; weekly, monthly and quarterly |
-| Link | /demo/team-performance |
+| Demo | /demo/team-performance |
 
 **Positioning.** One engine, five delivery teams, three reporting windows — and every published delay carries a root cause a named person signed.
 
 **Outcome (card copy).** One engine produces the weekly, monthly and quarterly performance report for all five delivery teams — four of which had no standing report at all.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A report is two parameters, not five products.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: the signature gate and coverage arithmetic, running |
+| A | A — public & verifiable | No count on any report is computed by a model |
+| A | A — public & verifiable | Nothing publishes unsigned from monthly upwards |
 
 **Problem.** AMS spent about two days a month on a performance report in which only 21% of delayed tasks arrived with a stated cause. The other four delivery teams had no standing report at all, and paid for that once a quarter in a lead's week.
 
@@ -2296,7 +2884,7 @@ Three reporting problems were on the table at the start: the monthly AMS report 
 
 Once AMS was running the second question arrived: build it four more times, or make the one that exists take a parameter.
 
-**Figure — Lead hours spent assembling material before each quarterly review, by team: AMS 4, RTL 19, FW 17, PS 16, HW 14**
+**Figure — Lead hours spent assembling material before each quarterly review, by team: AMS 4, RTL 19, FW 17, PS 16, HW 14**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2322,7 +2910,7 @@ I read six months of AMS reports against the underlying task data and coded what
 | Built a deck per quarter (RTL, PS, HW, FW) | Figures reconstructed by hand at the deadline | 5 of 16 decks contradicted the task data |
 | Circulated to leadership | Different versions in different inboxes | 3 versions of one month's report found |
 
-**Figure — Across six AMS monthly reports and sixteen quarterly decks: 79 percent of delayed tasks had no stated cause, 44 percent of comment threads already held one, 31 percent of decks contradicted the task data, and one team in five had a standing report**
+**Figure — Across six AMS monthly reports and sixteen quarterly decks: 79 percent of delayed tasks had no stated cause, 44 percent of comment threads already held one, 31 percent of decks contradicted the task data, and one team in five had a standing report**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2414,7 +3002,7 @@ We agreed before build that this failed if a report ever went out carrying a roo
 | 3 → 1 | Versions of a report in circulation (guardrail) |
 | 0 | Counts or percentages computed by a model |
 
-**Figure — Share of delayed tasks carrying a signed root cause, by team, from each team's first run to its third: rising from between 45 and 60 percent to between 80 and 89 percent**
+**Figure — Share of delayed tasks carrying a signed root cause, by team, from each team's first run to its third: rising from between 45 and 60 percent to between 80 and 89 percent**  `form: slope`
 
 _Signed-cause coverage per team across its first three runs, Mar–May 2026. The lines cross, which is the finding: the team that started lowest finished highest, and the two that finished lowest are the two whose leads sign inside a release or a tapeout week. Coverage tracks when a lead can stop, not how much their engineers write — which is not what the AMS evidence predicted._
 
@@ -2430,6 +3018,86 @@ I also rolled to four more teams on one team's evidence. Coverage rose everywher
 
 > **Note on this sample.** This is internal reporting. The screens in section 06 are a working recreation with invented content, and all figures on this page are invented placeholders for this sample. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is made up. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | Project Manager |
+| organization | Delivery teams — AMS, RTL, PS, HW, FW |
+
+**Tags** — `Workflow automation` · `Project reporting` · `ClickUp` · `Excel dashboards` · `AI-assisted RCA` · `Performance analytics` · `Multi-team reporting`
+
+**TL;DR.** Problem: Only the AMS team had a standing performance report, and it took about two days a month to assemble. The other four delivery teams — RTL, PS, HW and FW — had nothing standing, and reconstructed review material by hand once a quarter.
+
+What we did: I turned the AMS monthly workflow into one n8n sub-workflow that takes two parameters, a team and a reporting window. The same run produces a weekly, a monthly or a quarterly report for any of the five teams; counting stays rule-based, only synthesis goes to a model, and what the model is for changes with the window.
+
+Result: Fifteen monthly reports a quarter where there was one, plus weekly reports the leads act on and a quarterly that reads the three monthly reports rather than the task records. Root cause coverage across the five teams reached 84 per cent, and nothing publishes from monthly upwards without a named signature.
+
+**Role and approach.** What I owned: the reporting workflow from trigger to published report, the parameterisation into team and window, the rule about where judgement is allowed, and the six shared cause categories the five teams agreed to fill the same way. I was accountable for the right tasks landing in scope for each window, for the sheets staying in sync, and for the signature gate holding.
+
+Tradeoffs I navigated: reach against fit — one report shape across five teams that work very differently, which cost every team a distinction it cared about; comparability against the question leadership asked, which is why the five teams are never ranked and coverage is the only cross-team number; and maintainability against precision, since five fixed rosters mapped to live identities means every joiner or leaver is a manual edit.
+
+**What was built.** One n8n sub-workflow parameterised by team and reporting window. It clears the prior rows, fetches the team's tasks due inside the window with pagination, and runs parallel branches: per-assignee efficiency, group performance distribution, and delayed-task analysis that pulls each item's ClickUp comment history and drafts a root cause. A second pass reads the generated sheets rather than the raw tasks to produce key metrics, project distribution and critical issues. The weekly window writes three sheets, adds the open-and-overdue work no monthly report counts, and has no signature gate. The monthly window writes six sheets and publishes only through the gate. The quarterly window fetches no task records at all: it reads the three monthly reports the team published, groups their signed causes by the six shared categories, and writes four sheets ending in a portfolio view that reports coverage for all five teams and nothing else.
+
+**Impact context.** This replaced one team's manual monthly process with an engine that serves all five delivery teams on three cadences. It gave four teams a standing report they never had, tied delay analysis to the task context engineers had already written in comment threads, and made the quarterly review read from what was published at the time rather than from material assembled the week before.
+
+**Reflection.** The pattern that worked was keeping calculations deterministic where accuracy matters and using AI where synthesis is the real task — and then letting the reporting window decide which of the two the model is doing. Making the second stage read the generated sheets, and the quarterly read the published monthly reports, is the same rule applied at two levels and it is what stops the narrative drifting from the tables. What I would watch: the five hardcoded rosters, and the fact that rising coverage is an adoption signal rather than a quality one — nobody has yet sampled a signed cause against what actually happened.
+
+**Key decisions**
+
+- I made the report a function of two parameters — which team and which window — rather than building five copies that drift apart inside a quarter and then cannot be compared.
+- I let the reporting window decide what the model is for: an absolute threshold weekly, the worst decile with a floor of two rows monthly, and no new root cause at all at the quarter, where the model only clusters causes people already signed.
+- I kept task counting and delay classification rule-based, and used AI only after the base data was structured, so no count or percentage on any of the reports passes through a model.
+- I put the signature gate at monthly and above and deliberately left it out of the weekly, because signing a working document nobody quotes teaches people that signing means nothing.
+
+| Value | Label |
+|---|---|
+|  |  |
+|  |  |
+|  |  |
+
+**Media referenced**
+
+- `image` mermaid-diagram__8_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/team-performance` |
+| File | `public/demo/team-performance.html`  (198.0 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Team Performance Reporting Desk |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Team performance reporting
+h5  What this demo is
+h5  The four decisions it makes visible
+h5  more
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Team Performance Reporting Desk Ixana · Delivery reporting Team performance reporting Window — Not yet run 0 counts from a model Viewing as Team Window What this demo is A working recreation of the team performance reporting engine described in the case study. Two parameters — which team, which window — produce every report on this page. The run is simulated and the content is invented; the structure, the rules and the gate are the real ones. The four decisions it makes visible 1. Counting is deterministic; only synthesis goes to a model — every panel carries a rule or model badge. 2. The window decides what the model is for: a threshold weekly, the worst decile monthly, and at quarter it reads the three monthly reports and writes no task analysis at all. more 3. The signature gate exists from monthly upwards. A weekly report is a working document and is never signed, because signing it would cost four times as much for a document nobody quotes. 4. Five teams share a report shape and six cause categories, and are never ranked against each other. The one sheet that puts them on a page reports whether the process ran, not how they performed. All teams, tasks, names, comment threads, causes and figures on this page are invented for the demo. No task, customer or individual’s performance data appears here. The five team names are real internal groupings at Ixana; everything inside them is not. March and April are held as the monthly reports they produced, not as task records, because that is what the quarterly report actually reads.
+
+_Design note — Team performance reporting (Tier B):_
+
+**Identity (3 lines).** A native sibling of xana-nine: the warm brown-black ground, single orange accent and bordered-not-shadowed cards of the house system, laid out as this product's own cadence/sheet matrix — the team and window selectors ARE the product, so they live in the blurred top bar as two distinct control shapes (team = flat semibold tabs with the 2px orange active underline, i.e. the house nav grammar repurposed; window = rounded-full pills whose active state is the tinted-accent chip) and never in a menu. Below them, a numbered sheet rail and the delay-detail sheet as the hero surface: the 84% coverage figure gets the hero-number treatment (30px mono orange with the gradient track and the "before" mark scored into it), and the drawer's model analysis is set in the house answer-panel grammar (rounded-2xl deep card, uppercase kicker, warm `#E8E0D8` prose at 1.7 leading) with "used by the analysis" comments tinted like citation chips.
+
+**Tokens.** Ground `#0E0805`, surfaces `#1A1410`/`#221A14`/`#2A2420`, deep panel `#140F0B`, borders `#3A3028` (hover `#5A4838`, hairline `#2A2018`); accent `#FF6321` + soft `#FF8A56` + gradient `#CD3D00→#FF6321` (reserved for the coverage hero track); warm text ramp `#FFFFFF`/`#C0B6AC`/`#A89888`/`#8A7E72` (all ≥4.5:1 on their surfaces); semantic `#22C55E`/`#FFB020`/`#EF4444` with 35–40% borders and ~9% washes. Type: Geist + Geist Mono (Google Fonts, Arial/monospace fallbacks — Arial being what the XANA body actually renders), 13px workhorse, mono `tabular-nums` on every numeric column, 9.5–10px uppercase 0.12–0.16em kickers/badges, −0.25 to −0.5px on headings. Radius: 8px controls, 12px cards/tables, 16px panels, pill chips/badges. Motion: 200ms colour transitions, drawer and team-underline on `cubic-bezier(0.16,1,0.3,1)`, all killed under `prefers-reduced-motion`.
+
+**Signature interaction.** Owner-gated signing in the drawer: the deep link the case study documents (`?team=ams&cad=monthly&sheet=delay&task=T-2214&signed=0`) now lands as the AMS Layout lead — deliberately NOT the owner of T-2214's group — so pressing the disabled "Sign as Ana Beck" area shows the refusal ("This row belongs to AMS Design…") exactly as promised; `?as` is honoured last in init so it wins over both the default persona and the non-owner pick (the reorder fix). Everything else on the page is a function of the two header controls: switching a team tab slides the orange underline and rebuilds every sheet, count and persona list from the same arrays.
+
+**Deliberate omissions.** No XANA wordmark, gradient-text logo or 64px icon rail — the grammar (blurred bar, underline, pill user chip) without the structure. No white-on-orange primary buttons: the house Sign-In style fails AA, so primaries are solid `#FF6321` with near-black ink (`#240D02`, 6.3:1) and the gradient is spent on the hero track instead — the one documented deviation. No shadows for elevation (border + surface shifts only; toast excepted), no team ranking or individual ratings anywhere (parity invariant), no chart beyond the labelled three-month sparks, no light theme. Parity verified headlessly post-redesign: 5 teams × 3 cadences, all 13 sheet renderers + publish gates execute clean; 84% = 32-of-38; 6/8/7 run steps; six categories; "cause not confirmed" never blank; every `?param` (team/cad/sheet/task/signed/state/as/view/filter/fresh) lands as documented.
+
 ---
 
 ### 16. Scrum ecosystem — one workspace for sprint ceremonies
@@ -2442,16 +3110,29 @@ I also rolled to four more teams on one team's evidence. Coverage rose everywher
 | Track | ai |
 | Domain | Agile tooling |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Image__15_.jpg` |
+| Card colour | #fae8ff |
 | Context | Ixana · 2026 · Agile tooling |
 | Role | Product manager, ceremony owner |
 | Team | 2 engineers |
 | Timeline | Jan 2026 – present |
 | Stage | Live for three engineering squads |
-| Link | /demo/scrum-desk |
+| Demo | /demo/scrum-desk |
 
 **Positioning.** Standup, backlog, burndown and review became four views of one task record instead of three documents somebody kept up by hand.
 
 **Outcome (card copy).** Standup, backlog and burndown now read from the same task data instead of three separately maintained views.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A ceremony is a view, not a document.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: every standup line is a diff of the task record |
+| A | A — public & verifiable | Four writable fields behind one allow-list, on an open ledger |
+| A | A — public & verifiable | Drift is zero by construction — the second copy no longer exists |
 
 **Problem.** Three artefacts — a standup document, a backlog sheet and a burndown chart — were kept by hand beside the task records they described. Diffed across six sprints, 61 of their 218 rows disagreed with the record.
 
@@ -2471,7 +3152,7 @@ Ixana already had a read-only dashboard over this workspace, and read-only was r
 
 Three options were open: the tool of record’s own sprint module, an agile product bought in, or ceremonies built as views of records we already had. The first two add a place where work lives; only the third removes one. The case was never that ceremonies are expensive — it was the sixth of that cost spent producing a second, worse copy of what we own.
 
-**Figure — Engineer-hours per sprint spent in and around ceremonies, three squads: planning 12.7, standup 10.7, keeping the three artefacts current 6.0, review 4.0, retrospective 4.0**
+**Figure — Engineer-hours per sprint spent in and around ceremonies, three squads: planning 12.7, standup 10.7, keeping the three artefacts current 6.0, review 4.0, retrospective 4.0**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2495,7 +3176,7 @@ None were clerical. Each was a number somebody had already decided from — a ta
 | Backlog sheet | A private ordering that only re-entered the workspace when someone remembered | 71 rows checked, 22 disagreed |
 | Burndown chart | Recomputed by hand, so a split task burned its points twice | 65 rows checked, 15 disagreed |
 
-**Figure — Rows checked against rows that disagreed with the task record, by artefact, over six sprints**
+**Figure — Rows checked against rows that disagreed with the task record, by artefact, over six sprints**  `form: groupedHBar`
 
 | name | a | b |
 |---|---|---|
@@ -2587,7 +3268,7 @@ The guardrail was the median size of a closed task: a burndown counted in tasks 
 | 3 → 0 | Ceremony artefacts maintained by hand |
 | 3 → 3 pts | Median size of a closed task (guardrail) |
 
-**Figure — Median standup length against the minutes not spent reading out state, sprints 32 to 41: the total falls from 18 minutes to 9 while the useful part holds at 7 to 8**
+**Figure — Median standup length against the minutes not spent reading out state, sprints 32 to 41: the total falls from 18 minutes to 9 while the useful part holds at 7 to 8**  `form: gapArea`
 
 _Sprints 32–41, three squads; length from meeting recordings, the split coded by two people against the same rule and reconciled. The finding is the band, not either line: the useful part of a standup was always seven or eight minutes, and what disappeared was ten minutes of reading out state — which is also why the meeting did not keep shrinking after sprint 39._
 
@@ -2605,6 +3286,39 @@ And I would have solved the retrospective instead of cutting it. The cut was cor
 
 > **Note on this sample.** Sample page. The screens are recreations of the working demo on an invented sprint, and every figure — the audit counts, the meeting lengths, the adoption fraction — is an invented placeholder. The ceremony rules, the four-field write boundary and the reason the retrospective is missing are the real design. Happy to walk through the running product in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/scrum-desk` |
+| File | `public/demo/scrum-desk.html`  (72.0 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Sprint Desk — the Scrum ecosystem |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Sprint Desk
+h5  What this demo is
+h5  The four decisions it makes visible
+h5  …and the hardest cut
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Sprint Desk — the Scrum ecosystem Sprint Desk Ixana · Platform squad · Sprint ceremonies Sprint 41 · 2–13 Mar 2026 0 rows disagree with the record Signed in as What this demo is A working recreation of the Scrum ecosystem described in the case study. The sprint, the people and every task are invented; the structure, the write allow-list and the ceremony rules are the real ones . Standup, planning, burndown and review are four views of one task record . Nothing here keeps a second copy. The four decisions it makes visible 1. A ceremony is a view, not a document — every line on the standup board is a diff of the record, marked derived . 2. Write-narrow, not read-only. Four fields are writable; everything else deep-links out and is marked read . …and the hardest cut 3. Ceremony state attaches to the task , never to the person. The per-person column is a filter computed on read and never stored. 4. The burndown is recomputed on read, so it can never become the artefact that disagrees. There is no retrospective board here, and section 04 of the case study says why: a retro board inside the tool of record is read by people it was not written for. All squads, people, tasks, estimates and figures on this page are invented for the demo. No individual’s performance data appears here, and by design none could: the demo stores ceremony state against task ids only. The six-sprint drift audit shown under Drift check uses the same 218 rows / 61 disagreements quoted in section 02 of the case study.
+
+_Design note — Scrum ecosystem (Tier B):_
+
+**Identity (3 lines).** Sprint Desk is the ceremony spine of the XANA family: a blurred warm-dark top bar carries the six views as flat orange-underlined tabs (01–04 ceremonies, hairline-separated from Drift check / Write ledger) with the ten-day strip pinned beside them, so "which ceremony, which day" is always one glance up. The standup board is the hero, and every line on it is typeset as the record diff it literally is — a mono `was → now` gutter (todo → doing, doing → done, open → blocked) with a 2px state-coloured edge, so the "a ceremony is a view" argument is visible in the typography, not just the copy. The burndown is drafted, not defaulted: mono axis kicker, dotted ideal, a dashed replay-cursor rule labelled "day N · today", 45° amber hatching for post-day-1 scope, and punched-out node circles on the actual line.
+
+**Exact tokens.** Ground `#0E0805`, surfaces `#1A1410`/`#221A14`/`#2A2420`, deep panels `#140F0B`; borders `#3A3028` (hover `#5A4838`, hairline `rgba(255,255,255,.06)`); text `#FFFFFF` / `#D9CFC5` / `#A39685` / `#857A6E` (faint lifted off Xana's `#606060` to clear AA at 10px); accent `#FF6321` + soft `#FF8A56` + gradient `linear-gradient(90deg,#CD3D00,#FF6321)` on primary buttons, capacity bars and hero numbers only; semantic `#22C55E`/`#F59E0B`+`#FFB020`/`#EF4444` with dim/wash alpha pairs. Geist / Geist Mono (Arial + ui-monospace fallbacks), 13px workhorse, 21px −0.5px headings, 9.5–10px 0.12–0.16em uppercase mono kickers, tabular-nums on every figure; radii 8/12/16 + full pills; motion 200ms `cubic-bezier(0.16,1,0.3,1)`, drawer 350ms slide, 30ms-staggered pane rise, all zeroed under `prefers-reduced-motion: reduce`.
+
+**Signature interaction.** The day strip lives in the chrome, not inside the standup view: scrubbing day 1→6 replays the whole product — every diff gutter, the already-in-record counter, the burndown cursor rule and the review lists re-derive in place (days 7–10 stay disabled with the "sprint is on day 6" title), which stages the summed-on-read thesis as a single gesture. The current day is a tinted-accent pill; day 6 carries a permanent orange tick-dot marking "today".
+
+**Deliberate omissions.** No shadows (elevation is surface + 1px border, per the sibling grammar); no XANA wordmark, icon rail or route copy; no gradient on stat tiles — only the first (hero) stat of each row takes accent ink so orange stays scarce; no chart library and no decorative motion on the SVG (the drafted look is static geometry); focus keeps a visible 2px accent `:focus-visible` ring even though Xana itself uses border-only focus, because the common brief's keyboard requirement outranks the sibling habit. Parity verified headless: tabs/day/as params, 56 committed + 5 arrived pts, diff engine (7 items on day 6), T-4118 "Blocked 4 days" / T-4141 "Blocked 2 days", 218/61 with 82/24·71/22·65/15 replay, capacity medians (Imran 6), spread bars, points/tasks toggle with scope shading, four-field ledger, pull-in double write, per-person drawer disabled for people ops, day clamp at 6 — all intact; JS data and computations byte-identical, only render strings and chrome wiring restyled.
+
 ---
 
 ### 17. Flow Tracker — real-time delivery pipeline diagnostics
@@ -2617,16 +3331,29 @@ And I would have solved the retrospective instead of cutting it. The cut was cor
 | Track | ai |
 | Domain | Engineering ops |
 | Status | internal |
+| Tier | 1 |
+| Card image | `Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png` |
+| Card colour | #fae8ff |
 | Context | Ixana · 2026 · Engineering ops |
 | Role | Product manager, delivery owner |
 | Team | 3 engineers, 1 data engineer |
 | Timeline | Feb 2026 – present |
 | Stage | Live across three engineering teams |
-| Link | https://xana-nine.vercel.app/efficiency?view=tracker |
+| Demo | https://xana-nine.vercel.app/efficiency?view=tracker |
 
 **Positioning.** One live view of the PS, AMS and RTL delivery pipelines, so a weekly review starts from the same picture instead of three reconstructions of it.
 
 **Outcome (card copy).** One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A stage nobody recognises is a stage nobody corrects.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo on the deployed platform — every claim clickable |
+| A | A — public & verifiable | The correction rate sits on the header, not in a report |
+| A | A — public & verifiable | Ask it who the best engineer is: the ranking does not exist |
 
 **Problem.** Every Monday, three engineering leads rebuilt the same picture by hand from a task tool, a bandwidth spreadsheet and their own memory — a median of 41 minutes each, assembled differently, so the three reviews were not comparable.
 
@@ -2644,7 +3371,7 @@ And I would have solved the retrospective instead of cutting it. The cut was cor
 
 Three operations problems competed for the same quarter: pipeline visibility, a bandwidth reporting rebuild, and delivery-risk alerting. I sized them the same way — lead and architect hours consumed per month — from a fortnight of calendar sampling across eleven people plus the review observations in the next section.
 
-**Figure — Lead and architect hours lost per month: assembling review material 96, chasing delay explanations 54, reconciling bandwidth 22**
+**Figure — Lead and architect hours lost per month: assembling review material 96, chasing delay explanations 54, reconciling bandwidth 22**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2667,7 +3394,7 @@ I sat in eight weekly delivery reviews across the three teams and timed the prep
 | Wrote down why late items were late | The reason lived in a task comment thread nobody re-read | 8 of 8; median 19 min |
 | Compared this week to last week | No stored history, so comparison was from memory | 7 of 8 compared verbally with no artefact |
 
-**Figure — Median minutes per review preparation step across eight observed reviews: reading comment threads 19, editing the export 14, reconciling bandwidth 6, assembling slides 2**
+**Figure — Median minutes per review preparation step across eight observed reviews: reading comment threads 19, editing the export 14, reconciling bandwidth 6, assembling slides 2**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2757,7 +3484,7 @@ Before build we agreed this failed if fewer than half of the 31 leads ran their 
 | 4.2% | Stages corrected by a lead (guardrail) |
 | 3 | Delivery pipelines modelled separately |
 
-**Figure — Median review preparation minutes before and after, by team: PS 44 to 11, AMS 38 to 10, RTL 41 to 16**
+**Figure — Median review preparation minutes before and after, by team: PS 44 to 11, AMS 38 to 10, RTL 41 to 16**  `form: pairedBars`
 
 | name | before | after |
 |---|---|---|
@@ -2779,6 +3506,49 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 
 > **Note on this sample.** This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `Workflow analytics` · `Project tracking` · `Team operations` · `AI assistant` · `Data pipeline` · `Engineering dashboards`
+
+**TL;DR.** Problem: Engineering leads, architects, and project managers needed one place to see live task progress across PS, AMS, and RTL teams, spot bottlenecks, and review delays over time.
+
+What we did: I shipped a workflow tracker inside Ixana-Wiki that combined ClickUp and bandwidth data, mapped work into team-specific stages, and added delay analysis, leaderboard views, and a grounded AI query layer.
+
+Result: The team got a single operating view for current status, historical delays, and efficiency questions across three engineering workflows, with both scheduled and manual sync paths to keep the data current.
+
+**Role and approach.** What I owned: I owned the delivery of a shared tracking product for engineering managers and leads. I defined the scope around three needs: current task visibility, delay analysis, and team efficiency reporting. I aligned the workflow model across PS, AMS, and RTL, set the requirements for the two main views, and made sure the data pipeline, API layer, and frontend served one clear operating workflow for project review.
+
+Tradeoffs I navigated: I balanced consistency against team-specific workflow needs by keeping one product surface while allowing different stage models for PS, AMS, and RTL. I also balanced automation against trust by using AI to classify unstructured tasks into stages, while grounding downstream analysis and assistant responses in database records and structured filters.
+
+**What was built.** I built an internal workflow tracker in Ixana-Wiki for engineering leads, architects, and project managers. It showed where tasks sat in each team’s delivery pipeline, highlighted active, completed, and upcoming stages, and let users switch into a delay analysis mode to inspect overdue work and bottlenecks across set time ranges. The product supported PS, AMS, and RTL through separate pipeline views, exposed task details in a drill-down drawer, ranked team velocity in a leaderboard modal, and surfaced top delayed tasks in a bar chart. Behind the product, it pulled data from ClickUp and SharePoint or Excel bandwidth files, processed and classified tasks into structured stages, stored the results in PostgreSQL, and exposed them through FastAPI endpoints. It also included XANA, an AI assistant that answered natural-language questions against the efficiency data using targeted SQL filtering.
+
+**Impact context.** This gave engineering leads, architects, and project managers one place to run cross-team reviews. Instead of piecing together updates from ClickUp, bandwidth files, and team-specific workflows, they could see current status, investigate delays, compare team throughput, and ask grounded questions in the same product. The outcome was faster review cycles, clearer bottleneck identification, and a more consistent way to manage delivery across PS, AMS, and RTL.
+
+**Key decisions**
+
+- I chose to support separate pipeline definitions for PS, AMS, and RTL instead of forcing one standard flow. That made the tracker more useful for each team and kept stage-level reporting credible.
+- I included both a current-state view and a historical 'What Went Wrong' view. This let the product support daily execution reviews as well as retrospective delay analysis without requiring a second tool.
+- I added an AI assistant that answered efficiency questions from filtered SQL-backed data rather than open-ended generation. This reduced the risk of ungrounded answers and kept the feature tied to operational data.
+
+| Value | Label |
+|---|---|
+|  |  |
+|  |  |
+|  |  |
+
+**Media referenced**
+
+- `image` mermaid-diagram__3_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+External: <https://xana-nine.vercel.app/efficiency?view=tracker>
+
 ---
 
 ### 18. ClickUp Activity Tracker — task change audit trail
@@ -2791,16 +3561,29 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 | Track | ai |
 | Domain | Audit tooling |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Image__16_.jpg` |
+| Card colour | #fae8ff |
 | Context | Ixana · 2026 · Audit tooling |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers |
 | Timeline | May 2026 – present |
 | Stage | Live for one workspace space |
-| Link | /demo/clickup-audit |
+| Demo | /demo/clickup-audit |
 
 **Positioning.** Turned a raw activity feed into a searchable record of who changed what — holding the one thing the native feed never keeps: the value a field held before.
 
 **Outcome (card copy).** Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The record did not contain the answer.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: send a payload, tamper it, replay the rules over history |
+| A | A — public & verifiable | The previous value on every line — the thing the feed never keeps |
+| A | A — public & verifiable | Raw stored before parsed; two rule changes replayed, zero re-fetches |
 
 **Problem.** Questions of the form "who moved this date, and when" arrived about fourteen times a month and each consumed an afternoon. A quarter of support requests held 41 of them, and the native feed could technically answer all 41 — by scrolling an unfiltered chronological list with no search and no way to see a field's previous value.
 
@@ -2819,7 +3602,7 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 
 Three compliance-adjacent asks were live: a change audit trail, a document approval record, and an access review report. I sized them by how often each was requested and how long each took to satisfy — all three are the same gap, that the company could not reconstruct its own decisions.
 
-**Figure — Person-hours per quarter spent answering each kind of request: task change history 123, access review 18, document approval history 9**
+**Figure — Person-hours per quarter spent answering each kind of request: task change history 123, access review 18, document approval history 9**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2842,7 +3625,7 @@ I audited every support request in a quarter that asked what had changed on a ta
 | Tried to find the previous value | Feed shows that a field changed, not what it was | 31 of 41 needed the old value specifically |
 | Asked the person they suspected | Recollection, not record | 17 of 41 ended in someone's memory |
 
-**Figure — Of 41 change-history requests in one quarter: 31 needed a previous value, 24 concerned a due date, 17 were answered from memory, 5 went unanswered**
+**Figure — Of 41 change-history requests in one quarter: 31 needed a previous value, 24 concerned a due date, 17 were answered from memory, 5 went unanswered**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -2932,7 +3715,7 @@ We agreed before build that this failed if answering a change question still too
 | 9.2% | Events that are automation edits, shown as a count |
 | 2 | Parsing rule changes replayed over stored history |
 
-**Figure — Median minutes to answer a change question by week after launch, falling from 41 to 4 against a five-minute threshold**
+**Figure — Median minutes to answer a change question by week after launch, falling from 41 to 4 against a five-minute threshold**  `form: barsThreshold`
 
 _Threshold: 5 — Pre-agreed threshold: 5 minutes_
 
@@ -2950,6 +3733,94 @@ I would also start the retention conversation earlier. The service holds every r
 
 > **Note on this sample.** This is internal tooling. The demo linked from section 06 is a recreation with invented content on a fixed clock, and all figures on this page are invented placeholders for this sample. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `Audit Logging` · `Webhook Integration` · `ClickUp API` · `System Design` · `Data Pipelines`
+
+**TL;DR.** Problem: Teams struggle to extract clear, structured task change histories from ClickUp's native feed for compliance and audit reporting.
+
+What we did: I led the product scope and delivery of an activity tracking service that processes ClickUp webhooks into human-readable timeline records.
+
+Result: Delivered a reliable, real-time activity timeline that logs task updates with deduplication and replay capabilities.
+
+**Role and approach.** What I owned: I owned the product roadmap, MVP scope, and functional design. I defined the single-space filtering rules, webhook signature verification standards, schema requirements, and user interface features for filtering and searching activity logs.
+
+Tradeoffs I navigated: Launch speed vs. feature breadth — I limited the initial release to primary task fields while excluding attachments, time tracking, and checklists. I also prioritized storing raw payloads before processing, accepting extra database storage to guarantee replayability and data integrity.
+
+**What was built.** A Next.js 16 and PostgreSQL application that converts ClickUp webhook events into human-readable task history records. It authenticates incoming updates, computes snapshot diffs across status, assignee, priority, due date, and custom field changes, and presents them in a searchable, filterable timeline UI for project compliance and auditing.
+
+**Impact context.** Gave team leads and managers immediate visibility into task modifications, providing an audit trail of who changed what, when, and previous values across tracked workflows.
+
+**Reflection.** Capturing raw payloads from day one proved essential for pipeline resilience, allowing us to tweak parsing rules and reprocess events without relying on upstream API calls.
+
+**Key decisions**
+
+- Stored raw webhook payloads in a dedicated database table prior to processing, enabling data replay and logic updates without losing event history.
+- Enforced strict single-space filtering and history ID deduplication at the ingestion boundary to stop duplicate records and irrelevant space noise.
+- Excluded automated bot edits and secondary entities from the initial MVP to keep audit records clear and focused on human actions.
+
+| Value | Label |
+|---|---|
+|  |  |
+|  |  |
+|  |  |
+
+**Media referenced**
+
+- `image` mermaid-diagram__10_.png
+- `image`
+- `video`
+
+- [Activity View UI](http://localhost:3000/activity)
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/clickup-audit` |
+| File | `public/demo/clickup-audit.html`  (106.9 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Task Change Audit Trail |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Activity
+h2  Filters
+h1  The same question, in both records
+h3  ClickUp’s activity feed — Beta gate — hardware sign-off
+h3  This tracker — same task, same period
+h1  The 41 requests, and what happens to them now
+h1  What happens to one delivery
+h3  One webhook delivery
+h3  Ingest log
+h3  Replay — the same stored payloads under each parsing rule
+h5  What this demo is
+h5  The four decisions it makes visible
+h5  more
+h3  Stored raw event
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Task Change Audit Trail Activity View Tracker · ClickUp Task change audit trail Space: Product Delivery Connected Now: Wed 26 Aug 2026, 14:20 Timeline The record before Audit questions Ingest & replay Activity Every recorded change in the tracked space — who changed what, what it was before, and when. Filters and search live in the URL, so an answer can be sent as a link rather than a screenshot. Filters Clear all Search Values + names Field names only This is what shipped in week 1. Search matched field names and not the values inside them, so “Aug 14” found nothing. Three weeks of answer times above the five‑minute threshold were this one bug. Person Field Task Date range Today 7 days 30 days → 300 automation edits hidden 9.2% of the 3,262 records stored in this space. They are stored, not dropped — this switch is the only thing between you and them. Show automation Showing 1–50 of 2,962 The same question, in both records One task, two records of it. On the left, the activity feed people actually used. On the right, the same task in the tracker. The audit request below is one of the 41 collected in a quarter — the one that took longest. “Who moved the Beta gate off 14 August, and when?” Asked 12 Aug 2026 by the hardware programme lead, ahead of a customer commitment. Answered the old way in 3 h 10 m — and answered wrongly: the person asked from memory named the wrong editor. ClickUp’s activity feed — Beta gate — hardware sign-off 380 entries newest first no search no filters no previous values Jump to the answer 380 entries. 96 of them written by automations, 196 on fields nobody asked about, 41 description saves. The change being looked for is one row in that. This tracker — same task, same period 47 records 5 field types searchable previous value on every row Type it for me 47 records. The other 333 feed entries are either stored and hidden (automation), or never recorded at all (attachments, checklists, dependencies, time tracking, watchers, description saves). Why this task and not an average one. Across the space automation is 9.2% of stored events. On this task it is 67% — and that is exactly why this task generated a complaint and an average one did not. The tasks people brought to the audit were the automation-heavy ones; sizing the problem off the space average would have missed what made it expensive. The 41 requests, and what happens to them now Every support request in one quarter that asked what had changed on a task. Eight of the 41 are reproduced here with the answer the tracker gives. Two of them it still cannot answer, and those are sh…
+
+_Design note — ClickUp Activity Tracker (Tier B):_
+
+**Identity (3 lines).** Native XANA sibling: the audit trail as a warm near-black evidence ledger, where the single orange accent is spent on exactly one recurring thing — the NEW side of every change. The struck-through old value sits on a quiet neutral chip; the new value is the accent-tinted, hairline-glowed evidence chip (the house citation-chip grammar, because that is what it is: the citation). The before/after two-pane view is the argument of the page — the legacy feed set on the deeper `#140F0B` surface with a disabled pill search, the tracker beside it on the raised surface with a live one — and the ingest log reads as a verified chain, each link (signature → raw store → space check → transform → dedup) stamped in its own semantic colour on the near-black console ground.
+
+**Exact tokens.** `--bg #0E0805`, `--surface #1A1410`, `--surface-2 #221A14`, `--surface-3 #2A2420`, `--deep #140F0B` (answer panels, drawer, legacy pane, footer); borders `#3A3028` / hover `#5A4838` / soft `#2A2018`; text `#FFFFFF` / warm body `#E0D0C0` / muted `#A69887` / faint `#8C8175` (both ≥4.5:1 on their grounds — the house `#808080`/`#606060` ramp warmed and lifted to hold AA); accent `#FF6321`, soft `#FF8C5A`, chip text `#FFA478`, border `rgba(255,99,33,.38)`, wash `rgba(255,99,33,.10)`, gradient `#CD3D00→#FF6321` on primary buttons ("Type it for me", "Deliver", replay fill) only; semantic `#22C55E` / `#FFB020` / `#EF4444` with 35–40% borders and 10% washes. Type: Geist + Geist Mono (Google Fonts, Arial/ui-monospace fallbacks), 13px workhorse with −0.1px body tracking, 22px −0.5px view headings, 9–11px uppercase 0.08–0.14em mono kickers (filter labels, day headers, badges, ANSWER leads), `tabular-nums` on every timestamp, count, index and stat. Radii 6px value-chips, 8px buttons/consoles, 12px cards, pill for search/chips/toggles/version tabs. Motion: 200ms colour transitions, 0.35s ease-out-expo view rise and 0.3s drawer slide, plus a global `prefers-reduced-motion` kill (animations, transitions, and JS smooth-scroll via a `matchMedia` guard).
+
+**Signature interaction.** The diff pair, everywhere one record renders: `struck old on rgba-white 3% → boxed new on the orange wash`, deliberately not red/green — a due date moving is neither good nor bad, and hue-only encoding would moralise the ledger. Automation rows keep their hatched dashed left edge plus an uppercase AUTOMATION tag, never a hue alone; search hits highlight in the amber warn tint so found-ness and new-ness stay two different colours. The tabs carry the house 2px orange underline under a blurred `rgba(14,8,5,.82)` top bar; the sidebar search is the rounded-full pill with the inline SVG magnifier, focus shown as the border warming to the accent.
+
+**Deliberate omissions.** No XANA wordmark/gradient logo/64px icon rail — grammar, not structure. No shadows for elevation (surface + 1px border only; the one glow is 10%-alpha under the evidence chip). No orange on avatars, day headers or the legacy pane — restraint is what makes the vnew chip legible as "the answer". Legacy pane deliberately drabber (deep ground, `#322A26` border) so the comparison is felt before it is read. Kept the amber week-1 search-mode note and refusal states verbatim in the product's voice.
+
+**Functional fix + parity.** `?field=` is now validated against the nine legal keys (`status`, `assignee`, `priority`, `due_date`, `cf:*` for the five custom fields); unknown values are dropped rather than kept, so a typo behaves as no filter instead of a silent empty timeline. Parity verified headlessly with DOM stubs post-redesign: 3,262 records / 300 automation / 9.2%, 380 feed entries with the answer at 268, 47 tracked human records on the flagship task, eight questions with two attachment refusals, `?field=bogus&field=status&field=cf:Story Points` → `["status","cf:Story Points"]`; ingest signature/dedup/replay/401-tamper flows, chips, presets, pager and the fixed Wed 26 Aug 2026 clock untouched.
+
 ---
 
 ### 19. Video library and meeting recordings
@@ -2962,16 +3833,29 @@ I would also start the retention conversation earlier. The service holds every r
 | Track | ai |
 | Domain | Meeting intelligence |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_i9dz41i9dz41i9dz.png` |
+| Card colour | #fae8ff |
 | Context | Ixana · 2026 · Meeting intelligence |
 | Role | Product manager, delivery owner |
 | Team | 3 engineers |
 | Timeline | Mar 2026 – present |
 | Stage | Live, company-wide |
-| Link | https://xana-nine.vercel.app/videolibrary |
+| Demo | https://xana-nine.vercel.app/videolibrary |
 
 **Positioning.** Made every recording searchable by what was said in it, so people arrive at the minute that matters instead of scrubbing an hour.
 
 **Outcome (card copy).** Made every recording searchable by transcript, so people jump to the minute that matters instead of scrubbing an hour of video.
+
+**Skim layer — the pull, and the three facts under it**
+
+> People wanted a passage of speech and were handed a timeline.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: a search hit is a sentence and the second it was said |
+| A | A — public & verifiable | Generated minutes carry a timestamp on every claim |
+| A | A — public & verifiable | Organiser exclusion, set before the call, irreversible |
 
 **Problem.** Recordings accumulated in two places and were effectively write-only. Of 212 recordings in one month, 38 were ever opened again, and whoever did scrubbed for nearly six minutes before finding the passage — or gave up and asked the organiser.
 
@@ -2989,7 +3873,7 @@ I would also start the retention conversation earlier. The service holds every r
 
 Three investments sat in the same quarter: making recordings searchable, an automatic minutes service, and a hand-filled decision register. I sized each by how much of the archive it would make retrievable — an archive nobody can enter is the only one that compounds, because every unretrievable meeting is re-run as a new one.
 
-**Figure — Share of one month of recordings made retrievable by each option: transcript search 100 percent, automatic minutes 46 percent, manual decision register 12 percent**
+**Figure — Share of one month of recordings made retrievable by each option: transcript search 100 percent, automatic minutes 46 percent, manual decision register 12 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3012,7 +3896,7 @@ I analysed playback logs for the 212 recordings captured in January — opens, s
 | Gave up and asked the organiser | The answer stayed in a chat thread | 5 of 9; 3 organisers fielded most of it |
 | Re-ran the discussion as a new meeting | The archive grows, retrievability does not | 2 of 9 named a specific instance |
 
-**Figure — Of 212 recordings captured in one month, 38 were opened again, 14 were watched past two minutes, and 6 produced written notes**
+**Figure — Of 212 recordings captured in one month, 38 were opened again, 14 were watched past two minutes, and 6 produced written notes**  `form: funnel`
 
 | name | value | label |
 |---|---|---|
@@ -3103,7 +3987,7 @@ Before build we agreed this failed if fewer than a quarter of re-opened recordin
 | 47 (of 140) | Employees using it weekly by month 3 |
 | 0 | Recordings served outside attendee list (guardrail) |
 
-**Figure — After launch, of 690 indexed recordings 244 were opened again, 171 were entered by transcript jump, and 78 produced published minutes**
+**Figure — After launch, of 690 indexed recordings 244 were opened again, 171 were entered by transcript jump, and 78 produced published minutes**  `form: funnel`
 
 | name | value | label |
 |---|---|---|
@@ -3126,6 +4010,49 @@ I would also set the cache differently. Five minutes protected an API quota with
 
 > **Note on this sample.** This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `Video platform` · `Meeting intelligence` · `Transcript search` · `AI notes` · `Microsoft Graph`
+
+**TL;DR.** Problem: Teams meeting recordings and SharePoint videos were hard to browse, search, and turn into usable meeting notes.
+
+What we did: I managed the delivery of a unified video library and meeting recordings experience that indexed recordings, synchronized transcripts, enabled transcript-based playback, and added AI chat and auto-generated minutes.
+
+Result: We shipped a platform that combined video streaming, transcript navigation, hybrid search, and AI meeting assistance in one workflow, with support for full-transcript context up to 400K characters and a 5-minute cache to reduce unnecessary Graph API calls.
+
+**Role and approach.** What I owned: I owned the product scope for the end-to-end meeting recordings and video library experience. I aligned the ingestion pipeline, APIs, and user flows around a clear outcome: help teams find the right recording, jump to the right moment, and leave with usable notes. I defined the core surfaces across the library explorer, meeting recordings grid, and player workspace, and I drove decisions on transcript navigation, AI notes regeneration, and search behavior so the system served both stored video assets and Teams recordings in one model.
+
+Tradeoffs I navigated: I balanced completeness against usability by keeping the player centered on three jobs: watch, navigate, and capture decisions. I also weighed AI answer quality against system complexity, choosing full-transcript context without chunking loss for meeting chat, while using caching to limit avoidable Graph API traffic in the library experience. A further tradeoff was flexibility versus reliability, where organizer and drive user resolution was handled carefully to keep playback and thumbnails dependable across Microsoft sources.
+
+**What was built.** I delivered a video and meeting recordings platform for internal users in Ixana-Wiki. It pulled Microsoft Teams recordings and SharePoint video assets into a shared experience, stored transcript text and timestamped cues, and exposed that data through meeting and video library APIs. On the front end, users could browse folders, filter recorded meetings, open a player workspace, read speaker-labeled transcript blocks, and click any line to jump the video to that point. The same workspace included an AI assistant for transcript-grounded questions and a notes tab that generated structured minutes of meeting with summaries, decisions, and action items. The library also supported hybrid search across titles, descriptions, and transcript text.
+
+**Impact context.** These numbers show the system was designed for long meeting recordings, not just short clips. Full-transcript context helped keep AI answers grounded in the meeting record, while the cache reduced repeat calls to Microsoft Graph and made the browsing experience more efficient.
+
+**Key decisions**
+
+- I chose to unify Teams meeting recordings and SharePoint video assets under one experience so users could search and review both from the same product surface instead of switching tools.
+- I prioritized transcript-linked playback in the player and AI outputs with clickable timestamps because the main user need was not just watching video, but getting to the exact moment that mattered quickly.
+- I backed AI meeting chat with the full meeting transcript context rather than a chunked approach because preserving the whole conversation reduced context loss for meeting-specific questions and note generation.
+
+| Value | Label |
+|---|---|
+| 400K | Characters of transcript context supported in meeting AI chat |
+| ~100K | Approximate token context supported in meeting AI chat |
+| 5-minute | TTL cache used to reduce unnecessary Graph API hits |
+
+**Media referenced**
+
+- `image` mermaid-diagram__2_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+External: <https://xana-nine.vercel.app/videolibrary>
+
 ---
 
 ### 20. Calendar sync — Outlook and Gmail without leaking detail
@@ -3138,6 +4065,9 @@ I would also set the cache differently. Five minutes protected an API quota with
 | Track | ai |
 | Domain | Workplace automation |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_18w83818w83818w8.png` |
+| Card colour | #fae8ff |
 | Context | Ixana · 2025 · Workplace automation |
 | Role | Product manager, delivery owner |
 | Team | 1 engineer, with IT security as reviewer |
@@ -3147,6 +4077,16 @@ I would also set the cache differently. Five minutes protected an API quota with
 **Positioning.** Kept Outlook and Gmail calendars in step for people living in both, without letting a single private event title cross between them.
 
 **Outcome (card copy).** Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.
+
+**Skim layer — the pull, and the three facts under it**
+
+> On a product where every write sends email, the interesting decisions are all refusals.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Reflected time is an opaque block — no title crosses, by design |
+| A | A — public & verifiable | Dry-run preview is the default on every write path |
+| A | A — public & verifiable | Occurrence-level writes only: a bug touches one meeting, not a year |
 
 **Problem.** A group worked across two calendar tenants and neither system knew about the other. In a two-week diary study, six people recorded 11 double-bookings and two hours each per week of manual tidying — copying invites, blocking time by hand, apologising for clashes.
 
@@ -3160,7 +4100,7 @@ I would also set the cache differently. Five minutes protected an API quota with
 
 This competed with two other automation candidates and was the smallest by headcount — eleven people. The alternatives saved time already being spent badly; this removed an error visible outside the company: a double-booked person misses an external meeting and someone else notices.
 
-**Figure — Candidate automations scored by externally visible failures per month: calendar clashes 6, late expense approvals 2, stale distribution lists 0**
+**Figure — Candidate automations scored by externally visible failures per month: calendar clashes 6, late expense approvals 2, stale distribution lists 0**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3183,7 +4123,7 @@ Six people kept a structured diary for two weeks, logging every time the calenda
 | Blocked time by hand in the other calendar | Blocks went stale when the source meeting moved | 5 of 6; 4 stale blocks found at audit |
 | Shared a calendar link instead | Exposed titles they did not want external parties reading | 2 of 6 had already stopped doing this |
 
-**Figure — Two-week diary across six people: 11 double-bookings, 54 manual invite forwards, 22 hand-made time blocks, 4 stale blocks found**
+**Figure — Two-week diary across six people: 11 double-bookings, 54 manual invite forwards, 22 hand-made time blocks, 4 stale blocks found**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3260,7 +4200,7 @@ We agreed two failure conditions before build, one absolute: any private title r
 | 12 → 1 | Mailboxes reachable by the service credential |
 | 99.1% | Scheduled runs completing without overlap |
 
-**Figure — Weekly sync outcomes over six weeks, split between attendee patches, forwarded invites and deliberate skips, rising from 71 to 116 events**
+**Figure — Weekly sync outcomes over six weeks, split between attendee patches, forwarded invites and deliberate skips, rising from 71 to 116 events**  `form: stackedBars`
 
 | name |
 |---|
@@ -3282,6 +4222,58 @@ I would also not have built the subscribable feed. It is used by two people, and
 
 > **Note on this sample.** This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | Project Manager |
+
+**Tags** — `Calendar sync` · `Microsoft Graph` · `FastAPI backend` · `Google Calendar` · `Background jobs` · `Deployment operations`
+
+**TL;DR.** Problem: I needed a reliable way to keep Microsoft 365 calendar activity visible in Gmail and mirror Google busy time back into Outlook without exposing unnecessary details.
+
+What we did: I scoped a FastAPI service that synced upcoming Outlook events to a Gmail attendee, exposed a subscribable Outlook .ics feed, and mirrored Google Calendar busy blocks into Outlook with guarded background jobs.
+
+Result: We delivered a backend with dry-run controls, status endpoints, retry handling for Graph limits, and a 2-hour scheduled sync flow that could run on EC2 without overlapping jobs.
+
+**Role and approach.** What I owned: I owned the product scope for cross-platform calendar sync, the API surface, the operating model for scheduled runs, and the rules for when the system should modify events, forward invites, or skip them. I made the calls on dry-run safety, organizer-only behavior, recurring event handling within a time window, and how job status and deployment should work so the service was usable in day-to-day operations.
+
+Tradeoffs I navigated: I balanced calendar coverage against safety by defaulting to dry-run checks, limiting attendee edits to organizer-owned meetings, and treating recurring instances as separate occurrences to keep changes predictable. I also balanced reliability against simplicity by using in-process background jobs with overlap locks and retry logic for Graph throttling instead of adding a heavier job system.
+
+**What was built.** I delivered a FastAPI backend for people who work across Microsoft 365 and Gmail calendars. The service scanned upcoming Outlook events in a target mailbox, checked whether a configured Gmail address was already present, and either added that address as a required attendee or forwarded the invite so the event would reach Google Calendar. I also included a read-only events endpoint, a dry-run mode to preview changes, and status endpoints for operational visibility.
+
+Beyond the main attendee sync, I included two supporting flows. The first exposed Outlook events as a subscribable .ics feed so an external calendar could pull them by URL. The second pulled a public Google Calendar .ics feed, extracted busy intervals, and created placeholder busy events in Outlook when those times were not already occupied. To make the service workable in production, I set up background execution, overlap protection for scheduled jobs, retry handling for Graph rate limits and transient failures, and a deployment path on EC2 behind Nginx with cron triggering /sync-all every 2 hours.
+
+**Impact context.** This work reduced the manual effort of keeping two calendar ecosystems aligned. The main value was operational: people could keep Gmail informed of Outlook meetings, subscribe to an Outlook feed when needed, and block Outlook time from Google busy slots without revealing private event names. The scheduling guard, dry-run path, and job status endpoints also made the service safer to run in a live mailbox where every calendar update can notify attendees.
+
+**Reflection.** The main lesson was that calendar sync is less about moving data and more about managing side effects. Every attendee update can send emails, and recurring meetings create edge cases quickly, so I kept the scope focused on predictable behavior and explicit preview steps. If I extended the project, I would keep the same bias toward safe defaults and only widen scope where the operational impact stayed clear.
+
+**Key decisions**
+
+- I chose Microsoft Graph application permissions with client credentials so one backend could act on a target mailbox without relying on an interactive user session. This made the service easier to automate, while the documentation called out the tenant-wide access risk and the option to restrict scope with an application access policy.
+- I defined two paths for Outlook to Gmail sync: patch the attendee list when the mailbox was the organizer, and forward the invite when it was not. This matched Graph permission limits and preserved meeting visibility without attempting unsupported edits.
+- I kept recurring event changes at the occurrence level through calendarView instead of modifying the full series master. That reduced the chance of broad unintended changes and made the sync behavior easier to reason about.
+
+| Value | Label |
+|---|---|
+|  |  |
+|  |  |
+|  |  |
+
+**Media referenced**
+
+- `image` mermaid-diagram__13_.png
+- `image`
+- `video`
+
+- [Entra admin center](https://entra.microsoft.com)
+- [Application access policy](https://learn.microsoft.com/en-us/graph/auth-limit-mailbox-access)
+- [Swagger UI](http://127.0.0.1:8000/docs)
+- [Google Calendar public basic.ics example](https://calendar.google.com/calendar/ical/user%40gmail.com/public/basic.ics)
+
+</details>
+
 ---
 
 ### 21. AI Salary Generator
@@ -3294,16 +4286,30 @@ I would also not have built the subscribable feed. It is used by two people, and
 | Track | ai |
 | Domain | HR tooling |
 | Status | customer-testing |
+| Tier | 2 |
+| Card image | `Image__17_.jpg` |
+| Card colour | #fee2e2 |
 | Context | Ixana · 2026 · HR tooling |
 | Role | Product manager, pilot owner |
 | Team | 1 people operations partner, 1 data engineer, with finance as reviewer |
 | Timeline | Jun 2026 – present |
 | Stage | Controlled pilot across seven requisitions in five job families |
-| Link | /demo/salary-bands |
+| Demo | /demo/salary-bands |
+| External link | https://www.ixana.ai/products |
 
 **Positioning.** A pilot that drafts an offer range where every figure on it resolves to a dated comparator row — and refuses the role outright when the rows are not there.
 
 **Outcome (card copy).** In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.
+
+**Skim layer — the pull, and the three facts under it**
+
+> An unanswerable number gets renegotiated by whoever is most confident.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: press any figure and its citation opens |
+| A | A — public & verifiable | A figure with no dated source does not render at all |
+| A | A — public & verifiable | The floor refuses a role; it never widens a band |
 
 **Problem.** A salary range came out of a spreadsheet somebody had built, and whoever could say where its numbers came from had usually left. Of the last 26 closed requisitions, 6 agreed ranges resolved to a dated source; the other 20 resolved to an older range, to “market data”, or to nothing.
 
@@ -3322,7 +4328,7 @@ I would also not have built the subscribable feed. It is used by two people, and
 
 Compensation was not the loudest request; it was the one where being wrong stayed quiet longest. A range nobody can trace still produces an offer, and the cost surfaces a year later in an equity review nobody can reconstruct. I sized it against the two louder asks on how long a mistake stays invisible.
 
-**Figure — How long an error in each candidate tool stays invisible: an untraceable salary range about 12 months, a candidate screening assistant about 1 month, an interview scheduler the same day**
+**Figure — How long an error in each candidate tool stays invisible: an untraceable salary range about 12 months, a candidate screening assistant about 1 month, an interview scheduler the same day**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3346,7 +4352,7 @@ I read the last 26 closed requisitions and tried to trace every number in each a
 | Rebuilt a range inside the meeting | The argument became one about memory | Median 19 minutes per offer conversation |
 | Agreed a number above the range | No recorded reason, so it set a precedent | 5 of 26, with a reason recorded in 1 |
 
-**Figure — Across 26 closed requisitions: 11 ranges cited a previous range, 9 cited “market data” with nothing behind it, 6 resolved to a dated source, and 5 were agreed above the range with a reason recorded once**
+**Figure — Across 26 closed requisitions: 11 ranges cited a previous range, 9 cited “market data” with nothing behind it, 6 resolved to a dated source, and 5 were agreed above the range with a reason recorded once**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3438,7 +4444,7 @@ Eighteen drafts is enough to see whether the citation rule survives a live hirin
 | 2 (of 18) | Offers agreed outside the drafted range |
 | 0 | Percentiles or offer figures produced by a model (guardrail) |
 
-**Figure — Share of the figures in an agreed range that resolve to a dated source, by job family, before the pilot and during it: three families rise from between 17 and 31 percent to 100, and two do not move at all**
+**Figure — Share of the figures in an agreed range that resolve to a dated source, by job family, before the pilot and during it: three families rise from between 17 and 31 percent to 100, and two do not move at all**  `form: dumbbell`
 
 | name | from | to |
 |---|---|---|
@@ -3470,6 +4476,41 @@ I would also have measured provenance time before there was a tool to fix it. Th
 
 > **Note on this sample.** This is an internal pilot. The screen described in section 06 is a working recreation with invented comparator data, and every figure on this page is an invented placeholder for this sample — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/salary-bands` |
+| File | `public/demo/salary-bands.html`  (84.6 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Band Desk — the AI Salary Generator pilot |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Band Desk
+h5  What this demo is
+h5  The four rules it makes visible
+h5  more
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Band Desk — the AI Salary Generator pilot Ixana · HR tooling · Controlled pilot Band Desk Pilot day · 28 Aug 2026 0 figures written by a model Every figure cited What this demo is A working recreation of the salary benchmarking and offer drafting pilot described in the case study. Every computed figure on the requisition you have open — every percentile, band edge, observation count, weight and spread — is clickable, and every click ends at the comparator rows and the arithmetic that produced it. The only bare numerals are the floor’s own thresholds and the internal band edges: those cite an agreement with people operations and finance, not a computation, and the screens say so where they appear. The comparator data is invented; the weight table, the evidence floor and the refusals are the real ones. The four rules it makes visible 1. Numbers are rule , prose is model . No percentile, band edge or offer figure passes through a language model, and the screen says which is which. 2. A figure with no source does not render. There is no fallback estimate and no “approximately” — the cell says what is missing instead. more 3. Four evidence-floor rules can each refuse a whole role. A refusal names the rule and what would clear it; it never widens the band to cover thin data. A refusal here wears the product’s own colour, not an error state, because it is the product working. 4. It drafts a range and never a number, and the range stops at the market median. Paying above that is a decision a person makes and signs, not a default the tool hands over. Every comparator source, observation count, percentile, band, role, requisition and figure on this page is invented for the demo. No employee’s pay, no candidate, no real survey and no real offer appears here, and by design none could: the tool holds aggregate comparator rows, never individual compensation records. The internal distribution on the equity screen is suppressed below eight people in a band, which is the same rule the pilot runs.
+
+_Design note — AI Salary Generator (Tier B):_
+
+**Identity (3 lines).** Native XANA sibling: a requisition list where the refusal is the first-class object — the left rail holds all seven pilot requisitions, each banded role carrying a tiny orange-gradient range bar on its own track and each refused role a dashed empty track with a dashed accent "refused · F4" pill, so banded-vs-refused reads at a glance without a single error hue. The two hero surfaces are the band strip (market P25–P75 as a quiet fill on the deep ground, the drafted range in the CD3D00→FF6321 gradient with its accent glow, the region above the median hatched and dash-edged as "reserved") and the refusal panel — a rounded-2xl deep card in the house answer-panel grammar, kicker "THE OUTPUT — A REFUSAL, NOT AN ERROR", the failed rule's id set large in a dashed accent chip, its evidence cited figure by figure, and the clearing condition in its own bordered row. Views are flat top-bar tabs under the blurred bar with the 2px orange underline; every computed number on the page is a mono, dashed-underlined citation chip that opens the weighted-mean drawer.
+
+**Exact tokens.** `--bg #0E0805`, `--surface #1A1410`, `--surface-2 #221A14` (table-header/tile strips), `--deep #140F0B` (band track, refusal panel, rationale, drawer, footer); borders `#3A3028` / hover `#5A4838` / soft `#2A2018` / hairline `rgba(255,255,255,.06)`; text ramp `#FFFFFF` / warm `#E8E0D8` / body `#E0D0C0` / dim `#A89888` / faint `#8C8175` (both ≥4.7:1 on their surfaces — the house `#808080/#606060` ramp warmed and lifted to hold AA); accent `#FF6321` + soft `#FF8A56` + cite `#FF8C5A`, line `rgba(255,99,33,.38)`, wash `rgba(255,99,33,.09)`, gradient `#CD3D00→#FF6321` reserved for the drafted-range fill (hero and rail-mini); semantic `#22C55E` (banded/pass), `#FFB020` (model-written prose, stale-source age), `#FF6B6B` (crit — only the "no source" uncited state). Type: Geist + Geist Mono (Google Fonts, Arial/ui-monospace fallbacks), 13px workhorse with −0.1px tracking, 22px −0.5px view headings, 9–10px uppercase 0.1–0.16em mono kickers/badges/th, `tabular-nums` on every numeral. Radii 8px buttons, 12px cards/tables/band, 16px refusal panel, pill chips/tags/rule marks. Motion: 200ms colour transitions, 0.3s `cubic-bezier(.16,1,.3,1)` drawer slide, global `prefers-reduced-motion` kill.
+
+**Signature interaction.** The refusal chain: pick REQ-2221 in the rail (dashed track, "refused · F4") and the offer view produces the refusal panel instead of a draft — and even the refusal's own evidence is clickable, because floorCheck's "currently…" strings now route through `fig()`: each of the four medians (158, 191, 214, 186) cites its single source, and the 29% spread figure opens the drawer showing $214k − $158k = $56k ÷ mid median $191k = 29% against the 20% line, ending in the sentence that the role is refused. Semantics carry the mood everywhere: pass marks are green pills, refuse marks are dashed accent pills reading "refuses", and the only red on the page is the `no source` cell a figure without a citation would collapse into.
+
+**Functional fixes landed.** (1) One global weight table per collection method (`METHODS`: employer survey .40, own accepted offers .20, posted-range .18, recruiter-supplied .12, self-reported .10) wired onto every role's rows at load — the same method now carries the same weight in all seven requisitions (zero only for cross-market rows), each band renormalising over the methods present, with the renormalisation shown as its own column ("method wt → in this band") and as the "÷ methods present" step in the drawer arithmetic. (2) Self-reported is genuinely the lowest-weighted method and recruiter-supplied sits above it, so the evidence screen's prose is true. (3) The band-strip P25/P50/P75 tick labels, the evidence summary percentiles, the equity draft-edge figures and every floor-check "got" numeral route through `fig()`; the de4-sj rationale's "25th percentile" became "the market's lower quartile", pm5's "only seven" became a cited `{ownObs}` token; the footer's absolute claim was narrowed to the precise truth (every computed figure on the open requisition is clickable; floor thresholds and internal band edges cite an agreement, not a computation, and say so where they appear). Also computed rather than asserted: the equity screen's "enters in the Nth quartile / ahead of X, behind Y" sentence (was hard-coded "second", which was false for both banded engineering roles).
+
+**Deliberate omissions.** No XANA wordmark, gradient-text logo or 64px icon rail — the grammar (blurred bar, orange underline, pill chips), not the structure. No gradient primary buttons: the page's one pressable action (the raw-model toggle) is a quiet secondary, and the gradient is spent where the product's actual output lives — the drafted range. No red anywhere in the refusal path, no toast (removed as dead code), no charts beyond the band strips (the numbers are the interface), no light theme — an internal HR desk, dark by design, every colour painted. Parity verified headlessly post-redesign (39 assertions): 3 banded / 4 refused exactly as before; dv4-sj fails only F4 at $56k / 29%; rf5-sj F1+F2, tw3-sj F3 at 51% stale weight, de4-blr F1+F2+F4 with both San Jose rows on screen at zero weight; pm5-sj equity suppressed with edges intact; draft ranges close at the median (competitive: median + a third of the gap to P75) and all three sit inside their internal bands (de4 $170–188k, fw3 $148–162k, pm5 $196–226k — small shifts from the new weights, structure identical); citation drawer, model badge, raw-slots toggle, `?view=`/`?role=` deep links all land as documented.
+
 ---
 
 ### 22. AI product planning operating system
@@ -3482,14 +4523,29 @@ I would also have measured provenance time before there was a tool to fix it. Th
 | Track | ai |
 | Domain | Planning tooling |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_6dagw16dagw16dag.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2026 · Planning tooling |
 | Role | Product manager, delivery owner |
 | Team | 3 engineers |
 | Timeline | Jan – Aug 2026 |
 | Stage | Live for internal planning |
-| Link | /demo/prd-os |
+| Demo | /demo/prd-os |
 
 **Positioning.** Turns a brief into a reviewed, execution-ready plan — and refuses to let one model approve its own work.
+
+**Outcome (card copy).** Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner's work, enforced in code, and unknowns stop the pipeline instead of being papered over.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A loop that must terminate in approval will always find a way to approve.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: point both roles at one model and the run refuses to start |
+| A | A — public & verifiable | Forty of the product's rules run in the page |
+| A | A — public & verifiable | A critical unknown halts the pipeline, one question at a time |
 
 **Problem.** People had started planning with a model and were getting fast, confident output that quietly assumed away the hard parts. Critiquing 24 AI-written plans against an execution checklist found 19 asserted a fact nobody had supplied, and 15 contained a step whose completion nobody could test.
 
@@ -3503,7 +4559,7 @@ I would also have measured provenance time before there was a tool to fix it. Th
 
 The choice was not whether to use models for planning — people already were — but where to intervene. Three options: a prompt library, a checklist people apply by hand, or a workflow that enforces the checks structurally. I sized them against the same 24 plans, asking how many defects each would have caught.
 
-**Figure — Defects caught in 24 audited plans by each intervention: enforced workflow 21, manual review checklist 11, prompt library and training 4**
+**Figure — Defects caught in 24 audited plans by each intervention: enforced workflow 21, manual review checklist 11, prompt library and training 4**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3526,7 +4582,7 @@ I collected 24 plans people had generated and used, and scored each against an e
 | Ordered the work | Dependencies implied, never stated | 13 of 24 |
 | Estimated durations | Estimates attached to prose, not to steps | 17 of 24 |
 
-**Figure — Defects across 24 audited plans: 19 asserted unsupplied facts, 17 had unattached estimates, 15 had untestable steps, 13 had implied dependencies**
+**Figure — Defects across 24 audited plans: 19 asserted unsupplied facts, 17 had unattached estimates, 15 had untestable steps, 13 had implied dependencies**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3618,7 +4674,7 @@ We agreed before build that this failed if humans approved fewer than half of pl
 | 68% (of 41) | Plans approved by the human on first read |
 | 0 | Runs where planner and reviewer shared a model (guardrail) |
 
-**Figure — Distribution of 41 run times to human review, concentrated between four and eight minutes with three runs beyond the ten-minute ceiling**
+**Figure — Distribution of 41 run times to human review, concentrated between four and eight minutes with three runs beyond the ten-minute ceiling**  `form: histogram`
 
 | name | value |
 |---|---|
@@ -3644,6 +4700,96 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 
 > **Note on this sample.** This is an internal product. The brief, the plan and the run history in the demo linked from section 06 are invented, and the figures on this page are placeholders for a public sample; the structural characteristics — five stages, a 30-section master template, ten scorecard criteria, a five-round cap and distinct planner and reviewer models enforced in code — are the real ones, and the demo runs the product’s own logic so they can be checked. I’m glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `AI product planning` · `Workflow orchestration` · `Human-in-the-loop review` · `LLM evaluation` · `Task generation` · `Product UX`
+
+**TL;DR.** Problem: Teams using AI for planning were getting fast but unreliable output that assumed missing facts, missed dependencies, and produced tasks that were hard to execute or verify.
+
+What we did: I led the delivery of an AI product planning system that moved a raw idea through five specialized agents, a distinct-model review loop, and a final human approval gate before generating an execution-ready checklist.
+
+Result: We shipped an MVP that met the spec end to end, covered 85 tests across 10 suites, kept the planning loop capped at 5 rounds, and completed a typical run to human review in 3 to 8 minutes.
+
+**Role and approach.** What I owned: I owned the product workflow, stage gates, review model, and user experience from intake through task generation. I defined how the system should stop on uncertainty, how human feedback should re-enter the pipeline without losing context, how approved plans should freeze before task generation, and how exports, diffs, comments, and explainability should work so users could trust and act on the output.
+
+Tradeoffs I navigated: I balanced speed against rigor by batching plan generation, using retries and schema validation, and capping review iterations at 5 while still escalating unresolved issues to a human instead of forcing false approval. I also balanced transparency against usability by keeping intake data unchanged in storage, storing AI additions separately, and rendering both seamlessly in the UI so the output stayed readable without losing provenance in the data model.
+
+**What was built.** I delivered an AI Product Planning Operating System for founders, product managers, engineering managers, CTOs, consultants, researchers, and AI-first software teams. The product took a structured project brief and turned it into an execution-ready engineering plan, then into one implementation-ready task with a checklist of concrete steps.
+
+The workflow started with structured intake for the task title, total-day estimate, what and why, Tiger and Elephant risks, assumptions, constraints, dependencies, and optional context. Agent 1 validated that context, ran a pre-mortem, classified information as fact, assumption, or unknown, and stopped the flow whenever a critical gap needed an answer. Agent 2 identified the project type and selected the relevant sections from a 30-section PRD template. Agent 3 wrote the plan in batches, and Agent 4 reviewed it against a 10-point scorecard using a different model. If the review failed, the plan looped back for revision, up to five rounds. After approval by both the reviewer and the user, Agent 5 generated a single task overview and a flat checklist of 3 to 30 steps, each with binary completion tests, day estimates, dependencies, and LNO priority codes.
+
+I also shipped the operating surfaces around that core flow. These included plan versioning, line-level diffs, PRD export in markdown and JSON, task export in JSON, CSV, and markdown, comment-driven revision paths for either the checklist or the plan, and an Ask AI feature that could explain the whole task or propose a checklist revision when the user asked for a concrete tradeoff such as reducing duration. The UI locked prior stages once the workflow moved forward, while still allowing controlled edits that re-ran the right part of the pipeline and cleared stale approval when needed.
+
+**Impact context.** These numbers showed that the product was not just a concept but a controlled planning system with clear operating limits, review standards, and auditability. The five-agent structure, distinct-model review, and frozen-plan rule made the output easier to trust. The performance profile kept the end-to-end experience within a practical working session, and the test coverage reduced the risk of regressions in the workflow rules that mattered most, such as approval state, dependency validation, version history, and revision behavior.
+
+**Reflection.** One lesson was that the quality of the review loop depended as much on context handoff as on the reviewer itself. Early failures came from the reviewer not seeing clarification answers and the planner revising without access to its previous draft. Once those inputs were fixed and the scoring was calibrated so TBD did not count as failure, the loop converged much faster. Another lesson was that workflow integrity mattered as much as generation quality. Freezing approved plans, preventing archive and concurrency edge cases, and resetting clarification budgets on intake edits were small rules that had a large effect on user trust.
+
+**Key decisions**
+
+- I chose a gated workflow where Agent 1 paused the pipeline and asked one highest-priority question at a time. This reduced avoidable hallucinations and kept users focused on the single piece of information most needed to move planning forward.
+- I required the planner and reviewer to run on different models and enforced that rule in code. I made that choice to reduce shared blind spots and to make approval mean independent agreement, not self-consistency from one model.
+- I froze the approved plan version before task generation and routed later feedback back into revision flows instead of mutating the approved artifact. This preserved auditability, made diffs trustworthy, and kept generated tasks traceable to a specific approved plan.
+
+| Value | Label |
+|---|---|
+| 5 | Specialized AI agents in the workflow |
+| 5 | Maximum planner-reviewer iterations before escalation |
+| 6 | Maximum clarification questions per intake round |
+| 30 | PRD sections in the master template |
+| 3–30 | Checklist steps generated for the final task |
+| 0.5 | Day-estimate granularity used for checklist planning |
+| 10 | Review criteria in the scorecard |
+| 85 | Tests across the automated test suite |
+| 10 | Test suites |
+| 3–8 min | Typical full run to human review |
+| ~10s | Clarification turn time |
+| ~75s | Plan draft time |
+| ~30s | Review time per round |
+| 2 rounds | Observed reject-to-approve path after review-loop fixes |
+| ~3 min | Observed reject-to-approve timing after review-loop fixes |
+| 12 steps / 10.5d → 8 steps / 8.0d | Live-verified checklist revision via actionable Ask AI proposal |
+
+**Media referenced**
+
+- `image` mermaid-diagram__11_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/prd-os` |
+| File | `public/demo/prd-os.html`  (131.9 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | AI Product Planning OS |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Dev-kit firmware OTA update path
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> AI Product Planning OS AI product planning OS · walkthrough run Dev-kit firmware OTA update path Invented brief
+
+_Design note — AI product planning OS (Tier B):_
+
+**Identity (3 lines).** A gated planning pipeline rendered as its own argument: a vertical stage spine of numbered nodes on a thread, the active stage lit on the house gradient, so the seven stages read as one supervised run rather than tabs. The hero is the adversarial pairing — planner and reviewer as two deep-surface tiles joined by a "distinct" double-arrow link that flips to a red "collision" glyph — with the live scorecard and computed verdict directly beneath. The SameModelError is a designed refusal, not a toast: a full crimson-headed panel (mono exception name, throw-site, message verbatim) whose 27/30-vs-19/30 measurement is set as opposing red/green stat tiles, softly pulsing while everything below it is gone.
+
+**Exact tokens.** Ground `#0E0805`; surfaces `#1A1410` / `#221A14` / `#2A2420` / deep `#140F0B`; borders `#3A3028`, hairline `#2A2018`, hover `#5A4838`; text `#FFFFFF` / prose `#E8E0D8` / body `#C0B6AC` / muted `#A89888` / faint `#8A7E72` (all ≥4.5:1 on their surfaces); accent `#FF6321` + soft `#FF8A56`, gradient `#CD3D00→#FF6321` reserved for primary buttons, the active pipeline node, the brand tile and metric hero numbers; semantic `#22C55E` / `#F59E0B` / `#EF4444` with `…-dim` borders at 0.38–0.42 alpha and `…-wash` fills at 0.09. Geist / Geist Mono (Google Fonts, real fallback stacks), 13px workhorse, 24px `-0.5px` view headings, 11px `0.12em` uppercase mono kickers, `tabular-nums` on every numeric column and the histogram (`Geist Mono` axis text, `#FF6321` bars, `#EF4444` past the `#F59E0B` dashed ceiling). Radii 8/12/16/pill; motion `200ms cubic-bezier(0.16,1,0.3,1)`, one 0.32s pane-entry rise, one 2.6s refusal pulse — all killed under `prefers-reduced-motion: reduce` (and JS `scrollTo` drops to `auto`).
+
+**Signature interaction.** Setting planner = reviewer: the pairing link flips to the collision glyph, the badge flips to "refused", and the entire lower screen is replaced by the SameModelError panel — the refusal is the content, and the round tabs (styled as the 2px-orange-underline nav grammar), verdict, scorecard, diff, gate and plan all vanish because the pipeline genuinely never ran.
+
+**Deliberate omissions.** No XANA wordmark, gradient-text logo, 64px icon rail or copied routes — the spine + check-mark gradient tile is an invented sibling nav; no shadows for elevation (border + surface color only, the two glows on active node/brand tile are accent, not depth); no chart library, no hover theatrics on data cards, no skeletons (nothing loads), and the focus ring was kept despite XANA's border-only focus habit because the brief's keyboard requirement outranks fidelity.
+
+**Parity re-verified headlessly (node, post-edit):** all 40 in-page rules pass; 44 runs → 41 counted / 3 excluded, median 6m40s, rounds 3.2→1.4, 68% first-read; "4h → 25m" still the one marked non-derivable figure; round 1 rejects / round 2 approves from the stored scorecards; LCS diff = 3 of 16 sections; derived 13d vs guessed 12d over 8 steps; 30-section accounting; SameModelError thrown and cited with 27/30-vs-19/30; clarify priority order, freeze/unfreeze empty state, and the broken-graph cycle (`TASK-003 → TASK-006 → TASK-005 → TASK-004 → TASK-003`) all intact. All deep-link params (`view/q/round/collide/planner/reviewer/run/approved/broken/plan/diff`) untouched. Data constants, rules and computation code byte-identical — only the fonts link, chrome markup, render-string presentation (pairing hero, refusal panel, tab class, SVG palette) and CSS changed.
+
 ---
 
 ### 23. AI Lawyer — multi-agent patent drafting system
@@ -3656,16 +4802,29 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 | Track | ai |
 | Domain | Legal tooling |
 | Status | prototype |
+| Tier | 1 |
+| Card image | `Gemini_Generated_Image_2sua6e2sua6e2sua.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2026 · Legal tooling |
 | Role | Product manager, build owner |
 | Team | 2 engineers, with a patent attorney as domain reviewer |
 | Timeline | Feb – Aug 2026 |
 | Stage | Prototype — loopback only, no authentication, never run on a real inventor disclosure and never put in front of an attorney |
-| Link | /demo/ai-lawyer |
+| Demo | /demo/ai-lawyer |
 
 **Positioning.** Turns a disclosure into an attorney-review filing package with containment enforced at every boundary — and refuses to draw a novelty conclusion when the search looked in the wrong art.
 
 **Outcome (card copy).** Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Automating the fast half of a slow process is the most expensive way to find the queue.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| B | B — real but protected | Real measurement over public patent data: 84.6% of ground-truth art was not in the corpus |
+| A | A — public & verifiable | Live demo: the wrong-art refusal, the gap list, §1.84-measured drawings |
+| A | A — public & verifiable | Never run on a real disclosure; no attorney has used it |
 
 **Problem.** Turning a disclosure into an attorney-review draft is expensive, and both failure modes are quiet: a trade-secret candidate leaves inside a search query, or the system drafts around prior art it never found.
 
@@ -3679,7 +4838,7 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 
 Two framings were available: a multi-agent drafting system, where the interesting work is the agent lineup, or the view that draft quality is downstream of retrieval and everything after the search is polish on what it found. I sized them against where the attorney hours actually go.
 
-**Figure — Attorney hours across five completed filings: prior-art search and reading 34, claim drafting 18, specification writing 15, figures and formalities 9 — search alone is 45 percent**
+**Figure — Attorney hours across five completed filings: prior-art search and reading 34, claim drafting 18, specification writing 15, figures and formalities 9 — search alone is 45 percent**  `form: pareto`
 
 | name | value |
 |---|---|
@@ -3698,7 +4857,7 @@ I scoped the pilot to the US path: mixing two legal standards puts a jurisdictio
 
 I shadowed two attorneys through five disclosures, then ran the same code and prompts over two kinds of source document to learn whether the drafter or the input was the constraint.
 
-**Figure — Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4**
+**Figure — Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4**  `form: groupedHBar`
 
 | name | a | b |
 |---|---|---|
@@ -3758,7 +4917,7 @@ _Six screens from the running demo. The pipeline, the verdicts and the checks ar
 
 We agreed before building the eval that a ranker within 85% of what the corpus made achievable was not worth tuning. Measuring the ceiling first told us 84.6% of ground-truth prior art was not in the corpus at all — and the cause was not the date floor everyone assumed but the classification filter the corpus was built on. Prior art for a UI invention is not UI-classified. Containment was the guardrail: blocked outbound calls were counted from week one.
 
-**Figure — The same ranker reported two ways: 91 percent of what the corpus makes achievable, or 14 percent absolute — against a corpus ceiling of 15.4 percent that would rise to 73.5 percent if the classification filter were widened**
+**Figure — The same ranker reported two ways: 91 percent of what the corpus makes achievable, or 14 percent absolute — against a corpus ceiling of 15.4 percent that would rise to 73.5 percent if the classification filter were widened**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3790,6 +4949,96 @@ I would also have shown the attorney the gap list before a draft. Seeing both, h
 
 > **Note on this sample.** This is a prototype. It has never been run on a real inventor disclosure, no attorney has used it, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data, and the attorney-hours figures in section 01 are invented placeholders for this sample. I'm glad to walk through the real prototype in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| role | Project Manager |
+
+**Tags** — `AI agents` · `Patent drafting` · `Retrieval systems` · `Evaluation harness` · `Workflow orchestration` · `Governance`
+
+**TL;DR.** Problem: Patent drafting for UI inventions needed a safer and more reliable way to turn inventor disclosures into attorney-review patent application drafts without leaking trade-secret candidates or drafting around prior art the system never found.
+
+What we did: I scoped the pilot to the US first, reordered the build around retrieval quality and governance, and defined a staged plan for a multi-agent system with shared memory, human gates, provenance, evaluation, and Patent Center-ready DOCX output.
+
+Result: We moved the project from research into an execution-ready plan, completed the cost, caching, and provenance core with 49 tests passing, and set measurable quality gates before downstream drafting work could ship.
+
+**Role and approach.** What I owned: I owned scope, build order, delivery plan, and the operating rules for the system. I set the pilot to US only through filing output, with India deferred. I prioritized foundations that would be costly to retrofit, especially provenance, cost tracking, security, and Gate 0 enforcement. I defined the milestone sequence, acceptance criteria, risk register, and the dependencies between retrieval, evaluation, drafting, review, and export. I also aligned the system around attorney-review drafts rather than autonomous filing and made DOCX the filing artifact for the US path.
+
+Tradeoffs I navigated: I chose US-first over parallel US and India to avoid mixing different legal standards in the same drafting flow and to use the stronger USPTO data and filing path first. I put retrieval and evaluation ahead of most agent work because recall risk would drive downstream quality more than prompt changes would. I delayed the orchestrator until the actual control flow was known from logged runs, rather than centralizing assumptions too early. I treated Gate 0 as a containment boundary at intake, not a later strategy step, because protecting trade-secret candidates mattered more than pipeline convenience. I also balanced model quality against operating cost by reserving heavier reasoning models for high-stakes tasks and lighter models for output-heavy or mechanical work.
+
+**What was built.** This project defined a multi-agent system that turns UI invention disclosures into attorney-review patent application drafts for the US filing path. The planned product serves patent attorneys and internal teams who need prior-art research, claims, specification drafts, figure support, review checkpoints, and filing-ready output in one managed workflow. I structured the system around a shared memory layer, a retrieval layer, specialized drafting and review agents, and reusable human gates so legal review stays in the loop.
+
+The system design starts with intake, controlled terminology, company templates, portfolio memory, versioned drafts, a reference numeral registry, and universal provenance. From there it moves into normalized prior-art retrieval across patent and non-patent sources, measured against a gold set before generative drafting work proceeds. Downstream agents draft claims, write the specification, generate figure descriptions, critique the draft through novelty, compliance, and examiner-style review, and then revise it within a bounded loop. The export path produces a DOCX package for specification, claims, and abstract, plus PDF drawings, ADS data, and IDS support for attorney handoff and Patent Center validation.
+
+The current implementation status is early but concrete. The cost, caching, usage accounting, configuration, LLM client, and provenance core are built and tested. Database models, retrieval, shared memory, gates, drafting agents, and export are planned in detail but not yet started.
+
+**Impact context.** These numbers set the operating guardrails before the team commits to full drafting automation. The passing test suite showed the foundation for token accounting, caching, and provenance was stable. The gold-set size and retrieval thresholds defined how we would judge whether research quality was good enough to trust later drafting steps. The iteration caps and cache rules controlled cost and latency so the review loop could stay practical for attorneys. The cost envelope showed model spend was manageable relative to outside counsel costs, which let us optimize for quality and reviewability rather than for token minimization alone.
+
+**Reflection.** The main lesson was that the hard part was not the agent lineup. It was the retrieval quality, the evaluation discipline, and the governance boundaries around sensitive disclosures. I also found that several early assumptions had to be corrected before execution, including treating Red Book XML as a filing format and assuming some public patent data endpoints would work without credentials. If I were carrying this forward, I would keep the same order: prove recall early, keep the first filing path narrow, and delay orchestration until observed workflow justifies it.
+
+**Key decisions**
+
+- I scoped the pilot to the US through filing output and moved India to a later phase. This reduced legal and operational complexity and let the team build on USPTO APIs and DOCX filing instead of mixing in India's more manual path too early.
+- I made retrieval and evaluation the critical path ahead of most drafting agents. I did this because weak recall would undermine every downstream draft, while an early gold-set harness gave us a way to measure progress and catch regressions.
+- I required Gate 0 enforcement at intake and inside outbound clients, while delaying the full orchestrator until later. This protected sensitive disclosures before any external calls and avoided hard-coding workflow assumptions before the team had evidence from real runs.
+
+| Value | Label |
+|---|---|
+| 49 | Tests passing |
+| 7 | Planned retrieval sources in the evaluation milestone |
+| 60–100 | Target size of the US UI patent gold set |
+| 20–30 | Earlier gold-set estimate in the build plan |
+| 4 | Maximum prior-art query refinement rounds |
+| 2–3 | Maximum critic-loop iterations in the build plan |
+| 3 | Maximum critic-loop iterations in the detailed plan |
+| ±2% | Target variance for computed cost reconciliation against a live invoice |
+| 30m | GPT-5.6 prompt cache retention window |
+| 24h | GPT-5.5 prompt cache retention option |
+| ~$4–6 | Estimated cost per full draft cycle |
+| ~$10–16 | Estimated cost per disclosure including two revision cycles |
+
+**Media referenced**
+
+- `image` mermaid-diagram__12_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/ai-lawyer` |
+| File | `public/demo/ai-lawyer.html`  (154.7 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | AI Lawyer — Patent Drafting Run |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  AI Lawyer — patent drafting run
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> AI Lawyer — Patent Drafting Run § Ixana · patentgen · prototype AI Lawyer — patent drafting run Gate 0 enforced
+
+_Design note — AI Lawyer (Tier B):_
+
+**Identity (3 lines).** A legal instrument in the XANA family's warm dark: the front door is not a dashboard but a ruling — the RUN REFUSED panel, red-ruled and slow-glowing, with the ContainmentError quoted verbatim in Geist Mono and no run button anywhere until a named human decides. The app mark is a `§` glyph on the CD3D00→FF6321 gradient tile, and everything a lawyer or an auditor would quote — refusals, claim numerals, sha256s, dollar figures — is mono; everything explanatory is Geist at the 13px workhorse. The cost tab reads as an audited bill: nested token counters in faint sub-lines under their totals, per-call `$0.xxxx` right-aligned tabular, and an orange bold total row on the `#221A14` header surface — the line an auditor signs.
+
+**Exact tokens.** Ground `#0E0805`, surfaces `#1A1410`/`#221A14`, deep panels `#140F0B`; borders `#3A3028` (hover `#5A4838`, hairline `#2A2018`); text `#FFFFFF` / warm body `#C0B6AC` + bright `#E8E0D8` / dim `#8A817A` / faint `#6E655E` (both lifted slightly off Xana's `#808080`/`#606060` for AA headroom on the warm ground); accent `#FF6321` + soft `#FF8A56` + `linear-gradient(90deg,#CD3D00,#FF6321)` reserved for primary buttons, the run-progress bar, hero stat numbers and the winning hbar; semantic `#22C55E`/`#FFB020`/`#FF6B6B` (crit text lifted off `#EF4444` for contrast, dims/washes as rgba pairs of the base hues). Geist + Geist Mono (Arial / ui-monospace fallbacks), 13px body, 11px 0.12em uppercase kickers with orange mono section numerals, tabular-nums everywhere numeric; radii 8px controls / 12px cards / full pills and badges; motion 200ms `cubic-bezier(0.16,1,0.3,1)` colour transitions, a 0.32s view-entry rise replayed only in `go()` (never on the intake form's per-keystroke re-renders), and the gate's 2.6s red pulse — all zeroed under `prefers-reduced-motion: reduce`.
+
+**Signature interaction.** The corpus toggle in the chrome chip re-renders the entire product — and the corpus-ceiling slider is the centerpiece it argues for: drag absolute recall and the second tile flips its own colour (crit → warn → green) as *percent of achievable* crosses 60/85, teaching "0.14 against a 0.154 ceiling is 91%, not broken" in one gesture, with the 15.4% ceiling tile pinned beside it as the number no ranker can move. The eras/widening hbars put the gradient only on the load-bearing bars (32.1%, 15.4%) and flat green on 73.5%, so the chart states the argument before the caption does.
+
+**Deliberate omissions.** No shadows for elevation (surface + 1px warm border; the only glows are the gate's 10%-alpha pulse and the primary button's hover). No XANA wordmark, icon rail, or route copy — grammar only. The `§1.84` drawing sheet stays white paper on the dark page: rendering it dark would falsify the thing the lint measures, so it is framed as a plate (12px radius, warm border) instead of restyled; its SVG text switched Inter→Arial (patent-drawing voice, and Inter is no longer loaded). Orange is scarce by rule — badges use tinted-wash pills, hero numbers and primaries take the accent, body copy never does. Kept the refusal wording, the four publication states, and every empty/blocked state byte-identical.
+
+**Functional fixes + parity.** (1) `?tab=` now validated against the eight known result tabs — unknown falls back to `gaps` and is never written back to the URL. (2) The blocked concept's grade now renders under a small mono "§112(a) support" kicker (grade in code face), so the case study's "per concept, with the §112(a) grade" reads true. (3) The runs view header carries the honest stats line: "507 tests across the pipeline and the web UI — 447 Python, 60 frontend," tied to the refusal/AND-of-clearances/token-accounting behaviours shown below it. Parity verified headlessly (DOM-stub run of the full script): `$1.77` narrow / `$2.31` wide computed from the ledger rows, 312s → `5m 12s` (wide 468s → 7m 48s), `?view=result&tab=bogus&corpus=wide` → `tab=gaps, corpus=wide`; all six views and all eight result tabs render in both corpus modes without throwing; intake AND-of-clearances, four publication states, both ContainmentErrors verbatim, three notable runs, §1.84 lint values, FIG.1 inline SVG, run player timeline/speeds/skip, and the claims' §103 `<mark>` widening all untouched — JS data constants and computations byte-identical, only render strings, chrome wiring and CSS restyled.
+
 ---
 
 ### 24. ClickUp reporting and Gantt dashboard
@@ -3802,16 +5051,29 @@ I would also have shown the attorney the gap list before a draft. Seeing both, h
 | Track | ai |
 | Domain | PM tooling |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_h59yuyh59yuyh59y.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2025–2026 · PM tooling |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers; 1 automation engineer on the capacity workflow |
 | Timeline | May 2025 – Aug 2026 |
 | Stage | Live for leads, architects and PMs |
-| Link | /demo/clickup-gantt |
+| Demo | /demo/clickup-gantt |
 
 **Positioning.** A read-only timeline and bandwidth view over live task data, with the delay explanation already read out of the comment thread.
 
 **Outcome (card copy).** Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Nobody needed new data captured; they needed the same data drawn differently.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo on a pinned clock: timeline, bandwidth, delay drawers |
+| A | A — public & verifiable | Read-only permanently: zero writes, zero update requests, ever |
+| A | A — public & verifiable | Withholds what the data cannot carry — no predicted dates |
 
 **Problem.** Leads planning a sprint needed a timeline, a capacity view and a reason for each slipped task, and the tool of record offered none of the three usably. Shadowing five sprint plannings showed a median of 5m 20s per session spent hand-building a timeline that was discarded immediately afterwards.
 
@@ -3830,7 +5092,7 @@ I would also have shown the attorney the gap list before a draft. Seeing both, h
 
 This sat next to two alternatives: buying a portfolio management product, or extending the tool of record with its own automations. I sized them on what each would cost to reverse rather than to build, because the failure I most wanted to avoid was a tool becoming load-bearing before anyone knew whether it worked.
 
-**Figure — Weeks to unwind each option if it proved wrong: read-only layer 1, native automations 6, portfolio product 16**
+**Figure — Weeks to unwind each option if it proved wrong: read-only layer 1, native automations 6, portfolio product 16**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3853,7 +5115,7 @@ I sat in five sprint plannings and watched what people built before the meeting 
 | Asked why a task slipped | Answer was in a thread nobody had read | 4 of 5 sessions stalled on this |
 | Kept a personal tracking spreadsheet | Four different spreadsheets, none agreeing | 9 of 22 maintained one |
 
-**Figure — Of 22 leads and architects surveyed: 18 estimated capacity from memory, 14 rebuilt a timeline each cycle, 9 maintained a personal spreadsheet, 6 had stopped attempting a timeline**
+**Figure — Of 22 leads and architects surveyed: 18 estimated capacity from memory, 14 rebuilt a timeline each cycle, 9 maintained a personal spreadsheet, 6 had stopped attempting a timeline**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -3952,7 +5214,7 @@ Before build we agreed this failed if any lead was still hand-building a timelin
 | 63% | Delay questions answered without opening a task |
 | 0 · 0 | Writes to the workspace · updates asked of engineers (guardrails) |
 
-**Figure — Weekly sessions by role over ten weeks, rising from 24 to 133, split between leads, architects and project managers**
+**Figure — Weekly sessions by role over ten weeks, rising from 24 to 133, split between leads, architects and project managers**  `form: stackedArea`
 
 | series | W1 | W3 | W5 | W7 | W10 |
 |---|---|---|---|---|---|
@@ -3974,6 +5236,71 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 > **Note on this sample.** This is an internal product. The demo linked from this page is a recreation with invented content on a fixed clock, and all figures here are invented placeholders for this sample. I'm glad to walk through the real product and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+**Tags** — `Project Management` · `Analytics Dashboards` · `ClickUp API` · `AI Delay Analysis` · `Resource Planning`
+
+**TL;DR.** Problem: Project managers and engineering leads lacked clear visibility into team workloads, timelines, and root causes of task delays across ClickUp workspaces.
+
+What we did: I led the product scope and requirements for a read-only analytics platform featuring custom Gantt charts, workload bandwidth tracking, and AI-driven delay diagnostics.
+
+Result: The platform provided multi-dimensional operational visibility across projects while preventing accidental data mutations in the primary ClickUp workspace.
+
+**Role and approach.** What I owned: I defined the product roadmap and functional scope for a read-only analytics platform built on the ClickUp API v2. I drove alignment on core feature requirements across individual, team, and project views, focusing on workload bandwidth planning, visual timeline exports, and automated task delay analysis.
+
+Tradeoffs I navigated: API rate limits vs. data freshness: I specified a 5-minute cache TTL for team task queries and a 30-minute cache for LLM delay analyses to prevent ClickUp endpoint throttling while keeping data relevant. Feature scope vs. data safety: I limited the application to read-only views to eliminate data corruption risks in active ClickUp workspaces and shorten time to launch.
+
+**What was built.** A read-only reporting and visualization dashboard serving individual contributors, engineering leads, and project managers. The platform aggregates ClickUp tasks into hierarchical trees, custom SVG Gantt timelines, team bandwidth allocation grids, and Kanban status boards. An integrated AI analysis tool reads task comments to explain why tasks were delayed.
+
+**Impact context.** The platform gave leaders cross-project visibility into task bottlenecks and team capacity without risking accidental edits to primary workspace data.
+
+**Key decisions**
+
+- Built a custom SVG Gantt engine instead of using third-party chart libraries to support dynamic scale switching and instant SVG rendering exports.
+- Routed all ClickUp interactions through Next.js server-side route handlers with multi-tiered caching to protect API credentials and prevent rate limiting.
+- Integrated OpenAI gpt-4o-mini to automatically synthesize task comment threads into technical and non-technical delay cause breakdowns.
+
+| Value | Label |
+|---|---|
+|  |  |
+|  |  |
+|  |  |
+
+**Media referenced**
+
+- `image` mermaid-diagram__14_.png
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/clickup-gantt` |
+| File | `public/demo/clickup-gantt.html`  (84.4 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Reporting and Gantt Dashboard |
+| Interactive | yes — the page carries its own script |
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Reporting and Gantt Dashboard Ixana · internal Reporting and Gantt dashboard Read-only · 0 writes Timeline Bandwidth List Status board Delay analysis 0 writes to the source workspace, ever · Task state cached 5 min · generated delay analysis cached 30 min · Pinned to Wed 26 Aug 2026 so the case-study snapshots stay true · Invented data — read the case study
+
+_Design note — ClickUp Gantt (Tier B):_
+
+**Identity (3 lines).** Native XANA sibling: the lead's pinned-Wednesday programme timeline on the warm near-black ground, the custom two-SVG Gantt (pinned names / scrolling chart) drawn as an architectural sheet — light state bars carrying dark ink labels, dimension-line plan lanes, one orange TODAY rule. The signature surface is the delay drawer: the comment thread with accent-tinted "read by the analysis" citations feeding two side-by-side accounts (technical / plain) on the deep AI-panel surface. Everything else — bandwidth's "not known" refusal, the overdue-as-tile donut, the read-only toast — kept verbatim in behavior and re-clothed in the house grammar.
+
+**Exact tokens.** `--bg #0E0805`, `--surface #1A1410`, `--surface-2 #221A14`, `--surface-deep #140F0B` (drawer + control strips), `--line #3A3028` / hover `#5A4838` / soft `#1C140E` / hairline `rgba(255,255,255,0.06)`; text `#FFFFFF` / `#E0D0C0` / `#808080` / `#606060`, warm tints `#E8E0D8` `#A89888`; accent `#FF6321` with soft `#FF8A56`, cite `#FF8C5A`, line `rgba(255,99,33,.35)`, wash `rgba(255,99,33,.08)`; semantic `#22C55E` / `#F59E0B` / `#EF4444`; plan lane `#8A7A66`. Workflow states re-stepped for the warm ground: todo `#5AA2F7`, prog `#F59E0B`, review `#B497F8`, done `#22C55E`, closed `#8A8178`, all labeled in one dark ink `#140F0B` (≥5:1 on every fill). Type: Geist / Geist Mono (Google Fonts, Arial+ui-monospace fallbacks), 13px workhorse, uppercase kickers 10–11px tracking 0.09–0.16em, `tabular-nums` on every numeric run. Radii 8/12px, bordered-not-shadowed cards, blurred `rgba(14,8,5,.72)` top bar with the 2px orange underline on the active tab, `--dur 200ms` + `cubic-bezier(0.16,1,0.3,1)` drawer/toast entries, full `prefers-reduced-motion` kill switch.
+
+**Signature interaction.** Click any bar (or "why?" in `#FF8C5A`) → the drawer slides in on ease-out-expo over the deep surface: the marked comments glow in the accent citation tint, and the two-audience account renders as twin cards under one "Why it slipped — both accounts, generated together" kicker. On the chart itself, the plan lane is now a literal dimension line (end ticks + rule in `#8A7A66`), drawn only under slipped bars, so a slip reads as "built past its drawn extent."
+
+**Deliberate omissions.** No orange gradient buttons (this page has no primary action — read-only is the point); no pill search bar (nothing to search, and faking one would be furniture); no 64px icon rail (the flat tab row is the whole nav); no hover-glow or pulse keyframes on a data surface; no dark-slice donut restyle (slice hues are the state palette, stroke is the card surface); accent orange appears only at nav-active, TODAY, citations and the deep-link chip — never on a state.
+
+**Functional fixes verified.** (1) Plan lanes gated on `t.planned && t.slipped`; `86a2rb4hn` now carries a genuinely earlier plan (27 Jul–7 Aug vs live 3–14 Aug), so all four planned tasks are slipped and zero unslipped tasks draw a lane — headless check confirms exactly two hatched bars on the default view (86a2r97tt 5d, 86a2rb4hn 12d) with lanes only under slipped bars, matching the case study. (2) `?view`/`?scale` validated against known sets; `?view=bogus&scale=nonsense` falls back to gantt/week and the first `writeURL()` rewrites the address bar to the corrected form. (3) Bandwidth rule block now ends with the workspace-scale line: "Across the real workspace this reads 58 task lists and 30 engineers in three teams, on one definition instead of three." Parity re-checked headlessly: 4 of 6 people "not known", 5 delay accounts, deep links `app.clickup.com/t/<id>`, 0-request redraw readout, export SVG, fixed clock Wed 26 Aug 2026.
+
 ---
 
 ### 25. In-house meeting notetaker
@@ -3986,16 +5313,29 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 | Track | ai |
 | Domain | Meeting intelligence |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Image__18_.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2026 · Meeting intelligence |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers |
 | Timeline | Jan – Aug 2026 |
 | Stage | Live, company-wide |
-| Link | https://xana-nine.vercel.app/meetingrecordings |
+| Demo | https://xana-nine.vercel.app/meetingrecordings |
 
 **Positioning.** Transcripts and minutes for every internal meeting, generated inside the tenant, with no third-party bot ever sitting in the room.
 
 **Outcome (card copy).** Kept transcripts and minutes inside the tenant instead of routing every internal meeting through a third-party bot.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A wrong minute is worse than no minute and is read by more people.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: notes with a timestamp pill on every claim |
+| A | A — public & verifiable | No bot joins a call — capture reads the platform's own artefact |
+| A | A — public & verifiable | Exclusion set before the call and irreversible |
 
 **Problem.** Meetings were recorded and then forgotten: of 24 decisions people asked about again a month later, 5 were written down anywhere durable, 7 sat in chat threads nobody could locate, and 12 lived in memory alone. The obvious fix, a commercial bot, could not join the calls that most needed one.
 
@@ -4014,7 +5354,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 Three ways to a written record were on the table: a commercial notetaker bot, a minutes rota, or capture built into the tenant. I sized them on the one axis that mattered — where the audio gets processed. Ixana’s meetings routinely carry unfiled invention disclosures and partner material under NDA; the patent programme depends on those never reaching an outside processor.
 
-**Figure — Where the audio of 212 monthly meetings would be processed under each option: in-tenant capture covers all 212, an unrestricted vendor bot sends all 212 outside, a vendor bot restricted to pre-cleared meetings covers 66 and leaves 146 unrecorded, and a minutes rota covers 30**
+**Figure — Where the audio of 212 monthly meetings would be processed under each option: in-tenant capture covers all 212, an unrestricted vendor bot sends all 212 outside, a vendor bot restricted to pre-cleared meetings covers 66 and leaves 146 unrecorded, and a minutes rota covers 30**  `form: stackedHBar`
 
 | name | values | label |
 |---|---|---|
@@ -4038,7 +5378,7 @@ I ran a decision trace rather than a survey: 24 decisions someone had asked abou
 | The organiser remembers the detail | Two decisions came back in two incompatible versions | 2 of 24 re-argued from scratch |
 | A notetaker bot would simply fix this | Only meetings cleared before the call could use one | 66 of 212 cleared in the trial |
 
-**Figure — Of 212 meetings recorded in January 2026, 31 left any written record of what was decided**
+**Figure — Of 212 meetings recorded in January 2026, 31 left any written record of what was decided**  `form: waffle`
 
 _31 of 212 — Left a written record (31); the rest Recorded, never written down (181)_
 
@@ -4127,7 +5467,7 @@ We agreed before building that this failed below 95% transcription of eligible m
 | 13 (6% of meetings) | Excluded by the organiser before the call |
 | 5 → 21 (of 24 traced) | Decisions found in a written record |
 
-**Figure — Where 24 traced decisions could be found, January against July: a durable written record 5 to 21, a chat thread someone had to locate 7 to 2, somebody's memory 12 to 1**
+**Figure — Where 24 traced decisions could be found, January against July: a durable written record 5 to 21, a chat thread someone had to locate 7 to 2, somebody's memory 12 to 1**  `form: groupedHBar`
 
 | name | a | b |
 |---|---|---|
@@ -4149,6 +5489,10 @@ I would also build the correction path first. There is still no way to fix a wro
 
 > **Note on this sample.** This is internal tooling. The screens in section 06 are the running demo on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+**Demo**
+
+External: <https://xana-nine.vercel.app/meetingrecordings>
+
 ---
 
 ### 26. Patent program operations
@@ -4161,16 +5505,29 @@ I would also build the correction path first. There is still no way to fix a wro
 | Track | ai |
 | Domain | Patent operations |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_strjxvstrjxvstrj.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2024–2026 · Patent operations |
 | Role | Product manager — patent programme owner and Wi-R product line PM |
 | Team | Founder/CTO on strategy, outside counsel on execution, 1 engineer, with the patent paralegal as domain owner |
 | Timeline | Feb 2024 – Aug 2026 |
 | Stage | Live, running across three outside firms |
-| Link | https://xana-nine.vercel.app/patents |
+| Demo | https://xana-nine.vercel.app/patents |
 
 **Positioning.** Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, and no statutory date ever computed in-house.
 
 **Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.
+
+**Skim layer — the pull, and the three facts under it**
+
+> What gets taped out decides what is patentable.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: five surfaces over an invented portfolio |
+| A | A — public & verifiable | No statutory date computed anywhere in the system |
+| B | B — real but protected | Filing decisions anchored to the tapeout calendar |
 
 **Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox: a disclosure past its filing date was discovered, not decided.
 
@@ -4190,7 +5547,7 @@ What gets taped out decides what is patentable. What is already filed decides wh
 
 I sat on both sides. Over the tenure I owned 50-plus filings end to end — what to protect, how broadly, when to file — while running the six Wi-R product programmes those filings protect. Disclosure date and filing date come off the same roadmap; until 2024 different people set them.
 
-**Figure — Annual cost of each option against the same filing rate: commercial IP suite 48 thousand, docketing pushed wholly to counsel 90 thousand, hire a paralegal 75 thousand, build on the stack we already run 12 thousand**
+**Figure — Annual cost of each option against the same filing rate: commercial IP suite 48 thousand, docketing pushed wholly to counsel 90 thousand, hire a paralegal 75 thousand, build on the stack we already run 12 thousand**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4214,7 +5571,7 @@ I did not ask anyone how it felt. I took every docketed action over twelve month
 | Opened the tracker | Stage was current; the next action and its owner were not | 19 of 54 had no owned next action at all |
 | Waited on an inventor | Nobody had told them a date depended on them | Median 5 weeks from request to disclosure |
 
-**Figure — Median distinct places opened to answer what is owed on a matter: programme owner 6, founder 4, outside counsel 2**
+**Figure — Median distinct places opened to answer what is owed on a matter: programme owner 6, founder 4, outside counsel 2**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4237,7 +5594,7 @@ I was the interface. The founder/CTO wanted to know what was protected before a 
 - **Automate only where being wrong is recoverable.** Routing and reminders can be fixed the same afternoon. A date, a scope or an approval cannot.
 - **One matter identity, owned by us.** Three firms, three naming habits. Until I resolved those to one identity, nothing counted.
 
-**Figure — Filings by product line per half-year from 2024 to 2026 — 8, 10, 12, 12, 7 and 3 — with each line’s first public disclosure marked**
+**Figure — Filings by product line per half-year from 2024 to 2026 — 8, 10, 12, 12, 7 and 3 — with each line’s first public disclosure marked**  `form: stackedBars`
 
 | name |
 |---|
@@ -4352,7 +5709,7 @@ We agreed before build that this failed if any date the system showed disagreed 
 | 0 | Dates disagreeing with counsel’s docket · source sheets modified |
 | 6 → 1 | Places opened to answer what is owed |
 
-**Figure — Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent**
+**Figure — Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent**  `form: survival`
 
 | series | 0 | 15 | 30 | 45 | 60 | 75 | 90+ |
 |---|---|---|---|---|---|---|---|
@@ -4373,6 +5730,10 @@ I would also have measured the tail earlier. Section 08 says we fixed the first 
 
 > **Note on this sample.** Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation.
 
+**Demo**
+
+External: <https://xana-nine.vercel.app/patents>
+
 ---
 
 ### 27. Document change intelligence
@@ -4385,16 +5746,29 @@ I would also have measured the tail earlier. Section 08 says we fixed the first 
 | Track | ai |
 | Domain | Documentation ops |
 | Status | internal |
+| Tier | 2 |
+| Card image | `Gemini_Generated_Image_jt9prtjt9prtjt9p.png` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2026 · Documentation ops |
 | Role | Product manager, delivery owner |
 | Team | 2 engineers |
 | Timeline | Feb – Aug 2026 |
 | Stage | Live, syncing daily |
-| Link | https://xana-nine.vercel.app/myfiles?tab=clickup |
+| Demo | https://xana-nine.vercel.app/myfiles?tab=clickup |
 
 **Positioning.** A daily sync that versions and diffs every workspace document, so the ones that changed overnight are visible without anyone being asked.
 
 **Outcome (card copy).** A daily sync that versions and diffs every workspace document - immutable versions only on real content change, and nothing tracked is ever pruned.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The register was being treated as the estate.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Live demo: versions, diffs, and the run that checked nothing |
+| A | A — public & verifiable | Versions are immutable — no edit affordance exists anywhere |
+| B | B — real but protected | The register was demoted from gate to enrichment after it failed |
 
 **Problem.** Nobody could say what had changed in the documentation. The register listed 248 documents, the workspace held 301, and a document could be rewritten between two readings with no record of it. Reconciling the two lists by hand found 53 documents tracked nowhere.
 
@@ -4412,7 +5786,7 @@ I would also have measured the tail earlier. Section 08 says we fixed the first 
 
 Documentation quality had been raised repeatedly and always as a content problem. I reframed it as an observability problem, because all three obvious remedies — an ownership drive, a review schedule, a rewrite — need to know which documents are actually changing, and none of us could answer that.
 
-**Figure — Documentation interventions and the share of documents each could reach without change data: change tracking 100 percent, review schedule 38 percent, ownership drive 21 percent**
+**Figure — Documentation interventions and the share of documents each could reach without change data: change tracking 100 percent, review schedule 38 percent, ownership drive 21 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4435,7 +5809,7 @@ I reconciled the register against the workspace document by document — 301 aga
 | Owners know when their doc changes | Owners learned from readers, or not at all | 9 of 11 owners interviewed |
 | Deleted register rows mean retired docs | 23 rows removed while the document lived on | 23 orphaned documents found |
 
-**Figure — Reconciliation of 301 workspace documents against a 248-row register: 248 matched, 53 untracked, 23 orphaned after a register row was deleted, 0 with any version history**
+**Figure — Reconciliation of 301 workspace documents against a 248-row register: 248 matched, 53 untracked, 23 orphaned after a register row was deleted, 0 with any version history**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4523,7 +5897,7 @@ We agreed the MVP failed below 95% sync completion over a month — a change rec
 | 1 day | Worst-case age of the newest version |
 | 53 → 0 | Documents tracked nowhere |
 
-**Figure — Documents tracked rising from 248 to 301 while documents changed per night stays between 9 and 34, over eight weeks**
+**Figure — Documents tracked rising from 248 to 301 while documents changed per night stays between 9 and 34, over eight weeks**  `form: dualLine`
 
 | series | W1 | W3 | W5 | W6 | W8 |
 |---|---|---|---|---|---|
@@ -4544,6 +5918,61 @@ I would also have built owner notifications before the dashboard. The eleven doc
 
 > **Note on this sample.** This is internal tooling. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No document title, content or author is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
+<details>
+<summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
+
+| Field | Value |
+|---|---|
+| organization | Documentation Platform Team |
+
+**Tags** — `Documentation operations` · `Version control` · `Internal dashboard` · `Change tracking` · `Sync orchestration` · `Workflow monitoring`
+
+**TL;DR.** Problem: Teams had no reliable way to see what changed in ClickUp documentation, compare versions, or reconcile workspace docs with the document register in SharePoint Excel.
+
+What we did: I managed the MVP delivery of an internal platform that synced ClickUp docs daily, stored immutable versions and diffs, enriched records with Excel metadata when available, and exposed change history and sync health through a dashboard.
+
+Result: The platform was implemented with a daily automated sync, version creation gated by real content changes, and a later production update that expanded coverage to all workspace docs with a confirmed run of 301 docs checked, 34 changed, and 278 total in the database.
+
+**Role and approach.** What I owned: I owned the MVP scope for an internal, read-only change intelligence platform for ClickUp Docs. I defined the operating model around a daily cron sync, a 60 second serverless budget, and a concurrency limit of 5 so the system could process tens to low hundreds of documents reliably. I aligned the product around the core user jobs: browse tracked docs, inspect version history, compare diffs, and monitor sync health. I also carried forward the post-launch change in tracking policy so the platform moved from Excel intersection only to all workspace docs, while keeping Excel metadata as optional enrichment.
+
+Tradeoffs I navigated: Coverage vs. control was the main tradeoff. The original MVP used the Excel register as the tracked set so the platform matched the canonical document list, but that limited visibility. The later change favored broader workspace coverage and operational continuity, so sync could continue when Excel was missing and documents were no longer auto-pruned. Precision vs. speed was the second tradeoff. I chose a cheap last-modified check first and a content hash second so we avoided unnecessary downloads while still preventing spurious versions. Simplicity vs. access control was another tradeoff. Because the tool was internal, we kept the UI unauthenticated and protected only the sync endpoint with a Bearer secret.
+
+**What was built.** I delivered an internal dashboard for teams that rely on ClickUp Docs and need a clear audit trail of document change. The product automatically syncs workspace documents on a daily schedule, captures immutable versions when content changes, computes line-level and page-level diffs, and shows those changes in a dashboard, document repository, document detail view, changes feed, and sync run history. For each document, the platform stores the latest state, version timeline, change summaries, and business metadata such as category, owner, SharePoint link, and Excel dates when those fields exist in the register. It also provides basic operational control through lock handling, stale run recovery, and a run log that shows checked and changed documents.
+
+**Impact context.** These numbers show the platform was designed to run as a lightweight daily operational system, not a manual reporting exercise. The sync cadence and concurrency rules kept the process inside a tight serverless window. The confirmed live run after the tracking-policy change showed the immediate business effect of broader coverage: the database grew from 248 to 278 documents because ClickUp-only records were no longer excluded or deleted. That improved visibility for internal teams without changing the schema or the user-facing workflow.
+
+**Reflection.** The main lesson was that the original control model was too dependent on the Excel register. Using Excel as the gate for inclusion matched the canonical list, but it also created blind spots and made the sync brittle. The later move to track all workspace docs, keep history, and treat Excel as enrichment was a better fit for the reporting job this product had to do. I also saw the value of keeping the MVP read-only and internal. That narrowed scope, reduced approval overhead, and let the team focus on correctness, freshness, and operational reliability first.
+
+**Key decisions**
+
+- I chose a two-step change detection model using ClickUp last-modified timestamps first and SHA-256 content hashes second. This cut unnecessary content fetches while ensuring a new version was created only when the document content actually changed.
+- I set the sync to run once per day with a concurrency limit of 5 and a 60 second serverless budget. That balanced freshness with the practical limits of Vercel execution time and external API reliability.
+- I supported the later shift from tracking only ClickUp docs present in Excel to tracking all workspace docs, with Excel as optional enrichment and no auto-pruning. We made that change to avoid losing visibility when the register was incomplete or unavailable and to retain document history over time.
+
+| Value | Label |
+|---|---|
+| 5 | Concurrent documents processed per sync |
+| 60 seconds | Serverless execution budget per invocation |
+| 10 minutes | Stale lock timeout |
+| 95%+ | Target sync reliability |
+| < 3 s | Target dashboard and document list load time |
+| 301 | Documents checked in confirmed live sync |
+| 34 | Documents changed in confirmed live sync |
+| 278 | Total documents in database after track-all update |
+| +30 | Additional ClickUp-only documents retained after update |
+
+**Media referenced**
+
+- `image`
+- `image`
+- `video`
+
+</details>
+
+**Demo**
+
+External: <https://xana-nine.vercel.app/myfiles?tab=clickup>
+
 ---
 
 ### 28. Condenser microphone
@@ -4556,6 +5985,9 @@ I would also have built owner notifications before the dashboard. The eleven doc
 | Track | silicon |
 | Domain | Audio hardware |
 | Status | production |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_cqoga8cqoga8cqog.png` |
+| Card colour | #dbeafe |
 | Context | EEGRAB · 2024 · Audio hardware |
 | Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 3 — me, an acoustics consultant and a mechanical designer, with the CTO carrying the commercial side |
@@ -4565,6 +5997,16 @@ I would also have built owner notifications before the dashboard. The eleven doc
 **Positioning.** The variance war: the supplier's window is the problem, and the answer was calibrating every unit at test instead of sorting capsules into bins that die with the next lot.
 
 **Outcome (card copy).** Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The trim may correct, never rescue.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | The real schematic and transient simulation, on-page |
+| A | A — public & verifiable | Gain taken passively in a 1:5 transformer, before any active part |
+| A | A — public & verifiable | Publish the worst unit, not the typical one — policy, not luck |
 
 **Problem.** A condenser microphone is sold on two printed numbers, and both of them come from a capsule bought in bulk. I measured sixty capsules from three lots the supplier called in-spec: they used the whole ±3 dB window edge to edge, and the lot means drifted 3.4 dB across three quarters.
 
@@ -4580,7 +6022,7 @@ This tier is defined by one printed figure. At or under about 17 dBA of self-noi
 
 I scored three of them in the only unit that matters here — decibels of self-noise, not rupees — because a lever that improves the number by half a decibel is not a cheaper option, it is not an option.
 
-**Figure — Self-noise improvement available from each lever: passive step-up 4.8 dB, a quieter capsule grade 3.1 dB, a lower-noise output stage 0.9 dB**
+**Figure — Self-noise improvement available from each lever: passive step-up 4.8 dB, a quieter capsule grade 3.1 dB, a lower-noise output stage 0.9 dB**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4603,7 +6045,7 @@ Before designing anything I measured sixty capsules — twenty from each of thre
 | Self-noise typical, no maximum | Worst capsule 4 dB noisier than the best | The printable figure is set by the worst unit |
 | Matched pairs to order | Priced per pair, six-week lead | Not viable at our volume |
 
-**Figure — Mean measured sensitivity by delivered lot: 17.0, 21.5 and 25.0 millivolts per pascal against a nominal 20**
+**Figure — Mean measured sensitivity by delivered lot: 17.0, 21.5 and 25.0 millivolts per pascal against a nominal 20**  `form: dotplot`
 
 | name | value | n |
 |---|---|---|
@@ -4689,7 +6131,7 @@ We agreed before build that this failed if two microphones taken off the line at
 | 74% (under the half-trim rule) | Capsules accepted from a delivered lot |
 | 30 Hz – 18 kHz (±3 dB) | Frequency response on axis |
 
-**Figure — Sensitivity deviation from nominal: sixty delivered capsules spread across the supplier's full window, against 240 shipped microphones inside a 1 dB acceptance band**
+**Figure — Sensitivity deviation from nominal: sixty delivered capsules spread across the supplier's full window, against 240 shipped microphones inside a 1 dB acceptance band**  `form: strips`
 
 | name | label | values |
 |---|---|---|
@@ -4722,6 +6164,9 @@ I also characterised on-axis response properly, published a tolerance for it, an
 | Track | silicon |
 | Domain | Test engineering |
 | Status | production |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_dwoxzldwoxzldwox.png` |
+| Card colour | #dbeafe |
 | Context | SLB · 2023 · Test engineering |
 | Role | Owner of the problem choice and the bench's contract — failure analysis & R&D engineer |
 | Team | 3 — myself, a failure-analysis engineer, a LabVIEW developer, with the calibration lab reviewing |
@@ -4731,6 +6176,16 @@ I also characterised on-axis response properly, published a tolerance for it, an
 **Positioning.** A bench that plays back downhole sensor faults on demand, so a failure analyst stops waiting for a well to reproduce one.
 
 **Outcome (card copy).** Bench instrument that synthesised downhole sensor signals, so tool electronics could be tested without waiting on a well.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The labs did not have a diagnosis problem, they had a stimulus problem.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| B | B — real but protected | 55 of 56 catalogued fault signatures reproduce — real figure |
+| B | B — real but protected | Runs in more than 40 SLB failure-analysis labs — real figure |
+| A | A — public & verifiable | Treated as a device under test: reference-verified every session |
 
 **Problem.** Downhole tools carry temperature, pressure, formation-evaluation, accelerometer and gyroscope sensors, and when one misbehaves the fault lives a few kilometres underground. Reproducing it meant a rig, a tool string and a crew. Auditing returned-tool failure records showed most reports could not be reproduced off-rig at all.
 
@@ -4746,7 +6201,7 @@ Drilling loses a well-understood share of its spend to non-productive time — t
 
 The failure-analysis labs sat downstream of that. Three things could have been improved: faster teardown throughput, better field data capture, or the ability to reproduce a fault on a bench at all. I sized them by how many open cases each would let an analyst close without new field time.
 
-**Figure — Share of open failure cases closable without new field time: bench reproduction 71 percent, better field data capture 34 percent, faster teardown 12 percent**
+**Figure — Share of open failure cases closable without new field time: bench reproduction 71 percent, better field data capture 34 percent, faster teardown 12 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4769,7 +6224,7 @@ I read 84 returned-tool failure records from the preceding two years and coded e
 | A hypothesis about a channel | Testing it needed the tool back downhole | 37 of 84 |
 | A fix, applied and shipped | Confirmation waited for the next run | 29 of 84 closed unconfirmed |
 
-**Figure — Of 84 returned-tool failure records: 61 could not be reproduced off-rig, 37 needed a downhole test to check a hypothesis, 29 were closed without confirmation**
+**Figure — Of 84 returned-tool failure records: 61 could not be reproduced off-rig, 37 needed a downhole test to check a hypothesis, 29 were closed without confirmation**  `form: funnel`
 
 | name | value | label |
 |---|---|---|
@@ -4855,7 +6310,7 @@ We agreed before build that this failed if it could not reproduce the twenty mos
 | 5 | Sensor channel families emulated |
 | ±0.4% (of reading) | Agreement with calibrated reference (guardrail) |
 
-**Figure — Fault-signature coverage: 55 of the 56 catalogued field fault modes reproduce on the bench, one does not**
+**Figure — Fault-signature coverage: 55 of the 56 catalogued field fault modes reproduce on the bench, one does not**  `form: waffle`
 
 _55 of 56 — Reproduced within tolerance (55); the rest Not reproducible open-loop (1)_
 
@@ -4885,16 +6340,30 @@ I would also have designed the contribution path on day one. Forty labs see faul
 | Track | silicon |
 | Domain | Aerial robotics |
 | Status | prototype |
+| Tier | 3 |
+| Card image | `demo-card-ornithopter.jpg` |
+| Card colour | #dbeafe |
 | Context | SRM UAV · 2021–2022 · Aerial robotics |
 | Role | Project Manager — SRM UAV (student UAV club, SRM University) |
 | Team | 6 in the core build team, across the club's design-and-fabrication and electronics groups |
 | Timeline | Q3 2021 – Q2 2022 |
 | Stage | Prototype — flew a stable circuit on a university field, and was pitched as a concept to DRDO. It never went to users: no operator ever flew it and nothing it recorded was ever used. |
-| Link | /demo/ornithopter-concept |
+| Demo | /demo/ornithopter-concept |
+| External link | https://drive.google.com/drive/u/0/folders/1v5Woj-5XMv07hJ-PMSneMdFDRAmq5nQs |
 
 **Positioning.** The disguise worked and the flying did not: the proposal asked for an hour aloft and twenty-five kilometres of reach, and its own arithmetic — run it in the demo — never closed.
 
 **Outcome (card copy).** Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.
+
+**Skim layer — the pull, and the three facts under it**
+
+> We had been building a bird and testing an aircraft.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | The full project proposal, as a PDF on-page |
+| A | A — public & verifiable | Demo: the proposal's own coverage arithmetic, checkable |
+| A | A — public & verifiable | Club targets in writing — 1 h aloft, 25 km reach — never approached |
 
 **Problem.** The club’s brief was blunt: surveillance drones fly high and suit camps, and a quadcopter near the ground is heard before it is seen. What was missing could loiter low and be ignored.
 
@@ -4916,7 +6385,7 @@ Flapping-wing surveillance is a funded category: DARPA paid for the Nano Humming
 
 That property is being unremarkable. Everything else a surveillance platform does is better done by something else, so the bet was worth testing first.
 
-**Figure — Share of a low-altitude loiter each platform can hold before an observer on the ground notices it: flapping wing 71 percent, fixed-wing micro air vehicle 38, small quadcopter 24**
+**Figure — Share of a low-altitude loiter each platform can hold before an observer on the ground notices it: flapping wing 71 percent, fixed-wing micro air vehicle 38, small quadcopter 24**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -4939,7 +6408,7 @@ So we tested the disguise before the aircraft: flew it past people who had not b
 | What made it a bird? | The rhythm of the flapping, not the shape | 19 of 24 |
 | Did you hear anything? | Nobody mentioned a sound | 24 of 24 |
 
-**Figure — Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80**
+**Figure — Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80**  `form: curve`
 
 | 20 m | 40 m | 60 m | 80 m |
 |---|---|---|---|
@@ -4988,7 +6457,7 @@ _The patrol radius, the coverage figure, the shift pattern and the one-hour targ
 
 We agreed before build that this failed if it could not hold controlled flight with the camera aboard long enough to be worth pointing at anything — thirty seconds.
 
-**Figure — Nine flight attempts in order: four structural failures, two aborts, and three completed circuits, all after the camera was moved aft**
+**Figure — Nine flight attempts in order: four structural failures, two aborts, and three completed circuits, all after the camera was moved aft**  `form: sequence`
 
 | name | outcome |
 |---|---|
@@ -5029,6 +6498,45 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 
 > **Note on this sample.** Sample portfolio page. What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is invented and internally reconciled — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/ornithopter-concept` |
+| File | `public/demo/ornithopter-concept.html`  (32.8 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Ornithopter — The Concept Against The Airframe |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Ornithopter — the concept against the airframe
+h2  What the concept costs in airframes
+h3  1 Where the hour goes
+h3  2 Airframes to hold one station continuously
+h3  3 The half that worked
+h5  What this demo is
+h5  The finding, in one move
+h5  more
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Ornithopter — The Concept Against The Airframe SRM UAV · SRM Kattankulathur · Surveillance CONOPS worksheet · form B-2 Ornithopter — the concept against the airframe The proposal asks for 24/7 border cover from an hour of endurance and 25 km of reach. Those two numbers are in the same document and they do not fit together — which is checkable on paper, before a motor is chosen. From the project proposal 0 operators · nothing recorded was used File under Proposal target 1 h · 25 km Concept of operations · arithmetic only, nothing flown here What the concept costs in airframes Several aircraft flying in shifts, live video to a ground station, a 25 km patrol radius covering 1,962 km². Set the endurance to what actually flew and watch the fleet the same promise needs. Planning inputs pencil, not policy — drag anything 1 Where the hour goes transit out and back time actually on station endurance the concept does not have 2 Airframes to hold one station continuously One aircraft on station at all times means the rest are in transit, on the ground or charging. Each pin is an airframe. Airframes for the border segment — Time on station per sortie — endurance minus transit both ways Endurance the concept actually needs — for ten minutes on station at this reach 3 The half that worked Observers saying “a bird”, % — by viewing distance Two thirds of observers at forty metres — sixteen of twenty-four — said “a bird”. The disguise cleared the bar it was set. It is the only property of this concept that nothing else on the shelf has, and it is the one the flying never got to use. What this demo is The concept of operations from the project's own proposal, made arithmetic. The 25 km patrol radius, the 1,962 km² figure, the shift pattern and the one-hour target are the proposal's ; the cruise speed, turnaround and the flight results are invented for this sample and reconciled with the case study. The finding, in one move Press the airframe that flew . Forty-one seconds does not shrink the concept — it removes it: the aircraft cannot reach the patrol radius at all, so no number of airframes buys the coverage. more This is the check that costs an afternoon and comes before a gearbox. The proposal's own two headline numbers disagree with each other, and nothing had to be built to find that out. Student club work at SRM Kattankulathur. The concept, the surveillance framing and the targets come from the project's own proposal documents. No operator ever flew this aircraft and nothing it recorded was ever used. Cruise speed, turnaround, fleet arithmetic, flight times and obse…
+
+_Design note — Ornithopter:_
+
+**Identity (3 lines).** Field-notebook-meets-mission-planning: a club logbook page — warm kraft paper, iron-gall ink, a red margin rule down the left — that grew a planning table. Big Shoulders Display gives headings and stamps a stencil/drafting voice; Courier Prime sets every word and figure like the typewriter that filled in the form. The coverage arithmetic is the page: the sortie drawn as a tick-marked mission ruler, the fleet as pins on blue graph paper, and the reality check landing as a rubber stamp.
+
+**Exact tokens.** `--bg #e6dabc` (desk) · `--surface #f1e8d2` (sheet) · `--surface-2 #e9dec2` · `--surface-3 #ded1ad` · `--border #b4a37c` / `--border-soft #cdbf9c` · `--text #2b2318` · `--dim #5c5140` (5.6:1 on sheet) · `--faint #857757` (decoration only) · `--accent #1e4a6e` drafting blue · `--ok #3f6631` · `--warn #7d5310` · `--crit #98291f` stamp-pad red · `--rule-blue rgba(30,74,110,.16)` grid ink. Type: Big Shoulders Display 500–700 (display) + Courier Prime 400/700 (everything else, tabular-nums page-wide). Scale 11/13.5/15/18/26/40 on a 4px rhythm; single-theme by design (paper is the theme), all colors painted explicitly.
+
+**Signature interaction.** Pressing "The airframe that flew" stamps the verdict: a double-bordered, −2° rotated red stamp ("NEVER REACHES THE STATION") thunks in at 220 ms with an overshoot ease, and the empty fleet board gets a matching small stamp ("no pins to place"). The animation is gated on the *transition* into the no-reach state (module flag `prevNoReach`) so slider drags inside the crit region never re-fire it; reduced-motion zeroes it entirely. The mission ruler swaps from out/on-station/back segments to a hatched deficit strip with a scale row that relabels itself ("whole sortie — 60 min" → "transit alone, both ways — 104 min").
+
+**Deliberate omissions.** No sticky topbar and no backdrop blur (a notebook page doesn't float chrome). No dark theme — the artifact is paper, and the brief permits committed single-theme. Grid/ruled texture confined to two surfaces (fleet board, ruler ticks) so it reads as material, not wallpaper. No icons anywhere; the stamp, pins and hatching carry the semantics. Kept the toast, restyled as a taped-on slip, because the 328 m line is part of the parity contract.
+
+**Parity verified headlessly** (fake-DOM run of both script blocks): `?preset=flew` → "Never reaches the station" chip, "short by 103 min", "There is no fleet size that works.", crit field, stamp present; `?preset=honest` → endurance capped 5400; `?preset=proposal` → "short by 44 min" (the proposal's own numbers not fitting is the demo's thesis, identical to pre-redesign formulas); `?endurance=41&speed=12` dial params honored; observer curve renders [29,67,83,88] vs the 60% dashed bar; "sixteen of twenty-four" note, 114-min required tile, aria-pressed tabs all intact. JS data constants, computations and copy untouched except class names in render strings, the anim gate, and the added ruler scale row.
+
 ---
 
 ### 31. Carbon positive e-car
@@ -5041,16 +6549,29 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 | Track | silicon |
 | Domain | Sustainable mobility |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_y44ktyy44ktyy44k.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2020 · Sustainable mobility |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 3 students across two universities |
 | Timeline | Q2 2020 – Q4 2020 |
 | Stage | Research — concept and modelling study. No vehicle was built and nothing was measured in service. |
-| Link | https://drive.google.com/drive/u/0/folders/1UFIFRPfj_T6rlZwSt5imc6q1aBv4Wm-e |
+| External link | https://drive.google.com/drive/u/0/folders/1UFIFRPfj_T6rlZwSt5imc6q1aBv4Wm-e |
 
 **Positioning.** We modelled our own concept's carbon balance and found the two features it was named for are on the wrong side of it.
 
 **Outcome (card copy).** Feasibility study on whether a small EV could offset more carbon than it embodied — the answer turned entirely on grid mix.
+
+**Skim layer — the pull, and the three facts under it**
+
+> By then the check was a threat rather than a tool.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Physics: harvesting your own airflow cannot yield net energy |
+| A | A — public & verifiable | HEPA and carbon filters remove no CO2 — the name was wrong |
+| A | A — public & verifiable | The full concept write-up, as a PDF on-page |
 
 **Problem.** We had designed a small electric car with rooftop solar, a turbine in the radiator position and a HEPA and activated-carbon filter stack, and we were calling it carbon positive. Nobody on the team had checked whether that phrase was true.
 
@@ -5070,7 +6591,7 @@ In 2020 an electric car in India was still an argument rather than a purchase, a
 
 So before modelling anything we sized where a car's lifetime carbon actually sits, to see how much of it the features we were proudest of could possibly touch.
 
-**Figure — Share of a small car's lifetime carbon each lever can address: electricity source 62 percent, manufacture 31 percent, onboard generation and filtration 2 percent**
+**Figure — Share of a small car's lifetime carbon each lever can address: electricity source 62 percent, manufacture 31 percent, onboard generation and filtration 2 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5093,7 +6614,7 @@ We built the model from our own component list rather than a template, then ran 
 | HEPA and carbon filters clean the air | They capture particulates and odours | Real, but removes no CO₂ |
 | Therefore the car is carbon positive | Nothing on it removes carbon at all | Claim withdrawn |
 
-**Figure — Lifetime carbon of the concept against a petrol equivalent at three grid intensities: 36, 32 and 14 tonnes against 42**
+**Figure — Lifetime carbon of the concept against a petrol equivalent at three grid intensities: 36, 32 and 14 tonnes against 42**  `form: pairedBars`
 
 | name | before | after |
 |---|---|---|
@@ -5140,7 +6661,7 @@ _Our own system diagram from the project deck. This is a concept drawing: no veh
 
 We agreed before build that this failed if we could not show the concept carbon positive — net removal across its whole life — under some assumption set we were prepared to defend in front of somebody who disagreed with us.
 
-**Figure — Lifetime carbon walked from a petrol equivalent to the concept: 42 tonnes less 36 for fuel removed, plus 21 for grid electricity and 5 for embodied carbon, ending at 32 tonnes**
+**Figure — Lifetime carbon walked from a petrol equivalent to the concept: 42 tonnes less 36 for fuel removed, plus 21 for grid electricity and 5 for embodied carbon, ending at 32 tonnes**  `form: waterfall`
 
 | name | value | kind | label |
 |---|---|---|---|
@@ -5192,16 +6713,30 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 | Track | silicon |
 | Domain | Weather instrumentation |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_wzokgjwzokgjwzok.png` |
+| Card colour | #dbeafe |
 | Context | NIT Tiruchirappalli & SRM University · 2022 · Weather instrumentation |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC |
 | Timeline | Q1 2022 – Q2 2022 |
 | Stage | Research — submitted as an ISRO YUKTI-Sanchita proposal. No flights were conducted. |
-| Link | /demo/radar-error-budget |
+| Demo | /demo/radar-error-budget |
+| External link | https://drive.google.com/drive/u/0/folders/1rDmPZo8yHV0OFcVruwNqiDJHfU8SeUED |
 
 **Positioning.** Flying the calibration target instead of building a tower for it — and finding that the hard part is knowing where the target is, not flying it there.
 
 **Outcome (card copy).** Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.
+
+**Skim layer — the pull, and the three facts under it**
+
+> It is a positioning project that happens to need a drone.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Real proposal: ISRO YUKTI-Sanchita, YS/PD-IP/318 |
+| A | A — public & verifiable | Three research papers linked by DOI |
+| A | A — public & verifiable | The demo derives the budget live: altitude dominates |
 
 **Problem.** A weather radar is calibrated by measuring the return from an object of known radar cross section, and that object has to sit in the far field. Radars live on towers and rooftops, so the reference has to be flown to it.
 
@@ -5224,7 +6759,7 @@ Weather radar products are only as trustworthy as the radar constant behind them
 
 The timing was not ours. ISRO and the India Meteorological Department had just run the country's first drone-based calibration of a weather radar, which turned the question from whether this is possible into whether it is repeatable by people without their budget.
 
-**Figure — Share of a radar's antenna pattern a known target can be placed in: UAV-carried sphere 84 percent, tethered balloon 22 percent, fixed pedestal 4 percent**
+**Figure — Share of a radar's antenna pattern a known target can be placed in: UAV-carried sphere 84 percent, tethered balloon 22 percent, fixed pedestal 4 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5247,7 +6782,7 @@ Every published UAV calibration experiment we could find reported a headline acc
 | Altitude and horizontal error treated alike | Altitude dominates by roughly three to one | 3 of 4 |
 | Flights in clear air | None flown in precipitation | 4 of 4 |
 
-**Figure — Reported calibration error against the portion attributable to sphere positioning, for four published experiments**
+**Figure — Reported calibration error against the portion attributable to sphere positioning, for four published experiments**  `form: dumbbell`
 
 | name | from | to |
 |---|---|---|
@@ -5295,7 +6830,7 @@ _A worked illustration of the decomposition described above, not a measurement. 
 
 We agreed before build that this failed if sphere position uncertainty put more than 0.5 dB of error into the antenna pattern at the three-decibel beamwidth — below that, the method cannot beat the fixed reference it replaces.
 
-**Figure — Swing each term puts into calibration error across its plausible range: sphere altitude 1.33 decibels, horizontal position 0.45, sphere cross section 0.30**
+**Figure — Swing each term puts into calibration error across its plausible range: sphere altitude 1.33 decibels, horizontal position 0.45, sphere cross section 0.30**  `form: tornado`
 
 | name | low | high | label |
 |---|---|---|---|
@@ -5334,6 +6869,48 @@ We would also have written the pass mark into the proposal. It shaped everything
 
 > **Note on this sample.** Sample portfolio page. The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita 2021 programme in April 2022 with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are invented — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/radar-error-budget` |
+| File | `public/demo/radar-error-budget.html`  (39.0 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | UAV Sphere Calibration — The Error Budget |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  UAV sphere calibration — the error budget
+h2  Test condition
+h2  Which term decides whether this works
+h3  Swing each term puts into the calibration error
+h4  Quadrature total · vs 1.5 dB budget
+h4  Sphere-position contribution · vs 0.5 dB pass mark
+h4  Fixed points of the method
+h2  The literature this budget rests on
+h5  What this demo is
+h5  The finding, in one move
+h5  Why fail on paper
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> UAV Sphere Calibration — The Error Budget Ricky Kids · SRM Kattankulathur / ISRO proposal · weather-radar calibration Worked error budget · EB-01 UAV sphere calibration — the error budget A weather radar is calibrated against an object of known radar cross-section sitting in the far field. The question is not whether a hexacopter can carry a sphere there. It is whether you can know where the sphere is once it arrives. This budget was built before anyone chose a motor — the pass mark came first. Total budget 1.50 dB Positioning pass mark ≤ 0.50 dB Experiments decomposed 4 published Flights conducted 0 by design Condition under test: altitude uncertainty of the sphere, 1σ 01 Test condition 0.35 m — altitude uncertainty of the sphere, 1σ 02 Which term decides whether this works Five terms combine in quadrature. Click a term to take it out of the budget entirely — the most generous assumption you can make about it — and watch what the total does. Swing each term puts into the calibration error low / high · dB Fig. 1 Asymmetric swing bounds per term at the current dial setting, against the 1.5 dB budget span (shaded). The dominant term is drawn heavier: sphere altitude is where the achievable accuracy is decided. Quadrature total · vs 1.5 dB budget — 1.5 budget 0 dB 3 dB Sphere-position contribution · vs 0.5 dB pass mark — 0.5 pass mark 0 dB 2 dB Fixed points of the method Altitude accuracy the spec demands ±0.35 m, 1σ Altitude at which the budget closes ±0.36 m, 1σ Angular coverage, one flight pattern ±12° elev. Standoff for that coverage 350 m 03 The literature this budget rests on Decomposed experiment Reported error, dB Attributable to positioning, dB Positioning share S-band, sphere + external GNSS tethered sphere, surveyed ground receiver 1.8 1.5 83% Polarimetric X-band sphere calibration, dual-pol comparison 1.4 1.1 79% UAV vs pedestal comparison same sphere flown and fixed 1.1 0.9 82% Altitude-limited trial flight ceiling constrained the geometry 2.2 1.9 86% Table 1 The four published calibration experiments whose error budgets were decomposed to build this one: in every case, most of the reported error traces to knowing the sphere's position — which is why the budget above turns on the altitude term, not the airframe. What this demo is The error budget from the case study, made adjustable. The proposal, the specified airframe and the cited literature are real ; the budget itself is an invented worked illustration, and no flight was ever conducted. It exists to show which term the method actually turns on. The finding, in one move Drag the dial from ±…
+
+_Design note — Radar error budget:_
+
+**Identity (3 lines):** Precision-instrumentation engineering report — a calibration-lab document on a cool paper-grey bench, the budget rendered as a numbered worked sheet (EB-01) rather than a dashboard. Archivo carries the report voice, IBM Plex Mono carries every value; hairline rules, a heavy ink rule under the doc-id line, and measured annotations do the structure. Light, deliberately single-theme, with graphite marks and exactly one alert hue (vermilion #b42318) reserved for over-budget states — pass states are ink and words, never a second hue.
+
+**Tokens:** `--bg #e7e9e9` (bench) · `--surface #fbfbfa` (sheet) · `--surface-2 #f2f3f2` · `--border #c7ccce` / `--hairline #dde0e1` · `--text #1a1d1f` · `--body-ink #383e43` · `--dim #5b6268` · `--faint #666d73` · `--bar #454b50` (neutral mark) · `--bar-dom #17191c` (dominant, heavier) · `--crit #b42318` / `--crit-deep #8e1b11` / `--crit-wash #f7e9e6` · `--band #eff1f0` (budget-span shading) · type: Archivo + IBM Plex Mono, tabular-nums throughout · radius scale 3/6px.
+
+**Signature interaction:** The tornado is centre stage: five asymmetric-bound bars (low/high, not ±half) on a shared dB axis with the 1.5 dB budget span shaded behind them; the dominant term draws heavier (18px vs 10px, near-black) with a "dominant term" caliper annotation that follows the bar end and turns vermilion when the total goes over. Dragging the σ dial from 0.35 to the u-blox NEO-M8N mark makes the altitude bar blow through the axis (which rescales) while the aside's positioning meter fails its 0.5 dB pass mark in the same hue — the finding performed, not narrated.
+
+**Functional fixes landed:** (1) BOM preset, dial mark, dial note, verdict and footer all name the u-blox NEO-M8N as the bill-of-materials module. (2) New "sphere-position contribution vs 0.5 dB pass mark" panel + header chip: 1.40 dB at nominal against ≤0.50, shown failing even at the demanded ±0.35 m, as the case study states. (3) Closure reconciled everywhere: budget closes at ±0.36 m while the spec demands ±0.35 — 1.46 dB against 1.50, a 0.04 dB whisker (dynamic when terms are excluded). (4) Table 1: four decomposed experiments, reported → attributable-to-positioning (1.8→1.5, 1.4→1.1, 1.1→0.9, 2.2→1.9 dB) with positioning-share meters and the literature caption. (5) Asymmetric bounds per term (alt −0.62/+0.71 scaling with the dial; hor −0.21/+0.24; RCS −0.14/+0.16; airframe −0.11/+0.13; receiver −0.05/+0.06); total swings and quadrature engine unchanged.
+
+**Deliberate omissions:** No hover tooltips on the tornado — every row prints its exact bounds and swing directly, so a tooltip would duplicate the value column. No green "pass" hue and no warn tier — the identity's one-alert-hue rule; pass is carried by ink chips and words ("total inside 1.5 dB budget"). No dark mode — a calibration report is a lit sheet; every colour is painted explicitly per the brief's single-theme clause. No sticky header or chrome — the document scrolls as a document. Masthead metadata stays honest (no invented revision dates or approvals); the only doc-furniture is the EB-01 designation. Parity verified headlessly: nominal 1.46 dB, positioning 1.40, closure ±0.36, BOM preset 5.73 dB, presets demand/rtk/bom, `?preset/?sigma/?off`, term-exclusion clicks and the required-σ solver all land exactly as before.
+
 ---
 
 ### 33. Non-contact COVID patient monitoring
@@ -5346,16 +6923,30 @@ We would also have written the pass mark into the proposal. It shaped everything
 | Track | silicon |
 | Domain | Health sensing |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_fpkpjsfpkpjsfpkp.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2021 · Health sensing |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 6 students across three universities, with a faculty supervisor in electronics and communication at SRM |
 | Timeline | Q3 2021 – Q1 2022 |
 | Stage | Research — bench feasibility study on healthy volunteers. Never used on patients and never clinically evaluated. |
-| Link | /demo/covid-bench |
+| Demo | /demo/covid-bench |
+| External link | https://drive.google.com/drive/u/0/folders/198wp9t5QOvHIX3rZbVzw9IehQD7HToc5 |
 
 **Positioning.** An engineering feasibility study that concluded against its own premise: the two readings staff act on are the two that need contact.
 
 **Outcome (card copy).** Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A device only removes the gowning cycle if it removes every reason to go in.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Demo: tick every required parameter and the saving stays at zero |
+| A | A — public & verifiable | Oxygen saturation and blood pressure have no non-contact route |
+| A | A — public & verifiable | No patient, ever — six healthy volunteers on a bench |
 
 **Problem.** Watching an isolated patient costs a gowning cycle. Shadowing observation rounds across three wards, more than half of all entries into a room existed only to read numbers off a patient — around nine minutes of ritual for about a minute of measurement.
 
@@ -5379,7 +6970,7 @@ In the second pandemic year, isolation wards were rationing something that had n
 
 We wanted to know how much of the burden was measurement rather than care, because only the measurement part is an engineering problem. Everything else on this page follows from the answer being most of it.
 
-**Figure — Purpose of staff entries into an isolation room: routine observation 58 percent, medication and treatment 27 percent, patient request 15 percent**
+**Figure — Purpose of staff entries into an isolation room: routine observation 58 percent, medication and treatment 27 percent, patient request 15 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5402,7 +6993,7 @@ We shadowed observation rounds in three wards and timed every phase of an entry,
 | Readings recorded at the bedside | Written once inside, transcribed again outside | 2 of 3 |
 | A monitor available per bed | One monitor shared and wheeled between beds | 2 of 3 |
 
-**Figure — Minutes per entry into an isolation room by phase: gowning 3.5, in the room 1.2 to 4.1, doffing and disposal 4.8**
+**Figure — Minutes per entry into an isolation room by phase: gowning 3.5, in the room 1.2 to 4.1, doffing and disposal 4.8**  `form: stackedHBar`
 
 | name | values | label |
 |---|---|---|
@@ -5451,7 +7042,7 @@ _A recreation of the feasibility question, not of the device. No patient took pa
 
 We agreed before build that this failed if a non-contact channel disagreed with the contact reference by more than an agreed margin under the movement a real patient produces — not under stillness, which anyone can pass.
 
-**Figure — Which parameters a non-contact channel could obtain, by condition: temperature and respiration usable when still, oxygen saturation and blood pressure unreachable in every condition**
+**Figure — Which parameters a non-contact channel could obtain, by condition: temperature and respiration usable when still, oxygen saturation and blood pressure unreachable in every condition**  `form: statusGrid`
 
 |  | Still, 1.2 m | Small movement | Repositioning | Beyond 2 m |
 |---|---|---|---|---|
@@ -5488,6 +7079,43 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 
 > **Note on this sample.** Sample portfolio page describing an engineering feasibility study. It makes no diagnostic or clinical claim: nothing here was tested on patients, no reading was used in anyone's care, and the agreement figures are engineering comparisons against an instrument, not measures of diagnostic accuracy. The project is real — six students across SRM, Jadavpur University and VIT Vellore in 2021–22, with a faculty supervisor and a patent disclosure — as are the architecture, the stand design and the contact monitor photographed. The workflow timings, the bench sessions and every figure are invented and internally reconciled. I'm glad to walk through the real study in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/covid-bench` |
+| File | `public/demo/covid-bench.html`  (29.1 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Non-contact Monitoring — The Bench |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Non-contact monitoring — the bench
+h2  How many gowning cycles does this actually remove?
+h3  What a non-contact channel could obtain
+h5  What this demo is
+h5  The finding, in one move
+h5  The tempting version
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Non-contact Monitoring — The Bench Ricky Kids · SRM Kattankulathur · Isolation wards Non-contact monitoring — the bench 24 bench sessions 6 healthy volunteers 0 patients, ever This is an engineering agreement study, not a clinical one. It measures how far each non-contact channel sits from a contact instrument on the same volunteer in the same minute. It says nothing about diagnosis, and nothing here was ever used on a patient. Bench condition Reference: a commercial contact monitor Bench feasibility · the premise, not the prototype How many gowning cycles does this actually remove? Fifty-eight per cent of entries into an isolation room exist only to read numbers off a patient, and each one costs about nine and a half minutes of gowning and doffing around a minute of measurement. A device removes that entry only if it removes every reason to go in. What a non-contact channel could obtain Tick the parameters this round has to report. The marked column is the bench condition selected above. Our design set out to report four of these five — pulse rides along on the reference monitor. Respiration at “still”: ±1.4 breaths/min against the contact reference, seated and still — the study’s guardrail figure. Gowning cycles removed · per patient · per day — observation 58% medication 27% request 15% — Staff minutes back per patient per day the 9.5-min observation entry — gowning 3.5 · in-room 1.2 · doffing & disposal 4.8 Medication entries spend 4.1 min in-room and requests 2.6 — the gowning shell around them is the same. 0 of 2 Escalation parameters reachable without contact oxygen saturation · blood pressure What this demo is The feasibility question from the case study, made arithmetic — not the device . There is no hardware here and no reading is taken. It replays which channels the bench could and could not obtain, and turns that into the only number that mattered: how many entries into a room the design would actually have removed. The finding, in one move Leave every parameter ticked, as a standard round requires, and the saving is zero at every condition. Oxygen saturation and blood pressure have no non-contact route at all , so somebody still gowns up and goes in. The tempting version Untick those two — and pulse, which was marginal at best — and the device looks excellent. That is exactly the framing our own materials used, and it is the one the study does not support. Student research at SRM Kattankulathur with collaborators at Jadavpur University and VIT Vellore. This is an engineering feasibility study on a bench: six healthy volunteers, scripted cond…
+
+_Design note — COVID bench:_
+
+**Identity (3 lines).** Calm clinical utility: a daylight ward tool on a pale green-cast ground (`#f2f5f4`) with white cards, clinical blue-green as the single working hue, and humane rounded-but-not-bubbly geometry (6/10/14px radius scale, 1px borders, one soft shadow). Type is Atkinson Hyperlegible (400/700) for everything a nurse reads and Spline Sans Mono (400–600, tabular) for every number, cap label and matrix cell. Nothing dark, nothing orange, nothing enterprise — it reads like a well-kept observation chart, and the study's own "0 patients, ever" fact sits in the masthead as a quiet clay-red pill.
+
+**Exact tokens.** `--bg #f2f5f4 · --surface #fff · --surface-2 #f8faf9 · --surface-3 #ebf0ef · --border #d7e0de · --border-soft #e5ebe9 · --ink #1a2b28 · --body-c #33443f · --dim #50605c · --faint #5e6e69 · --accent #0f766e · --accent-deep #0b5d57 · --accent-wash #e2efed · --accent-ring rgba(15,118,110,.30) · --ok #17694a/#e4f2ea/#b9dcc9 · --warn #7c5200/#f8efd8/#e4d0a0 · --crit #9c3a29/#f8ebe6/#e6c4b9 · --none-ink #5c6b67 + --none-border #c9d4d1` (dashed). All state text ≥4.5:1 on its wash; pressed segment sub-caption `#e3f2f0` on accent ≈5:1.
+
+**Signature interaction.** The condition scrubber: the sticky segmented control sweeps a soft accent ring + underline marker down the selected column of the channel-status board (180ms ease), while unticked parameter rows recede to 32% opacity — the whole page (cycles, minutes, entry bar, verdict, state chip) re-derives from that one column. The four cell states carry four distinct treatments, not four hues of alarm: within-margin (green wash), outside-margin (amber wash), no-agreement (clay wash), and **no path exists** as a dashed-border, uncoloured, gray cell — a calm clinical fact, visually a different species from a failure. The zero verdict answers the H2 in its own unit: a 52px tabular "0" of N observation rounds, "Zero." spelled out in the sub-line, clay numeral but no banner, siren or animation.
+
+**Deliberate omissions.** No icons at all (state is text + treatment, per the calm-ward brief); no dark theme (single-theme light, every colour painted, `color-scheme: light`); no charts beyond the two labeled proportion bars (entry mix, entry anatomy — each with a written legend, so no unlabeled marks); dropped the old shell's toast (defined, never fired) and its third-column `visibility:hidden` heading hack (the column now has a real heading, "The tempting version"); no hover theatrics — the only motion is the 160–180ms state transitions, killed under reduced-motion.
+
+**Functional fixes + parity.** (1) Footer now reads "Untick those two — and pulse, which was marginal at best — and the device looks excellent," so the sentence is true (pulse blocks at stillness). (2) Design-scope line added over the board: "Our design set out to report four of these five — pulse rides along on the reference monitor." (3) Respiration guardrail rendered twice: `±1.4 br/min` inside the resp/still cell and the full "±1.4 breaths/min against the contact reference, seated and still" as the board caption. (4) The 9.5-minute figure now shows its anatomy — a labeled gown 3.5 / in-room 1.2 / doff & disposal 4.8 bar with the 4.1-min medication / 2.6-min request in-room variants in the footnote. (5) The headline answers the H2 in gowning cycles (`ok ? rounds : 0`) alongside the existing `savedPct` and minutes. Parity verified headlessly: exact 5×4 cell matrix, 58/27/15 mix, ENTRY_MIN 9.5 (split sums to 9.5), defaults cond=still/rounds=12/all ticked, all-ticked → 0% and 0 cycles at **every** condition (still/small/repos/far), blockers at still = pulse+spo2+bp, resp-only at still skippable (12×9.5=114 min), empty selection not skippable, `?cond/?need/?rounds` parsing untouched.
+
 ---
 
 ### 34. Triple riding avoidance
@@ -5500,16 +7128,30 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 | Track | ai |
 | Domain | Road safety |
 | Status | internal |
+| Tier | 1 |
+| Card image | `Gemini_Generated_Image_6d6qur6d6qur6d6q.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2022 · Road safety |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 5 students across three institutions, with three faculty advisers at SRM |
 | Timeline | Q1 2022 – Q4 2022 |
 | Stage | In internal use — scores road-safety survey clips for the campus. Never connected to a live camera and never used to identify or penalise anyone. |
-| Link | /demo/rider-count |
+| Demo | /demo/rider-count |
+| External link | https://drive.google.com/drive/u/0/folders/11Bx3DJGQsSQoCqb6T8OjxarnfehbDbIk |
 
 **Positioning.** We designed an enforcement system, built the detector, and then shipped only the half that counts riders — because the half that names them was not ours to build.
 
 **Outcome (card copy).** Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Enforcement needs to be right about a person; measurement only needs to be right on average.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | The demo is deliberately image-less: counts only, no frame stored |
+| A | A — public & verifiable | The project docs include the enforcement pipeline we refused to build |
+| A | A — public & verifiable | No live-camera path exists in the shipped tool |
 
 **Problem.** Three people on a two-wheeler is illegal in India and routine on a large campus. Guards check at the gate, so riders drop the third person before it and pick them up inside — timed observation put roughly a third of gate checks defeated that way.
 
@@ -5531,7 +7173,7 @@ Triple riding is a genuine road-safety problem and a hard one to measure. A camp
 
 The reason the gate does not work is behavioural rather than technical. We watched entries and counted where instances actually occur.
 
-**Figure — Where triple-riding instances occur: 62 percent inside the campus away from any gate, 26 percent stopped at a gate, 12 percent evading the gate by dropping a rider**
+**Figure — Where triple-riding instances occur: 62 percent inside the campus away from any gate, 26 percent stopped at a gate, 12 percent evading the gate by dropping a rider**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5554,7 +7196,7 @@ We hand-labelled a sample of survey clips frame by frame to establish ground tru
 | Occlusion would be the main error | Two-up flagged as three-up dominates errors | 64 of 114 errors |
 | Footage would be usable throughout | 38% of a survey week is after dark | 1,840 clips reviewed |
 
-**Figure — Rider-count accuracy by lighting condition: daylight 96 percent, overcast 93, dusk 78, night 41, against an agreed 90 percent bar**
+**Figure — Rider-count accuracy by lighting condition: daylight 96 percent, overcast 93, dusk 78, night 41, against an agreed 90 percent bar**  `form: barsThreshold`
 
 _Threshold: 90 — the accuracy we agreed a survey number needs_
 
@@ -5639,7 +7281,7 @@ We agreed before build that this failed if the false-positive rate was high enou
 | 31% (measured at three gates) | Gate checks defeated by drop-and-remount |
 | 9 h → 40 min (per survey week) | Time to score the footage |
 
-**Figure — Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two**
+**Figure — Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two**  `form: confusion`
 
 | truth \ model | 1 rider | 2 riders | 3 or more |
 |---|---|---|---|
@@ -5661,6 +7303,39 @@ I would also have written the sampling plan before scoring anything. We scored t
 
 > **Note on this sample.** Sample portfolio page. The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is invented and internally reconciled: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/rider-count` |
+| File | `public/demo/rider-count.html`  (41.8 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Rider Counting — The Survey Tool |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Rider counting — the survey tool
+h5  What this demo is
+h5  What you will not find on this page
+h5  What it cost
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Rider Counting — The Survey Tool Form RS–03 · Rider occupancy survey Series 2022 · Batch over stored clips · No live feed Ricky Kids · SRM Kattankulathur · Road safety Rider counting — the survey tool 0 identifiers extracted Not yet scored 1,840 hand-labelled clips What this demo is A recreation of the tool that shipped, not the enforcement system the paper describes. It reads stored survey clips and writes counts. The detection approach, the three-model sequence and the team are real; every clip, count and accuracy figure here is invented for this sample. What you will not find on this page No frame, no face, no number plate, no rider identity, and no camera input. Not blurred or withheld — never extracted . The survey number is defensible precisely because it identifies nobody. What it cost The cost of that is on the third tab: the tool cannot deter a single rider. It can only count them, and counting is what nobody had numbers for. Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. No footage, frame, face, number plate or person from this project appears here or anywhere in it. The clip identifiers below are generated for the demo and refer to nothing; the accuracy figures, the confusion matrix, the labelled sample size and the timings are invented and reconciled with the case study.
+
+_Design note — Rider count:_
+
+**Identity (3 lines).** A privacy-forward civic instrument: a survey register set on warm paper stock, deliberately image-less — the absence of footage is the design statement, felt through big tabular numerals and generous whitespace where thumbnails would sit. Document furniture throughout: a serial line ("Form RS-03 · Rider occupancy survey · Series 2022"), heavy ink rules, a numbered index rail, an "Exhibit A" double-framed centerpiece, a colophon. Single-theme light by intent; every colour painted explicitly.
+
+**Tokens.** Paper `#efece1`, sheet `#faf8f1`, well `#efebde`; ink/rule `#1d2531`, body `#3a434f`, muted `#59626e`; one civic accent `#245a94`; status ok `#177347` / warn `#8f6400` / crit `#ac3220` with warm washes and matched hairlines (validated with the dataviz palette script against the paper surface — the warn/crit CVD proximity is the classic amber/red status pair and every colored mark carries a text label, never color alone). Type: Public Sans (prose, 400–700) + Space Mono (every count, ID, and micro-label; monospace = inherently tabular). Hairline `#d8d2c1` vs 2–3px ink rules give the ledger its two-weight rule system; radius ~0 everywhere (documents have corners).
+
+**Signature interaction.** The confusion matrix as "Exhibit A": a double-framed, full-width block whose nine cells are buttons set in 24–32px tabular numerals, each carrying its verdict and %-of-row ("over-counted · 6.2% of row"); selecting a cell (incl. deep-link `?view=eval&cell=1-2` for the 64 clips) swaps the annotation beneath the frame — the over-count note argues the plate-reader cut in one number. Second register: "Score the week" fills the empty ledger with 40 rows whose Stored-frame column is a typographic nil token (`∅ no frame stored` between en-rules), not a greyed thumbnail slot.
+
+**Deliberate omissions.** No imagery of any kind — no img/video/canvas/base64/background-image/url() (the excluded-lighting hatch and nil token are pure CSS/typography); no dark mode (the paper is the identity; `color-scheme: light` painted throughout); no card grids or radii, no shadows except the toast; no icons beyond the × strike and ∅ nil glyphs; no decorative motion (only the batch progress bar, tab underline and toast, all under `prefers-reduced-motion`). Parity kept exactly: views survey/eval/cut, params view/cell/scored/place, matrix [624,12,3]/[20,956,64]/[1,14,146], 94% / 6.2% / 1,840, lighting 96/93/78/41 vs the 90 bar, camera-refusal toast, batch animation, helmet stats, location filter. Fixes shipped: `?cell` validated by `/^[0-2]-[0-2]$/` (malformed → no selection); new figure "31% of gate approaches defeated by drop-and-remount (12 of 38 gate-share points)" derived from the 62/26/12 split (`Math.floor(12/38·100)` = 31, as the case study quotes); framing line beside the 94% figure: the 1,840 scored clips are the daylight-and-overcast set — dusk and night are reported separately and enter no survey figure.
+
 ---
 
 ### 35. Toys for autistic kids
@@ -5673,16 +7348,30 @@ I would also have written the sampling plan before scoring anything. We scored t
 | Track | silicon |
 | Domain | Assistive play |
 | Status | prototype |
+| Tier | 3 |
+| Card image | `Screenshot_2026-07-06_161758.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2021–2023 · Assistive play |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 6 students, with a mechanical-engineering faculty supervisor at SRM |
 | Timeline | Q3 2021 – Q1 2023 |
 | Stage | Prototype — built, demonstrated at a student expo and reviewed by special-education teachers. It never went to users: no child ever used it. |
-| Link | /demo/autism-bench |
+| Demo | /demo/autism-bench |
+| External link | https://drive.google.com/drive/u/0/folders/14Cx5kE8ckME3dmSky9t9Eryn2wERSMcC |
 
 **Positioning.** We took the prototype to special-education teachers before any child could meet it — and the interaction we were proudest of is the one they refused. A machine holding a child who wants to stop was the whole problem.
 
 **Outcome (card copy).** Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.
+
+**Skim layer — the pull, and the three facts under it**
+
+> They wanted a design where stopping is the child pulling their hand away.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Demo: pull the hand away mid-stroke — the stage finishes the stroke |
+| A | A — public & verifiable | No child ever used it; two special-education teachers reviewed the bench |
+| A | A — public & verifiable | The full write-up, as a PDF on-page |
 
 **Problem.** An e-learning kit for autistic children was our most ambitious project and the one most likely to do harm. The design that excited us most was a motorised gantry that would guide a child's hand to write.
 
@@ -5704,7 +7393,7 @@ Assistive devices for autistic children are mostly imported and priced for a Wes
 
 So the first constraint was affordability: a device an Indian NGO or public centre cannot buy helps nobody.
 
-**Figure — Share of target centres and schools able to buy at each price point: 68 percent under 5,000 rupees, 31 percent between 5,000 and 10,000, 9 percent above**
+**Figure — Share of target centres and schools able to buy at each price point: 68 percent under 5,000 rupees, 31 percent between 5,000 and 10,000, 9 percent above**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5727,7 +7416,7 @@ We ran structured design reviews with two special-education teachers from an aut
 | The teacher sets up, the device runs | A teacher who cannot stop it instantly will not switch it on | Redesigned |
 | Portability matters most | Cleanability matters more — everything gets mouthed | We had not considered it |
 
-**Figure — Classroom criteria outcomes by interaction: visual prompts 12 of 14 met, teacher-assigned content 10 of 14, guided-writing gantry 5 of 14**
+**Figure — Classroom criteria outcomes by interaction: visual prompts 12 of 14 met, teacher-assigned content 10 of 14, guided-writing gantry 5 of 14**  `form: stackedHBar`
 
 | name | values | label |
 |---|---|---|
@@ -5777,7 +7466,7 @@ _Both screens are the state their own link opens, captured from the running benc
 
 We agreed before build that this failed if the teachers reviewing it would not put it in front of a child. Two of the three interactions passed that bar; the third did not.
 
-**Figure — Teacher scores across six criteria: visual prompts strong throughout, teacher-assigned content strong on control, the guided-writing gantry weakest on safety and robustness**
+**Figure — Teacher scores across six criteria: visual prompts strong throughout, teacher-assigned content strong on control, the guided-writing gantry weakest on safety and robustness**  `form: radar`
 
 | name | values |
 |---|---|
@@ -5812,6 +7501,43 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 
 > **Note on this sample.** Sample portfolio page describing a prototype that never went to users. No child took part in any part of this project, no reading or observation of a child appears here, and no clinical, therapeutic or educational-outcome claim is made or implied — the only evidence is two special-education teachers reviewing a bench prototype. What is real: the project, the hardware shown, its team and supervisor, the demonstration at SRM Project Expo on 10 December 2021, and the involvement of teachers from an autism care centre, who are not named. The fourteen criteria, the scores, the price points and every figure are invented and internally reconciled. I'm glad to walk through the real prototype and the real review in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/autism-bench` |
+| File | `public/demo/autism-bench.html`  (55.6 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Autism Kit — The Bench Review |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Autism kit — the bench review
+h3  The review, averaged into six dimensions
+h3  What the bench unit cost
+h5  What this demo is
+h5  The test the review turned on
+h5  What was signed off
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Autism Kit — The Bench Review Ricky Kids · SRM Kattankulathur · Assistive play Autism kit — the bench review Bench review · Q4 2021 0 sessions with children Interaction 2 teachers · 14 criteria Design review · the kit on a bench, no child present The child pulls their hand away Teacher presses stop the test the review turned on 2 of 3 Interactions both teachers would put in front of a child Visual & sound prompts Teacher-assigned content Guided-writing gantry of 14 classroom criteria met, agreed by both teachers The criteria are theirs, not ours. Fourteen checks these two teachers already apply to anything entering their classroom. We would have measured whether the kit worked; they measured whether it can be stopped, cleaned and predicted. The review, averaged into six dimensions Mean of the fourteen criteria per dimension, scored 1–5 and agreed by both teachers. 0 1 2 3 4 5 The gantry collapses on the two axes that are about stopping — safety in use and child independence, both at 2 of 5 — and those are the axes the review turned on. On teacher control it is nearly the equal of the others: the stop button works. The button was never the question. What the bench unit cost ₹10,000 in parts, roughly against the teachers’ line under ₹5,000 at volume Criterion 13’s context: a public centre buys nothing above that line, and the prompt interaction clears it only by running on a tablet the centre already owns. What this demo is A recreation of the bench review described in the case study: three interactions, fourteen criteria, two special-education teachers. The kit is the real one — an ATmega board with a CNC Shield V3, A4988 drivers, lead screws and a micro servo running GRBL. The criteria, the verdicts and the teachers' words are invented for this sample. The test the review turned on The child pulls their hand away. Two of the three interactions simply end. The third completes the stroke it started, because a lead screw cannot tell a child who is concentrating from one who wants to leave. A stop button is not the same thing, and the difference is the reason the gantry was not built again. What was signed off No child took part in any part of this project. Nothing here is a clinical, therapeutic or educational-outcome claim, and none could be made from a design review: two practitioners said which of three ideas they would allow into a classroom — the prompts and the teacher-assigned content, and not the gantry. Student work at SRM Kattankulathur. The prototype, its hardware and the involvement of teachers from an autism care centre are real; the teachers a…
+
+_Design note — Autism bench:_
+
+**Identity (3 lines).** Warm, sensory-considerate, rigorous: an oat-cream ground with genuinely rounded geometry (10/16/22px radii, pill chips), soft warm shadows and slow easings (cubic-bezier(.32,.72,.28,1), 300–500ms, everything killed under prefers-reduced-motion), in muted terracotta / sage / dusty-blue — nothing saturated, nothing flashing. Nunito Sans is the humane voice; Spline Sans Mono is the soft machine voice (G-code, axis readouts, criterion numbers). The rigor is structural: the review is a literal 3 × 14 matrix with shape-coded verdict marks (filled dot / half dot / crossed ring — never colour alone), tappable P/C/G column heads, the teachers' verbatim quotes set as quiet indented italics attributed "one of the teachers", and a 2-of-3 sign-off card leading the panel.
+
+**Tokens.** bg `#FAF5EC`, surface `#FFFDF7`, surface-2 `#F1EADC`, code `#F4EDDE`; lines `#E2D8C6`/`#ECE4D4`; ink `#33291C`, body `#4E4335`, muted `#6A5D49` (5.9:1 — smallest copy stops here), faint `#8A7C67` (decorative marks and disabled only); accent dusty-blue `#34598A` (soft `rgba(52,89,138,.09)`, line `#B9C8DC`); ok sage `#41663A`, warn ochre `#7F5A17`, crit terracotta `#9C4A2F`, each with a -soft wash and -line border; chart series `#2F5FA8`/`#4A7A2F`/`#C97951` (validated with the dataviz six checks on `#FFFDF7`: all pass; protan 6.5 sits in the 6–8 band and is covered by direct value labels, legend and fixed bar order); radii 10/16/22/999; shadow `0 1px 2px rgba(87,72,50,.05), 0 8px 24px rgba(87,72,50,.07)`; type Nunito Sans 400–800 + Spline Sans Mono 400–600, base 15px/1.6, tabular-nums on every numeral. AA re-computed for every text token on every ground (min 5.11:1).
+
+**Signature interaction.** The pull-away stop test lands visually now: from the instant the hand leaves, everything the gantry keeps drawing is painted terracotta over the dusty-blue trace — the length of letter nobody asked it to finish — the pen dot turns terracotta with it, and the verdict arrives as a quiet cream card with a 4px terracotta spine (soft 450ms rise, no red flood) that names that length: "what the machine drew after the hand had gone." `?i=gantry&letter=A&test=pull` verified headlessly: seeds at step 27 mid-stroke-0 with the stage moving, finishes stroke 0 at step 113, renders the crit verdict and both split polylines.
+
+**Functional additions (audit gaps closed).** (1) Educator sign-off explicit: a "2 of 3 — interactions both teachers would put in front of a child" card atop the criteria panel naming visual prompts + teacher-assigned content with the gantry crossed out; the prompt verdict now reads "one of the two interactions both teachers would allow"; the content tab note and content verdict each carry their own sign-off sentence; the footer's third column states what was signed off. (2) Six-dimension grouped bar chart (1–5 on a 0 baseline, gridline per unit, legend + per-bar value labels + native tooltips, terracotta "stop axis" tags on Safety in use and Child independence, full caption on the collapse) from prompts [5,5,4,4,4,4] / content [5,4,5,2,3,3] / gantry [2,3,4,2,2,2]. (3) Cost line: about ₹10,000 in parts vs the under-₹5,000-at-volume target, as a side panel beside the chart and as a mono context line inside criterion 13's matrix row.
+
+**Deliberate omissions.** No dark mode — a sensory-gentle cream sheet is the identity; single-theme, every colour painted. No motion beyond the 1.4s speaking wave (owned by the prompt's fixed 4-second run), the 450ms verdict rise and 300ms control transitions — nothing loops elsewhere, nothing is sudden, and the whole page goes static under prefers-reduced-motion. No red flood or alarm styling on the failed test — the finding is meant to land quietly. No custom tooltip layer on the chart beyond native `title` — every bar already prints its value and the legend names the series, so a tooltip would duplicate both. No per-tab re-colouring or re-ordering of the chart — colour follows the interaction, never its verdict. Parity verified headlessly (vm + DOM stubs): tallies 12/2/0, 10/3/1, 5/4/5; `?i`/`?letter`/`?test=pull`/`?run=1`; teacher-stop halts mid-stroke; 4s prompt timer; session queue; keypad; "0 sessions with children" chip and the no-clinical-claims / no-child text verbatim.
+
 ---
 
 ### 36. Sludge-traversing ROV
@@ -5824,16 +7550,30 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 | Track | silicon |
 | Domain | Field robotics |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_gx3u69gx3u69gx3u.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2022 · Field robotics |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 5 students across two universities, with a mechanical-engineering faculty mentor at SRM |
 | Timeline | Q4 2021 – Q2 2022 |
 | Stage | Research — test-tank study, entered in the 2021-22 Technology Infusion Grand Challenge. Never deployed in a live sewer. |
-| Link | /demo/sludge-envelope |
+| Demo | /demo/sludge-envelope |
+| External link | https://drive.google.com/drive/u/0/folders/1xcXPJ-9sD7xQWy-5TUwYhE5nlHJs1pqI |
 
 **Positioning.** We set out to drive across settled sludge and found there is nothing to drive on — which is why the vehicle in these drawings floats.
 
 **Outcome (card copy).** Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.
+
+**Skim layer — the pull, and the three facts under it**
+
+> A track is a machine for not leaving it alone.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Demo: run the tracked drive into its stall yourself |
+| A | A — public & verifiable | The vehicle floats because the finding said driving is impossible |
+| A | A — public & verifiable | Entered in La Trobe's Technology Infusion Grand Challenge |
 
 **Problem.** India’s sewers have no walkways, so inspection means sending a person into them — the National Commission for Safai Karamcharis recorded 631 deaths in ten years cleaning sewers and septic tanks. A machine that could cross settled sludge would take the most dangerous entries out of the job.
 
@@ -5855,7 +7595,7 @@ Indian sewer networks were not built to be walked through; inspection still ofte
 
 So the sizing question was reach: how much of a line each method sees without a person entering it.
 
-**Figure — Share of line length reachable without a person entering: self-propelled vehicle 71 percent, push-camera on a rod 34 percent, floating camera raft 22 percent**
+**Figure — Share of line length reachable without a person entering: self-propelled vehicle 71 percent, push-camera on a rod 34 percent, floating camera raft 22 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -5878,7 +7618,7 @@ We built a test tank and mixed three sludge analogues to bracket what a settled 
 | A stall is recoverable by reversing | Reversing dug the vehicle in deeper | 7 of 9 stalls |
 | Sinkage stabilises | It kept increasing while the drive ran | 6 of 9 tracked runs |
 
-**Figure — Sinkage measured in each medium: 118 mm in the fresh analogue, 74 mm part-settled, 31 mm settled, against a 60 mm track height**
+**Figure — Sinkage measured in each medium: 118 mm in the fresh analogue, 74 mm part-settled, 31 mm settled, against a 60 mm track height**  `form: dotplot`
 
 | name | value | n |
 |---|---|---|
@@ -5930,7 +7670,7 @@ _The vehicle drawings are our own SolidWorks models. The lane, the analogues and
 
 We agreed before build that this failed if the vehicle could not get itself out of a stall and had to be hauled back on its tether.
 
-**Figure — Density range in which each drive completed the lane: tracks only above 1.15 grams per cubic centimetre, paddle wheels with thrusters from 0.98, thrusters alone to 1.12**
+**Figure — Density range in which each drive completed the lane: tracks only above 1.15 grams per cubic centimetre, paddle wheels with thrusters from 0.98, thrusters alone to 1.12**  `form: bands`
 
 | name | from | to | label |
 |---|---|---|---|
@@ -5965,6 +7705,42 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 
 > **Note on this sample.** Sample portfolio page. The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the 2021-22 Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are invented and internally reconciled — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/sludge-envelope` |
+| File | `public/demo/sludge-envelope.html`  (37.2 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Sludge Test Lane — The Operating Envelope |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Sludge test lane
+h2  What the medium does to the drive
+h5  What this demo is
+h5  The finding, in one move
+h5  The band and the dots
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Sludge Test Lane — The Operating Envelope Ricky Kids · SRM Kattankulathur · Field robotics — test-tank study Sludge test lane — the operating envelope Test tank · 27 runs 3 media · 3 drives · 3 runs each Traction limit 1.15 g/cm³ The project name assumes traversing is possible. The cheapest thing we could do was spend the first quarter building a tank and trying to disprove our own title. Move the dial below the traction limit and run the lane. Density dial medium in the lane — the one variable of the study 1.02 g/cm³ detents or drag the pointer anywhere between the mixed analogues One lane, one vehicle, three graded sludge analogues What the medium does to the drive The variable was the medium; the vehicle stayed fixed. A drive that has to be hauled back on its tether has added an entry to the job rather than removed one — that was the pass mark, agreed before any of this was built. Drives vs traction — one shared density axis Bands: each drive's modelled hold envelope, in a medium left alone. Dots: the three media — filled olive where that drive completed the lane, open rust where it did not. Clay rule: the dialled density. The band and the dots only agree at the settled analogue. Run the lane Reverse out of the stall simulates the tracked drive at the dialled density surface 60 mm — track height sinkage — mm track height 60 mm idle Sinkage is measured while the drive runs, not after it. Six of the nine tracked runs never completed the lane — the drive kept turning, the medium kept thinning, and the vehicle kept going down. 2 of 9 Stall events the vehicle recovered from unaided — the pass mark Stalls are events, not runs: nine stall events across the nine tracked runs — a run can stall twice. The other seven ended with the vehicle pulled out on its tether, after reversing dug each of them in deeper. Six of the nine runs never completed the lane. What this demo is The test lane from the case study, on one axis. The vehicle drawings and the component list are the project's real ones ; the tank, the three analogues, the densities, the sinkage and the run counts are invented for this sample. Nothing here was tested in a real sewer. The finding, in one move Put the dial at the fresh analogue and run the lane with tracks. The medium thins under the drive, sinkage passes the track height, and the vehicle stops being on a surface and starts being in a fluid. The band and the dots The band and the runs are two different things. The tracked envelope is where a track can hold in a medium left alone. The dots are where it actually completed the lane — and the two …
+
+_Design note — Sludge ROV:_
+
+**Identity (3 lines).** Tactile field engineering: a workshop bench sheet on khaki paper — deep umber ink, clay, olive and rust — where the DENSITY DIAL is built as a real instrument: a machined plate with a recessed readout window, an engraved scale (hatched "tracks fluidise" zone below the rust 1.15 traction-limit post, olive "tracks can hold" above, minor/major engraved ticks, the three media driven in as labelled index pins) and a knurled 20×56px pointer handle riding a recessed groove, with the three media as stamped detent keys that press dark when set. Bricolage Grotesque carries the stencil-ish display voice (uppercase 800 masthead over a 3px ink rule), Chivo Mono carries every numeral; elevation is physical — raised plates get a top-light inset highlight, lanes and grooves get inset shadows, buttons sit on a 2px drop edge and travel 1px when pressed. Single-theme light by intent; every colour painted.
+
+**Tokens.** `--bg #d7cdb4` (khaki paper) · `--surface #e7e0cc` (plate) · `--surface-2 #efe9d8` (sheet) · `--well #c7bc9e` (grooves/lanes) · `--line #a89b7c` / `--hairline #beb397` · ink `#2a2013` (deep umber) · body `#42351f` · dim `#5d4f36` (≥5:1 on both grounds) · accent clay `#a34a17` / deep `#7f3810` (deep used wherever clay is small text) · ok olive `#52601c` / deep `#3f4b15` · warn ochre `#8a5c12` · crit rust `#99290f` / deep `#7a2009` · sludge `#b3a170` + hatch line `#9c8a58`. Type: Bricolage Grotesque (400–800) + Chivo Mono (400–600), `tabular-nums` on every numeral. Radii 3/6/10px; two shadow recipes only (`--plate` raised, `--recess` sunk).
+
+**Signature interaction.** The dial and the envelope chart share one density axis: dragging the knurled pointer through the hatched fluidise zone moves a clay cursor (with a pointer cap) through all three drive lanes simultaneously, flips the header chip between "tracks fluidise the medium"/"tracks can hold", and repositions the vehicle's resting sinkage in the tank. Stalls render consequentially: the tank SVG draws a semi-opaque sludge murk layer OVER the vehicle below the surface, so the olive track unit visibly turns rust and drowns as sinkage passes the rust-dashed 60mm track-height line; the stalled tank card takes a rust double border, and a slack tether line drawn from the tank wall to the hull is the thing the copy says pulls it out. Under `prefers-reduced-motion` the lane run executes the identical physics loop synchronously — the run jumps straight to its outcome (stall or completion) with zero animation.
+
+**Functional fixes landed.** (1) Stall denominators reconciled as events-vs-runs: the tile now states "nine stall events across the nine tracked runs — a run can stall twice", 2 of 9 events recovered unaided, the other seven "ended with the vehicle pulled out on its tether, after reversing dug each of them in deeper", and "six of the nine runs never completed the lane"; the sink note now says six of nine *runs* never completed (the old "never stabilised" run line and the ambiguous "7 of 9" tile line are gone). (2) The seven is bound to the tether in the tile, the stall verdict ("the other seven ended with the vehicle pulled out on its tether, after reversing dug them in deeper") and the reverse verdict ("worse for reversing, then pulled out on the tether"), matching the case study's claim.
+
+**Deliberate omissions.** No sticky topbar — a bench sheet scrolls as a sheet. No dark mode (`color-scheme: light`, all colours explicit). No rotary/gauge dial — a linear slide-rule instrument was chosen so the dial, the three envelope lanes and the axis strip literally share one x-axis and the finding reads as one geometric statement; the native `<input type=range>` stays underneath for keyboard/AT (arrow keys work, `aria-valuetext` reports g/cm³). No hover tooltips beyond the run dots' existing title text (bands print status in a column). One decorative-looking element only — the tether — and it is an argument, not decoration. The misleading "9 runs per medium" button caption was replaced with "simulates the tracked drive at the dialled density" (the run button only ever models the tracked drive). Parity verified headlessly (43 checks): densities 1.02/1.18/1.42, sinkage 118/74/31, envelopes 1.15–1.60 / 0.98–1.30 own / 0.98–1.12, BOUND 1.15, TRACK_H 60, margins 0.03 vs 0.27, interpolation (1.30→52.5), `?d` clamp, `?medium=part/settled`, `?medium=fresh&run=1` stalls past track height with reverse adding 16mm, 9 run dots, completion toast at settled.
+
 ---
 
 ### 37. ENVI-City — sustainable smart city concept
@@ -5977,16 +7753,30 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 | Track | silicon |
 | Domain | Urban concept |
 | Status | research |
+| Tier | 3 |
+| Card image | `Gemini_Generated_Image_orqf1borqf1borqf.png` |
+| Card colour | #dbeafe |
 | Context | Ricky Kids · 2022 · Urban concept |
 | Role | Founder — Ricky Kids (student research org, SRM University) |
 | Team | 3 students across two universities, with a faculty co-author at SRM |
 | Timeline | Q4 2021 – Q2 2022 |
 | Stage | Research — concept study, presented at ICTSGS 2021 and published in ECS Transactions. Nothing was built or deployed. |
-| Link | /demo/envi-city |
+| Demo | /demo/envi-city |
+| External link | https://drive.google.com/drive/u/0/folders/1XhqFiIQJZtQN9ZVzuRBbMfDo5szeg9W0 |
 
 **Positioning.** We published a whole-city vision, then audited our own paper claim by claim — eleven claims, one testable at block scale — and modelled the single one we were prepared to defend in public.
 
 **Outcome (card copy).** Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.
+
+**Skim layer — the pull, and the three facts under it**
+
+> The useful work is deciding which single intention you are prepared to be wrong about in public.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Published: ECS Transactions 107(1) 11007 — the DOI resolves |
+| A | A — public & verifiable | Demo: the paper drawn claim by claim, with the audit attached |
+| A | A — public & verifiable | Eleven claims in the vision; one testable at block scale |
 
 **Problem.** Our own published vision proposed a city running on renewables, harvesting floodwater, purifying its own air and replacing cell towers with fibre. Eleven claims, one paper, and no way to tell which a reader should believe.
 
@@ -6007,7 +7797,7 @@ A smart-city concept is easy to write and almost impossible to falsify, which is
 
 Coupling utilities only pays if it reaches the one that dominates, so the first question was where a block's resources actually go.
 
-**Figure — Share of a city block's annual resource cost by utility: power 54 percent, water and wastewater 31 percent, solid waste 15 percent**
+**Figure — Share of a city block's annual resource cost by utility: power 54 percent, water and wastewater 31 percent, solid waste 15 percent**  `form: hbar`
 
 | name | value | label |
 |---|---|---|
@@ -6031,7 +7821,7 @@ I went through our own paper and poster claim by claim, asking one question of e
 | City-scale rooftop air purification | No defensible model at that volume | Dropped |
 | Removing cell towers to protect birds | A correlation, and no mechanism we could test | Dropped |
 
-**Figure — Claims in the published vision narrowed to what could be tested: 11 claims, 7 with a stated mechanism, 4 we could quantify, 1 testable at block scale**
+**Figure — Claims in the published vision narrowed to what could be tested: 11 claims, 7 with a stated mechanism, 4 we could quantify, 1 testable at block scale**  `form: funnel`
 
 | name | value | label |
 |---|---|---|
@@ -6075,7 +7865,7 @@ _Our own conference poster from ICTSGS 2021, with a personal email address redac
 
 We agreed before build that this failed if coupling did not beat running the three separately by more than the uncertainty in our own assumptions — a saving smaller than its own error bar is not a finding.
 
-**Figure — Saving from coupling water, power and waste by block type: 9 percent for dense residential and 11 for mixed use, with commercial and industrial intervals crossing zero**
+**Figure — Saving from coupling water, power and waste by block type: 9 percent for dense residential and 11 for mixed use, with commercial and industrial intervals crossing zero**  `form: intervals`
 
 | name | value | lo | hi | label | clears |
 |---|---|---|---|---|---|
@@ -6113,9 +7903,62 @@ I would also have gone to the planners first. We spent two quarters establishing
 
 > **Note on this sample.** Sample portfolio page. The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016 (2022), and the poster shown was presented at ICTSGS 2021. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are invented and internally reconciled. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation.
 
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/envi-city` |
+| File | `public/demo/envi-city.html`  (47.0 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | ENVI-City — the published vision, made explorable |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  ENVI-City — the paper, made explorable
+h2  The audit, in four counts
+h2  All eleven claims, audited in place
+h3  Deep links
+h3  What this page cites
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> ENVI-City — the published vision, made explorable Ricky Kids · ECS Transactions 107(1) 11007 · 2022 ENVI-City — the paper, made explorable Every element drawn below is a claim from the published vision of a sustainable smart city. Select one to read what the paper proposes for it — and the verdict from the audit that followed. Nothing was built. This page is the published vision, drawn — and the audit that followed it. Every claim traces to “Envi-city: Vision of a Sustainable Smart City of the Future”, ECS Trans. 107(1) 11007–11016 (2022) ; every verdict traces to the authors’ own follow-up audit. This demo asserts nothing the paper does not. doi 10.1149/10701.11007ecst · Das, Elumalai, Sarkar, Santhosh Kumar R The audit, in four counts our own paper, audited against itself · Q1 2022 11 claims in the published vision 7 with a stated mechanism 4 we could put a number on 1 testable at one-block scale Press a count to grey the drawing down to the claims that survive that stage — press the last one and the whole vision dims except a single loop. Bars are proportional to the count; the drop from eleven to one is the finding before the finding. All layers Energy Air Network Water Waste below street level block boundary 8–15% lost between plant and consumer the grid it leaves behind the headline claim dust / gas PPM sensed filtered out WAN fibre short-range Wi-Fi above, cables below — in place of the tower the birds the paper worries for rain harvested, streets kept dry auto collection water · power · waste one loop — the one testable claim One block of the vision, drawn to the paper’s claims — nothing pictured was built. select any element · tab reaches every one All eleven claims, audited in place Verdicts and one-line reasons are the case study’s own; the columns reproduce its audit. Counts: 11 claims · 7 mechanisms · 4 quantifiable · 1 block-testable. id Claim Stated mechanism A number on it Testable at one block Verdict Deep links ?layer=<energy|air|network|water|waste> — open with that layer highlighted, the rest greyed. ?claim=<id> — open with that claim’s panel open and its element marked. Claim ids (each is a link): What this page cites Every “what the paper proposes” line paraphrases Envi-city: Vision of a Sustainable Smart City of the Future , Pushpal Das, Vijayaragavan Elumalai, Abhishek Sarkar, Santhosh Kumar R — ECS Transactions 107(1) 11007–11016 (2022), doi 10.1149/10701.11007ecst . The 8–15% transmission figure is the paper’s own; no other number on this page describes the world. Every verdict, reason and the 11 → 7 → 4 → 1 funnel come from the…
+
+_Design note — ENVI-City (created):_
+
+**Identity (3 lines).** Optimistic civic: a daylight page — clear-sky ground, paper cards, warm-neutral street — on which one city block of the published vision is drawn as a friendly-but-precise line diagram (uniform ink strokes, soft green/blue/ochre tints, no clip-art), and audited in place. Figtree carries the public-signage voice; DM Mono carries every citation, claim id and count. The 11 → 7 → 4 → 1 funnel sits above the drawing as a permanent fixture of four count cards with proportional sequential-green bars, and the whole page holds the grounding rule: the only worldly number anywhere is the paper's own 8–15%.
+
+**Exact tokens.** `--bg #e9f1f7` (sky) · `--paper #fdfcf9` · `--paper-2 #f3f0e8` · road `#e3dfd3` · underground `#efe9db` · `--line #cfd3cd` / `--hairline #e2e2d8` · ink `#20282b` · body `#3d4649` · dim `#5c6a6e` · green `#1b7a41` / deep `#10552d` / soft `#dcefe2` · blue `#1e5fa8` / deep `#143f72` / soft `#dfeaf7` · warm ochre `#955a17` / soft `#f3e8d8` · verdict olive (deferred) `#836200` · verdict rust (dropped) `#b02a37`. The green/blue/ochre diagram trio passes all six dataviz checks (validator run: lightness band, chroma, CVD ΔE 19.3 worst pair, normal floor 20.2, contrast); funnel bars are a 4-step sequential green (`#9fceac → #5fa878 → #1b7a41 → #10552d`). Type: Figtree 400–800 + DM Mono 400/500 (Google Fonts, real fallbacks), tabular-nums on every count, id and audit column; radii 4/8/12; motion 200–250ms opacity/border transitions + 180ms panel rise, all killed under `prefers-reduced-motion`.
+
+**Signature interaction.** "Audited in place": pressing a funnel count greys the drawn vision down to the claims that survive that stage — press "1 testable at one-block scale" and the whole city dims to a single dashed green loop joining rooftop solar, the rain tank and the waste pad ("water · power · waste — one loop"). Every drawn element (11 elements ↔ 11 claims, 1:1, all tabbable with visible focus on their hit-rects) opens a panel: the paper's paraphrased claim over a mono citation line, then the audit — three yes/— rows, a glyph-carrying verdict chip (kept ✓ / kept-as-input → / deferred ‖ / dropped ×, word always present, never colour alone) and the case study's one-line reason. Funnel counts are computed from the claim flags at runtime, never typed twice.
+
+**Deliberate omissions.** No invented numbers: claim/reason text contains no numeral but the paper's 8–15% (harness-checked by regex); no modelled savings, no adoption figures, no % on the funnel bars beyond the counts. No dark mode — a daylight civic page is the identity; `color-scheme: light`, every colour painted. No hue-per-layer rainbow — layers are isolated by dimming, not repainting; green/blue/ochre follow the entity (renewables / civic infrastructure / waste). No emoji, no raster images, no canvas — the city is one inline SVG; the sun is warm-neutral, not a third accent. No hover tooltips on the diagram (the panel is the reading surface) and no shadows (bordered paper cards only). The bird strike through the cell tower is drawn in ink, not rust — the removal is the paper's proposal, the rust is reserved for the audit's verdicts. Verified headlessly (34-check DOM-stub harness) and eyeballed at 1380/768/390: funnel 11/7/4/1 computed; `?layer=` validated against the five layer ids (bogus → ignored); `?claim=` validated against the eleven ids; conflicting `?layer`+`?claim` resolves claim-first; stage/layer/selection interplay, keyboard Enter/Space selection, URL replaceState sync, and all index-table verdicts matching the case study's five-row table.
+
+**Claim ids (deep-linkable as `?claim=<id>`), and what each cites:**
+- `rooftop-solar` — rooftop solar cells on residential buildings · ECS Trans. 107(1) 11007, abstract · kept as an input
+- `roadside-vawt` — vertical-axis wind turbines along roadsides · abstract · kept as an input
+- `air-purifiers` — automated solar-powered purifiers responsive to dust/gas PPM · abstract · dropped
+- `em-regulation` — telecom signals filtered out; short-range Wi-Fi over WAN fibre instead · abstract · dropped
+- `bird-decline` — the EM-radiation/urban-bird-decline correlation motivating it · abstract · dropped
+- `iot-management` — IoT-run day-to-day electronics · abstract · dropped
+- `transmission-losses` — 8–15% lost between plant and consumer · the paper's own figure · kept as an input
+- `flood-management` — automated flood + rainwater management · abstract · deferred
+- `waste-management` — automated waste management · abstract · kept as an input
+- `full-renewable` — a city run fully on renewable energy (the headline) · abstract · dropped
+- `coupled-loop` — water, power and waste as one loop · the vision's three elements read together · kept (the 1 of 11)
+
+Audit flags sum to the case study's funnel: 7 mechanisms (solar, vawt, purifiers, em, losses, flood, loop), 4 quantifiable (solar, vawt, losses, loop), 1 block-testable (loop); verdicts reproduce the case study's five-row table exactly, and every reason line is its wording. `?layer=<energy|air|network|water|waste>` opens with that layer isolated; both params documented in the page footer.
+
+---
+
 ---
 
 ## Program overview
+
+_One page over fourteen chapters, not a 38th product. It fronts the internal AI program and is deliberately kept off the /work grid._
 
 ### P. The internal AI program — fourteen tools, one doctrine
 
@@ -6127,16 +7970,29 @@ I would also have gone to the planners first. We spent two quarters establishing
 | Track | ai |
 | Domain | Internal platform |
 | Status | internal |
+| Tier | 2 |
+| Card image | `ixana-wiki-search.jpg` |
+| Card colour | #dbeafe |
 | Context | Ixana · 2025–2026 · Internal platform program |
 | Role | Program owner — prioritisation, doctrine and delivery across every tool on this page |
 | Team | One to four engineers per tool, drawn from the same small pool |
 | Timeline | Jan 2025 – Aug 2026 |
 | Stage | Live — fourteen tools in use across the company |
-| Link | https://xana-nine.vercel.app/ |
+| Demo | https://xana-nine.vercel.app/ |
 
 **Positioning.** What it is to build the internal AI operating system of a silicon company: fourteen tools under one set of rules — deterministic counts, model-written prose, provenance on every claim, and a refusal wherever the data cannot carry an answer.
 
 **Outcome (card copy).** What it is to build the internal AI operating system of a silicon company: fourteen tools under one doctrine — deterministic counts, model-written prose, provenance on every claim, and refusal where the data runs out.
+
+**Skim layer — the pull, and the three facts under it**
+
+> Counting is deterministic; only synthesis goes to a model.
+
+| Class | Meaning | Fact |
+|---|---|---|
+| A | A — public & verifiable | Three chapters run live on the deployed platform — click through |
+| A | A — public & verifiable | Fourteen tools; every chapter page carries its own worked example |
+| A | A — public & verifiable | The same refusals recur by design: no rankings, no write-back, no unsourced figure |
 
 **Problem.** A silicon company on five-month tapeout cycles roughly doubled, from about 75 people in 2024 to about 140 by mid-2025, and every coordination surface creaked at once: knowledge lived in five tools, reports were rebuilt by hand from memory, ceremonies ran on documents that drifted from the record, and audit questions ended in somebody's recollection.
 
@@ -6219,28 +8075,42 @@ I would also measure the program, not just the tools. Each chapter measures itse
 
 > **Note on this sample.** This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own data note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation.
 
+**Demo**
+
+External: <https://xana-nine.vercel.app/>
+
 ---
 
-## Appendix — engineering and hardware builds
+## Appendix — demo inventory
 
-_Earlier engineering work carried as supporting evidence rather than as products._
+_Every interactive recreation hosted in this repo. Each is a single self-contained HTML file in `public/demo/`, served at an extension-less path by an explicit rewrite in `next.config.ts`. Adding one means both edits; without the rewrite the clean path 404s._
 
-| Build | Company | Years | Domain | Note |
-|---|---|---|---|---|
-| Board failure analysis — resonant converter, supply and post regulator | Failure Analysis \| SLB | 2023 | Failure analysis | Root-caused five recurring board failures and fed each fix back into the build standard so the next revision stopped repeating them. |
-| Testing AD8232 with NI instruments and LabVIEW | Ricky Kids | 2021 | Test engineering | Characterised an ECG front end against NI instrumentation and documented where its datasheet bandwidth claims actually held. |
-| Obstacle avoidance robot using ultrasonic sensing | Vyorius | 2021 | Embedded systems | Ultrasonic obstacle-avoidance rover built to learn sensing, filtering and motor control end to end on one platform. |
-| FSM designs — Mealy, Moore and an up-down counter | Vyorius | 2021 | Digital design | Mealy and Moore machines plus an up-down counter, simulated and checked against a written test plan rather than by eye. |
-| Verilog and VHDL circuits implemented on FPGA | Vyorius | 2021 | Digital design | Closed the loop from RTL to hardware on a set of standard circuits — written, simulated, synthesised and run on the board. |
-| UART transmitter printing a single character | Vyorius | 2021 | Digital design | Built a UART transmitter from scratch and proved the framing on a scope before trusting a vendor IP block. |
-| 16-bit RISC processor | Vyorius | 2022 | Digital design | Designed a 16-bit RISC core with its own instruction set and ran real programs on it in simulation. |
-| IoT-based smart agriculture system | Vyorius | 2021 | IoT systems | Soil-moisture and weather sensing that only triggered irrigation when both readings agreed, to cut false watering. |
-| RGB pattern generator | Vyorius | 2021 | Digital design | Timing-driven RGB pattern generator, written to practise clock division and state encoding on real hardware. |
-| World map COVID-19 dashboard | Vyorius | 2021 | Data visualization | Choropleth dashboard over public COVID feeds, built to learn how to keep a dense map readable at a glance. |
-| Voice-controlled home automation | Vyorius | 2021 | Home automation | Voice-triggered relay control with a hardware interlock, so a misheard command could not latch a load on. |
-| Home automation with automatic room temperature control | MSME Technology Development Centre, Govt. of India | 2020 | Home automation | Closed-loop room temperature control on a scheduled setpoint, built during an MSME development centre internship. |
-| 3-bit binary to grey code converter using low-voltage XOR gates | Hackathon \| IIT Hyderabad | 2021 | Digital design | Low-voltage XOR implementation of a 3-bit grey code converter, entered and defended at an IIT Hyderabad hackathon. |
-| First robot | Intern \| MSME Technology Development Centre, Govt. of India | 2019 | Embedded systems | A line-following robot — the first build that turned electronics from a subject into something I did on weekends. |
-| Character LCD driver | Intern \| MSME Technology Development Centre, Govt. of India | 2019 | Embedded systems | Drove a character LCD straight from a bare microcontroller, timing every instruction delay by hand against the datasheet. |
-| Hardware timer | Intern \| MSME Technology Development Centre, Govt. of India | 2019 | Embedded systems | Countdown timer built on hardware timer peripherals rather than delay loops, to learn why that distinction matters. |
-| First signal | Intern \| MSME Technology Development Centre, Govt. of India | 2019 | Embedded systems | The first circuit I built that produced a signal I could see on a scope and explain line by line. |
+| Path | File | Size | Linked from |
+|---|---|---|---|
+| `/demo/ai-lawyer` | `/demo/ai-lawyer.html` | 154.7 KB | AI Lawyer — multi-agent patent drafting system |
+| `/demo/autism-bench` | `/demo/autism-bench.html` | 55.6 KB | Toys for autistic kids |
+| `/demo/clickup-audit` | `/demo/clickup-audit.html` | 106.9 KB | ClickUp Activity Tracker — task change audit trail |
+| `/demo/clickup-gantt` | `/demo/clickup-gantt.html` | 84.4 KB | ClickUp reporting and Gantt dashboard |
+| `/demo/covid-bench` | `/demo/covid-bench.html` | 29.1 KB | Non-contact COVID patient monitoring |
+| `/demo/envi-city` | `/demo/envi-city.html` | 47.0 KB | ENVI-City — sustainable smart city concept |
+| `/demo/neuroadapt` | `/demo/neuroadapt.html` | 105.6 KB | NeuroAdapt — spike-train feature extraction for a science compiler |
+| `/demo/ornithopter-concept` | `/demo/ornithopter-concept.html` | 32.8 KB | Ornithopter for surveillance |
+| `/demo/prd-os` | `/demo/prd-os.html` | 131.9 KB | AI product planning operating system |
+| `/demo/procurement-desk` | `/demo/procurement-desk.html` | 102.6 KB | Procurement Orchestrator — M365-native request workflow |
+| `/demo/quantum-simulator` | `/demo/quantum-simulator.html` | 95.9 KB | Quantum Gate Simulator — interactive 10-qubit circuit builder |
+| `/demo/radar-error-budget` | `/demo/radar-error-budget.html` | 39.0 KB | UAV-aided weather radar calibration |
+| `/demo/rider-count` | `/demo/rider-count.html` | 41.8 KB | Triple riding avoidance |
+| `/demo/salary-bands` | `/demo/salary-bands.html` | 84.6 KB | AI Salary Generator |
+| `/demo/scrum-desk` | `/demo/scrum-desk.html` | 72.0 KB | Scrum ecosystem — one workspace for sprint ceremonies |
+| `/demo/sludge-envelope` | `/demo/sludge-envelope.html` | 37.2 KB | Sludge-traversing ROV |
+| `/demo/team-performance` | `/demo/team-performance.html` | 198.0 KB | Team performance reporting — five teams, three windows |
+
+## Appendix — what this export leaves out
+
+Stated plainly so the analysis knows its own edges.
+
+- **The 17 engineering builds** under Others, excluded by instruction. They are one-sentence card entries in `app/work/constants.ts` with no case study and no demo.
+- **Images.** No card art, screenshots, or the 15 mermaid architecture diagrams in `public/static/images/project/`. Chart *numbers* survive as tables; visual evidence does not.
+- **Demo behaviour.** The text and screen structure of each demo are extracted here, but the demos are script-driven; what a state actually does on click is only visible by opening it.
+- **The site's code.** Architecture, routing, the filter system, the admin CMS and the known defects live in `PROJECT-REFERENCE.md`; `/work` specifically in `app/Changes/work-page-reference.md`.
+- **The audit trail.** `AUDIT/FINDINGS.md`, `CLAIMS-AUDIT.md` and `INTERVIEW-BRIEF.md` hold the per-project rubric verdicts, the full evidence-class audit, and the questions a hostile interviewer would ask.
