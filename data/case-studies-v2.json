@@ -14999,8 +14999,8 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Ixana already had a read-only dashboard over this workspace, and read-only was right for what it does. Ceremonies were the part it deliberately did not touch, so they stayed in documents beside the workspace, updated by whoever remembered.",
-          "Three options were open: the tool of record's own sprint module, an agile product bought in, or ceremonies built as views of the records we already had. The first two add a place where work lives; only the third removes one. The case was never that ceremonies are expensive — it was the sixth of that cost spent producing a second, worse copy of what we already own."
+          "Ixana already had a read-only dashboard over this workspace, and read-only was right for it. Ceremonies were the part it deliberately did not touch, so they stayed in documents beside the workspace, updated by whoever remembered.",
+          "Three options were open: the tool of record’s own sprint module, an agile product bought in, or ceremonies built as views of records we already had. The first two add a place where work lives; only the third removes one. The case was never that ceremonies are expensive — it was the sixth of that cost spent producing a second, worse copy of what we own."
         ],
         "blocks": [
           {
@@ -15130,7 +15130,7 @@
               },
               {
                 "lead": "Write-narrow, rather than read-only.",
-                "text": "A ceremony exists to change state, and a read-only one sends people to a second tab — which is where the hand-maintained document came from. So this writes: four fields, one module, every write listed."
+                "text": "A ceremony exists to change state, and a read-only one sends people to a second tab — where the hand-maintained document came from. This writes: four fields, one module, every write listed."
               },
               {
                 "lead": "The burndown is recomputed on read.",
@@ -15182,14 +15182,14 @@
         "body": [
           "The head of people operations blocked the first version, and she was right to. A per-person blocker log, retained and searchable, is a performance record whatever it is called, and she is the one who would have to defend it in an appraisal.",
           "So I changed what exists rather than who may see it. Ceremony state is keyed to the task and to nothing else: there is no person row in the schema, and the per-person column is a filter computed on render and discarded on close.",
-          "She agreed, with two conditions I had not planned to give: no per-person export of any kind, and a ceremony archive visible to every member of a squad rather than to its lead, so anyone who can be measured can read the measure. The second is why the write ledger is a product surface and not a log file."
+          "She agreed, with two conditions: no per-person export of any kind, and a ceremony archive visible to every member of a squad rather than its lead, so anyone who can be measured can read the measure. The second is why the write ledger is a product surface and not a log file."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "Four ceremonies over one dataset. The standup board renders the record's diff since yesterday, blockers attached to tasks. Planning shows the ranked backlog beside a capacity meter built from each engineer's own median throughput. The burndown sums task rows on read, in points and in tasks, so slicing shows up as two lines separating. Behind them sit the drift check and the write ledger."
+          "Four ceremonies over one dataset. The standup board renders the record’s diff since yesterday, blockers attached to tasks. Planning shows the ranked backlog beside a capacity meter built from each engineer’s median throughput. The burndown sums task rows on read, in points and tasks, so slicing shows as two lines separating. Behind them: the drift check and the write ledger."
         ],
         "blocks": [
           {
@@ -15295,7 +15295,7 @@
         "heading": "Impact and outcomes",
         "body": [
           "Before build we agreed this failed if any squad still kept a private standup document a month after launch. Four sprints in, none of the three keeps one.",
-          "The guardrail was the median size of a closed task: a burndown counted in tasks rewards closing small ones, and a product that improved every meeting metric while halving task size would be a worse product with a better dashboard. It has held at three points since launch."
+          "The guardrail was the median size of a closed task: a burndown counted in tasks rewards closing small ones, and a product improving every meeting metric while halving task size is a worse product with a better dashboard. It has held at three points since launch."
         ],
         "blocks": [
           {
@@ -15396,7 +15396,7 @@
           }
         ],
         "after": [
-          "Drift now stands at zero, and I do not report it as an achievement: it is zero because the second copy no longer exists, which is what removing it means."
+          "Drift stands at zero, and I do not report it as an achievement: it is zero because the second copy no longer exists — which is what removing it means."
         ]
       },
       {
@@ -15404,7 +15404,7 @@
         "heading": "What I'd do differently",
         "body": [
           "I would build the write ledger first. It went in late, to show the head of people operations that the four-field boundary was a claim she could check, and it turned out to be what made engineers trust the product at all.",
-          "And I would have solved the retrospective instead of cutting it. The cut was correct on the constraint I set, but I treated that constraint as fixed rather than the thing to solve. A genuinely anonymous surface pushing back only action items would probably have worked."
+          "And I would have solved the retrospective instead of cutting it. The cut was correct on the constraint I set, but I treated the constraint as fixed rather than the thing to solve. A genuinely anonymous surface returning only action items would probably have worked."
         ]
       }
     ],
