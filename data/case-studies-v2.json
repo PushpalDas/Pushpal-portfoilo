@@ -915,7 +915,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Each team kept its own stage vocabulary — the tidy canonical model would have been wrong for two of the three — and classification ships with its correction rate on the header, where the people relying on it can see it. The assistant answers from filtered records and refuses the ranking question outright; all of it is clickable in the live demo. Adoption and preparation-time figures below are the worked example."
+        "text": "Each team kept its own stage vocabulary — the canonical model would have been wrong for two of three — and classification ships with its correction rate on the header, where the people relying on it can see it. The assistant refuses the ranking question outright. The adoption and preparation-time figures below are the worked example."
       }
     ],
     "sections": [
@@ -923,7 +923,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Three operations problems competed for the same quarter: pipeline visibility, a bandwidth reporting rebuild, and a delivery-risk alerting system. I sized them the same way — lead and architect hours consumed per month — from a fortnight of calendar sampling across eleven people plus the review observations in the next section."
+          "Three operations problems competed for the same quarter: pipeline visibility, a bandwidth reporting rebuild, and delivery-risk alerting. I sized them the same way — lead and architect hours consumed per month — from a fortnight of calendar sampling across eleven people plus the review observations in the next section."
         ],
         "blocks": [
           {
@@ -957,7 +957,7 @@
           }
         ],
         "after": [
-          "It was urgent rather than merely large because a delay nobody explains gets re-explained in the next review, so the two largest bars fed each other week after week."
+          "It was urgent rather than merely large: a delay nobody explains gets re-explained at the next review, so the two largest bars fed each other week after week."
         ]
       },
       {
@@ -1033,14 +1033,14 @@
           }
         ],
         "after": [
-          "The reframe: leads were not short of data, they were short of an agreed shape for it. Three teams with different delivery flows had been asked to fit one export format, so every review began by undoing it."
+          "The reframe: leads were not short of data, they were short of an agreed shape for it. Three teams with different flows had been asked to fit one export format, so every review began by undoing it."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I owned scope across ingestion, the pipeline model, the two views and the assistant — and the negotiation with each team about what their stages were. That negotiation was the product work; the rest followed."
+          "I owned scope across ingestion, the pipeline model, the two views and the assistant — and the negotiation with each team about what their stages were. That negotiation was the product work."
         ],
         "blocks": [
           {
@@ -1049,7 +1049,7 @@
             "items": [
               {
                 "lead": "Three pipeline definitions, one product surface.",
-                "text": "The tidy answer was one canonical stage model, and it would have been wrong for at least two of the three teams. Stages are per-team; only the surface is shared."
+                "text": "The tidy answer was one canonical stage model, and it would have been wrong for two of the three teams. Stages are per-team; only the surface is shared."
               },
               {
                 "lead": "A historical view, not just a live one.",
@@ -1057,11 +1057,11 @@
               },
               {
                 "lead": "The assistant answers from filtered records, not free generation.",
-                "text": "Efficiency questions have exact answers, so the assistant translates a question into a filter over stored records. A wrong answer is then a wrong filter — visible and fixable — rather than a fluent invention."
+                "text": "Efficiency questions have exact answers, so the assistant translates a question into a filter over stored records. A wrong answer is a wrong filter — visible and fixable — rather than a fluent invention."
               },
               {
                 "lead": "Automatic stage classification with a visible correction.",
-                "text": "Classifying unstructured tasks is the only way this works at volume, and it will sometimes be wrong. Every stage carries a one-click correction, and the correction rate is the metric I report."
+                "text": "Classifying unstructured tasks is the only way this works at volume, and it will sometimes be wrong. Every stage carries a one-click correction, and the correction rate is what I report."
               }
             ]
           }
@@ -1093,7 +1093,7 @@
           },
           {
             "kind": "para",
-            "text": "Cutting automatic stage inference for RTL was the hardest call — it is the team with the most tasks and the most to gain. On a sample of 200 tasks the classifier reached 54% against the 71% it managed elsewhere, low enough that leads would have stopped trusting the view. A manual stage field set on task creation costs their lead ten minutes a week, and a slower correct view beats a fast one that has to be checked."
+            "text": "Cutting automatic stage inference for RTL was the hardest call — the team with the most tasks and the most to gain. On 200 sampled tasks the classifier reached 54% against 71% elsewhere, low enough that leads would stop trusting the view. A manual stage field on task creation costs their lead ten minutes a week, and a slower correct view beats a fast one that needs checking."
           }
         ]
       },
@@ -1101,16 +1101,16 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The RTL lead did not want to be in this product at all. He had built his own verification tracker in a spreadsheet, it fit his flow exactly, and his position was that a shared tool would either flatten his stages into something meaningless or force his team to maintain data for somebody else's dashboard. Both of those had happened to him before.",
-          "I stopped arguing that a shared tool would serve him and asked what his spreadsheet could not do. The answer was comparison: he could see his own pipeline perfectly and could not answer a director's question about RTL against PS without a week's notice. That reframed it from \"one model or three\" to \"what has to be shared for comparison to work\", and the answer was small — stage entry and exit timestamps, not stage names.",
-          "He agreed on two conditions. RTL keeps its own stage vocabulary rather than a normalised set, which is why the product carries three pipeline definitions. And nothing writes back to the task tool, so his team can never be blocked by a bug in my product — which is why write-back sits in the cut column rather than the deferred one."
+          "The RTL lead did not want to be in this product at all. He had built his own verification tracker in a spreadsheet that fit his flow exactly, and a shared tool would either flatten his stages into something meaningless or force his team to maintain data for somebody else’s dashboard — both had happened to him before.",
+          "I stopped arguing that a shared tool would serve him and asked what his spreadsheet could not do. The answer was comparison: he could not answer a director’s question about RTL against PS without a week’s notice. That reframed it to “what must be shared for comparison to work” — stage entry and exit timestamps, not stage names.",
+          "He agreed on two conditions. RTL keeps its own stage vocabulary, which is why the product carries three pipeline definitions. And nothing writes back to the task tool, so his team can never be blocked by a bug in mine — which is why write-back sits in the cut column, not the deferred one."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A tracker showing where each task sits in its team's pipeline, with a delay mode for overdue work across a chosen window, a drill-down drawer for one task's history, a velocity leaderboard, and an assistant answering efficiency questions against stored records. It classifies work into stages and stores the result so history survives."
+          "A tracker showing where each task sits in its team’s pipeline, with a delay mode for overdue work, a drill-down drawer for one task’s history, a velocity leaderboard, and an assistant answering efficiency questions against stored records. Stage classifications are stored, so history survives."
         ],
         "blocks": [
           {
@@ -1215,7 +1215,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "Before build we agreed this failed if fewer than half of the 31 leads were running their weekly review inside it within a quarter. The guardrail was the stage correction rate — classification people quietly stop believing is worse than none, and the correction rate is the only early signal of that."
+          "Before build we agreed this failed if fewer than half of the 31 leads ran their weekly review inside it within a quarter. The guardrail was the stage correction rate — classification people quietly stop believing is worse than none, and the correction rate is its only early signal."
         ],
         "blocks": [
           {
@@ -1280,7 +1280,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create. Three populations appear on this page and are not interchangeable: the three team leads who run the flagship Monday reviews and were observed in section 02, the 31 group leads across the three teams who form the adoption denominator, and the 11 leads and architects in the January calendar sample. And the gap between 71% classification accuracy and a 4.2% correction rate is not leads missing errors — it is that the 71% was sampled across every task while a lead only touches the stages their review passes through, so most misclassifications sit on work no review ever surfaces. That is why the correction rate is the guardrail and not the accuracy claim."
+            "text": "A lead counts as running their review in the product when they opened their pipeline view in the 24 hours before a scheduled review, at least three weeks in four. Three populations on this page are not interchangeable: the three team leads running the Monday reviews observed in section 02, the 31 group leads forming the adoption denominator, and the 11 people in the January calendar sample. And 71% accuracy beside a 4.2% correction rate is not leads missing errors: accuracy was sampled across every task, while a lead only touches the stages their review passes through — why the correction rate, not accuracy, is the guardrail."
           },
           {
             "kind": "config",
@@ -1292,7 +1292,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I treated the stage model as a data problem and it was a political one. Two of the three teams changed how they name stages once they saw them rendered publicly, quietly invalidating a month of classifier tuning. I would now freeze stage vocabularies with each lead in writing first, and treat a change as a schema change with notice rather than a mysterious drop in accuracy.",
+          "I treated the stage model as a data problem and it was a political one. Two teams changed their stage names once they saw them rendered publicly, quietly invalidating a month of classifier tuning. I would now freeze stage vocabularies with each lead in writing, and treat a change as a schema change with notice rather than a mysterious accuracy drop.",
           "I also built the velocity leaderboard because it was easy, and it is the feature I would remove. It gets looked at, it has never changed a decision, and it started a recurring argument about whether team throughput is comparable at all."
         ]
       }
