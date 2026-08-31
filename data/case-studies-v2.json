@@ -6504,7 +6504,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "A teacher's work sits across roughly seventy books, thousands of letters and hundreds of hours of recordings, with nowhere to ask a question and get his actual words back with a source. A general model answers every such question fluently, which is precisely the failure — a plausible paraphrase attributed to a named person is worse than no answer."
+        "text": "A teacher’s work sits across roughly seventy books, thousands of letters and hundreds of hours of recordings, with nowhere to ask a question and get his actual words back with a source. A general model answers every such question fluently — precisely the failure: a plausible paraphrase attributed to a named person is worse than no answer."
       },
       {
         "lead": "What we did.",
@@ -6512,7 +6512,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Fabricated citations cannot ship: any reference the retriever did not return is stripped by code before an answer renders, and out-of-corpus questions are refused by a calibrated gate rather than answered fluently. The engine and the interface both work and are not yet connected, so nobody has used it — the evaluation figures further down are the worked example of the harness built to judge it."
+        "text": "Fabricated citations cannot ship: any reference the retriever did not return is stripped by code before an answer renders, and out-of-corpus questions are refused by a calibrated gate rather than answered fluently. Engine and interface both work and are not yet connected, so nobody has used it; the evaluation figures below are the worked example."
       }
     ],
     "sections": [
@@ -6554,14 +6554,14 @@
           }
         ],
         "after": [
-          "Refusal is the feature. Reframing the problem from \"how do we always answer\" to \"how do we reliably decline\" made the rest of the design follow."
+          "Refusal is the feature. Reframing from “how do we always answer” to “how do we reliably decline” made the rest of the design follow."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "We collected 100 real questions from community forums rather than writing our own, then had three reviewers who know the corpus independently judge whether a returned passage addressed each. Real questions mattered: the ones people ask are vaguer and less well-formed than any test set we would have written."
+          "We collected 100 real questions from community forums rather than writing our own, then had three reviewers who know the corpus independently judge whether a returned passage addressed each. Real questions matter: the ones people ask are vaguer than any test set we would have written."
         ],
         "blocks": [
           {
@@ -6624,7 +6624,7 @@
               },
               {
                 "lead": "A deterministic citation guard, not a prompt instruction.",
-                "text": "Any citation not in the retrieved set is stripped by code. Asking a model not to fabricate references reduces the rate; a deterministic check takes it to zero, and only one of those is a guarantee."
+                "text": "Any citation not in the retrieved set is stripped by code. Asking a model not to fabricate reduces the rate; a deterministic check takes it to zero — only one of those is a guarantee."
               }
             ]
           }
@@ -6634,7 +6634,7 @@
         "num": "04",
         "heading": "What was built",
         "body": [
-          "A retrieval engine over books, letters and verified lecture transcripts, held as roughly 32,000 chunks. A question is embedded, candidates are pulled from the book and lecture lanes separately, a re-ranker reorders them, and a calibrated distance gate refuses anything the corpus does not address. A deterministic guard removes any cited reference that was not retrieved. We prototyped the interface separately, and the two halves are not yet connected."
+          "A retrieval engine over books, letters and verified lecture transcripts, held as roughly 32,000 chunks. A question is embedded, candidates come from the book and lecture lanes separately, a re-ranker reorders them, and a calibrated distance gate refuses what the corpus does not address. A deterministic guard removes any cited reference that was not retrieved. The interface was prototyped separately; the two halves are not yet connected."
         ],
         "blocks": [
           {
@@ -6743,7 +6743,7 @@
           },
           {
             "kind": "para",
-            "text": "What the evaluation cannot tell us is whether any of this helps. It measures whether reviewers who know the corpus judge a retrieved passage relevant — a fair proxy for retrieval quality and no more. It says nothing about whether a person in grief found the teaching useful, or whether a correct refusal leaves them better off than a sympathetic invention."
+            "text": "What the evaluation cannot tell us is whether any of this helps. It measures whether reviewers who know the corpus judge a passage relevant — a fair proxy for retrieval quality and no more. It says nothing about whether a person in grief found the teaching useful, or whether a correct refusal leaves them better off than a sympathetic invention."
           },
           {
             "kind": "config",
@@ -6755,7 +6755,7 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "We built an engine and an interface and never connected them, which is the fact that defines where this project stands. Both halves are good and neither has met a user, because each was sequenced to be finished rather than to meet the other early. A crude API between two half-built halves would have produced worse demos and far better information.",
+          "We built an engine and an interface and never connected them — the fact that defines where this project stands. Both halves are good and neither has met a user, because each was sequenced to be finished rather than to meet the other early. A crude API between two half-built halves would have produced worse demos and better information.",
           "I would also have set the evaluation at 100 questions from the start. The 20-question set gave us months of confidence that turned out to be unearned — too small to show the grief-category gap that is now the most important thing we know."
         ]
       }
