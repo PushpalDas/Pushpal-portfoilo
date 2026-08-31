@@ -4,7 +4,7 @@ Last updated: 2026-09-01 · Session: 1 · Model: Claude Fable 5 · Branch: feat/
 ## CONTEXT CAPSULE (≤ 12 lines — a fresh model reads ONLY this + NEXT_ACTION to re-orient)
 - Mission: elevate this sample mid/senior PM portfolio to a global 10/10 benchmark per ELEVATION-MASTER-PROMPT.md.
 - Ground truth: PORTFOLIO-ANALYSIS.md (content), PROJECT-REFERENCE.md (code), app/Changes/portfolio-decisions.md (spec — wins conflicts).
-- Current phase: 4 — demo verification (P0–P3 complete)
+- Current phase: 6 — final QA (P0–P5 complete; final build running)
 - Done so far: P0 complete (verifier fixed, build passes after stale .next types purge, BENCHMARKS.md, sitemap+orphan); P1/P2 via prior-run FINDINGS; P3 COMPLETE — all 30 word-band overruns trimmed into band, barsThreshold §08 collision fixed (notetaker → groupedHBar decision-trace), `npm run verify:work` passes corpus-wide (36 distinct chart forms / tile sets / evidence methods). No headline figures changed, so no new BENCHMARKS rows.
 - KEY DISCOVERY: a prior audit run already elevated demos (all 17 have design notes; most parity-verified) and reconciled arithmetic corpus-wide. Remaining defects: 30 case studies over word band (see ledger deltas), one §08 chart-form collision (barsThreshold: ixana-meeting-notetaker vs github-for-clickup…), 6 demos lacking recorded parity verification (quantum, procurement-desk, prd-os, clickup-gantt, rider-count, envi-city) with punch lists in AUDIT/FINDINGS.md "Phase 2 parity" section.
 - Method for P3 units: read dossier slice of PORTFOLIO-ANALYSIS.md (index in scratchpad/pa-index.txt) → trim v2 JSON prose into band via node per-slug surgery, preserving voice/claims/numbers → four-lens check → verify:work → commit.
@@ -12,7 +12,7 @@ Last updated: 2026-09-01 · Session: 1 · Model: Claude Fable 5 · Branch: feat/
 - Open risks/blocks: `npm run build` baseline still running (task b0kp7byw6); very slow under OneDrive.
 
 ## NEXT_ACTION
-Execute P4: verify the six demos without recorded parity (quantum-simulator, procurement-desk, prd-os, clickup-gantt, rider-count, envi-city) against their punch lists in AUDIT/FINDINGS.md "Phase 2 parity" section; fix only genuine mismatches. Also check notetaker demo/case-study alignment after the §08 chart change (chart is page-side only — no demo change expected).
+Execute P6 closeout: when the final `npm run build` (task b5j6hvzig) completes clean, run `next start` and spot-fetch 6 case-study routes + 6 demo routes for 200s and section headings, then set this file to DONE and make the final commit. P4 done (six demos verified — punch lists all closed in current files; external spot fetches match). P5 done (AUDIT/ELEVATION-AUDIT.md all green). P3-in-band-check done (program page four-lens PASS; other in-band pages carry prior-run Pass verdicts).
 
 ## TASK LEDGER
 | ID | Unit | Status | Notes / word delta | Commit |
