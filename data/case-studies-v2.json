@@ -13821,7 +13821,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Ixana files ~25 applications a year off five-month tapeout cycles — with about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided."
+        "text": "Ixana files ~25 applications a year off five-month tapeout cycles — about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox: a disclosure past its filing date was discovered, not decided."
       },
       {
         "lead": "What I did.",
@@ -13838,7 +13838,7 @@
         "heading": "Why this, and why now",
         "body": [
           "What gets taped out decides what is patentable. What is already filed decides what we can publish or demo. And a disclosure landing before its filing destroys protection nobody can recover — so the roadmap and the estate are one decision surface.",
-          "I sat on both sides of it. Over the tenure I owned 50-plus filings end to end — what to protect, how broadly, when to file — while running the six Wi-R product programmes those filings protect. Disclosure date and filing date come off the same roadmap; until 2024 they were set by different people."
+          "I sat on both sides. Over the tenure I owned 50-plus filings end to end — what to protect, how broadly, when to file — while running the six Wi-R product programmes those filings protect. Disclosure date and filing date come off the same roadmap; until 2024 different people set them."
         ],
         "blocks": [
           {
@@ -13878,7 +13878,7 @@
           }
         ],
         "after": [
-          "About twenty-five applications a year is large for seventy-five people, nearly all of it landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade here — which is why the guardrail is inventor time."
+          "About twenty-five applications a year is large for seventy-five people, nearly all landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade — which is why the guardrail is inventor time."
         ]
       },
       {
@@ -13946,7 +13946,7 @@
           }
         ],
         "after": [
-          "The reframe came from the 23 disagreements. Nobody was missing data. Three people read the same mail spool and built three different states from it, because a matter’s state was never written down — it was inferred, freshly, each time. What was missing was a place for the answer to live."
+          "The reframe came from the 23 disagreements. Nobody was missing data: three people read the same mail spool and built three different states, because a matter’s state was never written down — inferred, freshly, each time. What was missing was a place for the answer to live."
         ]
       },
       {
@@ -14190,7 +14190,7 @@
         "body": [
           "The objection came from counsel’s docketing partner, and it was the best one raised. Their docket is the legal record; a system deriving dates from email creates a second source of truth the firm cannot indemnify, and a founder acting on our date is harmed by something the firm will still answer for.",
           "I could not win that, so I removed what she objected to. The system computes no statutory dates at all: it mirrors the firm’s docket as sole authority and calculates only internal readiness dates.",
-          "She agreed, then asked for three things I had not planned to give: a provenance stamp on every date, internal dates drawn so they cannot be mistaken for statutory ones, and no reminder without the firm’s own date beside ours. The third is why the founder has never acted on a date I invented."
+          "She agreed, then asked for three things: a provenance stamp on every date, internal dates drawn so they cannot be mistaken for statutory ones, and no reminder without the firm’s own date beside ours. The third is why the founder has never acted on a date I invented."
         ]
       },
       {
@@ -14481,7 +14481,7 @@
         "heading": "What I'd do differently",
         "body": [
           "I built the mechanism before I wrote down the strategy. For a year the filing decisions lived in my head and in conversations with the founder, while what got documented was the plumbing. How a tapeout maps to a filing decision is still the part I cannot hand over.",
-          "I would also have measured the tail earlier. Section 08 says we fixed the first thirty days and left the rest where it was — that tail is inventor availability in a tapeout crunch."
+          "I would also have measured the tail earlier. Section 08 says we fixed the first thirty days and left the rest alone — that tail is inventor availability in a tapeout crunch."
         ]
       }
     ],
