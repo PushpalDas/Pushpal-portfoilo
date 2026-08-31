@@ -8560,7 +8560,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Real throughput went from about 3.4 to 13.5 Mbit/s — the announcement's own figures — which puts a 100 MB payload inside a one-minute service window. Gen-1 stayed in production for the designs that need its longer reach, so the upgrade stranded nobody by construction. The pipeline that pulled this spin, and what converted, is the worked example further down."
+        "text": "Real throughput went from about 3.4 to 13.5 Mbit/s — the announcement’s own figures — putting a 100 MB payload inside a one-minute service window. Gen-1 stayed in production for designs needing its longer reach, so the upgrade stranded nobody. The pipeline that pulled this spin, and what converted, is the worked example below."
       }
     ],
     "sections": [
@@ -8568,8 +8568,8 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The case for this spin was unusual in that I did not have to make it. Fourteen evaluations had already written down what they needed and told us we did not meet it, so the demand was documented, quantified and sitting in a folder. What I had to do was stop us spending it on something else.",
-          "The alternative was a gen-1 derivative for a new consumer segment — cheaper, lower rate, high volume. It is a real opportunity with the property that makes speculative markets seductive: nobody can prove the number wrong. The pipeline number was written by people who had already qualified the part."
+          "The case for this spin was unusual: I did not have to make it. Fourteen evaluations had already written down what they needed and told us we did not meet it — demand documented, quantified and sitting in a folder. My job was to stop us spending it on something else.",
+          "The alternative was a gen-1 derivative for a new consumer segment — cheaper, lower rate, high volume. A real opportunity, with the property that makes speculative markets seductive: nobody can prove the number wrong. The pipeline number was written by people who had already qualified the part."
         ],
         "blocks": [
           {
@@ -8603,14 +8603,14 @@
           }
         ],
         "after": [
-          "Timing mattered too. Sealed enclosures were becoming the default across industrial and medical hardware at the same moment firmware images crossed a hundred megabytes, so the gap between what a near-field link could carry and what a service workflow needed was widening on its own."
+          "Timing mattered too: sealed enclosures were becoming the default across industrial and medical hardware just as firmware images crossed a hundred megabytes, so the gap between what a near-field link could carry and what a service workflow needed was widening on its own."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "Fourteen evaluations had supplied a written requirement sheet before stalling, so rather than interview anyone I put those sheets beside our own characterisation data for gen-1 and scored each line met or missed. Requirement sheets are the most honest artefact a partner produces: written to be held to, before anyone is invested in the answer."
+          "Fourteen evaluations had supplied a written requirement sheet before stalling, so rather than interview anyone I put those sheets beside our gen-1 characterisation data and scored each line met or missed. Requirement sheets are the most honest artefact a partner produces: written to be held to, before anyone is invested in the answer."
         ],
         "blocks": [
           {
@@ -8716,7 +8716,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "On this programme the delivery loop did the product definition outright. The founder owned whether the near-field line deserved a second part; I ran the review that decided what it had to be — reading fourteen requirement sheets against our characterisation data and converting the gap into a specification the design team could work from.",
+          "On this programme the delivery loop did the product definition outright. The founder owned whether the near-field line deserved a second part; I ran the review that decided what it had to be, converting the gap between fourteen requirement sheets and our characterisation data into a specification the design team could work from.",
           "That is a narrower job than it sounds, and the discipline is in the refusals. A requirements list assembled from partner documents is easy to defend and easy to inflate, because every line has a customer name behind it."
         ],
         "blocks": [
@@ -8770,7 +8770,7 @@
           },
           {
             "kind": "para",
-            "text": "Operation through a fully conductive enclosure was the hardest thing to refuse, and the most asked for — industrial partners with metal housings wanted the sealed-service story their plastic-cased neighbours were getting. It is not a scheduling constraint: an enclosed conductive shield blocks electric-field coupling, so the only route was a second inductive front end beside the electric one. That costs die area, a second validation campaign, and the RF-silent property that is why these buyers are here. Enclosure-material guidance and an aperture pattern in the reference layout cover the partly-conductive cases; the datasheet says plainly that a full Faraday cage is out of scope."
+            "text": "Operation through a fully conductive enclosure was the hardest thing to refuse, and the most asked for — industrial partners with metal housings wanted the sealed-service story their plastic-cased neighbours were getting. It is not a scheduling constraint: an enclosed conductive shield blocks electric-field coupling, so the only route was a second inductive front end beside the electric one — die area, a second validation campaign, and the RF-silent property that is why these buyers are here. Enclosure-material guidance and an aperture pattern in the reference layout cover the partly-conductive cases; the datasheet says plainly a full Faraday cage is out of scope."
           }
         ]
       },
@@ -8779,15 +8779,15 @@
         "heading": "How I got it agreed",
         "body": [
           "The founder wanted the gen-1 consumer derivative instead. His reasoning was not casual: a cheaper low-rate part aimed at a high-volume consumer tap has a bigger ceiling than any industrial pipeline, and a company that only serves the customers it already has stops finding new ones. He has been right about that before.",
-          "Arguing about which market was larger was unwinnable, because the honest answer is his. So I stopped comparing markets and compared the quality of the two numbers. The pipeline 480 thousand were written by partners into their own requirement sheets after qualifying the part; the derivative 200 thousand were ours. That reframed it from which opportunity is bigger to which number we would still believe in a year.",
-          "He agreed, and attached a condition I had not planned for. The gen-2 spin had to carry the hooks the derivative would need — a documented reduced-rate, low-power operating point selectable at provisioning — so the derivative becomes a binning decision rather than a third spin. It cost validation weeks we had not budgeted, and it is why a derivative is now a quarter of work instead of a year."
+          "Arguing about which market was larger was unwinnable — the honest answer is his. So I compared the quality of the two numbers instead. The pipeline 480 thousand were written by partners into their own requirement sheets after qualifying the part; the derivative 200 thousand were ours. Which opportunity is bigger became which number we would still believe in a year.",
+          "He agreed, and attached a condition. The gen-2 spin had to carry the hooks the derivative would need — a documented reduced-rate, low-power operating point selectable at provisioning — so the derivative becomes a binning decision rather than a third spin. It cost unbudgeted validation weeks, and it is why a derivative is now a quarter of work instead of a year."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A near-field transceiver moving about 13.5 Mbit/s of real data at 1–15 cm, under 6 mW, at sub-0.2 ms latency, with no radiated RF. In workflow terms: 25 MB in about fifteen seconds, 50 MB in thirty, and a 100 MB firmware image plus its validation logs in fifty-nine — the number that decides whether a sealed device can be serviced without opening it."
+          "A near-field transceiver moving about 13.5 Mbit/s of real data at 1–15 cm, under 6 mW, sub-0.2 ms, with no radiated RF. In workflow terms: 25 MB in about fifteen seconds, 50 MB in thirty, and a 100 MB firmware image plus validation logs in fifty-nine — the number that decides whether a sealed device can be serviced unopened."
         ],
         "blocks": [
           {
@@ -8954,7 +8954,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I treated the requirement sheets as a specification and never asked what was missing from them. They told me precisely what the fourteen wanted and nothing about partners who never got as far as writing one — and the metal-enclosure request in section 04 came from exactly that population, late, by which point it was a physics answer rather than a design question.",
+          "I treated the requirement sheets as a specification and never asked what was missing from them. They told me precisely what the fourteen wanted and nothing about partners who never wrote one — and the metal-enclosure request in section 04 came from exactly that population, late, by which point it was a physics answer rather than a design question.",
           "I would also have set the service window with a margin. Fifty-nine seconds against a sixty-second requirement is a specification met and an engineering position with nowhere to stand: any partner whose enclosure attenuates more than our reference case falls outside a window we told them we were inside."
         ]
       }
