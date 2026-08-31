@@ -9849,7 +9849,7 @@
       },
       {
         "lead": "Result.",
-        "text": "One decision set the tier: the display is a cost decision disguised as a feature decision, and once it went reflective the battery, the charging circuit and half the enclosure stopped being separate problems. The board is real and on this page — processor, sensors, crystals, antenna network. The costs, battery life and the return-rate guardrail below are the worked example the programme was scored on."
+        "text": "One decision set the tier: the display is a cost decision disguised as a feature decision, and once it went reflective the battery, the charging circuit and half the enclosure stopped being separate problems. The board is real and on this page — processor, sensors, crystals, antenna network. The costs, battery life and return-rate guardrail below are the worked example."
       }
     ],
     "sections": [
@@ -9985,7 +9985,7 @@
           }
         ],
         "after": [
-          "The reframe: the tier is not competing on watches, it is competing on shop windows. A colour face sells the unit and then spends the next two years disappointing the person who bought it."
+          "The reframe: the tier is not competing on watches, it is competing on shop windows. A colour face sells the unit, then spends two years disappointing the person who bought it."
         ]
       },
       {
@@ -10047,7 +10047,7 @@
           },
           {
             "kind": "para",
-            "text": "The colour screen was the cut that set the tier, and what it really removed was the shop-window demo. A reflective display is unreadable in the one place a buyer sees it — a lit cabinet, held for thirty seconds — and unbeatable everywhere they will actually use it. What covers the gap is the number we could print instead: nine days on a charge, on a stated profile, against a tier that claims a week and delivers three days. The honest cost is that we depend on the box, the listing and the reviews to make an argument the product cannot make by being picked up, and in a retail aisle we lose to a brighter rectangle."
+            "text": "The colour screen was the cut that set the tier, and what it really removed was the shop-window demo. A reflective display is unreadable in the one place a buyer sees it — a lit cabinet, held for thirty seconds — and unbeatable everywhere they will actually use it. What covers the gap is the number we could print: nine days on a charge, on a stated profile, against a tier that claims a week and delivers three days. The honest cost: we depend on the box, the listing and the reviews to make an argument the product cannot make by being picked up — in a retail aisle we lose to a brighter rectangle."
           }
         ]
       },
@@ -10056,7 +10056,7 @@
         "heading": "How I got it agreed",
         "body": [
           "The sourcing lead refused to buy the display I had specified. His objection had nothing to do with my battery argument, which he accepted. At our volume the part had one credible supplier and a fourteen-week lead time, and he would not carry a consumer line on a single-source part that long: one allocation event and the programme stops with tooled enclosures in a warehouse and a retail slot going elsewhere.",
-          "I had been defending the choice on power and readability, which was answering a question he had not asked. So I took his frame — the risk is not which display is best, it is what the product does on the day that display is unavailable — and moved the decision up a level. I specified the interface instead of the part: a defined connector and pin map at the board edge, and a display abstraction in firmware.",
+          "I had been defending the choice on power and readability — answering a question he had not asked. So I took his frame: the risk is not which display is best but what the product does on the day that display is unavailable — and moved the decision up a level, specifying the interface instead of the part: a defined connector and pin map at the board edge, and a display abstraction in firmware.",
           "He agreed, then asked for something I had not planned. Designing for a second source was not enough — he wanted one built, shipped and sold before placing the first volume order. That bought an extra qualification and pilot run ahead of revenue, and leaves us maintaining two display drivers permanently."
         ]
       },
@@ -10239,8 +10239,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I made warranty returns the guardrail and then built no way to read a watch that came back. There is no cycle count, no reset counter, nothing stored on the unit, so return analysis is a spreadsheet of what customers wrote in a form and what a technician guessed. A few bytes of flash would have turned the number I chose to be judged on into something I could act on.",
-          "I also accepted the charging cradle. The teardowns told me a proprietary connector generates returns in this tier, I wrote it down, and shipped one anyway because the cradle was tooled before I got to it and arguing meant reopening a decision outside my scope. It was inside the scope I claim on this page, and I did not fight for it."
+          "I made warranty returns the guardrail and built no way to read a watch that came back. No cycle count, no reset counter, nothing stored on the unit — return analysis is a spreadsheet of what customers wrote in a form and what a technician guessed. A few bytes of flash would have turned the number I chose to be judged on into something I could act on.",
+          "I also accepted the charging cradle. The teardowns told me a proprietary connector generates returns in this tier, I wrote it down, and shipped one anyway — the cradle was tooled before I got to it, and arguing meant reopening a decision outside my scope. It was inside the scope I claim on this page, and I did not fight for it."
         ]
       }
     ],
