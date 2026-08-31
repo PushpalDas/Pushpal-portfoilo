@@ -80,8 +80,15 @@ external URL was altered anywhere else.
 
 ## Open items — all AUTHOR-CONFIRM, carried from AUDIT/FINDINGS.md, not defects of this run
 
-AC-XANA (push Changes-archive/dummy so Vercel redeploys) · AC-7 (NFE3001 live page shows a newer
-30 Mbit/s bin) · AC-8 (P8 announcement link) · AC-3b (Ixana-Wiki GitHub href) · AC-DRIVE (two
-Google Drive links behind sign-in) · AC-9/12/14/20/28/29/31 (per-page one-line questions).
+AC-XANA (push Changes-archive/dummy so Vercel redeploys — commit e056966 is ready; author is
+pushing from their own terminal, 2026-09-01) · AC-7 (NFE3001 live page shows a newer 30 Mbit/s
+bin) · AC-8 (P8 announcement link) · AC-3b (Ixana-Wiki GitHub href) · AC-9/12/14/20/28/29/31
+(per-page one-line questions).
+
+**AC-DRIVE — RESOLVED 2026-09-01.** The author set both folders (NeuroAdapt docs
+`1B0mtA9-…`, ENVI-City `1XhqFiIQ…`) to "anyone with the link: viewer". Verified two ways:
+permissions API shows `{role: reader, type: anyone}` on both, and an unauthenticated fetch of
+the NeuroAdapt folder renders the listing (whitepaper, pitch materials, demo video) with no
+sign-in redirect. The corpus links stand unchanged.
 
 **Matrix verdict: all green.** Zero alignment defects introduced or found in the elevated corpus.
