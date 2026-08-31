@@ -8119,7 +8119,7 @@
       },
       {
         "lead": "Result.",
-        "text": "YR31 is in production at 20 Mbit/s and sub-0.2 ms across the same 16-device network — the public spec row carries every one of those numbers. Energy per bit went the wrong way on purpose, and gen-1 stayed in production beside it so no shipping design was forced to move. The yield, test-time and interop figures further down are the worked example of how the programme was scored."
+        "text": "YR31 is in production at 20 Mbit/s and sub-0.2 ms across the same 16-device network — the public spec row carries every one of those numbers. Energy per bit went the wrong way on purpose, and gen-1 stayed in production beside it so no shipping design was forced to move. The yield, test-time and interop figures below are the worked example."
       }
     ],
     "sections": [
@@ -8127,7 +8127,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "A second spin is the easiest programme in the world to justify badly. Everyone has a change they want, the die is proven, and the argument for going again is always available. The question was not whether to spin but what the spin was for — a gen-2 that absorbs every request is a gen-1 that arrives eighteen months late.",
+          "A second spin is the easiest programme in the world to justify badly: everyone has a change they want, the die is proven, and the argument for going again is always available. The question was not whether to spin but what the spin was for — a gen-2 that absorbs every request is a gen-1 arriving eighteen months late.",
           "The commercial stake settled it. The volume tier of the segment YR23 opened is video smartglasses, and at 5 Mbit/s that design compresses hard enough that compression becomes the product problem. Rate was the constraint holding back the only application with consumer volume behind it."
         ],
         "blocks": [
@@ -8181,7 +8181,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I collected every change request, field issue and evaluation complaint against YR23 — 63 of them — and ranked each by two numbers I could defend: how many stalled evaluations it would unblock, and what it cost in die area and validation weeks. A list of 63 requests is an argument for a third spin; a ranking is a decision."
+          "I collected every change request, field issue and evaluation complaint against YR23 — 63 — and ranked each by two defensible numbers: stalled evaluations unblocked, and cost in die area and validation weeks. A list of 63 requests is an argument for a third spin; a ranking is a decision."
         ],
         "blocks": [
           {
@@ -8270,7 +8270,7 @@
         "heading": "My role and approach",
         "body": [
           "This is the clearest case on the line of a delivery lens doing product work. The founder owned whether a second BAN part should exist. I owned the loop that decided what it was for: routing field feedback, yield and ATE data from the YR23 lots into one ranked list, and defending the line under it.",
-          "The routing was deliberate. Field issues, evaluation complaints and lot data arrived through three channels to three audiences, and nobody scored them against each other — so I ran them into one queue with the delivery tooling built for it, and made the ranking the artefact everyone argued about."
+          "The routing was deliberate. Field issues, evaluation complaints and lot data arrived through three channels to three audiences, and nobody scored them against each other — so I ran them into one queue and made the ranking the artefact everyone argued about."
         ],
         "blocks": [
           {
@@ -8323,7 +8323,7 @@
           },
           {
             "kind": "para",
-            "text": "The backward-compatible energy mode was the hardest cut. Partners with a shipping YR23 design wanted YR31 to run at 5 Mbit/s at gen-1’s exact 0.12 nJ/bit, dropping it in and inheriting the rate later without touching their power budget. It needed two separately tuned analogue front ends on one die — the area was findable, the validation was not, since every mode multiplies the characterisation matrix we had just reduced. The gap is covered twice: interop parity means gen-1 hosts work unchanged, and YR23 stays in production."
+            "text": "The backward-compatible energy mode was the hardest cut. Partners with a shipping YR23 design wanted YR31 to run 5 Mbit/s at gen-1’s exact 0.12 nJ/bit — drop it in now, inherit the rate later, power budget untouched. It needed two separately tuned analogue front ends on one die: the area was findable, the validation was not, since every mode multiplies the characterisation matrix the spin had just reduced. The gap is covered twice — interop parity, and YR23 staying in production."
           }
         ]
       },
@@ -8331,8 +8331,8 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The test lead objected to cutting the ATE program, and his was the strongest objection anyone put to me on this programme. Test time at volume is a real line in a customer’s cost model, so pressure to cut it is permanent — and every test removed is a class of defect that now reaches a wearable on somebody’s head. A field failure is not a return, it is a design-in at risk.",
-          "I had opened by asking for a test-time target, which invited exactly the argument we were having. So I withdrew it and asked which tests had actually failed a unit across every YR23 lot we had run. Roughly a third had never fired once. That moved the conversation from how much test we could afford to which tests had earned their seconds — a question he was better placed to answer than I was.",
+          "The test lead objected to cutting the ATE program — the strongest objection anyone put to me on this programme. Test time at volume is a real line in a customer’s cost model, so pressure to cut it is permanent, and every test removed is a class of defect that now reaches a wearable on somebody’s head. A field failure is not a return; it is a design-in at risk.",
+          "I had opened by asking for a test-time target, which invited exactly the argument we were having. So I withdrew it and asked which tests had actually failed a unit across every YR23 lot. Roughly a third had never fired. That moved the conversation from how much test we could afford to which tests had earned their seconds — his question to answer, not mine.",
           "He agreed to cut the tests that had never fired, on a condition I had not planned to carry. Every removed test is re-run as a periodic audit on a sample of lots, so if one starts failing we hear it from our own sampling rather than a customer. That process is permanent."
         ]
       },
