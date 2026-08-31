@@ -125,7 +125,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.',
-		image: 'Gemini_Generated_Image_xejg8vxejg8vxejg.png',
+		image: 'demo-card-neuroadapt.jpg',
 		href: 'https://drive.google.com/drive/u/0/folders/1B0mtA9-xkNbbo6ZUXztuHZiMmlovNtLw',
 		demoUrl: '/demo/neuroadapt',
 		slug: 'neuroadapt-agentic-rag-engine-for-neuroscience-research',
@@ -187,7 +187,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.',
-		image: 'Gemini_Generated_Image_dafj5odafj5odafj.png',
+		image: 'demo-card-quantum-simulator.jpg',
 		slug: 'quantum-circuit-simulator-interactive-10-qubit-delivering-re',
 		demoUrl: '/demo/quantum-simulator',
 		color: '#dbeafe',
@@ -202,7 +202,7 @@ export const workItems: WorkItem[] = [
 		status: 'customer-testing',
 		outcome:
 			'In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.',
-		image: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
+		image: 'demo-card-procurement-desk.jpg',
 		slug: 'procurement-orchestrator-procurement-process-automation-with',
 		demoUrl: '/demo/procurement-desk',
 		color: '',
@@ -263,7 +263,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'One engine produces the weekly, monthly and quarterly performance report for all five delivery teams — four of which had no standing report at all.',
-		image: 'Image__14_.jpg',
+		image: 'demo-card-team-performance.jpg',
 		slug: 'team-performance-reporting',
 		demoUrl: '/demo/team-performance',
 		color: '#ddd6fe',
@@ -278,7 +278,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Standup, backlog and burndown now read from the same task data instead of three separately maintained views.',
-		image: 'Image__15_.jpg',
+		image: 'demo-card-scrum-desk.jpg',
 		slug: 'ixana-scrum-ecosystem',
 		demoUrl: '/demo/scrum-desk',
 		color: '#fae8ff',
@@ -308,7 +308,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Turned a raw activity feed into a searchable who-changed-what timeline, so audit questions get answered in seconds not hours.',
-		image: 'Image__16_.jpg',
+		image: 'demo-card-clickup-audit.jpg',
 		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
 		demoUrl: '/demo/clickup-audit',
 		color: '#fae8ff',
@@ -352,7 +352,7 @@ export const workItems: WorkItem[] = [
 		status: 'customer-testing',
 		outcome:
 			'In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.',
-		image: 'Image__17_.jpg',
+		image: 'demo-card-salary-bands.jpg',
 		slug: 'ai-salary-generator',
 		href: 'https://www.ixana.ai/products',
 		demoUrl: '/demo/salary-bands',
@@ -368,7 +368,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Turns a raw brief into a reviewed, execution-ready plan in 3–8 minutes, with a second model required to approve the first one.',
-		image: 'Gemini_Generated_Image_6dagw16dagw16dag.png',
+		image: 'demo-card-prd-os.jpg',
 		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
 		demoUrl: '/demo/prd-os',
 		color: '#dbeafe',
@@ -383,7 +383,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Drafts an attorney-review filing package from a disclosure in five minutes, and refuses to draw a novelty conclusion when the search looked in the wrong art.',
-		image: 'Gemini_Generated_Image_1i9ozk1i9ozk1i9o.png',
+		image: 'demo-card-ai-lawyer.jpg',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		demoUrl: '/demo/ai-lawyer',
 		color: '#dbeafe',
@@ -398,7 +398,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.',
-		image: 'Gemini_Generated_Image_h59yuyh59yuyh59y.png',
+		image: 'demo-card-clickup-gantt.jpg',
 		slug: 'ai-pm-customized-multi-view-for-pms',
 		demoUrl: '/demo/clickup-gantt',
 		color: '#dbeafe',
@@ -530,7 +530,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.',
-		image: 'Gemini_Generated_Image_wzokgjwzokgjwzok.png',
+		image: 'demo-card-radar.jpg',
 		slug: 'ricky-kids-uav-weather-radar-calibration',
 		demoUrl: '/demo/radar-error-budget',
 		href: 'https://drive.google.com/drive/u/0/folders/1rDmPZo8yHV0OFcVruwNqiDJHfU8SeUED',
@@ -546,7 +546,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Measured respiration rate at a distance with a thermal and radar pair, so isolation wards could monitor without contact.',
-		image: 'Gemini_Generated_Image_fpkpjsfpkpjsfpkp.png',
+		image: 'demo-card-covid-bench.jpg',
 		slug: 'ricky-kids-noncontact-covid-monitoring',
 		demoUrl: '/demo/covid-bench',
 		href: 'https://drive.google.com/drive/u/0/folders/198wp9t5QOvHIX3rZbVzw9IehQD7HToc5',
@@ -562,7 +562,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.',
-		image: 'Gemini_Generated_Image_6d6qur6d6qur6d6q.png',
+		image: 'demo-card-rider-count.jpg',
 		slug: 'ricky-kids-triple-riding-avoidance',
 		demoUrl: '/demo/rider-count',
 		href: 'https://drive.google.com/drive/u/0/folders/11Bx3DJGQsSQoCqb6T8OjxarnfehbDbIk',
@@ -578,7 +578,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.',
-		image: 'Screenshot_2026-07-06_161758.png',
+		image: 'demo-card-autism-bench.jpg',
 		slug: 'ricky-kids-toys-for-autistic-kids',
 		demoUrl: '/demo/autism-bench',
 		href: 'https://drive.google.com/drive/u/0/folders/14Cx5kE8ckME3dmSky9t9Eryn2wERSMcC',
@@ -594,7 +594,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.',
-		image: 'Gemini_Generated_Image_gx3u69gx3u69gx3u.png',
+		image: 'demo-card-sludge.jpg',
 		slug: 'ricky-kids-sludge-traversing-rov',
 		demoUrl: '/demo/sludge-envelope',
 		href: 'https://drive.google.com/drive/u/0/folders/1xcXPJ-9sD7xQWy-5TUwYhE5nlHJs1pqI',
@@ -817,7 +817,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
-		image: 'Gemini_Generated_Image_orqf1borqf1borqf.png',
+		image: 'demo-card-envi-city.jpg',
 		slug: 'ricky-kids-envi-city',
 		demoUrl: '/demo/envi-city',
 		href: 'https://drive.google.com/drive/u/0/folders/1XhqFiIQJZtQN9ZVzuRBbMfDo5szeg9W0',
