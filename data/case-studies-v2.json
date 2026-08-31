@@ -1338,7 +1338,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Recordings accumulated in two places and were effectively write-only. Of 212 recordings in one month, log analysis showed 38 were ever opened again, and whoever did scrubbed for nearly six minutes before finding the passage they wanted — or gave up and asked the organiser."
+        "text": "Recordings accumulated in two places and were effectively write-only. Of 212 recordings in one month, 38 were ever opened again, and whoever did scrubbed for nearly six minutes before finding the passage — or gave up and asked the organiser."
       },
       {
         "lead": "What I did.",
@@ -1354,7 +1354,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Three investments sat in the same quarter: making recordings searchable, an automatic minutes service, and a hand-filled decision register. I sized each by how much of the archive it would make retrievable, because an archive nobody can enter is the only one of the three that compounds — every unretrievable meeting is re-run as a new one."
+          "Three investments sat in the same quarter: making recordings searchable, an automatic minutes service, and a hand-filled decision register. I sized each by how much of the archive it would make retrievable — an archive nobody can enter is the only one that compounds, because every unretrievable meeting is re-run as a new one."
         ],
         "blocks": [
           {
@@ -1388,7 +1388,7 @@
           }
         ],
         "after": [
-          "The register lost on a rate we had already measured elsewhere: things people must remember to fill in get filled in about one time in eight. Minutes alone lost because they answer \"what was decided\", not \"what exactly did they say about the coupling test\" — the question people actually brought."
+          "The register lost on a rate we had already measured: things people must remember to fill in get filled in about one time in eight. Minutes alone lost because they answer “what was decided”, not “what exactly did they say about the coupling test” — the question people actually brought."
         ]
       },
       {
@@ -1460,7 +1460,7 @@
           }
         ],
         "after": [
-          "The reframe: this was not a video problem. People wanted a passage of speech and were handed a timeline, and every workaround they had invented was a way of getting speech back out of a medium that stores it badly."
+          "The reframe: this was not a video problem. People wanted a passage of speech and were handed a timeline; every workaround they had invented was a way of getting speech back out of a medium that stores it badly."
         ]
       },
       {
@@ -1476,15 +1476,15 @@
             "items": [
               {
                 "lead": "The transcript is the navigation, not a feature beside the video.",
-                "text": "Every line is a seek target, and the player is the secondary surface. Treating it that way is what moved time-to-moment by minutes rather than seconds."
+                "text": "Every line is a seek target, and the player is the secondary surface. That is what moved time-to-moment by minutes rather than seconds."
               },
               {
                 "lead": "Both sources under one experience.",
-                "text": "Recordings and stored video live in different systems and are the same object to someone looking for something. Unifying them removed a decision the user should never have had to make."
+                "text": "Recordings and stored video live in different systems and are the same object to someone searching. Unifying them removed a decision the user should never have had."
               },
               {
                 "lead": "Full transcript context, not chunked retrieval.",
-                "text": "A meeting is one argument spread over an hour, and chunking loses the thread that makes an answer correct. Holding the whole transcript costs latency and buys answers that survive being checked."
+                "text": "A meeting is one argument spread over an hour, and chunking loses the thread that makes an answer correct. Whole-transcript context costs latency and buys answers that survive checking."
               },
               {
                 "lead": "Access follows the meeting, not the library.",
@@ -1528,8 +1528,8 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The compliance lead wanted recordings out of search entirely. Her concern was correct: a recording is a verbatim record of people speaking informally, indexing it makes every offhand remark permanently discoverable, and she had no appetite for explaining to an employee that a sentence they had forgotten saying had surfaced in a search result two years later.",
-          "I could not argue the risk was imaginary, so I made the argument smaller. I separated the two things being indexed — that a meeting happened, and what was said inside it — and showed most of the retrieval value in our nine interviews came from finding the right meeting, which needs only titles, attendees and dates. That turned a question of principle into one of scope.",
+          "The compliance lead wanted recordings out of search entirely, and her concern was correct: a recording is a verbatim record of people speaking informally, indexing makes every offhand remark permanently discoverable, and she had no appetite for telling an employee that a sentence they had forgotten saying surfaced in a search two years later.",
+          "I could not argue the risk was imaginary, so I made the argument smaller. I separated the two things being indexed — that a meeting happened, and what was said inside it — and showed most of the retrieval value in our nine interviews came from finding the right meeting, which needs only titles, attendees and dates. A question of principle became one of scope.",
           "We landed on transcripts indexed but searchable only by people already entitled to open the recording, so search never widens access. She added a condition I had not offered: organisers can mark a meeting excluded before it starts, irreversibly. About 6% are marked, and that switch is what made the rest acceptable to index."
         ]
       },
@@ -1538,7 +1538,7 @@
         "heading": "What was built",
         "body": [
           "A company video library that fills itself: a call ends, the recording and transcript are pulled from Teams or SharePoint, a channel is chosen, and cues, minutes and questions are built before anyone opens it.",
-          "What makes it worth having is opening one. Every item carries its own transcript, suggested questions and minutes, and an answer comes back as the line a person actually said, timestamped."
+          "What makes it worth having is opening one: every item carries its own transcript, suggested questions and minutes, and an answer comes back as the line a person said, timestamped."
         ],
         "blocks": [
           {
@@ -1636,7 +1636,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "Before build we agreed this failed if fewer than a quarter of re-opened recordings were entered by search or transcript jump rather than a direct link — that is, if we had built a nicer player rather than a way into the archive. The guardrail was access: any recording served outside its attendee list would have stopped the rollout."
+          "Before build we agreed this failed if fewer than a quarter of re-opened recordings were entered by search or transcript jump rather than a direct link — a nicer player, not a way into the archive. The guardrail was access: any recording served outside its attendee list would stop the rollout."
         ],
         "blocks": [
           {
@@ -1702,7 +1702,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. The 140 in the weekly-use denominator is the mid-2025 roster — up from about 75 a year earlier — and it has held roughly flat since."
+            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback, excluding sessions with no playback at all — people confirming a meeting exists rather than looking inside it. The 140 in the weekly-use denominator is the mid-2025 roster, up from about 75 a year earlier, roughly flat since."
           },
           {
             "kind": "config",
@@ -1714,8 +1714,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I built minutes generation before I understood who was supposed to send them. The number moved, but 11% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.",
-          "I would also set the cache differently. Five minutes was chosen to protect an API quota with plenty of headroom, and the cost is that the most common first action — looking for the meeting you just left — is where the product appears broken. I optimised a constraint I assumed rather than measured."
+          "I built minutes generation before I understood who was supposed to send them. The number moved, but 11% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive’s concentration problem moved one step downstream. A tool cannot assign ownership; I spent a quarter behaving as though it could.",
+          "I would also set the cache differently. Five minutes protected an API quota with plenty of headroom, and the cost lands on the most common first action — looking for the meeting you just left — where the product appears broken. I optimised a constraint I assumed rather than measured."
         ]
       }
     ],
