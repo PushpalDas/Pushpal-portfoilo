@@ -7234,11 +7234,11 @@
       },
       {
         "lead": "What I did.",
-        "text": "The founder owned the bet that a near-field line should exist. I owned turning it into a delivered part while the BAN program kept its dates: validation capacity shared between two lines, a scope built for a different buyer, and the launch gates for a part that had to work on hardware we did not design."
+        "text": "The founder owned the bet that a near-field line should exist. I owned turning it into a delivered part while the BAN program kept its dates: shared validation capacity, a scope built for a different buyer, and launch gates for a part that had to work on hardware we did not design."
       },
       {
         "lead": "Result.",
-        "text": "XA-NFE2001 launched at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput, per the published comparison — with the physics written up in an arXiv paper. It shipped as a second line while the BAN program kept its own dates, and the interop matrix that qualified it is the worked example further down."
+        "text": "XA-NFE2001 launched at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput, per the published comparison — with the physics written up in an arXiv paper. It shipped as a second line while BAN kept its dates; the interop matrix that qualified it is the worked example below."
       }
     ],
     "sections": [
@@ -7246,8 +7246,8 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The commercial question was whether Ixana was a one-line company. A single line means every conversation with an investor or a large customer is about concentration risk, and it means the roadmap has one thing on it. A second line answers both — and a second line that slips adds an execution problem to the concentration risk.",
-          "The buyers were already there, and they were not asking for a body-area network. A secure-payments device maker and an industrial-handheld OEM wanted the same thing: move a firmware image between two devices held near each other, without an exposed port and without lighting up a radio. Their incumbent was NFC, and what they disliked about it was the clock."
+          "The commercial question was whether Ixana was a one-line company. A single line makes every investor and large-customer conversation about concentration risk, and puts one thing on the roadmap. A second line answers both — and a second line that slips adds an execution problem to the concentration risk.",
+          "The buyers were already there, and they were not asking for a body-area network. A secure-payments device maker and an industrial-handheld OEM wanted the same thing: move a firmware image between two devices held near each other, without an exposed port and without lighting up a radio. Their incumbent was NFC, and what they disliked was the clock."
         ],
         "blocks": [
           {
@@ -7381,8 +7381,8 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "The split is the same as on the BAN program and worth restating. The founder owned the bet that a near-field line should exist and what it was for. I owned the delivery system that made it a part: the same five functions across two sites, now running two silicon programs against one pool of validation capacity.",
-          "Running two lines is where delivery fed product hardest. Shared validation capacity forced the range decision below. The interop matrix we could afford to test set how configurable the part could be. Nobody debated those as product questions; they were settled as scheduling questions and they shaped the datasheet."
+          "The split is the same as on the BAN program: the founder owned the bet that a near-field line should exist and what it was for; I owned the delivery system that made it a part — the same five functions across two sites, now running two silicon programs against one pool of validation capacity.",
+          "Running two lines is where delivery fed product hardest. Shared validation capacity forced the range decision below, and the interop matrix we could afford set how configurable the part could be. Those were settled as scheduling questions, and they shaped the datasheet."
         ],
         "blocks": [
           {
@@ -7435,7 +7435,7 @@
           },
           {
             "kind": "para",
-            "text": "Runtime-adjustable range was the hardest cut, and the one partners asked about most. A continuous knob the host could turn is obviously useful — tight for a payment, open for a bench transfer. It failed on validation capacity already split with the BAN program: every additional setting multiplies the interop matrix, and we could afford twelve configurations, not sixty. Three profiles cover the cases the inbound requests described, and a partner needing a fourth gets it characterised in a later revision rather than finding at integration that nobody tested theirs."
+            "text": "Runtime-adjustable range was the hardest cut, and the one partners asked about most. A continuous knob the host could turn is obviously useful — tight for a payment, open for a bench transfer. It failed on validation capacity already split with BAN: every additional setting multiplies the interop matrix, and we could afford twelve configurations, not sixty. Three profiles cover the cases the inbound requests described; a partner needing a fourth gets it characterised in a later revision rather than finding at integration that nobody tested theirs."
           }
         ]
       },
@@ -7443,9 +7443,9 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The COO would not commit a build plan for a second line on gen-1 demand signal. His objection was capital, not enthusiasm: committing wafer starts and package tooling for a part with no shipped revenue, on the strength of inbound emails, is the decision that looks obvious beforehand and reckless in a quarter where BAN needs the same money.",
-          "I had been arguing that the demand was real, which is unfalsifiable and therefore useless. So I offered to make it falsifiable. We converted the 96 coded requests into a sample-request commitment: before any long-lead spend, we would ask that population to formally request samples against a spec sheet with a price on it. Interest that survives a form and a price is a different signal.",
-          "104 requests came back — eight of the 96 companies asked from two teams each, which is how 96 coded requests produce 104. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter."
+          "The COO would not commit a build plan for a second line on gen-1 demand signal. His objection was capital: committing wafer starts and package tooling for a part with no shipped revenue, on the strength of inbound emails, looks obvious beforehand and reckless in a quarter where BAN needs the same money.",
+          "I had been arguing that the demand was real, which is unfalsifiable and therefore useless. So I made it falsifiable: we converted the 96 coded requests into a sample-request commitment — before any long-lead spend, that population would formally request samples against a spec sheet with a price on it. Interest that survives a form and a price is a different signal.",
+          "104 requests came back — eight of the 96 companies asked from two teams, which is how 96 coded requests produce 104. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan, so if NFE underperforms it is visible as NFE underperforming. Every subsequent conversation about a third line has been shorter for it."
         ]
       },
       {
@@ -7530,7 +7530,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "Before the build plan was committed we agreed the line failed on one condition: if the part could not hold a link across the majority of host and range configurations on hardware we did not design, it was a demo and not a product. The guardrail was the BAN program — any milestone it missed while the second line spun up would mean the second line was being paid for out of the first."
+          "Before the build plan was committed we agreed the line failed on one condition: if the part could not hold a link across the majority of host and range configurations on hardware we did not design, it was a demo, not a product. The BAN program was the guardrail — a missed BAN milestone while the second line spun up meant NFE was being paid for out of the first."
         ],
         "blocks": [
           {
@@ -7611,7 +7611,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. Latency here is the 0.6 ms median on partner hardware; the 0.9 ms on the XA-NFE3001 page is the worst-case characterisation figure a requirement line gets scored against."
+            "text": "A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure. Latency here is the 0.6 ms median on partner hardware; the 0.9 ms on the XA-NFE3001 page is the worst-case characterisation figure a requirement line is scored against."
           },
           {
             "kind": "config",
@@ -7623,7 +7623,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I let the interop matrix size be decided by what we could afford rather than by where risk was. Twelve configurations was a capacity number, not an analysis, and the cell that failed was predictable from first principles — slowest host, longest range. An hour of thinking before booking bench time would have spent the same twelve slots on the twelve riskiest combinations instead of a tidy four-by-three grid.",
+          "I let the interop matrix be sized by what we could afford rather than where risk was. Twelve configurations was a capacity number, not an analysis, and the cell that failed was predictable from first principles — slowest host, longest range. An hour of thinking would have spent the same twelve slots on the twelve riskiest combinations instead of a tidy four-by-three grid.",
           "I would also have run the sample-request test earlier. It settled section 05 in a fortnight, and I reached for it only after two months of arguing that demand was real. The instrument that turns an unfalsifiable claim into a number is usually cheap."
         ]
       }
