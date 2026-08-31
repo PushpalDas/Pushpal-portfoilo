@@ -12560,12 +12560,12 @@
           },
           {
             "kind": "para",
-            "text": "What this could not tell us is whether any of it survives contact with a municipality. Nothing was built and no block was instrumented: the model uses published averages rather than metered data, assumes utilities that are in practice three procurement bodies with three budgets, and ignores capital cost. The planners we spoke to said coordination, not physics, kills schemes like this."
+            "text": "What this could not tell us is whether any of it survives contact with a municipality. Nothing was built and no block was instrumented: the model uses published averages, assumes utilities that are in practice three procurement bodies with three budgets, and ignores capital cost. The planners we spoke to said coordination, not physics, kills schemes like this."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Saving from coupling is the modelled reduction in a block's annual resource use — energy, potable water and landfilled waste on a common energy basis — when the three are operated as one loop rather than independently. It excludes capital cost, construction carbon and any benefit outside the block boundary, and the interval is the span produced by moving every assumption across a defensible range, not a statistical confidence interval."
+            "text": "Saving from coupling is the modelled reduction in a block’s annual resource use — energy, potable water and landfilled waste on a common energy basis — when the three run as one loop rather than independently. It excludes capital cost, construction carbon and any benefit outside the block; the interval is the span from moving every assumption across a defensible range, not a statistical confidence interval."
           },
           {
             "kind": "config",
@@ -12577,8 +12577,8 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "The audit should have come before the paper. Everything here would have improved the publication rather than qualifying it, and dropping a claim in a draft costs nothing while dropping one you have already presented costs a page like this.",
-          "I would also have gone to the planners first. We spent two quarters establishing that coupling is physically worthwhile in housing, and the first planner we spoke to said the physics was never the obstacle — three utilities with three budgets and three procurement cycles is."
+          "The audit should have come before the paper. Everything here would have improved the publication rather than qualifying it; dropping a claim in a draft costs nothing, dropping one already presented costs a page like this.",
+          "I would also have gone to the planners first. We spent two quarters establishing that coupling is physically worthwhile in housing, and the first planner we met said physics was never the obstacle — three utilities with three budgets and three procurement cycles is."
         ]
       }
     ],
