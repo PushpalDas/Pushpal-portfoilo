@@ -4499,7 +4499,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Early signal only — deliberately below any rate-claim threshold. What held is the contract: no request reaches order without a recorded approval, the ceiling refuses what the pilot has no business handling, and every launch gate is counted live from the demo's own requests rather than stored. The running totals below are the worked example."
+        "text": "Early signal only — deliberately below any rate-claim threshold. What held is the contract: no request reaches order without a recorded approval, the ceiling refuses what the pilot has no business handling, and every launch gate is counted live from the demo’s own requests. The running totals below are the worked example."
       }
     ],
     "sections": [
@@ -4507,7 +4507,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The obvious answer was a procurement platform, and the company had looked at three. I argued for one quarter proving the operating model on tooling we own, because every failure in the thread analysis was one of accountability — and a platform bought to fix that tends to reproduce it with better reporting."
+          "The obvious answer was a procurement platform, and the company had looked at three. I argued for one quarter proving the operating model on tooling we own: every failure in the thread analysis was one of accountability, and a platform bought to fix that tends to reproduce it with better reporting."
         ],
         "blocks": [
           {
@@ -4631,7 +4631,7 @@
             "label": "Key decisions",
             "items": [
               {
-                "lead": "One canonical list is the source of truth, and requesters cannot edit it.",
+                "lead": "One canonical list, and requesters cannot edit it.",
                 "text": "Requester edits are how status drifts from reality. They get a controlled path to add information rather than change state."
               },
               {
@@ -4710,7 +4710,7 @@
         "body": [
           "The finance controller wanted two approval stages — budget holder then finance — because that is the control the company operates above a certain value, and a weaker one looked like using the pilot to erode it. She was right to be suspicious; pilots have a way of becoming the permanent process.",
           "I did not argue that one stage was sufficient, because for larger purchases it plainly is not. I proposed a value ceiling: requests above the finance-approval threshold route out of the pilot entirely, so it could not weaken any control because the requests those controls exist for never enter it.",
-          "She agreed, and added a condition I would not have proposed: the routing rule is a blocking validation, so a request above the ceiling cannot be submitted at all. It has blocked four — four times the pilot would have quietly swallowed something it had no business handling."
+          "She agreed, and added a condition I would not have proposed: the routing rule is a blocking validation — a request above the ceiling cannot be submitted at all. It has blocked four; four times the pilot would have quietly swallowed something it had no business handling."
         ]
       },
       {
@@ -4930,17 +4930,17 @@
         "num": "09",
         "heading": "What would make me stop",
         "body": [
-          "These were written down before the pilot opened, and each is a stop rather than a discussion — because every one is a condition under which I would find an explanation persuasive.",
+          "These were written down before the pilot opened, and each is a stop rather than a discussion — every one is a condition under which I would find an explanation persuasive.",
           "Any request ordered without a recorded approval stops the pilot immediately. A second silent flow failure stops it too: the first told us the integrity check works, a repeat would tell us the check has become the mechanism rather than the safety net.",
-          "Two softer gates run to the end. If more than a fifth of requesters are still chasing by email at 40 requests, the pilot has produced a better record without changing the experience it exists to fix. And past fifty a week, the lean architecture stops being proportionate."
+          "Two softer gates run to the end. If more than a fifth of requesters still chase by email at 40 requests, the pilot has produced a better record without changing the experience it exists to fix. Past fifty a week, the lean architecture stops being proportionate."
         ]
       },
       {
         "num": "10",
         "heading": "What I'd do differently",
         "body": [
-          "I built the approver map as configuration and treated it as settled. Both assignment-gate failures trace to one organisation whose map had a gap nobody noticed until a Friday request fell through it — a wrong map is indistinguishable from a right one until that moment.",
-          "I would also have measured chasing from the start rather than in month two. The number I care most about has a denominator of 23 and no clean baseline."
+          "I built the approver map as configuration and treated it as settled. Both assignment-gate failures trace to one organisation whose map had a gap nobody noticed until a Friday request fell through it — a wrong map looks right until that moment.",
+          "I would also have measured chasing from the start rather than month two. The number I care most about has a denominator of 23 and no clean baseline."
         ]
       }
     ],
