@@ -1,10 +1,12 @@
 # AUDIT STATE
 
-> **Handoff note:** ALL PHASES COMPLETE. Phases 0–5 ✅ for all 37 projects + appendix; QA gates
-> pass; AUDIT/LAUNCH-READINESS.md is the final report (per-project verdicts, the ten material
-> fixes, the complete AUTHOR-CONFIRM list — AC-XANA first: push Changes-archive/dummy commit
-> e056966). Repo builds clean and is fully committed. Nothing remains for a future session except
-> acting on AUTHOR-CONFIRM answers.
+> **Handoff note:** PERCEPTION PASS (P6–P10) IN PROGRESS — launch audit (phases 0–5) remains ✅
+> and untouched. New mission: curation/IA tiers (P6), claim calibration to evidence classes (P7),
+> role story (P8), skim layer (P9), perception QA (P10). Guardrails: nothing hidden or inflated;
+> placeholders only ever move DOWN the prominence ladder; disclosures unified in form, never
+> reduced; deep-layer voice preserved.
+> Current position: extending state; next = P7 claims classification (CLAIMS-AUDIT.md), because
+> flagship selection and skim facts depend on each page's Class-A assets.
 
 ## Session protocol
 Read this file, then FINDINGS.md and CHANGELOG.md, before touching anything. Resume at the first
@@ -81,3 +83,51 @@ ph3 = snapshot alignment; ph4 = redesign (tier B/C only). ⬜ pending · ✅ don
 | 37 | ENVI-City | C-create | ✅ | ⬜ | ✅ | ✅ | demo to be created |
 | — | Appendix (17 builds) | A-lock | ✅ | ➖ | ➖ | ➖ | copy-edit only |
 | P5 | QA gates + LAUNCH-READINESS.md | — | ✅ | | | | |
+
+
+## Perception pass — P6 Curation · P7 Calibration · P8 Role · P9 Skim · P10 QA
+Legend: ✅ done · ⬜ pending · ➖ n/a. P7 covers card+deck+Result calibration & data-note unification;
+P9 covers fast header/pull line/verify strip/section nav (Tier 1–3 pages).
+
+| # | Project | Tier (P6) | P7 | P8 role row | P9 | notes |
+|---|---|---|---|---|---|---|
+| 1 | Wi-R BAN YR31 | 1 Flagship | ⬜ | ⬜ | ⬜ | |
+| 2 | Wi-R Dev Kits | 3 | ⬜ | ⬜ | ⬜ | |
+| 3 | Ixana-Wiki | 1 Flagship | ⬜ | ⬜ | ⬜ | |
+| 4 | Dāsa | 1 Flagship | ⬜ | ⬜ | ⬜ | §3.2 worked example |
+| 5 | Wi-R BAN YR23 | 3 | ⬜ | ⬜ | ⬜ | |
+| 6 | NeuroAdapt | 3 | ⬜ | ⬜ | ⬜ | |
+| 7 | NFE XA-NFE3001 | 3 | ⬜ | ⬜ | ⬜ | |
+| 8 | NFE XA-NFE2001 | 3 | ⬜ | ⬜ | ⬜ | arXiv = A |
+| 9 | Soil mineral | 4 Archive | ⬜ | ➖ | ➖ | card-only |
+| 10 | Quantum Simulator | 3 | ⬜ | ⬜ | ⬜ | prototypes label |
+| 11 | Procurement | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 12 | WishKey | 3 | ⬜ | ⬜ | ⬜ | |
+| 13 | Reference designs | 3 | ⬜ | ⬜ | ⬜ | |
+| 14 | Smart watch | 3 | ⬜ | ⬜ | ⬜ | |
+| 15 | Team performance | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 16 | Scrum ecosystem | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 17 | Flow Tracker | 1 Flagship | ⬜ | ⬜ | ⬜ | |
+| 18 | Activity Tracker | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 19 | Video library | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 20 | Calendar sync | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 21 | Salary Generator | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 22 | Planning OS | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 23 | AI Lawyer | 1 Flagship | ⬜ | ⬜ | ⬜ | prototypes label |
+| 24 | ClickUp Gantt | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 25 | Meeting notetaker | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 26 | Patent ops | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 27 | Doc intelligence | 2 chapter | ⬜ | ⬜ | ⬜ | |
+| 28 | Condenser mic | 3 | ⬜ | ⬜ | ⬜ | |
+| 29 | Signal generator | 4 Archive | ⬜ | ➖ | ➖ | card-only? has CS → 3? decide at P6 |
+| 30 | Ornithopter | 3 | ⬜ | ⬜ | ⬜ | |
+| 31 | Carbon e-car | 3 | ⬜ | ⬜ | ⬜ | |
+| 32 | Radar calibration | 3 | ⬜ | ⬜ | ⬜ | |
+| 33 | COVID bench | 3 | ⬜ | ⬜ | ⬜ | |
+| 34 | Triple riding | 1 Flagship | ⬜ | ⬜ | ⬜ | |
+| 35 | Autism bench | 3 | ⬜ | ⬜ | ⬜ | |
+| 36 | Sludge ROV | 3 | ⬜ | ⬜ | ⬜ | |
+| 37 | ENVI-City | 3 | ⬜ | ⬜ | ⬜ | |
+| P2pg | Internal AI program page | 2 head | ⬜ | ⬜ | ⬜ | NEW page to write |
+| — | Appendix | 4 | ➖ | ➖ | ➖ | stays as-is |
+| QA | P10 gates + PERCEPTION-READINESS | — | ⬜ | | | |
