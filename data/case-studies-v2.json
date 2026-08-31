@@ -6805,11 +6805,11 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Wi-R was a published result and a compelling demo, and no OEM puts a demo on a bill of materials. Turning it into a part meant committing to numbers across a whole data-rate ladder, on a date, against a specification an engineer could draw a schematic from before the silicon existed."
+        "text": "Wi-R was a published result and a compelling demo, and no OEM puts a demo on a bill of materials. Turning it into a part meant committing to numbers across a whole data-rate ladder, on a date, against a specification an engineer could draw a schematic from before silicon existed."
       },
       {
         "lead": "What I did.",
-        "text": "I ran delivery of first silicon across five functions and two sites. The founder owned the product bets; I owned the system that turned them into a shippable part on a date — the scope of first silicon, what shipped as errata against what forced a respin, and the launch gates."
+        "text": "I ran delivery of first silicon across five functions and two sites. The founder owned the product bets; I owned the system that turned them into a shippable part on a date — first silicon’s scope, what shipped as errata against what forced a respin, and the launch gates."
       },
       {
         "lead": "Result.",
@@ -6821,7 +6821,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The commercial stake was specific. A hearables OEM and an AR-wearables maker had both seen Wi-R work on a bench and both asked the same question: what do we put in the schematic. Neither would staff a program against a research result, and if the answer stayed “a demo and a paper” we lost the first design-ins.",
+          "The commercial stake was specific: a hearables OEM and an AR-wearables maker had both seen Wi-R work on a bench and asked the same question — what do we put in the schematic. Neither would staff a program against a research result, and if the answer stayed “a demo and a paper” we lost the first design-ins.",
           "What those teams were weighing was an energy budget. A wearable running for days off a small cell spends most of it on the radio, and every alternative on their shortlist sits an order of magnitude or more above Wi-R on energy per bit."
         ],
         "blocks": [
@@ -6855,14 +6855,14 @@
           }
         ],
         "after": [
-          "That gap is why a part was worth building rather than a paper worth citing, and why first silicon had to be honest about the whole ladder: an energy claim at one operating point is a headline, and a design-in needs the number at the rate the product will run."
+          "That gap is why a part was worth building rather than a paper worth citing, and why first silicon had to be honest about the whole ladder: an energy claim at one operating point is a headline; a design-in needs the number at the rate the product will run."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "Rather than ask engineers how bring-up went, I audited the bench logs from the first 24 evaluation boards built on first silicon and coded every stall by cause. The logs were kept for debugging, not for me, which is what makes them worth reading."
+          "Rather than ask engineers how bring-up went, I audited the bench logs from the first 24 evaluation boards on first silicon and coded every stall by cause. The logs were kept for debugging, not for me — which is what makes them worth reading."
         ],
         "blocks": [
           {
@@ -6940,8 +6940,8 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I should be precise about what I owned, because a title on a silicon program is easy to inflate. The founder owned the product bets — that Wi-R should exist, which market it enters, what the part is for. I owned the delivery system that turned those bets into a shippable part on a date: five functions, two sites, one schedule, and the gates that decided what shipped.",
-          "That system is where delivery reality fed back into product decisions. Validation capacity set the tapeout date. Which escapes were tolerable set what first silicon could claim. Whether a workaround fit in firmware decided whether a feature shipped at all."
+          "I should be precise about what I owned, because a title on a silicon program is easy to inflate. The founder owned the product bets — that Wi-R should exist, which market, what the part is for. I owned the delivery system that turned bets into a shippable part on a date: five functions, two sites, one schedule, and the gates that decided what shipped.",
+          "That system is where delivery fed product. Validation capacity set the tapeout date; tolerable escapes set what first silicon could claim; whether a workaround fit in firmware decided whether a feature shipped at all."
         ],
         "blocks": [
           {
@@ -6994,7 +6994,7 @@
           },
           {
             "kind": "para",
-            "text": "On-die link encryption was the hardest cut. It failed on two constraints at once: die area against a floorplan already closed, and a validation matrix we had no bench hours to cover before the committed tapeout. Wi-R’s security position is physical — the field stays within about 0.1 m of the body, so there is no signal at 5 m to intercept — and the reference driver encrypts host-side where compliance needs it. The cost is that anyone needing crypto in silicon waits for a later part."
+            "text": "On-die link encryption was the hardest cut. It failed on two constraints at once: die area against a closed floorplan, and a validation matrix with no bench hours before the committed tapeout. Wi-R’s security position is physical — the field stays within about 0.1 m of the body, so there is no signal at 5 m to intercept — and the reference driver encrypts host-side where compliance needs it. The cost is that anyone needing crypto in silicon waits for a later part."
           }
         ]
       },
@@ -7002,9 +7002,9 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The post-silicon validation lead wanted to hold first silicon for a respin rather than release it with documented errata and firmware workarounds. His argument was not caution for its own sake: a part that needs a workaround gets designed in wrong by somebody who never opened the errata sheet, and when that board does not link they blame the silicon.",
-          "He was right about how errata sheets get read, so I stopped arguing schedule and split the 41 escapes into two kinds — those that change what the part can do, and those that change how you must drive it. Only three were the first kind, and none touched the paths the launch segments used. That turned an argument about risk appetite into a question about three specific defects.",
-          "He agreed on two conditions I had not planned to offer. Every workaround ships as code in the reference driver rather than a note in a PDF, so a partner cannot design it in wrong by skipping the document — six firmware weeks, and the best thing on this page. And any later escape in a launch-segment path reopened the respin conversation with him holding the pen."
+          "The post-silicon validation lead wanted to hold first silicon for a respin rather than release with documented errata and firmware workarounds. His argument was not caution for its own sake: a part that needs a workaround gets designed in wrong by somebody who never opened the errata sheet, and the silicon gets the blame.",
+          "He was right about how errata sheets get read, so I stopped arguing schedule and split the 41 escapes into two kinds: those that change what the part can do, and those that change how you must drive it. Only three were the first kind, none in the launch segments’ paths. That turned risk appetite into a question about three specific defects.",
+          "He agreed on two conditions. Every workaround ships as code in the reference driver rather than a note in a PDF — a partner cannot design it in wrong by skipping the document; six firmware weeks, and the best thing on this page. And any later escape in a launch-segment path reopened the respin conversation, him holding the pen."
         ]
       },
       {
@@ -7089,7 +7089,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "Before tapeout we agreed first silicon failed on one condition: if it could not hold a sustained on-body link at full rate on an ordinary person without a metal fixture, it went back for a respin before any customer saw it. Interop was the guardrail, so the date could not be won by shipping a part that only worked on our own reference board."
+          "Before tapeout we agreed first silicon failed on one condition: if it could not hold a sustained on-body link at full rate on an ordinary person without a metal fixture, it went back for a respin before any customer saw it. Interop was the guardrail — the date could not be won by a part that only worked on our reference board."
         ],
         "blocks": [
           {
@@ -7168,7 +7168,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround at the time of triage — the three that carried the label were exactly that when triaged, and later driver work closed all three, which is the reclassification the summary counts. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts."
+            "text": "An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround at triage — the three that carried the label were exactly that when triaged, and later driver work closed all three, the reclassification the summary counts. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time went. The four OEM programs counted here are pre-kit direct engagements, not the dev-kit page’s kit-mediated design-ins."
           },
           {
             "kind": "config",
@@ -7180,7 +7180,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I scheduled the die and left the interface around it to look after itself. Every expensive surprise in section 02 came from the electrode interface rather than the silicon, and it was the one part of the system with no owner and no line on the schedule — not a design deliverable, not a validation deliverable, so it belonged to nobody.",
+          "I scheduled the die and left the interface around it to look after itself. Every expensive surprise in section 02 came from the electrode interface, the one part of the system with no owner and no line on the schedule — not a design deliverable, not a validation deliverable, so it belonged to nobody.",
           "I would also publish the errata differently. Shipping workarounds in the driver was right, and quietly created a second problem: partners who take the driver get the fix invisibly and never learn the constraint, so when they write their own integration they reintroduce it."
         ]
       }
