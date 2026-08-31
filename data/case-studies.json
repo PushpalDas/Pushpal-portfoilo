@@ -1150,45 +1150,6 @@
     "prevProject": null,
     "nextProject": null
   },
-  "wi-r-body-area-network-yr23": {
-    "slug": "wi-r-body-area-network-yr23",
-    "company": "Ixana",
-    "organization": "Wi-R product program",
-    "title": "Wi-R Body Area Network — YR23",
-    "dateRange": "2024–2026",
-    "role": "",
-    "teamSize": "",
-    "tags": [
-      "Silicon",
-      "Body Area Networks"
-    ],
-    "isConfidential": false,
-    "confidentialNote": "",
-    "tldr": "Problem: The project addressed on-body connectivity through Ixana's Wi-R body area network product work.\n\nWhat I did: The current portfolio record identifies YR23 as a production silicon project, but does not yet document a reliable ownership boundary.\n\nResult: YR23 is listed as in production; no verified outcome metrics are stored in the current project record.",
-    "roleAndApproach": "What I owned: The existing record does not yet provide enough evidence to state a narrower ownership claim.\n\nTradeoffs I navigated: Product-level tradeoffs have not yet been documented for publication.",
-    "keyDecisions": [],
-    "whatWasBuilt": "YR23 is part of Ixana's Wi-R body area network silicon product work for on-body connectivity.",
-    "media": [
-      {
-        "type": "image",
-        "src": "Image__3_.jpg",
-        "caption": "YR23 project image from the existing portfolio record.",
-        "fullWidth": true
-      }
-    ],
-    "metrics": [],
-    "impactContext": "The current record confirms production status but does not contain verified customer or business outcome measurements.",
-    "reflection": "The next revision should document the customer stake, team, decision history, and measurable outcome using material cleared for publication.",
-    "links": [
-      {
-        "icon": "external",
-        "label": "Ixana Wi-R BAN product page",
-        "url": "https://www.ixana.ai/products/chips/wi-r-ban"
-      }
-    ],
-    "prevProject": null,
-    "nextProject": null
-  },
   "github-for-clickup-automation-on-the-changes-going-outside-p": {
     "slug": "github-for-clickup-automation-on-the-changes-going-outside-p",
     "company": "",
