@@ -5836,7 +5836,7 @@
       },
       {
         "lead": "What I did.",
-        "text": "I scoped a simulator around one claim: that watching the Bloch sphere move as you place a gate teaches something a table of amplitudes does not. That meant a hard cap on qubit count so rendering stayed instantaneous, and an interactive grid rather than a code editor."
+        "text": "I scoped a simulator around one claim: watching the Bloch sphere move as you place a gate teaches something a table of amplitudes does not. That meant a hard qubit cap so rendering stayed instantaneous, and an interactive grid rather than a code editor."
       },
       {
         "lead": "Result.",
@@ -5848,7 +5848,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Three ways to attack the intuition gap: better static diagrams, an annotated notebook, or an interactive simulator. The first two are far cheaper and share a property that makes them poor candidates — the learner does not choose what happens next. I sized the options by how many distinct states a learner could explore in twenty minutes, since exploration is the mechanism the whole idea rests on."
+          "Three ways to attack the intuition gap: better static diagrams, an annotated notebook, or an interactive simulator. The first two are far cheaper and share a disqualifying property — the learner does not choose what happens next. I sized the options by how many distinct states a learner could explore in twenty minutes, exploration being the mechanism the idea rests on."
         ],
         "blocks": [
           {
@@ -5886,7 +5886,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I sat in on two teaching sessions and surveyed 31 learners on what they could do versus what they could picture. The survey mattered more than the observation, because the gap is internal — a learner getting the right answer looks identical to one who understands it."
+          "I sat in on two teaching sessions and surveyed 31 learners on what they could do versus what they could picture. The survey mattered more, because the gap is internal — a learner getting the right answer looks identical to one who understands it."
         ],
         "blocks": [
           {
@@ -5925,7 +5925,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I set the scope, the qubit ceiling and the boundary between the numerical engine and the rendering layer, and ran the milestones across both."
+          "I set the scope, the qubit ceiling and the boundary between numerical engine and rendering layer, and ran the milestones across both."
         ],
         "blocks": [
           {
@@ -5956,7 +5956,7 @@
         "num": "04",
         "heading": "What was built",
         "body": [
-          "A web application for building, simulating and visualising quantum circuits. Gates are placed on a timeline grid; the engine computes state vectors, probabilities, shot distributions and Bloch coordinates per qubit; the front end renders those as interactive 3D spheres that update as the circuit changes. A prebuilt library loads standard algorithms. It is complete, and no learner has used it."
+          "A web application for building, simulating and visualising quantum circuits. Gates land on a timeline grid; the engine computes state vectors, probabilities, shot distributions and Bloch coordinates per qubit; the front end renders interactive 3D spheres that update as the circuit changes. A prebuilt library loads standard algorithms. It is complete, and no learner has used it."
         ],
         "blocks": [
           {
@@ -6037,7 +6037,7 @@
         "num": "05",
         "heading": "What we learned",
         "body": [
-          "We agreed before building that the interaction failed if state-vector computation at the chosen ceiling exceeded a 200ms budget — beyond that a placement stops feeling connected to its result. Correctness was the guardrail: a faster renderer computing the wrong state would have been worse than a slow one, so the physics test suite ran on every change to the engine."
+          "We agreed before building that the interaction failed if state-vector computation at the ceiling exceeded a 200ms budget — beyond that a placement stops feeling connected to its result. Correctness was the guardrail: a fast renderer computing the wrong state is worse than a slow one, so the physics suite ran on every engine change."
         ],
         "blocks": [
           {
@@ -6096,7 +6096,7 @@
           },
           {
             "kind": "para",
-            "text": "The second thing learned is what the prototype cannot tell us. It was built to test a claim about intuition, and because it never reached a learner that claim is exactly as unproven as it was in December. Everything above is a statement about the software, not about whether watching a Bloch sphere move teaches anyone anything."
+            "text": "The second thing learned is what the prototype cannot tell us. It was built to test a claim about intuition, and because it never reached a learner that claim is exactly as unproven as in December. Everything above is about the software, not about whether watching a Bloch sphere move teaches anyone anything."
           },
           {
             "kind": "config",
@@ -6111,8 +6111,8 @@
         "num": "06",
         "heading": "What I'd do differently",
         "body": [
-          "I built the whole thing before showing it to a single learner. A paper prototype of one Bloch sphere responding to one gate would have tested the core claim in an afternoon, and I spent five months on an engine, a renderer and a circuit library in order to test it properly. The completeness is why it never shipped — it kept being nearly ready.",
-          "I would also have measured the qubit ceiling first. It shaped every other decision and I estimated rather than measured it, which happened to be close. Had I been wrong by two qubits the other way, the entire interaction model would have rested on an assumption checkable in a day."
+          "I built the whole thing before showing it to a single learner. A paper prototype of one Bloch sphere responding to one gate would have tested the core claim in an afternoon; I spent five months on an engine, a renderer and a circuit library to test it properly. The completeness is why it never shipped — it kept being nearly ready.",
+          "I would also have measured the qubit ceiling first. It shaped every other decision and I estimated it, which happened to be close. Wrong by two qubits the other way, the entire interaction model would have rested on an assumption checkable in a day."
         ]
       }
     ],
