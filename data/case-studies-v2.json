@@ -4242,7 +4242,7 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A workflow taking a structured brief through five stages: context validation with a clarification gate, project-type classification and section selection, batched drafting, scorecard review by a different model with a bounded revision loop, and a single implementation-ready task whose checklist carries binary completion tests, estimates and dependencies. Around it sit versioning, line-level diffs, export and comment-driven revision."
+          "A workflow taking a structured brief through five stages: context validation with a clarification gate, project-type classification and section selection, batched drafting, scorecard review by a different model with a bounded revision loop, and one implementation-ready task whose checklist carries binary completion tests, estimates and dependencies. Around it: versioning, line-level diffs, export and comment-driven revision."
         ],
         "blocks": [
           {
@@ -4367,7 +4367,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "We agreed before build that this failed if humans approved fewer than half of plans on first read. That threshold is deliberately about the reviewer: a loop that passes work a person then redoes spends both the model's rounds and the human's attention. Model independence was the guardrail — any run where planner and reviewer shared a model would invalidate the approval, so it is enforced in code and counted."
+          "We agreed before build that this failed if humans approved fewer than half of plans on first read — a threshold deliberately about the reviewer: a loop that passes work a person then redoes spends the model’s rounds and the human’s attention. Model independence was the guardrail: any run where planner and reviewer shared a model invalidates the approval, enforced in code and counted."
         ],
         "blocks": [
           {
@@ -4451,8 +4451,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "The review loop's early failures were about context handoff, not reviewing. The reviewer could not see the clarification answers and the planner revised without its own previous draft, so the loop spent 3.2 rounds converging on things both sides knew. A plumbing bug that presented as a quality problem, and it sent me looking at prompts for three weeks.",
-          "I would also have calibrated the scorecard before running it in anger. Early on a section marked TBD scored as a failure, so plans correctly flagging their own unknowns were rejected for doing exactly what the product exists to encourage. The fix was one line; the fortnight of confusing rejections made several people distrust the review stage for months."
+          "The review loop’s early failures were about context handoff, not reviewing. The reviewer could not see the clarification answers and the planner revised without its own previous draft, so the loop spent 3.2 rounds converging on things both sides knew. A plumbing bug presenting as a quality problem — it sent me reading prompts for three weeks.",
+          "I would also have calibrated the scorecard before running it in anger. Early on, a section marked TBD scored as a failure, so plans correctly flagging their own unknowns were rejected for doing what the product exists to encourage. The fix was one line; the fortnight of confusing rejections made people distrust the review stage for months."
         ]
       }
     ],
