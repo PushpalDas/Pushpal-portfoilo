@@ -80,10 +80,16 @@ external URL was altered anywhere else.
 
 ## Open items — all AUTHOR-CONFIRM, carried from AUDIT/FINDINGS.md, not defects of this run
 
-AC-XANA (push Changes-archive/dummy so Vercel redeploys — commit e056966 is ready; author is
-pushing from their own terminal, 2026-09-01) · AC-7 (NFE3001 live page shows a newer 30 Mbit/s
-bin) · AC-8 (P8 announcement link) · AC-3b (Ixana-Wiki GitHub href) · AC-9/12/14/20/28/29/31
-(per-page one-line questions).
+AC-7 (NFE3001 live page shows a newer 30 Mbit/s bin) · AC-8 (P8 announcement link) · AC-3b
+(Ixana-Wiki GitHub href) · AC-9/12/14/20/28/29/31 (per-page one-line questions).
+
+**AC-XANA — RESOLVED 2026-09-01.** The author pushed Changes-archive/dummy to
+github.com/PushpalDas/xana: origin/main now at e056966 ("Parity with the case studies"),
+matching the local parity HEAD. Vercel redeploy confirmed live — /meetingrecordings now
+serves the authored subtitle ("Transcribed and minuted inside the tenant — no third-party
+notetaker joins the call") where the prior deploy served the generic placeholder line. The
+remaining deep-link content renders client-side and was already source-verified against this
+exact commit (FINDINGS "Phase 2/3 — xana-nine").
 
 **AC-DRIVE — RESOLVED 2026-09-01.** The author set both folders (NeuroAdapt docs
 `1B0mtA9-…`, ENVI-City `1XhqFiIQ…`) to "anyone with the link: viewer". Verified two ways:
