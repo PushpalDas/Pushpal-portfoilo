@@ -11555,7 +11555,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "India's sewers have no walkways, so inspection means sending a person into them — the National Commission for Safai Karamcharis put 631 deaths in ten years to cleaning sewers and septic tanks. A machine that could cross settled sludge would take the most dangerous entries out of the job."
+        "text": "India’s sewers have no walkways, so inspection means sending a person into them — the National Commission for Safai Karamcharis recorded 631 deaths in ten years cleaning sewers and septic tanks. A machine that could cross settled sludge would take the most dangerous entries out of the job."
       },
       {
         "lead": "What we did.",
@@ -11563,7 +11563,7 @@
       },
       {
         "lead": "Finding.",
-        "text": "A track is a machine for not leaving the medium alone: it shears, shear-thinning sludge gets thinner where it is sheared, and the vehicle digs its own hole. That is why the final design carries its weight in a buoyant frame and pushes with paddles and thrusters instead. The threshold and the tank runs below are the worked example."
+        "text": "A track is a machine for not leaving the medium alone: it shears, shear-thinning sludge thins where sheared, and the vehicle digs its own hole. So the final design carries its weight in a buoyant frame and pushes with paddles and thrusters. The threshold and tank runs below are the worked example."
       }
     ],
     "sections": [
@@ -11571,7 +11571,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Indian sewer networks were not built to be walked through, and inspection still often means lifting a manhole and sending somebody down. A machine displaces that practice only if it can get from one manhole to the next unaided.",
+          "Indian sewer networks were not built to be walked through; inspection still often means lifting a manhole and sending somebody down. A machine displaces that practice only if it can get from one manhole to the next unaided.",
           "So the sizing question was reach: how much of a line each method sees without a person entering it."
         ],
         "blocks": [
@@ -11606,7 +11606,7 @@
           }
         ],
         "after": [
-          "The beneficiaries are municipal sewer and sump inspection crews — no buyer, just a job currently done by people who should not be doing it."
+          "The beneficiaries are municipal sewer and sump inspection crews — no buyer, just a job done by people who should not be doing it."
         ]
       },
       {
@@ -11679,15 +11679,15 @@
           }
         ],
         "after": [
-          "The reframe: we had been treating sludge as a difficult floor. It is a shear-thinning fluid that behaves like a floor only while you leave it alone, and a track is a machine for not leaving it alone."
+          "The reframe: we had treated sludge as a difficult floor. It is a shear-thinning fluid that behaves like a floor only while left alone — and a track is a machine for not leaving it alone."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I founded Ricky Kids and led this team into the Grand Challenge; a faculty member mentored it and signed the institutional side, and I decided what we would test and what would count as failing.",
-          "The judgment worth pointing at is spending the first quarter on a tank rather than a vehicle. The project name assumes traversing is possible, and the cheapest thing we could do was try to disprove our own title."
+          "I founded Ricky Kids and led the team into the Grand Challenge; a faculty mentor signed the institutional side, and I decided what we would test and what counted as failing.",
+          "The judgment worth pointing at is spending the first quarter on a tank rather than a vehicle. The project name assumes traversing is possible; the cheapest thing to do was try to disprove our own title."
         ],
         "blocks": [
           {
@@ -11700,7 +11700,7 @@
               },
               {
                 "lead": "Make self-recovery the pass mark, not distance.",
-                "text": "A vehicle that travels ten metres and then needs a person to fetch it has added an entry to the job rather than removed one."
+                "text": "A vehicle that travels ten metres and then needs a person to fetch it has added an entry to the job."
               },
               {
                 "lead": "Keep the electronics in one sealed cylinder.",
@@ -11767,7 +11767,7 @@
         "num": "05",
         "heading": "Finding and what it changed",
         "body": [
-          "We agreed before build that this failed if the vehicle could not get itself out of a stall and had to be hauled back on its tether — a machine that needs retrieving has added an entry to the job, not removed one."
+          "We agreed before build that this failed if the vehicle could not get itself out of a stall and had to be hauled back on its tether."
         ],
         "blocks": [
           {
@@ -11849,16 +11849,16 @@
           },
           {
             "kind": "para",
-            "text": "Tracks completed the lane in the settled analogue and nothing else, and seven of nine tracked stalls ended with the vehicle being pulled out. The mechanism is not weak motors: a track shears the medium under itself, shear-thinning sludge gets thinner where it is sheared, and the vehicle digs its own hole. What it changed: we stopped designing a crawler and designed the thing above."
+            "text": "Tracks completed the lane in the settled analogue and nothing else, and seven of nine tracked stalls ended with the vehicle pulled out. The mechanism is not weak motors: a track shears the medium under itself, shear-thinning sludge thins where sheared, and the vehicle digs its own hole. We stopped designing a crawler and designed the thing above."
           },
           {
             "kind": "para",
-            "text": "What this could not tell us is how any of it behaves in a real sewer. We tested clean analogues mixed to a density in a straight tank: no rag, no grit, no roots, no fat, no joints to snag on, no long-duration fouling of seals or thrusters. Every one is a plausible way for this vehicle to fail, and we have nothing to say about any of them."
+            "text": "What this could not tell us is how any of it behaves in a real sewer. We tested clean analogues in a straight tank: no rag, grit, roots, fat, joints to snag on, no long-duration fouling of seals or thrusters. Each is a plausible way for this vehicle to fail, and we can say nothing about any of them."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Traverse success is the share of runs completing the full test lane under the vehicle's own power in a given medium. It excludes runs aborted for tether tangles, which were a property of our tank rather than of the drive. Stalls are counted as events rather than runs — a run can stall twice, which is how nine tracked runs produced nine stall events — and a stall counts as recovered only if forward motion resumed without tension on the tether."
+            "text": "Traverse success is the share of runs completing the full lane under the vehicle’s own power in a given medium, excluding runs aborted for tether tangles — a property of our tank, not the drive. Stalls are counted as events, not runs — a run can stall twice, which is how nine tracked runs produced nine stall events — and a stall counts as recovered only if forward motion resumed without tether tension."
           },
           {
             "kind": "config",
@@ -11870,7 +11870,7 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed, so the number that matters is the margin above 1.15, not the line itself.",
+          "We mixed our analogues to a density because density is easy to measure with what we had. But yield stress, not density, governs this — two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed, so what matters is the margin above 1.15, not the line.",
           "We also kept the project name after the finding contradicted it. Calling it a sludge-traversing ROV and then building something that floats over the sludge made every later conversation start in the wrong place."
         ]
       }
