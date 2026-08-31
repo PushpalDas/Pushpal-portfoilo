@@ -1,5 +1,10 @@
 # IA MAP — tiers, routes and rationale (P6)
 
+> **2026-08-31, author decision:** the tiered front-door LAYOUT was reverted — /work renders the
+> original flat three-per-row grid in the original order, program card excluded from the grid.
+> Everything else from the pass stands: tier metadata on the data, the program page (reachable at
+> /work/ixana-internal-ai-program), calibrated copy, fast layers, Verify strips, Data notes.
+
 Governing rule: nothing deleted, everything placed. Every pre-existing route resolves unchanged.
 The tiered front door renders on /work's default view only; any ?filter= or ?domain= slice keeps
 the flat grid those deep links were built against — zero redirects needed.
