@@ -497,7 +497,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Three ways of getting Wi-R into partner hands were on the table for FY25: an onsite bring-up by our applications engineer, a full reference design, or a dev kit. The commercial stake was concrete — our largest pipeline evaluation, a hearables OEM weighing Wi-R against BLE for an earbud-to-case link, had told us plainly they would not staff an RF engineer to evaluate an unproven physical layer. If evaluation stayed expensive for them we lost the account, and with it the reference design every later hearables conversation would have leaned on.",
+          "Three ways of getting Wi-R into partner hands were on the table for FY25: an onsite bring-up by our applications engineer, a full reference design, or a dev kit. The commercial stake was concrete — our largest pipeline evaluation, a hearables OEM weighing Wi-R against BLE for an earbud-to-case link, had said plainly they would not staff an RF engineer to evaluate an unproven physical layer. If evaluation stayed expensive we lost the account, and the reference design every later hearables conversation would lean on.",
           "I sized the three against the constraint that actually bound us: applications engineering capacity. Three engineers could bring up a body-coupled link, and each option consumed them differently."
         ],
         "blocks": [
@@ -705,15 +705,15 @@
         "heading": "How I got it agreed",
         "body": [
           "The VP of Sales wanted the kit and the reference design bundled and sold as one thing. His reasoning was sound from where he sat: a kit is a small transaction that produces a technical opinion, a reference design is what a partner builds against, and shipping them together meant one conversation instead of two.",
-          "I did not think we would win on principle, so I re-grounded it in the pipeline we had. Every one of the six completed evaluations had asked a variant of \"does this link hold on a person\" before anyone asked a productisation question — and bundling would put a two-month reference design lead time in front of a question we could answer in a day. The argument stopped being about deal size and became about what the partner is trying to learn first.",
-          "He agreed, with two conditions I had not planned to give. The kit ships with two worked examples rather than one, so it demonstrates a use case and not just a link, which cost the firmware engineer three weeks. And any partner completing a kit evaluation gets the reference design files without a separate commercial step, so the kit never becomes a toll gate in front of what he is paid to sell — which is why eval-to-design conversion is measurable at all."
+          "I did not think we would win on principle, so I re-grounded it in the pipeline we had. Every completed evaluation had asked a variant of “does this link hold on a person” before any productisation question — and bundling would put a two-month reference-design lead time in front of a question we could answer in a day. Deal size stopped being the argument; what the partner is trying to learn first became it.",
+          "He agreed, with two conditions I had not planned to give. The kit ships with two worked examples rather than one, demonstrating a use case and not just a link — three weeks of firmware time. And any partner completing a kit evaluation gets the reference-design files with no separate commercial step, so the kit never becomes a toll gate — which is why eval-to-design conversion is measurable at all."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A sealed kit containing a Wi-R transceiver module, a known-good host board, two tested electrode assemblies, a USB console and two worked applications. A partner engineer opens it, mounts the electrode pair as printed on the enclosure, connects the console, and watches a link establish across their own body inside the hour. Everything that could have been a variable — spacing, contact material, ground reference, host clocking — is fixed and characterised in the box."
+          "A sealed kit: a Wi-R transceiver module, a known-good host board, two tested electrode assemblies, a USB console and two worked applications. A partner engineer opens it, mounts the electrode pair as printed on the enclosure, connects the console, and watches a link establish across their own body inside the hour. Everything that could have been a variable — spacing, contact material, ground reference, host clocking — is fixed and characterised."
         ],
         "blocks": [
           {
@@ -861,7 +861,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I measured the kit and never measured the evaluation. Time to first link was right for the hardware and wrong for the business: it tells you the box works and nothing about whether the partner reached a decision. Nine of 34 converted, and I cannot say cleanly why the other 25 stopped — we instrumented the first hour thoroughly and the following two months not at all.",
+          "I measured the kit and never measured the evaluation. Time to first link was right for the hardware and wrong for the business: it says the box works, nothing about whether the partner reached a decision. Nine of 34 converted, and I cannot say cleanly why the other 25 stopped — we instrumented the first hour thoroughly and the following two months not at all.",
           "I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that trade differently now. The saving was real; the cost was two partners running a competitor evaluation in the gap, which does not appear in any program metric until it appears as a lost design-in a year later."
         ]
       }
