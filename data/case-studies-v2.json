@@ -5464,15 +5464,15 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Turning a disclosure into an attorney-review draft is expensive, and both ways it goes wrong are quiet: a trade-secret candidate leaves inside a search query, or the system drafts around prior art it never found."
+        "text": "Turning a disclosure into an attorney-review draft is expensive, and both failure modes are quiet: a trade-secret candidate leaves inside a search query, or the system drafts around prior art it never found."
       },
       {
         "lead": "What I did.",
-        "text": "I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had, before letting anyone tune one. The answer changed what the system reports, not what it retrieves."
+        "text": "I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had before letting anyone tune one. The answer changed what the system reports, not what it retrieves."
       },
       {
         "lead": "Result.",
-        "text": "It drafts a full filing package end to end — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The measurement that mattered is real, computed over public patent data: 84.6% of ground-truth prior art was not in the corpus at all, which reframed the ranker from broken to nearly done. It has never been run on a real inventor disclosure and no attorney has used it."
+        "text": "It drafts a full filing package — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The key measurement is real, over public patent data: 84.6% of ground-truth prior art was absent from the corpus, reframing the ranker from broken to nearly done. It has never been run on a real disclosure and no attorney has used it."
       }
     ],
     "sections": [
@@ -5480,7 +5480,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Two framings were available. The exciting one is a multi-agent drafting system, where the interesting work is the agent lineup. The other is that draft quality is downstream of retrieval, and everything after the search is polish on what it found. I sized them against where the attorney hours actually go."
+          "Two framings were available: a multi-agent drafting system, where the interesting work is the agent lineup, or the view that draft quality is downstream of retrieval and everything after the search is polish on what it found. I sized them against where the attorney hours actually go."
         ],
         "blocks": [
           {
@@ -5517,14 +5517,14 @@
           }
         ],
         "after": [
-          "I scoped the pilot to the US path, because mixing two legal standards puts a jurisdiction condition in every prompt."
+          "I scoped the pilot to the US path: mixing two legal standards puts a jurisdiction condition in every prompt."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I shadowed two attorneys through five disclosures, then ran the same code and the same prompts over two kinds of source document to find out whether the drafter or the input was the constraint."
+          "I shadowed two attorneys through five disclosures, then ran the same code and prompts over two kinds of source document to learn whether the drafter or the input was the constraint."
         ],
         "blocks": [
           {
@@ -5590,14 +5590,14 @@
           }
         ],
         "after": [
-          "The reframe: the hard part was never the agent lineup. It was retrieval, containment, and telling an inventor what their disclosure fails to teach — and the third turned out to be worth shipping on its own."
+          "The reframe: the hard part was never the agent lineup — it was retrieval, containment, and telling an inventor what their disclosure fails to teach. The third turned out to be worth shipping on its own."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I owned scope, build order and the operating rules. The build order is the contribution: what cannot be retrofitted first, and a measurement in front of the work it would justify."
+          "I owned scope, build order and the operating rules. Build order is the contribution: what cannot be retrofitted first, and a measurement ahead of the work it would justify."
         ],
         "blocks": [
           {
@@ -5606,11 +5606,11 @@
             "items": [
               {
                 "lead": "Containment at intake, and inside every outbound client.",
-                "text": "Enforced at the call boundary, not at client construction: both clients memoise their SDK object, so a check there fires once per process and enforces nothing after."
+                "text": "Enforced at the call boundary, not at client construction: both clients memoise their SDK object, so a construction-time check fires once and enforces nothing after."
               },
               {
                 "lead": "Measure the corpus ceiling before tuning a ranker.",
-                "text": "We agreed before the eval existed that a ranker within 85% of achievable was not the thing to work on. Three weeks then answered what would otherwise have taken months."
+                "text": "We agreed before the eval existed that a ranker within 85% of achievable was not the thing to work on. Three weeks answered what would otherwise take months."
               },
               {
                 "lead": "Every run judges its own retrieval and says so.",
@@ -5628,7 +5628,7 @@
         "num": "04",
         "heading": "What was built",
         "body": [
-          "A pipeline that reads several documents as one disclosure and returns a filing package: text with page provenance, one vision call per drawing sheet, a deterministic split of claimable from not, retrieval with a coverage verdict, claims, a critic ring, a specification, drawings measured against 37 CFR 1.84, and a DOCX set. Around it sit the containment gate, universal provenance and per-call cost accounting."
+          "A pipeline that reads several documents as one disclosure and returns a filing package: text with page provenance, one vision call per drawing sheet, a deterministic split of claimable from not, retrieval with a coverage verdict, claims, a critic ring, a specification, drawings measured against 37 CFR 1.84, and a DOCX set — wrapped in the containment gate, universal provenance and per-call cost accounting."
         ],
         "blocks": [
           {
@@ -5717,7 +5717,7 @@
         "num": "05",
         "heading": "What we learned",
         "body": [
-          "We agreed before building the eval that a ranker within 85% of what the corpus made achievable was not worth tuning. Measuring the ceiling first told us that 84.6% of the ground-truth prior art was not in the corpus at all — and that the cause was not the date floor everyone assumed but the classification filter the corpus was built on. Prior art for a UI invention is not UI-classified. Containment was the guardrail: blocked outbound calls were counted from week one."
+          "We agreed before building the eval that a ranker within 85% of what the corpus made achievable was not worth tuning. Measuring the ceiling first told us 84.6% of ground-truth prior art was not in the corpus at all — and the cause was not the date floor everyone assumed but the classification filter the corpus was built on. Prior art for a UI invention is not UI-classified. Containment was the guardrail: blocked outbound calls were counted from week one."
         ],
         "blocks": [
           {
@@ -5780,7 +5780,7 @@
           },
           {
             "kind": "para",
-            "text": "The ceiling is a property of the stopgap, not the architecture — the corpus exists only because patent-office credentials were pending, and those APIs search everything server-side. So the recommendation was to not widen it, which is the most valuable thing the evaluation produced and a decision to do less."
+            "text": "The ceiling is a property of the stopgap, not the architecture — the corpus exists only because patent-office credentials were pending, and those APIs search everything server-side. The recommendation was to not widen it: the most valuable thing the evaluation produced, and a decision to do less."
           },
           {
             "kind": "config",
@@ -5792,8 +5792,8 @@
         "num": "06",
         "heading": "What I'd do differently",
         "body": [
-          "I would build the gold set in month one rather than month five. Everything that mattered was decided by a measurement that took three weeks to construct.",
-          "I would also have shown the attorney the gap list before showing him a draft. When he saw both he was uninterested in the claims and wanted the questionnaire on every disclosure, drafted or not — which is a product, and a much smaller one than what I had been building toward."
+          "I would build the gold set in month one, not month five. Everything that mattered was decided by a measurement that took three weeks to construct.",
+          "I would also have shown the attorney the gap list before a draft. Seeing both, he was uninterested in the claims and wanted the questionnaire on every disclosure, drafted or not — a product, and a much smaller one than I had been building toward."
         ]
       }
     ],
