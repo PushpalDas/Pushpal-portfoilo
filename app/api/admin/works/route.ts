@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import fs from 'node:fs';
 import path from 'node:path';
-import { workItems, filters } from '../../../work/constants';
+import { NextResponse } from 'next/server';
+import { filters, workItems } from '../../../work/constants';
 
 export async function GET(request: Request) {
 	const authHeader = request.headers.get('x-admin-password');
@@ -59,15 +59,19 @@ export const STATUS_ORDER: Record<string, number> = {
 const FILE_FOOTER = `
 export const filters = [
 	{ key: 'all', label: 'All' },
-	{ key: 'product', label: 'Product' },
-	{ key: 'engineering', label: 'Engineering' },
+	{ key: 'silicon', label: 'Silicon & systems' },
+	{ key: 'ai', label: 'AI programs & platforms' },
+	{ key: 'prototypes', label: 'Prototypes & research' },
+	{ key: 'others', label: 'Others' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];
 `;
 
 const q = (value: unknown): string =>
-	String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+	String(value ?? '')
+		.replace(/\\/g, '\\\\')
+		.replace(/'/g, "\\'");
 
 function generateConstantsFile(items: typeof workItems): string {
 	const itemsStr = items

@@ -1,27 +1,15 @@
 /**
- * Tracks — the two groupings the home page highlights and `/work?domain=`
- * filter by. Kept beside the work data because both readers derive their
- * numbers from `workItems` rather than carrying their own copies: nothing
- * in this file is a typed-in count.
+ * Tracks — the two groupings the home page highlights and the `/work` filter
+ * row are built from. Kept beside the work data because both readers derive
+ * their numbers from `workItems` rather than carrying their own copies:
+ * nothing in this file is a typed-in count. The pill labels themselves live
+ * with the rest of the row, in `constants.ts`.
  */
 
 import { workItems } from './constants';
 import type { WorkItem } from './types';
 
 export type TrackKey = NonNullable<WorkItem['track']>;
-export type TrackFilterKey = 'all' | TrackKey;
-
-export const TRACK_FILTERS: { key: TrackFilterKey; label: string }[] = [
-	{ key: 'all', label: 'All' },
-	{ key: 'silicon', label: 'Silicon & systems' },
-	{ key: 'ai', label: 'AI programs & platforms' },
-];
-
-export function isTrackFilterKey(
-	value: string | null,
-): value is TrackFilterKey {
-	return TRACK_FILTERS.some((f) => f.key === value);
-}
 
 /** Every product entry carrying this track. */
 export function productsInTrack(track: TrackKey): WorkItem[] {

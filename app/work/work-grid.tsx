@@ -5,9 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { workSlug } from './slug';
 import { WORK_STATUSES } from './status';
 import type { WorkItem } from './types';
-import { workSlug } from './slug';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,16 +15,16 @@ interface WorkGridProps {
 	items: WorkItem[];
 	gridColumns?: 2 | 3 | 4;
 	/** Rides along to the case study so its back link returns to this list. */
-	domain?: string;
+	filter?: string;
 }
 
 export default function WorkGrid({
 	items,
 	gridColumns = 2,
-	domain,
+	filter,
 }: WorkGridProps) {
 	const gridRef = useRef<HTMLDivElement>(null);
-	const carry = domain ? `?domain=${domain}` : '';
+	const carry = filter ? `?filter=${filter}` : '';
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
@@ -83,7 +83,6 @@ export default function WorkGrid({
 									</h4>
 									<p className='work-tile-outcome'>{item.outcome}</p>
 								</div>
-
 							</>
 						);
 

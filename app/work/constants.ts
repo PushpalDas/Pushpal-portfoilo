@@ -405,7 +405,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner\'s work, enforced in code, and unknowns stop the pipeline instead of being papered over.',
+			"Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner's work, enforced in code, and unknowns stop the pipeline instead of being papered over.",
 		image: 'Gemini_Generated_Image_6dagw16dagw16dag.png',
 		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
 		tier: 2,
@@ -422,7 +422,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.',
-		image: 'Gemini_Generated_Image_1i9ozk1i9ozk1i9o.png',
+		image: 'Gemini_Generated_Image_2sua6e2sua6e2sua.png',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		tier: 1,
 		demoUrl: '/demo/ai-lawyer',
@@ -545,7 +545,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.',
-		image: 'Image__20_.jpg',
+		image: 'demo-card-ornithopter.jpg',
 		slug: 'srm-uav-ornithopter-for-surveillance',
 		tier: 3,
 		demoUrl: '/demo/ornithopter-concept',
@@ -879,10 +879,23 @@ export const workItems: WorkItem[] = [
 	},
 ];
 
+/**
+ * One flat row. The two product tracks are the filter now — the old
+ * Product/Engineering split had Products standing in front of the two
+ * groupings people actually browse by, so it was collapsed into them.
+ * Engineering builds file under Others.
+ *
+ * `prototypes` is the one pill that cuts the other way: it filters by
+ * maturity, not by track, so its items also appear under Silicon or AI.
+ * That overlap is the point — it is the shelf for work that has not
+ * shipped, wherever it came from.
+ */
 export const filters = [
 	{ key: 'all', label: 'All' },
-	{ key: 'product', label: 'Product' },
-	{ key: 'engineering', label: 'Engineering' },
+	{ key: 'silicon', label: 'Silicon & systems' },
+	{ key: 'ai', label: 'AI programs & platforms' },
+	{ key: 'prototypes', label: 'Prototypes & research' },
+	{ key: 'others', label: 'Others' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];

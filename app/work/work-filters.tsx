@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import Magnetic from '../components/Magnetic';
 import { type FilterKey, filters } from './constants';
 

@@ -386,11 +386,11 @@ export default function WorkHighlights({
 					);
 				})}
 
-				{/* Lands on Products with the track pills already open, which is
-				    what this section is a slice of. */}
+				{/* This section is a slice of the work page; the link lands on the
+				    unfiltered row it was sliced from. */}
 				<p className='wh-all wh-reveal'>
 					<Magnetic strength={12}>
-						<Link href='/work?filter=product' className='wh-all-link'>
+						<Link href='/work' className='wh-all-link'>
 							See all work →
 						</Link>
 					</Magnetic>

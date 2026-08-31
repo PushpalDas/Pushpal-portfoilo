@@ -10,7 +10,6 @@ interface WorkHeaderProps {
 export default function WorkHeader({ filters }: WorkHeaderProps) {
 	const headerRef = useRef<HTMLDivElement>(null);
 	const line1Ref = useRef<HTMLSpanElement>(null);
-	const line2Ref = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
@@ -38,23 +37,27 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 							</span>
 						</h1>
 						<div className='work-header-subline-wrap'>
+							{/* The scannable line: named tools, for a recruiter reading in
+							    seconds. Every keyword here is one the case studies can back —
+							    see the tags in data/case-studies.json. */}
+							<p className='work-header-stack'>
+								Product management · Program management · Project management ·
+								RTL · AMS · Embedded firmware · Body area networks · Python ·
+								FastAPI · NumPy · Next.js · React · Three.js · PostgreSQL ·
+								Azure AD · JWT · RAG · Dense retrieval (bge-m3) · LLM re-ranking
+								· nDCG evaluation · Multi-agent LLM systems · Microsoft Graph ·
+								ClickUp API · Google Calendar API · Webhooks · n8n · Excel and
+								Google Sheets dashboards
+							</p>
 							<p className='work-header-subline'>
-								Product manager with an engineering background. Thirty-seven
-								products across silicon and AI — ten in production, fourteen
-								shipped internally, two in customer pilots, eleven research
-								studies and prototypes — plus seventeen early engineering
-								builds, a peer-reviewed paper, and fifty-plus patent filings
-								owned end to end.
+								Silicon delivery, embedded firmware and board bring-up, RAG
+								retrieval and evaluation, multi-agent LLM systems, and the
+								internal platforms built around them.
 							</p>
 							<p className='work-header-sample-note'>
-								“Demo” means different things here, deliberately: sometimes
-								the deployed platform itself, sometimes an interactive
-								recreation running on invented data, sometimes a public spec
-								page or a video — and for the earlier work, the demo is the
-								docs, or the research paper where one was published. Every card
-								says which; and wherever a figure is an
-								invented placeholder for this public sample, the page says
-								that too, in the same breath.
+								Sample portfolio — body area network silicon, RAG platforms and
+								internal tools. Figures on the cards and case study pages are
+								invented placeholders, and screens are recreations.
 							</p>
 						</div>
 					</div>

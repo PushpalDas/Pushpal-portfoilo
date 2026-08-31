@@ -9,8 +9,9 @@ import { Suspense } from 'react';
  *
  * Links out of the home page's work section carry `?from=home`, so the way
  * back is the section they were reading rather than the top of /work. The
- * `?domain=` a /work card was filtered by rides along the same way, so a
- * visitor lands back on the list they left.
+ * `?filter=` a /work card was filtered by rides along the same way, so a
+ * visitor lands back on the list they left. `?domain=` is the name that
+ * carry had before the filter row was flattened.
  */
 function BackLink() {
 	const searchParams = useSearchParams();
@@ -23,8 +24,8 @@ function BackLink() {
 		);
 	}
 
-	const domain = searchParams.get('domain');
-	const href = domain ? `/work?filter=product&domain=${domain}` : '/work';
+	const filter = searchParams.get('filter') ?? searchParams.get('domain');
+	const href = filter ? `/work?filter=${filter}` : '/work';
 
 	return (
 		<Link href={href} className='cs2-back'>

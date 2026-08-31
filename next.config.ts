@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	pageExtensions: ['ts', 'tsx'],
 	transpilePackages: ['next-mdx-remote'],
-	reactCompiler: true,
+	reactCompiler: false,
 	// The photography archive is the only heavy image set on the site, and
 	// every file in it is immutable. AVIF first, the qualities /hobby actually
 	// asks for (Next 16 coerces anything outside the allowlist), and a one-year
@@ -162,14 +162,18 @@ const nextConfig: NextConfig = {
 				source: '/demo/prd-os',
 				destination: '/demo/prd-os.html',
 			},
-			{
-				source: '/umami.js',
-				destination: `${umami_url}/script.js`,
-			},
-			{
-				source: '/api/send',
-				destination: `${umami_url}/api/send`,
-			},
+			...(umami_url
+				? [
+						{
+							source: '/umami.js',
+							destination: `${umami_url}/script.js`,
+						},
+						{
+							source: '/api/send',
+							destination: `${umami_url}/api/send`,
+						},
+					]
+				: []),
 		];
 	},
 };

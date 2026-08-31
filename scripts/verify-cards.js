@@ -24,10 +24,16 @@ const body = src.slice(src.indexOf('export const workItems'), src.indexOf('expor
 // into the working tree on Windows, so the separator has to tolerate both.
 const blocks = body.split(/\r?\n\t\},?\r?\n/).filter((b) => b.includes('title:'));
 
+// Biome's `quoteStyle: single` still emits a double-quoted string when that
+// avoids escaping an apostrophe, so both quote styles appear in the data file
+// and both have to parse. Matching only one silently reads a field as missing.
 const field = (block, key) => {
-  const m = block.match(new RegExp(`${key}:\\s*(?:'((?:[^'\\\\]|\\\\.)*)'|null)`));
+  const m = block.match(
+    new RegExp(`${key}:\\s*(?:'((?:[^'\\\\]|\\\\.)*)'|"((?:[^"\\\\]|\\\\.)*)"|null)`),
+  );
   if (!m) return undefined;
-  return m[1] === undefined ? null : m[1].replace(/\\'/g, "'");
+  const raw = m[1] !== undefined ? m[1] : m[2];
+  return raw === undefined ? null : raw.replace(/\\(['"])/g, '$1');
 };
 
 const problems = [];

@@ -684,6 +684,22 @@ html:not(.dark) .work-tile-info-col p {
    ============================================ */
 
 /* Header Subline */
+/* The keyword line — read by scanners and skimmers, so it sits above the
+   sentence and runs a step smaller and wider than it. */
+.work-header-stack {
+	font-size: clamp(0.8rem, 1vw, 0.92rem);
+	font-weight: 300;
+	letter-spacing: 0.01em;
+	color: rgba(255, 255, 255, 0.55);
+	margin: 1.25rem 0 0;
+	max-width: 900px;
+	line-height: 1.7;
+}
+
+html:not(.dark) .work-header-stack {
+	color: rgba(0, 0, 0, 0.5);
+}
+
 .work-header-subline {
 	font-size: clamp(1rem, 1.5vw, 1.25rem);
 	font-weight: 300;
@@ -856,58 +872,6 @@ html:not(.dark) .work-section-divider-text {
 }
 html:not(.dark) .work-section-divider-line {
 	background: rgba(0, 0, 0, 0.1);
-}
-
-/* ============================================
-   DOMAIN PILLS — deep-linked from the home page +n rows
-   ============================================ */
-/* The row is the sub-level of Products, so it reveals rather than appearing. */
-.work-domain-reveal {
-	display: grid;
-	grid-template-rows: 0fr;
-	opacity: 0;
-	transition:
-		grid-template-rows 0.25s cubic-bezier(0.76, 0, 0.24, 1),
-		opacity 0.25s ease;
-}
-
-.work-domain-reveal[data-open="true"] {
-	grid-template-rows: 1fr;
-	opacity: 1;
-}
-
-.work-domain-reveal-inner {
-	overflow: hidden;
-	min-height: 0;
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
-	/* Matches .work-grid-container, so the pills line up with the cards. */
-	padding: 0 clamp(1.5rem, 4vw, 4rem);
-}
-
-/* Under the CASE STUDIES line, in the grid container, aligned right to
-   the Products toggle that reveals them. */
-
-.work-domain-row {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-	gap: 0.45rem;
-	padding-bottom: 1.75rem;
-}
-
-/* One size step down from the Products / Engineering toggle above it. */
-.work-domain-btn {
-	font-size: 0.72rem;
-	padding: 0.42em 1em;
-	min-height: 34px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.work-domain-reveal {
-		transition-duration: 0.01ms;
-	}
 }
 
 .work-empty {

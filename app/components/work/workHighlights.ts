@@ -112,12 +112,12 @@ export const highlightGroups: HighlightGroup[] = [
 	{
 		track: 'silicon',
 		label: 'Silicon & systems',
-		more: { href: '/work?domain=silicon' },
+		more: { href: '/work?filter=silicon' },
 	},
 	{
 		track: 'ai',
 		label: 'AI programs & platforms',
-		more: { href: '/work?domain=ai' },
+		more: { href: '/work?filter=ai' },
 	},
 ];
 

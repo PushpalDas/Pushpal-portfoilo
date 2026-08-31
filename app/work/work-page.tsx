@@ -3,42 +3,46 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useMemo } from 'react';
 import Contact from '../components/contact';
-import { type FilterKey, workItems } from './constants';
+import { type FilterKey, filters, workItems } from './constants';
 import './work.css';
 import { WORK_STATUS_ORDER } from './status';
-import { isTrackFilterKey, type TrackFilterKey } from './tracks';
-import WorkDomainFilters from './work-domain-filters';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
 
-const FILTER_KEYS: FilterKey[] = ['all', 'product', 'engineering'];
+const FILTER_KEYS: FilterKey[] = filters.map((f) => f.key);
+
+const isFilterKey = (value: string | null): value is FilterKey =>
+	FILTER_KEYS.includes(value as FilterKey);
+
+/**
+ * Links written before the row was flattened. `?domain=` was the track
+ * sub-filter and `?filter=product|engineering` the level above it; both
+ * still land where the reader meant to go.
+ */
+const LEGACY_KEYS: Record<string, FilterKey> = {
+	product: 'all',
+	engineering: 'others',
+	silicon: 'silicon',
+	ai: 'ai',
+};
 
 function WorkPageInner() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
-	// The URL is the single source of truth for both levels. The home page's
-	// "+n" rows deep-link straight in, so a pasted link and a click have to
-	// land in exactly the same state.
-	const filterParam = searchParams.get('filter') as FilterKey | null;
+	// The URL is the single source of truth. The home page's "+n" rows deep-link
+	// straight in, so a pasted link and a click have to land in exactly the same
+	// state. `?domain=` is read only as a fallback, for links that predate the
+	// flat row.
+	const filterParam = searchParams.get('filter');
 	const domainParam = searchParams.get('domain');
-	const trackFromUrl: TrackFilterKey = isTrackFilterKey(domainParam)
-		? domainParam
-		: 'all';
 
-	// ?domain= with no ?filter= reads as Products plus that track — which is
-	// what the "+n" rows mean.
-	const activeFilter: FilterKey =
-		filterParam && FILTER_KEYS.includes(filterParam)
-			? filterParam
-			: trackFromUrl !== 'all'
-				? 'product'
-				: 'all';
-
-	// Tracks only exist under Products, so they are the sub-level of it.
-	const showTracks = activeFilter === 'product';
-	const activeTrack: TrackFilterKey = showTracks ? trackFromUrl : 'all';
+	const activeFilter: FilterKey = isFilterKey(filterParam)
+		? filterParam
+		: (LEGACY_KEYS[filterParam ?? ''] ??
+			LEGACY_KEYS[domainParam ?? ''] ??
+			'all');
 
 	const setFilterWithUrl = (filter: FilterKey) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -47,22 +51,8 @@ function WorkPageInner() {
 		} else {
 			params.set('filter', filter);
 		}
-		// Leaving Products takes the track with it.
-		if (filter !== 'product') {
-			params.delete('domain');
-		}
-		router.replace(`?${params.toString()}`, { scroll: false });
-	};
-
-	const setTrackWithUrl = (track: TrackFilterKey) => {
-		const params = new URLSearchParams(searchParams.toString());
-		if (track === 'all') {
-			params.delete('domain');
-		} else {
-			params.set('domain', track);
-		}
-		// A track always implies Products; keep the two levels consistent.
-		params.set('filter', 'product');
+		// The old sub-level param would otherwise fight the click.
+		params.delete('domain');
 		router.replace(`?${params.toString()}`, { scroll: false });
 	};
 
@@ -101,15 +91,18 @@ function WorkPageInner() {
 	 * on the data survive as metadata only.
 	 */
 	const filteredItems = useMemo(() => {
-		let items = sortedItems.filter((w) => !w.programHead);
-		if (activeFilter !== 'all') {
-			items = items.filter((w) => w.category === activeFilter);
+		const items = sortedItems.filter((w) => !w.programHead);
+		if (activeFilter === 'all') return items;
+		if (activeFilter === 'others') {
+			return items.filter((w) => w.category === 'engineering');
 		}
-		if (activeTrack !== 'all') {
-			items = items.filter((w) => w.track === activeTrack);
+		if (activeFilter === 'prototypes') {
+			return items.filter(
+				(w) => w.status === 'prototype' || w.status === 'research',
+			);
 		}
-		return items;
-	}, [activeFilter, activeTrack, sortedItems]);
+		return items.filter((w) => w.track === activeFilter);
+	}, [activeFilter, sortedItems]);
 
 	return (
 		<div className='work-page'>
@@ -126,19 +119,11 @@ function WorkPageInner() {
 					<span className='work-section-divider-text'>CASE STUDIES</span>
 					<div className='work-section-divider-line'></div>
 				</div>
-				{/* The track pills belong to the case studies below them, not to
-				    the header — so they sit under the line, aligned with the toggle
-				    that reveals them. */}
-				<WorkDomainFilters
-					activeTrack={activeTrack}
-					setActiveTrack={setTrackWithUrl}
-					open={showTracks}
-				/>
 				{filteredItems.length > 0 ? (
 					<WorkGrid
 						items={filteredItems}
 						gridColumns={3}
-						domain={activeTrack === 'all' ? undefined : activeTrack}
+						filter={activeFilter === 'all' ? undefined : activeFilter}
 					/>
 				) : (
 					<p className='work-empty'>
