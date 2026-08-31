@@ -531,6 +531,16 @@ export interface CaseStudySection {
 export type CaseStudyBlock =
 	/** A paragraph placed between two blocks, where ordering matters */
 	| { kind: 'para'; text: string }
+	/**
+	 * A list of internal or external links with a one-line note each —
+	 * built for the program page's chapter list, where a name has to be
+	 * the way into the page it names.
+	 */
+	| {
+			kind: 'links';
+			label?: string;
+			items: { label: string; href: string; note?: string }[];
+	  }
 	| { kind: 'figure'; chart: ChartSpec; caption: string }
 	/** Evidence / tradeoff table. `head` labels are reused as mobile row labels. */
 	| { kind: 'table'; head: string[]; rows: string[][] }
@@ -615,6 +625,16 @@ export interface CaseStudyV2 {
 	confidentiality: string;
 	/** Public, verifiable evidence — datasheets, product pages, patents */
 	evidence?: { label: string; url: string }[];
+	/**
+	 * The fast layer for a skimming reader. Facts carry only claims a
+	 * public source or the linked demo can back (Class A) or that the page
+	 * declares real-but-masked (Class B) — never illustrative placeholders.
+	 * The pull line is harvested from the page's own prose, never written new.
+	 */
+	fast?: {
+		pull?: string;
+		facts?: { text: string; cls: 'A' | 'B' }[];
+	};
 	/** Exactly three: Problem / What I did / Result */
 	summary: { lead: string; text: string }[];
 	sections: CaseStudySection[];

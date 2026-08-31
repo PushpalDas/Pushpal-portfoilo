@@ -432,7 +432,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "Fixing search in OneDrive alone would have moved almost nothing.",
+      "facts": [
+        {
+          "text": "Live demo — search an invented workspace yourself",
+          "cls": "A"
+        },
+        {
+          "text": "Five sources under one index; a citation opens the exact passage",
+          "cls": "A"
+        },
+        {
+          "text": "Security shipped in v1: Azure AD, JWT, signed media URLs",
+          "cls": "B"
+        }
+      ]
+    }
   },
   "wi-r-dev-kits-ban-yr23-and-nfe-xa-nfe2001": {
     "slug": "wi-r-dev-kits-ban-yr23-and-nfe-xa-nfe2001",
@@ -849,7 +866,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are invented placeholders and should be replaced with real data before this page is used. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are invented placeholders and should be replaced with real data before this page is used. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "fast": {
+      "pull": "It is the only metric sales, engineering and I argued about in the same units.",
+      "facts": [
+        {
+          "text": "Shipping kit, sold through the public product page",
+          "cls": "A"
+        },
+        {
+          "text": "One number on the box: time to first link",
+          "cls": "A"
+        },
+        {
+          "text": "Both Wi-R families — BAN first, NFE on shared tooling",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic": {
     "slug": "ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic",
@@ -1263,7 +1297,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "A stage nobody recognises is a stage nobody corrects.",
+      "facts": [
+        {
+          "text": "Live demo on the deployed platform — every claim clickable",
+          "cls": "A"
+        },
+        {
+          "text": "The correction rate sits on the header, not in a report",
+          "cls": "A"
+        },
+        {
+          "text": "Ask it who the best engineer is: the ranking does not exist",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ixana-video-library-automated-company-video-library": {
     "slug": "ixana-video-library-automated-company-video-library",
@@ -1668,7 +1719,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "People wanted a passage of speech and were handed a timeline.",
+      "facts": [
+        {
+          "text": "Live demo: a search hit is a sentence and the second it was said",
+          "cls": "A"
+        },
+        {
+          "text": "Generated minutes carry a timestamp on every claim",
+          "cls": "A"
+        },
+        {
+          "text": "Organiser exclusion, set before the call, irreversible",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "calendar-automation-real-time-bi-directional-sync-engine-wit": {
     "slug": "calendar-automation-real-time-bi-directional-sync-engine-wit",
@@ -2082,7 +2150,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "On a product where every write sends email, the interesting decisions are all refusals.",
+      "facts": [
+        {
+          "text": "Reflected time is an opaque block — no title crosses, by design",
+          "cls": "A"
+        },
+        {
+          "text": "Dry-run preview is the default on every write path",
+          "cls": "A"
+        },
+        {
+          "text": "Occurrence-level writes only: a bug touches one meeting, not a year",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "team-performance-reporting": {
     "slug": "team-performance-reporting",
@@ -2541,7 +2626,24 @@
         ]
       }
     ],
-    "sampleNote": "This is internal reporting. The screens in section 06 are a working recreation with invented content, and all figures on this page are invented placeholders for this sample. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is made up. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is internal reporting. The screens in section 06 are a working recreation with invented content, and all figures on this page are invented placeholders for this sample. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is made up. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "A report is two parameters, not five products.",
+      "facts": [
+        {
+          "text": "Live demo: the signature gate and coverage arithmetic, running",
+          "cls": "A"
+        },
+        {
+          "text": "No count on any report is computed by a model",
+          "cls": "A"
+        },
+        {
+          "text": "Nothing publishes unsigned from monthly upwards",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ai-pm-customized-multi-view-for-pms": {
     "slug": "ai-pm-customized-multi-view-for-pms",
@@ -3024,7 +3126,24 @@
         "label": "Or start where the architects start, at the delay analysis",
         "url": "/demo/clickup-gantt?view=delays"
       }
-    ]
+    ],
+    "fast": {
+      "pull": "Nobody needed new data captured; they needed the same data drawn differently.",
+      "facts": [
+        {
+          "text": "Live demo on a pinned clock: timeline, bandwidth, delay drawers",
+          "cls": "A"
+        },
+        {
+          "text": "Read-only permanently: zero writes, zero update requests, ever",
+          "cls": "A"
+        },
+        {
+          "text": "Withholds what the data cannot carry — no predicted dates",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "github-for-clickup-automation-on-the-changes-going-outside-p": {
     "slug": "github-for-clickup-automation-on-the-changes-going-outside-p",
@@ -3459,7 +3578,24 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The demo linked from section 06 is a recreation with invented content on a fixed clock, and all figures on this page are invented placeholders for this sample. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is internal tooling. The demo linked from section 06 is a recreation with invented content on a fixed clock, and all figures on this page are invented placeholders for this sample. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "The record did not contain the answer.",
+      "facts": [
+        {
+          "text": "Live demo: send a payload, tamper it, replay the rules over history",
+          "cls": "A"
+        },
+        {
+          "text": "The previous value on every line — the thing the feed never keeps",
+          "cls": "A"
+        },
+        {
+          "text": "Raw stored before parsed; two rule changes replayed, zero re-fetches",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "clickup-document-tracker-data-extraction-easy-visibility-for": {
     "slug": "clickup-document-tracker-data-extraction-easy-visibility-for",
@@ -3870,7 +4006,24 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No document title, content or author is shown. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is internal tooling. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No document title, content or author is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "The register was being treated as the estate.",
+      "facts": [
+        {
+          "text": "Live demo: versions, diffs, and the run that checked nothing",
+          "cls": "A"
+        },
+        {
+          "text": "Versions are immutable — no edit affordance exists anywhere",
+          "cls": "A"
+        },
+        {
+          "text": "The register was demoted from gate to enrichment after it failed",
+          "cls": "B"
+        }
+      ]
+    }
   },
   "ai-prd-multi-agent-multi-llm-shared-memory-generative-system": {
     "slug": "ai-prd-multi-agent-multi-llm-shared-memory-generative-system",
@@ -4303,7 +4456,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The brief, the plan and the run history in the demo linked from section 06 are invented, and the figures on this page are placeholders for a public sample; the structural characteristics — five stages, a 30-section master template, ten scorecard criteria, a five-round cap and distinct planner and reviewer models enforced in code — are the real ones, and the demo runs the product’s own logic so they can be checked. I’m glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is an internal product. The brief, the plan and the run history in the demo linked from section 06 are invented, and the figures on this page are placeholders for a public sample; the structural characteristics — five stages, a 30-section master template, ten scorecard criteria, a five-round cap and distinct planner and reviewer models enforced in code — are the real ones, and the demo runs the product’s own logic so they can be checked. I’m glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "A loop that must terminate in approval will always find a way to approve.",
+      "facts": [
+        {
+          "text": "Live demo: point both roles at one model and the run refuses to start",
+          "cls": "A"
+        },
+        {
+          "text": "Forty of the product's rules run in the page",
+          "cls": "A"
+        },
+        {
+          "text": "A critical unknown halts the pipeline, one question at a time",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "procurement-orchestrator-procurement-process-automation-with": {
     "slug": "procurement-orchestrator-procurement-process-automation-with",
@@ -4784,7 +4954,24 @@
         "label": "Or start at the gate that is failing, and the two requests that fail it",
         "url": "/demo/procurement-desk?view=gates&as=priya"
       }
-    ]
+    ],
+    "fast": {
+      "pull": "A named person is the difference between a status and an answer.",
+      "facts": [
+        {
+          "text": "Live demo: launch gates counted from the requests, never stored",
+          "cls": "A"
+        },
+        {
+          "text": "At or above the ceiling, submission is refused outright",
+          "cls": "A"
+        },
+        {
+          "text": "No transition writes without evidence attached",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ai-salary-generator": {
     "slug": "ai-salary-generator",
@@ -5242,7 +5429,24 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal pilot. The screen described in section 06 is a working recreation with invented comparator data, and every figure on this page is an invented placeholder for this sample — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation."
+    "sampleNote": "This is an internal pilot. The screen described in section 06 is a working recreation with invented comparator data, and every figure on this page is an invented placeholder for this sample — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation.",
+    "fast": {
+      "pull": "An unanswerable number gets renegotiated by whoever is most confident.",
+      "facts": [
+        {
+          "text": "Live demo: press any figure and its citation opens",
+          "cls": "A"
+        },
+        {
+          "text": "A figure with no dated source does not render at all",
+          "cls": "A"
+        },
+        {
+          "text": "The floor refuses a role; it never widens a band",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys": {
     "slug": "ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys",
@@ -5593,7 +5797,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a prototype. It has never been run on a real inventor disclosure, no attorney has used it, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data, and the attorney-hours figures in section 01 are invented placeholders for this sample. I'm glad to walk through the real prototype in a conversation."
+    "sampleNote": "This is a prototype. It has never been run on a real inventor disclosure, no attorney has used it, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data, and the attorney-hours figures in section 01 are invented placeholders for this sample. I'm glad to walk through the real prototype in a conversation.",
+    "fast": {
+      "pull": "Automating the fast half of a slow process is the most expensive way to find the queue.",
+      "facts": [
+        {
+          "text": "Real measurement over public patent data: 84.6% of ground-truth art was not in the corpus",
+          "cls": "B"
+        },
+        {
+          "text": "Live demo: the wrong-art refusal, the gap list, §1.84-measured drawings",
+          "cls": "A"
+        },
+        {
+          "text": "Never run on a real disclosure; no attorney has used it",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "quantum-circuit-simulator-interactive-10-qubit-delivering-re": {
     "slug": "quantum-circuit-simulator-interactive-10-qubit-delivering-re",
@@ -5895,7 +6116,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a personal prototype that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the prototype’s own engine so they can be checked. I’m glad to walk through the full prototype, backend and 3D renderer included, in a conversation."
+    "sampleNote": "This is a personal prototype that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the prototype’s own engine so they can be checked. I’m glad to walk through the full prototype, backend and 3D renderer included, in a conversation.",
+    "fast": {
+      "pull": "A run button turns exploration into submission.",
+      "facts": [
+        {
+          "text": "Live demo: ten qubits, spheres update as you place a gate",
+          "cls": "A"
+        },
+        {
+          "text": "32 physics tests run in the page itself",
+          "cls": "A"
+        },
+        {
+          "text": "Never released — the teaching claim stays deliberately untested",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "neuroadapt-agentic-rag-engine-for-neuroscience-research": {
     "slug": "neuroadapt-agentic-rag-engine-for-neuroscience-research",
@@ -6225,7 +6463,24 @@
         ]
       }
     ],
-    "sampleNote": "This is academic research validated on simulated data. The report in section 04 and every figure on this page come from the whitepaper’s validation dataset — five units, ten seconds, three planted structures — re-run in the demo, where the numbers are computed in the browser rather than stored. No real recording and no unpublished collaborator result is shown. I’m glad to walk through the real module and its validation in a conversation."
+    "sampleNote": "This is academic research validated on simulated data. The report in section 04 and every figure on this page come from the whitepaper’s validation dataset — five units, ten seconds, three planted structures — re-run in the demo, where the numbers are computed in the browser rather than stored. No real recording and no unpublished collaborator result is shown. I’m glad to walk through the real module and its validation in a conversation.",
+    "fast": {
+      "pull": "A better burst index is a fifth definition.",
+      "facts": [
+        {
+          "text": "Every figure on the page recomputes live in the demo — nothing stored",
+          "cls": "A"
+        },
+        {
+          "text": "One metric name, four published definitions: 0.82 / 0.82 / 1.00 / 8.6",
+          "cls": "A"
+        },
+        {
+          "text": "Whitepaper PDF on-page; validated on simulated data only",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "dsa-generative-ai-engine-for-a-guided-spiritual-path": {
     "slug": "dsa-generative-ai-engine-for-a-guided-spiritual-path",
@@ -6505,7 +6760,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and all evaluation figures on this page are invented placeholders for this sample. I'm glad to walk through the real engine and its evaluation in a conversation."
+    "sampleNote": "This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and all evaluation figures on this page are invented placeholders for this sample. I'm glad to walk through the real engine and its evaluation in a conversation.",
+    "fast": {
+      "pull": "Refusal is the feature.",
+      "facts": [
+        {
+          "text": "Fabricated citations stripped by code — architecture, not prompting",
+          "cls": "A"
+        },
+        {
+          "text": "Separate retrieval lanes so lecture volume cannot crowd out scripture",
+          "cls": "A"
+        },
+        {
+          "text": "Product walkthrough on video",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "wi-r-ban-yr23": {
     "slug": "wi-r-ban-yr23",
@@ -6514,7 +6786,7 @@
     "deck": "The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, the silicon under the shipping dev kit and both published reference designs.",
     "status": "production",
     "meta": {
-      "role": "Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Owner of first-silicon scope and launch gates — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
       "timeline": "Feb 2023 – May 2024",
       "stage": "In production — the part under the BAN dev kit and every on-body reference design since"
@@ -6913,7 +7185,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "fast": {
+      "pull": "Validation capacity set the tapeout date.",
+      "facts": [
+        {
+          "text": "0.12 nJ/bit at 5 Mbit/s — the public specification",
+          "cls": "A"
+        },
+        {
+          "text": "The silicon under the shipping dev kit and both reference designs",
+          "cls": "A"
+        },
+        {
+          "text": "The security model is physics: ~0.1 m off-body containment",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "wi-r-nfe-xa-nfe2001": {
     "slug": "wi-r-nfe-xa-nfe2001",
@@ -6922,7 +7211,7 @@
     "deck": "The second product line: a touch-range electric-field link at 5 Mbit/s under a milliwatt, sold against NFC rather than against Bluetooth.",
     "status": "production",
     "meta": {
-      "role": "Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Owner of second-line delivery against one validation pool — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "The same 5 functions across 2 sites as the BAN program, running both lines concurrently",
       "timeline": "Jan 2024 – Dec 2025",
       "stage": "In production — launched December 2025"
@@ -7339,7 +7628,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "fast": {
+      "pull": "Choosing the comparison is choosing the buyer.",
+      "facts": [
+        {
+          "text": "5 Mbit/s under a milliwatt — the public spec",
+          "cls": "A"
+        },
+        {
+          "text": "Over 50× NFC energy efficiency — the published comparison",
+          "cls": "A"
+        },
+        {
+          "text": "The physics written up on arXiv: 2512.07167",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "wi-r-reference-designs": {
     "slug": "wi-r-reference-designs",
@@ -7348,7 +7654,7 @@
     "deck": "Two complete designs an OEM can copy, built to kill the objection that stalls every silicon evaluation: great chip, no path to a product.",
     "status": "production",
     "meta": {
-      "role": "Program manager — reference design delivery (HW/FW US · applications and validation across both sites)",
+      "role": "Owner of what “done” meant for a copyable design — program manager, reference design delivery (HW/FW US · applications and validation across both sites)",
       "team": "The same 5 functions as the chip programs, plus 3 applications engineers carrying the live evaluations",
       "timeline": "Jan 2025 – Feb 2026",
       "stage": "In production — design files released to evaluating teams"
@@ -7764,7 +8070,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are invented placeholders and should be replaced with real data before this page is used. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are invented placeholders and should be replaced with real data before this page is used. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "fast": {
+      "pull": "No amount of attention transfers a skill — only a design they can copy does.",
+      "facts": [
+        {
+          "text": "Both designs public and complete: schematic, layout, BOM, firmware",
+          "cls": "A"
+        },
+        {
+          "text": "Two live demonstrations on video",
+          "cls": "A"
+        },
+        {
+          "text": "Release gated on an outside team rebuilding from the files alone",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "wi-r-ban-yr31": {
     "slug": "wi-r-ban-yr31",
@@ -7773,7 +8096,7 @@
     "deck": "The second spin: four times the rate and a fifth of the latency, bought with a deliberate step backwards on energy per bit.",
     "status": "production",
     "meta": {
-      "role": "Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Product owner of the gen-2 definition — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "The same 5 functions across 2 sites as the YR23 program",
       "timeline": "Jun 2024 – Nov 2025",
       "stage": "In production — the higher-rate part on the BAN line, alongside YR23"
@@ -8184,7 +8507,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are invented placeholders — none of that class of data is ever published — and should be replaced with real data before this page is used. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are invented placeholders — none of that class of data is ever published — and should be replaced with real data before this page is used. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
+    "fast": {
+      "pull": "The hard part was refusing changes.",
+      "facts": [
+        {
+          "text": "20 Mbit/s · sub-0.2 ms — shipped silicon, on the public spec row",
+          "cls": "A"
+        },
+        {
+          "text": "Gen-1 kept in production beside it, so nobody was forced to move",
+          "cls": "A"
+        },
+        {
+          "text": "0.12 → 0.20 nJ/bit spent deliberately to buy rate",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "wi-r-nfe-xa-nfe3001": {
     "slug": "wi-r-nfe-xa-nfe3001",
@@ -8193,7 +8533,7 @@
     "deck": "A gen-2 the pipeline asked for: 13.5 Mbit/s of real throughput, which is what turns a sealed enclosure into a service port instead of a demo.",
     "status": "production",
     "meta": {
-      "role": "Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Owner of the gen-2 specification review — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "The same 5 functions across 2 sites as the XA-NFE2001 programme",
       "timeline": "Mar 2025 – Feb 2026",
       "stage": "In production — the higher-throughput part on the NFE line, alongside XA-NFE2001"
@@ -8619,7 +8959,24 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation."
+    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
+    "fast": {
+      "pull": "They were one number.",
+      "facts": [
+        {
+          "text": "20 Mbit/s PHY, ~13.5 Mbit/s real throughput — the announcement's figures",
+          "cls": "A"
+        },
+        {
+          "text": "100 MB in about 59 s: inside the one-minute service window",
+          "cls": "A"
+        },
+        {
+          "text": "RF-silent; the Faraday-cage limit is in the datasheet, in writing",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "slb-sensor-signal-generator": {
     "slug": "slb-sensor-signal-generator",
@@ -8628,7 +8985,7 @@
     "deck": "A bench that plays back downhole sensor faults on demand, so a failure analyst stops waiting for a well to reproduce one.",
     "status": "production",
     "meta": {
-      "role": "Failure Analysis & R&D Engineer",
+      "role": "Owner of the problem choice and the bench's contract — failure analysis & R&D engineer",
       "team": "3 — myself, a failure-analysis engineer, a LabVIEW developer, with the calibration lab reviewing",
       "timeline": "Oct 2022 – Aug 2023",
       "stage": "In production — deployed across 40+ SLB failure-analysis labs"
@@ -8987,7 +9344,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. Screens and figures are recreations or invented placeholders and should be replaced with real data before this page is used — with three exceptions the owner confirms are real: 98.2% fault-signature reproduction, deployment across 40+ SLB failure-analysis labs, and the industry-scale cost of non-productive time cited in section 01. Bench photography is my own and shows commercial instruments only; no tool, fault-library content or customer data is shown. I'm glad to walk through the real bench and its numbers in a conversation."
+    "sampleNote": "Sample portfolio page. Screens and figures are recreations or invented placeholders and should be replaced with real data before this page is used — with three exceptions the owner confirms are real: 98.2% fault-signature reproduction, deployment across 40+ SLB failure-analysis labs, and the industry-scale cost of non-productive time cited in section 01. Bench photography is my own and shows commercial instruments only; no tool, fault-library content or customer data is shown. I'm glad to walk through the real bench and its numbers in a conversation.",
+    "fast": {
+      "pull": "The labs did not have a diagnosis problem, they had a stimulus problem.",
+      "facts": [
+        {
+          "text": "55 of 56 catalogued fault signatures reproduce — real figure",
+          "cls": "B"
+        },
+        {
+          "text": "Runs in more than 40 SLB failure-analysis labs — real figure",
+          "cls": "B"
+        },
+        {
+          "text": "Treated as a device under test: reference-verified every session",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "eegrab-wishkey": {
     "slug": "eegrab-wishkey",
@@ -8996,7 +9370,7 @@
     "deck": "An electronic key cabinet that makes a key impossible to take anonymously, replacing a paper register nobody could reconcile.",
     "status": "production",
     "meta": {
-      "role": "Senior Embedded Design Engineer",
+      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
       "team": "4 engineers — me, firmware, Android, mechanical — with the CTO carrying the commercial side",
       "timeline": "Q1 2023 – Q4 2023",
       "stage": "In production — shipping as a catalogue product through installer partners"
@@ -9432,7 +9806,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. Every figure here is invented and reconciled to be internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation."
+    "sampleNote": "Sample portfolio page. Every figure here is invented and reconciled to be internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation.",
+    "fast": {
+      "pull": "The record had to become the act.",
+      "facts": [
+        {
+          "text": "Catalogue product — public brochure and demo video",
+          "cls": "A"
+        },
+        {
+          "text": "Per-slot locking: every slot senses, locks and reports alone",
+          "cls": "A"
+        },
+        {
+          "text": "My own board design on-page: 16 channels, optocoupled drive",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "eegrab-smart-watch": {
     "slug": "eegrab-smart-watch",
@@ -9441,7 +9832,7 @@
     "deck": "A watch that loses in the shop and wins on the wrist: the colour screen went, and a week of battery came back with it.",
     "status": "production",
     "meta": {
-      "role": "Senior Embedded Design Engineer",
+      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
       "team": "3 — me, a firmware engineer and a mechanical designer, with the CTO carrying the commercial side",
       "timeline": "Q1 2023 – Q1 2024",
       "stage": "In production — shipping as a catalogue product"
@@ -9853,7 +10244,20 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. This project is data-thin, so the split matters: what is real is the design — the processor and its part number, the six-axis sensor, both crystals, the antenna matching network, the board size and layer count, and the four board revisions, all from my own EasyEDA workspace dated January 2024. The display type, heart-rate front end, battery and charging circuit are described by function because the sheet names them only as connections, and no part number is claimed for them. Every figure is invented and internally reconciled: bill-of-materials costs, battery life, return rate, retail band, and the nine-watch teardown in section 02. There is no public product page for this watch, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation."
+    "sampleNote": "Sample portfolio page. This project is data-thin, so the split matters: what is real is the design — the processor and its part number, the six-axis sensor, both crystals, the antenna matching network, the board size and layer count, and the four board revisions, all from my own EasyEDA workspace dated January 2024. The display type, heart-rate front end, battery and charging circuit are described by function because the sheet names them only as connections, and no part number is claimed for them. Every figure is invented and internally reconciled: bill-of-materials costs, battery life, return rate, retail band, and the nine-watch teardown in section 02. There is no public product page for this watch, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
+    "fast": {
+      "pull": "In this tier the bracket is the product.",
+      "facts": [
+        {
+          "text": "The real board on-page: nRF52840, discrete antenna, two crystals",
+          "cls": "A"
+        },
+        {
+          "text": "The display trade pays twice — the cost line and the battery line",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "eegrab-condenser-microphone": {
     "slug": "eegrab-condenser-microphone",
@@ -9862,7 +10266,7 @@
     "deck": "The variance war: the supplier's window is the problem, and the answer was calibrating every unit at test instead of sorting capsules into bins that die with the next lot.",
     "status": "production",
     "meta": {
-      "role": "Senior Embedded Design Engineer",
+      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
       "team": "3 — me, an acoustics consultant and a mechanical designer, with the CTO carrying the commercial side",
       "timeline": "Q1 2024 – Q4 2024",
       "stage": "In production — shipping as a catalogue product"
@@ -10340,7 +10744,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. This project is data-thin: what is real is the circuit — the passive calibration schematic, its component values, the 1:5 transformer, the output trim, and the transient simulation shown, all from my own EasyEDA workspace dated February 2024. Everything else is invented and internally reconciled, including the capsule specification, the sixty-capsule study in section 02, all performance figures, and the acceptance and yield numbers. There is no public datasheet or product page for this microphone, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation."
+    "sampleNote": "Sample portfolio page. This project is data-thin: what is real is the circuit — the passive calibration schematic, its component values, the 1:5 transformer, the output trim, and the transient simulation shown, all from my own EasyEDA workspace dated February 2024. Everything else is invented and internally reconciled, including the capsule specification, the sixty-capsule study in section 02, all performance figures, and the acceptance and yield numbers. There is no public datasheet or product page for this microphone, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
+    "fast": {
+      "pull": "The trim may correct, never rescue.",
+      "facts": [
+        {
+          "text": "The real schematic and transient simulation, on-page",
+          "cls": "A"
+        },
+        {
+          "text": "Gain taken passively in a 1:5 transformer, before any active part",
+          "cls": "A"
+        },
+        {
+          "text": "Publish the worst unit, not the typical one — policy, not luck",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-uav-weather-radar-calibration": {
     "slug": "ricky-kids-uav-weather-radar-calibration",
@@ -10683,7 +11104,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita 2021 programme in April 2022 with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are invented — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation."
+    "sampleNote": "Sample portfolio page. The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita 2021 programme in April 2022 with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are invented — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation.",
+    "fast": {
+      "pull": "It is a positioning project that happens to need a drone.",
+      "facts": [
+        {
+          "text": "Real proposal: ISRO YUKTI-Sanchita, YS/PD-IP/318",
+          "cls": "A"
+        },
+        {
+          "text": "Three published papers linked by DOI",
+          "cls": "A"
+        },
+        {
+          "text": "The demo derives the budget live: altitude dominates",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-noncontact-covid-monitoring": {
     "slug": "ricky-kids-noncontact-covid-monitoring",
@@ -11068,7 +11506,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page describing an engineering feasibility study. It makes no diagnostic or clinical claim: nothing here was tested on patients, no reading was used in anyone's care, and the agreement figures are engineering comparisons against an instrument, not measures of diagnostic accuracy. The project is real — six students across SRM, Jadavpur University and VIT Vellore in 2021–22, with a faculty supervisor and a patent disclosure — as are the architecture, the stand design and the contact monitor photographed. The workflow timings, the bench sessions and every figure are invented and internally reconciled. I'm glad to walk through the real study in a conversation."
+    "sampleNote": "Sample portfolio page describing an engineering feasibility study. It makes no diagnostic or clinical claim: nothing here was tested on patients, no reading was used in anyone's care, and the agreement figures are engineering comparisons against an instrument, not measures of diagnostic accuracy. The project is real — six students across SRM, Jadavpur University and VIT Vellore in 2021–22, with a faculty supervisor and a patent disclosure — as are the architecture, the stand design and the contact monitor photographed. The workflow timings, the bench sessions and every figure are invented and internally reconciled. I'm glad to walk through the real study in a conversation.",
+    "fast": {
+      "pull": "A device only removes the gowning cycle if it removes every reason to go in.",
+      "facts": [
+        {
+          "text": "Demo: tick every required parameter and the saving stays at zero",
+          "cls": "A"
+        },
+        {
+          "text": "Oxygen saturation and blood pressure have no non-contact route",
+          "cls": "A"
+        },
+        {
+          "text": "No patient, ever — six healthy volunteers on a bench",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-sludge-traversing-rov": {
     "slug": "ricky-kids-sludge-traversing-rov",
@@ -11420,7 +11875,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the 2021-22 Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are invented and internally reconciled — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation."
+    "sampleNote": "Sample portfolio page. The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the 2021-22 Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are invented and internally reconciled — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation.",
+    "fast": {
+      "pull": "A track is a machine for not leaving it alone.",
+      "facts": [
+        {
+          "text": "Demo: run the tracked drive into its stall yourself",
+          "cls": "A"
+        },
+        {
+          "text": "The vehicle floats because the finding said driving is impossible",
+          "cls": "A"
+        },
+        {
+          "text": "Entered in La Trobe's Technology Infusion Grand Challenge",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-carbon-positive-ev": {
     "slug": "ricky-kids-carbon-positive-ev",
@@ -11762,7 +12234,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: a three-student concept from SRM Kattankulathur with a collaborator at Jadavpur University, and the system diagrams and component list shown are the team's own. The carbon model is a worked illustration built for this page — the tonnages, grid intensities, scenario counts and percentages are invented and internally reconciled. No vehicle, subsystem or filter stack was built or measured, and there is no public page for this project, so nothing here can be checked externally. The two engineering conclusions it rests on — that harvesting a moving vehicle's own airflow cannot yield net energy, and that HEPA and activated-carbon filtration does not remove carbon dioxide — are not invented. I'm glad to walk through the real concept in a conversation."
+    "sampleNote": "Sample portfolio page. The project is real: a three-student concept from SRM Kattankulathur with a collaborator at Jadavpur University, and the system diagrams and component list shown are the team's own. The carbon model is a worked illustration built for this page — the tonnages, grid intensities, scenario counts and percentages are invented and internally reconciled. No vehicle, subsystem or filter stack was built or measured, and there is no public page for this project, so nothing here can be checked externally. The two engineering conclusions it rests on — that harvesting a moving vehicle's own airflow cannot yield net energy, and that HEPA and activated-carbon filtration does not remove carbon dioxide — are not invented. I'm glad to walk through the real concept in a conversation.",
+    "fast": {
+      "pull": "By then the check was a threat rather than a tool.",
+      "facts": [
+        {
+          "text": "Physics: harvesting your own airflow cannot yield net energy",
+          "cls": "A"
+        },
+        {
+          "text": "HEPA and carbon filters remove no CO2 — the name was wrong",
+          "cls": "A"
+        },
+        {
+          "text": "The full concept write-up, as a PDF on-page",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-envi-city": {
     "slug": "ricky-kids-envi-city",
@@ -12093,7 +12582,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016 (2022), and the poster shown was presented at ICTSGS 2021. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are invented and internally reconciled. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation."
+    "sampleNote": "Sample portfolio page. The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016 (2022), and the poster shown was presented at ICTSGS 2021. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are invented and internally reconciled. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation.",
+    "fast": {
+      "pull": "The useful work is deciding which single intention you are prepared to be wrong about in public.",
+      "facts": [
+        {
+          "text": "Published: ECS Transactions 107(1) 11007 — the DOI resolves",
+          "cls": "A"
+        },
+        {
+          "text": "Demo: the paper drawn claim by claim, with the audit attached",
+          "cls": "A"
+        },
+        {
+          "text": "Eleven claims in the vision; one testable at block scale",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-toys-for-autistic-kids": {
     "slug": "ricky-kids-toys-for-autistic-kids",
@@ -12474,7 +12980,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page describing a prototype that never went to users. No child took part in any part of this project, no reading or observation of a child appears here, and no clinical, therapeutic or educational-outcome claim is made or implied — the only evidence is two special-education teachers reviewing a bench prototype. What is real: the project, the hardware shown, its team and supervisor, the demonstration at SRM Project Expo on 10 December 2021, and the involvement of teachers from an autism care centre, who are not named. The fourteen criteria, the scores, the price points and every figure are invented and internally reconciled. I'm glad to walk through the real prototype and the real review in a conversation."
+    "sampleNote": "Sample portfolio page describing a prototype that never went to users. No child took part in any part of this project, no reading or observation of a child appears here, and no clinical, therapeutic or educational-outcome claim is made or implied — the only evidence is two special-education teachers reviewing a bench prototype. What is real: the project, the hardware shown, its team and supervisor, the demonstration at SRM Project Expo on 10 December 2021, and the involvement of teachers from an autism care centre, who are not named. The fourteen criteria, the scores, the price points and every figure are invented and internally reconciled. I'm glad to walk through the real prototype and the real review in a conversation.",
+    "fast": {
+      "pull": "They wanted a design where stopping is the child pulling their hand away.",
+      "facts": [
+        {
+          "text": "Demo: pull the hand away mid-stroke — the stage finishes the stroke",
+          "cls": "A"
+        },
+        {
+          "text": "No child ever used it; two special-education teachers reviewed the bench",
+          "cls": "A"
+        },
+        {
+          "text": "The full write-up, as a PDF on-page",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ricky-kids-triple-riding-avoidance": {
     "slug": "ricky-kids-triple-riding-avoidance",
@@ -12894,7 +13417,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is invented and internally reconciled: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation."
+    "sampleNote": "Sample portfolio page. The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is invented and internally reconciled: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation.",
+    "fast": {
+      "pull": "Enforcement needs to be right about a person; measurement only needs to be right on average.",
+      "facts": [
+        {
+          "text": "The demo is deliberately image-less: counts only, no frame stored",
+          "cls": "A"
+        },
+        {
+          "text": "The paper includes the enforcement pipeline we refused to build",
+          "cls": "A"
+        },
+        {
+          "text": "No live-camera path exists in the shipped tool",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "srm-uav-ornithopter-for-surveillance": {
     "slug": "srm-uav-ornithopter-for-surveillance",
@@ -13240,7 +13780,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is invented and internally reconciled — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation."
+    "sampleNote": "Sample portfolio page. What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is invented and internally reconciled — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation.",
+    "fast": {
+      "pull": "We had been building a bird and testing an aircraft.",
+      "facts": [
+        {
+          "text": "The full project proposal, as a PDF on-page",
+          "cls": "A"
+        },
+        {
+          "text": "Demo: the proposal's own coverage arithmetic, checkable",
+          "cls": "A"
+        },
+        {
+          "text": "Club targets in writing — 1 h aloft, 25 km reach — never approached",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ixana-patent-program": {
     "slug": "ixana-patent-program",
@@ -13928,7 +14485,24 @@
         ]
       }
     ],
-    "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation."
+    "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "What gets taped out decides what is patentable.",
+      "facts": [
+        {
+          "text": "Live demo: five surfaces over an invented portfolio",
+          "cls": "A"
+        },
+        {
+          "text": "No statutory date computed anywhere in the system",
+          "cls": "A"
+        },
+        {
+          "text": "Filing decisions anchored to the tapeout calendar",
+          "cls": "B"
+        }
+      ]
+    }
   },
   "ixana-meeting-notetaker": {
     "slug": "ixana-meeting-notetaker",
@@ -14385,7 +14959,24 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The screens in section 06 are the running demo on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation."
+    "sampleNote": "This is internal tooling. The screens in section 06 are the running demo on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "fast": {
+      "pull": "A wrong minute is worse than no minute and is read by more people.",
+      "facts": [
+        {
+          "text": "Live demo: notes with a timestamp pill on every claim",
+          "cls": "A"
+        },
+        {
+          "text": "No bot joins a call — capture reads the platform's own artefact",
+          "cls": "A"
+        },
+        {
+          "text": "Exclusion set before the call and irreversible",
+          "cls": "A"
+        }
+      ]
+    }
   },
   "ixana-scrum-ecosystem": {
     "slug": "ixana-scrum-ecosystem",
@@ -14834,6 +15425,294 @@
         ]
       }
     ],
-    "sampleNote": "Sample page. The screens are recreations of the working demo on an invented sprint, and every figure — the audit counts, the meeting lengths, the adoption fraction — is an invented placeholder. The ceremony rules, the four-field write boundary and the reason the retrospective is missing are the real design. Happy to walk through the running product in a conversation."
+    "sampleNote": "Sample page. The screens are recreations of the working demo on an invented sprint, and every figure — the audit counts, the meeting lengths, the adoption fraction — is an invented placeholder. The ceremony rules, the four-field write boundary and the reason the retrospective is missing are the real design. Happy to walk through the running product in a conversation.",
+    "fast": {
+      "pull": "A ceremony is a view, not a document.",
+      "facts": [
+        {
+          "text": "Live demo: every standup line is a diff of the task record",
+          "cls": "A"
+        },
+        {
+          "text": "Four writable fields behind one allow-list, on an open ledger",
+          "cls": "A"
+        },
+        {
+          "text": "Drift is zero by construction — the second copy no longer exists",
+          "cls": "A"
+        }
+      ]
+    }
+  },
+  "ixana-internal-ai-program": {
+    "slug": "ixana-internal-ai-program",
+    "eyebrow": "Ixana · 2025–2026 · Internal platform program",
+    "title": "The internal AI program — fourteen tools, one doctrine",
+    "deck": "What it is to build the internal AI operating system of a silicon company: fourteen tools under one set of rules — deterministic counts, model-written prose, provenance on every claim, and a refusal wherever the data cannot carry an answer.",
+    "status": "internal",
+    "meta": {
+      "role": "Program owner — prioritisation, doctrine and delivery across every tool on this page",
+      "team": "One to four engineers per tool, drawn from the same small pool",
+      "timeline": "Jan 2025 – Aug 2026",
+      "stage": "Live — fourteen tools in use across the company"
+    },
+    "confidentiality": "Program-level view. Every claim and figure on this page comes from a chapter page linked below and carries that page's own data note; nothing is introduced here that a chapter does not already establish.",
+    "evidence": [
+      {
+        "label": "The platform, live — search it yourself",
+        "url": "https://xana-nine.vercel.app/"
+      },
+      {
+        "label": "Flow Tracker, live on the platform",
+        "url": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong"
+      },
+      {
+        "label": "Patent operations, live on the platform",
+        "url": "https://xana-nine.vercel.app/patents"
+      }
+    ],
+    "fast": {
+      "pull": "Counting is deterministic; only synthesis goes to a model.",
+      "facts": [
+        {
+          "text": "Three chapters run live on the deployed platform — click through",
+          "cls": "A"
+        },
+        {
+          "text": "Fourteen tools; every chapter page carries its own worked example",
+          "cls": "A"
+        },
+        {
+          "text": "The same refusals recur by design: no rankings, no write-back, no unsourced figure",
+          "cls": "A"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "A silicon company on five-month tapeout cycles roughly doubled, from about 75 people in 2024 to about 140 by mid-2025, and every coordination surface creaked at once: knowledge lived in five tools, reports were rebuilt by hand from memory, ceremonies ran on documents that drifted from the record, and audit questions ended in somebody's recollection."
+      },
+      {
+        "lead": "What I did.",
+        "text": "I ran internal tooling as one program rather than fourteen requests. Every candidate was sized the same way — hours lost per month, or errors made visible — before anything was built; each tool shipped thin on platforms we already ran; and one doctrine decided, everywhere, what a model may do and what it may never touch."
+      },
+      {
+        "lead": "Result.",
+        "text": "Fourteen tools in use, three of them flagship pages in their own right, and one set of rules that holds across all of them: no count computed by a model, no claim without provenance, no ranking of people anywhere, and a visible guardrail on every surface that automates judgment. Each chapter page below carries its own worked example."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Why a program, and not fourteen projects",
+        "body": [
+          "Nothing on this page began as a roadmap item. Each tool began as a hole somebody was falling into weekly — a document hunted for nine minutes, a report rebuilt from memory the night before a review, a decision nobody could find a month later. The temptation at that point is to buy a suite for each hole, and the company had looked at several.",
+          "The argument for running it as one program was the same argument three times over. Sized one at a time, every candidate competes only against doing nothing, and everything gets built; sized together, candidates compete against each other, and most lose. Built one at a time, every tool invents its own rules about what a model may write, and the fifth tool's rules contradict the second's. And bought one at a time, each suite arrives with its own place where work now lives — which is precisely the fragmentation the first tool on this page exists to undo.",
+          "So every chapter opens the same way: the options that were on the table, sized in the same units, and the reason the winner won. That figure — the sizing chart at the top of each chapter — is the program's actual artefact. The tools are what fell out of it."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "The doctrine",
+        "body": [
+          "The rules below were not written down on day one; they were written down after the second tool re-derived them, and enforced from the third onward. Every one of them is visible in the chapters, usually as the thing a screen refuses to do."
+        ],
+        "blocks": [
+          {
+            "kind": "decisions",
+            "label": "What holds everywhere",
+            "items": [
+              {
+                "lead": "Counting is deterministic; only synthesis goes to a model.",
+                "text": "A model occasionally wrong about a count destroys trust faster than one occasionally vague about a cause. The reporting engine computes every number by rule and hands the model only the argument; the salary pilot renders no figure a model produced; the assistant surfaces answer from filtered records, never free generation."
+              },
+              {
+                "lead": "Every claim carries its provenance.",
+                "text": "Minutes cite the second a thing was said. Salary figures resolve to dated comparator rows or do not render. Delay explanations name the comments they drew on. Audit answers link the raw stored event. The pattern is one pattern: a claim a reader cannot check is a claim the surface will not make."
+              },
+              {
+                "lead": "The guardrail sits on the surface, not in a report.",
+                "text": "Classification ships with its correction rate on the header. Reports carry their signature coverage where the signer sees it. The sync dashboard shows the run that checked nothing beside the runs that worked. If the people relying on automation cannot see its error rate without asking, it does not have one — it has a secret."
+              },
+              {
+                "lead": "Refusal is a feature.",
+                "text": "No tool on this page ranks people, and three of them refused a requested ranking outright. Nothing writes back to the tool of record from an analytics surface. An assistant asked for a judgment the records cannot support says so. The cuts were harder to ship than the features."
+              },
+              {
+                "lead": "Thin tools on owned platforms.",
+                "text": "Lists, flows, webhooks and one shared web platform — nothing bought, nothing that takes a migration to unwind. The procurement pilot's whole architecture is reversible in a week by design, because the fastest way to learn whether an operating model works is to build the cheapest thing that enforces it."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "My role, and the boundary",
+        "body": [
+          "I owned the program: what got built, in what order, under what rules, and what got refused. Each tool then had its own delivery shape — one to four engineers, with the domain owner (a delivery lead, the paralegal, people operations, the compliance lead) as the reviewer whose conditions became product decisions. The chapters name those negotiations individually, because several of the program's best features were somebody else's condition for saying yes.",
+          "The boundary that matters: none of this replaced the company's tools of record. The program's products read, reconcile, explain and gate — the record itself stays where it lives, which is why read-only and write-narrow boundaries recur on chapter after chapter."
+        ]
+      },
+      {
+        "num": "04",
+        "heading": "What was killed",
+        "body": [
+          "A program is what it refuses. The recurring kills, each argued for by someone reasonable: team rankings (asked for directly by leadership, refused on comparability — three separate times); per-person performance surfaces (refused structurally: no person-keyed rows exist to query); write-back from analytics surfaces (refused so a dashboard bug can never corrupt the record); full backlog generation (refused because a human can review one task's checklist and cannot review thirty); and model-drafted claim language in the patent system (refused because anything a model proposes becomes part of the legal record of what was considered).",
+          "Two whole candidate tools also lost their quarters to the sizing figure — the chapters on delivery reporting and pipeline diagnostics both name the losers. That is the program working, not a gap in it."
+        ]
+      },
+      {
+        "num": "05",
+        "heading": "Adoption, without a mandate",
+        "body": [
+          "Nothing on this page was rolled out by decree, and the chapters are honest about what that cost: adoption spread department by department, and the guardrails — signatures, visible correction rates, open ledgers — were the trust that made it spread. The pattern that repeated: a sceptical owner (the RTL lead, the finance controller, the compliance lead, the head of people operations) blocked a first version, their objection became a structural feature, and the feature made the tool acceptable to everyone downstream of them.",
+          "The honest limit is also on the chapters: adoption numbers on this program are the chapters' own worked examples, and where a chapter says its evidence is early signal, this page claims nothing more."
+        ]
+      },
+      {
+        "num": "06",
+        "heading": "The fourteen chapters",
+        "body": [
+          "Each chapter is a full case study in its own right — the same nine-part structure, its own decisions, tradeoffs and worked example. Three run live on the deployed platform. The AI Lawyer prototype, the program's research spike into multi-agent drafting, stands apart as a flagship page of its own."
+        ],
+        "blocks": [
+          {
+            "kind": "links",
+            "items": [
+              {
+                "label": "Ixana-Wiki — the knowledge platform",
+                "href": "/work/xana-multifile-rag-based-data-singularity-platform",
+                "note": "— five sources, one search box, cited answers. Flagship chapter, live."
+              },
+              {
+                "label": "Flow Tracker — pipeline diagnostics",
+                "href": "/work/ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic",
+                "note": "— three stage vocabularies, one surface. Flagship chapter, live."
+              },
+              {
+                "label": "Patent program operations",
+                "href": "/work/ixana-patent-program",
+                "note": "— the estate and the roadmap as one decision surface. Live."
+              },
+              {
+                "label": "Team performance reporting",
+                "href": "/work/team-performance-reporting",
+                "note": "— one engine, five teams, three windows, a signature gate."
+              },
+              {
+                "label": "Scrum ecosystem",
+                "href": "/work/ixana-scrum-ecosystem",
+                "note": "— four ceremonies as views of one record."
+              },
+              {
+                "label": "ClickUp Activity Tracker",
+                "href": "/work/github-for-clickup-automation-on-the-changes-going-outside-p",
+                "note": "— the audit trail that keeps previous values."
+              },
+              {
+                "label": "ClickUp reporting and Gantt",
+                "href": "/work/ai-pm-customized-multi-view-for-pms",
+                "note": "— read-only forever, deep links instead of write-back."
+              },
+              {
+                "label": "Video library",
+                "href": "/work/ixana-video-library-automated-company-video-library",
+                "note": "— the transcript is the navigation."
+              },
+              {
+                "label": "Meeting notetaker",
+                "href": "/work/ixana-meeting-notetaker",
+                "note": "— in-tenant capture, a timestamp on every claim."
+              },
+              {
+                "label": "Document change intelligence",
+                "href": "/work/clickup-document-tracker-data-extraction-easy-visibility-for",
+                "note": "— immutable versions, only on real change."
+              },
+              {
+                "label": "Calendar sync",
+                "href": "/work/calendar-automation-real-time-bi-directional-sync-engine-wit",
+                "note": "— two tenants in step; no title ever crosses."
+              },
+              {
+                "label": "Procurement Orchestrator",
+                "href": "/work/procurement-orchestrator-procurement-process-automation-with",
+                "note": "— the operating contract as the product. In pilot."
+              },
+              {
+                "label": "AI Salary Generator",
+                "href": "/work/ai-salary-generator",
+                "note": "— refusals as first-class output. In pilot."
+              },
+              {
+                "label": "AI product planning OS",
+                "href": "/work/ai-prd-multi-agent-multi-llm-shared-memory-generative-system",
+                "note": "— a second model must approve the first."
+              },
+              {
+                "label": "AI Lawyer — the research spike",
+                "href": "/work/ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys",
+                "note": "— flagship prototype; containment first, corpus measured before tuning."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "num": "07",
+        "heading": "Tradeoffs",
+        "blocks": [
+          {
+            "kind": "table",
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
+            "rows": [
+              [
+                "One doctrine vs per-team fit",
+                "Shared rules and shared vocabularies where comparison needs them",
+                "Every team gave up a distinction its own work turns on — the chapters name them"
+              ],
+              [
+                "Thin tools vs suites",
+                "Owned platforms, reversible architectures",
+                "Real ceilings, stated in advance: past certain volume, several of these architectures stop being proportionate"
+              ],
+              [
+                "Program speed vs instrumentation",
+                "Ship, then measure",
+                "More than one chapter admits its first weeks ran on intuition — the program repeated that mistake before fixing it"
+              ],
+              [
+                "One owner vs bus factor",
+                "One person holds the prioritisation and the doctrine",
+                "The patent chapter says it plainly: the mechanism is documented, the judgment is not yet handed over"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "num": "08",
+        "heading": "What this page can claim",
+        "body": [
+          "Structurally, everything above is checkable: three chapters run live on the deployed platform, the recurring refusals are visible on their surfaces, and every chapter carries its own worked example with its own data note. This page adds no number a chapter does not already carry, and where a chapter's figures are illustrative, that chapter says so in the same breath.",
+          "What a program page cannot honestly claim is a program-level metric — there was no baseline year in which the company ran without tools to compare against. The claim is narrower and, I think, stronger: fourteen tools, one person's prioritisation, one doctrine that held under fourteen different pressures to break it."
+        ]
+      },
+      {
+        "num": "09",
+        "heading": "What I'd do differently",
+        "body": [
+          "I would write the doctrine down at tool one instead of tool three. The rules existed as instincts before they existed as rules, and two early tools carry small inconsistencies the later ones do not — the chapters own them individually.",
+          "I would also measure the program, not just the tools. Each chapter measures itself honestly, but nobody measured the portfolio: which quarter's sizing calls were wrong, which tool's hours would have been better spent on another's backlog. The program taught the company to instrument everything except the program."
+        ]
+      }
+    ],
+    "sampleNote": "This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own data note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation."
   }
 }
