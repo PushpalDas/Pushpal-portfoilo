@@ -14530,15 +14530,15 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Meetings were recorded and then forgotten. Tracing 24 decisions that people referred back to a month later, 5 were written down anywhere durable, 7 lived in a chat thread nobody could name without asking, and 12 existed only in someone's memory — twice in two versions. The obvious fix, a commercial notetaker bot, could not join the calls that most needed one."
+        "text": "Meetings were recorded and then forgotten: of 24 decisions people asked about again a month later, 5 were written down anywhere durable, 7 sat in chat threads nobody could locate, and 12 lived in memory alone. The obvious fix, a commercial bot, could not join the calls that most needed one."
       },
       {
         "lead": "What I did.",
-        "text": "I owned an in-tenant notetaker: capture from the meeting's own recording artefact rather than a guest participant, a cued transcript, and generated minutes in which every claim must cite the second it was said. The organiser can exclude a meeting before it starts, irreversibly, and that mark is the only consent control in the system."
+        "text": "I owned an in-tenant notetaker: capture from the meeting’s own recording artefact rather than a guest participant, cued transcripts, and minutes where every claim cites the second it was said. Organisers exclude a meeting before it starts, irreversibly."
       },
       {
         "lead": "Result.",
-        "text": "Nothing is processed outside the tenant and no bot ever joins a call — capture reads the meeting's own recording artefact, and a claim without a timestamp does not ship, which is the rule that made minutes circulable at all. Exclusion is set by the organiser before the call and cannot be undone. The coverage and decision-trace figures below are the worked example."
+        "text": "Nothing leaves the tenant and no bot joins a call. A claim without a timestamp does not ship — the rule that made minutes circulable. The decision-trace figures below are the worked example."
       }
     ],
     "sections": [
@@ -14546,7 +14546,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Three ways of ending up with a written record were on the table: license a commercial notetaker bot, staff a minutes rota, or build capture into the tenant. I sized them on one axis, because one axis was the constraint — where the audio of a meeting would be processed. Ixana's meetings routinely carry unfiled invention disclosures and partner material under NDA, and the patent programme's filings depend on those disclosures not having been handed to a processor first."
+          "Three ways to a written record were on the table: a commercial notetaker bot, a minutes rota, or capture built into the tenant. I sized them on the one axis that mattered — where the audio gets processed. Ixana’s meetings routinely carry unfiled invention disclosures and partner material under NDA; the patent programme depends on those never reaching an outside processor."
         ],
         "blocks": [
           {
@@ -14613,14 +14613,14 @@
           }
         ],
         "after": [
-          "Read that way the choice stops being build against buy. The vendor product is better than anything two engineers will write, and it is only allowed to run on a third of the estate — so the comparison is a better tool on 66 meetings against an adequate tool on 212. Retrieval across the archive once it exists is a separate problem and has its own page; this one is only about how the record gets made."
+          "Read that way it stops being build against buy: the vendor product is better than anything two engineers will write, and it may touch a third of the estate. Archive retrieval has its own page; this one is how the record gets made."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I ran a decision trace rather than a survey. I took 24 decisions that someone had asked about again in the following month — pulled from chat searches for \"did we decide\" and the like — and tried to find where each one was written down. Asking people whether meetings are well minuted gets you an opinion; asking where a specific decision is recorded gets you a file path or a shrug."
+          "I ran a decision trace rather than a survey: 24 decisions someone had asked about again the following month, traced to wherever each was written down. Asking whether meetings are well minuted gets an opinion; asking where a decision is recorded gets a file path or a shrug."
         ],
         "blocks": [
           {
@@ -14668,14 +14668,14 @@
           }
         ],
         "after": [
-          "The reframe: nobody was choosing not to write minutes. Writing them costs the one person in the room who was most engaged about twenty minutes, immediately after the meeting they were most engaged in, and that person is always the one already late for the next call. Every intervention that starts by asking a human to do it inherits that arithmetic, which is why the rota scored 30."
+          "The reframe: nobody was choosing not to write minutes. Writing them costs the most engaged person twenty minutes right after the meeting, and that person is already late for the next call. Anything that starts by asking a human inherits that arithmetic."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I owned the capture path, the consent model and what generated minutes are allowed to claim. The residency constraint decided the architecture; what took the judgement was deciding what the output must never do, because a wrong minute is worse than no minute and is read by more people."
+          "I owned capture, consent and what generated minutes may claim. The judgement was what the output must never do: a wrong minute is worse than none, and read by more people."
         ],
         "blocks": [
           {
@@ -14684,19 +14684,19 @@
             "items": [
               {
                 "lead": "No bot ever joins the call.",
-                "text": "Capture reads the meeting's own recording artefact through the platform API after the fact. A guest participant is a thing people see in the roster, mute, argue about and forget to invite; an artefact is simply there. It also means turning capture on cannot change who feels able to speak."
+                "text": "Capture reads the meeting’s own recording artefact after the fact. Unlike a guest participant it is simply there, and cannot change who feels able to speak."
               },
               {
                 "lead": "A claim without a timestamp does not ship.",
-                "text": "Every line of generated minutes must cite the second it came from or it is dropped before anyone sees it. This is the single change that moved minutes from written to sent: nobody circulates a claim about what a colleague said that they cannot spot-check first."
+                "text": "Every line cites the second it came from or is dropped. This moved minutes from written to sent: nobody circulates a claim they cannot spot-check."
               },
               {
-                "lead": "Exclusion is set before the call and cannot be undone.",
-                "text": "The organiser's mark is the only consent control in the system, and a control you can lift afterwards is not one — it turns into a request someone can be pressured into granting. Roughly 6% of meetings carry it."
+                "lead": "Exclusion is pre-call and irreversible.",
+                "text": "A control you can lift afterwards is a request someone can be pressured into granting. The organiser’s mark is the only consent surface."
               },
               {
                 "lead": "An excluded meeting stays in the library, named.",
-                "text": "It is listed with its exclusion stated rather than hidden. A recording that silently vanishes sends people to ask the organiser where it went, which is precisely the behaviour this product exists to end."
+                "text": "Listed with its exclusion stated, never hidden. A silent disappearance sends people back to asking the organiser."
               }
             ]
           }
@@ -14729,7 +14729,7 @@
           },
           {
             "kind": "para",
-            "text": "The guest-bot fallback was the hardest cut, and the one I argued for hardest before dropping it. Meetings held on a customer's own platform expose no recording artefact, so the only way in is the thing the product exists to avoid — and an exception made once for convenience is the whole argument conceded. Those meetings stay uncovered: about nine a month, none of them internal, and the organiser is told plainly that nothing was captured rather than left to discover it later."
+            "text": "The guest-bot fallback was the hardest cut, and the one I argued for before dropping it. Meetings on a customer’s platform expose no recording artefact, so the only way in is the thing the product exists to avoid — an exception made once is the argument conceded. About nine a month stay uncovered, none internal, and the organiser is told plainly nothing was captured."
           }
         ]
       },
@@ -14737,17 +14737,17 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The head of engineering wanted to buy, and he was right on the merits I could measure. In a two-week bake-off the vendor product beat ours on word error rate and beat it badly on diarization above three speakers, it needed no engineers, and it was available that afternoon. His argument against the residency worry was the strongest one available: the tenant already runs on somebody else's hardware, so the line I was drawing was a line about contracts, not about physics.",
-          "I could not answer that, so I stopped arguing the principle and tested the control instead. The compromise on the table was a vendor bot restricted to meetings an organiser cleared before the call. Over four weeks organisers cleared 66 of 212 meetings, and legal review of those 66 found 4 that had discussed unfiled disclosures — cleared in good faith, by people who had read the guidance, before an agenda existed to read.",
-          "That ended it, and not because I won the argument. A control that fails 6% of the time fails on the exact cases it was built for, and the cost of one of those failures is a filing rather than an inconvenience. We built. His conditions were fair and I kept them: the diarization gap is measured against the vendor and published internally each month, and if in-house accuracy had still been behind by June we would have revisited the whole decision."
+          "The head of engineering wanted to buy, and on everything measurable he was right: the vendor won the bake-off on word error rate, badly on diarization, needed no engineers, and was available that afternoon. His answer to the residency worry was the strongest there is: the tenant already runs on somebody else’s hardware, so my line was contracts, not physics.",
+          "So I stopped arguing the principle and tested the control: a vendor bot restricted to organiser-cleared meetings. Over four weeks organisers cleared 66 of 212 — and legal review found 4 of the 66 had discussed unfiled disclosures, cleared in good faith before an agenda existed to read.",
+          "That ended it: a control failing 6% of the time fails on the exact cases it exists for, and one failure costs a filing. We built, on his conditions: the diarization gap is published monthly against the vendor, reopening the decision had we still trailed by June."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A library of recordings, and behind each one a workspace holding three things at once: the transcript, a generated note, and a question box that answers from that recording only. Capture runs from a change-notification subscription on the tenant's call records; transcription and summarisation run on tenant-resident inference; nothing at any stage crosses the tenant boundary.",
-          "The note is the part I spent the most judgement on, because a summary is the easy half of this problem and the half every product already does. What a reader wants a month later is not a retelling of a call they sat through — it is the decision and why it went that way, the number they are allowed to quote and the conditions it was measured under, and what the meeting failed to settle. So the note is those sections, in that order, with a timestamp on every claim."
+          "A library of recordings; behind each, a workspace: transcript, generated note, and a question box answering from that recording only. Capture runs from a change-notification subscription on tenant call records; transcription and summarisation on tenant-resident inference; nothing crosses the boundary.",
+          "The note is where the judgement went. A reader a month later wants the decision and why, the figure they may quote with its conditions, and what was left unsettled — so the note is those sections, in that order, a timestamp on every claim."
         ],
         "blocks": [
           {
@@ -14846,7 +14846,7 @@
           },
           {
             "kind": "para",
-            "text": "The last row is the one I would defend hardest and the one that loses most. A meeting whose value is a shift in mood — the room going quiet on a number — produces minutes that say nothing about it, because no single second carries it. We publish thinner minutes on purpose rather than minutes that assert things the transcript cannot support."
+            "text": "The last row loses most and I defend it hardest: a meeting whose value is the room going quiet on a number produces minutes that say nothing about it, because no single second carries it. We publish thinner minutes rather than minutes the transcript cannot support."
           }
         ]
       },
@@ -14854,7 +14854,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "We agreed before building that the MVP failed below 95% transcription of eligible meetings sustained over a month: a record with silent gaps is worse than none, because it invites confident wrong answers about meetings that were simply never captured. The residency guardrail was absolute — any recording or transcript processed outside the tenant would have ended the project, which is why the vendor client was never installed rather than installed and disabled."
+          "We agreed before building that this failed below 95% transcription of eligible meetings sustained over a month — silent gaps invite confident wrong answers about meetings never captured. The residency guardrail was absolute: one recording processed outside the tenant ends the project, so the vendor client was never installed rather than installed and disabled."
         ],
         "blocks": [
           {
@@ -14894,55 +14894,38 @@
           {
             "kind": "figure",
             "chart": {
-              "form": "barsThreshold",
-              "title": "Weekly transcription coverage of eligible meetings against the agreed 95% floor, rising from 71% and dipping to 89% in week six",
-              "yMax": 100,
-              "unit": "% of eligible meetings",
-              "threshold": {
-                "value": 95,
-                "label": "Pre-agreed floor: 95%"
-              },
-              "columns": [
+              "form": "groupedHBar",
+              "title": "Where 24 traced decisions could be found, January against July: a durable written record 5 to 21, a chat thread someone had to locate 7 to 2, somebody's memory 12 to 1",
+              "max": 24,
+              "unit": "decisions",
+              "seriesNames": [
+                "Jan 2026 — before",
+                "Jul 2026 — after"
+              ],
+              "rows": [
                 {
-                  "name": "W1",
-                  "value": 71
+                  "name": "Durable written record",
+                  "a": 5,
+                  "b": 21
                 },
                 {
-                  "name": "W2",
-                  "value": 88
+                  "name": "Chat thread, had to be located",
+                  "a": 7,
+                  "b": 2
                 },
                 {
-                  "name": "W3",
-                  "value": 93
-                },
-                {
-                  "name": "W4",
-                  "value": 97
-                },
-                {
-                  "name": "W5",
-                  "value": 96
-                },
-                {
-                  "name": "W6",
-                  "value": 89
-                },
-                {
-                  "name": "W7",
-                  "value": 98
-                },
-                {
-                  "name": "W8",
-                  "value": 99
+                  "name": "Somebody's memory only",
+                  "a": 12,
+                  "b": 1
                 }
               ]
             },
-            "caption": "Coverage by week, Jun–Aug 2026, from capture run records. Week six is not a model problem: the notification subscription silently stopped renewing and eleven meetings were never fetched. It is on the chart because it is the failure mode this system actually has — capture goes quiet and everything downstream looks healthy."
+            "caption": "The January trace repeated on 24 fresh decisions from July, Aug 2026 — same method, same coder. The middle row is the honest one: chat threads did not disappear, they became the place a link to the note gets posted. The one decision still living in memory was made in a corridor, and no capture path fixes that."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Eligible excludes meetings the organiser marked before the call. A meeting counts as transcribed when a cued transcript exists, not when a recording file exists — the two come down different paths and counting files would have reported week six as healthy."
+            "text": "Eligible excludes meetings the organiser marked before the call. Transcribed means a cued transcript exists, not a recording file — the two arrive by different paths, and counting files would have called the lapsed-subscription week healthy."
           },
           {
             "kind": "config",
@@ -14954,8 +14937,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I measured diarization quality in week nine, after the shape of the minutes was already set. It came back worse than I had assumed above three speakers, and the fix was to weaken the product: attributed summary claims — X argued for Y — had to be dropped, because a decision attributed to the wrong person is a worse artefact than no attribution at all. That measurement cost two days and belonged in week one, next to the bake-off it would have informed.",
-          "I would also build the correction path before the generation path next time. There is still no way to fix a wrong claim except regenerate and hope, and the reason is that I treated correction as a feature rather than as the thing that makes an automated record trustworthy. Six people have now asked for it, which is more than have asked for anything else."
+          "I measured diarization in week nine, after the minutes’ shape was set. It came back worse than assumed above three speakers, and the fix weakened the product: attributed claims were dropped, because a wrong attribution is worse than none. That measurement belonged in week one.",
+          "I would also build the correction path first. There is still no way to fix a wrong claim except regenerate and hope — I treated correction as a feature rather than what makes an automated record trustworthy. Six people have asked; nothing else comes close."
         ]
       }
     ],
