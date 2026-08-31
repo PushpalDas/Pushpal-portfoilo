@@ -3012,7 +3012,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "Before build we agreed this failed if any lead was still hand-building a timeline a quarter after launch — a dashboard people admire and do not use is what both previous PM tools produced. The guardrail was writes to the workspace: an absolute rather than a target, since shipping without a rollback plan rested on the dashboard being incapable of damage."
+          "Before build we agreed this failed if any lead was still hand-building a timeline a quarter after launch — a dashboard people admire and do not use is what both previous PM tools produced. The guardrail was writes to the workspace: an absolute, since shipping without a rollback plan rested on the dashboard being incapable of damage."
         ],
         "blocks": [
           {
