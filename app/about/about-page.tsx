@@ -61,17 +61,17 @@ export default function AboutPage() {
 						</p>
 					</section>
 
-					<figure className='about-figure about-figure-plane about-reveal'>
+					<figure className='about-figure about-figure-lead about-reveal'>
 						{/* biome-ignore lint/performance/noImgElement: static photograph, hand-sized and lazy-loaded */}
 						<img
-							src='/about/plane.webp'
-							width={768}
+							src='/about/child.webp'
+							width={736}
 							height={1024}
 							loading='lazy'
 							decoding='async'
-							alt="A yellow paper plane resting against a wall of sticky notes, above one handwritten with Steve Jobs's line that simple can be harder than complex."
+							alt='A small child in a red and yellow tartan coat and yellow trousers, standing on a staircase with one hand on the railing, smiling at the camera.'
 						/>
-						<figcaption>a paper plane, over a note I kept</figcaption>
+						<figcaption>a staircase, and the child who kept asking</figcaption>
 					</figure>
 
 					<section className='about-section about-reveal'>
@@ -174,9 +174,9 @@ export default function AboutPage() {
 						<p className='about-section-label'>The other lens</p>
 						<p>
 							I still photograph. The year I graduated I trained under Asit
-							Poddar, an artist from Satyajit Ray&apos;s cinematography team. Ray
-							taught me how to see: a small, ordinary detail carries more than a
-							speech.
+							Poddar, an artist from Satyajit Ray&apos;s cinematography team.
+							Ray taught me how to see: a small, ordinary detail carries more
+							than a speech.
 						</p>
 						<p>
 							So I got the cinematographer&apos;s life sideways. The lens is

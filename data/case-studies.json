@@ -146,7 +146,13 @@
     "dateRange": "",
     "role": "",
     "teamSize": "",
-    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
+    "tags": [
+      "Quantum Computing",
+      "FastAPI",
+      "Next.js",
+      "Three.js",
+      "NumPy"
+    ],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
@@ -451,7 +457,9 @@
     "nextProject": null,
     "editorialOverrides": {
       "deck": "A secure internal workspace that brings documents, meeting context, task data, and patent records into one searchable, cited AI experience.",
-      "meta": { "stage": "Live internally" },
+      "meta": {
+        "stage": "Live internally"
+      },
       "whyNow": {
         "body": [
           "The issue was not simply that one search box performed poorly. Company knowledge was fragmented across separate systems, so finding an answer often required knowing where it had been created first.",
@@ -472,9 +480,20 @@
         ]
       },
       "scope": {
-        "shipped": ["Unified search and AI answers with cited source context", "Secure file preview and role-based access flows", "Meeting transcript navigation and operational reporting views", "Scheduled ingestion and admin controls for sync operations"],
-        "deferred": ["Additional connectors and feedback workflows", "Finer-grained permissions and configurable retrieval policies"],
-        "cut": ["Uncited answers that users could not independently verify", "Platform features outside the internal knowledge workflow"],
+        "shipped": [
+          "Unified search and AI answers with cited source context",
+          "Secure file preview and role-based access flows",
+          "Meeting transcript navigation and operational reporting views",
+          "Scheduled ingestion and admin controls for sync operations"
+        ],
+        "deferred": [
+          "Additional connectors and feedback workflows",
+          "Finer-grained permissions and configurable retrieval policies"
+        ],
+        "cut": [
+          "Uncited answers that users could not independently verify",
+          "Platform features outside the internal knowledge workflow"
+        ],
         "hardestCut": "The current project record does not preserve a specific scope-cut decision or its approval history. The lists above state the documented product boundary and should be refined if the original roadmap becomes available."
       },
       "alignment": [
@@ -493,15 +512,36 @@
           "type": "diagram"
         },
         "callouts": [
-          { "title": "One search surface.", "detail": "The product joins sources that previously required separate search habits." },
-          { "title": "Cited answers.", "detail": "AI responses are grounded in source context so users can verify an answer." },
-          { "title": "Secure preview.", "detail": "Access controls stay part of the product flow when sensitive material is retrieved." }
+          {
+            "title": "One search surface.",
+            "detail": "The product joins sources that previously required separate search habits."
+          },
+          {
+            "title": "Cited answers.",
+            "detail": "AI responses are grounded in source context so users can verify an answer."
+          },
+          {
+            "title": "Secure preview.",
+            "detail": "Access controls stay part of the product flow when sensitive material is retrieved."
+          }
         ]
       },
       "tradeoffs": [
-        { "tension": "Source breadth vs reliability", "choice": "Integrated multiple high-value systems while keeping connectors modular and schedulable.", "cost": "More connector behaviour and sync operations to monitor; a verified operational cost was not retained in the record." },
-        { "tension": "Answer quality vs speed", "choice": "Used hybrid retrieval and structured context assembly instead of generation alone.", "cost": "The record does not preserve a measured latency comparison." },
-        { "tension": "Ease of access vs data protection", "choice": "Required Azure AD authentication, JWT validation, and signed short-lived media access.", "cost": "The product does not support anonymous access to sensitive internal content." }
+        {
+          "tension": "Source breadth vs reliability",
+          "choice": "Integrated multiple high-value systems while keeping connectors modular and schedulable.",
+          "cost": "More connector behaviour and sync operations to monitor; a verified operational cost was not retained in the record."
+        },
+        {
+          "tension": "Answer quality vs speed",
+          "choice": "Used hybrid retrieval and structured context assembly instead of generation alone.",
+          "cost": "The record does not preserve a measured latency comparison."
+        },
+        {
+          "tension": "Ease of access vs data protection",
+          "choice": "Required Azure AD authentication, JWT validation, and signed short-lived media access.",
+          "cost": "The product does not support anonymous access to sensitive internal content."
+        }
       ],
       "outcomes": {
         "body": [
@@ -513,8 +553,18 @@
       "architecture": {
         "summary": "Ingestion and retrieval architecture",
         "visuals": [
-          { "src": "mermaid-diagram.png", "alt": "XANA data storage architecture", "caption": "Ingestion and storage architecture from the project record.", "type": "diagram" },
-          { "src": "mermaid-diagram__1_.png", "alt": "XANA vector search architecture", "caption": "Vector search architecture from the project record.", "type": "diagram" }
+          {
+            "src": "mermaid-diagram.png",
+            "alt": "XANA data storage architecture",
+            "caption": "Ingestion and storage architecture from the project record.",
+            "type": "diagram"
+          },
+          {
+            "src": "mermaid-diagram__1_.png",
+            "alt": "XANA vector search architecture",
+            "caption": "Vector search architecture from the project record.",
+            "type": "diagram"
+          }
         ]
       },
       "footerNote": "This is an internal product. Architecture diagrams are shown from the project record; screens should be recreated with illustrative content before public publication. Sensitive figures are omitted rather than estimated."
@@ -606,11 +656,11 @@
     "prevProject": null,
     "nextProject": null
   },
-  "ai-pm-generative-ai-engine-for-rca-report-automation": {
-    "slug": "ai-pm-generative-ai-engine-for-rca-report-automation",
+  "team-performance-reporting": {
+    "slug": "team-performance-reporting",
     "company": "",
-    "organization": "AMS Team",
-    "title": "AMS Monthly Performance Dashboard Workflow",
+    "organization": "Delivery teams — AMS, RTL, PS, HW, FW",
+    "title": "Team Performance Reporting Engine",
     "dateRange": "",
     "role": "Project Manager",
     "teamSize": "",
@@ -620,18 +670,20 @@
       "ClickUp",
       "Excel dashboards",
       "AI-assisted RCA",
-      "Performance analytics"
+      "Performance analytics",
+      "Multi-team reporting"
     ],
     "isConfidential": false,
     "confidentialNote": "",
-    "tldr": "Problem: The AMS team needed a repeatable monthly way to turn completed ClickUp work into a clean performance dashboard with delay analysis, project summaries, and recommended actions.\n\nWhat we did: I structured an n8n sub-workflow that cleared prior dashboard data, pulled AMS tasks for a reporting window, split them into efficiency and delay-analysis paths, used AI to generate root cause analysis and dashboard insights, and wrote the outputs into Excel sheets.\n\nResult: The workflow now produces and refreshes six dashboard sheets automatically and returns a central spreadsheet link for the monthly AMS performance report.",
-    "roleAndApproach": "What I owned: I owned the reporting workflow from trigger to dashboard output. I defined the monthly reporting flow, the AMS team filter, the reporting window logic, the split between deterministic calculations and AI analysis, and the writeback sequence into Excel. I was accountable for getting the right completed tasks into scope, keeping the dashboard sheets in sync, and making sure the output was usable as a fresh monthly report.\n\nTradeoffs I navigated: I balanced speed against reliability by using direct ClickUp filters and pagination for task retrieval, then limiting AI to the parts that needed judgment such as root cause analysis and issue clustering. I also balanced freshness against continuity by clearing only data rows and preserving sheet headers, and balanced team specificity against maintainability by using a hardcoded AMS member list mapped to live ClickUp identities.",
+    "tldr": "Problem: Only the AMS team had a standing performance report, and it took about two days a month to assemble. The other four delivery teams — RTL, PS, HW and FW — had nothing standing, and reconstructed review material by hand once a quarter.\n\nWhat we did: I turned the AMS monthly workflow into one n8n sub-workflow that takes two parameters, a team and a reporting window. The same run produces a weekly, a monthly or a quarterly report for any of the five teams; counting stays rule-based, only synthesis goes to a model, and what the model is for changes with the window.\n\nResult: Fifteen monthly reports a quarter where there was one, plus weekly reports the leads act on and a quarterly that reads the three monthly reports rather than the task records. Root cause coverage across the five teams reached 84 per cent, and nothing publishes from monthly upwards without a named signature.",
+    "roleAndApproach": "What I owned: the reporting workflow from trigger to published report, the parameterisation into team and window, the rule about where judgement is allowed, and the six shared cause categories the five teams agreed to fill the same way. I was accountable for the right tasks landing in scope for each window, for the sheets staying in sync, and for the signature gate holding.\n\nTradeoffs I navigated: reach against fit — one report shape across five teams that work very differently, which cost every team a distinction it cared about; comparability against the question leadership asked, which is why the five teams are never ranked and coverage is the only cross-team number; and maintainability against precision, since five fixed rosters mapped to live identities means every joiner or leaver is a manual edit.",
     "keyDecisions": [
-      "I separated the workflow into three parallel branches for efficiency summary, team performance, and delayed task analysis so the core reporting outputs could be calculated independently and then recombined into one dashboard.",
-      "I kept task counting and delay classification rule-based, and used AI only after the base data had been structured. That reduced ambiguity in totals and percentages while still allowing richer RCA and summary generation.",
-      "I made the dashboard AI read from the generated Excel sheets instead of raw ClickUp tasks. That created one reporting source for downstream metrics, project distribution, and critical issues, and kept later summaries aligned with the dashboard tables."
+      "I made the report a function of two parameters — which team and which window — rather than building five copies that drift apart inside a quarter and then cannot be compared.",
+      "I let the reporting window decide what the model is for: an absolute threshold weekly, the worst decile with a floor of two rows monthly, and no new root cause at all at the quarter, where the model only clusters causes people already signed.",
+      "I kept task counting and delay classification rule-based, and used AI only after the base data was structured, so no count or percentage on any of the reports passes through a model.",
+      "I put the signature gate at monthly and above and deliberately left it out of the weekly, because signing a working document nobody quotes teaches people that signing means nothing."
     ],
-    "whatWasBuilt": "I built an n8n-based monthly reporting workflow for the AMS team. It starts as a sub-workflow, accepts a reporting window, clears prior dashboard rows, fetches AMS members from ClickUp, maps them to assignee IDs, and retrieves completed tasks within the selected date range with pagination. From there, the workflow merges all pages and runs three paths in parallel. One path calculates per-assignee efficiency, delayed work, on-time work, average delay, and performance rating, then writes the EFFICIENCY SUMMARY sheet. A second path reshapes that data into TEAM PERFORMANCE DISTRIBUTION. A third path detects delayed tasks, calculates delay days, fetches ClickUp comment history for each delayed item, and generates AI-based root cause analysis and summaries before writing TASK DELAY DETAILS WITH ROOT CA. Once those sheets are populated, a second AI step reads the Excel sheets and generates KEY METRICS, PROJECT DISTRIBUTION, and CRITICAL ISSUES & RECOMMENDATIONS. The workflow then writes those outputs back into the workbook and returns the spreadsheet link.",
+    "whatWasBuilt": "One n8n sub-workflow parameterised by team and reporting window. It clears the prior rows, fetches the team's tasks due inside the window with pagination, and runs parallel branches: per-assignee efficiency, group performance distribution, and delayed-task analysis that pulls each item's ClickUp comment history and drafts a root cause. A second pass reads the generated sheets rather than the raw tasks to produce key metrics, project distribution and critical issues. The weekly window writes three sheets, adds the open-and-overdue work no monthly report counts, and has no signature gate. The monthly window writes six sheets and publishes only through the gate. The quarterly window fetches no task records at all: it reads the three monthly reports the team published, groups their signed causes by the six shared categories, and writes four sheets ending in a portfolio view that reports coverage for all five teams and nothing else.",
     "media": [
       {
         "type": "image",
@@ -666,8 +718,8 @@
         "label": ""
       }
     ],
-    "impactContext": "This workflow replaced a manual monthly reporting process with a single automated run. It gave the AMS team a consistent reporting structure across six sheets, tied delay analysis to actual task context from ClickUp comments, and ensured leadership-facing summaries were generated from the same underlying dashboard data.",
-    "reflection": "The source shows a clear pattern that worked well: keep calculations deterministic where accuracy matters most, and use AI where synthesis is the real task. A notable design choice was making the second AI stage analyze the Excel outputs rather than raw task data. That likely reduced mismatch between detailed sheets and final summaries. The main constraint I would keep watching is the hardcoded AMS member list, since that is simple and controlled but adds maintenance whenever the team changes.",
+    "impactContext": "This replaced one team's manual monthly process with an engine that serves all five delivery teams on three cadences. It gave four teams a standing report they never had, tied delay analysis to the task context engineers had already written in comment threads, and made the quarterly review read from what was published at the time rather than from material assembled the week before.",
+    "reflection": "The pattern that worked was keeping calculations deterministic where accuracy matters and using AI where synthesis is the real task — and then letting the reporting window decide which of the two the model is doing. Making the second stage read the generated sheets, and the quarterly read the published monthly reports, is the same rule applied at two levels and it is what stops the narrative drifting from the tables. What I would watch: the five hardcoded rosters, and the fact that rising coverage is an adoption signal rather than a quality one — nobody has yet sampled a signed cause against what actually happened.",
     "links": [],
     "prevProject": null,
     "nextProject": null
@@ -1008,79 +1060,6 @@
     "prevProject": null,
     "nextProject": null
   },
-  "patent-tracker-generative-ai-engine-for-data-extraction": {
-    "slug": "patent-tracker-generative-ai-engine-for-data-extraction",
-    "company": "Ixana",
-    "organization": "",
-    "title": "Ixana Patent Dashboard Sync",
-    "dateRange": "",
-    "role": "",
-    "teamSize": "",
-    "tags": [
-      "Project management",
-      "SharePoint automation",
-      "Portfolio reporting",
-      "Excel workflow",
-      "Microsoft Graph"
-    ],
-    "isConfidential": false,
-    "confidentialNote": "",
-    "tldr": "Problem: Ixana was tracking patent portfolio data across three SharePoint Excel workbooks and one master workbook, but live formulas were double-counting duplicate patent rows and manual edits could leave the master out of sync.\n\nWhat we did: I led the rollout of a FastAPI sync service that recomputed each source dashboard, rebuilt the master patents sheet from all three sources, and used Microsoft Graph change detection to refresh only when source data changed or the master drifted.\n\nResult: We moved dashboard counts to computed values, kept source sheets untouched, and set the master workbook to automatically realign to the three source files on startup and then every 60 seconds by default.",
-    "roleAndApproach": "What I owned: I owned the sync workflow across the three source workbooks and the master workbook. I defined the counting rules, set the refresh behavior, and aligned the service around the operational goal that the master must always match the source files. I also owned the decision to preserve workbook formatting by writing through the Microsoft Graph workbook API and to expose clear endpoints for health, dry-run stats, status, sync, and forced refresh.\n\nTradeoffs I navigated: I weighed accuracy against speed by using eTags as a first signal and content hashes as a second check, so we did not refresh on every minor file touch. I also balanced automation against file integrity by recomputing dashboards in place while never modifying source Patents sheets, and by adding verification retries to handle Excel Online autosave collisions and manual edits to the master.",
-    "keyDecisions": [
-      "I set the master workbook as a derived file, not a manually maintained source of truth, because the portfolio needed one reliable combined view and the source files had to remain authoritative. That let us automatically rebuild the master whenever a source changed or the master drifted.",
-      "I adopted deduplicated patent counting rules based on grouped rows and last-row status because the existing live formulas were double-counting repeated titles and continuation rows. This made the dashboard reflect patent-level counts rather than row-level counts.",
-      "I chose Microsoft Graph workbook updates over direct file rewriting because the workbooks already carried formatting, merged cells, and layout logic that needed to stay intact. That reduced disruption for the team using the Excel files day to day."
-    ],
-    "whatWasBuilt": "I delivered a backend service that kept four Excel workbooks in sync across SharePoint and OneDrive. It monitored three source patent dashboards, recalculated their dashboard values in place, and rebuilt the master workbook's Patents sheet as a combined table with a Source column. The service served the team maintaining Ixana's patent portfolio by giving them a current combined dashboard without changing the source Patents sheets they already worked in. It also exposed health, status, dry-run, sync, and force-refresh endpoints so the sync state was visible and controllable.",
-    "media": [
-      {
-        "type": "image",
-        "src": "mermaid-diagram__4_.png",
-        "caption": "",
-        "fullWidth": false
-      },
-      {
-        "type": "image",
-        "src": "",
-        "caption": "",
-        "fullWidth": false
-      },
-      {
-        "type": "video",
-        "src": "",
-        "caption": "",
-        "fullWidth": true
-      }
-    ],
-    "metrics": [
-      {
-        "value": "3",
-        "label": "Source workbooks synchronized into the master workbook"
-      },
-      {
-        "value": "60s",
-        "label": "Default polling interval for background sync"
-      },
-      {
-        "value": "5",
-        "label": "Top notice of allowance items shown on dashboards"
-      },
-      {
-        "value": "5",
-        "label": "Top upcoming deadlines shown on dashboards"
-      },
-      {
-        "value": "3",
-        "label": "Verification retry rounds after writes"
-      }
-    ],
-    "impactContext": "These numbers show the operating model of the service. It consolidated three separate patent workbooks into one master view, checked for changes on a 60 second cadence by default, and limited dashboard lists to the top five priority items so reviewers could act quickly. The retry loop reduced the risk that Excel Online autosave behavior would leave files in an unstable state after updates.",
-    "reflection": null,
-    "links": [],
-    "prevProject": null,
-    "nextProject": null
-  },
   "clickup-document-tracker-data-extraction-easy-visibility-for": {
     "slug": "clickup-document-tracker-data-extraction-easy-visibility-for",
     "company": "ClickUp",
@@ -1171,77 +1150,6 @@
     "prevProject": null,
     "nextProject": null
   },
-  "ai-pm-generative-ai-engine-for-resource-allocation": {
-    "slug": "ai-pm-generative-ai-engine-for-resource-allocation",
-    "company": "Ixana",
-    "organization": "",
-    "title": "Automated Engineering Bandwidth Reporting System",
-    "dateRange": "",
-    "role": "",
-    "teamSize": "30 people",
-    "tags": [
-      "Workflow Automation",
-      "Resource Planning",
-      "ClickUp Integration",
-      "Process Optimization"
-    ],
-    "isConfidential": false,
-    "confidentialNote": "",
-    "tldr": "Problem: Manual tracking of engineering capacity across multiple project lists was inefficient and prone to reporting errors.\n\nWhat we did: I led the development of an automated n8n workflow to pull task data from ClickUp, calculate working days and bandwidth availability, and sync reporting directly into Excel.\n\nResult: The system automated routine progress tracking and delivered clear visibility into capacity and commitments across three engineering teams.",
-    "roleAndApproach": "What I owned: I defined the reporting specifications for engineering capacity tracking, designed the data transformation logic across team rosters, and managed the delivery of the automated n8n workflow connecting ClickUp to Microsoft Excel.\n\nTradeoffs I navigated: Automated speed vs. rate limits: I chose batch iteration across list IDs rather than continuous real-time polling. Raw timeline tracking vs. actual availability: I enforced working-day calculation rules to exclude weekends and added date offset logic to maintain accurate schedule data across time zones.",
-    "keyDecisions": [
-      "I decided to calculate capacity based strictly on working days rather than calendar days to give leadership accurate availability forecasts.",
-      "I structured the workflow into parallel branches per sub-team to maintain distinct reporting tabs for RTL, AMS, and PS groups in Excel.",
-      "I implemented a date offset correction step in the transformation logic to prevent timezone shifts from changing task due dates."
-    ],
-    "whatWasBuilt": "An automated workflow pipeline using n8n that queries 58 ClickUp project lists, maps assigned tasks to 30 team members across RTL, AMS, and PS groups, calculates tentative and committed bandwidth timelines, and appends formatted reports directly into Microsoft Excel spreadsheets.",
-    "media": [
-      {
-        "type": "image",
-        "src": "mermaid-diagram__9_.png",
-        "caption": "",
-        "fullWidth": false
-      },
-      {
-        "type": "image",
-        "src": "",
-        "caption": "",
-        "fullWidth": false
-      },
-      {
-        "type": "video",
-        "src": "",
-        "caption": "",
-        "fullWidth": true
-      }
-    ],
-    "metrics": [
-      {
-        "value": "58",
-        "label": "ClickUp project lists integrated"
-      },
-      {
-        "value": "30",
-        "label": "Team members tracked across 3 departments"
-      }
-    ],
-    "impactContext": "The automated pipeline provides engineering leadership with accurate, real-time availability forecasts and task status reporting without requiring manual updates from developers.",
-    "reflection": "Standardizing task parameters like start dates, due dates, and parent task linkages in project management tools is essential before automating downstream operational reporting.",
-    "links": [
-      {
-        "icon": "file",
-        "label": "Phase 2 Final Report Excel Workbook",
-        "url": "https://10xar-my.sharepoint.com/personal/anuj_dubey_ixana_ai/_layouts/15/Doc.aspx?sourcedoc=%7B21EED6CA-F88E-4DCB-A97C-86FCC1D045CE%7D&file=Phase%202%20Final%20report-1%20month-anuj.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
-      },
-      {
-        "icon": "file",
-        "label": "AMS Bandwidth Report Excel Workbook",
-        "url": "https://10xar-my.sharepoint.com/personal/anuj_dubey_ixana_ai/_layouts/15/Doc.aspx?sourcedoc=%7BAED1F0DE-8F16-4109-AFCA-975253AF20C6%7D&file=[Ai_Controlled]%20AMS%20BW%20report-anuj.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
-      }
-    ],
-    "prevProject": null,
-    "nextProject": null
-  },
   "wi-r-body-area-network-yr23": {
     "slug": "wi-r-body-area-network-yr23",
     "company": "Ixana",
@@ -1250,7 +1158,10 @@
     "dateRange": "2024–2026",
     "role": "",
     "teamSize": "",
-    "tags": ["Silicon", "Body Area Networks"],
+    "tags": [
+      "Silicon",
+      "Body Area Networks"
+    ],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: The project addressed on-body connectivity through Ixana's Wi-R body area network product work.\n\nWhat I did: The current portfolio record identifies YR23 as a production silicon project, but does not yet document a reliable ownership boundary.\n\nResult: YR23 is listed as in production; no verified outcome metrics are stored in the current project record.",

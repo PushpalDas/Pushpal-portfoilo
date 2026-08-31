@@ -1,27 +1,17 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import useBreakpoint from 'use-breakpoint';
 import Contact from '../components/contact';
-import { type FilterKey, certificationItems } from './constants';
-import FloatingImage from './floating-image';
-import type { CertificationModal } from './types';
-import './certifications.css';
 import CertificationsFilters from './certifications-filters';
 import CertificationsGrid from './certifications-grid';
 import CertificationsHeader from './certifications-header';
+import { certificationItems, type FilterKey } from './constants';
+import './certifications.css';
 
-const BREAKPOINTS = { mobile: 0, tablet: 768, desktop: 1280 };
+const CERT_CATEGORY_ORDER = ['management', 'skills', 'achievements'];
 
 export default function CertificationsPage() {
-	const { breakpoint } = useBreakpoint(BREAKPOINTS);
 	const [activeFilter, setActiveFilter] = useState<FilterKey>('all');
-	const [modal, setModal] = useState<CertificationModal>({
-		active: false,
-		index: 0,
-	});
-
-	const CERT_CATEGORY_ORDER = ['management', 'skills', 'achievements'];
 
 	const filteredItems = useMemo(() => {
 		if (activeFilter !== 'all') {
@@ -54,6 +44,9 @@ export default function CertificationsPage() {
 				}
 			/>
 			<div className='certifications-content-wrap'>
+				{/* Each tile navigates to /certifications/<slug>. Nothing opens over
+				    this page any more, so the filter no longer has to close anything
+				    on its way through. */}
 				<CertificationsGrid items={filteredItems} gridColumns={4} />
 			</div>
 			<Contact />

@@ -344,21 +344,37 @@
 	max-width: 46ch;
 }
 
-.hoobie-hang {
-	display: grid;
-	grid-template-columns: 1fr;
-	column-gap: 1rem;
-	row-gap: clamp(2rem, 5vw, 6rem);
-	align-items: start;
+/* A collage, laid out in columns. Each frame keeps its own ratio, so the
+   heights vary and the columns stagger themselves — no hand-placed offsets,
+   and nothing is cropped. Small frames are also the sharp ones here: every
+   source file is 1179px wide, so a 280px column is still crisp at 3x. */
+.hoobie-collage {
+	columns: 2;
+	column-gap: clamp(0.75rem, 2vw, 1.5rem);
 }
 
-.hoobie-hang-figure {
-	margin: 0;
-	min-width: 0;
+.hoobie-collage-figure {
+	break-inside: avoid;
+	margin: 0 0 clamp(1.25rem, 3vw, 2.25rem);
+	/* Chrome needs this to stop a figure splitting across a column. */
+	display: inline-block;
+	width: 100%;
 }
 
-.hoobie-hang-caption {
-	margin-top: 0.75rem;
+/* Three widths on a seven-frame cycle, so the collage reads as hung by hand
+   rather than poured into a grid. */
+.hoobie-collage-figure[data-rhythm="2"],
+.hoobie-collage-figure[data-rhythm="5"] {
+	width: 88%;
+	margin-left: auto;
+}
+
+.hoobie-collage-figure[data-rhythm="4"] {
+	width: 82%;
+}
+
+.hoobie-collage-caption {
+	margin-top: 0.6rem;
 }
 
 .hoobie-wall-text {
@@ -565,65 +581,8 @@
 		grid-column: 1 / -1;
 	}
 
-	.hoobie-hang {
-		grid-template-columns: repeat(12, minmax(0, 1fr));
-	}
-
-	/* The hang, placed by the real ratios rather than the labels the old
-	   code carried. There is no landscape frame among the twelve — eight
-	   of them sit between 0.57 and 0.58 — so the rhythm comes from span
-	   and offset, not from shape. No two consecutive frames share a span
-	   or a side. */
-	.hoobie-hang-figure[data-frame="2"] {
-		grid-column: 2 / 8;
-	}
-
-	.hoobie-hang-figure[data-frame="3"] {
-		grid-column: 9 / 13;
-		margin-top: 8rem;
-	}
-
-	.hoobie-hang-figure[data-frame="4"] {
-		grid-column: 1 / 6;
-		margin-top: 2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="5"] {
-		grid-column: 9 / 12;
-		margin-top: 6rem;
-	}
-
-	.hoobie-hang-figure[data-frame="6"] {
-		grid-column: 2 / 9;
-	}
-
-	.hoobie-hang-figure[data-frame="7"] {
-		grid-column: 9 / 13;
-		margin-top: 10rem;
-	}
-
-	.hoobie-hang-figure[data-frame="8"] {
-		grid-column: 1 / 6;
-		margin-top: -2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="9"] {
-		grid-column: 7 / 13;
-		margin-top: 6rem;
-	}
-
-	.hoobie-hang-figure[data-frame="10"] {
-		grid-column: 2 / 6;
-		margin-top: 2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="11"] {
-		grid-column: 6 / 13;
-		margin-top: 4rem;
-	}
-
-	.hoobie-hang-figure[data-frame="12"] {
-		grid-column: 4 / 10;
+	.hoobie-collage {
+		columns: 3;
 	}
 
 	.hoobie-wall-text {
@@ -636,6 +595,13 @@
 	.hoobie-hero-grid {
 		grid-template-columns: 5fr 7fr;
 		align-items: center;
+	}
+
+	/* Four columns from here up. The `sizes` string in hobby-page.tsx is
+	   written for this count — at three, every frame would be served an
+	   image about a third narrower than the box it fills. */
+	.hoobie-collage {
+		columns: 4;
 	}
 
 	/* Three prints hung together. Both side plates share one height and

@@ -1,0 +1,536 @@
+/* ============================================================
+   BOOKS — /books
+
+   A shelf, in the same dark room as /hobby. The tokens, motion
+   contract and section rhythm are lifted from hoobie.css on
+   purpose: this is a sibling page, not a new design.
+
+   The one deliberate difference is the type. Fraunces — already
+   the site's single display face, already loaded on <html> —
+   carries every title here, not just the headings. A book is a
+   printed object; a serif with an optical-size axis is the face
+   that says so, and it costs no extra payload to use it.
+
+   Order: tokens · base · type · hero · index · shelves · card ·
+   detail · motion · breakpoints · reduced motion.
+   ============================================================ */
+
+/* --- tokens ------------------------------------------------- */
+
+.books-page {
+	--b-bg: #080808;
+	--b-surface: #111210;
+	--b-text: #f1efe7;
+	--b-muted: #a8a7a1;
+	--b-line: rgba(241, 239, 231, 0.14);
+
+	--b-accent: #455ce9;
+	--b-accent-text: #7d90ff;
+
+	--display: var(--font-fraunces), Georgia, serif;
+	--t-display-xl: clamp(2.75rem, 7vw, 5.5rem);
+	--t-display-l: clamp(2rem, 4.5vw, 3.25rem);
+	--t-heading: clamp(1.25rem, 2.2vw, 1.6rem);
+	--t-lead: 1.25rem;
+	--t-body: 1rem;
+	--t-small: 0.8125rem;
+	--t-caption: 0.6875rem;
+	--track-display: -0.03em;
+	--track-caps: 0.12em;
+
+	--ease: cubic-bezier(0.76, 0, 0.24, 1);
+	--fast: 0.2s;
+	--base: 0.4s;
+
+	--b-container: 1200px;
+	--b-gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+/* --- base --------------------------------------------------- */
+
+.books-page {
+	position: relative;
+	min-height: 100svh;
+	background:
+		radial-gradient(
+			110% 60% at 50% 0%,
+			rgba(69, 92, 233, 0.1) 0%,
+			transparent 60%
+		),
+		var(--b-bg);
+	color: var(--b-text);
+	overflow-x: hidden;
+}
+
+.books-page *:focus-visible {
+	outline: 2px solid var(--b-accent);
+	outline-offset: 3px;
+}
+
+.books-shell {
+	width: 100%;
+	max-width: var(--b-container);
+	margin: 0 auto;
+	padding-inline: var(--b-gutter);
+}
+
+/* --- type --------------------------------------------------- */
+
+.books-eyebrow {
+	margin: 0;
+	font-size: var(--t-caption);
+	font-weight: 600;
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
+	color: var(--b-accent-text);
+}
+
+.books-display-xl,
+.books-display-l,
+.books-heading {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-weight: 400;
+	margin: 0;
+}
+
+.books-display-xl {
+	font-size: var(--t-display-xl);
+	line-height: 1.02;
+	letter-spacing: var(--track-display);
+}
+
+.books-display-l {
+	font-size: var(--t-display-l);
+	line-height: 1.08;
+	letter-spacing: var(--track-display);
+}
+
+.books-heading {
+	font-size: var(--t-heading);
+	line-height: 1.2;
+}
+
+.books-lead {
+	margin: 0;
+	font-size: var(--t-lead);
+	line-height: 1.5;
+	color: var(--b-muted);
+	max-width: 58ch;
+}
+
+.books-body {
+	margin: 0;
+	font-size: var(--t-body);
+	line-height: 1.7;
+	color: var(--b-muted);
+	max-width: 62ch;
+}
+
+.books-caption {
+	margin: 0;
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
+	color: var(--b-muted);
+}
+
+/* --- hero --------------------------------------------------- */
+
+.books-hero {
+	display: flex;
+	align-items: flex-end;
+	min-height: 72svh;
+	padding-block: clamp(7rem, 18vh, 11rem) clamp(2.5rem, 6vh, 4rem);
+}
+
+.books-hero-grid {
+	display: grid;
+	gap: clamp(2.5rem, 6vw, 4rem);
+	align-items: center;
+}
+
+.books-hero-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	max-width: 34ch;
+}
+
+.books-hero .books-lead {
+	max-width: 46ch;
+}
+
+/* --- the hero cluster --------------------------------------- */
+
+.books-stage {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	min-width: 0;
+}
+
+.books-stage-index {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--b-line);
+}
+
+/* Three columns of jackets, each column nudged out of line with the next,
+   so a stack of six covers reads as a shelf rather than as a grid. Every
+   jacket keeps its own proportion — a paperback is not a hardback. */
+.books-cluster {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(0.75rem, 2vw, 1.25rem);
+	align-items: start;
+}
+
+.books-cluster-figure {
+	margin: 0;
+	min-width: 0;
+}
+
+.books-cluster-figure[data-rhythm="1"] {
+	margin-top: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.books-cluster-figure[data-rhythm="2"] {
+	margin-top: clamp(0.5rem, 2vw, 1.25rem);
+}
+
+/* In the cluster the jacket is the whole point; the caption belongs on the
+   shelves below, where there is room to read it. */
+.books-cluster-figure .books-card-text {
+	display: none;
+}
+
+/* --- the index of shelves ----------------------------------- */
+
+/* The four categories, stated once at the top and sticky thereafter, so
+   what the shelf is divided into is never more than a glance away. */
+.books-index {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	padding-block: 1rem;
+	background: color-mix(in srgb, var(--b-bg) 88%, transparent);
+	backdrop-filter: blur(12px);
+	border-block: 1px solid var(--b-line);
+}
+
+.books-index-inner {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 1.5rem;
+}
+
+.books-index-link {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	min-height: 32px;
+	font-size: var(--t-small);
+	color: var(--b-muted);
+	text-decoration: none;
+	transition: color var(--fast) var(--ease);
+}
+
+.books-index-link:hover,
+.books-index-link[data-active="true"] {
+	color: var(--b-text);
+}
+
+.books-index-count {
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	color: var(--b-accent-text);
+}
+
+/* --- a shelf ------------------------------------------------ */
+
+.books-shelf {
+	padding-block: clamp(3rem, 8vh, 5.5rem);
+	scroll-margin-top: 5rem;
+}
+
+.books-shelf-head {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	margin-bottom: clamp(2rem, 5vw, 3rem);
+	max-width: 52ch;
+}
+
+/* Covers are not uniform — a paperback is not a hardback and neither is a
+   scan. The row aligns on the baseline the caption sits on, and each jacket
+   keeps its own proportion above it. */
+.books-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+	gap: clamp(1.75rem, 4vw, 2.75rem) clamp(1.25rem, 3vw, 2rem);
+	align-items: end;
+}
+
+.books-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+	text-decoration: none;
+	color: inherit;
+}
+
+/* The jacket sits on the page, not in a card: no border, no radius, just a
+   shadow so a pale cover does not dissolve into the ground. */
+.books-cover {
+	position: relative;
+	display: block;
+	width: 100%;
+	background: var(--b-surface);
+	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+	transition: transform var(--base) var(--ease);
+}
+
+.books-cover img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.books-card:hover .books-cover,
+	.books-card:focus-visible .books-cover {
+		transform: translateY(-4px);
+	}
+}
+
+.books-card-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.books-card-title {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-size: 1.0625rem;
+	line-height: 1.25;
+	margin: 0;
+	color: var(--b-text);
+}
+
+.books-card-author {
+	margin: 0;
+	font-size: var(--t-small);
+	line-height: 1.4;
+	color: var(--b-muted);
+}
+
+/* --- detail ------------------------------------------------- */
+
+.books-detail {
+	padding-block: clamp(6.5rem, 16vh, 9rem) clamp(4rem, 12vh, 7rem);
+}
+
+.books-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: clamp(2.5rem, 6vh, 4rem);
+	font-size: var(--t-small);
+	color: var(--b-muted);
+	text-decoration: none;
+	transition: color var(--fast) var(--ease);
+}
+
+.books-back:hover {
+	color: var(--b-text);
+}
+
+.books-detail-grid {
+	display: grid;
+	gap: clamp(2rem, 6vw, 4rem);
+	align-items: start;
+}
+
+.books-detail-cover {
+	max-width: 300px;
+	box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
+}
+
+.books-detail-cover img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.books-detail-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 1.1rem;
+}
+
+.books-detail-title {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-size: clamp(2rem, 4vw, 2.9rem);
+	line-height: 1.1;
+	letter-spacing: var(--track-display);
+	margin: 0;
+}
+
+.books-detail-author {
+	margin: 0;
+	font-size: var(--t-lead);
+	color: var(--b-muted);
+}
+
+.books-detail-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+	margin: 0.25rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.books-detail-meta li {
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
+	color: var(--b-muted);
+}
+
+.books-detail-note {
+	margin: 0.5rem 0 0;
+	font-size: 1.125rem;
+	line-height: 1.75;
+	color: var(--b-text);
+	max-width: 54ch;
+	border-left: 2px solid var(--b-accent);
+	padding-left: 1.4rem;
+}
+
+/* Said once, on the three jackets that are a card rather than a scan. */
+.books-card-note {
+	margin: 0;
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	text-transform: uppercase;
+	color: #6c6d68;
+}
+
+/* --- ten to remember ---------------------------------------- */
+
+.books-takeaways {
+	margin-top: clamp(3rem, 8vh, 4.5rem);
+	padding-top: clamp(2rem, 5vh, 3rem);
+	border-top: 1px solid var(--b-line);
+}
+
+.books-takeaways-head {
+	font-family: var(--display);
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-size: var(--t-heading);
+	margin: 0 0 1.75rem;
+	color: var(--b-text);
+}
+
+/* Numbered because they are a list of ten, and the count is the point. The
+   numeral is set in the accent so the eye can walk the column. */
+.books-takeaways-list {
+	counter-reset: takeaway;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 1rem clamp(2rem, 5vw, 3.5rem);
+	max-width: 74ch;
+}
+
+.books-takeaways-list li {
+	counter-increment: takeaway;
+	position: relative;
+	padding-left: 2.75rem;
+	font-size: 1rem;
+	line-height: 1.6;
+	color: var(--b-muted);
+}
+
+.books-takeaways-list li::before {
+	content: counter(takeaway, decimal-leading-zero);
+	position: absolute;
+	left: 0;
+	top: 0.15rem;
+	font-size: var(--t-caption);
+	letter-spacing: var(--track-caps);
+	color: var(--b-accent-text);
+}
+
+@media (min-width: 900px) {
+	.books-takeaways-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.books-detail-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.5rem;
+	margin-top: clamp(3rem, 8vh, 5rem);
+	padding-top: 1.5rem;
+	border-top: 1px solid var(--b-line);
+}
+
+.books-detail-nav a {
+	font-size: var(--t-small);
+	color: var(--b-muted);
+	text-decoration: none;
+	transition: color var(--fast) var(--ease);
+}
+
+.books-detail-nav a:hover {
+	color: var(--b-text);
+}
+
+/* --- motion ------------------------------------------------- */
+
+/* The reveal itself is GSAP's, same as /hobby — useRevealGroup sets the
+   from-state inline, so nothing here may hide an element that JS never
+   reaches. This is the whole of the CSS side of the contract. */
+.books-page .reveal {
+	will-change: transform, opacity;
+}
+
+/* --- breakpoints -------------------------------------------- */
+
+@media (min-width: 700px) {
+	.books-detail-grid {
+		grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+	}
+}
+
+@media (min-width: 900px) {
+	.books-hero-grid {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.books-grid {
+		grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+	}
+}
+
+/* --- reduced motion ----------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+	.books-cover {
+		transition: none;
+	}
+}

@@ -84,28 +84,47 @@ export default function WorkGrid({
 									<p className='work-tile-outcome'>{item.outcome}</p>
 								</div>
 
-								<div className='work-tile-meta-col'>
-									<div
-										className='work-tile-stripe'
-										style={{ marginBottom: '0.75rem' }}
-									/>
-									<div
-										className='work-tile-info-col'
-										style={{
-											display: 'flex',
-											alignItems: 'center',
-											flexWrap: 'wrap',
-										}}
-									>
-										<p style={{ margin: 0 }}>
-											{item.company} &middot; {item.year} &middot; {item.domain}
-										</p>
-										{item.demoUrl && (
-											<span className='work-demo-marker'>Demo</span>
-										)}
-									</div>
-								</div>
 							</>
+						);
+
+						/**
+						 * The meta row sits outside the card's own link. The marker
+						 * under a card is the way into a running demo, so it has to
+						 * be a link to that demo — nested inside the card's anchor it
+						 * could only ever be a chip pointing somewhere else, which is
+						 * the small lie this section is built on not telling.
+						 */
+						const cardMeta = (
+							<div className='work-tile-meta-col'>
+								<div
+									className='work-tile-stripe'
+									style={{ marginBottom: '0.75rem' }}
+								/>
+								<div
+									className='work-tile-info-col'
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'space-between',
+										flexWrap: 'wrap',
+										gap: '0.5rem',
+									}}
+								>
+									<p style={{ margin: 0 }}>
+										{item.company} &middot; {item.domain}
+									</p>
+									{item.demoUrl && (
+										<a
+											className='work-demo-marker'
+											href={item.demoUrl}
+											target='_blank'
+											rel='noopener noreferrer'
+										>
+											Demo ↗
+										</a>
+									)}
+								</div>
+							</div>
 						);
 
 						// Case 1: has a slug → internal case study page
@@ -119,6 +138,7 @@ export default function WorkGrid({
 										>
 											{cardInner}
 										</Link>
+										{cardMeta}
 									</div>
 								</li>
 							);
@@ -137,6 +157,7 @@ export default function WorkGrid({
 										>
 											{cardInner}
 										</a>
+										{cardMeta}
 									</div>
 								</li>
 							);
@@ -149,6 +170,7 @@ export default function WorkGrid({
 									<div className='work-tile-link work-tile-link--static'>
 										{cardInner}
 									</div>
+									{cardMeta}
 								</div>
 							</li>
 						);

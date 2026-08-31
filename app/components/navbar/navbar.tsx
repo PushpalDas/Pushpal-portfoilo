@@ -9,15 +9,27 @@ import { useEffect, useState } from 'react';
 import { mukta } from '../../fonts';
 import Magnetic from '../Magnetic';
 
+/** Reading order of the bar, as set by Pushpal. Both the desktop run and
+ *  the mobile dropdown render straight from this, so it is the one place
+ *  the order lives. */
 const navLinks = [
 	{ href: '/', label: 'Home' },
 	{ href: '/about', label: 'About' },
-	{ href: '/work', label: 'Work' },
-	{ href: '/hobby', label: 'Hobby' },
 	{ href: '/experience', label: 'Experience' },
+	{ href: '/work', label: 'Work' },
 	{ href: '/certifications', label: 'Certifications' },
-	{ href: '/book-a-meeting', label: 'Book a meeting' },
+	{ href: '/hobby', label: 'Hobby' },
+	{ href: '/books', label: 'Books' },
 ];
+
+/**
+ * Let's connect lives only at the right end of the bar. It used to appear
+ * twice — once in the centre run after Certifications, once as the CTA —
+ * and the two pointed at different routes. The CTA is the survivor and it
+ * carries what the centre link had: the real /lets-connect route, the
+ * active pill and aria-current.
+ */
+const CONNECT = { href: '/lets-connect', label: "Let's connect" };
 
 export default function Navbar() {
 	const pathname = usePathname();
@@ -26,6 +38,8 @@ export default function Navbar() {
 
 	const isCaseStudySubpage =
 		pathname.startsWith('/work/') && pathname !== '/work';
+
+	const connectActive = pathname.startsWith(CONNECT.href);
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 20);
@@ -104,14 +118,22 @@ export default function Navbar() {
 				<div className='flex items-center gap-3'>
 					<Magnetic strength={20}>
 						<Link
-							href='/contact'
+							href={CONNECT.href}
+							aria-current={connectActive ? 'page' : undefined}
 							className={classNames(
-								'hidden sm:inline-flex items-center px-4 py-1.5 text-sm font-medium rounded-full',
-								'border border-white/20 text-white',
-								'hover:bg-white/10 transition-colors duration-200',
+								'relative hidden sm:inline-flex items-center px-4 py-1.5 text-sm font-medium rounded-full',
+								'border border-white/20 text-white transition-colors duration-200',
+								!connectActive && 'hover:bg-white/10',
 							)}
 						>
-							Let&apos;s Connect
+							{connectActive && (
+								<motion.span
+									layoutId='navbar-active'
+									className='absolute inset-0 rounded-full bg-blue-500/30'
+									transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+								/>
+							)}
+							<span className='relative z-10'>{CONNECT.label}</span>
 						</Link>
 					</Magnetic>
 
@@ -174,11 +196,15 @@ export default function Navbar() {
 							);
 						})}
 						<Link
-							href='/contact'
+							href={CONNECT.href}
 							onClick={() => setMobileOpen(false)}
-							className='mt-2 text-center px-4 py-2 text-sm font-medium rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors duration-200'
+							aria-current={connectActive ? 'page' : undefined}
+							className={classNames(
+								'mt-2 text-center px-4 py-2 text-sm font-medium rounded-full border border-white/20 text-white transition-colors duration-200',
+								connectActive ? 'bg-blue-500/30' : 'hover:bg-white/10',
+							)}
 						>
-							Let&apos;s Connect
+							{CONNECT.label}
 						</Link>
 					</div>
 				</motion.div>

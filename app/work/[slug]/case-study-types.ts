@@ -582,6 +582,13 @@ export type CaseStudyBlock =
 				placeholder?: string;
 				label?: string;
 				caption: string;
+				/**
+				 * Describes the screen for a reader who cannot see it. The
+				 * label is a title, not a description, so it makes poor alt
+				 * text; where this is absent the label is still used, which
+				 * is why it is optional rather than required.
+				 */
+				alt?: string;
 				/** The live surface this screen is a picture of. */
 				href?: string;
 				hrefLabel?: string;

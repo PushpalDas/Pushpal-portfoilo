@@ -439,15 +439,20 @@ html:not(.dark) .work-list-col-info p {
 	height: 100%;
 }
 
+/* The wrap carries the column now, because the meta row lives beside
+   the card's link rather than inside it. The link takes the remaining
+   height so the meta row still sits on the floor of the card. */
 .work-tile-wrap {
 	position: relative;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .work-tile-link {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	flex: 1 1 auto;
 	text-decoration: none;
 	color: inherit;
 }
@@ -766,6 +771,7 @@ html:not(.dark) .work-tile-outcome {
 .work-demo-marker {
 	display: inline-flex;
 	align-items: center;
+	gap: 0.3em;
 	font-size: 0.7rem;
 	font-weight: 500;
 	color: #fff;
@@ -774,6 +780,46 @@ html:not(.dark) .work-tile-outcome {
 	border-radius: 4px;
 	margin-left: 0.75rem;
 	vertical-align: middle;
+	text-decoration: none;
+	transition: background 0.2s ease;
+}
+
+.work-demo-marker:hover,
+.work-demo-marker:focus-visible {
+	background: #2f45cc;
+}
+
+/* In the grid the marker is a link out of the card rather than a badge
+   about it, so it stays quiet — transparent, on the card's right border,
+   level with the company line — and fills only under the cursor. That
+   fill is the whole tell that it is clickable, since everything else in
+   the tile leads to the case study instead. */
+.work-tile-info-col .work-demo-marker {
+	margin-left: 0;
+	background: transparent;
+	border: 1px solid rgba(69, 92, 233, 0.5);
+	color: #8b98f2;
+	transition:
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.work-tile-info-col .work-demo-marker:hover,
+.work-tile-info-col .work-demo-marker:focus-visible {
+	background: #455ce9;
+	border-color: #455ce9;
+	color: #fff;
+}
+
+html:not(.dark) .work-tile-info-col .work-demo-marker {
+	color: #455ce9;
+	border-color: rgba(69, 92, 233, 0.35);
+}
+
+html:not(.dark) .work-tile-info-col .work-demo-marker:hover,
+html:not(.dark) .work-tile-info-col .work-demo-marker:focus-visible {
+	color: #fff;
 }
 
 /* Case Studies Divider */

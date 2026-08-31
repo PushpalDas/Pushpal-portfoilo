@@ -20,7 +20,9 @@ const STATUS_RANK = { production: 1, internal: 2, 'customer-testing': 3, prototy
 
 // Parse the work items out of the source array.
 const body = src.slice(src.indexOf('export const workItems'), src.indexOf('export const filters'));
-const blocks = body.split(/\n\t\},?\n/).filter((b) => b.includes('title:'));
+// Split on the closing brace of each work item. `core.autocrlf` writes CRLF
+// into the working tree on Windows, so the separator has to tolerate both.
+const blocks = body.split(/\r?\n\t\},?\r?\n/).filter((b) => b.includes('title:'));
 
 const field = (block, key) => {
   const m = block.match(new RegExp(`${key}:\\s*(?:'((?:[^'\\\\]|\\\\.)*)'|null)`));

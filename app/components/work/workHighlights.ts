@@ -75,6 +75,11 @@ const IXANA_TECH = 'https://www.ixana.ai/technology';
 const IXANA_DEV_KITS = 'https://www.ixana.ai/products/dev-kits';
 const IXANA_REF_DESIGNS = 'https://www.ixana.ai/products/reference-designs';
 
+/** The patent programme demo — the real surfaces on an invented portfolio.
+ *  Everything the case study's "What was built" section shows is reachable
+ *  from here, so the card links the system rather than the filings. */
+const PATENT_DEMO = 'https://xana-nine.vercel.app/patents';
+
 /**
  * The partner ecosystem, defined once. Every name is published on
  * ixana.ai/company under the heading it is grouped by here — nothing is
@@ -493,85 +498,90 @@ export const workHighlights: Highlight[] = [
 		media: { kind: 'number' },
 	},
 	{
-		slug: 'ai-pm-generative-ai-engine-for-rca-report-automation',
+		slug: 'team-performance-reporting',
 		track: 'ai',
-		title: 'AMS performance dashboard',
+		title: 'Team performance reporting',
 		eyebrow: 'Ixana · 2026',
-		headline: 'A two-day report, produced in twelve minutes.',
+		headline: 'One engine, five delivery teams, three reporting windows.',
 		soWhat:
-			'Every delay now carries a root cause that a named person has signed.',
+			'Every published delay carries a root cause that a named person has signed.',
 		metrics: [
+			{
+				value: '1 → 5',
+				label: 'teams with a standing performance report',
+				source:
+					'case-studies-v2.json#team-performance-reporting › §08 metrics › "1 → 5"',
+			},
 			{
 				value: '21% → 84%',
 				label: 'delayed tasks with a stated root cause',
 				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-rca-report-automation › §08 metrics › "21% → 84%"',
+					'case-studies-v2.json#team-performance-reporting › §08 metrics › "21% → 84%"',
 			},
 			{
 				value: '2 days → 12m',
-				label: 'to produce the monthly report',
+				label: 'to produce one monthly report',
 				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-rca-report-automation › §08 metrics › "2 days → 12m"',
-			},
-			{
-				value: '3 → 1',
-				label: 'versions of the report in circulation',
-				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-rca-report-automation › §08 metrics › "3 → 1"',
+					'case-studies-v2.json#team-performance-reporting › §08 metrics › "2 days → 12m"',
 			},
 		],
 		features: [
-			'Counting stays rule-based; synthesis is what goes to a model',
-			'A signature gate in front of publication — no unsigned cause ships',
-			'Six dashboard sheets refreshed per run',
-			'No count or percentage on the report is computed by a model',
+			'A report is two parameters — which team, which window',
+			'The window decides what the model is for; the quarter reads the months',
+			'A signature gate from monthly upwards, and deliberately not below',
+			'No count or percentage on any report is computed by a model',
 		],
 		panelItems: IXANA_INTERNAL,
 		role: 'Product manager, delivery owner',
-		status: 'Live, running monthly',
+		status: 'Live across five teams',
 		years: '2026',
 		media: { kind: 'number' },
+		proof: { text: 'Open the working demo', href: '/demo/team-performance' },
 	},
 	{
-		slug: 'ai-pm-generative-ai-engine-for-resource-allocation',
+		// Bandwidth reporting started as its own monthly workflow in 2025 and
+		// is now the capacity half of the reporting dashboard, so this
+		// highlight points at the parent page the work ended up inside.
+		slug: 'ai-pm-customized-multi-view-for-pms',
 		track: 'ai',
-		title: 'Engineering bandwidth reporting',
-		eyebrow: 'Ixana · 2025',
-		headline: 'Capacity forecasts that need nothing from engineers.',
+		title: 'Reporting and Gantt dashboard',
+		eyebrow: 'Ixana · 2025–2026',
+		headline: 'Capacity and timeline, read live — nothing asked of engineers.',
 		soWhat:
-			'Thirty engineers across three teams, compiled from 58 task lists, unasked.',
+			'Thirty engineers across three teams and 58 task lists, read rather than compiled.',
 		metrics: [
 			{
 				value: '9h → 20m',
-				label: 'monthly compile, now review only',
+				label: 'monthly capacity compile, now review only',
 				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-resource-allocation › §08 metrics › "9h → 20m"',
+					'case-studies-v2.json#ai-pm-customized-multi-view-for-pms › §08 metrics › "9h → 20m"',
 			},
 			{
 				value: '11 → 2',
 				label: 'reporting errors caught per cycle',
 				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-resource-allocation › §08 metrics › "11 → 2"',
+					'case-studies-v2.json#ai-pm-customized-multi-view-for-pms › §08 metrics › "11 → 2"',
 			},
 			{
 				value: '58',
 				countUp: 58,
 				label: 'task lists covered per run',
 				source:
-					'case-studies-v2.json#ai-pm-generative-ai-engine-for-resource-allocation › §08 metrics › "58"',
+					'case-studies-v2.json#ai-pm-customized-multi-view-for-pms › §08 metrics › "58"',
 			},
 		],
 		features: [
 			'One definition of committed capacity across all three teams',
-			'Undated tasks handled by rule, timezone drift corrected on due dates',
-			"Appends a formatted report to each team's tab, monthly",
-			'Requires no update from any engineer — the guardrail that keeps it true',
+			'Undated tasks excluded by rule and counted in the open, never absorbed',
+			'Custom SVG timeline — switching scale redraws without a refetch',
+			'Read-only: no write to the workspace, no update asked of an engineer',
 		],
 		panelItems: IXANA_INTERNAL,
 		role: 'Product manager, delivery owner',
-		status: 'Live, running monthly across three teams',
-		years: '2025',
+		status: 'Live for leads, architects and PMs',
+		years: '2025–2026',
 		media: { kind: 'number' },
+		proof: { text: 'Open the working demo', href: '/demo/clickup-gantt' },
 	},
 	{
 		slug: 'ixana-patent-program',
@@ -594,9 +604,10 @@ export const workHighlights: Highlight[] = [
 					'case-studies-v2.json#ixana-patent-program › summary › "median disclosure-to-filing down from about fourteen weeks to six"',
 			},
 			{
-				value: 'Granted',
-				label: 'US12619308B2, first of the estate',
-				source: 'https://patents.google.com/patent/US12619308B2/en',
+				value: '6 → 1',
+				label: 'places opened to answer what is owed',
+				source:
+					'case-studies-v2.json#ixana-patent-program › §08 metrics › "6 → 1"',
 			},
 		],
 		features: [
@@ -605,22 +616,22 @@ export const workHighlights: Highlight[] = [
 			'Quarterly file / defer / publish / abandon reviews with the founder/CTO',
 			'First grants issued',
 		],
-		panelLabel: 'Proof',
+		panelLabel: 'Open the demo',
 		panelItems: [
 			{
-				text: 'Granted — wearable EQS-HBC device (US12619308B2)',
-				href: 'https://patents.google.com/patent/US12619308B2/en',
-				source: 'https://patents.google.com/patent/US12619308B2/en',
+				text: 'Portfolio dashboard and Ask the portfolio',
+				href: PATENT_DEMO,
+				source: PATENT_DEMO,
 			},
 			{
-				text: 'Published — human-body-resonance data transfer (US20250379663A1)',
-				href: 'https://patents.google.com/patent/US20250379663A1/en',
-				source: 'https://patents.google.com/patent/US20250379663A1/en',
+				text: 'Lifecycle tracker, pipeline and invoice approval',
+				href: `${PATENT_DEMO}/tracker`,
+				source: `${PATENT_DEMO}/tracker`,
 			},
 			{
-				text: 'Published — error-proportional encoding for BANs (US20250192915A1)',
-				href: 'https://patents.google.com/patent/US20250192915A1/en',
-				source: 'https://patents.google.com/patent/US20250192915A1/en',
+				text: 'Spend and milestone timeline',
+				href: `${PATENT_DEMO}/spend`,
+				source: `${PATENT_DEMO}/spend`,
 			},
 		],
 		role: 'Owned the program end to end with the founder/CTO',
@@ -631,6 +642,7 @@ export const workHighlights: Highlight[] = [
 			src: '/static/images/project/ixana-patent-tracker.png',
 			alt: 'Patent matter lifecycle tracker',
 		},
+		proof: { text: 'Open the working demo', href: PATENT_DEMO },
 	},
 ];
 

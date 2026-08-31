@@ -256,7 +256,7 @@ function Block({ block }: { block: CaseStudyBlock }) {
 										<img
 											className='gallery-img'
 											src={it.image}
-											alt={it.label ?? it.caption}
+											alt={it.alt ?? it.label ?? it.caption}
 											loading='lazy'
 										/>
 									</ShotFrame>
@@ -266,9 +266,7 @@ function Block({ block }: { block: CaseStudyBlock }) {
 								<figcaption>
 									{it.label && <b className='gallery-label'>{it.label}</b>}
 									{it.caption}
-									{it.href && (
-										<DemoLink href={it.href} label={it.hrefLabel} />
-									)}
+									{it.href && <DemoLink href={it.href} label={it.hrefLabel} />}
 								</figcaption>
 							</figure>
 						))}
