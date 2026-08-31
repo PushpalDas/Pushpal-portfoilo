@@ -4,15 +4,15 @@ Last updated: 2026-09-01 · Session: 1 · Model: Claude Fable 5 · Branch: feat/
 ## CONTEXT CAPSULE (≤ 12 lines — a fresh model reads ONLY this + NEXT_ACTION to re-orient)
 - Mission: elevate this sample mid/senior PM portfolio to a global 10/10 benchmark per ELEVATION-MASTER-PROMPT.md.
 - Ground truth: PORTFOLIO-ANALYSIS.md (content), PROJECT-REFERENCE.md (code), app/Changes/portfolio-decisions.md (spec — wins conflicts).
-- Current phase: 3 — case-study elevation (phases 0–2 resolved; see ledger)
-- Done so far: P0 verifier fixed + BENCHMARKS.md + sitemap/orphan fixes (build pending); P1 satisfied by prior-run AUDIT/FINDINGS.md + fresh verifier output; P2 deferred-per-unit (figures already calibrated + arithmetically verified by prior run — new benchmark rows only when a figure changes).
+- Current phase: 4 — demo verification (P0–P3 complete)
+- Done so far: P0 complete (verifier fixed, build passes after stale .next types purge, BENCHMARKS.md, sitemap+orphan); P1/P2 via prior-run FINDINGS; P3 COMPLETE — all 30 word-band overruns trimmed into band, barsThreshold §08 collision fixed (notetaker → groupedHBar decision-trace), `npm run verify:work` passes corpus-wide (36 distinct chart forms / tile sets / evidence methods). No headline figures changed, so no new BENCHMARKS rows.
 - KEY DISCOVERY: a prior audit run already elevated demos (all 17 have design notes; most parity-verified) and reconciled arithmetic corpus-wide. Remaining defects: 30 case studies over word band (see ledger deltas), one §08 chart-form collision (barsThreshold: ixana-meeting-notetaker vs github-for-clickup…), 6 demos lacking recorded parity verification (quantum, procurement-desk, prd-os, clickup-gantt, rider-count, envi-city) with punch lists in AUDIT/FINDINGS.md "Phase 2 parity" section.
 - Method for P3 units: read dossier slice of PORTFOLIO-ANALYSIS.md (index in scratchpad/pa-index.txt) → trim v2 JSON prose into band via node per-slug surgery, preserving voice/claims/numbers → four-lens check → verify:work → commit.
 - Git: use %LOCALAPPDATA%\Programs\Git\cmd; per-unit commits stage explicit paths (never add -A — OneDrive placeholders).
 - Open risks/blocks: `npm run build` baseline still running (task b0kp7byw6); very slow under OneDrive.
 
 ## NEXT_ACTION
-Execute P3-ixana-meeting-notetaker: trim from 1521 to ≤1000 prose words AND change its §08 chart form off barsThreshold (collision with github-for-clickup…), per-slug JSON surgery on data/case-studies-v2.json; then run node scripts/verify-case-studies.js.
+Execute P4: verify the six demos without recorded parity (quantum-simulator, procurement-desk, prd-os, clickup-gantt, rider-count, envi-city) against their punch lists in AUDIT/FINDINGS.md "Phase 2 parity" section; fix only genuine mismatches. Also check notetaker demo/case-study alignment after the §08 chart change (chart is page-side only — no demo change expected).
 
 ## TASK LEDGER
 | ID | Unit | Status | Notes / word delta | Commit |
