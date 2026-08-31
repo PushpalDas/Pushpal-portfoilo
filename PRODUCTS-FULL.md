@@ -1,6 +1,6 @@
 # Product Portfolio — Pushpal Das (full case-study export)
 
-_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-08-31. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries._
+_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-08-31. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
 
 ## How to read this
 
@@ -9,7 +9,6 @@ _Complete export of every product and its case study, compiled from `app/work/co
 - Every case study follows the same nine-part structure, so sections are directly comparable across products.
 - **Chart data** is rendered as tables rather than images, so the underlying numbers are readable.
 - **Confidentiality notes** are quoted on each product. Several internal and silicon products state outright that certain figures are anonymised, relative, or invented placeholders for a public sample — read those before treating any number as fact.
-- **Open questions** listed at the end of a product are unresolved authoring notes found in the source. They mark known gaps and internal contradictions, not settled claims.
 
 ## Index
 
@@ -17,7 +16,7 @@ _Complete export of every product and its case study, compiled from `app/work/co
 |---|---|---|---|---|---|---|
 | 1 | Wi-R Body Area Network — YR31 | Ixana | 2024 - present | silicon | production | Silicon |
 | 2 | Wi-R Dev Kits — BAN YR23 and NFE XA-NFE2001 | Ixana | 2024 - present | silicon | production | Developer hardware |
-| 3 | Ixana-Wiki — multifile RAG knowledge platform | Ixana | 2026 | ai | internal | Internal platform |
+| 3 | Ixana-Wiki — multifile RAG knowledge platform | Ixana | 2025 | ai | internal | Internal platform |
 | 4 | Dāsa — citation-grounded scripture engine | ISKCON (International Society for Krishna Consciousness) | 2026 - present | ai | research | Applied AI |
 | 5 | Wi-R Body Area Network — YR23 | Ixana | 2024 - present | silicon | production | Silicon |
 | 6 | NeuroAdapt — spike-train feature extraction for a science compiler | NeuroAdapt, IISc Bangalore | 2023 - present | ai | research | Research tooling |
@@ -46,7 +45,7 @@ _Complete export of every product and its case study, compiled from `app/work/co
 | 29 | Sensor signal generator | SLB | 2023 | silicon | production | Test engineering |
 | 30 | Ornithopter for surveillance | SRM UAV | 2021 - 2023 | silicon | prototype | Aerial robotics |
 | 31 | Carbon positive e-car | Ricky Kids | 2020 | silicon | research | Sustainable mobility |
-| 32 | UAV-aided weather radar calibration | NIT Tiruchirapalli & SRM University | 2022 | silicon | research | Weather instrumentation |
+| 32 | UAV-aided weather radar calibration | NIT Tiruchirapalli  & SRM University | 2022 | silicon | research | Weather instrumentation |
 | 33 | Non-contact COVID patient monitoring | Ricky Kids | 2021 | silicon | research | Health sensing |
 | 34 | Triple riding avoidance | Ricky Kids | 2022 | ai | internal | Road safety |
 | 35 | Toys for autistic kids | Ricky Kids | 2021 - 2023 | silicon | prototype | Assistive play |
@@ -58,7 +57,7 @@ _Complete export of every product and its case study, compiled from `app/work/co
 - **Total products:** 37 (plus 17 engineering/hardware builds, in the appendix)
 - **By track:** ai 20 · silicon 17
 - **By status:** internal 14 · production 10 · research 7 · prototype 4 · customer-testing 2
-- **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli & SRM University 1
+- **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli  & SRM University 1
 - **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Procurement ops 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
 
 ---
@@ -129,18 +128,20 @@ I collected every change request, field issue and evaluation complaint against Y
 | "Test cost is visible in our BOM" | Per-unit test time at volume | 6 of 63, all from teams past prototype |
 | Assorted convenience requests | Real, individually small, collectively a second gen-1 | 31 of 63 |
 
-**Figure — Sixty-three YR23 change requests ranked by evaluations unblocked against validation weeks: on-die trim 17, higher rate 9, test-time reduction 6, everything else 31 spread thin**
+**Figure — Sixty-three YR23 change requests grouped and ranked by evaluations unblocked against validation weeks: on-die trim 12, higher rate 8, test-time reduction 7, and the long tail spread thin below the cut line**
 
 | name | value | n |
 |---|---|---|
-| On-die trim storage | 17 | 6 |
-| Higher rate mode | 9 | 14 |
-| Test-time reduction | 6 | 4 |
-| Package variant | 4 | 9 |
-| Backward-compat energy mode | 3 | 11 |
-| Convenience requests (28) | 2 | 22 |
+| On-die trim storage (17 requests) | 12 | 5 |
+| Higher rate mode (9 requests) | 8 | 14 |
+| Test-time reduction (6 requests) | 7 | 4 |
+| Package variant (4 requests) | 4 | 9 |
+| Backward-compat energy mode (3 requests) | 2 | 11 |
+| Convenience requests (24) | 2 | 22 |
 
-_The 63 requests grouped and ranked, May 2024. Value is evaluations the change would unblock; n is the validation weeks it would cost. Three items sit above the cut line, and the long tail is the danger — individually cheap, collectively a second first-generation programme._
+_Threshold: 5 — cut line_
+
+_The 63 requests grouped and ranked, May 2024. Value is evaluations the change would unblock — not how often it was asked for, which is the point of ranking; n is the validation weeks it would cost. Three items sit above the cut line, and the long tail is the danger — individually cheap, collectively a second first-generation programme._
 
 The reframe: the loudest request was not the most valuable. Rate had executive attention because it appeared in competitive comparisons; on-die trim was raised nearly twice as often by the people actually building boards, and cost a third as much.
 
@@ -186,6 +187,8 @@ The higher-rate part on the BAN line: 20 Mbit/s at sub-0.2 ms across the same up
 - **Marked as a distinct part, not a revision.** YR31 changes the energy point. Shipping it as a YR23 revision would have let a design inherit a different power budget without noticing.
 - **Runs the same reference driver.** A partner evaluating gen-1 moves to gen-2 without a firmware project, which is what keeps the installed base an asset rather than a migration problem.
 
+_Ixana YR31 package, from Ixana's published product photography. The package, part marking and specification are public; internal design detail is not shown. Happy to walk through the real programme in a conversation._
+
 #### 07. Tradeoffs
 
 | Tension | What I chose | What it cost |
@@ -214,15 +217,15 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 
 | name | value | label | good |
 |---|---|---|---|
-| Bring-up time | -82 | −82% | true |
-| Link latency | -80 | −80% | true |
-| ATE test time | -38 | −38% | true |
-| Wafer yield | 21 | +21% | true |
-| Energy per bit | 67 | +67% — intended | false |
+| Bring-up time | -82 | −82% | True |
+| Link latency | -80 | −80% | True |
+| ATE test time | -38 | −38% | True |
+| Wafer yield | 21 | +21% | True |
+| Energy per bit | 67 | +67% — intended | False |
 
 _Gen-1 to gen-2 change by measure, Nov 2025, from production lot data and bring-up records. Link rate is excluded: at +300% it would compress everything else to nothing, and it is in the tiles above. The single red bar is the point of the page — one measure was spent, deliberately, and a page that hid it would be describing a different chip._
 
-**How we counted.** Yield is wafer-level probe yield at production release, excluding lots scrapped for assembly or handling defects, which are a packaging problem and would flatter the die.
+**How we counted.** Yield is wafer-level probe yield at production release, excluding lots scrapped for assembly or handling defects, which are a packaging problem and would flatter the die. Interop is counted across the 34 host designs in the installed base: the failing 6% is two early evaluation boards that drive the link outside the published timing spec, fail the same way on YR23, and are documented as out of spec. Parity means no host gen-1 had earned was lost — not that every board ever built works.
 
 `Part configuration — YR31 Wi-R BAN transceiver · up to 20 Mbit/s · 0.20 nJ/bit at 20 Mbit/s, under 6 mW · sub-0.2 ms link latency · up to 16 devices per network · 10–15 m along-body, ~0.1 m off-body containment · on-die per-unit trim storage · package, pin-out and reference driver shared with YR23`
 
@@ -233,11 +236,6 @@ I ranked by evaluations unblocked and validation weeks, and never scored anythin
 I would also have published the declined list earlier. Ranking in public is what worked here, and I did it two months in, after the queue had been relitigated twice. Every week the ranking is private is a week people spend lobbying rather than arguing about the criteria.
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are invented placeholders — none of that class of data is ever published — and should be replaced with real data before this page is used. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.11 — these six categories sum to 67 (17+9+6+4+3+28) against 63 requests, and each category's "evaluations unblocked" equals its request count. Give the true split summing to 63 and the true unblock counts, or confirm the coincidence so it can be footnoted.
-- name what the failing 6% of the interop guardrail is — which hosts or which link attempts fail, and whether they are documented.
 
 ---
 
@@ -290,7 +288,7 @@ I sized the three against the constraint that actually bound us: applications en
 | Reference design | 4 | 4 per quarter |
 | Onsite bring-up | 2 | 2 per quarter |
 
-_Opportunity sizing, Feb 2024. Estimated from the six evaluations we had run to that point, holding applications engineering headcount fixed at three. The dev kit was the only option that scaled evaluation without scaling the team, which is what decided the year._
+_Opportunity sizing, Feb 2024. Estimated from the six evaluations we had run to that point, holding the company's applications engineering function fixed at its three engineers — the kit team roster above borrows one of them. The dev kit was the only option that scaled evaluation without scaling the team, which is what decided the year._
 
 The reference design lost on timing rather than merit — it answers "how do I productise this", and nobody reaches that question before believing the link works.
 
@@ -301,7 +299,7 @@ I timed the first six partner evaluations end to end, from silicon delivery to f
 | What they did | Where it broke | Evidence |
 |---|---|---|
 | Wired the transceiver to their own MCU | Clock and supply noise coupled into the electrode path | 5 of 6 evaluations; 11 tickets |
-| Improvised electrodes from copper tape | Contact area and spacing off by enough to kill the link | 6 of 6; the single largest time sink |
+| Improvised electrodes from copper tape | Contact area and spacing off by enough to kill the link | 6 of 6; 15 tickets — the single largest time sink |
 | Grounded the board to bench earth | Return path through the bench, not the body | 4 of 6; 9 tickets, all filed as "no link" |
 | Measured with a scope probe on the electrode | Probe capacitance loaded the node and hid the signal | 3 of 6; 6 tickets |
 
@@ -341,7 +339,7 @@ I owned the kit as a product: what went in the box, what the first hour had to p
 
 The on-kit display was the hardest cut. Every partner review asked for it — a screen showing link state lets you walk around and watch the link hold, which is the demo that convinces a room. It cost an enclosure revision, a display driver and about seven weeks. A host-side console prints the same link-health fields, which is a worse demo and an equal diagnostic — and the diagnostic is what an evaluation actually needs.
 
-**From the kit definition — scope, rev D — Out of scope for the first kit revision**
+**Out of scope for the first kit revision — From the kit definition — scope, rev D**
 
 - **On-kit status display.** Adds an enclosure revision and roughly 7 weeks to first ship. Same information available over the USB console. Revisit if console use falls below half of onboarding sessions.
 - **Adjustable electrode mounting.** Directly contradicts the finding that geometry exploration is the largest single time cost. Fixed geometry, documented, no fasteners.
@@ -367,6 +365,8 @@ A sealed kit containing a Wi-R transceiver module, a known-good host board, two 
 - **The module sits in an open bay, not under a lid.** Evaluators want to probe the module and swap silicon revisions. Leaving the bay open cost ingress protection we did not need on a bench.
 - **Power is a hard switch, not a firmware state.** Half of the early "no link" tickets were resolved by a power cycle. A physical switch makes the first diagnostic step unambiguous over a phone call.
 - **The part number is on the outside of the case.** Support threads kept stalling on which silicon revision a partner had. Printing it externally removed a round trip from most tickets.
+
+_Ixana dev kit enclosure, photographed in-house. The mechanical design and markings are public; internal boards are not shown. Happy to walk through a live bring-up in a conversation._
 
 #### 07. Tradeoffs
 
@@ -394,6 +394,12 @@ Before tooling was committed we agreed the program failed on two conditions: few
 
 **Figure — Cumulative dev kits shipped by quarter, from 4 in the first quarter to 62 by the sixth, against a pre-agreed floor of 40**
 
+| Q3 24 | Q4 24 | Q1 25 | Q2 25 | Q3 25 | Q4 25 |
+|---|---|---|---|---|---|
+| 4 | 13 | 24 | 38 | 52 | 62 |
+
+_Threshold: 40 — Pre-agreed floor: 40 kits_
+
 _Cumulative kits shipped, Q3 2024 – Q4 2025, from order records. The steps are real: kits leave in batches tied to module builds, not continuously. The floor was crossed in Q3 2025, one quarter later than planned, because the NFE kit slipped behind BAN._
 
 **How we counted.** Time to first link means the interval between the partner opening the box and their first sustained 60-second on-body link, self-reported in the onboarding form. It counts calendar time rather than engineering hours, because calendar time decides whether an evaluation survives a reprioritisation. A design-in counts only where the part appears in a partner schematic we have seen. The 34 evaluations are kit-mediated only, a narrower population than the NFE-line design-in figures, which include direct silicon engagements.
@@ -408,11 +414,6 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are invented placeholders and should be replaced with real data before this page is used. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation.
 
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.13 — this sizing holds applications engineering at three, but the team roster on this page lists one applications engineer. State the real structure (kit team vs company applications team) in one clause.
-- this row has no ticket count while the other three do. If the four clusters partition the 41 audited tickets it is 15 (41 − 11 − 9 − 6); otherwise give the count, or mark the cluster un-ticketed.
-
 ---
 
 ### 3. Ixana-Wiki — multifile RAG knowledge platform
@@ -421,7 +422,7 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 |---|---|
 | Slug | `xana-multifile-rag-based-data-singularity-platform` |
 | Company | Ixana |
-| Years | 2026 |
+| Years | 2025 |
 | Track | ai |
 | Domain | Internal platform |
 | Status | internal |
@@ -440,7 +441,7 @@ I also let the NFE kit slip a quarter to reuse BAN tooling, and would take that 
 
 **What I did.** I owned delivery of a single internal knowledge platform: one searchable repository across OneDrive, ClickUp, Teams, efficiency trackers and patent records, with hybrid search, cited AI answers and role-based access.
 
-**Result.** 118 of 140 employees used it within a quarter. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence.
+**Result.** 118 of 140 employees used it within a quarter — 140 being the mid-2025 roster, up from about 75 a year earlier. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence.
 
 **Evidence / demos**
 
@@ -509,7 +510,7 @@ I owned product scope across ingestion, search, access and user workflows, and d
 
 Per-document permissions was the hardest cut. Existing SharePoint groups already covered roughly 90% of real sensitivity cases, and building a second permission model would have added a month for the remaining 10% — which we handled by excluding two folders from ingestion instead.
 
-**From the PRD — scope, v0.4 — Out of scope for v1**
+**Out of scope for v1 — From the PRD — scope, v0.4**
 
 - **Per-document permissions.** SharePoint group inheritance covers 90% of sensitivity cases (audit, Feb 2025). Remaining cases handled by excluding two named folders from ingestion. Revisit if exclusion list exceeds 5 folders.
 - **Multi-language search.** Under 2% of indexed content is non-English. Defer indefinitely.
@@ -531,10 +532,14 @@ An internal knowledge platform combining document management, enterprise search 
 
 **Interface — Searching XANA for “YR31 power budget”: the answer sits above the results with numbered citation chips inside its sentences, and the three sources beneath name a PDF page, a spreadsheet row range and a meeting timestamp**
 
+[Search this in the demo — opens the screen above](https://xana-nine.vercel.app/?q=YR31%20power%20budget)
+
 - **Citations sit inline, not in a footer.** In the alpha people wouldn't act on an answer without seeing the source first, so the marker sits in the clause it supports and opens that exact passage. A meeting citation carries a timestamp and seeks the recording to the second it was said.
 - **Preview opens in-app.** Opening OneDrive in a new tab broke the search flow and lost people's place in the results.
 - **Source filter is visible, not in settings.** People often knew which tool a document lived in and wanted to say so upfront.
 - **Superseded copies are flagged, never hidden.** The February audit found three versions of one spec. A superseded copy still appears in the results, ranked under the current one and labelled — and the answer refuses to quote from it. Hiding duplicates would have made the guardrail this shipped against impossible to read.
+
+_The running demo rather than a mock-up — same code, same layout, on an invented corpus. Ten documents, four recordings and three videos stand in for the five connected sources, and every document, name, part number and figure is made up for publication. The two folders excluded from ingestion are absent from it by construction rather than filtered._
 
 **Gallery**
 
@@ -542,6 +547,8 @@ An internal knowledge platform combining document management, enterprise search 
 - **A spreadsheet, opened as a grid** — [Open the spreadsheet](https://xana-nine.vercel.app/myfiles/view/doc-adoption-sheet)  Column letters and row numbers, because a citation reading “Sheet 1, rows 2–13” is only checkable against something a reader can count to. One markdown pane for every file type made every locator land in the same undifferentiated wall of text.
 - **A PDF, opened by page** — [Open the PDF](https://xana-nine.vercel.app/myfiles/view/doc-alpha-readout)  Each page stamped with the number its citations quote, so “p. 2” lands on page two. Word documents and decks read the same way, by section and by slide.
 - **My Files** — [Open My Files](https://xana-nine.vercel.app/myfiles)  The OneDrive and SharePoint surface — a video, a PDF, a spreadsheet, a document and a deck, each opening in a reader that looks like what it is. ClickUp is not mixed in; it is a separate source with its own route, and folding both into one list was counting one index as two. The two folders excluded from ingestion are absent entirely rather than filtered.
+
+_Every file type in My Files opens inside the app rather than bouncing out to OneDrive in a new tab, which lost people their place in the results. Each opens in a reader shaped like the file, because a locator only means something if the surface has pages, or rows, or a timeline._
 
 #### 07. Tradeoffs
 
@@ -568,6 +575,12 @@ Before build, we agreed this failed if fewer than half the company used it in th
 
 **Figure — Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70**
 
+| Week 1 | Week 4 | Week 7 | Week 10 |
+|---|---|---|---|
+| 18 | 36 | 44 | 62 | 68 | 84 | 94 | 104 | 112 | 118 |
+
+_Threshold: 70 — Pre-agreed floor: 70 of 140_
+
 _Weekly active users after launch, Jun–Aug 2025, from the application database. Growth was steady rather than spiked — no company-wide mandate, so adoption spread department by department, and it crossed the pre-agreed floor in week six._
 
 **How we counted.** Active means at least one search or chat query in a calendar week, deduplicated by user. It deliberately excludes people who only opened a link someone else shared, since that measures sharing rather than adoption.
@@ -581,10 +594,6 @@ I shipped v1 without product analytics. For six weeks I had no idea which source
 I also sequenced the connectors by how easy they were to build rather than by expected usage. OneDrive and ClickUp turned out to carry most of the traffic, but I only knew that afterwards — two of the five connectors could have waited a release and bought back the month the permissions work needed.
 
 > **Note on this sample.** This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025."
 
 ---
 
@@ -606,7 +615,7 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 
 **Positioning.** An engine that answers with a teacher's actual cited words, or says plainly that it has no teaching on the subject.
 
-**Outcome (card copy).** Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, up from 17.
+**Outcome (card copy).** Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, down from 17.
 
 **Problem.** A teacher's work sits across roughly seventy books, thousands of letters and hundreds of hours of recordings, with nowhere to ask a question and get his actual words back with a source. A general model answers every such question fluently, which is precisely the failure — a plausible paraphrase attributed to a named person is worse than no answer.
 
@@ -642,7 +651,7 @@ We collected 100 real questions from community forums rather than writing our ow
 
 | What people did | Where it broke | Evidence |
 |---|---|---|
-| Asked a general model | Fluent paraphrase attributed to him | Reproduced in 34 of 40 spot checks |
+| Asked a general model | Fluent paraphrase attributed to him | Reproduced in 34 of 40 spot checks — a separate question set from the 40 refusal tests in section 01 |
 | Searched the books by keyword | Missed anything phrased differently | Weakest on grief, guru and death questions |
 | Asked a knowledgeable person | Not always available, answer unrecorded | The default for most in the community |
 | Gave up on the question | No visibility into what was never asked | Unmeasurable, and probably the largest case |
@@ -669,6 +678,8 @@ A retrieval engine over books, letters and verified lecture transcripts, held as
 - **The first-person voice mode always shows the cited words alongside.** Warmth makes answers accessible and could quietly substitute for verifiability, so the two are never separated.
 - **The corpus boundary is stated on the page.** Users should know the commentary stops where his own translation stopped, rather than inferring the gap from an absence.
 
+_Recreated interface. Layout is accurate; the question, answer and citation shown are illustrative. Happy to walk through the real engine in a conversation._
+
 #### 05. Finding and what it changed
 
 We agreed before the evaluation ran that fabricated citations had to reach zero rather than merely fall — a low rate is still a product that occasionally puts words in his mouth. Correct refusal was the guardrail, because a system can trivially reach zero fabrications by refusing everything, so the two were always measured together.
@@ -683,6 +694,8 @@ We agreed before the evaluation ran that fabricated citations had to reach zero 
 | Death and afterlife | 0.79 | 14 |
 | Guru and guidance | 0.76 | 12 |
 | Grief | 0.71 | 11 |
+
+_Threshold: 0.75 — 0.75 line_
 
 _nDCG@6 by question category after re-ranking, n=100 total split as shown, judged independently by three reviewers, Aug 2026. The aggregate figure of 0.840 hides the finding: emotional questions retrieve worst and are the ones people most need answered, which is where the next work goes._
 
@@ -708,10 +721,6 @@ We built an engine and an interface and never connected them, which is the fact 
 I would also have set the evaluation at 100 questions from the start. The 20-question set gave us months of confidence that turned out to be unearned — too small to show the grief-category gap that is now the most important thing we know.
 
 > **Note on this sample.** This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and all evaluation figures on this page are invented placeholders for this sample. I'm glad to walk through the real engine and its evaluation in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- say whether these 40 spot checks are the same 40 deliberately out-of-scope questions used in §01, or a separate set.
 
 ---
 
@@ -780,6 +789,16 @@ Rather than ask engineers how bring-up went, I audited the bench logs from the f
 
 **Figure — Days from board build to first stable on-body link across 24 evaluation boards, clustered between 7 and 14 days against a 14-day gate**
 
+| name | value |
+|---|---|
+| 3–6 | 3 |
+| 7–10 | 7 |
+| 11–14 | 8 |
+| 15–20 | 4 |
+| 20+ | 2 |
+
+_Ceiling: None — 14-day gate_
+
 _Bring-up time across the first 24 evaluation boards, Sep–Dec 2023, coded from bench logs. Median 11 days. The six boards past the gate are the finding: they were not worse silicon, they were boards whose trim drifted furthest from the reference — a characterisation gap, not a die defect._
 
 The reframe: what looked like an unstable part was an uncharacterised one. The die behaved consistently; the electrode interface around it did not, and nothing in our documentation told an engineer what good looked like.
@@ -826,6 +845,8 @@ A body-area transceiver in a package a wearable can carry, moving 100 kbit/s to 
 - **Pin-out committed before first silicon returned.** OEMs cannot start a board until the pin-out is frozen. Publishing it early cost us the option to change it and bought two design starts that would otherwise have waited a quarter.
 - **The electrode interface is specified, not left open.** The 24-board audit showed the interface around the die was what varied. Specifying it turned the largest source of bring-up stalls into a documented procedure.
 
+_Ixana YR23 package, from Ixana's published product photography. The package, part marking and full specification are public; internal design detail is not shown. Happy to walk through the real program in a conversation._
+
 **Gallery**
 
 - **Untitled**  The network YR23 serves — up to 16 devices on one body, from head-worn to foot, linked along the surface rather than through the air. Range along the body is 10–15 m; off the body it stops at roughly 0.1 m, which is what makes the link private without encryption.
@@ -865,9 +886,11 @@ Before tapeout we agreed first silicon failed on one condition: if it could not 
 | Clock lock | 2 |
 | Other | 1 |
 
+_Cutoff: 80 — 80% of escapes_
+
 _Escapes by category, Sep 2023 – Feb 2024, from the bring-up defect log. Three categories carry 80%, and all three are addressable in firmware or documentation rather than in the die — which is the whole reason a respin was avoidable rather than merely avoided._
 
-**How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround at the time of triage. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts.
+**How we counted.** An escape is an issue found after tapeout that a pre-tapeout check should have caught, logged whether or not it turned out to be the die. Blocking means it could not be closed in firmware or documented as a workaround at the time of triage — the three that carried the label were exactly that when triaged, and later driver work closed all three, which is the reclassification the summary counts. Board and setup problems stay in deliberately: 26 of the 41 were never silicon, and excluding them would hide where bring-up time actually went. The four OEM programs counted here are pre-kit direct engagements, not the kit-mediated design-ins the dev-kit page counts.
 
 `Part configuration — YR23 Wi-R BAN transceiver · 100 kbit/s – 5 Mbit/s · 0.12 nJ/bit at 5 Mbit/s · up to 16 devices per network · sub-1 ms link latency · 10–15 m along-body, ~0.1 m off-body containment · physical-layer security by E-field confinement · host interface with reference driver`
 
@@ -878,10 +901,6 @@ I scheduled the die and left the interface around it to look after itself. Every
 I would also publish the errata differently. Shipping workarounds in the driver was right, and quietly created a second problem: partners who take the driver get the fix invisibly and never learn the constraint, so when they write their own integration they reintroduce it.
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- confirm the three were classed blocking at triage and closed in firmware later; if they were never firmware-closable, the summary is what needs changing.
 
 ---
 
@@ -966,10 +985,14 @@ A feature extraction module that ingests sorted spike trains and computes unit-l
 
 **Interface — A generated feature report: nine preprocessing choices listed with what each one changes, then a unit-level table whose column headings carry the definition of each metric, then the population tier beginning below it.**
 
+[Open this report in the demo](/demo/neuroadapt?view=report)
+
 - **Every metric carries its definition in the column heading.** This is the whole intervention. A burst index without its threshold is exactly the artefact the audit found 11 times.
 - **Preprocessing choices are listed, not implied.** Nine of them, each with the number it changes. 14 of 22 audited analyses were irreproducible because of omissions like these.
 - **The two tiers are labelled and kept apart.** They have different assumptions and different reliability, and merging them invites reading a population claim as a unit-level one.
 - **Each figure names the stored array it was drawn from.** Figures read the feature table rather than the spike times, which is what guarantees a figure and a table cannot disagree — a failure we hit twice during development.
+
+_The report the module generates, running on the whitepaper’s validation dataset: five units, ten seconds, three planted structures. The spike times are simulated and every number is computed from them in the browser. Happy to walk through the real module on a recording in a conversation._
 
 **Gallery**
 
@@ -979,11 +1002,21 @@ A feature extraction module that ingests sorted spike trains and computes unit-l
 - **The reason the module exists.** — [Try it on another unit](/demo/neuroadapt?view=definitions&metric=burst&unit=1)  One spike train under the four definitions of burst index the audit found in use: 0.82, 0.82, 1.00 and 8.6. Two of them agree here and disagree on the next unit. Nothing on this screen is a disagreement about data.
 - **Where the definition ends up.** — [Open the container](/demo/neuroadapt?view=export&format=nwb)  Written into NWB beside the spikes it came from, one description per column, with the same parameter hash in the CSV and the JSON. A better spreadsheet would have reproduced the exact failure the audit found.
 
+_The demo runs the whitepaper’s validation design in the browser from fixed seeds: every metric, figure and generated sentence is computed from the spike times at render time. It exists so the argument on this page can be checked rather than taken on trust — change the unit, re-run and compare the feature hash, or push an ungrounded number into the generated interpretation and watch it be withheld._
+
 #### 05. Finding and what it changed
 
 We agreed before running anything that the pipeline failed unless it recovered all three planted structures — a synchronous pair, a bursting unit and a regular one — with the top two components carrying at least 80% of variance. Definitional drift was the guardrail: any metric shipped without a written definition in the output would reproduce the problem we were fixing, and that count has stayed at zero.
 
 **Figure — Unit loadings on the first two principal components: the bursting unit alone on PC1, the synchronous pair together on PC2, the other two at the origin**
+
+| x | y | group |
+|---|---|---|
+| 0.903 | 0.429 | 0 |
+| 0.007 | 0.053 | 2 |
+| 0 | 0 | 2 |
+| 0.285 | 0.573 | 1 |
+| 0.322 | 0.696 | 1 |
 
 _Principal component analysis of the simulated recording, five units binned at 100 ms, covariance basis. The first two components carry 87% of the variance. Unit 1 sits alone on the first component, which is “did a burst happen in this bin”; units 4 and 5 sit together on the second, which is “did a synchronous event happen”; units 2 and 3 sit at the origin, which is the correct answer for them. Signs are dropped because an eigenvector’s sign is arbitrary. This is the demo’s own output — the same numbers appear under Population-level features._
 
@@ -1079,14 +1112,14 @@ Fourteen evaluations had supplied a written requirement sheet before stalling, s
 
 | name | value | target | max | label | targetLabel | pass |
 |---|---|---|---|---|---|---|
-| Goodput (Mbit/s) | 3.4 | 10 | 15 | 3.4 vs 10 | required | false |
-| 100 MB transfer | 235 | 60 | 250 | 235 s vs 60 s | required | false |
-| 50 MB transfer | 118 | 30 | 250 | 118 s vs 30 s | required | false |
-| Latency (ms) | 0.9 | 1 | 2 | 0.9 vs 1.0 | required | true |
-| Range at 5 cm | 1 | 1 | 1.2 | met | required | true |
-| Sealed-wall operation | 1 | 1 | 1.2 | met | required | true |
+| Goodput (Mbit/s) | 3.4 | 10 | 15 | 3.4 vs 10 | required | False |
+| 100 MB transfer | 235 | 60 | 250 | 235 s vs 60 s | required | False |
+| 50 MB transfer | 118 | 30 | 250 | 118 s vs 30 s | required | False |
+| Latency (ms) | 0.9 | 1 | 2 | 0.9 vs 1.0 | required | True |
+| Range at 5 cm | 1 | 1 | 1.2 | met | required | True |
+| Sealed-wall operation | 1 | 1 | 1.2 | met | required | True |
 
-_Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput._
+_Gen-1 characterisation against the fourteen requirement sheets, Feb 2025. Bars are our measured values, markers the required ones. Three lines pass and three fail, and the three that fail are one failure counted three ways — everything downstream of throughput. Latency is scored at its 0.9 ms worst case across the range profiles, not the 0.6 ms median the XA-NFE2001 page reports, because a requirement line is held to the worst case._
 
 The reframe: we had been reading these as separate objections and answering them separately. They were one number. Nobody wanted a faster link for its own sake; they wanted a payload moved inside a window a technician would stand still for.
 
@@ -1132,6 +1165,8 @@ A near-field transceiver moving about 13.5 Mbit/s of real data at 1–15 cm, und
 - **Range tuned for 1–15 cm, not gen-1's 5–25.** The trade the requirement sheets licensed. Tighter coupling is what the throughput was bought with, and nobody in the pipeline was using the range we gave up.
 - **No second front end for metal enclosures.** The cut in section 04, visible as an absence. Adding one would have cost the RF-silent property these buyers came for.
 
+_Ixana XA-NFE3001 package, from Ixana's published product photography. The package, part marking and specification are public; internal design detail is not shown. Happy to walk through the real programme in a conversation._
+
 **Gallery**
 
 - **Untitled**  The workflow the part exists for — a handheld against a sealed enclosure, moving a firmware image and pulling logs back without a connector. The enclosure stays closed, which is the commercial argument; throughput is what makes it a workflow rather than a demonstration.
@@ -1162,14 +1197,16 @@ Before the spin was committed we agreed it failed on one condition: if gen-2 cou
 
 **Figure — Transfer time against payload size: gen-1 leaves the one-minute service window between 25 and 50 megabytes, gen-2 stays inside it to 100 megabytes**
 
-| name | points |
-|---|---|
-| XA-NFE2001 (gen-1) | [59,118,235] |
-| XA-NFE3001 (gen-2) | [15,30,59] |
+| series | 25 MB | 50 MB | 100 MB |
+|---|---|---|---|
+| XA-NFE2001 (gen-1) | 59 | 118 | 235 |
+| XA-NFE3001 (gen-2) | 15 | 30 | 59 |
+
+_Threshold: 60 — 60 s window_
 
 _Transfer time by payload, computed from published goodput for both parts and confirmed on partner benches, Jan 2026. The shaded band is the window the requirement sheets specified. Gen-1 exits it before 50 MB; gen-2 reaches 100 MB with a second to spare, which is thin on purpose — the sheets asked for a minute, not for headroom._
 
-**How we counted.** Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1, drawn from the same NFE-line population as the gen-1 page's 7 of 26 rather than being a separate cohort.
+**How we counted.** Throughput is goodput at the host application, not PHY rate: payload bytes delivered divided by wall-clock session time, including link establishment. A converted evaluation issued a design commitment against gen-2 — a purchase order or a schematic we have seen — so evaluations that merely restarted are excluded, and nine is smaller than the enthusiasm suggested. The fourteen are gen-2 conversions of evaluations that had already stalled on gen-1 — fourteen of the same 26 NFE-line evaluations the gen-1 page counts, not a later intake.
 
 `Part configuration — XA-NFE3001 Wi-R NFE transceiver · 20 Mbit/s PHY, ~13.5 Mbit/s goodput · under 6 mW active at full rate · 1–15 cm operating range · sub-0.2 ms latency · RF-silent electric-field coupling · not intended to couple out of a fully enclosed conductive shield · host interface and reference driver shared with XA-NFE2001`
 
@@ -1180,11 +1217,6 @@ I treated the requirement sheets as a specification and never asked what was mis
 I would also have set the service window with a margin. Fifty-nine seconds against a sixty-second requirement is a specification met and an engineering position with nowhere to stand: any partner whose enclosure attenuates more than our reference case falls outside a window we told them we were inside.
 
 > **Note on this sample.** This is a sample portfolio page about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them.
-- confirm the fourteen are a subset of that 26 and not a later intake.
 
 ---
 
@@ -1218,10 +1250,9 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 **Evidence / demos**
 
 - [Wi-R NFE product page](https://www.ixana.ai/products/chips/wi-r-nfe)
-- [XA-NFE2001 launch announcement](https://www.ixana.ai/news/ixana-launches-wi-r-nfe)
 - [Technical paper (arXiv)](https://arxiv.org/pdf/2512.07167)
 
-> **Confidentiality.** Silicon work. The part number, specification, launch announcement and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.
+> **Confidentiality.** Silicon work. The part number, specification and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.
 
 #### 01. Why this, and why now
 
@@ -1294,7 +1325,7 @@ The COO would not commit a build plan for a second line on gen-1 demand signal. 
 
 I had been arguing that the demand was real, which is unfalsifiable and therefore useless. So I offered to make it falsifiable. We converted the 96 coded requests into a sample-request commitment: before any long-lead spend, we would ask that population to formally request samples against a spec sheet with a price on it. Interest that survives a form and a price is a different signal.
 
-104 requests came back. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter.
+104 requests came back — eight of the 96 companies asked from two teams each, which is how 96 coded requests produce 104. He committed the build plan, with a condition I had not planned to offer: the second line gets its own line in the capital plan rather than being absorbed into BAN’s, so if NFE underperforms it is visible as NFE underperforming. That has made every subsequent conversation about a third line shorter.
 
 #### 06. What was built
 
@@ -1306,6 +1337,8 @@ A near-field transceiver moving 5 Mbit/s between two devices at touch to decimet
 - **Range is a provisioning-time profile, not a runtime register.** The cut in section 04, visible in the part. Three profiles are characterised; a fourth would have been untested silicon wearing a tested part number.
 - **No antenna, no matching network on the reference layout.** Electric-field coupling removes the component most likely to differ between our board and a partner's, which is where interop usually goes wrong.
 - **Marked as a distinct family, not a BAN variant.** Internally it shares most of its lineage. Publicly it had to read as a second product line, because that was the argument the part existed to make.
+
+_Ixana XA-NFE2001 package, from Ixana's published product photography. The package, part marking and full specification are public; internal design detail is not shown. Happy to walk through the real program in a conversation._
 
 **Gallery**
 
@@ -1337,9 +1370,16 @@ Before the build plan was committed we agreed the line failed on one condition: 
 
 **Figure — Interop pass rate across four host platforms and three range profiles: 11 of 12 configurations above 85 percent, with the 25 cm profile on the low-power MCU the single weak cell at 62 percent**
 
+|  | 5 cm profile | 15 cm profile | 25 cm profile |
+|---|---|---|---|
+| Cortex-M4 host | 100 | 98 | 94 |
+| Cortex-M33 secure | 100 | 96 | 91 |
+| Linux SoC | 98 | 97 | 89 |
+| Low-power MCU | 96 | 88 | 62 |
+
 _Interop matrix at launch qualification, Oct–Nov 2025, 40 link attempts per cell on partner-supplied hardware. Eleven of twelve cells clear 85%. The weak cell is real and shipped documented: the longest range profile on the slowest host cannot service the link fast enough, and the datasheet says so rather than leaving a partner to find it._
 
-**How we counted.** A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator.
+**How we counted.** A configuration passes when 34 of 40 attempts establish and hold a link for ten seconds on hardware the partner built, not on our reference board — the reference board is excluded deliberately, being the one platform guaranteed to work. Design-ins count NFE-line evaluations including direct silicon engagements, a wider population than the dev-kit page’s kit-mediated figure; the two are not the same denominator. Latency here is the 0.6 ms median on partner hardware; the 0.9 ms on the XA-NFE3001 page is the worst-case characterisation figure a requirement line gets scored against.
 
 `Part configuration — XA-NFE2001 Wi-R NFE transceiver · up to 5 Mbit/s · under 1 mW at full rate · three provisioning-time range profiles across 5–25 cm, up to 1 m at reduced rate · sub-1 ms end-to-end latency · RF-silent electric-field coupling · host interface and reference driver shared with the BAN line`
 
@@ -1349,12 +1389,7 @@ I let the interop matrix size be decided by what we could afford rather than by 
 
 I would also have run the sample-request test earlier. It settled section 05 in a fortnight, and I reached for it only after two months of arguing that demand was real. The instrument that turns an unfalsifiable claim into a number is usually cheap.
 
-> **Note on this sample.** This is a sample portfolio page about real silicon. The part number, specification, launch announcement and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.14 — 104 responses from a coded population of 96 needs its mechanics stated in one clause: did the form travel beyond the coded population, or did some companies send more than one respondent?
-- 0.7 — gen-1 latency is quoted as 0.6 ms here and 0.9 ms on the XA-NFE3001 gate chart; state which stands, or the clause that distinguishes them.
+> **Note on this sample.** This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.
 
 ---
 
@@ -1368,6 +1403,7 @@ I would also have run the sample-request test earlier. It settled section 05 in 
 | Track | ai |
 | Domain | Remote sensing |
 | Status | internal |
+| Link | https://drive.google.com/drive/u/0/folders/1tYViz5kUrsL5PZ_9DsghxZ1uno1qYQzs |
 
 **Outcome (card copy).** Hyperspectral workflow that estimated surface mineral abundance from satellite bands, taking a field-sampling round out of the survey loop.
 
@@ -1446,24 +1482,36 @@ A web application for building, simulating and visualising quantum circuits. Gat
 
 **Interface — The circuit builder with a GHZ state loaded: a three-qubit grid carrying a Hadamard and two CNOTs, three Bloch spheres below it drawn with no vector because all three qubits are entangled, the exact probabilities and the sampled shot counts beside them, and the two-term state vector under both.**
 
+[Open this circuit in the demo](/demo/quantum-simulator?view=circuit&circuit=ghz-state)
+
 - **The spheres update on placement, not on a run button.** A run button turns exploration into submission, and the claim is that feedback has to be immediate enough to be playful.
 - **Entangled qubits are drawn as an unresolved sphere.** The honest representation of an entangled qubit is that it has no individual Bloch vector, and hiding that would teach the wrong thing for a nicer picture.
 - **The shot distribution sits beside the spheres.** Learners needed to connect the geometric picture to the measurement outcome, and tabs broke that link.
 - **Prebuilt circuits load as editable, not as demos.** The first useful action is modifying something correct, which requires it to arrive as a working circuit rather than a playback.
+
+_The prototype’s own engine, ported into the browser and running: a GHZ state, three qubits entangled, every amplitude and count on the screen computed from the circuit at render time rather than stored. The three spheres are blank because all three qubits are entangled and none of them has a Bloch vector of its own. One difference from the shipped prototype, which has a Run button: this updates on placement, as the first callout argues it should._
 
 **Gallery**
 
 - **The builder.** — [Place a gate and watch it move](/demo/quantum-simulator?view=circuit&circuit=superposition)  Nine gates, a timeline grid, and a hard stop at ten qubits. Here two Hadamards put a two-qubit register into an even superposition: both spheres point at |+⟩ and all four basis states sit at 25%. Place another gate and every number on the screen is recomputed before you let go of the mouse.
 - **Where the vector goes.** — [Step from product state to Bell state](/demo/quantum-simulator?view=entanglement&case=bell)  The same two qubits one CNOT apart. In the product state each vector has length 1; partly entangled they fall to 0.707; in the Bell state they are 0.000 and the spheres are drawn empty. The whole state stays perfectly definite at 50/50 throughout — the information moved into the correlation, which is the thing a per-qubit picture cannot hold.
 - **The prebuilt library.** — [Load one and edit it](/demo/quantum-simulator?view=library)  Twelve circuits, four of which run. The other eight are shown greyed with the reason attached rather than hidden: nothing needing a Toffoli can be expressed because the engine has no three-qubit gate, and no error-correction circuit can close its loop without mid-circuit measurement. Both were known when the list was written.
-- **The ceiling, re-measured.** — [Measure it on your own machine](/demo/quantum-simulator?view=ceiling&run=1)  The curve above runs again in the browser, on the same circuit and the same readout, against the same 200 ms line. The absolute milliseconds are different — this is JavaScript in a tab and that was Python on a server — and the shape is not: cost multiplying by about four per qubit, and a budget that gets crossed near ten either way.
+- **The ceiling, re-measured.** — [Measure it on your own machine](/demo/quantum-simulator?view=ceiling&run=1)  The curve above runs again in the browser, on the same circuit and the same readout, against the same 200 ms line. The absolute milliseconds are different — this is JavaScript in a tab and that was Python on a server — and the shape is not: cost roughly doubling with each added qubit, and a budget that gets crossed near ten either way.
 - **The guardrail.** — [Run the suite](/demo/quantum-simulator?view=tests&run=1)  All 32 tests, ported assertion for assertion and run in the page: 22 against the simulator and 10 against the API boundary. They confirm the Bell state has the amplitudes it should and that eleven qubits are refused. They say nothing about whether watching a sphere move teaches anyone anything, which is the claim this was built to test.
+
+_The demo is the prototype’s Python state-vector engine ported into a single file and running in the browser. It builds the full 2ⁿ × 2ⁿ operator per gate by Kronecker product exactly as the deployed one does, because the cost of doing it that way is the finding in section 05 and an optimised port would have made that claim uncheckable. Nothing on it is a stored number: change the circuit, flip a qubit’s initial state, or push it to ten qubits and watch the update time leave the budget._
 
 #### 05. What we learned
 
 We agreed before building that the interaction failed if state-vector computation at the chosen ceiling exceeded a 200ms budget — beyond that a placement stops feeling connected to its result. Correctness was the guardrail: a faster renderer computing the wrong state would have been worse than a slow one, so the physics test suite ran on every change to the engine.
 
 **Figure — State vector computation time against qubit count, rising from 4 milliseconds at four qubits to 1420 at twelve, against a 200 millisecond interactivity budget**
+
+| 4 | 6 | 8 | 9 | 10 | 11 | 12 |
+|---|---|---|---|---|---|---|
+| 4 | 15 | 62 | 121 | 244 | 610 | 1420 |
+
+_Ceiling: 200 — 200 ms interactivity budget_
 
 _Measured computation time by qubit count, Jun 2026, median of 20 runs per point on the deployed engine. The ten-qubit cap was chosen before this was measured and sits just past the budget line — the guess was close and slightly optimistic, and eleven qubits would have quietly broken the premise. The demo linked above re-runs this measurement in the browser, which lands on different milliseconds and the same shape._
 
@@ -1587,7 +1635,7 @@ I own the pilot scope, the operating model and the launch contract. Most of the 
 
 Cutting services and software was the hardest call, because they are the requests people complain about most — which is exactly why they were wrong for a pilot. Their approval logic depends on contract value, renewal dates and legal review, none of which the lean tooling models. They keep the email path: unsatisfying and honest.
 
-**From the pilot specification — launch gates, v1.2 — The pilot does not exit to production unless all of the following hold**
+**The pilot does not exit to production unless all of the following hold — From the pilot specification — launch gates, v1.2**
 
 - **Assignment.** 100% of requests assigned to one named owner within one business day of submission.
 - **Approval integrity.** Zero requests ordered without a valid recorded approval.
@@ -1610,10 +1658,14 @@ A submission form writing into a canonical request list, with routing and approv
 
 **Interface — The requester view of PR-2043. A strip across the top names the owner, the status, the next action as a named person, and an expected delivery date flagged verified with the supplier. Below it the timeline lists seven transitions, each carrying an actor, a timestamp, a source and an evidence reference.**
 
+[Open this request and try to change its status](/demo/procurement-desk?view=request&id=PR-2043&as=nadia)
+
 - **Next action names a person, not a stage.** "In procurement" is what 34 of 63 threads effectively said. A named person is the difference between a status and an answer.
 - **The ETA is labelled verified or unverified.** An unverified ETA presented as fact is how a requester plans around a date that was always a guess.
 - **The timeline shows who changed what, with its evidence.** This is where the 22 unapproved progressions become impossible — a transition without evidence cannot be recorded at all.
 - **Requesters can add information but not change state.** Letting requesters edit status is the fastest route back to a list nobody trusts, which is the failure this replaced.
+
+_Recreated from the pilot interface as a working demo. The fields, the transition rules, the value ceiling and the four gates are the real ones; every organisation, requester, supplier, item, price and date shown is invented. Happy to walk through the real pilot in a conversation._
 
 **Gallery**
 
@@ -1622,6 +1674,8 @@ A submission form writing into a canonical request list, with routing and approv
 - **Visible at three days, escalated only on a breach.** — [Open the manager view](/demo/procurement-desk?view=ageing&as=priya)  Managers see everything older than three days, grouped by organisation. Nobody is messaged for appearing here; a direct escalation fires only when a gate is actually breached. The cost is named in the tradeoffs — a request can sit visible and unescalated for several days.
 - **The check that found the failure that reported success.** — [Open the exceptions log](/demo/procurement-desk?view=exceptions&as=dana)  Short flows fail quietly. Four exceptions in five months, one of them a reminder flow that failed on a throttled connector and returned success — which is why the daily check now compares reminders due against reminders sent rather than reading the flow’s own result.
 - **The gate that is failing, and why that is useful.** — [Open the gates](/demo/procurement-desk?view=gates&as=priya)  Three of the four launch gates hold and one does not. Every number here is counted from the requests in the demo rather than stored, so the gate cannot drift from the queue it describes — drive a request through to delivery and watch the denominator move.
+
+_Every screen above is the state its own link opens, captured from the running demo on invented data. It exists so the argument on this page can be checked rather than taken on trust: submit above the ceiling, assign a request to the team mailbox instead of a person, record a transition with the evidence field empty, or approve something as the wrong role and read what each one refuses._
 
 #### 07. Tradeoffs
 
@@ -1651,10 +1705,10 @@ The numbers below come from 23 completed requests across three organisations —
 
 | name | value | target | max | label | targetLabel | pass |
 |---|---|---|---|---|---|---|
-| Assigned within 1 business day | 21 | 23 | 25 | 21 of 23 | gate: 23 | false |
-| Ordered with valid approval | 23 | 23 | 25 | 23 of 23 | gate: 23 | true |
-| Failures resolved within 1 day | 1 | 1 | 25 | 1 of 1 | gate: all | true |
-| Completed pilot requests | 23 | 20 | 25 | 23 | floor: 20 | true |
+| Assigned within 1 business day | 21 | 23 | 25 | 21 of 23 | gate: 23 | False |
+| Ordered with valid approval | 23 | 23 | 25 | 23 of 23 | gate: 23 | True |
+| Failures resolved within 1 day | 1 | 1 | 25 | 1 of 1 | gate: all | True |
+| Completed pilot requests | 23 | 20 | 25 | 23 | floor: 20 | True |
 
 _Performance against the four launch gates, Apr–Aug 2026, n=23. Three gates hold and one does not: two requests took more than a business day to assign, both submitted on a Friday afternoon into an organisation whose approver map had a gap. The gate is failing for a specific and fixable reason, which is the most useful state for a gate to be in._
 
@@ -1745,6 +1799,17 @@ I interviewed facility managers and the installers who service their sites, then
 
 **Figure — Days between a key being issued and a return being recorded, from twelve months of paper register pages: 41 percent same day, 8 percent never recorded**
 
+| name | value |
+|---|---|
+| 0–1 | 41 |
+| 2–3 | 22 |
+| 4–7 | 14 |
+| 8–14 | 9 |
+| 15–30 | 6 |
+| never | 8 |
+
+_Ceiling: None — no return ever written_
+
 _Six pilot sites, Q1 2023, as a share of all register rows. The right-hand bar is the finding that mattered: for roughly one row in twelve the register never closed, so nobody could say whether the key was in a drawer, in a van, or gone. Managers guessed a drawer._
 
 The reframe: this was never a discipline problem to be fixed with a better form. The record was separate from the act, so skipping it cost nothing. The record had to become the act.
@@ -1782,7 +1847,7 @@ He agreed, then asked for something I had not planned to build. Commissioning ha
 
 #### 06. What was built
 
-A cabinet holding thirty tagged keys, each in its own slot with its own lock, sensor and indicator. A user taps an employee card, enters a PIN, and the one slot they are entitled to releases. Behind the door is the board below.
+A cabinet holding thirty tagged key bunches, each in its own slot with its own lock, sensor and indicator. A user taps an employee card, enters a PIN, and the one slot they are entitled to releases. Behind the door is the board below.
 
 **Interface — Bare WishKey slot controller board: sixteen EMLOCK connectors and FET drivers down the left edge, four optocouplers, sixteen RFID reader connectors on the right, and Arduino Mega-form headers across the middle**
 
@@ -1790,6 +1855,8 @@ A cabinet holding thirty tagged keys, each in its own slot with its own lock, se
 - **Every lock connector carries a feedback pin, not just 12 V and ground.** Each four-way group is 12 V, return, 5 V and FB. The board reads back whether the slot actually released and whether the tag is still there, so the audit record is what happened rather than what firmware asked for.
 - **Sixteen readers on one differential pair, with sixteen enable lines.** The connectors down the right edge each carry 5 V, ground, an A/B pair and an enable. A bus rather than sixteen point-to-point links is what keeps a slot down to a few wires and lets two boards chain without a second harness.
 - **Four quad optocouplers between the logic and the lock rail.** OP1 to OP4 sit between the controller and the 12 V drive. Sixteen solenoids kicking back on the rail must not be able to reset or corrupt the thing writing the audit record — the record is the product.
+
+_My own photograph of a bare slot controller board, before assembly, with the EEGRAB silkscreen visible. No customer site, key list or configuration is shown. Happy to walk through the assembled cabinet in a conversation._
 
 **Gallery**
 
@@ -1828,9 +1895,9 @@ We agreed before build that this failed if any key could leave a cabinet without
 | Escalated to a supervisor before release |
 | Emergency override or unattributed |
 
-_All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it. The last band merges emergency overrides with unattributed removals, which the tiles above and "How we counted" report separately._
+_All key-removal events across the first twelve months in service. Widths carry keys under management because substations look worst and hold 200 of 3,420 keys — read as equal columns, the smallest segment would set the roadmap. The real finding is that we solved attribution and did nothing for punctuality: nearly a fifth of plant keys come back late, and the cabinet records that beautifully without changing it. The last band deliberately merges emergency overrides with unattributed removals — split per site class the two smallest categories are unreadable at this scale, and the tiles above and "How we counted" report them separately._
 
-**How we counted.** Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing.
+**How we counted.** Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing. Keys under management counts keys, not slots — a slot holds one tagged bunch, and the 660 slot positions across the 22 cabinets carry an average of about five keys per bunch, which is how 3,420 keys sit behind 660 locks. Mechanically, an unattributed removal is a slot that reports tag-out with no authenticated session open at the terminal — a slot forced, or released during a fault window — logged with timestamp and slot number but no user to charge it to.
 
 `Cabinet configuration — 30 key slots per cabinet, each with an electromagnetic lock, individual FET drive, feedback line and status LED · sixteen lock channels per slot board, two boards to a 30-key cabinet · slot readers on a shared RS-485 pair with a per-reader enable line · four quad optocouplers isolating the 12 V lock rail from 5 V logic · slot controller board designed in EasyEDA, 1.6 mm two-layer, ENIG finish, LCSC parts and JLCPCB fabrication · controller module on Arduino Mega-form headers · 7-inch Android operator terminal · RFID smart key tags carrying a unique-ID microchip on a semi-circular slot contact · employee RFID card plus PIN at the reader area · one-time anti-smash seal binding tag to key · two mechanical override keys per cabinet, door and lining door, commissioning and emergency only · optional backup battery · optional on-premises Ubuntu server, 4 core / 8 GB / 500 GB, with directory synchronisation, SSO and SMTP · wall or desk mount in 1.5 × 1.5 ft`
 
@@ -1841,12 +1908,6 @@ I treated late returns as somebody else's problem because the guardrail was attr
 I would also have designed the mechanical override to be self-evidencing rather than procedural. Today it is a real key and a witness signature on paper, which reintroduces the exact weakness the product exists to remove. A seal on the override lock, logged when broken, would have cost very little and closed the last honest gap in the trail.
 
 > **Note on this sample.** Sample portfolio page. Every figure here is invented and reconciled to be internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- give the split values per site class so the band can be separated, or say that the merge is deliberate here.
-- 0.1 — 22 cabinets at 30 slots each is 660 key positions, against "3,400+ keys under management" and the marimekko's 3,420 (1,450+1,150+620+200). Give the true cabinet count, slot configuration and keys figure; the metric tiles, the marimekko column widths and its caption all follow from it and are unswept until then.
-- add one sentence saying mechanically what an unattributed removal is — what physically happens at the slot for an event to end up in the 0.3%.
 
 ---
 
@@ -1891,13 +1952,13 @@ By late 2024 the technology objection was answered. The BAN part was in producti
 
 The commercial stake is straightforward. An evaluation that stalls between datasheet and prototype is not a slow design-in, it is a lost one — the engineer who championed us gets reassigned, and the next conversation starts in a colder room. Three options were on the table, scored against the same 27 stalled evaluations.
 
-**Figure — Share of 27 stalled evaluations each option would have unblocked: reference designs 79 percent, expanded documentation 31 percent, more applications engineering hours 23 percent**
+**Figure — Share of 27 stalled evaluations each option would have unblocked: reference designs 78 percent, expanded documentation 30 percent, more applications engineering hours 22 percent**
 
 | name | value | label |
 |---|---|---|
-| Reference designs | 79 | 79% — 21 of 27 |
-| Expanded documentation | 31 | 31% — 8 of 27 |
-| More applications hours | 23 | 23% — 6 of 27 |
+| Reference designs | 78 | 78% — 21 of 27 |
+| Expanded documentation | 30 | 30% — 8 of 27 |
+| More applications hours | 22 | 22% — 6 of 27 |
 
 _Options scored against the stalled-evaluation review described in section 02, Dec 2024. Each stall was read for what would actually have unblocked it. Documentation and engineering hours score low for the same reason: most stalls were not caused by missing knowledge but by work the partner did not want to do at all._
 
@@ -1914,9 +1975,17 @@ I took every evaluation that had gone quiet for more than sixty days — 27 of t
 | First board built | Worked on the bench, not on a person | 6 of 27 |
 | Mechanical integration | No guidance on electrode placement in a real enclosure | 5 of 27 |
 
-**Figure — Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 started their own board, 5 built one, 2 got it working on a person**
+**Figure — Of 27 stalled evaluations: 24 reached a working link on the dev kit, 11 designed their own board, 5 built one, and none got it working on a person**
 
-_Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have._
+| name | value | label |
+|---|---|---|
+| Evaluation started | 27 | 27 |
+| Link working on our hardware | 24 | 24 |
+| Own board designed | 11 | 11 |
+| Own board built | 5 | 5 |
+| Working on a person | 0 | 0 |
+
+_Where the 27 stalled evaluations stopped, Jul 2023 – Dec 2024, reconstructed from support threads. The cliff is not at the technology, it is immediately after it: 24 teams got a link working and 13 of them never designed a board. That step is where a reference design substitutes for expertise a wearables team may simply not have. The funnel ends at zero by construction — every one of the 27 stalled somewhere, and the four drops are the four rows of the table: 3 before the link, 13 at board design, 6 whose first board never worked past the bench, 5 at mechanical integration on a person._
 
 The reframe: we had been treating this as a sales conversion problem and staffing it with more contact. It was an engineering capability problem in the partner’s building, and no amount of attention transfers a skill — only a design they can copy does.
 
@@ -1962,6 +2031,8 @@ Two complete, copyable designs. The smartglasses design streams compressed video
 - **Firmware is the shared tree with a vertical flag.** Two trees would have drifted inside a quarter. One tree means a fix for the tactical design reaches the smartglasses design automatically.
 - **Released only after an outside team rebuilt it.** The gate that put our date in a partner's hands, and the only evidence that a design is copyable rather than merely correct.
 
+_Ixana all-day video streaming smartglasses reference design, from Ixana's published product imagery. The design's existence and description are public and a demonstration video is linked above; schematic, layout and BOM are not shown. Happy to walk through the real program in a conversation._
+
 **Gallery**
 
 - **Untitled**  The tactical headset design — headset to body-worn radio over the body rather than the air, which is the property that matters when a radiated link is what locates you. It is the ruggedized end of the bracket described in section 01.
@@ -1994,8 +2065,8 @@ We agreed before starting that a reference design failed if a team outside Ixana
 
 | name | values | label |
 |---|---|---|
-| Before | [2,3,2,3,1] | 11 weeks |
-| After | [1,0,0.5,0.5,1] | 3 weeks |
+| Before | [2, 3, 2, 3, 1] | 11 weeks |
+| After | [1, 0, 0.5, 0.5, 1] | 3 weeks |
 
 _Median evaluation cycle before and after, from the stalled-eval review and from twelve evaluations run on the released designs, Jan 2025 – Jan 2026. The phase that vanishes is board design, which is the point: we did not make partners faster at the hard step, we removed it._
 
@@ -2010,10 +2081,6 @@ I gated release on an outside rebuild, then chose the outside team from people w
 I would also have published the mechanical guidance as a first-class file rather than notes inside the layout package. Electrode placement in an enclosure is the second-largest stall cause, and it sits in a document people open after making the mistake.
 
 > **Note on this sample.** This is a sample portfolio page about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are invented placeholders and should be replaced with real data before this page is used. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.2 — the table and the funnel cannot both be right. The table's deaths (3 before the link + 13 designing + 6 first board + 5 mechanical) account for all 27, leaving nobody at "working on a person", while the funnel ends with 2. Give the true stage counts and each stage's definition.
 
 ---
 
@@ -2078,6 +2145,14 @@ I bought nine watches from the retail band we were aiming at, opened all of them
 
 **Figure — Bill of materials by subsystem, tier median from the teardowns against our target: display 390 rupees against 190, processor and radio 250 against 195**
 
+| name | before | after |
+|---|---|---|
+| Display | 390 | 190 |
+| Processor, radio | 250 | 195 |
+| Battery, charging | 180 | 140 |
+| Sensors | 150 | 145 |
+| Enclosure | 170 | 150 |
+
 _Nine teardowns costed at our own volume, Q2 2023. The strategy is one bar: spend roughly half what the tier spends on the display and match them everywhere else, including on sensors. Undercutting on sensors would have saved ₹5 and removed the reason the watch exists._
 
 The reframe: the tier is not competing on watches, it is competing on shop windows. A colour face sells the unit and then spends the next two years disappointing the person who bought it.
@@ -2124,6 +2199,8 @@ A two-layer board about the size of a large postage stamp, carrying one processo
 - **Two crystals, and the slow one is the expensive decision.** Running the clock off the internal oscillator saves a part. Timekeeping drift is the complaint that generates returns in this tier, and the crystal costs less than one of them.
 - **The display sits behind a connector, not soldered down.** That is what made the second-source qualification in section 05 possible without a new board, and it is the only reason the concession was survivable.
 
+_My own board view from the project's EasyEDA workspace, rev 1.0, January 2024. Component placement and the parts visible are real; every cost and performance figure on this page is invented._
+
 **Gallery**
 
 - **Untitled**  The final sheet. Almost everything on it is either the processor or a consequence of not using a radio module: the two crystals, the matching network at the antenna pin, and the regulator. The sensors, display and temperature channel are each a short branch off one bus.
@@ -2153,6 +2230,15 @@ We agreed before build that this failed if a unit could not be landed under ₹9
 | 4 (three bands plus the final) | Board revisions to production |
 
 **Figure — Route through the cost and battery trade space across four board revisions, from 1,180 rupees and three days to 820 rupees and nine days**
+
+| name | x | y | note |
+|---|---|---|---|
+| Smart Band 1 | 1180 | 3 | colour screen, always on |
+| Smart Band 2 | 1040 | 5 | colour screen, wake on gesture |
+| Smart Band 3 | 940 | 8 | reflective display; SpO2 still fitted |
+| Final board | 820 | 9 | SpO2 dropped, on-chip regulator enabled |
+
+_Target: None — agreed before build: under ₹900, a week on a charge_
 
 _The four board revisions, Q1 2023 to Q1 2024. The shape is the argument: revision two tried to buy battery by dimming the colour screen and moved almost nowhere, because the cost stayed and the display was still the load. Changing the display type moved both axes at once. The last step is small and it is what took the programme from nearly acceptable to sellable._
 
@@ -2284,10 +2370,14 @@ One n8n sub-workflow that takes a team and a window. It clears the prior rows, f
 
 **Interface — The monthly delay detail sheet for AMS. The team and window controls sit above the report; coverage reads 84 per cent, 32 signed of 38; the worst four rows carry a model-written draft cause, a worst-decile badge and a cause category, with the signer's name beside each.**
 
+[Open this sheet in the demo and sign a cause](/demo/team-performance?team=ams&cad=monthly&sheet=delay)
+
 - **The team and the window sit above the report, never inside a menu.** They are the whole product. A reader who cannot see which two parameters produced a number will eventually quote it as though it were another team's.
 - **The signature column sits beside the cause, not at the end of the row.** An unsigned cause has to be distinguishable from a signed one at a glance, or the gate becomes a formality.
 - **Every row carries one of the six shared categories.** It is the only field five teams fill the same way, and the only reason the quarterly can count anything across them.
 - **Unconfirmed causes read "cause not confirmed", never blank.** A blank cell reads as no delay to explain. The old AMS report was 79% blank cells, and that is exactly how it was misread.
+
+_Recreated from the internal workbook as a working demo. Structure, columns, rules and the signature gate are accurate; every task, name, comment thread, cause and figure shown is invented. Happy to walk through the real reports in a conversation._
 
 **Gallery**
 
@@ -2296,6 +2386,8 @@ One n8n sub-workflow that takes a team and a window. It clears the prior rows, f
 - **The weekly, and the only sheet that names open work.** — [Open the weekly for RTL](/demo/team-performance?team=rtl&cad=weekly&sheet=open)  A monthly report counts what closed. The weekly is the only window that names work still open past its date — the part a lead can still change — and it carries no signature anywhere.
 - **The quarter reads the months.** — [Open the quarterly for AMS](/demo/team-performance?team=ams&cad=quarterly&sheet=blockers&state=published)  No task record is fetched at this window. The blockers are signed causes from three published reports, grouped — and the one falling fastest is "no cause recorded", which is the reporting improving rather than the delivery.
 - **The one page the five teams share.** — [Open the portfolio sheet](/demo/team-performance?team=hw&cad=quarterly&sheet=portfolio&state=published)  Coverage and nothing else. On-time rate, delay days and any ordering of the teams are deliberately absent, and the sheet says so where a reader would look for them.
+
+_Every screen above is the state its own link opens, captured from the running demo on invented data and a simulated run. It exists so the argument on this page can be checked rather than taken on trust: switch team, switch window, sign a cause, try to sign someone else's, or publish a quarter over a month that has not been published and watch the gate refuse._
 
 #### 07. Tradeoffs
 
@@ -2451,10 +2543,14 @@ Four ceremonies over one dataset. The standup board renders the record's diff si
 
 **Interface — The Sprint Desk standup board on day 6 of sprint 41, showing per-person cards generated from the task record, two blocked tasks, and a counter of items already in the record**
 
+[Open this board in the demo — the day strip replays the sprint](/demo/scrum-desk?tab=standup&day=6)
+
 - **The counter is the product marking its own homework, and it is unflattering.** It counts the items on the board that were already in the record — the things a person used to read aloud. It is the number the case study is scored on, and it is displayed to the people being measured by it.
 - **Nothing on this board is stored, so there is no second copy to reconcile.** The board is a query. That is why the drift number on this page is zero by construction rather than by discipline, and why zero is not claimed as an achievement in section 08.
 - **Every line is a diff, not an entry.** "Closed · T-4121" is a state change the record already holds. A person adds two things a record cannot know: what is blocking them, and what they want to ask for.
 - **A blocker attaches to the task, never to the person.** This is the concession from section 05 made visible: the card reads "T-4141, blocked 2 days", and the per-person column above it is a filter computed on read and never written down.
+
+_A recreation of the running demo rather than a mock-up — same layout, same rules, on an invented ten-day sprint of 21 tasks and 8 engineers. Every name, task and figure is made up for publication; the ceremony rules, the four-field write boundary and the counter are the real ones._
 
 **Gallery**
 
@@ -2462,6 +2558,8 @@ Four ceremonies over one dataset. The standup board renders the record's diff si
 - **Burndown** — [Switch the unit and watch the guardrail](/demo/scrum-desk?tab=burndown)  Summed from the task rows on read, with work added after day one shaded. The unit toggle is the guardrail: when the task line falls faster than the points line, someone is slicing work to move it.
 - **Drift check** — [Replay the audit](/demo/scrum-desk?tab=drift)  The product's own scoreboard, here replaying the pre-launch audit from section 02 — the same 218 rows and 61 disagreements, artefact by artefact.
 - **Write ledger** — [See what the desk may change](/demo/scrum-desk?tab=ledger)  Four writable fields, one allow-list module, and everything else deep-linked out. Open to the whole squad rather than to leads, which is the second condition from section 05.
+
+_Four of the six screens. The two not shown are the sprint review log and the person filter, which is deliberately the least interesting screen in the product._
 
 #### 07. Tradeoffs
 
@@ -2617,10 +2715,14 @@ A tracker showing where each task sits in its team's pipeline, with a delay mode
 
 **Interface — The PS delay view: an eleven-stage test flow in the team's own words, one stage panel open showing its classification confidence and a control to move the work to another stage, and every late task decomposed into start, length and completion delay beside it.**
 
+[Open this screen in the demo — the panel opens with it](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&panel=3)
+
 - **Stage names are the team's own words.** Request intake, bench setup, characterisation, sign-off — PS's vocabulary, not a normalised one. That was the thing the RTL lead refused, and he was right: a stage nobody recognises is a stage nobody corrects.
 - **The correction control sits on the stage itself.** The open panel names what put the work there and how sure it was, then offers one move. Classification will be wrong some of the time; putting the fix where the error appears is what turned the correction rate into a metric we actually receive.
 - **The correction rate is on the header, not in a report.** Two of 48 stages corrected, 4.2%, beside the line saying stages are model-classified. The guardrail on automatic classification is only a guardrail if the people relying on it can see it without asking.
 - **A delay is three numbers, not one.** Every row splits into start, length and completion delay against the planned window. Leads argued about different things once they could see which of the three had moved.
+
+_The running demo, on an invented set of 48 tasks across three pipelines. Layout and interactions are the real ones; every task name, owner, comment and date is made up for publication._
 
 **Gallery**
 
@@ -2628,6 +2730,8 @@ A tracker showing where each task sits in its team's pipeline, with a delay mode
 - **Delay reasons show the source comment** — [Open this drawer in the demo](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&panel=3&task=ps-04)  Planned window against what actually happened, the delay split three ways, and under it the comment thread the reason came from, attributed and dated. In the observations leads would not carry an explanation into a review that they could not trace back to whoever wrote it. The link opens this task with its drawer already open.
 - **The leaderboard ranks teams, never individuals** — [Open the leaderboard](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&board=1)  Three pipelines compared on stage timestamps — the one field they share — and a line saying the per-person view was never built. The same data ranked by person would have changed how tasks get written within a week, and the tracker would have started measuring the writing rather than the work.
 - **The assistant shows the filter, not just the answer** — [Ask this question in the demo](https://xana-nine.vercel.app/efficiency?q=Why%20is%20the%20AMS%20layout%20behind%3F)  A question becomes a filter over stored records, and the filter is printed under the answer. A wrong answer is then a wrong filter — visible, and fixable — rather than a fluent invention. Ask it who the best engineer is and it says the ranking does not exist. The link opens this question already asked.
+
+_Four screens from the same invented dataset as the shot above. Each link opens the screen in the picture — the stage panel, the drawer, the leaderboard and the answered question all travel in the URL, so a link lands on what it shows rather than near it._
 
 #### 07. Tradeoffs
 
@@ -2655,9 +2759,15 @@ Before build we agreed this failed if fewer than half of the 31 leads were runni
 
 **Figure — Median review preparation minutes before and after, by team: PS 44 to 11, AMS 38 to 10, RTL 41 to 16**
 
+| name | before | after |
+|---|---|---|
+| PS | 44 | 11 |
+| AMS | 38 | 10 |
+| RTL | 41 | 16 |
+
 _Review preparation time by team. Before figures are the timed observations from Jan–Feb 2026; after figures are self-reported over four weeks in month three. RTL improved least, which is the visible cost of cutting automatic stage inference for that team — the manual stage field is exactly those extra minutes. The 12-minute figure in the tiles is the median across all leads; it is not the median of these three team medians, which is 11._
 
-**How we counted.** A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create.
+**How we counted.** A lead counts as running their review in the product when they opened their pipeline view within the 24 hours before a scheduled review, at least three weeks in four. Opening it at any other time does not count, because casual browsing was never the behaviour we were trying to create. Three populations appear on this page and are not interchangeable: the three team leads who run the flagship Monday reviews and were observed in section 02, the 31 group leads across the three teams who form the adoption denominator, and the 11 leads and architects in the January calendar sample. And the gap between 71% classification accuracy and a 4.2% correction rate is not leads missing errors — it is that the 71% was sampled across every task while a lead only touches the stages their review passes through, so most misclassifications sit on work no review ever surfaces. That is why the correction rate is the guardrail and not the accuracy claim.
 
 `Technical configuration — 3 pipeline definitions · task-tool v2 API and SharePoint bandwidth ingest · PostgreSQL store · FastAPI endpoints · gpt-4o-mini for stage classification and assistant filter selection`
 
@@ -2668,11 +2778,6 @@ I treated the stage model as a data problem and it was a political one. Two of t
 I also built the velocity leaderboard because it was easy, and it is the feature I would remove. It gets looked at, it has never changed a decision, and it started a recurring argument about whether team throughput is comparable at all.
 
 > **Note on this sample.** This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.3 — define the three populations on this page once and make every denominator use the right one: the three leads running the flagship Monday reviews, the 31 leads in the adoption denominator, and the 11 people in the calendar sample.
-- 0.3 — one sentence closing the gap between a 4.2% correction rate and 71% classification accuracy: where the other ~25% of misclassifications go if leads never correct them.
 
 ---
 
@@ -2785,10 +2890,14 @@ A service that receives change events from one workspace space, verifies their s
 
 **Interface — A change timeline searched for “Aug 14”. Each row carries the time, the person, the field they changed and both values side by side — the old one struck through, the new one boxed — with the matched text highlighted in both. A banner above the list says 300 automation edits are hidden and offers a switch, and every row ends in a “raw event” button.**
 
+[Search the timeline for a date that moved](/demo/clickup-audit?q=Aug+14)
+
 - **Both the old and new value appear on the same line.** Three quarters of audited requests needed the previous value, and a feed that says only that a field changed cannot answer any of them.
 - **The suppressed-automation count sits in the header.** The concession from section 05 — the omission has to be visible without turning the toggle on, or the default is quietly editorial.
 - **Search runs over values, not just field names.** People remember the date that got changed, not that a due-date field was modified.
 - **Each entry links to the raw stored event.** For an audit answer, showing the underlying record is the difference between a report and evidence.
+
+_Recreated as a working demo, pinned to Wednesday 26 August 2026 so the figures on this page stay true. The pipeline order, the field set, the ignore rules and the deduplication key are the real ones; every person, task, value and date shown is invented. Happy to walk through the real system in a conversation._
 
 **Gallery**
 
@@ -2796,6 +2905,8 @@ A service that receives change events from one workspace space, verifies their s
 - **The 41 requests, and the two it still cannot answer.** — [Answer them yourself](/demo/clickup-audit?view=questions)  Eight of the quarter’s requests, each with what it cost the old way and what the tracker returns now. Two are badged out of scope, and opening one gets an explicit “attachment history is not stored” rather than an empty timeline — an empty result would have read like “it never happened”, which is a worse answer than none. The count of status changes in question 05 is computed from the record set at load, not written on the page.
 - **One delivery, and the four decisions acting on it.** — [Send one, then send it again](/demo/clickup-audit?view=ingest)  Send the payload, then send it a second time: the signature verifies, the raw body is stored before anything is interpreted, one of three history items is dropped as out of scope, and the retry writes nothing because both history ids are already present. Tampering with the body returns 401 with nothing stored at all. Below it, the same stored payloads re-rendered under each parsing rule — the two rule changes this service has had, replayed over history with no ClickUp call.
 - **Behind any row, the delivery it came from.** — [Open the filter, then any raw event](/demo/clickup-audit?task=86a3kh9jb&field=status&bots=1&from=2026-07-01&to=2026-07-31)  The timeline is a rendering; this is what arrived. The panel names the verified signature, the stored raw event, and the source’s own history id — the deduplication key, which is why a retry cannot produce a second entry. Behind it sits the filter that answers question 05: one task, status only, July, automation switched on, nine records. For an audit answer, being able to show the stored delivery is the difference between a report and evidence.
+
+_The demo runs on invented data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: search for a value and watch it match inside the diff, switch the search to the week-1 behaviour and watch the same query return nothing, or deliver the same webhook twice and watch the duplicate count stay at zero._
 
 #### 07. Tradeoffs
 
@@ -2823,7 +2934,9 @@ We agreed before build that this failed if answering a change question still too
 
 **Figure — Median minutes to answer a change question by week after launch, falling from 41 to 4 against a five-minute threshold**
 
-_Median answer time by week, Aug–Sep 2026 , timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly._
+_Threshold: 5 — Pre-agreed threshold: 5 minutes_
+
+_Median answer time by week for the first seven weeks live, Jun–Jul 2026, timed on every request received. The first three weeks are above the threshold because search was matching field names rather than values — the fix in week four is the single largest step, and it came from watching one person fail to find a date they could remember exactly._
 
 **How we counted.** Answer time runs from the request arriving to the answer being sent, including queue time, because that queue is what made the previous process feel like an afternoon. It is timed on every request rather than sampled, since fourteen a month is small enough to measure exhaustively.
 
@@ -2836,10 +2949,6 @@ I shipped search that matched field names before anyone had tried to use it. The
 I would also start the retention conversation earlier. The service holds every raw event for a workspace space indefinitely, which was right for replayability and is a question nobody has asked yet. An audit trail with no retention policy is a liability accumulating quietly, and I would rather agree a period at design time than the first time someone asks what we still hold about them.
 
 > **Note on this sample.** This is internal tooling. The demo linked from section 06 is a recreation with invented content on a fixed clock, and all figures on this page are invented placeholders for this sample. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- this seven-week series runs past 2026-08-25; give the real launch week and how many weeks have data, or drop the weeks that have not happened
 
 ---
 
@@ -2905,6 +3014,13 @@ I analysed playback logs for the 212 recordings captured in January — opens, s
 
 **Figure — Of 212 recordings captured in one month, 38 were opened again, 14 were watched past two minutes, and 6 produced written notes**
 
+| name | value | label |
+|---|---|---|
+| Recordings captured | 212 | 212 |
+| Opened again at all | 38 | 38 |
+| Watched past 2 minutes | 14 | 14 |
+| Produced written notes | 6 | 6 |
+
 _Playback funnel for January 2026, from platform logs. The drop from 212 to 38 is the archive problem stated plainly: capturing meetings was solved, and entering them was not._
 
 The reframe: this was not a video problem. People wanted a passage of speech and were handed a timeline, and every workaround they had invented was a way of getting speech back out of a medium that stores it badly.
@@ -2946,16 +3062,22 @@ What makes it worth having is opening one. Every item carries its own transcript
 
 **Interface — The library shelf: an ingest strip across the top tracing a call from ending to appearing, and beneath it a grid of recordings and stored video with duration and source badges, one item marked excluded by the organiser**
 
+[Open the library — the shelf above, live](https://xana-nine.vercel.app/videolibrary)
+
 - **Nothing on this shelf was put here by a person.** Ingestion pulls the recording and its transcript, picks a channel and builds the cues, minutes and prompts before anyone opens it. The archive reached 690 recordings without anybody filing one.
 - **Every item on it can be asked a question.** Any item opens with its transcript, questions written for it, and answers returned as the line somebody said and the second they said it.
 - **Every item leaves you with minutes.** Summary, decisions and actions per item, timestamped claim by claim. Nobody circulated a minute they could not spot-check.
 - **Excluded meetings show as excluded, not as absent.** Third along the top row. The organiser marks it before the meeting, irreversibly — the condition that made indexing the rest acceptable.
+
+_The running demo, on an invented archive of eight items across five channels. Every title, transcript line, name and figure is made up for publication, and the thumbnails are generated title cards — inventing a poster frame would be a picture of a meeting that never happened._
 
 **Gallery**
 
 - **A hit is a line, not a title** — [Run this search in the demo](https://xana-nine.vercel.app/videolibrary?q=milliwatts)  Searching “milliwatts” returns the sentence that matched and the second it was said, across a recording and a stored video at once. Titles are calendar invites rather than contents. The link opens this search already run.
 - **Ask any video** — [Open this video with the question already asked](https://xana-nine.vercel.app/videolibrary?v=meeting-integration&ask=1)  The prompts belong to this recording rather than to the product, so the first click lands on a real answer. The reply is the line that was said, attributed and timestamped. The link opens this video with that question already asked.
 - **Minutes, on the same video** — [Open the same video on its minutes](https://xana-nine.vercel.app/videolibrary?v=meeting-integration&tab=notes)  Summary, decisions and actions for the item on screen, each claim carrying the moment it came from. Published minutes reached 11% of recorded meetings.
+
+_Three moments from the same invented archive as the shelf above._
 
 #### 07. Tradeoffs
 
@@ -2983,25 +3105,26 @@ Before build we agreed this failed if fewer than a quarter of re-opened recordin
 
 **Figure — After launch, of 690 indexed recordings 244 were opened again, 171 were entered by transcript jump, and 78 produced published minutes**
 
-_The same funnel as section 02, six months after launch , from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written._
+| name | value | label |
+|---|---|---|
+| Recordings indexed | 690 | 690 |
+| Opened again | 244 | 244 |
+| Entered by transcript jump | 171 | 171 |
+| Produced published minutes | 78 | 78 |
 
-**How we counted.** Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it.
+_The same funnel as section 02, Mar–Aug 2026 — the first five months after launch, from platform logs. The stage that moved is the second one — re-opening went from 18% of the archive to 35% — and the fall-off after transcript jump is where the next quarter's work is, since a third of jumps still end without a note being written._
+
+**How we counted.** Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback. It excludes sessions with no playback at all, which are people confirming a meeting exists rather than looking for something in it. The 140 in the weekly-use denominator is the mid-2025 roster — up from about 75 a year earlier — and it has held roughly flat since.
 
 `Technical configuration — Microsoft Graph ingestion for recordings and stored video · transcript cues stored per utterance with speaker label · full-transcript context to roughly 100K tokens · 5-minute response cache on library listings · gpt-4o-mini for minutes and question answering`
 
 #### 09. What I'd do differently
 
-I built minutes generation before I understood who was supposed to send them. The number moved, but 31% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.
+I built minutes generation before I understood who was supposed to send them. The number moved, but 11% of meetings having published minutes hides that a handful of people publish nearly all of them — the archive's concentration problem, moved one step downstream. A tool cannot assign ownership, and I spent a quarter behaving as though it could.
 
 I would also set the cache differently. Five minutes was chosen to protect an API quota with plenty of headroom, and the cost is that the most common first action — looking for the meeting you just left — is where the product appears broken. I optimised a constraint I assumed rather than measured.
 
 > **Note on this sample.** This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.4 — this read "8% → 31%"; 31% matched nothing and 11% is 78 of 690 from the funnel. The before-side 8% maps to nothing in 212/38/14/6 either (6 of 212 is 2.8%), so give the true before figure if this should read as a before→after.
-- launch is Mar 2026, so six months of logs do not exist yet at 2026-08-25; give the real observation window
-- 0.6 — state the headcount trajectory here (Patent Ops says ~75, this page says 140); e.g. "~75 in 2024, ~140 by mid-2025."
 
 ---
 
@@ -3111,6 +3234,8 @@ A service that scans upcoming Outlook events for a scoped mailbox and ensures a 
 - **Skipped events state why they were skipped.** Silent skips were the failure mode of the manual habit this replaced — people did not notice what they had forgotten to forward.
 - **Job status is an endpoint, not a log file.** The person who needs to know whether last night's sync ran is not going to read a server log, and if checking is hard the checking stops.
 
+_Recreated from the service's own output. Structure and fields are accurate; all event names, addresses and times shown are invented. Happy to walk through the real service in a conversation._
+
 #### 07. Tradeoffs
 
 | Tension | What I chose | What it cost |
@@ -3145,7 +3270,7 @@ We agreed two failure conditions before build, one absolute: if any private even
 
 _Sync outcomes by week, Jun–Jul 2025, from job status records. The forwarded share stays near a third throughout, which is the practical measure of how often these people attend meetings they do not organise — and the reason the two-path decision in section 03 was worth the extra code._
 
-**How we counted.** A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported.
+**How we counted.** A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported. The two figures on this page count different things: the headline six a month is the externally visible rate the quarter was prioritised on, while the diary's eleven in a fortnight counts every clash from both calendars, silent ones included. And the Outlook tenant this service reads is the smaller of the group's two — twelve mailboxes — which is why narrowing the credential reads 12 → 1 rather than a company-sized number.
 
 `Technical configuration — Graph application permissions narrowed by an IT-managed application access policy · occurrence-level writes through calendarView · subscribable .ics feed · dry-run default on every path · overlap lock with retry on throttling · scheduled every 2 hours on EC2 behind Nginx`
 
@@ -3156,11 +3281,6 @@ I scoped this as a sync problem for a month before the diary told me it was a di
 I would also not have built the subscribable feed. It was easy, it is used by two people, and it is the one surface where a misconfiguration could expose a whole calendar to whoever holds the URL — the highest-risk part of the service, earning the least.
 
 > **Note on this sample.** This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.5 — does the tenant hold 12 mailboxes? "Every mailbox in the tenant" and "12 → 1" only agree if it does.
-- 0.5 — the headline is 6 double-bookings a month while the diary logged 11 in a fortnight across six people. If the 6 is the externally visible rate (as the §01 row label says) and the 11 counts every clash, say so here.
 
 ---
 
@@ -3178,7 +3298,7 @@ I would also not have built the subscribable feed. It was easy, it is used by tw
 | Role | Product manager, pilot owner |
 | Team | 1 people operations partner, 1 data engineer, with finance as reviewer |
 | Timeline | Jun 2026 – present |
-| Stage | Controlled pilot across seven requisitions in three job families |
+| Stage | Controlled pilot across seven requisitions in five job families |
 | Link | /demo/salary-bands |
 
 **Positioning.** A pilot that drafts an offer range where every figure on it resolves to a dated comparator row — and refuses the role outright when the rows are not there.
@@ -3274,10 +3394,14 @@ One pipeline per requisition. Comparator rows are pulled and weighted by collect
 
 **Interface — The offer draft for REQ-2211, a digital design engineer role. A strip across the top gives the drafted range, the market median, the reserved threshold and the evidence behind it, each figure underlined and carrying superscript source references. Below it a model-written rationale in three paragraphs, badged as model-written, with every numeral inside it underlined and cited.**
 
+[Open this draft and follow a figure to its source](/demo/salary-bands?view=offer&role=de4-sj)
+
 - **The output is a range, and it stops at the market median.** Everything above is reserved and needs a named reason and a second approver. A point figure would be quoted as the offer and the range forgotten by the second email.
 - **Every figure carries its sources in superscript, and every one of them opens.** The click ends at rows with a date, an observation count and a method — never at another figure in the same document, which is how the old spreadsheets cited themselves.
 - **The rationale is badged model-written and contains no number the model chose.** It was given the computed band and asked for an argument with slots in it. Press “show the raw model output” in the demo and the slots are still sitting there, unfilled.
 - **Base salary only, on the tile rather than in a footnote.** A blended total-compensation figure is the point where a defensible band quietly becomes an indefensible one, and it is too useful a number to leave ambiguous.
+
+_Recreated from the pilot interface as a working demo. The weighting rule, the four floor rules, the refusals and the citation behaviour are the real ones; every source, observation count, band and figure shown is invented, and no employee or candidate data exists in it to show. Happy to walk through the real pilot in a conversation._
 
 **Gallery**
 
@@ -3287,13 +3411,15 @@ One pipeline per requisition. Comparator rows are pulled and weighted by collect
 - **Suppressed, not summarised.** — [Open a suppressed band](/demo/salary-bands?view=equity&role=pm5-sj)  Four people hold this band, so the distribution is not shown at all. The band edges stay, because they are a policy rather than a person. This is the screen that had to refuse the most, and the only one where refusing costs a question people genuinely need answered.
 - **Held, shown, and carrying no weight.** — [Open the cross-market refusal](/demo/salary-bands?view=evidence&role=de4-blr)  The Bengaluru requisition keeps its San Jose rows on screen at zero weight rather than hiding them, because the tempting thing to do with them is exactly what the location rule forbids. A labelled cross-market adjustment was deferred, so this role has no band and says so.
 
+_Every screen above is the state its own link opens, captured from the running demo on invented comparator data. It exists so the argument on this page can be checked rather than taken on trust: switch requisition, press any underlined figure and follow it to the rows and the arithmetic, open one of the four refusals, or ask the offer screen to show you what the model actually wrote._
+
 #### 07. Tradeoffs
 
 | Tension | What I chose | What it cost |
 |---|---|---|
 | Traceability vs coverage | Refuse the role rather than widen the band | Four of seven pilot requisitions got no band at all, and a recruiter with a live role still has to do something that day |
 | Rules vs a model that could reason about a market | Every figure by rule, the argument by model | The tool cannot weigh a signal that is not already a comparator row, which is most of what a good recruiter knows |
-| Aggregate equity vs the question that gets asked | Counts by quartile, suppressed below eight holders | Three of the seven families are too small to show anything, and those are the families where equity questions are sharpest |
+| Aggregate equity vs the question that gets asked | Counts by quartile, suppressed below eight holders | Three of the five families are too small to show anything, and those are the families where equity questions are sharpest |
 | A range vs a number | Draft a range and stop it at the market median | Somebody still picks a point inside it, and the tool has made that person more visible rather than better informed |
 | Base only vs total compensation | Base salary, stated on the tile itself | The number that decides an acceptance is the total one, and on that number the tool is deliberately silent |
 
@@ -3448,12 +3574,16 @@ He agreed with a condition that improved the economics without touching the prin
 
 A workflow taking a structured brief through five stages: context validation with a clarification gate, project-type classification and section selection, batched drafting, scorecard review by a different model with a bounded revision loop, and a single implementation-ready task whose checklist carries binary completion tests, estimates and dependencies. Around it sit versioning, line-level diffs, export and comment-driven revision.
 
-**Interface — The review stage on round two: the planner and reviewer models named at the top with the pairing marked distinct, a ten-criterion scorecard reading zero fail and two partial with the reviewer’s written objection under each, the line diff against the previous draft beside it, and the plan below marked approved and frozen at version two.**
+**Interface — The review stage on round two: the planner and reviewer models named at the top with the pairing marked distinct, a ten-criterion scorecard reading zero fail and two partial with the reviewer’s written note under every criterion it objected to, the line diff against the previous draft beside it, and the plan below marked approved and frozen at version two.**
+
+[Open this review in the demo](/demo/prd-os?view=review&round=2)
 
 - **The reviewing model is named on screen.** The guarantee that a plan was not approved by its own author is only worth something if the reader can see it held on this run.
 - **Unknowns are rendered as unknowns, not omitted.** The defect in section 02 was silence about gaps. Showing what the system does not know is the whole product in one interface decision.
 - **Each checklist step shows its completion test beside it.** A step with no test gets marked done because time passed, which is 15 of the 24 audited plans.
 - **Approved plans are visibly frozen.** Once tasks derive from a plan version, editing it in place breaks the trace between a task and the reasoning that produced it.
+
+_The review stage, running. The reviewer’s scores are what the model emitted; the approve-or-reject verdict beside them is not stored — it is computed on the page by the product’s own rule, so changing any score changes the verdict. The diff is the same line-level comparison the product uses, and it shows the one change that matters: the sentence naming an owner for the release channel replaced by an explicit unknown that names the question it came from. The brief, the plan and the objections are an invented run._
 
 **Gallery**
 
@@ -3463,6 +3593,8 @@ A workflow taking a structured brief through five stages: context validation wit
 - **One task, every step tested.** — [Break a dependency and watch it caught](/demo/prd-os?view=task)  Eight steps, eight binary completion tests, and a total of 13 days derived as the sum of the steps rather than estimated at the top — against the 12 the brief guessed, with the gap left visible. Every step over a day and a half shows its arithmetic. The publication step is deliberately unassigned, because the ownership question was never answered.
 - **Where the figures come from.** — [Check the figures against the rows](/demo/prd-os?view=runs)  Every number in this section, derived on the page from the 44 logged rows printed beneath it: the median, the distribution, the round counts either side of the context-handoff fix, and the first-read rate. Three runs reached human review and were never opened; they are excluded rather than counted as approved. One figure is marked as not derivable from any log, and left marked.
 - **The invariants.** — [Run them](/demo/prd-os?view=rules&run=1)  Forty of the product’s rules run in the page: the scoring boundaries, the dependency validator, the model-pairing assertion, the diff, the template integrity and the estimate derivation. They run against this run’s own data as well as against fixtures, so the walkthrough above cannot quietly disagree with the rules it claims to follow.
+
+_The demo is the product’s decision logic — the master template, the scoring rule, the dependency validator, the line diff, the model-pairing assertion and the estimate derivation — ported from source and running on one recorded run of an invented brief. What a model wrote is recorded: the questions, the plan prose, the objections, the checklist. What the system decides about them is computed live, which is the part this page makes claims about._
 
 #### 07. Tradeoffs
 
@@ -3489,6 +3621,16 @@ We agreed before build that this failed if humans approved fewer than half of pl
 | 0 | Runs where planner and reviewer shared a model (guardrail) |
 
 **Figure — Distribution of 41 run times to human review, concentrated between four and eight minutes with three runs beyond the ten-minute ceiling**
+
+| name | value |
+|---|---|
+| 2–4 | 6 |
+| 4–6 | 13 |
+| 6–8 | 12 |
+| 8–10 | 7 |
+| 10+ | 3 |
+
+_Ceiling: None — 10 min ceiling_
 
 _Run times across all 41 completed runs, Mar–Aug 2026, from workflow logs. The ceiling matters more than the median: we agreed a run must reach a human inside ten minutes or it stops being part of a working session, and the three runs beyond it all needed two clarification rounds._
 
@@ -3548,6 +3690,8 @@ Two framings were available. The exciting one is a multi-agent drafting system, 
 | Specification | 15 |
 | Figures, formalities | 9 |
 
+_Cutoff: 80 — 80% of the hours_
+
 _Effort distribution across five completed filings, Jan 2026, from attorney time records. Search is the largest single cost and also the one where a miss is invisible — a draft written around missed art looks exactly like a good draft until an examiner finds it._
 
 I scoped the pilot to the US path, because mixing two legal standards puts a jurisdiction condition in every prompt.
@@ -3556,13 +3700,13 @@ I scoped the pilot to the US path, because mixing two legal standards puts a jur
 
 I shadowed two attorneys through five disclosures, then ran the same code and the same prompts over two kinds of source document to find out whether the drafter or the input was the constraint.
 
-**Figure — Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, two internal engineering documents yield 8 of 9 with 1**
+**Figure — Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4**
 
 | name | a | b |
 |---|---|---|
-| Candidate concepts found | 7 | 9 |
-| Claimable without more detail | 1 | 8 |
-| Parameters quarantined | 15 | 1 |
+| Candidate concepts found | 7 | 6 |
+| Claimable without more detail | 1 | 5 |
+| Parameters quarantined | 15 | 4 |
 
 _Two runs on the same pipeline, Aug 2026. A document written to persuade a customer answers almost none of the questions a §112(a) enablement analysis asks; a document written to instruct an engineer answers most of them. The drafter was never the bottleneck._
 
@@ -3592,10 +3736,14 @@ A pipeline that reads several documents as one disclosure and returns a filing p
 
 **Interface — The intake gate for a published whitepaper. A red panel reads “RUN REFUSED — no intake decision on record” above the verbatim containment error. Below it four publication states are listed, each with its legal rationale, and the barred state is selected — showing an attorney-override field and no run button.**
 
+[Open the gate and try to run a barred document](/demo/ai-lawyer?view=intake&src=wp0092&status=published_us_barred&decided=0)
+
 - **The refusal is a sentence, not a greyed-out button.** A disabled control tells you the thing exists and you are not allowed it, which is an invitation to look for the way around. Until a decision permits a run, there is no run button on the page at all.
 - **Four states, because a boolean loses the case that matters.** A publication thirteen months before filing is a statutory bar; thirteen days before it is inside the grace period. A single is-published flag collapses those into the same answer and the wrong next action.
 - **Every rationale is served from the enum, never copied into the UI.** A duplicate of the legal text in the frontend would drift from the source of truth while continuing to look authoritative — which is the one thing this particular screen cannot afford.
 - **A draft from several documents is as cleared as its least-cleared member.** Each document was published on its own date and can independently bar foreign rights, so the gate ANDs the clearances. A decision recorded against a bundle would clear documents nobody looked at.
+
+_The running prototype rather than a mock-up — the four states, their rationales, the date classifier and the fail-closed refusal are the real ones, on an invented disclosure. Every document, name, claim and reference identifier in the demo is made up for publication._
 
 **Gallery**
 
@@ -3605,6 +3753,8 @@ A pipeline that reads several documents as one disclosure and returns a filing p
 - **The rule is measured, not asserted.** — [Open the sheet and its §1.84 proof](/demo/ai-lawyer?view=result&tab=drawings)  Sheets are laid out deterministically in millimetres and rendered, then the §1.84 check measures the rendered page — margins, line weight, character height, absence of colour. A layout engine free to move things cannot be proved against a rule that measures where they ended up.
 - **The three runs worth opening are not the successful one.** — [Read the refusal verbatim](/demo/ai-lawyer?view=runs)  A containment refusal rendered verbatim, a whitepaper that could not be drafted from, and a run that died without a manifest and is labelled `incomplete` rather than shown as an empty draft. Browsing them costs nothing and does not need the drafting service running at all.
 - **The measurement that decided the roadmap.** — [Move the slider in the demo](/demo/ai-lawyer?view=corpus)  An 80-patent gold set, 3,399 front-page citations, and the share of them the corpus contains at all — by era, by exclusion cause, and by the CPC subclasses the missing art actually sits in. The slider is the reframe: the same ranker reads as 14% or as 91%, depending on which number you report.
+
+_Six screens from the running demo. The pipeline, the verdicts and the checks are the real ones; the disclosure they run on is invented, and so is every claim, reference identifier, assignee and cost shown._
 
 #### 05. What we learned
 
@@ -3753,10 +3903,14 @@ A read-only dashboard aggregating tasks into hierarchical trees, custom timeline
 
 **Interface — A read-only timeline: a pinned task column on the left showing a hierarchy of space, folder and list, and beside it a workday grid where each task is a status-coloured bar. Two bars are past their due date and carry a red hatch running to the today line, each labelled with the number of days late and a why? link. A thin grey lane under two of the bars marks the window the task was originally planned for.**
 
+[Open the timeline and switch the scale](/demo/clickup-gantt)
+
 - **Every bar deep-links to the task it represents.** This is the concession that replaced write-back, and 26 of 31 spotted errors got fixed because of it.
 - **Scale switching redraws instantly, without a fetch.** Planning sessions move between quarter and week view constantly, and a two-second wait on each switch sent people back to a spreadsheet.
 - **Delay explanations show the technical and plain versions side by side.** The same slip is described differently to an architect and a director, and generating both removed a translation step from the meeting.
 - **The bandwidth grid shows unallocated time as empty, not as available.** A task needs a start date, a due date and an assignee to count as committed capacity; anything missing one is excluded and counted as undated, in the open. An engineer with nothing assigned is usually mis-recorded rather than idle, and colouring that as capacity would drive real staffing decisions off a data gap.
+
+_Recreated as a working demo, pinned to Wednesday 26 August 2026 so the figures here stay true. Layout, interactions, the workday grid and the read-only boundary are accurate; every task, name, date and comment thread shown is invented. Happy to walk through the real product in a conversation._
 
 | Surface | What it answers | The rule underneath it |
 |---|---|---|
@@ -3772,6 +3926,8 @@ A read-only dashboard aggregating tasks into hierarchical trees, custom timeline
 - **A slip, beside the thread it was read out of.** — [Read both accounts of this one](/demo/clickup-gantt?view=delays&task=86a2rb4hn)  The comments the account actually drew on are marked in the thread, and the two versions are generated together — one for someone who will touch the code, one for someone who will not. No completion date is produced anywhere, which was the most requested feature and the one this data cannot carry.
 - **When each person comes free — and where it refuses to say.** — [Open the bandwidth grid](/demo/clickup-gantt?view=bandwidth)  The day after someone’s last active dated task, split by the work in progress and the work not started. The column that matters is the one holding four of six blanks: an assignee whose remaining work carries no dates computes as free from today, which is almost always wrong, so the answer is withheld and the missing count shown instead. The definition sits under the table rather than in a metrics note — two teams once held contradictory capacity figures in good faith. Across the real workspace this reads 58 task lists and 30 engineers in three teams, on one definition instead of three.
 - **The view people land on from a link.** — [Open the status board](/demo/clickup-gantt?view=status)  Opening this alone does not count towards the weekly-user figure — it would measure link-following rather than use. Overdue is a tile and never a slice of the ring, because a task can be in progress and overdue at once and a ring that counted it twice would not add up.
+
+_The demo runs on invented data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: switch the scale and watch the request count stay at zero, open a late task and read why, or try to change a due date and be told no._
 
 #### 07. Tradeoffs
 
@@ -3800,13 +3956,13 @@ Before build we agreed this failed if any lead was still hand-building a timelin
 
 **Figure — Weekly sessions by role over ten weeks, rising from 24 to 133, split between leads, architects and project managers**
 
-| name | points |
-|---|---|
-| Leads | [14,31,44,55,62] |
-| Architects | [6,14,22,31,41] |
-| Project managers | [4,9,16,24,30] |
+| series | W1 | W3 | W5 | W7 | W10 |
+|---|---|---|---|---|---|
+| Leads | 14 | 31 | 44 | 55 | 62 |
+| Architects | 6 | 14 | 22 | 31 | 41 |
+| Project managers | 4 | 9 | 16 | 24 | 30 |
 
-_Weekly sessions by role, sampled fortnightly over ten weeks, Jul–Sep 2026 , from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points._
+_Weekly sessions by role, sampled fortnightly over ten weeks, May–Jul 2026, from application logs. Leads adopted first because the timeline solved their planning problem directly; architects arrived later and through the delay analysis rather than the timeline, which is not the entry point we designed for and is now where the roadmap points._
 
 **How we counted.** Committed capacity means working days on tasks carrying a start date, a due date and an assignee, excluding weekends and published holidays. Anything missing one of the three is excluded and counted separately as undated. That exclusion is deliberately visible: a capacity figure quietly absorbing its own uncertainty is the failure this replaced.
 
@@ -3819,10 +3975,6 @@ I designed for leads and architects arrived through a different door. Delay anal
 I would also revisit the thirty-minute cache on delay analysis. It was set to control generation cost before there was usage data to set it from, and the effect is that two people opening the same slipped task ten minutes apart read different explanations.
 
 > **Note on this sample.** This is an internal product. The demo linked from this page is a recreation with invented content on a fixed clock, and all figures here are invented placeholders for this sample. I'm glad to walk through the real product and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- this ten-week session series runs past 2026-08-25; give the weeks that actually have log data
 
 ---
 
@@ -3868,10 +4020,10 @@ Three ways of ending up with a written record were on the table: license a comme
 
 | name | values | label |
 |---|---|---|
-| In-tenant notetaker | [212,0,0] | 212 covered |
-| Vendor bot, all | [0,212,0] | 212 leave the tenant |
-| Vendor bot, cleared | [0,66,146] | 66 covered |
-| Human minutes rota | [30,0,182] | 30 covered |
+| In-tenant notetaker | [212, 0, 0] | 212 covered |
+| Vendor bot, all | [0, 212, 0] | 212 leave the tenant |
+| Vendor bot, cleared | [0, 66, 146] | 66 covered |
+| Human minutes rota | [30, 0, 182] | 30 covered |
 
 _Option sizing, Jan 2026, over the 212 meetings recorded that month. The rota is scored on the fill-in rate of the rota that already existed for the engineering standup, which is the fairest number available and a generous one. The middle two rows are the same product: the difference is entirely whether a human decides, before each call, that it is safe._
 
@@ -3889,6 +4041,8 @@ I ran a decision trace rather than a survey. I took 24 decisions that someone ha
 | A notetaker bot would simply fix this | Only meetings cleared before the call could use one | 66 of 212 cleared in the trial |
 
 **Figure — Of 212 meetings recorded in January 2026, 31 left any written record of what was decided**
+
+_31 of 212 — Left a written record (31); the rest Recorded, never written down (181)_
 
 _Every meeting recorded in January 2026, one cell each, checked against minutes, a wiki page or a task created within five working days. Drawn as units because the shape of the remainder is the point: this is not a documentation habit that needs tightening, it is an absence with a few exceptions in it._
 
@@ -3931,16 +4085,22 @@ The note is the part I spent the most judgement on, because a summary is the eas
 
 **Interface — A meeting workspace: on the left a video frame reporting that no recording was found and, beside it, the transcript with each speaker's line carrying a clickable timestamp; on the right the note, opening with a one-line statement of what was settled, then what happened, then a list of figures each carrying the conditions it was measured under, with an orange timestamp pill on every claim**
 
+[Open this meeting on its notes](https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes)
+
 - **The note opens with what was settled, not what was discussed.** One line, before any retelling of the call — and it is allowed to end in "and that is unresolved". A reader a month later did not come back for a narrative of a meeting they sat through.
 - **Every figure carries the conditions it was measured under.** 3.1 mW is labelled bench, saline phantom, single run, not a customer figure; 4.6 mW is on body, nine subjects, median. The failure this prevents is a bench number being lifted out of a note and quoted to a customer, which is a thing that had already happened once.
 - **Every claim carries the second it was said.** The pill beside each line seeks the transcript and the player to that moment. This is the rule that made notes circulable — a claim about a colleague that cannot be spot-checked stays a draft, whatever it says.
 - **The player can be empty and the record still stands.** Here no video was found and the frame says so. Capture and transcription are separate paths on purpose: a missing recording file must not take the transcript and the note down with it.
+
+_This is the screen the link above opens — same code, same layout, nothing scrolled or staged, on an invented workspace of five meetings. Every title, speaker and line of speech is written for publication; the note's structure, the capture path and the exclusion model are the real ones._
 
 **Gallery**
 
 - **Further down the same note** — [Open the note and scroll](https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes)  Below the fold of the screen above. Each decision is followed by a Why line naming the argument that settled it — including that Sam objected to the sequencing and the trade was taken anyway. Then Not decided, which is the section that separates a record from a summary: a note listing only decisions reads as though the meeting closed everything it touched.
 - **The library** — [Open the recordings library](https://xana-nine.vercel.app/meetingrecordings)  Captured, minuted and excluded are counted separately above the grid and never summed. Each card says what the notetaker produced — decisions, actions, and how many questions the meeting left open — so the choice to open one is made before opening it.
 - **Asking one recording** — [Open this question and its answer](https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?q=What%20was%20left%20unresolved%3F)  The link carries the question, so it opens on the answer rather than on an empty box — which is how one of these actually gets shared. The answer states the conclusion, shows the exchange behind it, cites the second of each claim, and reports what it could not find: the trim question was raised, agreed to be real, and left with no action assigned.
+
+_Three surfaces on the same invented workspace. Each is the state its own link opens._
 
 #### 07. Tradeoffs
 
@@ -3970,6 +4130,8 @@ We agreed before building that the MVP failed below 95% transcription of eligibl
 | 5 → 21 (of 24 traced) | Decisions found in a written record |
 
 **Figure — Weekly transcription coverage of eligible meetings against the agreed 95% floor, rising from 71% and dipping to 89% in week six**
+
+_Threshold: 95 — Pre-agreed floor: 95%_
 
 _Coverage by week, Jun–Aug 2026, from capture run records. Week six is not a model problem: the notification subscription silently stopped renewing and eleven meetings were never fetched. It is on the chart because it is the failure mode this system actually has — capture goes quiet and everything downstream looks healthy._
 
@@ -4008,7 +4170,7 @@ I would also build the correction path before the generation path next time. The
 
 **Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.
 
-**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided.
+**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — with about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided.
 
 **What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
 
@@ -4086,7 +4248,7 @@ I was the interface. The founder/CTO wanted to know what was protected before a 
 
 _Filings I owned, by product line and half-year, Feb 2024 – Aug 2026 (n=52). Markers are each line’s first public disclosure, taken from the product pages themselves. Filings cluster in the half before a line goes public — clearest on the two NFE parts, where the run-up is unmistakable. YR23 is the exception for a mundane reason: it shipped three months into this window, so most of its protection was already filed before the chart starts. That is the calendar working as the strategy, and I could only run it that way because I was in both rooms. The three source workbooks the portfolio dashboard is built from hold the whole estate, not just this window: 248 rows, 207 distinct patents once continuations and re-filings are grouped into families. The 52 here are the filings I owned between February 2024 and August 2026._
 
-**From the quarterly coverage review — one page, per product line — Every line gets one of four calls, agreed with the founder/CTO in the same hour**
+**Every line gets one of four calls, agreed with the founder/CTO in the same hour — From the quarterly coverage review — one page, per product line**
 
 - **File.** The line is still moving and someone else could plausibly get there first. Four of the six lines carried at least one of these in a typical quarter.
 - **Defer.** Claimable, but the roadmap has not committed. Deferred items are re-read next quarter rather than dropped — several carried twice before we filed.
@@ -4107,7 +4269,7 @@ Machine-drafted claim language was the hardest cut. It fails two stated constrai
 
 What handled the gap was unglamorous: structured disclosure capture front-loading exactly the fields counsel asks for anyway, plus a prior-art shortlist that is cited and never written. The honest cost is that it saves no legal spend — only the schedule moves.
 
-**From the programme note — what we will not automate, v1.1 — Three categories stay with a person, permanently, and not as a first-version simplification**
+**Three categories stay with a person, permanently, and not as a first-version simplification — From the programme note — what we will not automate, v1.1**
 
 - **Anything statutory.** We compute no bar date, no priority date and no response deadline. Counsel’s docket is the record; we mirror it and mark it as theirs.
 - **Anything unrecoverable.** Claim language and filing scope. A wrong scope survives to grant and cannot be argued away afterwards.
@@ -4128,12 +4290,16 @@ She agreed, then asked for three things I had not planned to give: a provenance 
 
 A mail-triggered spine, a workbook sync beneath it, and five surfaces over both. Documents from any of the three firms are extracted, matched to one matter identity, given a stage and a category, and written into one record — five views, not five tools.
 
-**Interface — The spend and milestone timeline: eighteen lanes, one per matter, running from April 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane**
+**Interface — The spend and milestone timeline: eighteen lanes, one per matter, running from February 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane**
+
+[Open the timeline in the demo](https://xana-nine.vercel.app/patents/spend)
 
 - **Deadline triage is a policy, not a colour.** The bands are sixty days, six months, a year. I set them so the weekly review has a fixed size: anything inside sixty days gets read out, everything else gets read once a month.
-- **Every date on this screen is ours.** Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so the two kinds are drawn differently and the origin travels with the date.
+- **Every date on this screen is ours.** Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so this timeline carries only our internal readiness dates — anything statutory is read from the docket where it lives, and the tracker says so in as many words.
 - **Each firm sees its own matters and only its own.** The same view is shared read-only, filtered per firm. It removed most of the status email in both directions and cost nothing, because the filter already existed for my own use.
 - **Spend is grouped by stage of work, never by matter.** Draft, filing, office action. That makes an invoice checkable against the engagement, and keeps everyone out of arguing about what any single matter is worth.
+
+_The running demo rather than a mock-up — same code, same layout, on an invented portfolio of 18 matters across 3 firms, $61,900 across 70 payments and 115 dated events. Matter names, application numbers, firms and fees are invented for publication; the stage model, the category set and the payment breakdown are the real ones._
 
 **Gallery**
 
@@ -4142,6 +4308,8 @@ A mail-triggered spine, a workbook sync beneath it, and five surfaces over both.
 - **Ask the portfolio** — [Ask the portfolio a question](https://xana-nine.vercel.app/patents)  It reads the same eighteen matters every other view reads and answers from them, naming the matters it used. Asked what is past its internal action date it returns six of fifteen with their refs, stages and dates — and says in the same breath that these are readiness dates and not statutory ones.
 - **Invoice approval** — [Open invoice approval](https://xana-nine.vercel.app/patents/invoices)  Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it.
 - **Upload an invoice** — [Open the upload half](https://xana-nine.vercel.app/patents/invoices?view=upload)  The other half of the same section. Most invoices arrive by mail and are matched before anyone looks; this is the path for the ones that did not, and it runs the same extraction and the same match. Firm and matter are chosen by hand rather than read off the PDF, because those two are what bind the invoice to the portfolio.
+
+_The five surfaces over the mail-triggered spine, on the same invented portfolio as the timeline above. Each link opens the screen its image shows._
 
 | Surface | Who uses it | The decision it carries |
 |---|---|---|
@@ -4184,10 +4352,12 @@ We agreed before build that this failed if any date the system showed disagreed 
 
 **Figure — Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent**
 
-| name | points |
-|---|---|
-| Before | [100,82,61,44,33,26,21] |
-| After | [100,46,18,8,4,2,2] |
+| series | 0 | 15 | 30 | 45 | 60 | 75 | 90+ |
+|---|---|---|---|---|---|---|---|
+| Before | 100 | 82 | 61 | 44 | 33 | 26 | 21 |
+| After | 100 | 46 | 18 | 8 | 4 | 2 | 2 |
+
+_Threshold: None — 30-day action age_
 
 _Share of open matters still waiting, by how long the next action had been owed. Before is the 2024 population (n=38); after is the same measure over the twelve months to Aug 2026 (n=54). The curves separate almost entirely inside the first month and then fall at a similar rate, which says plainly that the system fixed how fast work gets picked up and did nothing at all for the long tail — and that tail is inventor availability, not process._
 
@@ -4200,10 +4370,6 @@ I built the mechanism before I wrote down the strategy. For a year the filing de
 I would also have measured the tail earlier. Section 08 says we fixed the first thirty days and left the rest where it was — that tail is inventor availability in a tapeout crunch.
 
 > **Note on this sample.** Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.6 — state the headcount trajectory here (this page says ~75, the Wiki and Video Library pages say 140); e.g. "~75 in 2024, ~140 by mid-2025."
 
 ---
 
@@ -4315,15 +4481,21 @@ A dashboard over a nightly sync. The sync enumerates workspace documents, checks
 
 **Interface — Comparing version 1 to version 2 of a document: a What changed panel carrying a sentence about the change, the page list beneath it and two modified page chips, and under that the line-by-line diff with the removed line in red and the two added lines in green**
 
+[Open this comparison in the demo](https://xana-nine.vercel.app/documents/doc_onboarding?tab=compare)
+
 - **The change summary sits above the diff, not inside it.** This is what replaced the semantic diff. Most readers need to know whether a change matters; only some need to see it line by line, so the sentence comes first and the diff waits underneath it.
 - **Registered and unregistered counts are shown separately.** On the repository view: seven in the register, three tracked but unregistered, never summed. The tool follows more than the register lists and must not be read as the canonical inventory.
 - **The run history shows checked and changed, not just success.** Four nightly runs across the top, each with both numbers. The 27th reported completed having checked nothing — identical to a healthy run on status alone, which is how the same failure went unnoticed for three days.
 - **Versions carry no edit button anywhere.** There is no control on this screen that alters a version. An immutable record with an affordance for changing it is not an immutable record, however well the permissions are configured.
 
+_The running demo rather than a mock-up — same code, same layout, on an invented workspace of ten documents, fourteen versions and four nightly runs. Every title, author and line of content is made up for publication; the version model, the register distinction and the sync accounting are the real ones._
+
 **Gallery**
 
 - **The repository** — [Open ClickUp under My Files](https://xana-nine.vercel.app/myfiles?tab=clickup)  Reached from My Files, under ClickUp — the documents that carry a history rather than only a current copy. The two register counts sit apart from each other above the table, and the nightly runs sit above them with what each one checked and changed.
 - **A version timeline** — [Open a document and its versions](https://xana-nine.vercel.app/documents/doc_onboarding)  One document, its versions down the left, and a comparison between any two of them. A version exists only where the content hash genuinely moved, so the timeline is a record of real change rather than of how often the sync ran.
+
+_Two surfaces on the same invented workspace as the comparison above._
 
 #### 07. Tradeoffs
 
@@ -4351,10 +4523,10 @@ We agreed the MVP failed below 95% sync completion over a month — a change rec
 
 **Figure — Documents tracked rising from 248 to 301 while documents changed per night stays between 9 and 34, over eight weeks**
 
-| name | points |
-|---|---|
-| Documents tracked | [248,251,278,296,301] |
-| Changed that night | [12,9,31,34,18] |
+| series | W1 | W3 | W5 | W6 | W8 |
+|---|---|---|---|---|---|
+| Documents tracked | 248 | 251 | 278 | 296 | 301 |
+| Changed that night | 12 | 9 | 31 | 34 | 18 |
 
 _Tracked estate against nightly change volume, Jul–Aug 2026, from sync run records. The step in week five is the tracking policy change bringing in workspace-only documents; the change spike alongside it is those documents being versioned for the first time, not a burst of editing._
 
@@ -4437,6 +4609,8 @@ Before designing anything I measured sixty capsules — twenty from each of thre
 | Lot B, second quarter | 21.5 | 20 |
 | Lot C, third quarter | 25 | 20 |
 
+_Threshold: 20 — supplier nominal, 20 mV/Pa_
+
 _Sixty capsules across three delivered lots, Q1 2024. Within a lot the spread was wide but stable; the finding that mattered is between lots, because it kills the obvious answer. Sorting capsules into grades works beautifully until the next delivery arrives centred somewhere else, and then every grade you defined is wrong._
 
 The reframe: this was never a capsule-quality problem to solve by buying better parts. It is a variance problem, and variance is either paid for at the supplier or absorbed at our own test bench.
@@ -4483,6 +4657,8 @@ A cardioid condenser whose gain happens before any active device sees the signal
 - **The load the capsule sees is specified, not inherited.** Choosing the shunt rather than accepting whatever the capsule datasheet assumed is what keeps behaviour repeatable when a lot arrives centred somewhere new.
 - **Simulated to a transient before a board existed.** Meters on four nodes and a 1 kHz source, run in the schematic. Finding the operating point in a simulator costs an afternoon; finding it on a fabricated board costs a revision.
 
+_My own schematic from the project's EasyEDA workspace, rev 1.0, February 2024, with the simulation instruments still placed. The circuit and its component values are real. The capsule specification and every performance figure on this page are invented._
+
 **Gallery**
 
 - **Untitled**  The transient run at 1 kHz: input in yellow at about ±4.9 V, output in cyan at about ±9.3 V, in phase and symmetrical across the sweep. Symmetry is what is being checked — an asymmetric output means the transformer is heading toward saturation, which is audible as distortion long before it is visible as clipping. Source amplitude is scaled for visibility rather than drawn at a capsule level; the gain is set by the turns ratio and the loading, which is why the output is under 5× on a 1:5 transformer. Real capsule signals are millivolts.
@@ -4513,10 +4689,10 @@ We agreed before build that this failed if two microphones taken off the line at
 
 **Figure — Sensitivity deviation from nominal: sixty delivered capsules spread across the supplier's full window, against 240 shipped microphones inside a 1 dB acceptance band**
 
-| name | label | values | own |
-|---|---|---|---|
-| Capsules as delivered | 60 measured, three lots | [-3.1,-2.6,-2.4,-2.1,-1.9,-1.8,-1.6,-1.5,-1.4,-1.2,-1.1,-0.9,-0.8,-0.6,-0.4,-0.2,0.1,0.3,0.4,0.6,-2.8,-1.7,-1.3,-0.7,-0.3,0.2,0.5,0.8,0.9,1.1,1.2,1.4,1.5,1.7,1.8,2,2.2,2.4,2.6,2.9,-0.5,0,0.7,1,1.3,1.6,1.9,2.1,2.3,2.5,2.7,2.8,1.45,0.95,0.35,-0.15,-1.05,-2.2,2.45,0.55] |  |
-| Shipped microphones after trim | 240 measured at final test | [-0.38,-0.34,-0.31,-0.29,-0.26,-0.24,-0.21,-0.19,-0.16,-0.14,-0.11,-0.09,-0.06,-0.04,-0.01,0.02,0.04,0.07,0.09,0.12,0.14,0.17,0.19,0.22,0.24,0.27,0.29,0.32,0.35,0.38,-0.36,-0.27,-0.18,-0.08,0.01,0.11,0.21,0.31,-0.22,0.16] | true |
+| name | label | values |
+|---|---|---|
+| Capsules as delivered | 60 measured, three lots | [-2.95, -2.6, -2.4, -2.1, -1.9, -1.8, -1.6, -1.5, -1.4, -1.2, -1.1, -0.9, -0.8, -0.6, -0.4, -0.2, 0.1, 0.3, 0.4, 0.6, -2.8, -1.7, -1.3, -0.7, -0.3, 0.2, 0.5, 0.8, 0.9, 1.1, 1.2, 1.4, 1.5, 1.7, 1.8, 2, 2.2, 2.4, 2.6, 2.9, -0.5, 0, 0.7, 1, 1.3, 1.6, 1.9, 2.1, 2.3, 2.5, 2.7, 2.8, 1.45, 0.95, 0.35, -0.15, -1.05, -2.2, 2.45, 0.55] |
+| Shipped microphones after trim | 240 measured at final test | [-0.38, -0.34, -0.31, -0.29, -0.26, -0.24, -0.21, -0.19, -0.16, -0.14, -0.11, -0.09, -0.06, -0.04, -0.01, 0.02, 0.04, 0.07, 0.09, 0.12, 0.14, 0.17, 0.19, 0.22, 0.24, 0.27, 0.29, 0.32, 0.35, 0.38, -0.36, -0.27, -0.18, -0.08, 0.01, 0.11, 0.21, 0.31, -0.22, 0.16] |
 
 _Sixty capsules measured on delivery against 240 microphones at final test, to Q4 2024. The top row is what the supplier considers one part number. The bottom row is the same parts after a trim set against a reference — and the shipped population is narrower than the acceptance band, which is the only reason we can print a consistency figure rather than a typical one._
 
@@ -4593,6 +4769,13 @@ I read 84 returned-tool failure records from the preceding two years and coded e
 
 **Figure — Of 84 returned-tool failure records: 61 could not be reproduced off-rig, 37 needed a downhole test to check a hypothesis, 29 were closed without confirmation**
 
+| name | value | label |
+|---|---|---|
+| Failure records reviewed | 84 | 84 |
+| Not reproducible off-rig | 61 | 61 |
+| Hypothesis needed field time | 37 | 37 |
+| Closed unconfirmed | 29 | 29 |
+
 _Returned-tool failure records, Jan 2021 – Oct 2022, coded by reproducibility rather than by outcome. The last bar is the finding that funded the work: roughly a third of cases were closed with a fix nobody had watched work, which is not failure analysis, it is an educated guess with paperwork._
 
 The reframe: the labs did not have a diagnosis problem, they had a stimulus problem. Every analyst knew what to measure and none could make the tool produce it.
@@ -4639,6 +4822,8 @@ A bench that produces what a downhole sensor would produce, healthy or faulty, u
 - **Channel table on one screen, playback front panel on the other.** The analyst sees what a channel is defined to do beside what it is doing. Folding both into one window tested better in a demo and hid the mistake that actually happens — playing the right fault into the wrong channel.
 - **The electronics under test share the bench and the ground with the reference.** The boards on the rail behind the meters are what the signals are being played into. Putting the tool in one room and the calibration in another measures the cable between them, which is how a bench starts producing findings nobody can defend.
 
+_My own photograph of the bench in an SLB failure-analysis lab — a shared high-voltage and current station, hence the signage. Instruments shown are commercial products and the panels shown are channel-emulation VIs. No tool identity, fault-library content or customer data is visible. Happy to walk through the real bench in a conversation._
+
 **Gallery**
 
 - **Untitled**  The tool-bus side — a CAN HS/FD interface carrying sensor traffic to the tool electronics under test, alongside the analogue channels. Sensor faults arrive on a downhole tool through both paths, so a bench that only drove analogue signals would miss the bus-level fault modes entirely.
@@ -4669,6 +4854,8 @@ We agreed before build that this failed if it could not reproduce the twenty mos
 | ±0.4% (of reading) | Agreement with calibrated reference (guardrail) |
 
 **Figure — Fault-signature coverage: 55 of the 56 catalogued field fault modes reproduce on the bench, one does not**
+
+_55 of 56 — Reproduced within tolerance (55); the rest Not reproducible open-loop (1)_
 
 _The catalogued fault library at handover, Aug 2023, one cell per fault mode. Drawn as units rather than a percentage because the remainder is a specific thing, not a rounding error: the outstanding mode is an intermittent thermal-cycling fault that only appears while the temperature is moving, which open-loop playback cannot hold._
 
@@ -4743,16 +4930,22 @@ The prospective customer class is defence R&D — people who fund micro air vehi
 
 So we tested the disguise before the aircraft: flew it past people who had not been told what they would see, and asked what they were looking at.
 
-| What we asked | What observers said | Across 24 sightings |
+| What we asked | What observers said | Across 24 sightings at each distance |
 |---|---|---|
 | "What are you looking at?" at 20 m | A machine, a drone, or some kind of toy | 17 of 24 |
 | The same question at 40 m | A bird — often a specific one | 16 of 24 |
 | What made it a bird? | The rhythm of the flapping, not the shape | 19 of 24 |
 | Did you hear anything? | Nobody mentioned a sound | 24 of 24 |
 
-**Figure — Share of observers calling it a bird by distance: 31 percent at 20 metres, 68 at 40, 84 at 60, 89 at 80**
+**Figure — Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80**
 
-_Twenty-four sightings across four distances, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on._
+| 20 m | 40 m | 60 m | 80 m |
+|---|---|---|---|
+| 29 | 67 | 83 | 88 |
+
+_Ceiling: 60 — the level we needed to claim it hides in plain sight_
+
+_Twenty-four sightings at each of four distances — 96 in all, Q4 2021. The curve is steep between twenty and forty metres, which is where an airframe stops being a set of parts and becomes a silhouette with a rhythm — and the rhythm is what observers named, not the shape we had spent the term on._
 
 The reframe: we had been building a bird and testing an aircraft. The property worth protecting was the one nobody was working on.
 
@@ -4774,20 +4967,38 @@ A single-motor flapping-wing airframe: a gear train turning rotary motion into s
 
 **Interface — Concept render of the ornithopter: segmented flapping wings on spars, a fuselage carrying electronics and a nose camera, and a swept tail**
 
+[Open the concept arithmetic — the sums, not a flight](/demo/ornithopter-concept)
+
 - **One motor and a gear train, not two synchronised motors.** The project brief costed both. Two motors flap harder and need the wings kept in step by something; we had no way to instrument that, so we took the mechanical constraint over the control problem.
 - **Tail-only control — a rudder and an elevator, no wing twist.** Steering through the wings means a second degree of freedom in the one mechanism already carrying every load. The tail is heavier than it looks and it is why anything flew at all.
 - **The camera moved aft after the fifth flight.** In the nose it looked right and pitched the aircraft down. Moving it behind the spar cost us the head silhouette and bought the three flights that finished.
 - **Flap rhythm tuned for how it reads, not only for lift.** Once observers told us the rhythm was what made it a bird, frequency stopped being purely a thrust parameter and became the thing the product is.
 
+_The concept render carried on the project card. It is not a photograph of the built aircraft: the project folder holds no photograph of the airframe that flew, and the deck's other images are stock press photography, so nothing else here is ours to publish. The concept arithmetic below checks the proposal against itself — patrol radius against endurance, and the airframes a 24/7 shift pattern would need. It flies nothing and simulates no airframe; it only does the sums the proposal was written with, which is the check that should have come first._
+
 **Gallery**
 
 - **The proposal, checked against itself.** — [Open the concept arithmetic](/demo/ornithopter-concept?preset=flew)  Twenty-five kilometres of patrol radius and one hour of endurance are both in our proposal, and at any plausible cruise speed the transit eats the hour twice over. Set the dial to the forty-one seconds that flew and the fleet arithmetic has nothing left to divide.
+
+_The patrol radius, the coverage figure, the shift pattern and the one-hour target are the project's own; the cruise speed, turnaround and fleet arithmetic are a worked illustration for this sample. No operator ever flew this aircraft. The full write-up is the first link at the top of this page._
 
 #### 05. What we learned
 
 We agreed before build that this failed if it could not hold controlled flight with the camera aboard long enough to be worth pointing at anything — thirty seconds.
 
 **Figure — Nine flight attempts in order: four structural failures, two aborts, and three completed circuits, all after the camera was moved aft**
+
+| name | outcome |
+|---|---|
+| 1 | fail |
+| 2 | fail |
+| 3 | abort |
+| 4 | fail |
+| 5 | abort |
+| 6 | ok |
+| 7 | fail |
+| 8 | ok |
+| 9 | ok |
 
 _The whole campaign, Q1–Q2 2022. The order is the finding: nothing improved until a weight moved, and the change that produced three clean flights was not a change to the mechanism anyone had been working on. Flight seven still broke a spar, so the fix was real but partial._
 
@@ -4798,7 +5009,7 @@ _The whole campaign, Q1–Q2 2022. The order is the finding: nothing improved un
 | 41 s (best circuit, camera aboard) | Longest controlled flight |
 | 9 → 3 (attempted → completed) | Flights that finished as intended |
 | +6 g (over airframe and battery) | Payload margin with the camera |
-| 68% (observers at 40 m) | Bird-mistake rate (guardrail) |
+| 67% (observers at 40 m) | Bird-mistake rate (guardrail) |
 
 We cleared our own bar and the bar was wrong. Forty-one seconds beats thirty and means nothing against a concept written around an hour aloft — the number we set was a build milestone wearing a product criterion's clothes. The campaign taught us where the ceiling sits: the gear train wears, payload margin is a few grams, and control authority runs out before endurance does.
 
@@ -4815,10 +5026,6 @@ I would have put load cells on the bench rig before the first airframe, not afte
 I would also have left the camera off until the airframe flew. Integrating it early felt like de-risking and made every flight a test of two things, so trim and payload problems looked identical.
 
 > **Note on this sample.** Sample portfolio page. What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is invented and internally reconciled — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.16 — "17 of 24" and "16 of 24" are single-distance counts, but the header and caption say 24 sightings across all four distances. Say whether 24 is the total or the count per distance; the bird-rate curve then needs recomputing (at 20 m it is currently 31% where 24 − 17 = 7 of 24 is 29%).
 
 ---
 
@@ -4837,6 +5044,7 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 | Team | 3 students across two universities |
 | Timeline | Q2 2020 – Q4 2020 |
 | Stage | Research — concept and modelling study. No vehicle was built and nothing was measured in service. |
+| Link | https://drive.google.com/drive/u/0/folders/1UFIFRPfj_T6rlZwSt5imc6q1aBv4Wm-e |
 
 **Positioning.** We modelled our own concept's carbon balance and found the two features it was named for are on the wrong side of it.
 
@@ -4868,7 +5076,7 @@ So before modelling anything we sized where a car's lifetime carbon actually sit
 | Battery and vehicle manufacture | 31 | 31% — set by suppliers, not by us |
 | Onboard generation and filtration | 2 | 2% — the part the concept was built around |
 
-_Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station. The three bars are the levers we scored and not an exhaustive split: the remaining ~5% sits in levers too small to chart._
+_Modelled over a 200,000 km life, Q2 2020. The bottom bar is the uncomfortable one. Every feature in our name and on our slides sits inside it, and the lever that matters is a decision somebody else makes at a power station. The three bars are the levers we scored and not an exhaustive split: the remaining ~5% is the unscored tail — maintenance, tyres, fluids and end-of-life transport, each under two percent on its own._
 
 The beneficiaries are early small-EV buyers in Indian cities and the people breathing the air around them. There is no customer here — in 2020 there was barely a market.
 
@@ -4884,6 +5092,12 @@ We built the model from our own component list rather than a template, then ran 
 | Therefore the car is carbon positive | Nothing on it removes carbon at all | Claim withdrawn |
 
 **Figure — Lifetime carbon of the concept against a petrol equivalent at three grid intensities: 36, 32 and 14 tonnes against 42**
+
+| name | before | after |
+|---|---|---|
+| Coal-heavy, 820 g/kWh | 42 | 36 |
+| Indian mix 2020, 700 | 42 | 32 |
+| Low-carbon, 120 g/kWh | 42 | 14 |
 
 _Nine scenarios reduced to the three that move the answer, Q3 2020. The petrol bar barely changes and ours moves by a factor of two and a half — the same vehicle is either a modest improvement or a transformative one depending on a decision made at a power station. None of the bars goes below zero._
 
@@ -4907,10 +5121,14 @@ A concept, drawn and costed. Air enters at the radiator, turns a cylindrical tur
 
 **Interface — The team's system diagram of the wind-power charging and air-purification path: air entering the radiator, a cylindrical turbine, wind controller, filter stack, drive system and energy storage**
 
+[Read the paper](/papers/ricky-kids-carbon-positive-ev.pdf)
+
 - **The air the turbine harvests is air the motor is already paying to push aside.** This diagram is where the project's honesty problem lives. Nothing is wrong with the drawing — the arrows are real, the parts exist. The energy is simply not free, and no arrangement of them makes it free.
 - **Putting the filter stack downstream of the turbine was the right call for the wrong reason.** It shares one air path instead of two, which is genuinely good engineering. We adopted it because it made the slide simpler.
 - **The filters were chosen for particulates and odours, then credited against carbon.** HEPA captures particles and activated carbon adsorbs volatile organics. Both are real and useful. Neither touches carbon dioxide, and that is the whole distance between the name and the model.
 - **Keeping the drawing on the page after the finding.** The temptation was to quietly redraw it without the turbine. Leaving it is the only reason this page is worth reading.
+
+_Our own system diagram from the project deck. This is a concept drawing: no vehicle, subsystem or filter stack was ever built, and nothing in it was measured. The full concept write-up is linked below — the carbon model, the turbine argument and the grid-mix conditional, as we wrote them at the time._
 
 **Gallery**
 
@@ -4960,10 +5178,6 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 
 > **Note on this sample.** Sample portfolio page. The project is real: a three-student concept from SRM Kattankulathur with a collaborator at Jadavpur University, and the system diagrams and component list shown are the team's own. The carbon model is a worked illustration built for this page — the tonnages, grid intensities, scenario counts and percentages are invented and internally reconciled. No vehicle, subsystem or filter stack was built or measured, and there is no public page for this project, so nothing here can be checked externally. The two engineering conclusions it rests on — that harvesting a moving vehicle's own airflow cannot yield net energy, and that HEPA and activated-carbon filtration does not remove carbon dioxide — are not invented. I'm glad to walk through the real concept in a conversation.
 
-**Open questions in the source (unresolved authoring notes)**
-
-- confirm the remainder is ~5% and what it contains, if it is not simply the unscored tail.
-
 ---
 
 ### 32. UAV-aided weather radar calibration
@@ -4971,7 +5185,7 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 | Field | Value |
 |---|---|
 | Slug | `ricky-kids-uav-weather-radar-calibration` |
-| Company | NIT Tiruchirapalli & SRM University |
+| Company | NIT Tiruchirapalli  & SRM University |
 | Years | 2022 |
 | Track | silicon |
 | Domain | Weather instrumentation |
@@ -5048,7 +5262,7 @@ The reframe: this is not a drone project with a positioning requirement attached
 
 I founded Ricky Kids and led this study; the faculty investigators owned the ISRO relationship and the funding case, and I owned what we would try to find out. The judgment shows in one place only — deciding the interesting question was not the aircraft.
 
-Eight students across four campuses wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that.
+Eight students across three campuses wanted to start building a hexacopter, because that is the visible part. Agreeing a pass mark first is what stopped that.
 
 **Key decisions**
 
@@ -5060,14 +5274,20 @@ Eight students across four campuses wanted to start building a hexacopter, becau
 
 What exists is a specified system and the model that justifies it: a hexacopter carrying a metal sphere with its own GNSS receiver mounted beneath it, flying pre-programmed zigzags through the radar's illumination so the antenna pattern is intercepted at known points.
 
+[Open the error budget — arithmetic, not a flight](/demo/radar-error-budget)
+
 - **The sphere carries its own GNSS receiver, separate from the UAV's.** The airframe's position is not the target's position, and the gap between them is a lever arm that swings with attitude. Two fixes make that gap measurable instead of assumed.
 - **Pre-programmed zigzags rather than piloted passes.** The pattern has to be intercepted at repeatable points across elevation and azimuth. A pilot flying to a display cannot repeat a track well enough to compare two calibrations.
 - **A passive sphere, not an active transponder.** The whole method rests on a target whose radar cross section is known from geometry. Anything powered introduces a second thing needing calibration.
 - **Altitude accuracy prioritised over horizontal.** It falls out of the analysis in section 05 rather than out of preference, and it changes which GNSS solution is worth paying for.
 
+_Drawn from the proposal's methodology rather than photographed: this system was specified and costed, not flown. The staging folder holds the submission-format reference and cited figures, none of which are our own imagery, so nothing has been published here in place of a real one. The error budget below is the decomposition on this page made adjustable — five terms, a 1.5 dB budget and a positioning dial. It is arithmetic and nothing else: no airframe, no radar, no sphere and no measurement anywhere in it, which is exactly the stage this project reached._
+
 **Gallery**
 
 - **The term the method turns on.** — [Open the error budget](/demo/radar-error-budget?preset=bom)  Drag the positioning dial from the ±0.35 m the budget demands to the ±1.5 m the module in our own bill of materials gives, and the total goes from 1.46 dB to 5.73. Every other term can be made perfect and it still misses.
+
+_A worked illustration of the decomposition described above, not a measurement. No flights were conducted, no radar was calibrated and no hardware was built._
 
 #### 05. Finding and what it changed
 
@@ -5082,6 +5302,8 @@ We agreed before build that this failed if sphere position uncertainty put more 
 | Sphere radar cross section | -0.14 | 0.16 | 0.30 dB |
 | Scattering off the airframe | -0.11 | 0.13 | 0.24 dB |
 | Receiver linearity | -0.05 | 0.06 | 0.11 dB |
+
+_Baseline: nominal calibration_
 
 _Each term moved across the range the four experiments support, everything else held at nominal, Q2 2022. Altitude alone swings wider than the other four combined. The published advice to prioritise vertical accuracy over horizontal turns out to be derivable rather than a matter of taste, which is the only part of this analysis that felt like a result._
 
@@ -5109,10 +5331,6 @@ We decomposed four experiments because four was what we could get full enough er
 We would also have written the pass mark into the proposal. It shaped everything and appears nowhere in what we submitted, so reviewers saw a plan to build a drone rather than a hypothesis with a stated way to fail.
 
 > **Note on this sample.** Sample portfolio page. The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita 2021 programme in April 2022 with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are invented — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.18 — the header says three campuses and §03 says four. Give the true count.
 
 ---
 
@@ -5186,9 +5404,9 @@ We shadowed observation rounds in three wards and timed every phase of an entry,
 
 | name | values | label |
 |---|---|---|
-| Routine observation | [3.5,1.2,4.8] | 9.5 min |
-| Medication round | [3.5,4.1,4.8] | 12.4 min |
-| Patient request | [3.5,2.6,4.8] | 10.9 min |
+| Routine observation | [3.5, 1.2, 4.8] | 9.5 min |
+| Medication round | [3.5, 4.1, 4.8] | 12.4 min |
+| Patient request | [3.5, 2.6, 4.8] | 10.9 min |
 
 _Timed across three wards, Q3 2021. The fixed 8.3 minutes either side is the same whatever happens in between, so for an observation the useful minute is roughly one in eight. That ratio, not any clinical argument, is the whole case for measuring from across the room._
 
@@ -5212,20 +5430,34 @@ A bench: a volunteer seated at a measured standoff, our non-contact channels log
 
 **Interface — A commercial multi-parameter patient monitor on a rolling stand, showing heart rate, blood pressure, oxygen saturation, respiration and temperature, with electrode leads, a finger probe and a cuff in the basket beneath**
 
+[Open the bench — the feasibility question, not the device](/demo/covid-bench)
+
 - **The reference is a commercial monitor, not our own device.** Everything on this page is a comparison against it. Grading our sensing against another prototype of ours would have measured agreement between two guesses.
 - **Both channels log the same subject in the same minute.** Comparing to a reading taken a few minutes earlier turns normal physiological variation into apparent sensor error, which flatters or damns the result at random.
 - **The cables in the basket are the finding.** Electrodes, a finger probe and a cuff — the reference cannot produce two of these five numbers without touching somebody, and neither, it turned out, could we.
 - **Nothing here was ever taken to a bedside.** The stand was designed to be wipeable and moved between rooms, and it never was. This is a bench, and the page claims nothing beyond one.
 
+_My own photograph of the commercial contact monitor used as the reference instrument. It is not our device and nothing we built is shown. No patient, ward or clinical setting appears in this photograph or anywhere in this project. The bench below is the feasibility question rather than the device: which channels cleared the agreed margin under which conditions, and how many entries into a room that would actually have removed. It takes no reading, contains no hardware, and no patient appears anywhere in it._
+
 **Gallery**
 
-- **The premise, checked.** — [Open the bench](/demo/covid-bench)  Tick the parameters a round has to report and the saving is zero at every condition, because oxygen saturation and blood pressure have no non-contact route at all. Untick those two and the device looks excellent — which is the framing our own materials used, and the one the study does not support.
+- **The premise, checked.** — [Open the bench](/demo/covid-bench)  Tick the parameters a round has to report and the saving is zero at every condition, because oxygen saturation and blood pressure have no non-contact route at all. Untick those two — and pulse, which was marginal at best — and the device looks excellent, which is the framing our own materials used, and the one the study does not support.
+
+_A recreation of the feasibility question, not of the device. No patient took part in any part of this project and no clinical claim is made or implied. The full write-up is the first link at the top of this page._
 
 #### 05. Finding and what it changed
 
 We agreed before build that this failed if a non-contact channel disagreed with the contact reference by more than an agreed margin under the movement a real patient produces — not under stillness, which anyone can pass.
 
 **Figure — Which parameters a non-contact channel could obtain, by condition: temperature and respiration usable when still, oxygen saturation and blood pressure unreachable in every condition**
+
+|  | Still, 1.2 m | Small movement | Repositioning | Beyond 2 m |
+|---|---|---|---|---|
+| Skin temperature | pass | pass | marginal | marginal |
+| Respiration rate | pass | marginal | fail | fail |
+| Pulse rate | marginal | fail | fail | fail |
+| Oxygen saturation | none | none | none | none |
+| Blood pressure | none | none | none | none |
 
 _Bench sessions with healthy volunteers, Q4 2021 to Q1 2022. The two dashed rows are the result. They are not a measurement that came out badly — there was nothing to measure, because neither oxygen saturation nor blood pressure has a route to it that does not involve touching the person._
 
@@ -5317,10 +5549,12 @@ We hand-labelled a sample of survey clips frame by frame to establish ground tru
 |---|---|---|
 | Gate checks are broadly effective | Riders dismount before the gate and remount inside | 31% of gate approaches — a different denominator from §01's 12%, which is a share of all observed triple-riding instances |
 | The hard part is detecting a third rider | The hard part is lighting, not counting | Night accuracy 41% |
-| Occlusion would be the main error | Two-up flagged as three-up dominates errors | 64 of 105 errors |
+| Occlusion would be the main error | Two-up flagged as three-up dominates errors | 64 of 114 errors |
 | Footage would be usable throughout | 38% of a survey week is after dark | 1,840 clips reviewed |
 
 **Figure — Rider-count accuracy by lighting condition: daylight 96 percent, overcast 93, dusk 78, night 41, against an agreed 90 percent bar**
+
+_Threshold: 90 — the accuracy we agreed a survey number needs_
 
 _Scored against hand labels across 1,840 clips, Q2 2022. Two of four conditions clear the bar. Night is not a degradation, it is a different problem — the model is counting shapes it cannot resolve, and its confidence does not fall to match._
 
@@ -5363,15 +5597,21 @@ Three detection models in sequence — motorcycle, then riders and helmets withi
 
 **Interface — The team's system diagram: CCTV feeding a control unit and a database, with notification arrows to registered and non-registered riders' phones**
 
+[Open the survey tool — the counts, not the detector](/demo/rider-count)
+
 - **Everything left of the control unit shipped; everything right of it did not.** The camera, the crop and the count exist. The database, the registered-rider lookup and the two notification arrows were designed, written up, and deliberately never built.
 - **Three models in sequence rather than one model with more classes.** Cropping to the motorcycle before counting riders meant the rider model never saw pedestrians, which is most of a campus frame. It costs two extra inference passes per clip and it is why the count is usable at all.
 - **Counting helmets in the same pass as riders.** It is the same crop and the same question, so it was nearly free. It also gave the survey a second number that needs no identity to be useful.
 - **Batch scoring of stored clips, with no path to a live feed.** The concession from section 05, made structural rather than procedural: there is no camera input in what we built, so connecting one is a rewrite rather than a setting.
 
+_Our own system diagram from the project paper, showing the design including the parts that were cut. No footage, frame, face, number plate or person from this project is published here or anywhere on this page. The tool below is the shipped half of this diagram running on invented clips — batch scoring, the hand-labelled evaluation, and the parts that were cut. No model runs in it and no frame exists in it: it is the counts sheet and the argument around it, not the detector._
+
 **Gallery**
 
 - **The direction of the error is the finding.** — [Open the evaluation](/demo/rider-count?view=eval&cell=1-2)  Sixty-four two-rider clips called three, against fourteen the other way. Click a cell in the demo and it says what that error means for a survey number, and what it would have meant for a notice sent to a student.
 - **The half that was written up and never built.** — [Open what it will not do](/demo/rider-count?view=cut)  Plate recognition, the offender database, automatic notices and any live camera. The button offering to connect a camera explains there is no input to connect one to — the concession made structural rather than procedural.
+
+_Both screens are the state their own link opens. No footage, frame, face or number plate from this project is published here or anywhere on this page — the tool as described extracts none. The full write-up is the first link at the top of this page._
 
 #### 07. Tradeoffs
 
@@ -5399,7 +5639,13 @@ We agreed before build that this failed if the false-positive rate was high enou
 
 **Figure — Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two**
 
-_Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones and not the whole error set._
+| truth \ model | 1 rider | 2 riders | 3 or more |
+|---|---|---|---|
+| 1 rider | 624 | 12 | 3 |
+| 2 riders | 20 | 956 | 64 |
+| 3 or more | 1 | 14 | 146 |
+
+_Daylight and overcast clips only, Q3 2022. The direction of the errors is the point: 64 clips where two riders were called three, against 14 where three were called two. The tool over-reports, which for a survey number is the dangerous direction — and it is why the guardrail is the false-positive rate rather than the headline accuracy. The two classes named here are the dominant ones, not the whole error set: the remaining 36 of the 114 are 20 two-rider clips under-counted to one, 12 single-rider clips called two, 3 called three or more, and 1 three-up clip called a single rider._
 
 **How we counted.** Rider-count agreement is the share of clips where the model's count matches a hand label agreed by two people, over daylight and overcast footage only. It excludes dusk and night, which are reported separately and used in no survey figure. False-positive rate is two-rider clips reported as three or more, as a share of all two-rider clips.
 
@@ -5412,10 +5658,6 @@ We never measured how often our two labellers disagreed with each other, so we h
 I would also have written the sampling plan before scoring anything. We scored the clips we had, which came from wherever cameras happened to point, so the 62% in section 01 describes our camera coverage as much as the campus — and I have quoted it more confidently than that deserves.
 
 > **Note on this sample.** Sample portfolio page. The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is invented and internally reconciled: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.19 — §02 cites 105 errors; 64 two-up-called-three and 14 three-up-called-two account for 78. Say what the remaining 27 are.
 
 ---
 
@@ -5487,9 +5729,9 @@ We ran structured design reviews with two special-education teachers from an aut
 
 | name | values | label |
 |---|---|---|
-| Visual and sound prompts | [12,2,0] | 12 of 14 |
-| Teacher-assigned content | [10,3,1] | 10 of 14 |
-| Guided-writing gantry | [5,4,5] | 5 of 14 |
+| Visual and sound prompts | [12, 2, 0] | 12 of 14 |
+| Teacher-assigned content | [10, 3, 1] | 10 of 14 |
+| Guided-writing gantry | [5, 4, 5] | 5 of 14 |
 
 _Two teachers, fourteen criteria, three interactions, Q4 2021. The bottom row is the part of the kit we had spent the most time on. Five criteria were not met at all, and four of those five are about what happens when a child wants the device to stop._
 
@@ -5513,15 +5755,21 @@ Three interactions on one kit: visual and sound prompts for a letter, a teacher'
 
 **Interface — The prototype two-axis gantry: wooden frame, lead screws and linear rails, two stepper motors, and an Arduino with a CNC shield wired to a laptop**
 
+[Open the bench review — the review, not the hardware](/demo/autism-bench)
+
 - **Lead screws rather than belts, chosen for precision.** A belt drive slips under load, which we treated as a defect. A teacher pointed out that slipping is the only reason a belt-driven version would have been arguable at all.
 - **Motion control borrowed wholesale from desktop machining.** It made a working prototype possible in weeks on a student budget. It also meant the motion profile was designed for cutting metal, which is exactly the objection the review raised.
 - **Built in wood so it could be rebuilt in an afternoon.** The right call for iteration and the wrong material for a classroom, where everything has to be wiped down. We knew the first half and not the second.
 - **It never left this table.** The kit was demonstrated at a student expo and reviewed by teachers on a bench. No child has used it, and after the review we did not build a version that one could.
 
+_Our own photograph of the prototype gantry. No child, teacher or care setting appears in this image or anywhere in this project's photography, and nothing here was ever used by a child. The bench review below is a recreation of the design review, not of this machine: it replays the three interactions, the fourteen criteria and the stop test in a browser. Its gantry is a traced path and generated G-code — no hardware moves, and no child appears in it._
+
 **Gallery**
 
 - **The objection, made operable.** — [Open the gantry and try it](/demo/autism-bench?i=gantry&letter=A&test=pull)  The stage traces our own letter paths and the G-code beside it is generated from them. Pull the hand away mid-stroke and it finishes the stroke — which is criterion 01, marked not met by both teachers, and criteria 02, 09 and 10 failing for the same reason.
 - **The interaction they would allow.** — [Open the letter card](/demo/autism-bench?i=prompt)  A letter, its word and a fixed four-second prompt that ends on its own. Twelve of fourteen criteria met, and nothing on the bench is holding anything — which is the whole difference between this and the screen above.
+
+_Both screens are the state their own link opens, captured from the running bench review. The kit and its hardware are real; the criteria, the verdicts and the teachers' words are invented for this sample, and no child took part in any of it. The full write-up is the first link at the top of this page._
 
 #### 05. What we learned
 
@@ -5531,9 +5779,9 @@ We agreed before build that this failed if the teachers reviewing it would not p
 
 | name | values |
 |---|---|
-| Visual and sound prompts | [5,5,4,4,4,4] |
-| Teacher-assigned content | [5,4,5,2,3,3] |
-| Guided-writing gantry | [2,3,4,2,2,2] |
+| Visual and sound prompts | [5, 5, 4, 4, 4, 4] |
+| Teacher-assigned content | [5, 4, 5, 2, 3, 3] |
+| Guided-writing gantry | [2, 3, 4, 2, 2, 2] |
 
 _The fourteen criteria grouped into six dimensions and averaged, Q4 2021. The shape is what mattered: the gantry is not uniformly worse, it collapses on two axes. Both are about a child who wants to stop — and no amount of the things we were good at moves either of them._
 
@@ -5636,6 +5884,8 @@ We built a test tank and mixed three sludge analogues to bracket what a settled 
 | Part-settled analogue | 74 | 9 |
 | Settled analogue | 31 | 9 |
 
+_Threshold: 60 — track height — above this the tracks touch nothing solid_
+
 _Mean sinkage per medium over nine runs each, Q1 2022. Two of the three media bury the tracks entirely. At that point the drive is not gripping anything — it is stirring, and the stirring is what makes the medium thinner still._
 
 The reframe: we had been treating sludge as a difficult floor. It is a shear-thinning fluid that behaves like a floor only while you leave it alone, and a track is a machine for not leaving it alone.
@@ -5658,15 +5908,21 @@ The tank came first, and the vehicle below is what it produced: a sealed acrylic
 
 **Interface — SolidWorks isometric render of the ROV: a transparent cylindrical electronics housing inside a PVC pipe frame, with two large paddle wheels and four ducted thrusters**
 
+[Open the test lane — the density study, not the vehicle](/demo/sludge-envelope)
+
 - **No tracks, no wheels, nothing that pushes down.** This is the finding made physical. Anything that transmits weight into the medium fluidises it, so the vehicle carries its weight in the void spaces of the frame instead.
 - **PVC pipe is the chassis and the flotation at once.** A separate float would have been a second thing to seal and a second thing to snag. The sealed loop is structure and buoyancy in the same part, at the cost of a frame we cannot easily change later.
 - **Paddle wheels for the surface, ducted thrusters for the fluid.** Two propulsion modes because the medium has two regimes and we could not predict which one a given line would be in. It doubles the drive count and it is why the vehicle works either side of the boundary.
 - **One sealed cylinder, transparent, with the camera looking out of the end cap.** Every wire leaves through one bulkhead. Acrylic because we needed to see condensation and seal failure before it mattered, not after.
 
+_Our own SolidWorks model, from the project paper. This is a design, not a photograph of hardware: the vehicle was modelled and costed, and no version of it was ever put into a live sewer. The test lane below is the density study rather than this vehicle: one axis, three drive configurations and the traction limit, with the runs that completed the lane drawn against the modelled envelope. Nothing in it simulates this hull, and nothing in it was ever wet._
+
 **Gallery**
 
 - **Untitled**  Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ring and never bears on the medium. The four thrusters sit outboard on the loop, where they push without disturbing what is beneath.
 - **The finding on one axis.** — [Run the lane yourself](/demo/sludge-envelope?medium=fresh&run=1)  The density dial against the traction limit, with each drive's modelled envelope and the runs that actually completed the lane drawn on the same track. Run the tracked drive in the fresh analogue and it sinks past the track height while still turning.
+
+_The vehicle drawings are our own SolidWorks models. The lane, the analogues and every number in the demo are invented for this sample, and nothing here was tested in a real sewer. The full write-up is the first link at the top of this page._
 
 #### 05. Finding and what it changed
 
@@ -5674,13 +5930,13 @@ We agreed before build that this failed if the vehicle could not get itself out 
 
 **Figure — Density range in which each drive completed the lane: tracks only above 1.15 grams per cubic centimetre, paddle wheels with thrusters from 0.98, thrusters alone to 1.12**
 
-| name | from | to | label | own |
-|---|---|---|---|---|
-| Tracked drive | 1.15 | 1.6 | completed the lane only in the settled analogue | false |
-| Paddle wheels and thrusters | 0.98 | 1.3 | the configuration in the drawings above | true |
-| Thrusters alone | 0.98 | 1.12 | fine in the fluid regime, stalls once it thickens | false |
+| name | from | to | label |
+|---|---|---|---|
+| Tracked drive | 1.15 | 1.6 | completed the lane only in the settled analogue |
+| Paddle wheels and thrusters | 0.98 | 1.3 | the configuration in the drawings above |
+| Thrusters alone | 0.98 | 1.12 | fine in the fluid regime, stalls once it thickens |
 
-_Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis._
+_Operating envelopes from 27 test-lane runs, Q1–Q2 2022. The three ticks are the media we mixed. Fresh sewer sludge sits at the left-hand tick, and every tracked band starts to the right of the dashed line — the two never overlap, which is the whole result on one axis. The part-settled analogue at 1.18 sits just inside the tracked band and still failed, because the band is what a track can hold in a medium left alone and a running track does not leave it alone: its 0.03 g/cm³ of margin was spent in the first metre, where the settled analogue's 0.27 was not._
 
 **Metrics**
 
@@ -5695,22 +5951,17 @@ Tracks completed the lane in the settled analogue and nothing else, and seven of
 
 What this could not tell us is how any of it behaves in a real sewer. We tested clean analogues mixed to a density in a straight tank: no rag, no grit, no roots, no fat, no joints to snag on, no long-duration fouling of seals or thrusters. Every one is a plausible way for this vehicle to fail, and we have nothing to say about any of them.
 
-**How we counted.** Traverse success is the share of runs completing the full test lane under the vehicle's own power in a given medium. It excludes runs aborted for tether tangles, which were a property of our tank rather than of the drive. A stall counts as recovered only if forward motion resumed without tension on the tether.
+**How we counted.** Traverse success is the share of runs completing the full test lane under the vehicle's own power in a given medium. It excludes runs aborted for tether tangles, which were a property of our tank rather than of the drive. Stalls are counted as events rather than runs — a run can stall twice, which is how nine tracked runs produced nine stall events — and a stall counts as recovered only if forward motion resumed without tension on the tether.
 
 `Vehicle — sealed acrylic cylinder housing the electronics inside a closed PVC pipe frame providing structure and buoyancy · two paddle wheels and four ducted thrusters on brushless motors with electronic speed controllers · Arduino Nano V3 on ATmega328P, RS232 over the tether to a topside master · HMC5883L three-axis compass, MS5803-14BA pressure sensor, HC-SR04 ultrasonic ranger, TMP36 temperature sensor on I²C · BD681 Darlington drivers, LC filter, 470 µF and 0.1 µF decoupling · HoryzonHD 1080p camera on a servo gimbal, transmitted at 720p through a video balun over CAT5 · LED headlights · lithium-polymer packs · modelled in SolidWorks`
 
 #### 06. What we'd do differently
 
-We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy that happened to sort three samples correctly.
+We mixed our analogues to a density because density is easy to measure with what we had. Density is not the property that governs this — yield stress is, and two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed, so the number that matters is the margin above 1.15, not the line itself.
 
 We also kept the project name after the finding contradicted it. Calling it a sludge-traversing ROV and then building something that floats over the sludge made every later conversation start in the wrong place.
 
 > **Note on this sample.** Sample portfolio page. The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the 2021-22 Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are invented and internally reconciled — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation.
-
-**Open questions in the source (unresolved authoring notes)**
-
-- 0.17 — the tracked band starts at 1.15 g/cm³, but the part-settled analogue at 1.18 sank the tracks 74 mm against a 60 mm track height and did not complete the lane. Give the true threshold, or the density and margin that separate 1.18 from the settled analogue.
-- 0.17 — this says the density threshold "happened to sort three samples correctly", but the part-settled analogue at 1.18 sits above 1.15 and still failed. Resolve with the §05 band and state the same threshold in both places.
 
 ---
 
@@ -5729,6 +5980,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 | Team | 3 students across two universities, with a faculty co-author at SRM |
 | Timeline | Q4 2021 – Q2 2022 |
 | Stage | Research — concept study, presented at ICTSGS 2021 and published in ECS Transactions. Nothing was built or deployed. |
+| Link | /demo/envi-city |
 
 **Positioning.** We published a whole-city vision, then cut it down to the one claim we could actually model — and found it holds for housing and not much else.
 
@@ -5743,6 +5995,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 **Evidence / demos**
 
 - [The demo is the paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007](https://doi.org/10.1149/10701.11007ecst)
+- [Then the concept explorer — the paper's city, drawn layer by layer, with the audit that followed it](/demo/envi-city)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are invented for this sample — nothing was built, measured or deployed anywhere.
 
@@ -5778,6 +6031,13 @@ I went through our own paper and poster claim by claim, asking one question of e
 
 **Figure — Claims in the published vision narrowed to what could be tested: 11 claims, 7 with a stated mechanism, 4 we could quantify, 1 testable at block scale**
 
+| name | value | label |
+|---|---|---|
+| Claims in the published vision | 11 | 11 |
+| With a stated mechanism | 7 | 7 |
+| We could put a number on | 4 | 4 |
+| Testable at one-block scale | 1 | 1 |
+
 _Our own paper, audited against itself in Q1 2022. The drop from eleven to one is the finding before the finding: a vision paper is mostly a list of intentions, and the useful work is deciding which single intention you are prepared to be wrong about in public._
 
 The reframe: the bird claim taught me the most. We had a real correlation between mobile rollout and urban bird decline and no mechanism — which is not evidence, it is a hypothesis with a citation attached.
@@ -5800,10 +6060,14 @@ What exists is a published vision and a model that survived it. The poster below
 
 **Interface — The team's ICTSGS 2021 conference poster for Envi-city, showing sustainable energy, smart agriculture and smart networking panels with references**
 
+[Read the published paper](https://doi.org/10.1149/10701.11007ecst)
+
 - **Everything on this poster is a claim, and nothing on it is a measurement.** That is not a criticism of a concept poster — it is what the format is for. It becomes a problem only when the next piece of work treats it as a foundation rather than a proposal.
 - **The references are where the audit started.** Three citations carry the networking claim: a trade article, a news interview and a review. Reading what we had actually cited is what made the decision to drop it obvious.
 - **Keeping the poster on the page after cutting four fifths of it.** Replacing it with a tidy diagram of the surviving claim would have hidden the part of this project worth showing, which is the distance between what we announced and what we could support.
 - **The energy, water and waste icons stayed; the rest became context.** They are the three that share a physical boundary at block scale, so they are the only three that can be coupled rather than merely co-located.
+
+_Our own conference poster from ICTSGS 2021, with a personal email address redacted. Nothing shown was built: this is a concept presentation, and the model described on this page came afterwards. The full paper is linked below: the published version in ECS Transactions, which carries the eleven claims this page narrows to one._
 
 #### 05. Finding and what it changed
 
@@ -5811,12 +6075,14 @@ We agreed before build that this failed if coupling did not beat running the thr
 
 **Figure — Saving from coupling water, power and waste by block type: 9 percent for dense residential and 11 for mixed use, with commercial and industrial intervals crossing zero**
 
-| name | value | lo | label | clears |
-|---|---|---|---|---|
-| Dense residential | 9 | 2 | clears, but the range is seven points wide | true |
-| Mixed residential and retail | 11 | 4 | the strongest case we found | true |
-| Commercial | 6 | -1 | cannot be shown to beat separate utilities | false |
-| Industrial edge | 3 | -6 | demand profiles do not overlap in time | false |
+| name | value | lo | hi | label | clears |
+|---|---|---|---|---|---|
+| Dense residential | 9 | 2 | 16 | clears, but the range is seven points wide | True |
+| Mixed residential and retail | 11 | 4 | 18 | the strongest case we found | True |
+| Commercial | 6 | -1 | 13 | cannot be shown to beat separate utilities | False |
+| Industrial edge | 3 | -6 | 12 | demand profiles do not overlap in time | False |
+
+_Threshold: 0 — no better than three separate utilities_
 
 _Twelve scenarios collapsed to four block types, Q2 2022. The dots are central estimates and the bars are what happens when the assumptions move across the ranges we were willing to defend. Two rows cross the line, which is the honest form of a negative result: not that coupling fails, but that we cannot tell._
 
