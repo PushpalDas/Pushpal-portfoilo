@@ -65,10 +65,14 @@ for e in entries:
             "slug": field(e, "slug"),
             "href": field(e, "href"),
             "demoUrl": field(e, "demoUrl"),
+            "programHead": bool(re.search(r"programHead\s*:\s*true", e)),
         }
     )
 
-products = [i for i in items if i["category"] == "product"]
+# The program-overview card fronts Tier 2 but is not a 38th product; it is
+# exported as its own labelled section so the 37-product count stays truthful.
+products = [i for i in items if i["category"] == "product" and not i["programHead"]]
+program = next((i for i in items if i["programHead"]), None)
 appendix = [i for i in items if i["category"] != "product"]
 
 # ------------------------------------------------------- case-studies-v2.json
@@ -272,7 +276,15 @@ L.append("- **By domain:** " + " · ".join(f"{k} {v}" for k, v in do.most_common
 L.append("\n---\n")
 L.append("## Products\n")
 
-for n, p in enumerate(products, 1):
+# The program overview renders after the 37, numbered "P" — one page over
+# fourteen chapters, not a 38th product.
+numbered = list(enumerate(products, 1))
+if program:
+    numbered.append(("P", program))
+
+for n, p in numbered:
+    if n == "P":
+        L.append("## Program overview\n")
     cs = CS.get(p["slug"] or "", None)
     L.append(f"### {n}. {p['title']}\n")
     meta_rows = [

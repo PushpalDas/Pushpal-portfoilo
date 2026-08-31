@@ -124,6 +124,15 @@ export default function AboutPage() {
 							product until it ships. I own efficiency, our AI programs,
 							products, and patents.
 						</p>
+						<p>
+							The arc across every page in my work is one lens earning a bigger
+							job: I came in running delivery — five functions, two sites, one
+							schedule — and the delivery loop kept turning into the place where
+							product questions got decided. The founder owns whether a thing
+							should exist; I own what it is for and what it will refuse to be —
+							and that boundary, drawn honestly, is where all my best work has
+							happened.
+						</p>
 					</section>
 
 					<figure className='about-figure about-reveal'>

@@ -75,7 +75,7 @@ _Complete export of every product and its case study, compiled from `app/work/co
 | Domain | Silicon |
 | Status | production |
 | Context | Ixana · 2024–present · Silicon |
-| Role | Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Role | Product owner of the gen-2 definition — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the YR23 program |
 | Timeline | Jun 2024 – Nov 2025 |
 | Stage | In production — the higher-rate part on the BAN line, alongside YR23 |
@@ -89,7 +89,7 @@ _Complete export of every product and its case study, compiled from `app/work/co
 
 **What I did.** I owned the loop that decided what a second spin was for: routing field feedback, yield and test data from the YR23 lots into one ranked change list, and holding the line on what gen-2 would not attempt. The hard part was refusing changes.
 
-**Result.** YR31 delivers 20 Mbit/s at sub-0.2 ms across the same 16-device network, with wafer yield up from 71% to 86% and per-unit test time down 38%. Energy per bit went the wrong way on purpose, and interop with the installed YR23 base held at parity.
+**Result.** YR31 is in production at 20 Mbit/s and sub-0.2 ms across the same 16-device network — the public spec row carries every one of those numbers. Energy per bit went the wrong way on purpose, and gen-1 stayed in production beside it so no shipping design was forced to move. The yield, test-time and interop figures further down are the worked example of how the programme was scored.
 
 **Evidence / demos**
 
@@ -258,13 +258,13 @@ I would also have published the declined list earlier. Ranking in public is what
 
 **Positioning.** Turned two pieces of evaluation silicon into a kit a partner engineer can unbox and get an on-body link running the same day.
 
-**Outcome (card copy).** Turned Wi-R eval silicon into a shipping dev kit — partner teams bring up a working on-body link in under a day instead of weeks of RF debugging.
+**Outcome (card copy).** Turned Wi-R eval silicon into a shipping dev kit built around one acceptance bar: open the box, reach an on-body link the same day — every variable that killed early bring-ups fixed inside it.
 
 **Problem.** Wi-R worked in our lab and almost nowhere else. Every partner evaluation began with their engineer reproducing a body-coupled link from a datasheet, and the first six took a median of 28.5 days — most of it spent on electrode placement and grounding rather than on evaluating the technology.
 
 **What I did.** I owned the dev kit program across both Wi-R families, defining the kit as the smallest object that produces a working link on day one, sequencing BAN before NFE, and trading configurability away for a fixed electrode geometry a partner could not get wrong.
 
-**Result.** 62 kits shipped over six quarters against a pre-agreed floor of 40. Median time to first link fell from 28.5 days to about 6 hours, support tickets per kit from 4.1 to 1.3, and 9 of 34 evaluations converted into design-ins.
+**Result.** The kit ships through the public product page, and its whole design is the removal of variables: a fixed, characterised electrode geometry, a known-good host board, a hard power switch, the part number printed on the case. The volumes, timings and conversion figures further down are the worked example the programme was run against — including the pre-agreed floor that would have killed it.
 
 **Evidence / demos**
 
@@ -615,13 +615,13 @@ I also sequenced the connectors by how easy they were to build rather than by ex
 
 **Positioning.** An engine that answers with a teacher's actual cited words, or says plainly that it has no teaching on the subject.
 
-**Outcome (card copy).** Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, down from 17.
+**Outcome (card copy).** A deterministic guard strips any citation retrieval never returned — fabrication is prevented by architecture, not reduced by prompting — and a distance gate makes refusal a first-class answer.
 
 **Problem.** A teacher's work sits across roughly seventy books, thousands of letters and hundreds of hours of recordings, with nowhere to ask a question and get his actual words back with a source. A general model answers every such question fluently, which is precisely the failure — a plausible paraphrase attributed to a named person is worse than no answer.
 
 **What we did.** We set the fidelity bar as a technical specification rather than an aspiration: retrieval must surface real passages, a gate must refuse questions the corpus does not address, and a deterministic check must strip any citation the model produced that was not actually retrieved.
 
-**Result.** Across 100 evaluated questions, retrieval quality rose from 0.614 to 0.840 nDCG@6 after re-ranking, and fabricated citations fell from 17 per 100 answers to zero. The engine and the interface both work and are not yet connected, so nobody has used it.
+**Result.** Fabricated citations cannot ship: any reference the retriever did not return is stripped by code before an answer renders, and out-of-corpus questions are refused by a calibrated gate rather than answered fluently. The engine and the interface both work and are not yet connected, so nobody has used it — the evaluation figures further down are the worked example of the harness built to judge it.
 
 **Evidence / demos**
 
@@ -735,13 +735,13 @@ I would also have set the evaluation at 100 questions from the start. The 20-que
 | Domain | Silicon |
 | Status | production |
 | Context | Ixana · 2024–present · Silicon |
-| Role | Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Role | Owner of first-silicon scope and launch gates — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | 5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US |
 | Timeline | Feb 2023 – May 2024 |
 | Stage | In production — the part under the BAN dev kit and every on-body reference design since |
 | Link | https://www.ixana.ai/products/chips/wi-r-ban |
 
-**Positioning.** The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, into production without a respin.
+**Positioning.** The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, the silicon under the shipping dev kit and both published reference designs.
 
 **Outcome (card copy).** The first Wi-R body-area part to reach customer hardware — the silicon under the BAN dev kit and every on-body reference design that followed.
 
@@ -749,7 +749,7 @@ I would also have set the evaluation at 100 questions from the start. The 20-que
 
 **What I did.** I ran delivery of first silicon across five functions and two sites. The founder owned the product bets; I owned the system that turned them into a shippable part on a date — the scope of first silicon, what shipped as errata against what forced a respin, and the launch gates.
 
-**Result.** YR23 reached production without a respin, holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network. 41 escapes were found after tapeout, three initially classed blocking; all three ultimately closed in firmware. Four OEM programs designed the part in before the dev kit existed.
+**Result.** YR23 is in production holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network — the public specification — and it is the part under the shipping dev kit and both published reference designs. How first silicon was scoped, gated and released, escape by escape, is the worked example this page walks through.
 
 **Evidence / demos**
 
@@ -1056,7 +1056,7 @@ I would also have started the definitional conversation with more than two group
 | Domain | Silicon |
 | Status | production |
 | Context | Ixana · 2024–present · Silicon |
-| Role | Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Role | Owner of the gen-2 specification review — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the XA-NFE2001 programme |
 | Timeline | Mar 2025 – Feb 2026 |
 | Stage | In production — the higher-throughput part on the NFE line, alongside XA-NFE2001 |
@@ -1064,13 +1064,13 @@ I would also have started the definitional conversation with more than two group
 
 **Positioning.** A gen-2 the pipeline asked for: 13.5 Mbit/s of real throughput, which is what turns a sealed enclosure into a service port instead of a demo.
 
-**Outcome (card copy).** Successor near-field part that widened usable coupling range without raising the transmit power budget partners had already designed around.
+**Outcome (card copy).** Successor near-field part: 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — a 100 MB firmware image inside a one-minute service window, on the same sub-6 mW budget.
 
 **Problem.** XA-NFE2001 opened the near-field line and then kept losing the same argument. Fourteen evaluations reached a requirement sheet and stopped, and reading those sheets against our characterisation data showed why: partners were sizing real payloads, and at gen-1 throughput a 100 MB firmware image took nearly four minutes.
 
 **What I did.** I ran the review that turned those requirement sheets into the gen-2 specification. This spin was pulled by a pipeline we could name rather than pushed by a roadmap, so the requirements were somebody else's document and my job was to hold scope to what those documents actually said.
 
-**Result.** Real throughput went from about 3.4 to 13.5 Mbit/s, which puts a 100 MB payload inside a one-minute service window. Nine of the fourteen stalled evaluations converted, all six requirement lines are now met, including the three gen-1 missed, and no gen-1 socket was lost to the upgrade.
+**Result.** Real throughput went from about 3.4 to 13.5 Mbit/s — the announcement's own figures — which puts a 100 MB payload inside a one-minute service window. Gen-1 stayed in production for the designs that need its longer reach, so the upgrade stranded nobody by construction. The pipeline that pulled this spin, and what converted, is the worked example further down.
 
 **Evidence / demos**
 
@@ -1231,7 +1231,7 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 | Domain | Silicon |
 | Status | production |
 | Context | Ixana · 2024–2026 · Silicon |
-| Role | Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Role | Owner of second-line delivery against one validation pool — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
 | Team | The same 5 functions across 2 sites as the BAN program, running both lines concurrently |
 | Timeline | Jan 2024 – Dec 2025 |
 | Stage | In production — launched December 2025 |
@@ -1245,7 +1245,7 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 
 **What I did.** The founder owned the bet that a near-field line should exist. I owned turning it into a delivered part while the BAN program kept its dates: validation capacity shared between two lines, a scope built for a different buyer, and the launch gates for a part that had to work on hardware we did not design.
 
-**Result.** XA-NFE2001 launched in December 2025 at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput — with 91% interop across twelve host and range configurations. The BAN program missed none of its milestones.
+**Result.** XA-NFE2001 launched at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput, per the published comparison — with the physics written up in an arXiv paper. It shipped as a second line while the BAN program kept its own dates, and the interop matrix that qualified it is the worked example further down.
 
 **Evidence / demos**
 
@@ -1557,15 +1557,15 @@ I would also have measured the qubit ceiling first. It shaped every other decisi
 | Stage | Controlled pilot across three internal organisations |
 | Link | /demo/procurement-desk |
 
-**Positioning.** A pilot that names one accountable owner within a business day, so requesters stop chasing procurement for a status nobody holds.
+**Positioning.** A pilot whose operating contract is the product: one named owner within a business day, no transition without evidence, and launch gates written before the first request.
 
-**Outcome (card copy).** In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.
+**Outcome (card copy).** In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.
 
 **Problem.** A physical-goods request entered a process with no named owner. Nineteen interviews and a thread analysis of 63 completed requests found a median of 4 chase emails each, and 22 of the 63 progressed with no recorded approval — not because anyone bypassed a control, but because none existed.
 
 **What I did.** I scoped a lean pilot on tooling we already own, spending the effort on the operating contract rather than the software: who owns a request within a business day, what a status transition must carry as evidence, and which pre-agreed gates would stop the pilot.
 
-**Result.** Early signal only, from 23 pilot requests. 21 of 23 were assigned within one business day against a gate of all of them, none reached order unapproved, and 2 of 23 requesters still chased by email.
+**Result.** Early signal only — deliberately below any rate-claim threshold. What held is the contract: no request reaches order without a recorded approval, the ceiling refuses what the pilot has no business handling, and every launch gate is counted live from the demo's own requests rather than stored. The running totals below are the worked example.
 
 **Evidence / demos**
 
@@ -1745,7 +1745,7 @@ I would also have measured chasing from the start rather than in month two. The 
 | Domain | Access control |
 | Status | production |
 | Context | EEGRAB · 2023 · Access control |
-| Role | Senior Embedded Design Engineer |
+| Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 4 engineers — me, firmware, Android, mechanical — with the CTO carrying the commercial side |
 | Timeline | Q1 2023 – Q4 2023 |
 | Stage | In production — shipping as a catalogue product through installer partners |
@@ -1759,7 +1759,7 @@ I would also have measured chasing from the start rather than in month two. The 
 
 **What I did.** I owned WishKey end to end as an engineer: an electronic cabinet where each slot locks and reports independently, so a key cannot leave without an event that names an authenticated person. The design decision that carries the product is per-slot locking rather than one locked door.
 
-**Result.** Across the deployed sites, 0.3% of key-removal events are unattributed against a paper baseline nobody could reconcile at all, drawing a key takes about fifteen seconds instead of four minutes, and a cabinet is commissioned in two hours with no IT involved.
+**Result.** The design decision that carries the product is per-slot locking: a key cannot leave without an event naming an authenticated person, because the record is a side effect of the act rather than a form beside it. It ships as a catalogue product through installer partners, fully useful with nothing else installed. The deployment and audit figures below are the worked example.
 
 **Evidence / demos**
 
@@ -1922,7 +1922,7 @@ I would also have designed the mechanical override to be self-evidencing rather 
 | Domain | Wearable systems |
 | Status | production |
 | Context | Ixana · 2024–2026 · Wearable systems |
-| Role | Program manager — reference design delivery (HW/FW US · applications and validation across both sites) |
+| Role | Owner of what “done” meant for a copyable design — program manager, reference design delivery (HW/FW US · applications and validation across both sites) |
 | Team | The same 5 functions as the chip programs, plus 3 applications engineers carrying the live evaluations |
 | Timeline | Jan 2025 – Feb 2026 |
 | Stage | In production — design files released to evaluating teams |
@@ -1936,7 +1936,7 @@ I would also have designed the mechanical override to be self-evidencing rather 
 
 **What I did.** I ran delivery of two complete reference designs — schematic, layout, BOM and firmware — chosen to bracket the integration questions rather than to demo well. The founder owned which markets mattered; I owned what “done” meant for a design an OEM could copy, and gated release on evaluation evidence rather than internal demos.
 
-**Result.** Datasheet to working demo on a partner’s own hardware fell from about eleven weeks to three. Six of the nine design-ins in the period cite a reference design, and support hours per evaluation stayed flat while concurrent evaluations tripled.
+**Result.** Both designs are public and complete — schematic, layout, BOM and firmware — and both demonstrations are on video: live video into smartglasses, voice into a tactical radio, over the body rather than the air. Release was gated on a team outside the building rebuilding each one from the files alone. The cycle-time and design-in figures below are the worked example.
 
 **Evidence / demos**
 
@@ -2095,7 +2095,7 @@ I would also have published the mechanical guidance as a first-class file rather
 | Domain | Consumer wearable |
 | Status | production |
 | Context | EEGRAB · 2023 · Consumer wearable |
-| Role | Senior Embedded Design Engineer |
+| Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 3 — me, a firmware engineer and a mechanical designer, with the CTO carrying the commercial side |
 | Timeline | Q1 2023 – Q1 2024 |
 | Stage | In production — shipping as a catalogue product |
@@ -2108,7 +2108,7 @@ I would also have published the mechanical guidance as a first-class file rather
 
 **What I did.** I owned the watch end to end as an engineer. The decision the product rests on is dropping the colour screen for a reflective display that costs almost nothing to leave on — which is what a buyer compares in a shop, and what they stop caring about by the second week.
 
-**Result.** A landed bill of materials of about ₹820 against a ₹900 ceiling agreed before build, nine days between charges on the agreed usage profile, and warranty returns at 2.1% in the first year — the number we were not allowed to trade for any of the rest.
+**Result.** One decision set the tier: the display is a cost decision disguised as a feature decision, and once it went reflective the battery, the charging circuit and half the enclosure stopped being separate problems. The board is real and on this page — processor, sensors, crystals, antenna network. The costs, battery life and the return-rate guardrail below are the worked example the programme was scored on.
 
 > **Confidentiality.** EEGRAB product work. The schematic and board views are my own working files, rev 1.0, January 2024. There is no public product page to link. The circuit is real — the processor, sensors, crystals and antenna network are what is on the sheet — and every figure is invented: bill-of-materials costs, battery life, return rate, retail band and the nine-watch teardown in section 02 are illustrative, not EEGRAB's books.
 
@@ -2281,7 +2281,7 @@ I also accepted the charging cradle. The teardowns told me a proprietary connect
 
 **What I did.** I split the report along a line nobody had drawn — counting is deterministic and stays rule-based, synthesis goes to a model — then made it a function of two parameters, team and window, rather than a product built five times.
 
-**Result.** Five teams now run one engine on three windows. In the May run 84% of delayed tasks carry a cause a named owner signed, against 21% before, and no count on any report is computed by a model.
+**Result.** Five teams run one engine on three windows, nothing publishes unsigned from monthly upwards, and no count on any report is computed by a model — the signature gate and the coverage arithmetic run live in the demo. The before-and-after coverage figures below are the worked example.
 
 **Evidence / demos**
 
@@ -2457,7 +2457,7 @@ I also rolled to four more teams on one team's evidence. Coverage rose everywher
 
 **What I did.** I rebuilt the four ceremonies as views of the record rather than documents about it, and moved the boundary from reads to writes: four fields a ceremony may change, one allow-list module, a ledger open to the whole squad.
 
-**Result.** Across three squads, 24 of 26 engineers are in the ceremony each week. The median standup runs nine minutes instead of eighteen, and the minutes spent reading out state fell from eleven to one.
+**Result.** Nothing on the standup board is typed and nothing is stored — every line is a diff of the task record, so drift is zero by construction rather than by discipline. Writes are four fields behind one allow-list, on a ledger the whole squad can read. The meeting-length and adoption figures below are the worked example.
 
 **Evidence / demos**
 
@@ -2626,13 +2626,13 @@ And I would have solved the retrospective instead of cutting it. The cut was cor
 
 **Positioning.** One live view of the PS, AMS and RTL delivery pipelines, so a weekly review starts from the same picture instead of three reconstructions of it.
 
-**Outcome (card copy).** One live view across the PS, AMS and RTL pipelines — leads stopped assembling the weekly review deck from three sources.
+**Outcome (card copy).** One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.
 
 **Problem.** Every Monday, three engineering leads rebuilt the same picture by hand from a task tool, a bandwidth spreadsheet and their own memory — a median of 41 minutes each, assembled differently, so the three reviews were not comparable.
 
 **What I did.** I owned a tracker that models each team's pipeline separately but presents them on one surface, with a historical delay view and an assistant that answers from filtered records rather than open-ended generation.
 
-**Result.** 26 of 31 leads now run their weekly review inside it. Median preparation fell from 41 minutes to 12, and stage corrections — the guardrail on automatic classification — settled at 4.2% of tasks.
+**Result.** Each team kept its own stage vocabulary — the tidy canonical model would have been wrong for two of the three — and classification ships with its correction rate on the header, where the people relying on it can see it. The assistant answers from filtered records and refuses the ranking question outright; all of it is clickable in the live demo. Adoption and preparation-time figures below are the worked example.
 
 **Evidence / demos**
 
@@ -2798,15 +2798,15 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 | Stage | Live for one workspace space |
 | Link | /demo/clickup-audit |
 
-**Positioning.** Turned a raw activity feed into a searchable record of who changed what, so a question that used to take an afternoon takes about four minutes.
+**Positioning.** Turned a raw activity feed into a searchable record of who changed what — holding the one thing the native feed never keeps: the value a field held before.
 
-**Outcome (card copy).** Turned a raw activity feed into a searchable who-changed-what timeline, so audit questions get answered in seconds not hours.
+**Outcome (card copy).** Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.
 
 **Problem.** Questions of the form "who moved this date, and when" arrived about fourteen times a month and each consumed an afternoon. A quarter of support requests held 41 of them, and the native feed could technically answer all 41 — by scrolling an unfiltered chronological list with no search and no way to see a field's previous value.
 
 **What I did.** I scoped a service that stores every webhook payload raw before interpreting it, computes field-level diffs, and presents them as a filterable timeline. The decisions that mattered were exclusions: one space, human edits by default, and a deliberately narrow set of fields.
 
-**Result.** Median time to answer a change question fell from about three hours to four minutes, and requests reaching a person dropped from 41 a quarter to 6. Every event is stored raw, so parsing rules have changed twice and been replayed over history without re-fetching anything.
+**Result.** Every event is stored raw before it is interpreted, so when the parsing rules changed — twice — history was replayed without re-fetching anything, and a tampered delivery gets a 401 with nothing stored: the demo runs the whole chain live. Answer-time and request-volume figures below are the worked example.
 
 **Evidence / demos**
 
@@ -2977,7 +2977,7 @@ I would also start the retention conversation earlier. The service holds every r
 
 **What I did.** I owned an experience that indexes both sources, stores timestamped transcript cues, and makes the transcript the primary way to navigate a recording, with grounded question answering and generated minutes in the same workspace.
 
-**Result.** Median time to the relevant moment fell from 5m 50s to about 90 seconds, 70% of opened recordings are now entered by transcript jump, and published minutes reached 11% of recorded meetings.
+**Result.** The transcript is the navigation, not a feature beside the video: a search hit is a sentence and the second it was said, and every claim in the generated minutes carries a timestamp — all of it clickable in the live demo. The time-to-moment and usage figures below are the worked example.
 
 **Evidence / demos**
 
@@ -3146,13 +3146,13 @@ I would also set the cache differently. Five minutes was chosen to protect an AP
 
 **Positioning.** Kept Outlook and Gmail calendars in step for people living in both, without letting a single private event title cross between them.
 
-**Outcome (card copy).** Ended the double-booking that came from living in two tenants, without exposing a single private event title across them.
+**Outcome (card copy).** Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.
 
 **Problem.** A group worked across two calendar tenants and neither system knew about the other. In a two-week diary study, six of them recorded 11 double-bookings and about two hours each per week of manual tidying — copying invites across, blocking time by hand, apologising for clashes.
 
 **What I did.** I owned a service that mirrors Outlook meetings to a Gmail attendee, publishes a subscribable feed, and reflects Google busy time back as opaque blocks. The product argument was entirely about restraint: what it may write, to whose calendar, and what it must never reveal.
 
-**Result.** Double-bookings went from six a month to zero and have stayed there for four months. Not one event title has crossed to the Google side, and the service credential's reach narrowed from every mailbox in the tenant to one.
+**Result.** No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all, which is the answer to what the diary study actually found. Every path previews before it writes, one bad write can only ever touch one occurrence, and the credential's reach was narrowed to the single mailbox it needs. The double-booking counts below are the worked example.
 
 > **Confidentiality.** Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.
 
@@ -3309,7 +3309,7 @@ I would also not have built the subscribable feed. It was easy, it is used by tw
 
 **What I did.** I drew the line the tool is built on — every figure computed by rule from dated comparator rows, the model writing the argument and never a number — then added an evidence floor that refuses a role rather than widening a band to cover thin data.
 
-**Result.** Early signal only, from 18 drafts. Every figure in all 18 resolves to a dated comparator row, against 6 of 26 before; four of seven requisitions were refused at the floor; no figure anywhere is produced by a model.
+**Result.** Early signal only. What is structural: a figure with no dated source does not render at all, the evidence floor refuses a role rather than widening a band, and no figure anywhere is produced by a model — press any number in the demo and its citation opens. The pilot counts below are the worked example.
 
 **Evidence / demos**
 
@@ -3489,15 +3489,15 @@ I would also have measured provenance time before there was a tool to fix it. Th
 | Stage | Live for internal planning |
 | Link | /demo/prd-os |
 
-**Positioning.** Turns a brief into a reviewed, execution-ready plan in minutes — and refuses to let one model approve its own work.
+**Positioning.** Turns a brief into a reviewed, execution-ready plan — and refuses to let one model approve its own work.
 
-**Outcome (card copy).** Turns a raw brief into a reviewed, execution-ready plan in 3–8 minutes, with a second model required to approve the first one.
+**Outcome (card copy).** Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner's work, enforced in code, and unknowns stop the pipeline instead of being papered over.
 
 **Problem.** People had started planning with a model and were getting fast, confident output that quietly assumed away the hard parts. Critiquing 24 AI-written plans against an execution checklist found 19 asserted a fact nobody had supplied, and 15 contained a step whose completion nobody could test.
 
 **What I did.** I owned a workflow that stops on uncertainty rather than guessing, requires a different model to review the plan than wrote it, freezes an approved plan before tasks are generated, and puts a human gate in front of everything downstream.
 
-**Result.** 41 briefs have gone through to an approved plan. A run reaches human review in a median of 6m 40s, planner–reviewer rounds fell from 3.2 to 1.4 once context handoff was fixed, and 68% of plans are approved by the human on first read.
+**Result.** The guarantees are structural and demonstrable: planner and reviewer can never share a model — the run refuses to start — every checklist step carries a binary completion test, and an approved plan freezes before tasks derive from it. Forty of the product's rules run live in the demo. The run-log figures below are the worked example.
 
 > **Confidentiality.** Internal product — the screen described in section 06 is a recreation with an invented brief, and all figures on this page are invented placeholders for this sample.
 
@@ -3665,15 +3665,15 @@ I would also have calibrated the scorecard before running it in anger. Early on 
 | Stage | Prototype — loopback only, no authentication, never run on a real inventor disclosure and never put in front of an attorney |
 | Link | /demo/ai-lawyer |
 
-**Positioning.** Turns a disclosure into an attorney-review filing package in about five minutes, and refuses to draw a novelty conclusion when the search looked in the wrong art.
+**Positioning.** Turns a disclosure into an attorney-review filing package with containment enforced at every boundary — and refuses to draw a novelty conclusion when the search looked in the wrong art.
 
-**Outcome (card copy).** Drafts an attorney-review filing package from a disclosure in five minutes, and refuses to draw a novelty conclusion when the search looked in the wrong art.
+**Outcome (card copy).** Drafts an attorney-review filing package - and refuses a novelty conclusion when the search looked in the wrong art. The corpus-ceiling measurement that decided the roadmap is real, over public patent data.
 
 **Problem.** Turning a disclosure into an attorney-review draft is expensive, and both ways it goes wrong are quiet: a trade-secret candidate leaves inside a search query, or the system drafts around prior art it never found.
 
 **What I did.** I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had, before letting anyone tune one. The answer changed what the system reports, not what it retrieves.
 
-**Result.** It drafts a full filing package in about five minutes for under $2.50, at 507 tests passing. It has never been run on a real inventor disclosure and no attorney has used it.
+**Result.** It drafts a full filing package end to end — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The measurement that mattered is real, computed over public patent data: 84.6% of ground-truth prior art was not in the corpus at all, which reframed the ranker from broken to nearly done. It has never been run on a real inventor disclosure and no attorney has used it.
 
 > **Confidentiality.** Internal prototype. Nothing it produced has been filed, no attorney has used it, and it has never been run on a real inventor disclosure. The linked demo runs on an invented one: every document, claim, reference identifier, name and cost shown there is made up for publication. The corpus measurement in section 05 is the real result, computed over public patent data.
 
@@ -3819,7 +3819,7 @@ I would also have shown the attorney the gap list before showing him a draft. Wh
 
 **What I did.** I defined the reporting rules first — what counts as committed capacity, how a working day is calculated, how an undated task is handled — then built the read-only layer that applies them: a custom timeline engine, bandwidth grids, and delay analysis over comment threads. Read-only stayed a permanent constraint, not a first-version simplification.
 
-**Result.** 22 of 31 leads and architects use it weekly, hand-built timelines have stopped, the monthly capacity compile fell from nine hours to twenty minutes of review, and 63% of delay questions are answered without opening the task. Nothing it does has ever written to the workspace, or asked an engineer for an update.
+**Result.** Read-only is a permanent property, not a first-version phase: nothing it does has ever written to the workspace or asked an engineer for an update, and where the data cannot carry an answer — undated work, predicted completion dates — it withholds one. Every element deep-links to its source task, which is what replaced write-back. The adoption and preparation-time figures below are the worked example.
 
 **Evidence / demos**
 
@@ -4003,7 +4003,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 **What I did.** I owned an in-tenant notetaker: capture from the meeting's own recording artefact rather than a guest participant, a cued transcript, and generated minutes in which every claim must cite the second it was said. The organiser can exclude a meeting before it starts, irreversibly, and that mark is the only consent control in the system.
 
-**Result.** 198 of 212 monthly meetings are transcribed and minuted without anything leaving the tenant, minutes are ready a median of 9 minutes after the call ends, and a repeat of the decision trace found 21 of 24 decisions in a written record. Nothing has been processed outside the tenant, which was the guardrail the project existed to hold.
+**Result.** Nothing is processed outside the tenant and no bot ever joins a call — capture reads the meeting's own recording artefact, and a claim without a timestamp does not ship, which is the rule that made minutes circulable at all. Exclusion is set by the organiser before the call and cannot be undone. The coverage and decision-trace figures below are the worked example.
 
 **Evidence / demos**
 
@@ -4166,15 +4166,15 @@ I would also build the correction path before the generation path next time. The
 | Stage | Live, running across three outside firms |
 | Link | https://xana-nine.vercel.app/patents |
 
-**Positioning.** Fifty-plus filings across six product lines, owned end to end — and disclosure-to-filing cut from fourteen weeks to six on no extra inventor time.
+**Positioning.** Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, and no statutory date ever computed in-house.
 
-**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.
+**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.
 
 **Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — with about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided.
 
 **What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
 
-**Result.** Fifty-plus filings across six product lines, median disclosure-to-filing down from about fourteen weeks to six, and inventor time per disclosure falling rather than rising. No date we have shown has ever disagreed with counsel’s docket.
+**Result.** Fifty-plus filings across six product lines, owned end to end. The system underneath automates nothing irreversible: routing and reminders yes, dates and scope never — counsel's docket stays the sole statutory authority, mirrored and never computed. The cycle-time and inventor-minutes figures below are the worked example.
 
 **Evidence / demos**
 
@@ -4392,13 +4392,13 @@ I would also have measured the tail earlier. Section 08 says we fixed the first 
 
 **Positioning.** A daily sync that versions and diffs every workspace document, so the ones that changed overnight are visible without anyone being asked.
 
-**Outcome (card copy).** A daily sync that versions and diffs every workspace doc, so the 34 of 301 that changed last night are visible without asking.
+**Outcome (card copy).** A daily sync that versions and diffs every workspace document - immutable versions only on real content change, and nothing tracked is ever pruned.
 
 **Problem.** Nobody could say what had changed in the documentation. The register listed 248 documents, the workspace held 301, and a document could be rewritten between two readings with no record of it. Reconciling the two lists by hand found 53 documents tracked nowhere.
 
 **What I did.** I owned an MVP that syncs daily, creates an immutable version only when content genuinely changed, and computes diffs. Halfway through I reversed my own scoping decision: the register stopped gating what gets tracked and became optional enrichment.
 
-**Result.** 301 documents are checked each night against 248 before, versions are created only on real change — 34 on the confirmed run — and no document has been dropped from history since the policy change, including the 30 that exist only in the workspace — the 53 untracked less the 23 orphaned.
+**Result.** A version exists only where the content hash genuinely moved, versions are immutable with no edit affordance anywhere, and the register was demoted from gate to enrichment after it proved to be a single point of failure — nothing tracked is ever pruned. The reconciliation counts below are the worked example.
 
 **Evidence / demos**
 
@@ -4555,20 +4555,20 @@ I would also have built owner notifications before the dashboard. The eleven doc
 | Domain | Audio hardware |
 | Status | production |
 | Context | EEGRAB · 2024 · Audio hardware |
-| Role | Senior Embedded Design Engineer |
+| Role | Product owner end to end, requirements to production handoff — senior embedded design engineer |
 | Team | 3 — me, an acoustics consultant and a mechanical designer, with the CTO carrying the commercial side |
 | Timeline | Q1 2024 – Q4 2024 |
 | Stage | In production — shipping as a catalogue product |
 
-**Positioning.** Two microphones off the same line now measure within 0.4 dB of each other, in a tier where the capsule supplier's own window is fifteen times wider.
+**Positioning.** The variance war: the supplier's window is the problem, and the answer was calibrating every unit at test instead of sorting capsules into bins that die with the next lot.
 
-**Outcome (card copy).** Brought a studio-class condenser capsule to a shippable price by redesigning the preamp around a cheaper JFET front end.
+**Outcome (card copy).** Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.
 
 **Problem.** A condenser microphone is sold on two printed numbers, and both of them come from a capsule bought in bulk. I measured sixty capsules from three lots the supplier called in-spec: they used the whole ±3 dB window edge to edge, and the lot means drifted 3.4 dB across three quarters.
 
 **What I did.** I owned the microphone end to end as an engineer. Rather than bin capsules into grades — which stops working the moment a new lot arrives — I took the gain passively in a transformer and put a trim at the output, so every unit is calibrated at test instead of sorted.
 
-**Result.** Shipped microphones sit inside ±0.4 dB of nominal against a ±1 dB acceptance window agreed before build, with self-noise published as the worst unit off the line at 17 dBA rather than the typical one.
+**Result.** The policy is the product: publish the worst unit, not the typical one, and let the trim correct but never rescue — a capsule needing more than half the range is rejected even though the supplier calls it good. The real schematic and transient run are on this page; the consistency and yield figures below are the worked example.
 
 > **Confidentiality.** EEGRAB product work. The schematic and simulation shown are my own working files, rev 1.0, February 2024. There is no public product page or datasheet to link, so nothing here is externally verifiable: the circuit and its component values are real, and every number — the capsule study, sensitivity, self-noise, yield, cost — is invented and internally reconciled.
 
@@ -4721,7 +4721,7 @@ I also characterised on-axis response properly, published a tolerance for it, an
 | Domain | Test engineering |
 | Status | production |
 | Context | SLB · 2023 · Test engineering |
-| Role | Failure Analysis & R&D Engineer |
+| Role | Owner of the problem choice and the bench's contract — failure analysis & R&D engineer |
 | Team | 3 — myself, a failure-analysis engineer, a LabVIEW developer, with the calibration lab reviewing |
 | Timeline | Oct 2022 – Aug 2023 |
 | Stage | In production — deployed across 40+ SLB failure-analysis labs |
@@ -4734,7 +4734,7 @@ I also characterised on-axis response properly, published a tolerance for it, an
 
 **What I did.** I built a bench that synthesises the sensor signals a tool expects to see, including the faulty ones. Rather than emulate a whole tool in a loop, I catalogued documented field fault signatures and played them back open-loop, which is what makes a fault repeatable on demand.
 
-**Result.** The bench reproduces 98.2% of the catalogued field fault signatures — 55 of 56 — within the tolerance the calibration lab signs off. Reproducing a reported fault fell from weeks of waiting to under a day, and the bench now runs in more than 40 SLB failure-analysis labs.
+**Result.** The bench reproduces 98.2% of the catalogued field fault signatures — 55 of 56 — within the tolerance the calibration lab signs off, and it runs in more than 40 SLB failure-analysis labs. It is treated as a device under test, verified against calibrated references every session, because a synthesised signal nobody trusts is a signal nobody uses. The turnaround figures below are the worked example.
 
 > **Confidentiality.** Internal SLB tooling. The bench photography is my own and shows commercial instruments only. Fault-library contents, tool identities, customer wells and internal ticket data are not shown, and every figure on this page is invented except three the owner confirms are real: 98.2% signature reproduction, 40+ labs, and the industry-scale cost of non-productive time.
 
@@ -4890,7 +4890,7 @@ I would also have designed the contribution path on day one. Forty labs see faul
 | Stage | Prototype — flew a stable circuit on a university field, and was pitched as a concept to DRDO. It never went to users: no operator ever flew it and nothing it recorded was ever used. |
 | Link | /demo/ornithopter-concept |
 
-**Positioning.** It read as a bird to two thirds of observers at forty metres, and it stayed airborne for forty-one seconds. Only one of those numbers was ever going to be the problem.
+**Positioning.** The disguise worked and the flying did not: the proposal asked for an hour aloft and twenty-five kilometres of reach, and its own arithmetic — run it in the demo — never closed.
 
 **Outcome (card copy).** Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.
 
@@ -4898,7 +4898,7 @@ I would also have designed the contribution path on day one. Forty labs see faul
 
 **What we did.** We built a flapping-wing airframe from scratch, and before improving its flight we tested what the concept rested on: whether people called it a bird.
 
-**What we learned.** The disguise worked and the flying did not. Two thirds of observers at forty metres said bird; the best circuit lasted forty-one seconds against a concept written around an hour.
+**What we learned.** The disguise question was tested before the flight-time question, deliberately — if it does not read as a bird, a longer flight buys nothing, because better aeroplanes exist. It flew stable circuits and never approached the club's own written targets of an hour and twenty-five kilometres, and the demo checks the proposal's coverage arithmetic against exactly that gap. The observer-trial and flight figures below are the worked example.
 
 **Evidence / demos**
 
@@ -5054,7 +5054,7 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 
 **What we did.** We built a cradle-to-grave carbon model from the concept's own bill of materials, ran it across nine scenarios, and put each energy-harvesting claim through a conservation-of-energy check before letting it into the model.
 
-**Finding.** Carbon positive is unreachable, not marginal: nothing on the vehicle removes carbon dioxide, and the onboard turbine costs more in drag than it generates. What survives is 24% below a petrol equivalent, and that number turns entirely on grid mix.
+**Finding.** Carbon positive is unreachable, not marginal: nothing on the vehicle removes carbon dioxide, and the onboard turbine costs more in drag than it generates. What survives is a modest advantage over petrol that turns entirely on grid mix — the worked model below carries the numbers.
 
 **Evidence / demos**
 
@@ -5205,7 +5205,7 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 
 **What we did.** Rather than start with the airframe, we decomposed the error budgets of four published UAV calibration experiments to find which term actually sets the achievable accuracy — and set a pass mark before anyone had chosen a motor.
 
-**Finding.** Position uncertainty dominates: 1.4 dB of a 1.5 dB budget, almost all of it altitude rather than horizontal. With the GNSS module in our own bill of materials the method misses its own pass mark.
+**Finding.** Position uncertainty dominates the budget, almost all of it altitude rather than horizontal — a conclusion the demo derives live rather than asserts — and with the GNSS module in our own bill of materials the method misses its own pass mark. The decomposition below is the worked example.
 
 **Evidence / demos**
 
@@ -5353,7 +5353,7 @@ We would also have written the pass mark into the proposal. It shaped everything
 
 **Positioning.** An engineering feasibility study that concluded against its own premise: the two readings staff act on are the two that need contact.
 
-**Outcome (card copy).** Measured respiration rate at a distance with a thermal and radar pair, so isolation wards could monitor without contact.
+**Outcome (card copy).** Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.
 
 **Problem.** Watching an isolated patient costs a gowning cycle. Shadowing observation rounds across three wards, more than half of all entries into a room existed only to read numbers off a patient — around nine minutes of ritual for about a minute of measurement.
 
@@ -5513,7 +5513,7 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 
 **What I did.** We trained a rider-counting model on campus survey footage and I cut everything downstream of the count: no number plates, no database of offenders, no automatic notices. It reports how often three-up happens, not who did it.
 
-**Result.** 94% agreement with hand-labelled ground truth on daylight clips and a 6.2% false-positive rate, scoring a week of survey footage in forty minutes instead of nine hours — and extracting zero identifiers while doing it.
+**Result.** It outputs counts and nothing else — no plate, no face, no identity, and no live-camera path even exists in the shipped tool, so connecting one is a rewrite rather than a setting. Its errors run toward over-counting, which is why the guardrail is the false-positive rate. The accuracy and timing figures below are the worked example.
 
 **Evidence / demos**
 
@@ -5678,7 +5678,7 @@ I would also have written the sampling plan before scoring anything. We scored t
 | Stage | Prototype — built, demonstrated at a student expo and reviewed by special-education teachers. It never went to users: no child ever used it. |
 | Link | /demo/autism-bench |
 
-**Positioning.** Two special-education teachers reviewed what we built and would put two of its three interactions in front of a child. The impressive one was not among them.
+**Positioning.** We took the prototype to special-education teachers before any child could meet it — and the interaction we were proudest of is the one they refused. A machine holding a child who wants to stop was the whole problem.
 
 **Outcome (card copy).** Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.
 
@@ -5837,7 +5837,7 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 
 **What we did.** We tested whether a tracked drive could cross settled sludge without fluidising it, running one lane through three graded analogues, and agreed in advance that a vehicle needing to be pulled out on its tether had failed.
 
-**Finding.** Below about 1.15 g/cm³ the tracks liquefy the medium under themselves and traction disappears — the vehicle stops being on a surface and starts being in a fluid. Fresh sewer sludge sits well below that.
+**Finding.** A track is a machine for not leaving the medium alone: it shears, shear-thinning sludge gets thinner where it is sheared, and the vehicle digs its own hole. That is why the final design carries its weight in a buoyant frame and pushes with paddles and thrusters instead. The threshold and the tank runs below are the worked example.
 
 **Evidence / demos**
 
@@ -5982,7 +5982,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 | Stage | Research — concept study, presented at ICTSGS 2021 and published in ECS Transactions. Nothing was built or deployed. |
 | Link | /demo/envi-city |
 
-**Positioning.** We published a whole-city vision, then cut it down to the one claim we could actually model — and found it holds for housing and not much else.
+**Positioning.** We published a whole-city vision, then audited our own paper claim by claim — eleven claims, one testable at block scale — and modelled the single one we were prepared to defend in public.
 
 **Outcome (card copy).** Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.
 
@@ -5990,7 +5990,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 
 **What we did.** I cut the vision down to the part we could model at a scale we could defend — water, power and waste for a single city block, treated as one coupled loop rather than three independent utilities.
 
-**Finding.** Coupling saves about 9% of a dense residential block's resource use, and the interval around that is wide enough to matter. For commercial and industrial blocks we could not show it beats separate utilities at all.
+**Finding.** Of the paper's eleven claims, one survived to a model: coupling water, power and waste at block scale. The interval matters more than the point estimate — and for commercial and industrial blocks the model could not show coupling beats separate utilities at all. The scenario table below is the worked example.
 
 **Evidence / demos**
 
@@ -6110,6 +6110,112 @@ The audit should have come before the paper. Everything here would have improved
 I would also have gone to the planners first. We spent two quarters establishing that coupling is physically worthwhile in housing, and the first planner we spoke to said the physics was never the obstacle — three utilities with three budgets and three procurement cycles is.
 
 > **Note on this sample.** Sample portfolio page. The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016 (2022), and the poster shown was presented at ICTSGS 2021. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are invented and internally reconciled. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation.
+
+---
+
+## Program overview
+
+### P. The internal AI program — fourteen tools, one doctrine
+
+| Field | Value |
+|---|---|
+| Slug | `ixana-internal-ai-program` |
+| Company | Ixana |
+| Years | 2025 - 2026 |
+| Track | ai |
+| Domain | Internal platform |
+| Status | internal |
+| Context | Ixana · 2025–2026 · Internal platform program |
+| Role | Program owner — prioritisation, doctrine and delivery across every tool on this page |
+| Team | One to four engineers per tool, drawn from the same small pool |
+| Timeline | Jan 2025 – Aug 2026 |
+| Stage | Live — fourteen tools in use across the company |
+| Link | https://xana-nine.vercel.app/ |
+
+**Positioning.** What it is to build the internal AI operating system of a silicon company: fourteen tools under one set of rules — deterministic counts, model-written prose, provenance on every claim, and a refusal wherever the data cannot carry an answer.
+
+**Outcome (card copy).** What it is to build the internal AI operating system of a silicon company: fourteen tools under one doctrine — deterministic counts, model-written prose, provenance on every claim, and refusal where the data runs out.
+
+**Problem.** A silicon company on five-month tapeout cycles roughly doubled, from about 75 people in 2024 to about 140 by mid-2025, and every coordination surface creaked at once: knowledge lived in five tools, reports were rebuilt by hand from memory, ceremonies ran on documents that drifted from the record, and audit questions ended in somebody's recollection.
+
+**What I did.** I ran internal tooling as one program rather than fourteen requests. Every candidate was sized the same way — hours lost per month, or errors made visible — before anything was built; each tool shipped thin on platforms we already ran; and one doctrine decided, everywhere, what a model may do and what it may never touch.
+
+**Result.** Fourteen tools in use, three of them flagship pages in their own right, and one set of rules that holds across all of them: no count computed by a model, no claim without provenance, no ranking of people anywhere, and a visible guardrail on every surface that automates judgment. Each chapter page below carries its own worked example.
+
+**Evidence / demos**
+
+- [The platform, live — search it yourself](https://xana-nine.vercel.app/)
+- [Flow Tracker, live on the platform](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong)
+- [Patent operations, live on the platform](https://xana-nine.vercel.app/patents)
+
+> **Confidentiality.** Program-level view. Every claim and figure on this page comes from a chapter page linked below and carries that page's own data note; nothing is introduced here that a chapter does not already establish.
+
+#### 01. Why a program, and not fourteen projects
+
+Nothing on this page began as a roadmap item. Each tool began as a hole somebody was falling into weekly — a document hunted for nine minutes, a report rebuilt from memory the night before a review, a decision nobody could find a month later. The temptation at that point is to buy a suite for each hole, and the company had looked at several.
+
+The argument for running it as one program was the same argument three times over. Sized one at a time, every candidate competes only against doing nothing, and everything gets built; sized together, candidates compete against each other, and most lose. Built one at a time, every tool invents its own rules about what a model may write, and the fifth tool's rules contradict the second's. And bought one at a time, each suite arrives with its own place where work now lives — which is precisely the fragmentation the first tool on this page exists to undo.
+
+So every chapter opens the same way: the options that were on the table, sized in the same units, and the reason the winner won. That figure — the sizing chart at the top of each chapter — is the program's actual artefact. The tools are what fell out of it.
+
+#### 02. The doctrine
+
+The rules below were not written down on day one; they were written down after the second tool re-derived them, and enforced from the third onward. Every one of them is visible in the chapters, usually as the thing a screen refuses to do.
+
+**What holds everywhere**
+
+- **Counting is deterministic; only synthesis goes to a model.** A model occasionally wrong about a count destroys trust faster than one occasionally vague about a cause. The reporting engine computes every number by rule and hands the model only the argument; the salary pilot renders no figure a model produced; the assistant surfaces answer from filtered records, never free generation.
+- **Every claim carries its provenance.** Minutes cite the second a thing was said. Salary figures resolve to dated comparator rows or do not render. Delay explanations name the comments they drew on. Audit answers link the raw stored event. The pattern is one pattern: a claim a reader cannot check is a claim the surface will not make.
+- **The guardrail sits on the surface, not in a report.** Classification ships with its correction rate on the header. Reports carry their signature coverage where the signer sees it. The sync dashboard shows the run that checked nothing beside the runs that worked. If the people relying on automation cannot see its error rate without asking, it does not have one — it has a secret.
+- **Refusal is a feature.** No tool on this page ranks people, and three of them refused a requested ranking outright. Nothing writes back to the tool of record from an analytics surface. An assistant asked for a judgment the records cannot support says so. The cuts were harder to ship than the features.
+- **Thin tools on owned platforms.** Lists, flows, webhooks and one shared web platform — nothing bought, nothing that takes a migration to unwind. The procurement pilot's whole architecture is reversible in a week by design, because the fastest way to learn whether an operating model works is to build the cheapest thing that enforces it.
+
+#### 03. My role, and the boundary
+
+I owned the program: what got built, in what order, under what rules, and what got refused. Each tool then had its own delivery shape — one to four engineers, with the domain owner (a delivery lead, the paralegal, people operations, the compliance lead) as the reviewer whose conditions became product decisions. The chapters name those negotiations individually, because several of the program's best features were somebody else's condition for saying yes.
+
+The boundary that matters: none of this replaced the company's tools of record. The program's products read, reconcile, explain and gate — the record itself stays where it lives, which is why read-only and write-narrow boundaries recur on chapter after chapter.
+
+#### 04. What was killed
+
+A program is what it refuses. The recurring kills, each argued for by someone reasonable: team rankings (asked for directly by leadership, refused on comparability — three separate times); per-person performance surfaces (refused structurally: no person-keyed rows exist to query); write-back from analytics surfaces (refused so a dashboard bug can never corrupt the record); full backlog generation (refused because a human can review one task's checklist and cannot review thirty); and model-drafted claim language in the patent system (refused because anything a model proposes becomes part of the legal record of what was considered).
+
+Two whole candidate tools also lost their quarters to the sizing figure — the chapters on delivery reporting and pipeline diagnostics both name the losers. That is the program working, not a gap in it.
+
+#### 05. Adoption, without a mandate
+
+Nothing on this page was rolled out by decree, and the chapters are honest about what that cost: adoption spread department by department, and the guardrails — signatures, visible correction rates, open ledgers — were the trust that made it spread. The pattern that repeated: a sceptical owner (the RTL lead, the finance controller, the compliance lead, the head of people operations) blocked a first version, their objection became a structural feature, and the feature made the tool acceptable to everyone downstream of them.
+
+The honest limit is also on the chapters: adoption numbers on this program are the chapters' own worked examples, and where a chapter says its evidence is early signal, this page claims nothing more.
+
+#### 06. The fourteen chapters
+
+Each chapter is a full case study in its own right — the same nine-part structure, its own decisions, tradeoffs and worked example. Three run live on the deployed platform. The AI Lawyer prototype, the program's research spike into multi-agent drafting, stands apart as a flagship page of its own.
+
+_[links]_ {"items": [{"label": "Ixana-Wiki — the knowledge platform", "href": "/work/xana-multifile-rag-based-data-singularity-platform", "note": "— five sources, one search box, cited answers. Flagship chapter, live."}, {"label": "Flow Tracker — pipeline diagnostics", "href": "/work/ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic", "note": "— three stage vocabularies, one surface. Flagship chapter, live."}, {"label": "Patent program operations", "href": "/work/ixana-patent-program", "note": "— the estate and the roadmap as one decision surface. Live."}, {"label": "Team performance reportin
+
+#### 07. Tradeoffs
+
+| Tension | What I chose | What it cost |
+|---|---|---|
+| One doctrine vs per-team fit | Shared rules and shared vocabularies where comparison needs them | Every team gave up a distinction its own work turns on — the chapters name them |
+| Thin tools vs suites | Owned platforms, reversible architectures | Real ceilings, stated in advance: past certain volume, several of these architectures stop being proportionate |
+| Program speed vs instrumentation | Ship, then measure | More than one chapter admits its first weeks ran on intuition — the program repeated that mistake before fixing it |
+| One owner vs bus factor | One person holds the prioritisation and the doctrine | The patent chapter says it plainly: the mechanism is documented, the judgment is not yet handed over |
+
+#### 08. What this page can claim
+
+Structurally, everything above is checkable: three chapters run live on the deployed platform, the recurring refusals are visible on their surfaces, and every chapter carries its own worked example with its own data note. This page adds no number a chapter does not already carry, and where a chapter's figures are illustrative, that chapter says so in the same breath.
+
+What a program page cannot honestly claim is a program-level metric — there was no baseline year in which the company ran without tools to compare against. The claim is narrower and, I think, stronger: fourteen tools, one person's prioritisation, one doctrine that held under fourteen different pressures to break it.
+
+#### 09. What I'd do differently
+
+I would write the doctrine down at tool one instead of tool three. The rules existed as instincts before they existed as rules, and two early tools carry small inconsistencies the later ones do not — the chapters own them individually.
+
+I would also measure the program, not just the tools. Each chapter measures itself honestly, but nobody measured the portfolio: which quarter's sizing calls were wrong, which tool's hours would have been better spent on another's backlog. The program taught the company to instrument everything except the program.
+
+> **Note on this sample.** This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own data note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation.
 
 ---
 

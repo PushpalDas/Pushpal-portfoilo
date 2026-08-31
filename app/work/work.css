@@ -920,3 +920,89 @@ html:not(.dark) .work-section-divider-line {
 html:not(.dark) .work-empty {
 	color: rgba(0, 0, 0, 0.5);
 }
+
+/* ============================================================
+   TIERED FRONT DOOR (perception pass). The tier a card sits in
+   must be legible in a second: flagships large, the program as
+   one head card with quiet chapter rows, prototypes labelled,
+   the archive as a single-line register.
+   ============================================================ */
+
+.work-tier-sub {
+	margin: 0.5rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--work-muted, #8a8a93);
+	max-width: 62ch;
+}
+
+.work-chapters {
+	list-style: none;
+	margin: 1.25rem 0 2.5rem;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.6rem 1.25rem;
+}
+@media (max-width: 760px) {
+	.work-chapters {
+		grid-template-columns: 1fr;
+	}
+}
+.work-chapters a {
+	display: block;
+	padding: 0.7rem 0.9rem;
+	border: 1px solid rgba(128, 128, 140, 0.25);
+	border-radius: 8px;
+	text-decoration: none;
+	color: inherit;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+.work-chapters a:hover {
+	border-color: rgba(128, 128, 140, 0.6);
+	background: rgba(128, 128, 140, 0.06);
+}
+.work-chapter-title {
+	display: block;
+	font-weight: 600;
+	font-size: 0.95rem;
+	line-height: 1.35;
+}
+.work-chapter-note {
+	display: block;
+	margin-top: 0.2rem;
+	font-size: 0.8rem;
+	line-height: 1.45;
+	color: var(--work-muted, #8a8a93);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.work-archive {
+	list-style: none;
+	margin: 1rem 0 2rem;
+	padding: 0;
+}
+.work-archive li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	align-items: baseline;
+	padding: 0.45rem 0;
+	border-bottom: 1px solid rgba(128, 128, 140, 0.15);
+	font-size: 0.9rem;
+}
+.work-archive a {
+	color: inherit;
+	text-decoration: none;
+}
+.work-archive a:hover {
+	text-decoration: underline;
+}
+.work-archive-meta {
+	color: var(--work-muted, #8a8a93);
+	font-size: 0.8rem;
+	white-space: nowrap;
+}
