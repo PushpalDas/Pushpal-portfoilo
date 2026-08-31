@@ -5468,7 +5468,7 @@
       },
       {
         "lead": "What I did.",
-        "text": "I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had before letting anyone tune one. The answer changed what the system reports, not what it retrieves."
+        "text": "I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had before letting anyone tune one. It changed what the system reports, not what it retrieves."
       },
       {
         "lead": "Result.",
