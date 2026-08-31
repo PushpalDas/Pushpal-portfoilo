@@ -3821,7 +3821,7 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A dashboard over a nightly sync. The sync enumerates workspace documents, checks each for modification, fetches and hashes content only where something may have changed, and writes an immutable version when the hash differs. The interface offers a repository view, a per-document version timeline with diffs, a change feed, and a run history showing what was checked and what changed."
+          "A dashboard over a nightly sync. The sync enumerates workspace documents, checks each for modification, fetches and hashes content only where something may have changed, and writes an immutable version when the hash differs. The interface: a repository view, a per-document version timeline with diffs, a change feed, and a run history showing what was checked and what changed."
         ],
         "blocks": [
           {
@@ -3912,7 +3912,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "We agreed the MVP failed below 95% sync completion over a month — a change record with gaps is worse than none, because it invites confident wrong answers about what did not change. History loss was the guardrail: after the policy reversal, any document dropped from tracking would repeat the failure we had just fixed, so pruning was removed from the codebase rather than disabled."
+          "We agreed the MVP failed below 95% sync completion over a month — a change record with gaps is worse than none, inviting confident wrong answers about what did not change. History loss was the guardrail: after the policy reversal, any document dropped from tracking would repeat the failure just fixed, so pruning was removed from the codebase rather than disabled."
         ],
         "blocks": [
           {
@@ -4002,7 +4002,7 @@
         "heading": "What I'd do differently",
         "body": [
           "I let a canonical-list argument decide an availability question. The register-as-gate design was defensible on governance grounds and it made a hand-maintained spreadsheet a hard dependency of an automated system — a mistake I would have spotted immediately in any other kind of dependency. It took a three-day outage to see it.",
-          "I would also have built owner notifications before the dashboard. The eleven document owners still find out their document changed by visiting a page they have no reason to visit. Everything needed for a notification exists; I built the observation surface first because it was the thing I could see, and the delivery surface is where the value lands."
+          "I would also have built owner notifications before the dashboard. The eleven document owners still learn their document changed by visiting a page they have no reason to visit. Everything needed for a notification exists; I built the observation surface first because it was what I could see — the delivery surface is where the value lands."
         ]
       }
     ],
