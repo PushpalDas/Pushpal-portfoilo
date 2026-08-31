@@ -4999,7 +4999,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "A salary range came out of a spreadsheet somebody had built, and whoever could say where its numbers came from had usually left. Across the last 26 closed requisitions, 6 agreed ranges resolved to a dated source; the other 20 resolved to an older range, to the phrase “market data”, or to nothing."
+        "text": "A salary range came out of a spreadsheet somebody had built, and whoever could say where its numbers came from had usually left. Of the last 26 closed requisitions, 6 agreed ranges resolved to a dated source; the other 20 resolved to an older range, to “market data”, or to nothing."
       },
       {
         "lead": "What I did.",
@@ -5007,7 +5007,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Early signal only. What is structural: a figure with no dated source does not render at all, the evidence floor refuses a role rather than widening a band, and no figure anywhere is produced by a model — press any number in the demo and its citation opens. The pilot counts below are the worked example."
+        "text": "Early signal only. What is structural: a figure with no dated source does not render at all, the evidence floor refuses a role rather than widening a band, and no figure anywhere comes from a model — press any number in the demo and its citation opens. The pilot counts below are the worked example."
       }
     ],
     "sections": [
@@ -5049,14 +5049,14 @@
           }
         ],
         "after": [
-          "Timing carried the rest: pay transparency filings had made posted ranges usable, so a third independent source existed where a year earlier there were two."
+          "Timing carried the rest: pay transparency filings had made posted ranges usable — a third independent source where a year earlier there were two."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the last 26 closed requisitions and tried to trace every number in each agreed range back to something with a date on it, then timed four live offer conversations for how long each spent on where a figure came from."
+          "I read the last 26 closed requisitions and tried to trace every number in each agreed range to something with a date on it, then timed four live offer conversations for how long each spent on where a figure came from."
         ],
         "blocks": [
           {
@@ -5189,7 +5189,7 @@
           },
           {
             "kind": "para",
-            "text": "Flagging existing employees was the hardest cut: it is nearly free once the bands exist, and the first thing everyone asks for. It fails on what the data is. Comparator rows describe a market and a level, while the gap between a person and a band is explained by tenure, scope and a hiring market from three years ago. A list of names ordered by band position would be read as a finding when it is a rendering of what we do not know."
+            "text": "Flagging existing employees was the hardest cut: nearly free once the bands exist, and the first thing everyone asks for. It fails on what the data is. Comparator rows describe a market and a level; the gap between a person and a band is explained by tenure, scope and a hiring market from three years ago. A list of names ordered by band position would be read as a finding — it is a rendering of what we do not know."
           }
         ]
       },
@@ -5197,8 +5197,8 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The head of people operations did not want the tool to refuse anything, and her objection was correct: a recruiter with a live requisition and no band does not stop hiring, they reopen the spreadsheet. A refusal removes our view of a bad number, not the number.",
-          "So I did not argue it. What I proposed instead was that a refusal be worth more than the band: it names the rule that failed, the evidence against it, and what would clear it — a task rather than a closed door.",
+          "The head of people operations did not want the tool to refuse anything, and her objection was correct: a recruiter with a live requisition and no band does not stop hiring — they reopen the spreadsheet. A refusal removes our view of a bad number, not the number.",
+          "So I did not argue it. I proposed instead that a refusal be worth more than the band: it names the rule that failed, the evidence against it, and what would clear it — a task rather than a closed door.",
           "She agreed, on a condition I would not have proposed: the refusal goes to the hiring manager too, not only the recruiter. Four refusals have since produced three decisions to buy survey data and one levelling review."
         ]
       },
@@ -5328,7 +5328,7 @@
         "num": "08",
         "heading": "Early signal and what I'm watching",
         "body": [
-          "Eighteen drafts is enough to see whether the citation rule survives a live hiring round, and nowhere near enough to say anything about what people are paid."
+          "Eighteen drafts is enough to see whether the citation rule survives a live hiring round, and far too few to say anything about pay."
         ],
         "blocks": [
           {
@@ -5417,15 +5417,15 @@
         "body": [
           "These were agreed before the tool produced its first draft, and each is a stop rather than a conversation.",
           "One published draft carrying a figure that cannot be resolved to a dated row stops the pilot. So does any figure written by the model rather than substituted into it — a guardrail on the architecture, where one instance is a design failure, not a bug.",
-          "Two softer gates run to the end. If refusals stay above half of requisitions at 40 drafts, the floor is set for a data estate we do not have, and the answer is to buy data rather than move rules. If offers outside the range pass a fifth, the range is not what is being used."
+          "Two softer gates run to the end. If refusals stay above half of requisitions at 40 drafts, the floor is set for a data estate we do not have — buy data rather than move rules. If offers outside the range pass a fifth, the range is not what is being used."
         ]
       },
       {
         "num": "10",
         "heading": "What I'd do differently",
         "body": [
-          "I built the weighting table as a constant and treated its numbers as obvious. They are not: the weight on self-reported data is a judgement I made in an afternoon and never tested, and the band moves with it. It should have shipped as a versioned assumption.",
-          "I would also have measured provenance time before there was a tool to fix it. The 19 minutes comes from four conversations I sat in after the design was settled, and I chose them."
+          "I built the weighting table as a constant and treated its numbers as obvious. They are not: the weight on self-reported data is an afternoon judgement I never tested, and the band moves with it. It should have shipped as a versioned assumption.",
+          "I would also have measured provenance time before there was a tool to fix it. The 19 minutes comes from four conversations I sat in after the design was settled — and I chose them."
         ]
       }
     ],
