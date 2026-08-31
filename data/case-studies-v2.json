@@ -2395,7 +2395,7 @@
           },
           {
             "kind": "para",
-            "text": "Ranking the five teams was the hardest cut, because leadership asked for it directly. It fails on comparability, not cost: post-silicon is bench hours, firmware is release cycles, hardware is board spins around a fabrication slot. A number meaning \"late\" in one does not mean \"late\" in another, so any ordering is an artefact of the vocabulary we agreed rather than a fact about delivery. What covers the gap is a portfolio sheet comparing coverage — how much of what a report claims carries a name — a fact about the report, and the same measurement everywhere. The cost is that the question is still asked, and answered in a room where nobody can check it."
+            "text": "Ranking the five teams was the hardest cut, because leadership asked for it directly. It fails on comparability, not cost: post-silicon is bench hours, firmware is release cycles, hardware is board spins around a fabrication slot. A number meaning \"late\" in one does not mean \"late\" in another, so any ordering is an artefact of the vocabulary we agreed rather than a fact about delivery. What covers the gap is a portfolio sheet comparing coverage — how much of what a report claims carries a name — the same measurement everywhere. The cost is that the question is still asked, and answered in a room where nobody can check it."
           }
         ]
       },
@@ -2412,7 +2412,7 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "One n8n sub-workflow that takes a team and a window. It clears the prior rows, fetches tasks due inside the window, and runs parallel branches — efficiency per assignee, group distribution, and delayed-task analysis that pulls each comment history and drafts a cause. A second pass reads the generated sheets rather than the source, which is why the narrative and the tables agree. At the quarter nothing is fetched."
+          "One n8n sub-workflow that takes a team and a window. It clears prior rows, fetches tasks due inside the window, and runs parallel branches — efficiency per assignee, group distribution, and delayed-task analysis that pulls each comment history and drafts a cause. A second pass reads the generated sheets, not the source — why the narrative and the tables agree. At the quarter nothing is fetched."
         ],
         "blocks": [
           {
