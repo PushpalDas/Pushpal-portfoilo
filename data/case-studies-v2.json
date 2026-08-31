@@ -13216,7 +13216,7 @@
           },
           {
             "kind": "para",
-            "text": "Cutting the number plate is what turned this from the project we wrote up into the thing that exists. Plate reading was the piece everyone found most impressive, and it is the piece that changes what the system is: once a plate is extracted, a count becomes an accusation about a named student, delivered automatically, with no appeal path and a detector that is 41% accurate after dark. We had no mandate to build that and nobody to answer for it when it was wrong. The survey number is defensible precisely because it identifies nobody — and the cost is that the system cannot deter a single rider."
+            "text": "Cutting the number plate is what turned this from the project we wrote up into the thing that exists. Plate reading impressed everyone, and it changes what the system is: once a plate is extracted, a count becomes an accusation about a named student, delivered automatically, with no appeal path and a detector 41% accurate after dark. We had no mandate to build that and nobody to answer for it when wrong. The survey number is defensible precisely because it identifies nobody — the cost is that the system cannot deter a single rider."
           }
         ]
       },
@@ -13225,7 +13225,7 @@
         "heading": "How I got it agreed",
         "body": [
           "The campus security office would not let it near a camera. I had gone in expecting an argument about accuracy; the objection was about custody. Footage of students, held on a student team's laptops and processed into records of who did what — the office would be the party answering for that, and they had not agreed to hold anything.",
-          "I had been arguing that our detector was good enough to be fair, which conceded his frame entirely. His question was not whether we would be right, it was who owns the consequence when we are wrong. So I re-specified the output: counts per clip, no plates, no faces, nothing that resolves to a person, and therefore nothing for anyone to be custodian of.",
+          "I had been arguing that our detector was good enough to be fair, which conceded his frame entirely. His question was not whether we would be right but who owns the consequence when we are wrong. So I re-specified the output: counts per clip, no plates, no faces, nothing that resolves to a person — nothing for anyone to be custodian of.",
           "He agreed on that basis and added a condition I had not planned. The model never touches a live feed — it runs only on clips already collected for the survey, and those are deleted once scored. It costs us the ability to demonstrate it working in real time."
         ]
       },
@@ -13412,7 +13412,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "We never measured how often our two labellers disagreed with each other, so we have no floor to compare 94% against. If humans agree only 95% of the time on a dusk clip, the model is already at the ceiling and the rest is not a modelling problem. That number would have cost an afternoon.",
+          "We never measured how often our two labellers disagreed with each other, so we have no floor to compare 94% against. If humans agree only 95% of the time on a dusk clip, the model is already at the ceiling. That number would have cost an afternoon.",
           "I would also have written the sampling plan before scoring anything. We scored the clips we had, which came from wherever cameras happened to point, so the 62% in section 01 describes our camera coverage as much as the campus — and I have quoted it more confidently than that deserves."
         ]
       }
