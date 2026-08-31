@@ -9178,7 +9178,7 @@
           },
           {
             "kind": "para",
-            "text": "Closed-loop tool emulation was the hardest cut, and it is what most people picture when you say the words. Modelling a tool well enough to respond to its own outputs meant firmware models we did not have, and it fails the actual requirement: a loop introduces its own dynamics, so the same fault does not land the same way twice. Open-loop playback covers it — the analyst gets a fault they can trigger, repeat and instrument, and where genuine loop behaviour matters they still put the tool on a rig. The honest cost is that interaction faults, where two channels misbehave together, stay outside the bench and outside the 56."
+            "text": "Closed-loop tool emulation was the hardest cut, and it is what most people picture. Modelling a tool well enough to respond to its own outputs meant firmware models we did not have, and it fails the actual requirement: a loop introduces its own dynamics, so the same fault does not land the same way twice. Open-loop playback covers it — a fault the analyst can trigger, repeat and instrument; where genuine loop behaviour matters they still put the tool on a rig. The honest cost: interaction faults, where two channels misbehave together, stay outside the bench and outside the 56."
           }
         ]
       },
@@ -9186,7 +9186,7 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The metrology and calibration owner would not let the bench into the labs. Her objection was not about accuracy in the abstract: a lab that signs findings uses instruments with traceable calibration, and I was proposing to feed those instruments a signal produced by a laptop and a data-acquisition module with no certificate behind it. If an analyst attributed a failure to a sensor on the strength of my waveform, the finding inherits my uncertainty and nobody has recorded what it is.",
+          "The metrology and calibration owner would not let the bench into the labs. Her objection was not accuracy in the abstract: a lab that signs findings uses instruments with traceable calibration, and I was proposing to feed them a signal from a laptop and a data-acquisition module with no certificate behind it. A failure attributed on the strength of my waveform inherits my uncertainty, and nobody has recorded what it is.",
           "I had been arguing that the signals were accurate, which is exactly the claim she could not accept on my word. So I adopted her frame instead: the generator would be treated as a device under test, not an instrument. Every channel is verified against a calibrated reference meter and scope on the same bench, at the time of use, and the comparison is what the analyst records.",
           "She agreed on that basis and added a condition I had not planned to carry. The verification is a step in the procedure rather than a commissioning activity, so it runs every session in every lab, and any channel drifting outside tolerance takes the bench out of service. It costs each analyst about twenty minutes a session, permanently, and it is the reason a bench finding is admissible at all."
         ]
