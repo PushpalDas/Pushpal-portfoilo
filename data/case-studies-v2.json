@@ -13466,7 +13466,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "The club's brief was blunt: surveillance drones fly high and suit camps rather than people, and a quadcopter near the ground is heard before it is seen. What was missing could loiter low and be ignored."
+        "text": "The club’s brief was blunt: surveillance drones fly high and suit camps, and a quadcopter near the ground is heard before it is seen. What was missing could loiter low and be ignored."
       },
       {
         "lead": "What we did.",
@@ -13474,7 +13474,7 @@
       },
       {
         "lead": "What we learned.",
-        "text": "The disguise question was tested before the flight-time question, deliberately — if it does not read as a bird, a longer flight buys nothing, because better aeroplanes exist. It flew stable circuits and never approached the club's own written targets of an hour and twenty-five kilometres, and the demo checks the proposal's coverage arithmetic against exactly that gap. The observer-trial and flight figures below are the worked example."
+        "text": "The disguise question was tested before the flight-time question, deliberately — if it does not read as a bird, a longer flight buys nothing, because better aeroplanes exist. It flew stable circuits and never approached the club’s own written targets of an hour and twenty-five kilometres. The observer-trial and flight figures below are the worked example."
       }
     ],
     "sections": [
@@ -13482,7 +13482,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Flapping-wing surveillance is a funded category. DARPA paid for the Nano Hummingbird — twenty grams, a camera, about ten minutes — and India has run a national micro-air-vehicle programme for over a decade. A club can still test the property those programmes chase.",
+          "Flapping-wing surveillance is a funded category: DARPA paid for the Nano Hummingbird — twenty grams, a camera, about ten minutes — and India has run a national micro-air-vehicle programme for a decade. A club can still test the property those programmes chase.",
           "That property is being unremarkable. Everything else a surveillance platform does is better done by something else, so the bet was worth testing first."
         ],
         "blocks": [
@@ -13524,7 +13524,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "So we tested the disguise before the aircraft: flew it past people who had not been told what they would see, and asked what they were looking at."
+          "So we tested the disguise before the aircraft: flew it past people who had not been told what to expect, and asked what they were looking at."
         ],
         "blocks": [
           {
@@ -13592,8 +13592,8 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I was project manager for this build inside SRM UAV. The club owned the craft — fabrication, wing membranes, the gear train, the flying. What I contributed was making it scoped and pitchable: a customer class, one property worth proving, and a number that would stop us.",
-          "None of that is a title. It is deciding a disguise test comes before a flight-time record, and holding the team to it when the interesting work was the gearbox."
+          "I was project manager for this build inside SRM UAV. The club owned the craft — fabrication, wing membranes, the gear train, the flying. I made it scoped and pitchable: a customer class, one property worth proving, and a number that would stop us.",
+          "None of that is a title. It is deciding a disguise test comes before a flight-time record, and holding to it when the interesting work was the gearbox."
         ],
         "blocks": [
           {
@@ -13620,7 +13620,7 @@
         "num": "04",
         "heading": "What was built",
         "body": [
-          "A single-motor flapping-wing airframe: a gear train turning rotary motion into symmetric flapping on carbon spars, a fuselage holding the electronics, and a tail doing the steering. The render below is the concept; what flew was cruder."
+          "A single-motor flapping-wing airframe: a gear train turning rotary motion into symmetric flapping on carbon spars, a fuselage holding the electronics, a tail doing the steering. The render below is the concept; what flew was cruder."
         ],
         "blocks": [
           {
@@ -13754,11 +13754,11 @@
           },
           {
             "kind": "para",
-            "text": "We cleared our own bar and the bar was wrong. Forty-one seconds beats thirty and means nothing against a concept written around an hour aloft — the number we set was a build milestone wearing a product criterion's clothes. The campaign taught us where the ceiling sits: the gear train wears, payload margin is a few grams, and control authority runs out before endurance does."
+            "text": "We cleared our own bar and the bar was wrong: forty-one seconds beats thirty and means nothing against a concept written around an hour aloft — a build milestone wearing a product criterion’s clothes. The campaign showed where the ceiling sits: the gear train wears, payload margin is a few grams, and control authority runs out before endurance does."
           },
           {
             "kind": "para",
-            "text": "We pitched the concept to the Defence Research and Development Organisation. Nothing here describes what came back, because nothing is recorded. Preparing it taught us something anyway: naming a customer class forced us to admit that of seven surveillance tasks in our brief, only two survived contact with forty-one seconds. It never went to users — no operator flew it, and nothing it recorded was used."
+            "text": "We pitched the concept to the Defence Research and Development Organisation; nothing here describes what came back, because nothing is recorded. Preparing it taught us something anyway: naming a customer class forced us to admit that of seven surveillance tasks in our brief, only two survived contact with forty-one seconds. It never went to users — no operator flew it."
           },
           {
             "kind": "definition",
@@ -13775,7 +13775,7 @@
         "num": "06",
         "heading": "What I'd do differently",
         "body": [
-          "I would have put load cells on the bench rig before the first airframe, not after the fourth. We read the rig by eye, so the gearbox was tuned by whether it sounded right — and four structural failures are what that cost.",
+          "I would have put load cells on the bench rig before the first airframe, not after the fourth. We read the rig by eye, tuning the gearbox by whether it sounded right — four structural failures are what that cost.",
           "I would also have left the camera off until the airframe flew. Integrating it early felt like de-risking and made every flight a test of two things, so trim and payload problems looked identical."
         ]
       }
