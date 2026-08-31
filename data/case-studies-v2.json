@@ -472,7 +472,7 @@
       },
       {
         "lead": "Result.",
-        "text": "62 kits shipped over six quarters against a pre-agreed floor of 40. Median time to first link fell from 28.5 days to about 6 hours, support tickets per kit from 4.1 to 1.3, and 9 of 34 evaluations converted into design-ins."
+        "text": "The kit ships through the public product page, and its whole design is the removal of variables: a fixed, characterised electrode geometry, a known-good host board, a hard power switch, the part number printed on the case. The volumes, timings and conversion figures further down are the worked example the programme was run against — including the pre-agreed floor that would have killed it."
       }
     ],
     "sections": [
@@ -6257,7 +6257,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Across 100 evaluated questions, retrieval quality rose from 0.614 to 0.840 nDCG@6 after re-ranking, and fabricated citations fell from 17 per 100 answers to zero. The engine and the interface both work and are not yet connected, so nobody has used it."
+        "text": "Fabricated citations cannot ship: any reference the retriever did not return is stripped by code before an answer renders, and out-of-corpus questions are refused by a calibrated gate rather than answered fluently. The engine and the interface both work and are not yet connected, so nobody has used it — the evaluation figures further down are the worked example of the harness built to judge it."
       }
     ],
     "sections": [
@@ -6511,7 +6511,7 @@
     "slug": "wi-r-ban-yr23",
     "eyebrow": "Ixana · 2024–present · Silicon",
     "title": "Wi-R BAN — YR23",
-    "deck": "The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, into production without a respin.",
+    "deck": "The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, the silicon under the shipping dev kit and both published reference designs.",
     "status": "production",
     "meta": {
       "role": "Program manager — silicon delivery (RTL/AMS/PS India · HW/FW US)",
@@ -6541,7 +6541,7 @@
       },
       {
         "lead": "Result.",
-        "text": "YR23 reached production without a respin, holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network. 41 escapes were found after tapeout, three initially classed blocking; all three ultimately closed in firmware. Four OEM programs designed the part in before the dev kit existed."
+        "text": "YR23 is in production holding 0.12 nJ/bit at 5 Mbit/s across a 16-device on-body network — the public specification — and it is the part under the shipping dev kit and both published reference designs. How first silicon was scoped, gated and released, escape by escape, is the worked example this page walks through."
       }
     ],
     "sections": [
@@ -6949,7 +6949,7 @@
       },
       {
         "lead": "Result.",
-        "text": "XA-NFE2001 launched in December 2025 at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput — with 91% interop across twelve host and range configurations. The BAN program missed none of its milestones."
+        "text": "XA-NFE2001 launched at 5 Mbit/s under a milliwatt — over 50× NFC’s energy efficiency and ten times its throughput, per the published comparison — with the physics written up in an arXiv paper. It shipped as a second line while the BAN program kept its own dates, and the interop matrix that qualified it is the worked example further down."
       }
     ],
     "sections": [
@@ -7796,7 +7796,7 @@
       },
       {
         "lead": "Result.",
-        "text": "YR31 delivers 20 Mbit/s at sub-0.2 ms across the same 16-device network, with wafer yield up from 71% to 86% and per-unit test time down 38%. Energy per bit went the wrong way on purpose, and interop with the installed YR23 base held at parity."
+        "text": "YR31 is in production at 20 Mbit/s and sub-0.2 ms across the same 16-device network — the public spec row carries every one of those numbers. Energy per bit went the wrong way on purpose, and gen-1 stayed in production beside it so no shipping design was forced to move. The yield, test-time and interop figures further down are the worked example of how the programme was scored."
       }
     ],
     "sections": [
@@ -8220,7 +8220,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Real throughput went from about 3.4 to 13.5 Mbit/s, which puts a 100 MB payload inside a one-minute service window. Nine of the fourteen stalled evaluations converted, all six requirement lines are now met, including the three gen-1 missed, and no gen-1 socket was lost to the upgrade."
+        "text": "Real throughput went from about 3.4 to 13.5 Mbit/s — the announcement's own figures — which puts a 100 MB payload inside a one-minute service window. Gen-1 stayed in production for the designs that need its longer reach, so the upgrade stranded nobody by construction. The pipeline that pulled this spin, and what converted, is the worked example further down."
       }
     ],
     "sections": [

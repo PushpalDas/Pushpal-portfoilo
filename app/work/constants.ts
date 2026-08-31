@@ -63,7 +63,7 @@ export const workItems: WorkItem[] = [
 		track: 'silicon',
 		status: 'production',
 		outcome:
-			'Turned Wi-R eval silicon into a shipping dev kit — partner teams bring up a working on-body link in under a day instead of weeks of RF debugging.',
+			'Turned Wi-R eval silicon into a shipping dev kit built around one acceptance bar: open the box, reach an on-body link the same day — every variable that killed early bring-ups fixed inside it.',
 		image: 'Image__10_.jpg',
 		href: 'https://www.ixana.ai/products/dev-kits',
 		slug: 'wi-r-dev-kits-ban-yr23-and-nfe-xa-nfe2001',
@@ -94,7 +94,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'research',
 		outcome:
-			'Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, down from 17.',
+			'A deterministic guard strips any citation retrieval never returned — fabrication is prevented by architecture, not reduced by prompting — and a distance gate makes refusal a first-class answer.',
 		image: 'Image__1_.jpg',
 		slug: 'dsa-generative-ai-engine-for-a-guided-spiritual-path',
 		color: '#dbeafe',
@@ -140,7 +140,7 @@ export const workItems: WorkItem[] = [
 		track: 'silicon',
 		status: 'production',
 		outcome:
-			'Successor near-field part that widened usable coupling range without raising the transmit power budget partners had already designed around.',
+			'Successor near-field part: 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — a 100 MB firmware image inside a one-minute service window, on the same sub-6 mW budget.',
 		image: 'Image__8_.jpg',
 		href: 'https://www.ixana.ai/products/chips/wi-r-nfe',
 		slug: 'wi-r-nfe-xa-nfe3001',
