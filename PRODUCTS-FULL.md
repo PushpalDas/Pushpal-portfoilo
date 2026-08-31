@@ -3667,7 +3667,7 @@ I would also have calibrated the scorecard before running it in anger. Early on 
 
 **Positioning.** Turns a disclosure into an attorney-review filing package with containment enforced at every boundary — and refuses to draw a novelty conclusion when the search looked in the wrong art.
 
-**Outcome (card copy).** Drafts an attorney-review filing package - and refuses a novelty conclusion when the search looked in the wrong art. The corpus-ceiling measurement that decided the roadmap is real, over public patent data.
+**Outcome (card copy).** Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.
 
 **Problem.** Turning a disclosure into an attorney-review draft is expensive, and both ways it goes wrong are quiet: a trade-secret candidate leaves inside a search query, or the system drafts around prior art it never found.
 

@@ -82,7 +82,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
-		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
+		image: 'ixana-wiki-search.jpg',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
 		tier: 1,
 		demoUrl: 'https://xana-nine.vercel.app/',
@@ -326,7 +326,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.',
-		image: 'Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png',
+		image: 'ixana-flow-pipeline.jpg',
 		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 		tier: 1,
 		demoUrl: 'https://xana-nine.vercel.app/efficiency?view=tracker',

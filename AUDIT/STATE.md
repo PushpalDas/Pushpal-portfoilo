@@ -1,12 +1,14 @@
 # AUDIT STATE
 
-> **Handoff note:** PERCEPTION PASS (P6–P10) IN PROGRESS — launch audit (phases 0–5) remains ✅
-> and untouched. New mission: curation/IA tiers (P6), claim calibration to evidence classes (P7),
-> role story (P8), skim layer (P9), perception QA (P10). Guardrails: nothing hidden or inflated;
-> placeholders only ever move DOWN the prominence ladder; disclosures unified in form, never
-> reduced; deep-layer voice preserved.
-> Current position: extending state; next = P7 claims classification (CLAIMS-AUDIT.md), because
-> flagship selection and skim facts depend on each page's Class-A assets.
+> **Handoff note:** PERCEPTION PASS (P6–P10) COMPLETE, on top of the completed launch audit.
+> All six QA gates pass; AUDIT/PERCEPTION-READINESS.md is the final report and
+> AUDIT/INTERVIEW-BRIEF.md is the author's rehearsal document (with [FILL] slots for real
+> numbers). Deliverables: CLAIMS-AUDIT.md (A/B/C for all 37, zero C in headlines),
+> IA-MAP.md (tiers + flagship rationale), the program page /work/ixana-internal-ai-program,
+> the fast layer on all 36 long-form pages, unified Data notes, ownership-first role rows,
+> the About role narrative. Guardrail sweep: zero disclosures weakened (string-diff proven).
+> Build clean; tree committed. Remaining human actions: the AUTHOR-CONFIRM lists in
+> PERCEPTION-READINESS.md + LAUNCH-READINESS.md (AC-XANA push first).
 
 ## Session protocol
 Read this file, then FINDINGS.md and CHANGELOG.md, before touching anything. Resume at the first
@@ -91,43 +93,43 @@ P9 covers fast header/pull line/verify strip/section nav (Tier 1–3 pages).
 
 | # | Project | Tier (P6) | P7 | P8 role row | P9 | notes |
 |---|---|---|---|---|---|---|
-| 1 | Wi-R BAN YR31 | 1 Flagship | ⬜ | ⬜ | ⬜ | |
-| 2 | Wi-R Dev Kits | 3 | ⬜ | ⬜ | ⬜ | |
-| 3 | Ixana-Wiki | 1 Flagship | ⬜ | ⬜ | ⬜ | |
-| 4 | Dāsa | 1 Flagship | ⬜ | ⬜ | ⬜ | §3.2 worked example |
-| 5 | Wi-R BAN YR23 | 3 | ⬜ | ⬜ | ⬜ | |
-| 6 | NeuroAdapt | 3 | ⬜ | ⬜ | ⬜ | |
-| 7 | NFE XA-NFE3001 | 3 | ⬜ | ⬜ | ⬜ | |
-| 8 | NFE XA-NFE2001 | 3 | ⬜ | ⬜ | ⬜ | arXiv = A |
-| 9 | Soil mineral | 4 Archive | ⬜ | ➖ | ➖ | card-only |
-| 10 | Quantum Simulator | 3 | ⬜ | ⬜ | ⬜ | prototypes label |
-| 11 | Procurement | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 12 | WishKey | 3 | ⬜ | ⬜ | ⬜ | |
-| 13 | Reference designs | 3 | ⬜ | ⬜ | ⬜ | |
-| 14 | Smart watch | 3 | ⬜ | ⬜ | ⬜ | |
-| 15 | Team performance | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 16 | Scrum ecosystem | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 17 | Flow Tracker | 1 Flagship | ⬜ | ⬜ | ⬜ | |
-| 18 | Activity Tracker | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 19 | Video library | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 20 | Calendar sync | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 21 | Salary Generator | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 22 | Planning OS | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 23 | AI Lawyer | 1 Flagship | ⬜ | ⬜ | ⬜ | prototypes label |
-| 24 | ClickUp Gantt | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 25 | Meeting notetaker | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 26 | Patent ops | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 27 | Doc intelligence | 2 chapter | ⬜ | ⬜ | ⬜ | |
-| 28 | Condenser mic | 3 | ⬜ | ⬜ | ⬜ | |
-| 29 | Signal generator | 4 Archive | ⬜ | ➖ | ➖ | card-only? has CS → 3? decide at P6 |
-| 30 | Ornithopter | 3 | ⬜ | ⬜ | ⬜ | |
-| 31 | Carbon e-car | 3 | ⬜ | ⬜ | ⬜ | |
-| 32 | Radar calibration | 3 | ⬜ | ⬜ | ⬜ | |
-| 33 | COVID bench | 3 | ⬜ | ⬜ | ⬜ | |
-| 34 | Triple riding | 1 Flagship | ⬜ | ⬜ | ⬜ | |
-| 35 | Autism bench | 3 | ⬜ | ⬜ | ⬜ | |
-| 36 | Sludge ROV | 3 | ⬜ | ⬜ | ⬜ | |
-| 37 | ENVI-City | 3 | ⬜ | ⬜ | ⬜ | |
-| P2pg | Internal AI program page | 2 head | ⬜ | ⬜ | ⬜ | NEW page to write |
+| 1 | Wi-R BAN YR31 | 1 Flagship | ✅ | ✅ | ✅ | |
+| 2 | Wi-R Dev Kits | 3 | ✅ | ✅ | ✅ | |
+| 3 | Ixana-Wiki | 1 Flagship | ✅ | ✅ | ✅ | |
+| 4 | Dāsa | 1 Flagship | ✅ | ✅ | ✅ | §3.2 worked example |
+| 5 | Wi-R BAN YR23 | 3 | ✅ | ✅ | ✅ | |
+| 6 | NeuroAdapt | 3 | ✅ | ✅ | ✅ | |
+| 7 | NFE XA-NFE3001 | 3 | ✅ | ✅ | ✅ | |
+| 8 | NFE XA-NFE2001 | 3 | ✅ | ✅ | ✅ | arXiv = A |
+| 9 | Soil mineral | 4 Archive | ✅ | ➖ | ➖ | card-only |
+| 10 | Quantum Simulator | 3 | ✅ | ✅ | ✅ | prototypes label |
+| 11 | Procurement | 2 chapter | ✅ | ✅ | ✅ | |
+| 12 | WishKey | 3 | ✅ | ✅ | ✅ | |
+| 13 | Reference designs | 3 | ✅ | ✅ | ✅ | |
+| 14 | Smart watch | 3 | ✅ | ✅ | ✅ | |
+| 15 | Team performance | 2 chapter | ✅ | ✅ | ✅ | |
+| 16 | Scrum ecosystem | 2 chapter | ✅ | ✅ | ✅ | |
+| 17 | Flow Tracker | 1 Flagship | ✅ | ✅ | ✅ | |
+| 18 | Activity Tracker | 2 chapter | ✅ | ✅ | ✅ | |
+| 19 | Video library | 2 chapter | ✅ | ✅ | ✅ | |
+| 20 | Calendar sync | 2 chapter | ✅ | ✅ | ✅ | |
+| 21 | Salary Generator | 2 chapter | ✅ | ✅ | ✅ | |
+| 22 | Planning OS | 2 chapter | ✅ | ✅ | ✅ | |
+| 23 | AI Lawyer | 1 Flagship | ✅ | ✅ | ✅ | prototypes label |
+| 24 | ClickUp Gantt | 2 chapter | ✅ | ✅ | ✅ | |
+| 25 | Meeting notetaker | 2 chapter | ✅ | ✅ | ✅ | |
+| 26 | Patent ops | 2 chapter | ✅ | ✅ | ✅ | |
+| 27 | Doc intelligence | 2 chapter | ✅ | ✅ | ✅ | |
+| 28 | Condenser mic | 3 | ✅ | ✅ | ✅ | |
+| 29 | Signal generator | 3 | ✅ | ✅ | ✅ | promoted to Tier 3 (full CS, two real figures) |
+| 30 | Ornithopter | 3 | ✅ | ✅ | ✅ | |
+| 31 | Carbon e-car | 3 | ✅ | ✅ | ✅ | |
+| 32 | Radar calibration | 3 | ✅ | ✅ | ✅ | |
+| 33 | COVID bench | 3 | ✅ | ✅ | ✅ | |
+| 34 | Triple riding | 1 Flagship | ✅ | ✅ | ✅ | |
+| 35 | Autism bench | 3 | ✅ | ✅ | ✅ | |
+| 36 | Sludge ROV | 3 | ✅ | ✅ | ✅ | |
+| 37 | ENVI-City | 3 | ✅ | ✅ | ✅ | |
+| P2pg | Internal AI program page | 2 head | ✅ | ✅ | ✅ | NEW page to write |
 | — | Appendix | 4 | ➖ | ➖ | ➖ | stays as-is |
-| QA | P10 gates + PERCEPTION-READINESS | — | ⬜ | | | |
+| QA | P10 gates + PERCEPTION-READINESS | — | ✅ | | | |
