@@ -50,8 +50,9 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 								“Demo” means different things here, deliberately: sometimes
 								the deployed platform itself, sometimes an interactive
 								recreation running on invented data, sometimes a public spec
-								page or a video — and for the research work, the demo is the
-								paper. Every card says which; and wherever a figure is an
+								page or a video — and for the earlier work, the demo is the
+								docs, or the research paper where one was published. Every card
+								says which; and wherever a figure is an
 								invented placeholder for this public sample, the page says
 								that too, in the same breath.
 							</p>

@@ -1250,7 +1250,7 @@ I would also have set the service window with a margin. Fifty-nine seconds again
 **Evidence / demos**
 
 - [Wi-R NFE product page](https://www.ixana.ai/products/chips/wi-r-nfe)
-- [Technical paper (arXiv)](https://arxiv.org/pdf/2512.07167)
+- [Research paper (arXiv)](https://arxiv.org/pdf/2512.07167)
 
 > **Confidentiality.** Silicon work. The part number, specification and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.
 
@@ -4902,7 +4902,7 @@ I would also have designed the contribution path on day one. Forty labs see faul
 
 **Evidence / demos**
 
-- [The demo is the paper — Ornithopter for surveillance, the full project proposal (PDF)](/papers/srm-uav-ornithopter-for-surveillance.pdf)
+- [The demo is the docs — Ornithopter for surveillance, the full project proposal (PDF)](/papers/srm-uav-ornithopter-for-surveillance.pdf)
 - [Then the concept of operations — the proposal's own coverage arithmetic, before a motor was chosen](/demo/ornithopter-concept)
 - [Or set the endurance to the forty-one seconds that actually flew](/demo/ornithopter-concept?preset=flew)
 
@@ -5058,7 +5058,7 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 
 **Evidence / demos**
 
-- [The demo is the paper — Carbon Positive e-car, the full concept write-up (PDF)](/papers/ricky-kids-carbon-positive-ev.pdf)
+- [The demo is the docs — Carbon Positive e-car, the full concept write-up (PDF)](/papers/ricky-kids-carbon-positive-ev.pdf)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, its system diagrams and its component list are the project's own. The carbon model, its scenarios and every figure on this page are invented for this sample — no vehicle exists, so nothing here has been measured.
 
@@ -5363,7 +5363,7 @@ We would also have written the pass mark into the proposal. It shaped everything
 
 **Evidence / demos**
 
-- [The demo is the paper — Non-contact based COVID-19 monitoring system, the full write-up (PDF)](/papers/ricky-kids-noncontact-covid-monitoring.pdf)
+- [The demo is the docs — Non-contact based COVID-19 monitoring system, the full write-up (PDF)](/papers/ricky-kids-noncontact-covid-monitoring.pdf)
 - [Then the bench — which channels worked, and how many gowning cycles that removes](/demo/covid-bench)
 - [Or leave every parameter ticked, as a standard round requires, and watch the saving stay at zero](/demo/covid-bench?cond=still)
 - [Prior art the architecture was written against — wireless data communication in a medical device network](https://patents.google.com/patent/US20070254593A1/en)
@@ -5517,7 +5517,7 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 
 **Evidence / demos**
 
-- [The demo is the paper — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)](/papers/ricky-kids-triple-riding-avoidance.pdf)
+- [The demo is the docs — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)](/papers/ricky-kids-triple-riding-avoidance.pdf)
 - [Then the working tool — counts only, no frame anywhere](/demo/rider-count)
 - [Or start at the evaluation, on the 64 clips it over-counted](/demo/rider-count?view=eval&cell=1-2)
 
@@ -5690,7 +5690,7 @@ I would also have written the sampling plan before scoring anything. We scored t
 
 **Evidence / demos**
 
-- [The demo is the paper — Toys for Autistic Kids, the full project write-up (PDF)](/papers/ricky-kids-toys-for-autistic-kids.pdf)
+- [The demo is the docs — Toys for Autistic Kids, the full project write-up (PDF)](/papers/ricky-kids-toys-for-autistic-kids.pdf)
 - [Then the bench review, playable — three interactions, fourteen criteria, and the stop test](/demo/autism-bench)
 - [Or go straight to the gantry and pull the hand away](/demo/autism-bench?i=gantry&letter=A&test=pull)
 
@@ -5841,7 +5841,7 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 
 **Evidence / demos**
 
-- [The demo is the paper — Sludge-Traversing ROV, the full write-up (PDF)](/papers/ricky-kids-sludge-traversing-rov.pdf)
+- [The demo is the docs — Sludge-Traversing ROV, the full write-up (PDF)](/papers/ricky-kids-sludge-traversing-rov.pdf)
 - [Then the test lane — a density dial, three drives, and the traction limit](/demo/sludge-envelope)
 - [Or start in the fresh analogue and run the tracked drive into a stall](/demo/sludge-envelope?medium=fresh&run=1)
 
@@ -5994,7 +5994,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 
 **Evidence / demos**
 
-- [The demo is the paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007](https://doi.org/10.1149/10701.11007ecst)
+- [The demo is the research paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007](https://doi.org/10.1149/10701.11007ecst)
 - [Then the concept explorer — the paper's city, drawn layer by layer, with the audit that followed it](/demo/envi-city)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are invented for this sample — nothing was built, measured or deployed anywhere.

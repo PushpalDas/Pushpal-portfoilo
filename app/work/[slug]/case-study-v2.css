@@ -960,8 +960,13 @@
 .cs2 .verify-chip[data-kind='Live demo'] .verify-kind {
 	background: var(--ship-dim);
 }
-.cs2 .verify-chip[data-kind='Published'] .verify-kind {
+.cs2 .verify-chip[data-kind='Research paper'] .verify-kind {
 	background: var(--warn-dim);
+}
+.cs2 .verify-chip[data-kind='Docs'] .verify-kind,
+.cs2 .verify-chip[data-kind='Patent'] .verify-kind {
+	background: var(--line);
+	color: var(--body);
 }
 
 .cs2 .fast-facts {

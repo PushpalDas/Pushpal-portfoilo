@@ -337,15 +337,22 @@ function Block({ block }: { block: CaseStudyBlock }) {
  */
 function verifyKind(url: string): string {
 	if (url.startsWith('/demo/') || url.includes('xana-nine')) return 'Live demo';
+	// Peer-reviewed / indexed research only — a project write-up is not a
+	// research paper and must not borrow the label.
 	if (
 		url.includes('arxiv.org') ||
 		url.includes('doi.org') ||
 		url.includes('hdl.handle') ||
-		url.includes('patents.google') ||
+		url.includes('iopscience')
+	)
+		return 'Research paper';
+	if (url.includes('patents.google')) return 'Patent';
+	if (
 		url.startsWith('/papers/') ||
+		url.startsWith('/static/docs/') ||
 		url.endsWith('.pdf')
 	)
-		return 'Published';
+		return 'Docs';
 	if (url.includes('ixana.ai')) return 'Public spec';
 	if (url.includes('youtube.com') || url.includes('vimeo.com')) return 'Video';
 	if (url.includes('drive.google') || url.includes('docs.google'))

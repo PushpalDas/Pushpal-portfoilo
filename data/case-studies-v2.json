@@ -7223,7 +7223,7 @@
         "url": "https://www.ixana.ai/products/chips/wi-r-nfe"
       },
       {
-        "label": "Technical paper (arXiv)",
+        "label": "Research paper (arXiv)",
         "url": "https://arxiv.org/pdf/2512.07167"
       }
     ],
@@ -11113,7 +11113,7 @@
           "cls": "A"
         },
         {
-          "text": "Three published papers linked by DOI",
+          "text": "Three research papers linked by DOI",
           "cls": "A"
         },
         {
@@ -11138,7 +11138,7 @@
     "confidentiality": "Student research at SRM, with collaborators at Jadavpur University and VIT Vellore. This page describes an engineering feasibility test and makes no diagnostic or clinical claim of any kind. The workflow observations, the bench comparison and every number on this page are invented for this sample; what is real is the project, its architecture and the contact monitor we measured against.",
     "evidence": [
       {
-        "label": "The demo is the paper — Non-contact based COVID-19 monitoring system, the full write-up (PDF)",
+        "label": "The demo is the docs — Non-contact based COVID-19 monitoring system, the full write-up (PDF)",
         "url": "/papers/ricky-kids-noncontact-covid-monitoring.pdf"
       },
       {
@@ -11540,7 +11540,7 @@
     "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The vehicle drawings are our own SolidWorks models and the component list is the project's real one. The test-tank trials and every number on this page — densities, sinkage, run counts, success rates — are invented for this sample. Nothing here was tested in a real sewer.",
     "evidence": [
       {
-        "label": "The demo is the paper — Sludge-Traversing ROV, the full write-up (PDF)",
+        "label": "The demo is the docs — Sludge-Traversing ROV, the full write-up (PDF)",
         "url": "/papers/ricky-kids-sludge-traversing-rov.pdf"
       },
       {
@@ -11909,7 +11909,7 @@
     "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, its system diagrams and its component list are the project's own. The carbon model, its scenarios and every figure on this page are invented for this sample — no vehicle exists, so nothing here has been measured.",
     "evidence": [
       {
-        "label": "The demo is the paper — Carbon Positive e-car, the full concept write-up (PDF)",
+        "label": "The demo is the docs — Carbon Positive e-car, the full concept write-up (PDF)",
         "url": "/papers/ricky-kids-carbon-positive-ev.pdf"
       }
     ],
@@ -12268,7 +12268,7 @@
     "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are invented for this sample — nothing was built, measured or deployed anywhere.",
     "evidence": [
       {
-        "label": "The demo is the paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007",
+        "label": "The demo is the research paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007",
         "url": "https://doi.org/10.1149/10701.11007ecst"
       },
       {
@@ -12616,7 +12616,7 @@
     "confidentiality": "Student work at SRM Kattankulathur. The prototype, its hardware and the reviews with special-education teachers are real; the teachers and the autism care centre involved are not named here. This page makes no clinical or therapeutic claim of any kind, and no child took part in any part of this project. The review scores and every figure are invented for this sample.",
     "evidence": [
       {
-        "label": "The demo is the paper — Toys for Autistic Kids, the full project write-up (PDF)",
+        "label": "The demo is the docs — Toys for Autistic Kids, the full project write-up (PDF)",
         "url": "/papers/ricky-kids-toys-for-autistic-kids.pdf"
       },
       {
@@ -13014,7 +13014,7 @@
     "confidentiality": "Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. The system diagram, the detection approach and the team are real. No footage, number plate, face or person appears anywhere on this page, and none is published: the model runs on survey clips and outputs counts. The accuracy figures, the labelled sample and the observation counts are invented for this sample.",
     "evidence": [
       {
-        "label": "The demo is the paper — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)",
+        "label": "The demo is the docs — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)",
         "url": "/papers/ricky-kids-triple-riding-avoidance.pdf"
       },
       {
@@ -13426,7 +13426,7 @@
           "cls": "A"
         },
         {
-          "text": "The paper includes the enforcement pipeline we refused to build",
+          "text": "The project docs include the enforcement pipeline we refused to build",
           "cls": "A"
         },
         {
@@ -13451,7 +13451,7 @@
     "confidentiality": "Student club work at SRM Kattankulathur. The concept, the surveillance framing, the component list and the build sequence come from the project's own documents. Every number on this page is invented for this sample — flight times, attempt counts, payload margin and the observer trials. The concept was pitched to DRDO; nothing on this page describes any response to that pitch, because none is recorded.",
     "evidence": [
       {
-        "label": "The demo is the paper — Ornithopter for surveillance, the full project proposal (PDF)",
+        "label": "The demo is the docs — Ornithopter for surveillance, the full project proposal (PDF)",
         "url": "/papers/srm-uav-ornithopter-for-surveillance.pdf"
       },
       {
