@@ -11613,7 +11613,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "We built a test tank and mixed three sludge analogues to bracket what a settled line contains, then ran the same drive down the same lane in each. The variable was the medium; the vehicle stayed fixed."
+          "We built a test tank and mixed three sludge analogues to bracket what a settled line contains, then ran the same drive down the same lane in each — the medium varied, the vehicle stayed fixed."
         ],
         "blocks": [
           {
@@ -11714,7 +11714,7 @@
         "num": "04",
         "heading": "What was built",
         "body": [
-          "The tank came first, and the vehicle below is what it produced: a sealed acrylic cylinder for the electronics, slung inside a closed loop of PVC pipe that is both frame and buoyancy."
+          "The tank came first; the vehicle below is what it produced — a sealed acrylic cylinder for the electronics, slung inside a closed loop of PVC pipe serving as both frame and buoyancy."
         ],
         "blocks": [
           {
@@ -11870,7 +11870,7 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "We mixed our analogues to a density because density is easy to measure with what we had. But yield stress, not density, governs this — two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed, so what matters is the margin above 1.15, not the line.",
+          "We mixed our analogues to a density because density is easy to measure with what we had. But yield stress, not density, governs this — two media at the same density can behave differently under a track. Our threshold is a proxy a running track eats into: the part-settled analogue sat 0.03 g/cm³ inside the band and still failed; the margin above 1.15 matters, not the line.",
           "We also kept the project name after the finding contradicted it. Calling it a sludge-traversing ROV and then building something that floats over the sludge made every later conversation start in the wrong place."
         ]
       }
