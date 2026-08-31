@@ -201,7 +201,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'customer-testing',
 		outcome:
-			'In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.',
+			'In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.',
 		image: 'demo-card-procurement-desk.jpg',
 		slug: 'procurement-orchestrator-procurement-process-automation-with',
 		demoUrl: '/demo/procurement-desk',
@@ -292,7 +292,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'One live view across the PS, AMS and RTL pipelines — leads stopped assembling the weekly review deck from three sources.',
+			'One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.',
 		image: 'Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png',
 		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 		demoUrl: 'https://xana-nine.vercel.app/efficiency?view=tracker',
@@ -307,7 +307,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'Turned a raw activity feed into a searchable who-changed-what timeline, so audit questions get answered in seconds not hours.',
+			'Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.',
 		image: 'demo-card-clickup-audit.jpg',
 		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
 		demoUrl: '/demo/clickup-audit',
@@ -337,7 +337,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'Ended the double-booking that came from living in two tenants, without exposing a single private event title across them.',
+			'Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.',
 		image: 'Gemini_Generated_Image_18w83818w83818w8.png',
 		slug: 'calendar-automation-real-time-bi-directional-sync-engine-wit',
 		color: '#fae8ff',
@@ -367,7 +367,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'Turns a raw brief into a reviewed, execution-ready plan in 3–8 minutes, with a second model required to approve the first one.',
+			'Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner\'s work, enforced in code, and unknowns stop the pipeline instead of being papered over.',
 		image: 'demo-card-prd-os.jpg',
 		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
 		demoUrl: '/demo/prd-os',
@@ -382,7 +382,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'prototype',
 		outcome:
-			'Drafts an attorney-review filing package from a disclosure in five minutes, and refuses to draw a novelty conclusion when the search looked in the wrong art.',
+			'Drafts an attorney-review filing package - and refuses a novelty conclusion when the search looked in the wrong art. The corpus-ceiling measurement that decided the roadmap is real, over public patent data.',
 		image: 'demo-card-ai-lawyer.jpg',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		demoUrl: '/demo/ai-lawyer',
@@ -427,7 +427,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.',
+			'Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.',
 		image: 'Gemini_Generated_Image_strjxvstrjxvstrj.png',
 		slug: 'ixana-patent-program',
 		demoUrl: 'https://xana-nine.vercel.app/patents',
@@ -442,7 +442,7 @@ export const workItems: WorkItem[] = [
 		track: 'ai',
 		status: 'internal',
 		outcome:
-			'A daily sync that versions and diffs every workspace doc, so the 34 of 301 that changed last night are visible without asking.',
+			'A daily sync that versions and diffs every workspace document - immutable versions only on real content change, and nothing tracked is ever pruned.',
 		image: 'Gemini_Generated_Image_jt9prtjt9prtjt9p.png',
 		slug: 'clickup-document-tracker-data-extraction-easy-visibility-for',
 		demoUrl: 'https://xana-nine.vercel.app/myfiles?tab=clickup',
@@ -457,7 +457,7 @@ export const workItems: WorkItem[] = [
 		track: 'silicon',
 		status: 'production',
 		outcome:
-			'Brought a studio-class condenser capsule to a shippable price by redesigning the preamp around a cheaper JFET front end.',
+			'Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.',
 		image: 'Gemini_Generated_Image_cqoga8cqoga8cqog.png',
 		slug: 'eegrab-condenser-microphone',
 		color: '#dbeafe',
@@ -545,7 +545,7 @@ export const workItems: WorkItem[] = [
 		track: 'silicon',
 		status: 'research',
 		outcome:
-			'Measured respiration rate at a distance with a thermal and radar pair, so isolation wards could monitor without contact.',
+			'Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.',
 		image: 'demo-card-covid-bench.jpg',
 		slug: 'ricky-kids-noncontact-covid-monitoring',
 		demoUrl: '/demo/covid-bench',

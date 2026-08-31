@@ -881,7 +881,7 @@
       },
       {
         "lead": "Result.",
-        "text": "26 of 31 leads now run their weekly review inside it. Median preparation fell from 41 minutes to 12, and stage corrections — the guardrail on automatic classification — settled at 4.2% of tasks."
+        "text": "Each team kept its own stage vocabulary — the tidy canonical model would have been wrong for two of the three — and classification ships with its correction rate on the header, where the people relying on it can see it. The assistant answers from filtered records and refuses the ranking question outright; all of it is clickable in the live demo. Adoption and preparation-time figures below are the worked example."
       }
     ],
     "sections": [
@@ -1295,7 +1295,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Median time to the relevant moment fell from 5m 50s to about 90 seconds, 70% of opened recordings are now entered by transcript jump, and published minutes reached 11% of recorded meetings."
+        "text": "The transcript is the navigation, not a feature beside the video: a search hit is a sentence and the second it was said, and every claim in the generated minutes carries a timestamp — all of it clickable in the live demo. The time-to-moment and usage figures below are the worked example."
       }
     ],
     "sections": [
@@ -1694,7 +1694,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Double-bookings went from six a month to zero and have stayed there for four months. Not one event title has crossed to the Google side, and the service credential's reach narrowed from every mailbox in the tenant to one."
+        "text": "No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all, which is the answer to what the diary study actually found. Every path previews before it writes, one bad write can only ever touch one occurrence, and the credential's reach was narrowed to the single mailbox it needs. The double-booking counts below are the worked example."
       }
     ],
     "sections": [
@@ -2118,7 +2118,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Five teams now run one engine on three windows. In the May run 84% of delayed tasks carry a cause a named owner signed, against 21% before, and no count on any report is computed by a model."
+        "text": "Five teams run one engine on three windows, nothing publishes unsigned from monthly upwards, and no count on any report is computed by a model — the signature gate and the coverage arithmetic run live in the demo. The before-and-after coverage figures below are the worked example."
       }
     ],
     "sections": [
@@ -2567,7 +2567,7 @@
       },
       {
         "lead": "Result.",
-        "text": "22 of 31 leads and architects use it weekly, hand-built timelines have stopped, the monthly capacity compile fell from nine hours to twenty minutes of review, and 63% of delay questions are answered without opening the task. Nothing it does has ever written to the workspace, or asked an engineer for an update."
+        "text": "Read-only is a permanent property, not a first-version phase: nothing it does has ever written to the workspace or asked an engineer for an update, and where the data cannot carry an answer — undated work, predicted completion dates — it withholds one. Every element deep-links to its source task, which is what replaced write-back. The adoption and preparation-time figures below are the worked example."
       }
     ],
     "sections": [
@@ -3030,7 +3030,7 @@
     "slug": "github-for-clickup-automation-on-the-changes-going-outside-p",
     "eyebrow": "Ixana · 2026 · Audit tooling",
     "title": "Task change audit trail",
-    "deck": "Turned a raw activity feed into a searchable record of who changed what, so a question that used to take an afternoon takes about four minutes.",
+    "deck": "Turned a raw activity feed into a searchable record of who changed what — holding the one thing the native feed never keeps: the value a field held before.",
     "status": "internal",
     "meta": {
       "role": "Product manager, delivery owner",
@@ -3060,7 +3060,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Median time to answer a change question fell from about three hours to four minutes, and requests reaching a person dropped from 41 a quarter to 6. Every event is stored raw, so parsing rules have changed twice and been replayed over history without re-fetching anything."
+        "text": "Every event is stored raw before it is interpreted, so when the parsing rules changed — twice — history was replayed without re-fetching anything, and a tampered delivery gets a 401 with nothing stored: the demo runs the whole chain live. Answer-time and request-volume figures below are the worked example."
       }
     ],
     "sections": [
@@ -3491,7 +3491,7 @@
       },
       {
         "lead": "Result.",
-        "text": "301 documents are checked each night against 248 before, versions are created only on real change — 34 on the confirmed run — and no document has been dropped from history since the policy change, including the 30 that exist only in the workspace — the 53 untracked less the 23 orphaned."
+        "text": "A version exists only where the content hash genuinely moved, versions are immutable with no edit affordance anywhere, and the register was demoted from gate to enrichment after it proved to be a single point of failure — nothing tracked is ever pruned. The reconciliation counts below are the worked example."
       }
     ],
     "sections": [
@@ -3876,7 +3876,7 @@
     "slug": "ai-prd-multi-agent-multi-llm-shared-memory-generative-system",
     "eyebrow": "Ixana · 2026 · Planning tooling",
     "title": "AI product planning operating system",
-    "deck": "Turns a brief into a reviewed, execution-ready plan in minutes — and refuses to let one model approve its own work.",
+    "deck": "Turns a brief into a reviewed, execution-ready plan — and refuses to let one model approve its own work.",
     "status": "internal",
     "meta": {
       "role": "Product manager, delivery owner",
@@ -3896,7 +3896,7 @@
       },
       {
         "lead": "Result.",
-        "text": "41 briefs have gone through to an approved plan. A run reaches human review in a median of 6m 40s, planner–reviewer rounds fell from 3.2 to 1.4 once context handoff was fixed, and 68% of plans are approved by the human on first read."
+        "text": "The guarantees are structural and demonstrable: planner and reviewer can never share a model — the run refuses to start — every checklist step carries a binary completion test, and an approved plan freezes before tasks derive from it. Forty of the product's rules run live in the demo. The run-log figures below are the worked example."
       }
     ],
     "sections": [
@@ -4309,7 +4309,7 @@
     "slug": "procurement-orchestrator-procurement-process-automation-with",
     "eyebrow": "Ixana · 2026 · Procurement ops",
     "title": "Procurement orchestrator",
-    "deck": "A pilot that names one accountable owner within a business day, so requesters stop chasing procurement for a status nobody holds.",
+    "deck": "A pilot whose operating contract is the product: one named owner within a business day, no transition without evidence, and launch gates written before the first request.",
     "status": "customer-testing",
     "meta": {
       "role": "Product manager, pilot owner",
@@ -4329,7 +4329,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Early signal only, from 23 pilot requests. 21 of 23 were assigned within one business day against a gate of all of them, none reached order unapproved, and 2 of 23 requesters still chased by email."
+        "text": "Early signal only — deliberately below any rate-claim threshold. What held is the contract: no request reaches order without a recorded approval, the ceiling refuses what the pilot has no business handling, and every launch gate is counted live from the demo's own requests rather than stored. The running totals below are the worked example."
       }
     ],
     "sections": [
@@ -4820,7 +4820,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Early signal only, from 18 drafts. Every figure in all 18 resolves to a dated comparator row, against 6 of 26 before; four of seven requisitions were refused at the floor; no figure anywhere is produced by a model."
+        "text": "Early signal only. What is structural: a figure with no dated source does not render at all, the evidence floor refuses a role rather than widening a band, and no figure anywhere is produced by a model — press any number in the demo and its citation opens. The pilot counts below are the worked example."
       }
     ],
     "sections": [
@@ -5248,7 +5248,7 @@
     "slug": "ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys",
     "eyebrow": "Ixana · 2026 · Legal tooling",
     "title": "AI Lawyer — multi-agent patent drafting",
-    "deck": "Turns a disclosure into an attorney-review filing package in about five minutes, and refuses to draw a novelty conclusion when the search looked in the wrong art.",
+    "deck": "Turns a disclosure into an attorney-review filing package with containment enforced at every boundary — and refuses to draw a novelty conclusion when the search looked in the wrong art.",
     "status": "prototype",
     "meta": {
       "role": "Product manager, build owner",
@@ -5268,7 +5268,7 @@
       },
       {
         "lead": "Result.",
-        "text": "It drafts a full filing package in about five minutes for under $2.50, at 507 tests passing. It has never been run on a real inventor disclosure and no attorney has used it."
+        "text": "It drafts a full filing package end to end — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The measurement that mattered is real, computed over public patent data: 84.6% of ground-truth prior art was not in the corpus at all, which reframed the ranker from broken to nearly done. It has never been run on a real inventor disclosure and no attorney has used it."
       }
     ],
     "sections": [
@@ -7379,7 +7379,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Datasheet to working demo on a partner’s own hardware fell from about eleven weeks to three. Six of the nine design-ins in the period cite a reference design, and support hours per evaluation stayed flat while concurrent evaluations tripled."
+        "text": "Both designs are public and complete — schematic, layout, BOM and firmware — and both demonstrations are on video: live video into smartglasses, voice into a tactical radio, over the body rather than the air. Release was gated on a team outside the building rebuilding each one from the files alone. The cycle-time and design-in figures below are the worked example."
       }
     ],
     "sections": [
@@ -8645,7 +8645,7 @@
       },
       {
         "lead": "Result.",
-        "text": "The bench reproduces 98.2% of the catalogued field fault signatures — 55 of 56 — within the tolerance the calibration lab signs off. Reproducing a reported fault fell from weeks of waiting to under a day, and the bench now runs in more than 40 SLB failure-analysis labs."
+        "text": "The bench reproduces 98.2% of the catalogued field fault signatures — 55 of 56 — within the tolerance the calibration lab signs off, and it runs in more than 40 SLB failure-analysis labs. It is treated as a device under test, verified against calibrated references every session, because a synthesised signal nobody trusts is a signal nobody uses. The turnaround figures below are the worked example."
       }
     ],
     "sections": [
@@ -9023,7 +9023,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Across the deployed sites, 0.3% of key-removal events are unattributed against a paper baseline nobody could reconcile at all, drawing a key takes about fifteen seconds instead of four minutes, and a cabinet is commissioned in two hours with no IT involved."
+        "text": "The design decision that carries the product is per-slot locking: a key cannot leave without an event naming an authenticated person, because the record is a side effect of the act rather than a form beside it. It ships as a catalogue product through installer partners, fully useful with nothing else installed. The deployment and audit figures below are the worked example."
       }
     ],
     "sections": [
@@ -9458,7 +9458,7 @@
       },
       {
         "lead": "Result.",
-        "text": "A landed bill of materials of about ₹820 against a ₹900 ceiling agreed before build, nine days between charges on the agreed usage profile, and warranty returns at 2.1% in the first year — the number we were not allowed to trade for any of the rest."
+        "text": "One decision set the tier: the display is a cost decision disguised as a feature decision, and once it went reflective the battery, the charging circuit and half the enclosure stopped being separate problems. The board is real and on this page — processor, sensors, crystals, antenna network. The costs, battery life and the return-rate guardrail below are the worked example the programme was scored on."
       }
     ],
     "sections": [
@@ -9859,7 +9859,7 @@
     "slug": "eegrab-condenser-microphone",
     "eyebrow": "EEGRAB · 2024 · Audio hardware",
     "title": "Condenser microphone",
-    "deck": "Two microphones off the same line now measure within 0.4 dB of each other, in a tier where the capsule supplier's own window is fifteen times wider.",
+    "deck": "The variance war: the supplier's window is the problem, and the answer was calibrating every unit at test instead of sorting capsules into bins that die with the next lot.",
     "status": "production",
     "meta": {
       "role": "Senior Embedded Design Engineer",
@@ -9879,7 +9879,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Shipped microphones sit inside ±0.4 dB of nominal against a ±1 dB acceptance window agreed before build, with self-noise published as the worst unit off the line at 17 dBA rather than the typical one."
+        "text": "The policy is the product: publish the worst unit, not the typical one, and let the trim correct but never rescue — a capsule needing more than half the range is rejected even though the supplier calls it good. The real schematic and transient run are on this page; the consistency and yield figures below are the worked example."
       }
     ],
     "sections": [
@@ -10384,7 +10384,7 @@
       },
       {
         "lead": "Finding.",
-        "text": "Position uncertainty dominates: 1.4 dB of a 1.5 dB budget, almost all of it altitude rather than horizontal. With the GNSS module in our own bill of materials the method misses its own pass mark."
+        "text": "Position uncertainty dominates the budget, almost all of it altitude rather than horizontal — a conclusion the demo derives live rather than asserts — and with the GNSS module in our own bill of materials the method misses its own pass mark. The decomposition below is the worked example."
       }
     ],
     "sections": [
@@ -11108,7 +11108,7 @@
       },
       {
         "lead": "Finding.",
-        "text": "Below about 1.15 g/cm³ the tracks liquefy the medium under themselves and traction disappears — the vehicle stops being on a surface and starts being in a fluid. Fresh sewer sludge sits well below that."
+        "text": "A track is a machine for not leaving the medium alone: it shears, shear-thinning sludge gets thinner where it is sheared, and the vehicle digs its own hole. That is why the final design carries its weight in a buoyant frame and pushes with paddles and thrusters instead. The threshold and the tank runs below are the worked example."
       }
     ],
     "sections": [
@@ -11452,7 +11452,7 @@
       },
       {
         "lead": "Finding.",
-        "text": "Carbon positive is unreachable, not marginal: nothing on the vehicle removes carbon dioxide, and the onboard turbine costs more in drag than it generates. What survives is 24% below a petrol equivalent, and that number turns entirely on grid mix."
+        "text": "Carbon positive is unreachable, not marginal: nothing on the vehicle removes carbon dioxide, and the onboard turbine costs more in drag than it generates. What survives is a modest advantage over petrol that turns entirely on grid mix — the worked model below carries the numbers."
       }
     ],
     "sections": [
@@ -11768,7 +11768,7 @@
     "slug": "ricky-kids-envi-city",
     "eyebrow": "Ricky Kids · 2022 · Urban concept",
     "title": "ENVI-City — sustainable smart city concept",
-    "deck": "We published a whole-city vision, then cut it down to the one claim we could actually model — and found it holds for housing and not much else.",
+    "deck": "We published a whole-city vision, then audited our own paper claim by claim — eleven claims, one testable at block scale — and modelled the single one we were prepared to defend in public.",
     "status": "research",
     "meta": {
       "role": "Founder — Ricky Kids (student research org, SRM University)",
@@ -11798,7 +11798,7 @@
       },
       {
         "lead": "Finding.",
-        "text": "Coupling saves about 9% of a dense residential block's resource use, and the interval around that is wide enough to matter. For commercial and industrial blocks we could not show it beats separate utilities at all."
+        "text": "Of the paper's eleven claims, one survived to a model: coupling water, power and waste at block scale. The interval matters more than the point estimate — and for commercial and industrial blocks the model could not show coupling beats separate utilities at all. The scenario table below is the worked example."
       }
     ],
     "sections": [
@@ -12099,7 +12099,7 @@
     "slug": "ricky-kids-toys-for-autistic-kids",
     "eyebrow": "Ricky Kids · 2021–2023 · Assistive play",
     "title": "Toys for autistic kids",
-    "deck": "Two special-education teachers reviewed what we built and would put two of its three interactions in front of a child. The impressive one was not among them.",
+    "deck": "We took the prototype to special-education teachers before any child could meet it — and the interaction we were proudest of is the one they refused. A machine holding a child who wants to stop was the whole problem.",
     "status": "prototype",
     "meta": {
       "role": "Founder — Ricky Kids (student research org, SRM University)",
@@ -12514,7 +12514,7 @@
       },
       {
         "lead": "Result.",
-        "text": "94% agreement with hand-labelled ground truth on daylight clips and a 6.2% false-positive rate, scoring a week of survey footage in forty minutes instead of nine hours — and extracting zero identifiers while doing it."
+        "text": "It outputs counts and nothing else — no plate, no face, no identity, and no live-camera path even exists in the shipped tool, so connecting one is a rewrite rather than a setting. Its errors run toward over-counting, which is why the guardrail is the false-positive rate. The accuracy and timing figures below are the worked example."
       }
     ],
     "sections": [
@@ -12900,7 +12900,7 @@
     "slug": "srm-uav-ornithopter-for-surveillance",
     "eyebrow": "SRM UAV · 2021–2022 · Aerial robotics",
     "title": "Ornithopter for surveillance",
-    "deck": "It read as a bird to two thirds of observers at forty metres, and it stayed airborne for forty-one seconds. Only one of those numbers was ever going to be the problem.",
+    "deck": "The disguise worked and the flying did not: the proposal asked for an hour aloft and twenty-five kilometres of reach, and its own arithmetic — run it in the demo — never closed.",
     "status": "prototype",
     "meta": {
       "role": "Project Manager — SRM UAV (student UAV club, SRM University)",
@@ -12934,7 +12934,7 @@
       },
       {
         "lead": "What we learned.",
-        "text": "The disguise worked and the flying did not. Two thirds of observers at forty metres said bird; the best circuit lasted forty-one seconds against a concept written around an hour."
+        "text": "The disguise question was tested before the flight-time question, deliberately — if it does not read as a bird, a longer flight buys nothing, because better aeroplanes exist. It flew stable circuits and never approached the club's own written targets of an hour and twenty-five kilometres, and the demo checks the proposal's coverage arithmetic against exactly that gap. The observer-trial and flight figures below are the worked example."
       }
     ],
     "sections": [
@@ -13246,7 +13246,7 @@
     "slug": "ixana-patent-program",
     "eyebrow": "Ixana · 2024–2026 · Patent operations",
     "title": "Patent program operations",
-    "deck": "Fifty-plus filings across six product lines, owned end to end — and disclosure-to-filing cut from fourteen weeks to six on no extra inventor time.",
+    "deck": "Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, and no statutory date ever computed in-house.",
     "status": "internal",
     "meta": {
       "role": "Product manager — patent programme owner and Wi-R product line PM",
@@ -13272,7 +13272,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Fifty-plus filings across six product lines, median disclosure-to-filing down from about fourteen weeks to six, and inventor time per disclosure falling rather than rising. No date we have shown has ever disagreed with counsel’s docket."
+        "text": "Fifty-plus filings across six product lines, owned end to end. The system underneath automates nothing irreversible: routing and reminders yes, dates and scope never — counsel's docket stays the sole statutory authority, mirrored and never computed. The cycle-time and inventor-minutes figures below are the worked example."
       }
     ],
     "sections": [
@@ -13964,7 +13964,7 @@
       },
       {
         "lead": "Result.",
-        "text": "198 of 212 monthly meetings are transcribed and minuted without anything leaving the tenant, minutes are ready a median of 9 minutes after the call ends, and a repeat of the decision trace found 21 of 24 decisions in a written record. Nothing has been processed outside the tenant, which was the guardrail the project existed to hold."
+        "text": "Nothing is processed outside the tenant and no bot ever joins a call — capture reads the meeting's own recording artefact, and a claim without a timestamp does not ship, which is the rule that made minutes circulable at all. Exclusion is set by the organiser before the call and cannot be undone. The coverage and decision-trace figures below are the worked example."
       }
     ],
     "sections": [
@@ -14417,7 +14417,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Across three squads, 24 of 26 engineers are in the ceremony each week. The median standup runs nine minutes instead of eighteen, and the minutes spent reading out state fell from eleven to one."
+        "text": "Nothing on the standup board is typed and nothing is stored — every line is a diff of the task record, so drift is zero by construction rather than by discipline. Writes are four fields behind one allow-list, on a ledger the whole squad can read. The meeting-length and adoption figures below are the worked example."
       }
     ],
     "sections": [
