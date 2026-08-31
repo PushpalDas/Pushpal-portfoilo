@@ -1754,15 +1754,15 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "A group worked across two calendar tenants and neither system knew about the other. In a two-week diary study, six of them recorded 11 double-bookings and about two hours each per week of manual tidying — copying invites across, blocking time by hand, apologising for clashes."
+        "text": "A group worked across two calendar tenants and neither system knew about the other. In a two-week diary study, six people recorded 11 double-bookings and two hours each per week of manual tidying — copying invites, blocking time by hand, apologising for clashes."
       },
       {
         "lead": "What I did.",
-        "text": "I owned a service that mirrors Outlook meetings to a Gmail attendee, publishes a subscribable feed, and reflects Google busy time back as opaque blocks. The product argument was entirely about restraint: what it may write, to whose calendar, and what it must never reveal."
+        "text": "I owned a service that mirrors Outlook meetings to a Gmail attendee, publishes a subscribable feed, and reflects Google busy time back as opaque blocks. The product argument was restraint: what it may write, to whose calendar, and what it must never reveal."
       },
       {
         "lead": "Result.",
-        "text": "No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all, which is the answer to what the diary study actually found. Every path previews before it writes, one bad write can only ever touch one occurrence, and the credential's reach was narrowed to the single mailbox it needs. The double-booking counts below are the worked example."
+        "text": "No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all. Every path previews before it writes, one bad write can only touch one occurrence, and the credential was narrowed to the single mailbox it needs. The double-booking counts below are the worked example."
       }
     ],
     "sections": [
@@ -1770,7 +1770,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "This competed with two other automation candidates and was the smallest by headcount — eleven people. The alternatives saved time already being spent badly; this one removed an error visible outside the company, because a double-booked person misses an external meeting and someone else notices."
+          "This competed with two other automation candidates and was the smallest by headcount — eleven people. The alternatives saved time already being spent badly; this removed an error visible outside the company: a double-booked person misses an external meeting and someone else notices."
         ],
         "blocks": [
           {
@@ -1804,14 +1804,14 @@
           }
         ],
         "after": [
-          "It was also the only one where the risk of getting it wrong exceeded the prize for getting it right. Every incorrect write sends email to everyone invited."
+          "It was also the only one where the risk of getting it wrong exceeded the prize: every incorrect write sends email to everyone invited."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "Six people kept a structured diary for two weeks, logging every time the calendars disagreed. A diary beat interviews here because the incidents are individually forgettable — people called it \"a bit annoying\" where the log showed something more expensive."
+          "Six people kept a structured diary for two weeks, logging every time the calendars disagreed. A diary beat interviews because the incidents are individually forgettable — people said \"a bit annoying\" where the log showed something more expensive."
         ],
         "blocks": [
           {
@@ -1879,14 +1879,14 @@
           }
         ],
         "after": [
-          "The reframe: they did not need their calendars merged, which is what they asked for. They needed each calendar to be right about when they were busy — and the diary's last row, people who had stopped sharing calendar links because of what titles revealed, turned a sync problem into a disclosure problem."
+          "The reframe: they did not need their calendars merged, which is what they asked for. They needed each calendar to be right about when they were busy — and the diary’s last row, people who had stopped sharing calendar links over what titles revealed, turned a sync problem into a disclosure problem."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I owned scope, the API surface, and the rules about when the service may modify anything. On a product where every write sends email, the interesting decisions are all refusals."
+          "I owned scope, the API surface, and when the service may modify anything. On a product where every write sends email, the interesting decisions are all refusals."
         ],
         "blocks": [
           {
@@ -1895,7 +1895,7 @@
             "items": [
               {
                 "lead": "Busy blocks carry no detail at all.",
-                "text": "Reflected time is an opaque block with no title, attendees or body. The diary had already shown people self-censoring their calendars, and a sync that leaks titles would have made that worse."
+                "text": "Reflected time is an opaque block with no title, attendees or body. The diary had shown people self-censoring their calendars; a sync that leaks titles would make that worse."
               },
               {
                 "lead": "Dry run is the default, not a flag.",
@@ -1903,11 +1903,11 @@
               },
               {
                 "lead": "Occurrence level, never the series.",
-                "text": "Recurring meetings are where calendar automation does catastrophic things. Editing single occurrences means a bug damages one meeting instead of a year of them."
+                "text": "Recurring meetings are where calendar automation does catastrophic things. Occurrence-level edits mean a bug damages one meeting, not a year of them."
               },
               {
                 "lead": "Two paths depending on who owns the meeting.",
-                "text": "Where the mailbox organises, the service adds an attendee; where it does not, it forwards. Attempting the first everywhere is the obvious implementation and it fails silently on exactly the meetings that matter most."
+                "text": "Where the mailbox organises, the service adds an attendee; where it does not, it forwards. Attempting the first everywhere is the obvious implementation, and it fails silently on the meetings that matter most."
               }
             ]
           }
@@ -1939,7 +1939,7 @@
           },
           {
             "kind": "para",
-            "text": "Two-way body and attendee sync was the hardest cut — it is what people asked for by name. It failed on a rule I had already set: a body sync writes meeting content into a tenant with a different compliance boundary. Opaque busy blocks plus the subscribable feed cover the gap, so anyone needing detail subscribes deliberately and owns the disclosure."
+            "text": "Two-way body and attendee sync was the hardest cut — it is what people asked for by name. It failed on a rule already set: a body sync writes meeting content into a tenant with a different compliance boundary. Opaque busy blocks plus the feed cover the gap: anyone needing detail subscribes deliberately and owns the disclosure."
           }
         ]
       },
@@ -1947,16 +1947,16 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The IT security administrator refused the design on first review, and he was right to. Running unattended needs application-level permissions rather than a user session, and as scoped those grant read and write across every mailbox in the tenant. His question: why does a calendar tool for eleven people need access to the CEO's mailbox.",
-          "I had no good answer, which was the useful part. Rather than argue about the likelihood of misuse, I found the mechanism — an access policy restricting the application's mailbox reach to a named group — and came back with the scoped version, the exact membership, and a demonstration that it failed cleanly outside the group. The conversation stopped being about trust and became about a configuration we could both read.",
-          "He approved it with two conditions. The mailbox group is managed by IT, not me, so I cannot widen the service's reach by editing my own config. And every write is logged with actor, target and reason for a year. The second has already paid for itself twice, in incidents that turned out not to be the service's fault."
+          "The IT security administrator refused the design on first review, and he was right to. Unattended operation needs application-level permissions, and as scoped those grant read and write across every mailbox in the tenant. His question: why does a calendar tool for eleven people need access to the CEO’s mailbox.",
+          "I had no good answer, which was the useful part. Rather than argue likelihood of misuse, I found the mechanism — an access policy restricting the application’s reach to a named mailbox group — and came back with the scoped version, demonstrated to fail cleanly outside the group. The conversation stopped being about trust and became a configuration we could both read.",
+          "He approved with two conditions. IT manages the mailbox group, not me, so I cannot widen the service’s reach by editing my own config. And every write is logged with actor, target and reason for a year — a log that has already cleared the service twice, in incidents that were not its fault."
         ]
       },
       {
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A service that scans upcoming Outlook events for a scoped mailbox and ensures a configured Gmail address sees them — adding it as an attendee where the mailbox organises, forwarding where it does not. It also publishes a subscribable feed and reads a Google feed to create opaque busy blocks. Every path previews before it writes, and scheduled runs hold a lock so two never overlap."
+          "A service that scans upcoming Outlook events for a scoped mailbox and ensures a configured Gmail address sees them — added as an attendee where the mailbox organises, forwarded where it does not. It publishes a subscribable feed and reads a Google feed into opaque busy blocks. Every path previews before it writes; scheduled runs hold a lock so two never overlap."
         ],
         "blocks": [
           {
@@ -2024,7 +2024,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "We agreed two failure conditions before build, one absolute: if any private event title reached the Google side, the service would be stopped rather than fixed. The second was that double-bookings had to reach zero within a month. Disclosure was the guardrail throughout — the headline metric here can be met perfectly while the thing that matters fails."
+          "We agreed two failure conditions before build, one absolute: any private title reaching the Google side stops the service rather than triggers a fix. The second: double-bookings reach zero within a month. Disclosure was the guardrail throughout — the headline can be met perfectly while the thing that matters fails."
         ],
         "blocks": [
           {
@@ -2133,7 +2133,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars rather than from complaints. Counting complaints undercounts heavily — the diary showed most clashes were absorbed silently, and only the externally visible ones were reported. The two figures on this page count different things: the headline six a month is the externally visible rate the quarter was prioritised on, while the diary's eleven in a fortnight counts every clash from both calendars, silent ones included. And the Outlook tenant this service reads is the smaller of the group's two — twelve mailboxes — which is why narrowing the credential reads 12 → 1 rather than a company-sized number."
+            "text": "A double-booking means two accepted meetings overlapping by more than five minutes on the same person, counted from both calendars, not complaints — the diary showed most clashes absorbed silently. The two figures on this page count different things: the headline six a month is the externally visible rate the quarter was prioritised on; the diary’s eleven in a fortnight counts every clash, silent ones included. And the Outlook tenant this service reads is the smaller of the group’s two — twelve mailboxes — which is why narrowing the credential reads 12 → 1 rather than a company-sized number."
           },
           {
             "kind": "config",
@@ -2145,8 +2145,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I scoped this as a sync problem for a month before the diary told me it was a disclosure problem, and spent that month designing category filters, selective sync and a preferences page — all assuming people wanted to choose what crossed over. They wanted to be confident nothing did. I only got there because one line in one log mentioned they had stopped sharing calendar links.",
-          "I would also not have built the subscribable feed. It was easy, it is used by two people, and it is the one surface where a misconfiguration could expose a whole calendar to whoever holds the URL — the highest-risk part of the service, earning the least."
+          "I scoped this as a sync problem for a month before the diary told me it was a disclosure problem — a month spent designing category filters and a preferences page, all assuming people wanted to choose what crossed over. They wanted to be confident nothing did. One line in one log got me there: they had stopped sharing calendar links.",
+          "I would also not have built the subscribable feed. It is used by two people, and it is the one surface where a misconfiguration could expose a whole calendar to whoever holds the URL — the highest-risk part of the service, earning the least."
         ]
       }
     ],
