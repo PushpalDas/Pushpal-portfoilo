@@ -7677,7 +7677,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "The chips worked and the dev kits proved the link, and evaluations still died. Reviewing 27 that stalled showed almost none failed on the technology: they failed after the kit worked, when a team had to turn a working link into a wearable and found they had signed up for an antenna-less RF layout problem nobody on staff had done."
+        "text": "The chips worked and the dev kits proved the link, and evaluations still died. Reviewing 27 that stalled showed almost none failed on the technology: they failed after the kit worked, when a team had to turn a working link into a wearable — an antenna-less RF layout problem nobody on staff had done."
       },
       {
         "lead": "What I did.",
@@ -7693,7 +7693,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "By late 2024 the technology objection was answered. The BAN part was in production, the near-field part close behind, and the dev kit reliably produced a working link in a day. What had not moved was conversion: teams impressed in week one were quiet by week ten, consistently enough to be structural rather than bad luck.",
+          "By late 2024 the technology objection was answered: the BAN part in production, the near-field part close behind, the dev kit reliably producing a working link in a day. What had not moved was conversion — teams impressed in week one were quiet by week ten, consistently enough to be structural.",
           "The commercial stake is straightforward. An evaluation that stalls between datasheet and prototype is not a slow design-in, it is a lost one — the engineer who championed us gets reassigned, and the next conversation starts in a colder room. Three options were on the table, scored against the same 27 stalled evaluations."
         ],
         "blocks": [
@@ -7812,7 +7812,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "This is the program where a delivery lens most visibly turns into a product one. The founder owned which markets mattered and why Wi-R belonged in them. I owned the three things that decided what the designs became: which two verticals we built, what “done” meant for a design an OEM could copy, and when it was allowed out.",
+          "This is the program where a delivery lens most visibly turns into a product one. The founder owned which markets mattered and why Wi-R belonged there. I owned what the designs became: which two verticals we built, what “done” meant for a design an OEM could copy, and when it was allowed out.",
           "That last one was the fight. A reference design is finished when someone outside the building reproduces it, not when it works on our bench — so release gated on evidence from partner hardware, putting the date in other people’s hands."
         ],
         "blocks": [
@@ -7876,7 +7876,7 @@
         "body": [
           "The hardware lead did not want the layout published. His objection was not territorial: the electrode geometry and its ground treatment are the part of a Wi-R design that takes real skill, they are not covered by anything we had filed, and publishing them hands a competitor the one thing they cannot reverse-engineer from a datasheet.",
           "I could not argue the risk away, so I argued about what the package was for. A design that withholds the layout answers “does this work”, which the dev kit already answered, and leaves untouched the step where 13 of 27 evaluations died. Held back, it would be a marketing asset with a support cost.",
-          "He agreed, with a condition I had not planned to carry. Every released package ships with the exact validated BOM including tested substitutions, and any change forces a versioned re-release rather than a quiet file swap — a partner building from a stale layout is a support incident that looks like a silicon fault. That obligation is permanent and has no owner outside my program."
+          "He agreed, with one condition. Every released package ships with the exact validated BOM including tested substitutions, and any change forces a versioned re-release rather than a quiet file swap — a partner building from a stale layout is a support incident that looks like a silicon fault. The obligation is permanent, and it has no owner outside my program."
         ]
       },
       {
@@ -8053,7 +8053,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "An active evaluation is one where a named engineer has requested design files and has hardware on order or in hand. Teams holding a dev kit without a project, and teams that have only asked for pricing, are excluded — both were counted before this program and both inflated the number while explaining none of the conversion. The nine period design-ins are the same nine on the dev-kit page; six cite a reference design, so the figures overlap by construction and must not be added."
+            "text": "An active evaluation is one where a named engineer has requested design files and has hardware on order or in hand. Teams holding a dev kit without a project, or that only asked for pricing, are excluded — both were counted before this program, inflating the number while explaining none of the conversion. The nine period design-ins are the same nine on the dev-kit page; six cite a reference design, so the figures overlap by construction and must not be added."
           },
           {
             "kind": "config",
@@ -8065,7 +8065,7 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I gated release on an outside rebuild, then chose the outside team from people who already liked us. Both first rebuilds succeeded, which felt like validation and was closer to a formality — a team already invested pushes through ambiguity a neutral one would file as a defect. The gate was right and the sample was flattering; I would now insist the rebuild come from an evaluation that had not yet committed.",
+          "I gated release on an outside rebuild, then chose the outside team from people who already liked us. Both first rebuilds succeeded — which felt like validation and was closer to a formality, because a team already invested pushes through ambiguity a neutral one would file as a defect. The gate was right, the sample flattering; the rebuild should come from an evaluation not yet committed.",
           "I would also have published the mechanical guidance as a first-class file rather than notes inside the layout package. Electrode placement in an enclosure is the second-largest stall cause, and it sits in a document people open after making the mistake."
         ]
       }
