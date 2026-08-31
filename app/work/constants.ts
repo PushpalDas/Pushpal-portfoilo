@@ -82,7 +82,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
-		image: 'ixana-wiki-search.jpg',
+		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
 		tier: 1,
 		demoUrl: 'https://xana-nine.vercel.app/',
@@ -130,7 +130,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.',
-		image: 'demo-card-neuroadapt.jpg',
+		image: 'Gemini_Generated_Image_xejg8vxejg8vxejg.png',
 		href: 'https://drive.google.com/drive/u/0/folders/1B0mtA9-xkNbbo6ZUXztuHZiMmlovNtLw',
 		demoUrl: '/demo/neuroadapt',
 		slug: 'neuroadapt-agentic-rag-engine-for-neuroscience-research',
@@ -196,7 +196,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.',
-		image: 'demo-card-quantum-simulator.jpg',
+		image: 'Gemini_Generated_Image_dafj5odafj5odafj.png',
 		slug: 'quantum-circuit-simulator-interactive-10-qubit-delivering-re',
 		tier: 3,
 		demoUrl: '/demo/quantum-simulator',
@@ -212,7 +212,7 @@ export const workItems: WorkItem[] = [
 		status: 'customer-testing',
 		outcome:
 			'In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.',
-		image: 'demo-card-procurement-desk.jpg',
+		image: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
 		slug: 'procurement-orchestrator-procurement-process-automation-with',
 		tier: 2,
 		demoUrl: '/demo/procurement-desk',
@@ -294,7 +294,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'One engine produces the weekly, monthly and quarterly performance report for all five delivery teams — four of which had no standing report at all.',
-		image: 'demo-card-team-performance.jpg',
+		image: 'Image__14_.jpg',
 		slug: 'team-performance-reporting',
 		tier: 2,
 		demoUrl: '/demo/team-performance',
@@ -310,7 +310,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Standup, backlog and burndown now read from the same task data instead of three separately maintained views.',
-		image: 'demo-card-scrum-desk.jpg',
+		image: 'Image__15_.jpg',
 		slug: 'ixana-scrum-ecosystem',
 		tier: 2,
 		demoUrl: '/demo/scrum-desk',
@@ -326,7 +326,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.',
-		image: 'ixana-flow-pipeline.jpg',
+		image: 'Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png',
 		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 		tier: 1,
 		demoUrl: 'https://xana-nine.vercel.app/efficiency?view=tracker',
@@ -342,7 +342,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.',
-		image: 'demo-card-clickup-audit.jpg',
+		image: 'Image__16_.jpg',
 		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
 		tier: 2,
 		demoUrl: '/demo/clickup-audit',
@@ -389,7 +389,7 @@ export const workItems: WorkItem[] = [
 		status: 'customer-testing',
 		outcome:
 			'In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.',
-		image: 'demo-card-salary-bands.jpg',
+		image: 'Image__17_.jpg',
 		slug: 'ai-salary-generator',
 		tier: 2,
 		href: 'https://www.ixana.ai/products',
@@ -406,7 +406,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner\'s work, enforced in code, and unknowns stop the pipeline instead of being papered over.',
-		image: 'demo-card-prd-os.jpg',
+		image: 'Gemini_Generated_Image_6dagw16dagw16dag.png',
 		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
 		tier: 2,
 		demoUrl: '/demo/prd-os',
@@ -422,7 +422,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.',
-		image: 'demo-card-ai-lawyer.jpg',
+		image: 'Gemini_Generated_Image_1i9ozk1i9ozk1i9o.png',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		tier: 1,
 		demoUrl: '/demo/ai-lawyer',
@@ -438,7 +438,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.',
-		image: 'demo-card-clickup-gantt.jpg',
+		image: 'Gemini_Generated_Image_h59yuyh59yuyh59y.png',
 		slug: 'ai-pm-customized-multi-view-for-pms',
 		tier: 2,
 		demoUrl: '/demo/clickup-gantt',
@@ -578,7 +578,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.',
-		image: 'demo-card-radar.jpg',
+		image: 'Gemini_Generated_Image_wzokgjwzokgjwzok.png',
 		slug: 'ricky-kids-uav-weather-radar-calibration',
 		tier: 3,
 		demoUrl: '/demo/radar-error-budget',
@@ -595,7 +595,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.',
-		image: 'demo-card-covid-bench.jpg',
+		image: 'Gemini_Generated_Image_fpkpjsfpkpjsfpkp.png',
 		slug: 'ricky-kids-noncontact-covid-monitoring',
 		tier: 3,
 		demoUrl: '/demo/covid-bench',
@@ -612,7 +612,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.',
-		image: 'demo-card-rider-count.jpg',
+		image: 'Gemini_Generated_Image_6d6qur6d6qur6d6q.png',
 		slug: 'ricky-kids-triple-riding-avoidance',
 		tier: 1,
 		demoUrl: '/demo/rider-count',
@@ -629,7 +629,7 @@ export const workItems: WorkItem[] = [
 		status: 'prototype',
 		outcome:
 			'Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.',
-		image: 'demo-card-autism-bench.jpg',
+		image: 'Screenshot_2026-07-06_161758.png',
 		slug: 'ricky-kids-toys-for-autistic-kids',
 		tier: 3,
 		demoUrl: '/demo/autism-bench',
@@ -646,7 +646,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.',
-		image: 'demo-card-sludge.jpg',
+		image: 'Gemini_Generated_Image_gx3u69gx3u69gx3u.png',
 		slug: 'ricky-kids-sludge-traversing-rov',
 		tier: 3,
 		demoUrl: '/demo/sludge-envelope',
@@ -870,7 +870,7 @@ export const workItems: WorkItem[] = [
 		status: 'research',
 		outcome:
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
-		image: 'demo-card-envi-city.jpg',
+		image: 'Gemini_Generated_Image_orqf1borqf1borqf.png',
 		slug: 'ricky-kids-envi-city',
 		tier: 3,
 		demoUrl: '/demo/envi-city',

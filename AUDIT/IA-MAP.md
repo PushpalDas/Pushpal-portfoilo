@@ -45,3 +45,9 @@ there as the program's research spike (renders in Tier 1).
 ## Count integrity
 Distribution stays truthful: 37 products + 17 builds; the program head is an overview card
 (programHead flag) and is not counted as a 38th product in exports or stats.
+
+
+> **2026-08-31, author decision (2):** card images reverted to the original placeholder art
+> (18 cards; the demo-card-*.jpg captures remain on disk and the in-page case-study screenshots
+> remain the fresh captures of the redesigned demos). Work-page header subline rewritten to the
+> stats-forward summary + the "what does Demo mean here" note (disclosure folded in, not removed).

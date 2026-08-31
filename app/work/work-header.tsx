@@ -39,13 +39,21 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 						</h1>
 						<div className='work-header-subline-wrap'>
 							<p className='work-header-subline'>
-								Product manager with an engineering background — body area
-								network silicon, RAG platforms, and internal tools. Three
-								shipped commercially.
+								Product manager with an engineering background. Thirty-seven
+								products across silicon and AI — ten in production, fourteen
+								shipped internally, two in customer pilots, eleven research
+								studies and prototypes — plus seventeen early engineering
+								builds, a peer-reviewed paper, and fifty-plus patent filings
+								owned end to end.
 							</p>
 							<p className='work-header-sample-note'>
-								Sample portfolio — figures on the cards and case study pages are
-								invented placeholders, and screens are recreations.
+								“Demo” means different things here, deliberately: sometimes
+								the deployed platform itself, sometimes an interactive
+								recreation running on invented data, sometimes a public spec
+								page or a video — and for the research work, the demo is the
+								paper. Every card says which; and wherever a figure is an
+								invented placeholder for this public sample, the page says
+								that too, in the same breath.
 							</p>
 						</div>
 					</div>
