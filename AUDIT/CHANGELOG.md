@@ -12,3 +12,4 @@ Format: `[project] [file] [what] [why → finding ref]`, in commit order.
 - [P4] data/case-studies-v2.json + app/work/constants.ts — spot-check set stated; card "down from 17" → F/P4.
 - [P5] data/case-studies-v2.json — blocking-at-triage clause → F/P5.
 - [note] commit c0af636 also carried the author's pre-staged changes (app/lets-connect/*, deletion of public/static/images/project/ixana-ams-*.jpg) and their uncommitted edits to the two source files; audited tree is the working tree by design.
+- [FINAL] recaptures + QA + LAUNCH-READINESS committed (6e2c560); author work checkpointed; xana repo patched locally at Changes-archive/dummy e056966 (push = AC-XANA).
