@@ -11078,7 +11078,7 @@
           },
           {
             "kind": "para",
-            "text": "With the GNSS module already in our own component list, positioning contributes about 1.4 dB against a 0.5 dB pass mark. The method fails as we proposed it — and that is the finding, because it arrived before anyone had bought a motor. What it changed: a precise-point-positioning solution became the first deliverable rather than a supporting detail, and the aerodynamic work the team wanted to start on moved behind it."
+            "text": "With the GNSS module already in our own component list, positioning contributes about 1.4 dB against a 0.5 dB pass mark. The method fails as proposed — and that is the finding, because it arrived before anyone had bought a motor. What it changed: precise-point positioning became the first deliverable, and the aerodynamic work the team wanted to start on moved behind it."
           },
           {
             "kind": "para",
@@ -11099,7 +11099,7 @@
         "num": "06",
         "heading": "What we'd do differently",
         "body": [
-          "We decomposed four experiments because four was what we could get full enough error reporting from, and that is a thin base for a conclusion we let redirect the whole programme. Three of the four came from the same research lineage, so their agreement is weaker evidence than it looks — a point we did not press, because the answer was one we liked.",
+          "We decomposed four experiments because four was what we could get full error reporting from — a thin base for a conclusion we let redirect the whole programme. Three of the four share a research lineage, so their agreement is weaker evidence than it looks; we did not press the point, because the answer was one we liked.",
           "We would also have written the pass mark into the proposal. It shaped everything and appears nowhere in what we submitted, so reviewers saw a plan to build a drone rather than a hypothesis with a stated way to fail."
         ]
       }
