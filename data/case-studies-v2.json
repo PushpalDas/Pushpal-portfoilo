@@ -9389,15 +9389,15 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Facilities that run on physical keys — data-centre halls, plants, commercial estates, substations — control them with a board on a wall and a register on a clipboard. Reading twelve months of those pages against the actual key sets, a third of rows named nobody legible."
+        "text": "Facilities that run on physical keys — data-centre halls, plants, commercial estates, substations — control them with a wall board and a clipboard register. Reading twelve months of those pages against the actual key sets, a third of rows named nobody legible."
       },
       {
         "lead": "What I did.",
-        "text": "I owned WishKey end to end as an engineer: an electronic cabinet where each slot locks and reports independently, so a key cannot leave without an event that names an authenticated person. The design decision that carries the product is per-slot locking rather than one locked door."
+        "text": "I owned WishKey end to end as an engineer: an electronic cabinet where each slot locks and reports independently, so a key cannot leave without an event that names an authenticated person. The carrying design decision is per-slot locking rather than one locked door."
       },
       {
         "lead": "Result.",
-        "text": "The design decision that carries the product is per-slot locking: a key cannot leave without an event naming an authenticated person, because the record is a side effect of the act rather than a form beside it. It ships as a catalogue product through installer partners, fully useful with nothing else installed. The deployment and audit figures below are the worked example."
+        "text": "A key cannot leave without an event naming an authenticated person, because the record is a side effect of the act rather than a form beside it. It ships as a catalogue product through installer partners, fully useful with nothing else installed. The deployment and audit figures below are the worked example."
       }
     ],
     "sections": [
@@ -9405,7 +9405,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The cost of a lost key is never the key. It is rekeying every lock that key opened, the site running degraded until that finishes, and an audit finding that says you could not name who held it. The segments carrying this hardest are the ones where a key opens something regulated.",
+          "The cost of a lost key is never the key. It is rekeying every lock that key opened, the site running degraded until that finishes, and an audit finding saying you could not name who held it. The segments carrying this hardest are those where a key opens something regulated.",
           "Three products could have addressed it. I scored them on one thing — the share of key-removal events that would produce an attributable record without somebody choosing to write one. A control that works only when people comply is not a control."
         ],
         "blocks": [
@@ -9447,7 +9447,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I interviewed facility managers and the installers who service their sites, then sat with twelve months of paper key-register pages from six pilot sites and counted the rows that could not be resolved to a person, a key, or a return."
+          "I interviewed facility managers and the installers who service their sites, then sat with twelve months of paper key-register pages from six pilot sites, counting rows that could not be resolved to a person, a key, or a return."
         ],
         "blocks": [
           {
@@ -9529,8 +9529,8 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "My title was senior embedded design engineer. The CTO owned the commercial relationships — the installer channel, pricing, which enquiries we chased — and I owned the product end to end from requirements through schematic, board, firmware, enclosure and production handoff. The product-definition work was mine without the title that usually comes with it.",
-          "The decision everything else follows from is per-slot locking. A cabinet with one locked door is far cheaper and gives you a door audit: it tells you a person opened the cabinet, not which key they walked away with."
+          "My title was senior embedded design engineer. The CTO owned the commercial relationships — the installer channel, pricing, which enquiries we chased — and I owned the product from requirements through schematic, board, firmware, enclosure and production handoff. The product-definition work was mine without the title.",
+          "The decision everything else follows from is per-slot locking. A cabinet with one locked door is far cheaper and gives you a door audit: a person opened the cabinet — not which key left with them."
         ],
         "blocks": [
           {
@@ -9584,7 +9584,7 @@
           },
           {
             "kind": "para",
-            "text": "Fingerprint authentication was the hardest cut and the one every prospect asked about. It failed on the population: our sites run shift workers and contractors with dirty, wet or damaged fingertips, often in gloves, and a false reject at the cabinet does not degrade gracefully — it sends someone to the mechanical override or to propping the door, which is precisely the behaviour we were selling against. What covers the gap is an employee RFID card plus a PIN, and the anti-smash seal so a returned tag cannot be a decoy. The honest cost is that the trail attributes to a card and a PIN, not to a face."
+            "text": "Fingerprint authentication was the hardest cut and the one every prospect asked about. It failed on the population: our sites run shift workers and contractors with dirty, wet or damaged fingertips, often gloved, and a false reject at the cabinet does not degrade gracefully — it sends someone to the mechanical override or to propping the door, precisely the behaviour we were selling against. An employee RFID card plus PIN covers the gap, with the anti-smash seal so a returned tag cannot be a decoy. The honest cost: the trail attributes to a card and a PIN, not a face."
           }
         ]
       },
@@ -9592,9 +9592,9 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The installer partner who would actually commission these at customer sites read my prerequisites list and refused to carry the product. His objection was correct. The list asked the customer for a Linux server, two network points, directory synchronisation, an SSO endpoint and a mail relay before a cabinet would work. His crews are electricians. Every one of those lines was a site visit ending in a phone call to somebody's IT department, and the delay would be blamed on the box with our name on it.",
-          "I had been defending the list feature by feature, which was the wrong argument, because each item genuinely earned its place. So I took his frame instead: the question is not whether an integration is valuable, it is what the cabinet must do on the day it is bolted to a wall. I recut the requirements so full audit capability depends on nothing outside the cabinet, and every integration became optional and post-commissioning.",
-          "He agreed, then asked for something I had not planned to build. Commissioning had to be signable on the spot, so the cabinet itself produces the acceptance report his foreman hands the customer, from its own local store, before any server exists. We carry a local log and report generator permanently, duplicating what the server does — a standing maintenance cost, and the two will drift if nobody watches them."
+          "The installer partner who would commission these at customer sites read my prerequisites list and refused to carry the product — correctly. The list asked the customer for a Linux server, two network points, directory synchronisation, an SSO endpoint and a mail relay before a cabinet would work. His crews are electricians: every line was a site visit ending in a call to somebody’s IT department, and the delay would be blamed on the box with our name on it.",
+          "I had been defending the list feature by feature — the wrong argument, because each item genuinely earned its place. His frame was better: not whether an integration is valuable, but what the cabinet must do the day it is bolted to a wall. I recut the requirements so full audit capability depends on nothing outside the cabinet; every integration became optional and post-commissioning.",
+          "He agreed, then asked for something I had not planned. Commissioning had to be signable on the spot, so the cabinet itself produces the acceptance report his foreman hands the customer, from its own local store, before any server exists. We permanently carry a local log and report generator duplicating the server — a standing maintenance cost, and the two drift if nobody watches."
         ]
       },
       {
@@ -9679,7 +9679,7 @@
         "num": "08",
         "heading": "Impact and outcomes",
         "body": [
-          "We agreed before build that this failed if any key could leave a cabinet without an event record naming either an authenticated user or a witnessed override. Unattributed removals are the guardrail rather than the headline, because everything else here improves by making release easier, and making release easier is how you lose the record."
+          "We agreed before build that this failed if any key could leave a cabinet without an event record naming either an authenticated user or a witnessed override. Unattributed removals are the guardrail rather than the headline, because everything else here improves by making release easier, and easier release is how you lose the record."
         ],
         "blocks": [
           {
@@ -9789,7 +9789,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. It excludes emergency mechanical overrides, which are recorded, witness-signed and reported separately — they are a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know exactly who has the key, which is a different failure from not knowing. Keys under management counts keys, not slots — a slot holds one tagged bunch, and the 660 slot positions across the 22 cabinets carry an average of about five keys per bunch, which is how 3,420 keys sit behind 660 locks. Mechanically, an unattributed removal is a slot that reports tag-out with no authenticated session open at the terminal — a slot forced, or released during a fault window — logged with timestamp and slot number but no user to charge it to."
+            "text": "Unaccounted-key rate is the share of key-removal events with no attributable authenticated user. Emergency mechanical overrides are excluded — recorded, witness-signed and reported as a tile above rather than a footnote, because excluding a category quietly is how a guardrail stops meaning anything. Late returns count as attributed: we know who has the key, a different failure from not knowing. Keys under management counts keys, not slots — a slot holds one tagged bunch averaging about five keys, which is how 3,420 keys sit behind 660 locks across 22 cabinets. Mechanically, an unattributed removal is a slot reporting tag-out with no authenticated session open — forced, or released in a fault window — logged with timestamp and slot but no user to charge."
           },
           {
             "kind": "config",
@@ -9801,8 +9801,8 @@
         "num": "09",
         "heading": "What I'd do differently",
         "body": [
-          "I treated late returns as somebody else's problem because the guardrail was attribution, and the chart above is the bill for that. The cabinet knows who holds every overdue key and does nothing with it beyond a report a manager has to go and read. A nudge at the point the key is due was a small piece of work I never scheduled, because it did not fit the metric I had chosen.",
-          "I would also have designed the mechanical override to be self-evidencing rather than procedural. Today it is a real key and a witness signature on paper, which reintroduces the exact weakness the product exists to remove. A seal on the override lock, logged when broken, would have cost very little and closed the last honest gap in the trail."
+          "I treated late returns as somebody else’s problem because the guardrail was attribution, and the chart above is the bill. The cabinet knows who holds every overdue key and does nothing beyond a report a manager has to go and read. A nudge when a key falls due was small work I never scheduled, because it did not fit the metric I had chosen.",
+          "I would also have made the mechanical override self-evidencing rather than procedural. Today it is a real key and a witness signature on paper — the exact weakness the product exists to remove. A seal on the override lock, logged when broken, would have cost little and closed the last honest gap in the trail."
         ]
       }
     ],
