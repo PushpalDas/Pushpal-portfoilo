@@ -359,3 +359,19 @@ run: scratchpad/capture-xana.mjs).
   …/1XhqFiIQ… (P37 card href) 302 to a Google sign-in — a reviewer hits a login wall.
   **AUTHOR-CONFIRM AC-DRIVE:** set both folders to "anyone with the link can view", or drop the
   links. Left in place (they may be intentionally semi-private); flagged for launch.
+
+---
+
+# AUTHOR CONFIRMATIONS — 2026-09-01 (elevation-run session)
+
+- **AC-XANA — RESOLVED.** Author pushed Changes-archive/dummy; origin/main = e056966; Vercel
+  redeploy verified live (meetingrecordings serves the authored subtitle). Remaining follow-up:
+  one run of scratchpad/capture-xana.mjs against the live app to confirm screenshots.
+- **AC-DRIVE — RESOLVED.** Author set both folders (P6 NeuroAdapt 1B0mtA9-..., P37 ENVI-City
+  1XhqFiIQ...) to anyone-with-link viewer; verified via permissions API and anonymous fetch.
+- **AC-7 — CONFIRMED: keep announcement-anchored figures.** The XA-NFE3001 page stays at the
+  Feb 2026 announcement values (20 Mbit/s PHY / 13.5 goodput / <0.2 ms / <6 mW); the live
+  page's newer 30 Mbit/s bin is not adopted.
+- **AC-12 — CONFIRMED.** The WishKey key-bunch model (~5 keys per tagged bunch behind 660
+  slots, 3,420 keys total) stands as the page's configuration.
+- **AC-P26-50 — CONFIRMED.** "50+ filings" stands as a real career-scope fact, Class B.

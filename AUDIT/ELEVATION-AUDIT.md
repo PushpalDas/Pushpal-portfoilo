@@ -80,8 +80,14 @@ external URL was altered anywhere else.
 
 ## Open items — all AUTHOR-CONFIRM, carried from AUDIT/FINDINGS.md, not defects of this run
 
-AC-7 (NFE3001 live page shows a newer 30 Mbit/s bin) · AC-8 (P8 announcement link) · AC-3b
-(Ixana-Wiki GitHub href) · AC-9/12/14/20/28/29/31 (per-page one-line questions).
+AC-8 (P8 announcement link — restore only if a real URL exists) · AC-3b (Ixana-Wiki GitHub
+href — restore only if the repo is private/renamed) · AC-ENV (LogRocket id / umami env in
+prod) · AC-9/14/28/29 (ship-as-declared defaults, standing) · AC-20/31 (optional demo
+proposals, not built by default).
+
+**Confirmed by the author 2026-09-01** (logged in FINDINGS "AUTHOR CONFIRMATIONS"): AC-7 keep
+announcement-anchored NFE3001 figures · AC-12 WishKey bunch model stands · AC-P26-50 "50+
+filings" stands as a real career fact.
 
 **AC-XANA — RESOLVED 2026-09-01.** The author pushed Changes-archive/dummy to
 github.com/PushpalDas/xana: origin/main now at e056966 ("Parity with the case studies"),
