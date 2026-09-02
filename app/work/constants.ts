@@ -374,7 +374,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		outcome:
 			'Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.',
-		image: 'Gemini_Generated_Image_18w83818w83818w8.png',
+		image: 'Gemini_Generated_Image_s97ql7s97ql7s97q.png',
 		slug: 'calendar-automation-real-time-bi-directional-sync-engine-wit',
 		demoUrl: '/demo/calendar-sync',
 		tier: 2,
