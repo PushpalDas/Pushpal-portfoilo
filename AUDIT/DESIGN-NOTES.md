@@ -205,3 +205,15 @@
 - `coupled-loop` — water, power and waste as one loop · the vision's three elements read together · kept (the 1 of 11)
 
 Audit flags sum to the case study's funnel: 7 mechanisms (solar, vawt, purifiers, em, losses, flood, loop), 4 quantifiable (solar, vawt, losses, loop), 1 block-testable (loop); verdicts reproduce the case study's five-row table exactly, and every reason line is its wording. `?layer=<energy|air|network|water|waste>` opens with that layer isolated; both params documented in the page footer.
+
+---
+
+## P20 — Calendar sync (Tier B) · /demo/calendar-sync · added 2026-09-02 (author-ordered AC-20 override)
+
+**Identity (3 lines).** A restraint console in the XANA family: the front door is not a calendar but the dry-run preview - a per-event action table whose badges (add attendee / forward / busy create-update-delete / skip) ARE the product argument, with the GET /status panel rendered as an endpoint response in Geist Mono because the case study promises "an endpoint, not a log file". The mirror view puts the two tenants side by side so the opaque-block thesis is visible as typography: titled personal events on the Google column, bare orange-edged "Busy" blocks on the Outlook column with a "no detail" chip. Scope and Write log are the governance surfaces: a 12-mailbox roster with one policy-group member, a verbatim 403 refusal panel, and a ledger whose two amber incident rows carry the "cleared the service twice" story.
+
+**Tokens.** Ground #0E0805, surfaces #1A1410/#221A14/#2A2420, deep #140F0B; borders #3A3028 (hover #5A4838, hairline #2A2018); text #FFFFFF/#E8E0D8/#C0B6AC/#8A7E72; accent #FF6321 + soft #FF8A56 + CD3D00-FF6321 gradient on the app tile only; semantic #22C55E/#FFB020/#EF4444 as 35-45% borders over ~9% washes; forward badges take the house #8B5CF6 info purple. Geist/Geist Mono (Arial/ui-monospace fallbacks), 13px workhorse, 10px 0.14em uppercase mono kickers, tabular-nums on every time and count; radii 8/12/16 + pills; motion 200ms + 0.32s rise on cubic-bezier(0.16,1,0.3,1), zeroed under prefers-reduced-motion.
+
+**Signature interaction.** Apply is the second step by construction: the preview renders first, "Apply 8 writes" flips each row to "written" and appends eight actor/target/reason rows to the write log (view 04), demonstrating dry-run-as-default and the ledger in one gesture. On the mirror, selecting either half of a pair (?ev=g-dentist) highlights both and explains what did NOT cross; on scope, pressing any mailbox fires the same read - one 200, eleven verbatim 403s (?try=ceo deep-links the refusal).
+
+**Deliberate omissions.** No XANA wordmark or icon rail; no shadows (border+surface elevation, toast excepted); the gradient never touches buttons (solid #FF6321 with near-black ink, AA); no chart - the numbers on this page are counters, not series, and the case study's S08 chart stays page-side; no light theme. Invariants held: no real names/companies, no event title ever rendered on a Busy block, guardrail "0 titles crossed" pinned in the chrome, all four case-study callout states rendered verbatim, params view/ev/try validated with clean fallbacks.

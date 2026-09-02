@@ -1750,7 +1750,7 @@
       "timeline": "Apr – Aug 2025",
       "stage": "Live for the affected group"
     },
-    "confidentiality": "Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.",
+    "confidentiality": "Internal service — the screens in section 06 are a working recreation on an invented week, and every figure on this page is an invented placeholder for this sample. No real calendar content appears anywhere: every person, mailbox, event and time in the demo is made up.",
     "summary": [
       {
         "lead": "Problem.",
@@ -1961,7 +1961,6 @@
         "blocks": [
           {
             "kind": "shot",
-            "placeholder": "Dry-run preview output for a scheduled sync, recreated as a console view — with numbered callout arrows drawn on top",
             "callouts": [
               {
                 "lead": "The preview names the action per event, not per run.",
@@ -1980,7 +1979,38 @@
                 "text": "The person who needs to know whether last night's sync ran is not going to read a server log, and if checking is hard the checking stops."
               }
             ],
-            "note": "Recreated from the service's own output. Structure and fields are accurate; all event names, addresses and times shown are invented. Happy to walk through the real service in a conversation."
+            "note": "Recreated from the service’s own output as a working demo, on an invented week. Structure, fields, rules and the two write paths are the real ones; every event name, address and time shown is invented. Happy to walk through the real service in a conversation.",
+            "image": "/static/images/project/ixana-calsync-dryrun.jpg",
+            "href": "/demo/calendar-sync?view=dryrun",
+            "hrefLabel": "Open this preview in the demo and apply the writes",
+            "alt": "A dry-run console for the 06:00 scheduled run: a per-event action table with badges for attendee patches, forwards, opaque busy blocks and skips with stated reasons, an Apply button that has not been pressed, and a GET /status panel showing the run outcome as an endpoint response"
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-calsync-mirror.jpg",
+                "href": "/demo/calendar-sync?view=mirror&ev=g-dentist",
+                "hrefLabel": "Open the mirror on this pair",
+                "label": "The mirror, on the pair that makes the argument",
+                "caption": "A dental appointment on the Google side; on the Outlook side, a block reading “Busy” and nothing else — no title, no attendees, not even which calendar it came from. Outlook meetings travel the other way as ordinary invites, sent by the meeting’s own organiser mechanics, never written by the service."
+              },
+              {
+                "image": "/static/images/project/ixana-calsync-scope.jpg",
+                "href": "/demo/calendar-sync?view=scope&try=ceo",
+                "hrefLabel": "Try to read the CEO’s mailbox",
+                "label": "The scope, failing cleanly",
+                "caption": "Twelve mailboxes in the tenant, one inside the IT-managed policy group. Attempting any other returns the verbatim 403 before anything is read — the demonstration that ended the argument in section 05, kept as a screen anyone can press."
+              },
+              {
+                "image": "/static/images/project/ixana-calsync-log.jpg",
+                "href": "/demo/calendar-sync?view=log",
+                "hrefLabel": "Open the write log",
+                "label": "The write log",
+                "caption": "Every write with actor, target and reason, retained twelve months — the condition IT security added at approval. The two amber rows are the incident reviews the log has already answered: both traced to something a person had done, not the service."
+              }
+            ],
+            "note": "Three surfaces of the same demo on the same invented week. Each is the state its own link opens."
           }
         ]
       },
@@ -2150,7 +2180,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal service. The screens in section 06 are the running demo on an invented week, and all figures on this page are invented placeholders for this sample. No real calendar content is shown — every event, name, address and time is made up for publication. I’m glad to walk through the real service and the underlying numbers in a conversation.",
     "fast": {
       "pull": "On a product where every write sends email, the interesting decisions are all refusals.",
       "facts": [
@@ -2167,7 +2197,17 @@
           "cls": "A"
         }
       ]
-    }
+    },
+    "evidence": [
+      {
+        "label": "Open the working demo — the dry-run console, the mirror, the scope and the write log",
+        "url": "/demo/calendar-sync"
+      },
+      {
+        "label": "Or start at the credential scope, and try a mailbox outside it",
+        "url": "/demo/calendar-sync?view=scope&try=ceo"
+      }
+    ]
   },
   "team-performance-reporting": {
     "slug": "team-performance-reporting",

@@ -11,7 +11,7 @@ Last updated: 2026-09-01 · Session: 1 · Model: Claude Fable 5 · Branch: feat/
 - Git: %LOCALAPPDATA%\Programs\Git\cmd (NOT on PATH); never `git add -A` (OneDrive placeholders); repo config carries longpaths + appendAtomically=false.
 
 ## NEXT_ACTION
-none — run complete.
+none — run complete. (Post-run addendum 2026-09-02: the author explicitly overrode the "ND — hard" rule for Calendar sync and ordered a demo — built at /demo/calendar-sync with four captures, case study §06/evidence wired, all gates green; see CHANGELOG "[E-P20]" and ELEVATION-AUDIT row 20. The author's project source + base.apk live at Changes-archive/calendar-sync-source/, moved out of public/ so nothing real is web-served; left untracked like the rest of Changes-archive.)
 
 ## COMPLETION SUMMARY (what a reviewer should read, in order)
 1. AUDIT/ELEVATION-AUDIT.md — Phase-5 alignment matrix, all green, per-project verdicts.

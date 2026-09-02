@@ -1,6 +1,6 @@
 # Product Portfolio — Pushpal Das (full case-study export)
 
-_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-09-01. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
+_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-09-02. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
 
 ## How to read this
 
@@ -3143,6 +3143,7 @@ I would also set the cache differently. Five minutes protected an API quota with
 | Team | 1 engineer, with IT security as reviewer |
 | Timeline | Apr – Aug 2025 |
 | Stage | Live for the affected group |
+| Link | /demo/calendar-sync |
 
 **Positioning.** Kept Outlook and Gmail calendars in step for people living in both, without letting a single private event title cross between them.
 
@@ -3154,7 +3155,12 @@ I would also set the cache differently. Five minutes protected an API quota with
 
 **Result.** No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all. Every path previews before it writes, one bad write can only touch one occurrence, and the credential was narrowed to the single mailbox it needs. The double-booking counts below are the worked example.
 
-> **Confidentiality.** Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.
+**Evidence / demos**
+
+- [Open the working demo — the dry-run console, the mirror, the scope and the write log](/demo/calendar-sync)
+- [Or start at the credential scope, and try a mailbox outside it](/demo/calendar-sync?view=scope&try=ceo)
+
+> **Confidentiality.** Internal service — the screens in section 06 are a working recreation on an invented week, and every figure on this page is an invented placeholder for this sample. No real calendar content appears anywhere: every person, mailbox, event and time in the demo is made up.
 
 #### 01. Why this, and why now
 
@@ -3229,12 +3235,24 @@ He approved with two conditions. IT manages the mailbox group, not me, so I cann
 
 A service that scans upcoming Outlook events for a scoped mailbox and ensures a configured Gmail address sees them — added as an attendee where the mailbox organises, forwarded where it does not. It publishes a subscribable feed and reads a Google feed into opaque busy blocks. Every path previews before it writes; scheduled runs hold a lock so two never overlap.
 
+**Interface — A dry-run console for the 06:00 scheduled run: a per-event action table with badges for attendee patches, forwards, opaque busy blocks and skips with stated reasons, an Apply button that has not been pressed, and a GET /status panel showing the run outcome as an endpoint response**
+
+[Open this preview in the demo and apply the writes](/demo/calendar-sync?view=dryrun)
+
 - **The preview names the action per event, not per run.** A run-level summary hides the one event you would have objected to, which is the only reason to look at a preview at all.
 - **Reflected busy blocks show as "Busy" with no source.** Even naming the source calendar tells a colleague which of your two lives an appointment belongs to. The block says only that the time is gone.
 - **Skipped events state why they were skipped.** Silent skips were the failure mode of the manual habit this replaced — people did not notice what they had forgotten to forward.
 - **Job status is an endpoint, not a log file.** The person who needs to know whether last night's sync ran is not going to read a server log, and if checking is hard the checking stops.
 
-_Recreated from the service's own output. Structure and fields are accurate; all event names, addresses and times shown are invented. Happy to walk through the real service in a conversation._
+_Recreated from the service’s own output as a working demo, on an invented week. Structure, fields, rules and the two write paths are the real ones; every event name, address and time shown is invented. Happy to walk through the real service in a conversation._
+
+**Gallery**
+
+- **The mirror, on the pair that makes the argument** — [Open the mirror on this pair](/demo/calendar-sync?view=mirror&ev=g-dentist)  A dental appointment on the Google side; on the Outlook side, a block reading “Busy” and nothing else — no title, no attendees, not even which calendar it came from. Outlook meetings travel the other way as ordinary invites, sent by the meeting’s own organiser mechanics, never written by the service.
+- **The scope, failing cleanly** — [Try to read the CEO’s mailbox](/demo/calendar-sync?view=scope&try=ceo)  Twelve mailboxes in the tenant, one inside the IT-managed policy group. Attempting any other returns the verbatim 403 before anything is read — the demonstration that ended the argument in section 05, kept as a screen anyone can press.
+- **The write log** — [Open the write log](/demo/calendar-sync?view=log)  Every write with actor, target and reason, retained twelve months — the condition IT security added at approval. The two amber rows are the incident reviews the log has already answered: both traced to something a person had done, not the service.
+
+_Three surfaces of the same demo on the same invented week. Each is the state its own link opens._
 
 #### 07. Tradeoffs
 
@@ -3280,7 +3298,7 @@ I scoped this as a sync problem for a month before the diary told me it was a di
 
 I would also not have built the subscribable feed. It is used by two people, and it is the one surface where a misconfiguration could expose a whole calendar to whoever holds the URL — the highest-risk part of the service, earning the least.
 
-> **Note on this sample.** This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.
+> **Note on this sample.** This is an internal service. The screens in section 06 are the running demo on an invented week, and all figures on this page are invented placeholders for this sample. No real calendar content is shown — every event, name, address and time is made up for publication. I’m glad to walk through the real service and the underlying numbers in a conversation.
 
 ---
 

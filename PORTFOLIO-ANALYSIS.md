@@ -1,6 +1,6 @@
 # Portfolio — complete analysis export
 
-_Every product in the portfolio at maximum available depth, compiled from the repository on 2026-09-01. Regenerate with `python scripts/export-analysis.py`._
+_Every product in the portfolio at maximum available depth, compiled from the repository on 2026-09-02. Regenerate with `python scripts/export-analysis.py`._
 
 ## Scope
 
@@ -43,7 +43,7 @@ _Every product in the portfolio at maximum available depth, compiled from the re
 | 17 | Flow Tracker — real-time delivery pipeline diagnostics | Ixana | 2026 | ai | internal | Engineering ops | yes | external |
 | 18 | ClickUp Activity Tracker — task change audit trail | Ixana | 2026 | ai | internal | Audit tooling | yes | internal |
 | 19 | Video library and meeting recordings | Ixana | 2026 | ai | internal | Meeting intelligence | yes | external |
-| 20 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation | yes | — |
+| 20 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation | yes | internal |
 | 21 | AI Salary Generator | Ixana | 2026 - present | ai | customer-testing | HR tooling | yes | internal |
 | 22 | AI product planning operating system | Ixana | 2026 | ai | internal | Planning tooling | yes | internal |
 | 23 | AI Lawyer — multi-agent patent drafting system | Ixana | 2026 | ai | prototype | Legal tooling | yes | internal |
@@ -71,7 +71,7 @@ _Every product in the portfolio at maximum available depth, compiled from the re
 - **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli  & SRM University 1
 - **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Procurement ops 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
 - **With an authored case study:** 36 of 37
-- **With a demo:** 30 (17 interactive recreations hosted here, the rest external)
+- **With a demo:** 31 (18 interactive recreations hosted here, the rest external)
 
 ---
 
@@ -4073,6 +4073,7 @@ External: <https://xana-nine.vercel.app/videolibrary>
 | Team | 1 engineer, with IT security as reviewer |
 | Timeline | Apr – Aug 2025 |
 | Stage | Live for the affected group |
+| Demo | /demo/calendar-sync |
 
 **Positioning.** Kept Outlook and Gmail calendars in step for people living in both, without letting a single private event title cross between them.
 
@@ -4094,7 +4095,12 @@ External: <https://xana-nine.vercel.app/videolibrary>
 
 **Result.** No event title can reach the Google side because none is ever written — reflected busy time carries no detail at all. Every path previews before it writes, one bad write can only touch one occurrence, and the credential was narrowed to the single mailbox it needs. The double-booking counts below are the worked example.
 
-> **Confidentiality.** Internal service — all figures on this page are invented placeholders for this sample, no calendar content is shown, and the endpoints referenced are internal only.
+**Evidence / demos**
+
+- [Open the working demo — the dry-run console, the mirror, the scope and the write log](/demo/calendar-sync)
+- [Or start at the credential scope, and try a mailbox outside it](/demo/calendar-sync?view=scope&try=ceo)
+
+> **Confidentiality.** Internal service — the screens in section 06 are a working recreation on an invented week, and every figure on this page is an invented placeholder for this sample. No real calendar content appears anywhere: every person, mailbox, event and time in the demo is made up.
 
 #### 01. Why this, and why now
 
@@ -4169,12 +4175,24 @@ He approved with two conditions. IT manages the mailbox group, not me, so I cann
 
 A service that scans upcoming Outlook events for a scoped mailbox and ensures a configured Gmail address sees them — added as an attendee where the mailbox organises, forwarded where it does not. It publishes a subscribable feed and reads a Google feed into opaque busy blocks. Every path previews before it writes; scheduled runs hold a lock so two never overlap.
 
+**Interface — A dry-run console for the 06:00 scheduled run: a per-event action table with badges for attendee patches, forwards, opaque busy blocks and skips with stated reasons, an Apply button that has not been pressed, and a GET /status panel showing the run outcome as an endpoint response**
+
+[Open this preview in the demo and apply the writes](/demo/calendar-sync?view=dryrun)
+
 - **The preview names the action per event, not per run.** A run-level summary hides the one event you would have objected to, which is the only reason to look at a preview at all.
 - **Reflected busy blocks show as "Busy" with no source.** Even naming the source calendar tells a colleague which of your two lives an appointment belongs to. The block says only that the time is gone.
 - **Skipped events state why they were skipped.** Silent skips were the failure mode of the manual habit this replaced — people did not notice what they had forgotten to forward.
 - **Job status is an endpoint, not a log file.** The person who needs to know whether last night's sync ran is not going to read a server log, and if checking is hard the checking stops.
 
-_Recreated from the service's own output. Structure and fields are accurate; all event names, addresses and times shown are invented. Happy to walk through the real service in a conversation._
+_Recreated from the service’s own output as a working demo, on an invented week. Structure, fields, rules and the two write paths are the real ones; every event name, address and time shown is invented. Happy to walk through the real service in a conversation._
+
+**Gallery**
+
+- **The mirror, on the pair that makes the argument** — [Open the mirror on this pair](/demo/calendar-sync?view=mirror&ev=g-dentist)  A dental appointment on the Google side; on the Outlook side, a block reading “Busy” and nothing else — no title, no attendees, not even which calendar it came from. Outlook meetings travel the other way as ordinary invites, sent by the meeting’s own organiser mechanics, never written by the service.
+- **The scope, failing cleanly** — [Try to read the CEO’s mailbox](/demo/calendar-sync?view=scope&try=ceo)  Twelve mailboxes in the tenant, one inside the IT-managed policy group. Attempting any other returns the verbatim 403 before anything is read — the demonstration that ended the argument in section 05, kept as a screen anyone can press.
+- **The write log** — [Open the write log](/demo/calendar-sync?view=log)  Every write with actor, target and reason, retained twelve months — the condition IT security added at approval. The two amber rows are the incident reviews the log has already answered: both traced to something a person had done, not the service.
+
+_Three surfaces of the same demo on the same invented week. Each is the state its own link opens._
 
 #### 07. Tradeoffs
 
@@ -4220,7 +4238,7 @@ I scoped this as a sync problem for a month before the diary told me it was a di
 
 I would also not have built the subscribable feed. It is used by two people, and it is the one surface where a misconfiguration could expose a whole calendar to whoever holds the URL — the highest-risk part of the service, earning the least.
 
-> **Note on this sample.** This is an internal service. The output described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No calendar content is shown. I'm glad to walk through the real service and the underlying numbers in a conversation.
+> **Note on this sample.** This is an internal service. The screens in section 06 are the running demo on an invented week, and all figures on this page are invented placeholders for this sample. No real calendar content is shown — every event, name, address and time is made up for publication. I’m glad to walk through the real service and the underlying numbers in a conversation.
 
 <details>
 <summary><strong>Earlier long-form record</strong> (data/case-studies.json — superseded by the sections above, kept for comparison)</summary>
@@ -4273,6 +4291,40 @@ Beyond the main attendee sync, I included two supporting flows. The first expose
 - [Google Calendar public basic.ics example](https://calendar.google.com/calendar/ical/user%40gmail.com/public/basic.ics)
 
 </details>
+
+**Demo**
+
+| Field | Value |
+|---|---|
+| Path | `/demo/calendar-sync` |
+| File | `public/demo/calendar-sync.html`  (37.6 KB) |
+| Served by | explicit rewrite in `next.config.ts` |
+| Document title | Calendar Sync — two tenants, one console |
+| Interactive | yes — the page carries its own script |
+
+_Screen structure, read out of the demo file:_
+
+```
+h1  Two-tenant calendar sync Ixana · internal service · scheduled every 2 hours
+h2  Dry-run preview — 06:00 scheduled run
+h2  The mirror — one person, two tenants
+h2  Credential scope — 12 mailboxes in the tenant, 1 reachable
+h2  Write log — actor, target, reason, for a year
+```
+
+_Visible copy in the demo (markup stripped, truncated):_
+
+> Calendar Sync — two tenants, one console Two-tenant calendar sync Ixana · internal service · scheduled every 2 hours 01 Dry run 02 Mirror 03 Scope 04 Write log 06:00 run · ok 0 titles crossed What this demo is A working recreation of the two-tenant calendar sync described in the case study, sitting on an invented week — Mon 11 to Fri 15 Aug 2025, pinned so the figures stay true. Every event, name, address and time is made up for publication; the rules, the preview, the scope and the log are the real design. The four decisions it makes visible: Reflected busy time carries no detail at all. A Google appointment lands in Outlook as “Busy” — no title, no attendees, no source calendar. Dry run is the default, not a flag. Every write path produces the preview on view 01 first; “Apply” is the second step, never the first. Writes are occurrence-level, never the series. A bug can damage one meeting, not a year of them — the amber badges mark it. Two paths by ownership. Where the mailbox organises, the service patches an attendee; where it does not, it forwards the invite. Dry-run preview — 06:00 scheduled run Wed 13 Aug 2025 · delta since 04:00 · nothing below has been written yet 10 changed events in this delta 8 writes prepared — 3 patches · 2 forwards · 3 busy blocks 118 events synced this week — 67 patched · 36 forwarded · 15 skipped 0 double-bookings this month, pilot group — down from 6 GET /status — the endpoint, not a log file what a person checks at 8 a.m. Per-event actions — one row per event, never a run summary preview only — 0 of 8 written Apply 8 writes Action Event When Why this action State Engine guards on this run loop guard 1 change matched the service’s own last write (etag) and was skipped — a mirrored write can never echo back as new idempotency each change is marked before handling; a redelivered delta is a no-op overlap lock held 04:00–04:00:41, released — 1,132 of 1,142 runs since 12 May completed without overlap (99.1%) throttling on 429 the cycle retries with backoff rather than counting a failure The mirror — one person, two tenants Week of 11 Aug 2025 · left is what the tenant sees, right is what stays private Outlook · nikhil.rao@ops tenant scoped mailbox Google · nikhil’s personal calendar feed.ics — 2 subscribers Select any event to see its counterpart. A Google appointment appears on the Outlook side as Busy and nothing else — even naming the source calendar would say which of two lives an appointment belongs to. Outlook meetings reach Gmail as ordinary invites, sent by the meeting’s own organiser mechanics, never written by the s…
+
+_Design note — Calendar sync (Tier B) · /demo/calendar-sync · added 2026-09-02 (author-ordered AC-20 override):_
+
+**Identity (3 lines).** A restraint console in the XANA family: the front door is not a calendar but the dry-run preview - a per-event action table whose badges (add attendee / forward / busy create-update-delete / skip) ARE the product argument, with the GET /status panel rendered as an endpoint response in Geist Mono because the case study promises "an endpoint, not a log file". The mirror view puts the two tenants side by side so the opaque-block thesis is visible as typography: titled personal events on the Google column, bare orange-edged "Busy" blocks on the Outlook column with a "no detail" chip. Scope and Write log are the governance surfaces: a 12-mailbox roster with one policy-group member, a verbatim 403 refusal panel, and a ledger whose two amber incident rows carry the "cleared the service twice" story.
+
+**Tokens.** Ground #0E0805, surfaces #1A1410/#221A14/#2A2420, deep #140F0B; borders #3A3028 (hover #5A4838, hairline #2A2018); text #FFFFFF/#E8E0D8/#C0B6AC/#8A7E72; accent #FF6321 + soft #FF8A56 + CD3D00-FF6321 gradient on the app tile only; semantic #22C55E/#FFB020/#EF4444 as 35-45% borders over ~9% washes; forward badges take the house #8B5CF6 info purple. Geist/Geist Mono (Arial/ui-monospace fallbacks), 13px workhorse, 10px 0.14em uppercase mono kickers, tabular-nums on every time and count; radii 8/12/16 + pills; motion 200ms + 0.32s rise on cubic-bezier(0.16,1,0.3,1), zeroed under prefers-reduced-motion.
+
+**Signature interaction.** Apply is the second step by construction: the preview renders first, "Apply 8 writes" flips each row to "written" and appends eight actor/target/reason rows to the write log (view 04), demonstrating dry-run-as-default and the ledger in one gesture. On the mirror, selecting either half of a pair (?ev=g-dentist) highlights both and explains what did NOT cross; on scope, pressing any mailbox fires the same read - one 200, eleven verbatim 403s (?try=ceo deep-links the refusal).
+
+**Deliberate omissions.** No XANA wordmark or icon rail; no shadows (border+surface elevation, toast excepted); the gradient never touches buttons (solid #FF6321 with near-black ink, AA); no chart - the numbers on this page are counters, not series, and the case study's S08 chart stays page-side; no light theme. Invariants held: no real names/companies, no event title ever rendered on a Busy block, guardrail "0 titles crossed" pinned in the chrome, all four case-study callout states rendered verbatim, params view/ev/try validated with clean fallbacks.
 
 ---
 
@@ -7956,6 +8008,8 @@ Audit flags sum to the case study's funnel: 7 mechanisms (solar, vawt, purifiers
 
 ---
 
+---
+
 ## Program overview
 
 _One page over fourteen chapters, not a 38th product. It fronts the internal AI program and is deliberately kept off the /work grid._
@@ -8089,6 +8143,7 @@ _Every interactive recreation hosted in this repo. Each is a single self-contain
 |---|---|---|---|
 | `/demo/ai-lawyer` | `/demo/ai-lawyer.html` | 154.7 KB | AI Lawyer — multi-agent patent drafting system |
 | `/demo/autism-bench` | `/demo/autism-bench.html` | 55.6 KB | Toys for autistic kids |
+| `/demo/calendar-sync` | `/demo/calendar-sync.html` | 37.6 KB | Calendar sync — Outlook and Gmail without leaking detail |
 | `/demo/clickup-audit` | `/demo/clickup-audit.html` | 106.9 KB | ClickUp Activity Tracker — task change audit trail |
 | `/demo/clickup-gantt` | `/demo/clickup-gantt.html` | 84.4 KB | ClickUp reporting and Gantt dashboard |
 | `/demo/covid-bench` | `/demo/covid-bench.html` | 29.1 KB | Non-contact COVID patient monitoring |

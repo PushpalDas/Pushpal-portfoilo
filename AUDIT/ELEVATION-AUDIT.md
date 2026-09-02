@@ -49,7 +49,7 @@ external URL was altered anywhere else.
 | 17 | flow tracker (ai-pm-generative-…) | 993 | pairedBars | GREEN — trimmed; three-population definition + 71%-vs-4.2% explanation preserved in tighter form |
 | 18 | github-for-clickup-… | 1000 | barsThreshold | GREEN — untouched (form now unique again); demo parity-verified |
 | 19 | ixana-video-library-… | 996 | funnel | GREEN — trimmed; 212/38, 5m50s→90s, 140-roster definition intact |
-| 20 | calendar-… | 998 | stackedBars | GREEN — trimmed; 11-in-fortnight vs 6-a-month dual definition preserved; no demo (by rule) |
+| 20 | calendar-… | 998 | stackedBars | GREEN — trimmed; 11-in-fortnight vs 6-a-month dual definition preserved. **2026-09-02: demo added at the author's explicit order (AC-20 override of the run's ND rule)** — /demo/calendar-sync, Tier-B Ixana identity, four views (dryrun/mirror/scope/log), all §06 callout states rendered, four 1440×900 captures wired into shot+gallery, figures matched to the page to the digit (118 = 67+36+15, 12→1, 99.1% = 1,132/1,142, 6→0, 0 titles) |
 | 21 | ai-salary-generator | 998 | dumbbell | GREEN — trimmed; 6/26, 4 refusals, 18 drafts intact |
 | 22 | ai-prd-… | 999 | histogram | GREEN — trimmed; 44→41, 3.2→1.4, SameModelError present in demo |
 | 23 | ai-lawyer-… | 700 (≤700) | hbar | GREEN — trimmed; 84.6%/15.4%/91%↔14%, $1.77–2.31, 507 tests intact; demo carries the fixes (tab validation, §112(a) kicker, 507-line) |

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar Sync — two tenants, one console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0805; --surface:#1A1410; --surface-2:#221A14; --surface-3:#2A2420; --deep:#140F0B;
+  --border:#3A3028; --border-hover:#5A4838; --hairline:#2A2018;
+  --text:#FFFFFF; --body:#C0B6AC; --bright:#E8E0D8; --dim:#8A7E72; --faint:#6E655E;
+  --accent:#FF6321; --accent-soft:#FF8A56; --accent-deep:#CD3D00;
+  --ok:#22C55E; --warn:#FFB020; --crit:#EF4444; --crit-soft:#FF6B6B;
+  --sans:'Geist',Arial,Helvetica,sans-serif; --mono:'Geist Mono',ui-monospace,Consolas,monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--body);font:400 13px/1.55 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.kick{font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+
+/* ── top bar ─────────────────────────────────────────── */
+header{position:sticky;top:0;z-index:50;background:rgba(14,8,5,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--hairline)}
+.bar{max-width:1280px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:11px}
+.mark .tile{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent-deep),var(--accent));display:grid;place-items:center;flex:none}
+.mark .tile svg{width:17px;height:17px;stroke:#240D02;stroke-width:2.4;fill:none}
+.mark h1{font-size:15px;font-weight:600;color:var(--text);letter-spacing:-.25px;white-space:nowrap}
+.mark small{display:block;font-size:10px;color:var(--dim);font-weight:400;letter-spacing:0}
+nav{display:flex;gap:2px;flex-wrap:wrap}
+nav button{position:relative;padding:8px 13px;font-size:13px;font-weight:600;letter-spacing:-.2px;color:var(--dim);transition:color .2s}
+nav button:hover{color:var(--text)}
+nav button[aria-selected="true"]{color:var(--text)}
+nav button[aria-selected="true"]::after{content:"";position:absolute;left:13px;right:13px;bottom:-1px;height:2px;background:var(--accent)}
+nav button .n{font-family:var(--mono);font-size:10px;color:var(--accent);margin-right:6px}
+.bar-right{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:11px;border:1px solid var(--border);background:var(--surface);color:var(--body)}
+.chip .dot{width:6px;height:6px;border-radius:50%;flex:none}
+.chip.ok .dot{background:var(--ok)}
+.chip.guard{border-color:rgba(255,99,33,.35);background:rgba(255,99,33,.08);color:var(--accent-soft)}
+
+/* ── layout ──────────────────────────────────────────── */
+main{max-width:1280px;margin:0 auto;padding:26px 24px 60px}
+.pane{animation:rise .32s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pane-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.pane-head h2{font-size:21px;font-weight:600;color:var(--text);letter-spacing:-.5px}
+.pane-head p{font-size:12px;color:var(--dim)}
+.grid{display:grid;gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;transition:border-color .2s}
+.card-h{padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--hairline);border-radius:12px 12px 0 0;display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.card-b{padding:13px 16px}
+.stat{font:600 23px/1.1 var(--mono);color:var(--accent);letter-spacing:-.5px}
+.stat small{font-size:11px;color:var(--dim);font-family:var(--sans);font-weight:400;letter-spacing:0;display:block;margin-top:5px}
+.note{font-size:11.5px;color:var(--dim);line-height:1.6}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{text-align:left;font:700 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:9px 12px;background:var(--surface-2);border-bottom:1px solid var(--border)}
+.tbl td{padding:7px 12px;border-bottom:1px solid var(--hairline);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;border-radius:999px;padding:2px 9px;font:600 10px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.b-patch{border:1px solid rgba(34,197,94,.35);background:rgba(34,197,94,.09);color:var(--ok)}
+.b-fwd{border:1px solid rgba(139,92,246,.4);background:rgba(139,92,246,.1);color:#B9A0F5}
+.b-busy{border:1px solid rgba(255,99,33,.35);background:rgba(255,99,33,.08);color:var(--accent-soft)}
+.b-skip{border:1px solid var(--border);background:var(--deep);color:var(--dim)}
+.b-warn{border:1px solid rgba(255,176,32,.4);background:rgba(255,176,32,.09);color:var(--warn)}
+.b-crit{border:1px solid rgba(239,68,68,.4);background:rgba(239,68,68,.09);color:var(--crit-soft)}
+.occ{display:inline-block;margin-left:7px;font:500 10px/1 var(--mono);color:var(--warn);border:1px dashed rgba(255,176,32,.4);border-radius:4px;padding:2px 6px}
+.btn{border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;transition:all .2s}
+.btn-primary{background:var(--accent);color:#240D02}
+.btn-primary:hover{background:#FF7331}
+.btn-primary[disabled]{background:var(--surface-3);color:var(--faint);cursor:default}
+.btn-ghost{border:1px solid var(--border);color:var(--dim)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border-hover)}
+.status-json{font:12px/1.75 var(--mono);color:var(--bright);background:var(--deep);border:1px solid var(--hairline);border-radius:8px;padding:14px 16px;overflow-x:auto}
+.status-json .k{color:var(--dim)}
+.status-json .v{color:var(--accent-soft)}
+.status-json .g{color:var(--ok)}
+
+/* ── explainer ──────────────────────────────────────── */
+.intro{background:var(--deep);border:1px solid var(--hairline);border-radius:16px;padding:0;margin-bottom:20px}
+.intro summary{cursor:pointer;list-style:none;padding:13px 20px;font:600 10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px}
+.intro summary::-webkit-details-marker{display:none}
+.intro summary::after{content:"+ expand";color:var(--faint);font-weight:400;letter-spacing:.08em}
+.intro[open] summary::after{content:"− collapse"}
+.intro .intro-b{padding:0 20px 16px}
+.intro p{font-size:12.5px;color:var(--body);line-height:1.65;max-width:76ch}
+.intro ol{margin:9px 0 0 17px;font-size:12.5px;line-height:1.7;color:var(--body)}
+.intro b{color:var(--bright);font-weight:600}
+
+/* ── mirror ─────────────────────────────────────────── */
+.mirror{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cal-day{border-bottom:1px solid var(--hairline);padding:10px 14px}
+.cal-day:last-child{border-bottom:none}
+.cal-day .d{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.cal-day .d .today{color:var(--accent);margin-left:8px}
+.ev{display:flex;gap:10px;align-items:baseline;border:1px solid var(--hairline);border-left:3px solid var(--border);border-radius:8px;padding:7px 11px;margin-bottom:6px;background:var(--deep);width:100%;text-align:left;transition:border-color .2s}
+.ev:hover{border-color:var(--border-hover)}
+.ev .t{font:500 11px/1 var(--mono);color:var(--dim);white-space:nowrap}
+.ev .name{font-size:12.5px;color:var(--bright)}
+.ev .tag{margin-left:auto;flex:none}
+.ev.work{border-left-color:#5b7cfa}
+.ev.busy{border-left-color:var(--accent)}
+.ev.busy .name{color:var(--accent-soft);font-style:normal}
+.ev.personal{border-left-color:var(--ok)}
+.ev.invite{border-left-color:#8B5CF6}
+.ev.ghost{opacity:.42}
+.ev.ghost .name{text-decoration:line-through}
+.ev.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pair-note{background:var(--surface);border:1px solid rgba(255,99,33,.35);border-radius:12px;padding:14px 16px;margin-top:14px;font-size:12.5px;color:var(--body);line-height:1.65}
+.pair-note b{color:var(--accent-soft)}
+
+/* ── scope ──────────────────────────────────────────── */
+.mailbox{display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--hairline);width:100%;text-align:left;transition:background .2s}
+.mailbox:hover{background:var(--surface-2)}
+.mailbox:last-child{border-bottom:none}
+.mailbox.sel{background:rgba(255,99,33,.06)}
+.mailbox .who{flex:1;min-width:0}
+.mailbox .who .nm{font-size:12.5px;color:var(--bright)}
+.mailbox .who .em{font:400 11px/1.5 var(--mono);color:var(--faint)}
+.av{width:26px;height:26px;border-radius:50%;background:var(--surface-3);color:var(--dim);display:grid;place-items:center;font:600 9px/1 var(--mono);flex:none}
+.mailbox.inpol .av{background:rgba(255,99,33,.14);color:var(--accent-soft)}
+.refusal{border:1px solid rgba(239,68,68,.45);background:rgba(239,68,68,.06);border-radius:12px;padding:16px 18px;animation:rise .3s var(--ease)}
+.refusal h4{font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--crit-soft);margin-bottom:9px}
+.refusal .err{font:12px/1.7 var(--mono);color:var(--bright);background:var(--deep);border:1px solid var(--hairline);border-radius:8px;padding:12px 14px;margin:10px 0;overflow-x:auto}
+.granted{border:1px solid rgba(34,197,94,.4);background:rgba(34,197,94,.05);border-radius:12px;padding:16px 18px;animation:rise .3s var(--ease)}
+.granted h4{font:700 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ok);margin-bottom:9px}
+
+/* ── log ────────────────────────────────────────────── */
+.lr-incident td{background:rgba(255,176,32,.05)}
+.lr-refusal td{background:rgba(239,68,68,.045)}
+.lr-new td{background:rgba(34,197,94,.05)}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(80px);background:var(--surface-2);border:1px solid var(--border-hover);color:var(--bright);border-radius:10px;padding:11px 18px;font-size:12.5px;transition:transform .3s var(--ease);z-index:99;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+footer{max-width:1280px;margin:0 auto;padding:8px 24px 40px;font-size:11px;color:var(--faint);line-height:1.7}
+footer b{color:var(--dim)}
+
+@media (max-width:900px){ .mirror{grid-template-columns:1fr} .g3{grid-template-columns:1fr 1fr !important} #dr-top{grid-template-columns:1fr !important} #scope-grid{grid-template-columns:1fr !important} }
+@media (max-width:620px){ .g3,.g4{grid-template-columns:1fr !important} .bar{padding:12px 16px} main{padding:20px 16px 48px} }
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{animation:none !important;transition:none !important} }
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.wrap-x{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="mark">
+      <div class="tile" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h13M13 4l4 4-4 4M20 16H7M11 12l-4 4 4 4"/></svg></div>
+      <h1>Two-tenant calendar sync<small>Ixana · internal service · scheduled every 2 hours</small></h1>
+    </div>
+    <nav role="tablist" aria-label="Views">
+      <button role="tab" data-v="dryrun"><span class="n">01</span>Dry run</button>
+      <button role="tab" data-v="mirror"><span class="n">02</span>Mirror</button>
+      <button role="tab" data-v="scope"><span class="n">03</span>Scope</button>
+      <button role="tab" data-v="log"><span class="n">04</span>Write log</button>
+    </nav>
+    <div class="bar-right">
+      <span class="chip ok"><span class="dot"></span><span class="mono">06:00 run · ok</span></span>
+      <span class="chip guard mono" title="Guardrail — counted since first run">0 titles crossed</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <details class="intro">
+    <summary>What this demo is</summary>
+    <div class="intro-b">
+    <p>A working recreation of the two-tenant calendar sync described in the case study, sitting on an invented week — Mon 11 to Fri 15 Aug 2025, pinned so the figures stay true. Every event, name, address and time is made up for publication; the rules, the preview, the scope and the log are the real design. The four decisions it makes visible:</p>
+    <ol>
+      <li><b>Reflected busy time carries no detail at all.</b> A Google appointment lands in Outlook as “Busy” — no title, no attendees, no source calendar.</li>
+      <li><b>Dry run is the default, not a flag.</b> Every write path produces the preview on view 01 first; “Apply” is the second step, never the first.</li>
+      <li><b>Writes are occurrence-level, never the series.</b> A bug can damage one meeting, not a year of them — the amber badges mark it.</li>
+      <li><b>Two paths by ownership.</b> Where the mailbox organises, the service patches an attendee; where it does not, it forwards the invite.</li>
+    </ol>
+    </div>
+  </details>
+
+  <!-- ════════ 01 DRY RUN ════════ -->
+  <section class="pane" id="pane-dryrun" hidden>
+    <div class="pane-head"><h2>Dry-run preview — 06:00 scheduled run</h2><p>Wed 13 Aug 2025 · delta since 04:00 · nothing below has been written yet</p></div>
+
+    <div class="grid" style="grid-template-columns:1fr 1.05fr;margin:12px 0 14px" id="dr-top">
+      <div class="grid" style="grid-template-columns:1fr 1fr;align-content:start">
+        <div class="card"><div class="card-b"><div class="stat mono" id="st-changes">10</div><small class="note">changed events in this delta</small></div></div>
+        <div class="card"><div class="card-b"><div class="stat mono" id="st-writes">8</div><small class="note">writes prepared — 3 patches · 2 forwards · 3 busy blocks</small></div></div>
+        <div class="card"><div class="card-b"><div class="stat mono">118</div><small class="note">events synced this week — 67 patched · 36 forwarded · 15 skipped</small></div></div>
+        <div class="card"><div class="card-b"><div class="stat mono" style="color:var(--ok)">0</div><small class="note">double-bookings this month, pilot group — down from 6</small></div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="kick">GET /status — the endpoint, not a log file</span><span class="note">what a person checks at 8 a.m.</span></div>
+        <div class="card-b"><pre class="status-json" id="status-json"></pre></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <span class="kick">Per-event actions — one row per event, never a run summary</span>
+        <span style="display:flex;gap:8px;align-items:center">
+          <span class="note mono" id="apply-state">preview only — 0 of 8 written</span>
+          <button class="btn btn-primary" id="btn-apply">Apply 8 writes</button>
+        </span>
+      </div>
+      <div class="wrap-x"><table class="tbl" id="dr-table">
+        <thead><tr><th>Action</th><th>Event</th><th>When</th><th>Why this action</th><th class="num">State</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+
+    <div class="grid" style="margin-top:16px" id="dr-lower">
+      <div class="card">
+        <div class="card-h"><span class="kick">Engine guards on this run</span></div>
+        <div class="card-b">
+          <table class="tbl">
+            <tbody>
+              <tr><td><span class="badge b-skip">loop guard</span></td><td class="note">1 change matched the service’s own last write (etag) and was skipped — a mirrored write can never echo back as new</td></tr>
+              <tr><td><span class="badge b-skip">idempotency</span></td><td class="note">each change is marked before handling; a redelivered delta is a no-op</td></tr>
+              <tr><td><span class="badge b-skip">overlap lock</span></td><td class="note">held 04:00–04:00:41, released — 1,132 of 1,142 runs since 12 May completed without overlap (99.1%)</td></tr>
+              <tr><td><span class="badge b-skip">throttling</span></td><td class="note">on 429 the cycle retries with backoff rather than counting a failure</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ 02 MIRROR ════════ -->
+  <section class="pane" id="pane-mirror" hidden>
+    <div class="pane-head"><h2>The mirror — one person, two tenants</h2><p>Week of 11 Aug 2025 · left is what the tenant sees, right is what stays private</p></div>
+    <div class="mirror" style="margin-top:14px">
+      <div class="card">
+        <div class="card-h"><span class="kick">Outlook · nikhil.rao@ops tenant</span><span class="chip mono" style="font-size:10px">scoped mailbox</span></div>
+        <div id="cal-outlook"></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><span class="kick">Google · nikhil’s personal calendar</span><span class="chip mono" style="font-size:10px">feed.ics — 2 subscribers</span></div>
+        <div id="cal-google"></div>
+      </div>
+    </div>
+    <div class="pair-note" id="pair-note" hidden></div>
+    <p class="note" style="margin-top:12px">Select any event to see its counterpart. A Google appointment appears on the Outlook side as <b style="color:var(--accent-soft)">Busy</b> and nothing else — even naming the source calendar would say which of two lives an appointment belongs to. Outlook meetings reach Gmail as ordinary invites, sent by the meeting’s own organiser mechanics, never written by the service.</p>
+  </section>
+
+  <!-- ════════ 03 SCOPE ════════ -->
+  <section class="pane" id="pane-scope" hidden>
+    <div class="pane-head"><h2>Credential scope — 12 mailboxes in the tenant, 1 reachable</h2><p>The configuration IT security approved, readable rather than trusted</p></div>
+    <div class="grid" style="grid-template-columns:1fr 1.1fr;margin-top:14px" id="scope-grid">
+      <div class="card">
+        <div class="card-h"><span class="kick">Tenant mailboxes (12)</span><span class="note">press one to attempt a calendar read</span></div>
+        <div id="mailboxes"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-h"><span class="kick">Application access policy</span></div>
+          <div class="card-b">
+            <pre class="status-json">New-ApplicationAccessPolicy
+  -AppId        <span class="v">calendar-sync</span>
+  -PolicyScopeGroupId <span class="v">app-calsync-mailboxes</span>
+  -AccessRight  <span class="v">RestrictAccess</span></pre>
+            <p class="note" style="margin-top:10px">The group is managed by IT, not by the service owner — the service’s reach cannot widen by editing its own config. Members today: <b style="color:var(--bright)">1 of 12 mailboxes</b>.</p>
+          </div>
+        </div>
+        <div id="scope-result"><div class="card"><div class="card-b note">No read attempted yet. Every mailbox on the left takes the same request; only one of them answers.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ 04 WRITE LOG ════════ -->
+  <section class="pane" id="pane-log" hidden>
+    <div class="pane-head"><h2>Write log — actor, target, reason, for a year</h2><p>The condition IT security added at approval — and the record that has twice cleared the service</p></div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h">
+        <span class="kick">Entries · newest first</span>
+        <span class="note mono" id="log-count"></span>
+      </div>
+      <div class="wrap-x"><table class="tbl" id="log-table">
+        <thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Target</th><th>Reason recorded</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+    <p class="note" style="margin-top:12px">Retention is twelve months, set by IT security as a condition of approval. The two amber rows are incident reviews where the log answered for the service: both reports traced to something a person had done, and the entries are what proved it in an afternoon rather than an argument.</p>
+  </section>
+</main>
+
+<footer>
+  <b>All content on this page is invented for the demo.</b> Every person, mailbox, event title, time and figure is made up for publication; no real calendar content appears anywhere, and by design none could — the service writes no event title across tenants, which is the guardrail counted in the header. The preview rules, the two write paths, the access policy shape and the log columns are the real design described in the case study.
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ─────────── data ─────────── */
+const DR_ROWS = [
+  { act:"patch", ev:"YR31 bring-up review", when:"Wed 13 · 10:00–11:00", why:"mailbox organises → add nikhil’s Gmail as attendee", occ:"occurrence 13 Aug only — series untouched" },
+  { act:"patch", ev:"AMS / RTL sync", when:"Thu 14 · 09:30–10:00", why:"mailbox organises → add attendee" },
+  { act:"patch", ev:"Dev-kit triage", when:"Wed 13 · 16:00–16:45", why:"mailbox organises → add attendee" },
+  { act:"fwd",   ev:"Partner eval — hearables segment", when:"Thu 14 · 14:00–15:00", why:"external organiser → forward the invite; patching would fail silently" },
+  { act:"fwd",   ev:"Board prep read-through", when:"Fri 15 · 11:00–12:00", why:"organised by leadership mailbox → forward" },
+  { act:"busy+", ev:"Busy", when:"Thu 14 · 15:30–16:30", why:"new item on the Google feed → create opaque block — no title, no source" },
+  { act:"busy~", ev:"Busy", when:"Fri 15 · 08:30 → 09:00", why:"Google item moved → update the one occurrence" },
+  { act:"busy-", ev:"Busy", when:"Wed 13 · 18:00–19:00", why:"Google item cancelled → remove the block" },
+  { act:"skip",  ev:"Weekly staff (series master)", when:"series", why:"skipped: series master — occurrences are written individually via calendarView" },
+  { act:"skip",  ev:"Quarterly planning", when:"Mon 18 · 09:00", why:"skipped: loop guard — change matches the service’s own last write (etag)" },
+];
+const BADGE = { "patch":["b-patch","add attendee"], "fwd":["b-fwd","forward"], "busy+":["b-busy","busy · create"], "busy~":["b-busy","busy · update"], "busy-":["b-busy","busy · delete"], "skip":["b-skip","skip"] };
+
+const OUTLOOK = [
+  { d:"Mon 11", evs:[ {t:"09:00",n:"Programme standup",c:"work"}, {t:"13:30",n:"Firmware release gate",c:"work"} ]},
+  { d:"Tue 12", evs:[ {t:"10:30",n:"Validation capacity review",c:"work"}, {t:"15:00",n:"Busy",c:"busy",id:"b-physio-old"} ]},
+  { d:"Wed 13", evs:[ {t:"10:00",n:"YR31 bring-up review",c:"work",id:"o-yr31"}, {t:"16:00",n:"Dev-kit triage",c:"work"}, {t:"18:00",n:"Busy",c:"busy",ghost:true,id:"o-b-physio",pair:"g-physio"} ], today:true},
+  { d:"Thu 14", evs:[ {t:"09:30",n:"AMS / RTL sync",c:"work"}, {t:"14:00",n:"Partner eval — hearables segment",c:"work"}, {t:"15:30",n:"Busy",c:"busy",id:"o-b-dentist",pair:"g-dentist",fresh:true} ]},
+  { d:"Fri 15", evs:[ {t:"09:00",n:"Busy",c:"busy",id:"o-b-school",pair:"g-school",moved:"was 08:30"}, {t:"11:00",n:"Board prep read-through",c:"work"} ]},
+];
+const GOOGLE = [
+  { d:"Mon 11", evs:[ {t:"19:30",n:"Football — five-a-side",c:"personal"} ]},
+  { d:"Tue 12", evs:[ {t:"15:00",n:"Physio — follow-up",c:"personal"} ]},
+  { d:"Wed 13", evs:[ {t:"10:00",n:"YR31 bring-up review",c:"invite",via:true,id:"g-yr31",pair:"o-yr31"}, {t:"18:00",n:"Physio — cancelled",c:"personal",ghost:true,id:"g-physio",pair:"o-b-physio"} ], today:true},
+  { d:"Thu 14", evs:[ {t:"15:30",n:"Dentist — Dr Kulkarni",c:"personal",id:"g-dentist",pair:"o-b-dentist"} ]},
+  { d:"Fri 15", evs:[ {t:"09:00",n:"School run — swapped with Mira",c:"personal",id:"g-school",pair:"o-b-school",moved:"was 08:30"} ]},
+];
+const PAIR_NOTES = {
+  "g-dentist": "<b>“Dentist — Dr Kulkarni” never leaves this column.</b> On the Outlook side it is a block reading “Busy · 15:30–16:30 · created by calendar-sync” — no title, no attendees, no body, not even which calendar it came from. The block says only that the time is gone.",
+  "o-b-dentist": "<b>This block carries nothing.</b> Title “Busy”, no attendees, no body, no source named. Its Google counterpart is a dental appointment — which is exactly the kind of detail the diary study found people self-censoring their calendars over.",
+  "g-school": "<b>Moved 08:30 → 09:00 on the Google side.</b> The service updates the one Outlook occurrence, not a series — the 06:00 preview carries this as “busy · update”.",
+  "o-b-school": "<b>Updated occurrence.</b> The Google item moved by half an hour; only this block moved with it. A wrong write here costs one morning, never a year of mornings.",
+  "g-physio": "<b>Cancelled on the Google side.</b> The 06:00 run removes its Outlook block — struck through here until Apply runs on view 01.",
+  "o-b-physio": "<b>Pending removal.</b> The Google appointment behind this block was cancelled; the block is struck through until the 06:00 writes are applied.",
+  "g-yr31": "<b>This arrived as an ordinary invite.</b> The service added nikhil’s Gmail as an attendee on the Outlook event; Outlook’s own invitation mechanics did the rest. The service never wrote to Google at all.",
+  "o-yr31": "<b>The mailbox organises this one</b>, so the service patches an attendee — on the 13 Aug occurrence only. Its Gmail counterpart is the invite that patch produced.",
+};
+
+const MAILBOXES = [
+  { nm:"Nikhil Rao", em:"nikhil.rao@ops tenant", pol:true, id:"nikhil" },
+  { nm:"CEO office", em:"ceo@ops tenant", id:"ceo" },
+  { nm:"Meera Iyer", em:"meera.iyer@ops tenant", id:"meera" },
+  { nm:"Dana Okafor", em:"dana.okafor@ops tenant", id:"dana" },
+  { nm:"Tomás Rivera", em:"tomas.rivera@ops tenant", id:"tomas" },
+  { nm:"Grace Lin", em:"grace.lin@ops tenant", id:"grace" },
+  { nm:"Ewa Nowak", em:"ewa.nowak@ops tenant", id:"ewa" },
+  { nm:"Finance shared", em:"finance@ops tenant", id:"finance" },
+  { nm:"Rahul Menon", em:"rahul.menon@ops tenant", id:"rahul" },
+  { nm:"Sofia Marques", em:"sofia.marques@ops tenant", id:"sofia" },
+  { nm:"Front desk", em:"reception@ops tenant", id:"reception" },
+  { nm:"Yusuf Khan", em:"yusuf.khan@ops tenant", id:"yusuf" },
+];
+
+const LOG_BASE = [
+  { w:"13 Aug 04:00:41", a:"calendar-sync", act:["b-skip","lock release"], t:"scheduler", r:"04:00 run complete — 3 changes, 3 writes, no overlap" },
+  { w:"12 Aug 22:00:12", a:"calendar-sync", act:["b-busy","busy · create"], t:"nikhil.rao — Tue 12, 15:00", r:"new item on Google feed; block written with no detail" },
+  { w:"12 Aug 20:00:08", a:"calendar-sync", act:["b-patch","add attendee"], t:"Firmware release gate — Mon 11 occurrence", r:"mailbox organises; Gmail attendee patched via calendarView" },
+  { w:"12 Aug 18:00:05", a:"calendar-sync", act:["b-skip","loop guard"], t:"Validation capacity review", r:"change matched service’s own last write (etag) — skipped" },
+  { w:"12 Aug 14:03:19", a:"calendar-sync", act:["b-crit","read denied"], t:"finance@ops tenant", r:"403 outside application access policy — nothing read; attempt logged" },
+  { w:"29 Jul 11:14:00", a:"IT security", act:["b-warn","incident review"], t:"IR-14 — “duplicate busy block”", r:"log showed the second block was user-created, not the service’s — cleared" },
+  { w:"28 Jul 08:00:03", a:"calendar-sync", act:["b-fwd","forward"], t:"Supplier QBR — Mon 28, 10:00", r:"external organiser; invite forwarded to configured Gmail address" },
+  { w:"17 Jun 09:41:00", a:"IT security", act:["b-warn","incident review"], t:"IR-11 — “missing invite”", r:"log showed organiser recalled the meeting before the run — cleared" },
+  { w:"12 May 06:00:00", a:"calendar-sync", act:["b-skip","first run"], t:"scheduler", r:"service enabled; every write hereafter carries actor, target and reason for 12 months" },
+];
+
+/* ─────────── state & render ─────────── */
+const state = { view:"dryrun", applied:false, ev:null, try:null };
+const $ = (s)=>document.querySelector(s);
+const esc = (s)=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+
+function syncUrl(){
+  const u = new URL(location.href);
+  u.searchParams.set("view", state.view);
+  if (state.view==="mirror" && state.ev) u.searchParams.set("ev", state.ev); else u.searchParams.delete("ev");
+  if (state.view==="scope" && state.try) u.searchParams.set("try", state.try); else u.searchParams.delete("try");
+  history.replaceState(null,"",u);
+}
+
+function renderTabs(){
+  document.querySelectorAll("nav [data-v]").forEach(b=>{
+    b.setAttribute("aria-selected", b.dataset.v===state.view ? "true":"false");
+  });
+  ["dryrun","mirror","scope","log"].forEach(v=>{ $("#pane-"+v).hidden = v!==state.view; });
+}
+
+function renderDryrun(){
+  const tb = $("#dr-table tbody"); tb.innerHTML="";
+  DR_ROWS.forEach(r=>{
+    const [cls,label] = BADGE[r.act];
+    const isWrite = r.act!=="skip";
+    const stateCell = r.act==="skip" ? '<span class="note">—</span>'
+      : state.applied ? '<span class="mono" style="color:var(--ok)">written ✓</span>'
+      : '<span class="note mono">preview</span>';
+    tb.insertAdjacentHTML("beforeend",
+      `<tr><td><span class="badge ${cls}">${label}</span></td>
+       <td style="color:var(--bright)">${esc(r.ev)}${r.occ?`<span class="occ">${esc(r.occ)}</span>`:""}</td>
+       <td class="mono" style="white-space:nowrap;color:var(--dim)">${esc(r.when)}</td>
+       <td class="note">${esc(r.why)}</td>
+       <td class="num">${stateCell}</td></tr>`);
+  });
+  $("#apply-state").textContent = state.applied ? "applied 06:00:37 — 8 of 8 written" : "preview only — 0 of 8 written";
+  const btn = $("#btn-apply");
+  btn.disabled = state.applied;
+  btn.textContent = state.applied ? "Applied at 06:00" : "Apply 8 writes";
+  $("#status-json").innerHTML =
+`{ <span class="k">"service"</span>: <span class="v">"calendar-sync"</span>,
+  <span class="k">"lastRun"</span>: <span class="v">"2025-08-13T06:00:04+05:30"</span>, <span class="k">"result"</span>: <span class="g">"ok"</span>,
+  <span class="k">"changes"</span>: 10, <span class="k">"writesPrepared"</span>: 8, <span class="k">"writesApplied"</span>: ${state.applied?8:0}, <span class="k">"skipped"</span>: 2,
+  <span class="k">"lockHeld"</span>: false, <span class="k">"nextRun"</span>: <span class="v">"08:00"</span>,
+  <span class="k">"weekToDate"</span>: { <span class="k">"patched"</span>: 67, <span class="k">"forwarded"</span>: 36, <span class="k">"skipped"</span>: 15, <span class="k">"total"</span>: 118 },
+  <span class="k">"runsWithoutOverlap"</span>: <span class="v">"1132 of 1142 (99.1%)"</span>,
+  <span class="k">"titlesCrossedAllTime"</span>: <span class="g">0</span> }`;
+}
+
+function evHtml(e){
+  const cls = ["ev",e.c, e.ghost?"ghost":"", (state.ev && (e.id===state.ev || e.pair===state.ev))?"sel":""].join(" ");
+  const tag = e.c==="busy" ? '<span class="tag badge b-busy">no detail</span>'
+    : e.via ? '<span class="tag badge b-fwd">via invite</span>'
+    : e.moved ? `<span class="tag note mono">${e.moved}</span>` : "";
+  return `<button class="${cls.trim()}" ${e.id?`data-ev="${e.id}"`:""}><span class="t mono">${e.t}</span><span class="name">${esc(e.n)}</span>${tag}</button>`;
+}
+function renderMirror(){
+  const paint=(days,el)=>{ el.innerHTML = days.map(d=>
+    `<div class="cal-day"><div class="d">${d.d}${d.today?'<span class="today">· today</span>':""}</div>${d.evs.map(evHtml).join("")}</div>`).join(""); };
+  paint(OUTLOOK, $("#cal-outlook")); paint(GOOGLE, $("#cal-google"));
+  const note = $("#pair-note");
+  if (state.ev && PAIR_NOTES[state.ev]) { note.hidden=false; note.innerHTML = PAIR_NOTES[state.ev]; }
+  else note.hidden=true;
+  document.querySelectorAll("[data-ev]").forEach(b=>b.addEventListener("click",()=>{ state.ev=b.dataset.ev; syncUrl(); renderMirror(); }));
+}
+
+function renderScope(){
+  const box = $("#mailboxes"); box.innerHTML="";
+  MAILBOXES.forEach(m=>{
+    box.insertAdjacentHTML("beforeend",
+      `<button class="mailbox ${m.pol?"inpol":""} ${state.try===m.id?"sel":""}" data-mb="${m.id}">
+        <span class="av">${m.nm.split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase()}</span>
+        <span class="who"><span class="nm">${esc(m.nm)}</span><br><span class="em">${esc(m.em)}</span></span>
+        ${m.pol?'<span class="badge b-busy">in policy group</span>':'<span class="note mono" style="font-size:10px">outside</span>'}
+      </button>`);
+  });
+  const res = $("#scope-result");
+  if (!state.try) {
+    res.innerHTML = '<div class="card"><div class="card-b note">No read attempted yet. Every mailbox on the left takes the same request; only one of them answers.</div></div>';
+  } else if (state.try==="nikhil") {
+    res.innerHTML = `<div class="granted"><h4>200 — calendar readable</h4>
+      <p class="note">GET /users/nikhil.rao/calendarView?start=…&end=… → <b style="color:var(--bright)">23 events in the window</b>. This is the one mailbox in <span class="mono">app-calsync-mailboxes</span>, and the only one the credential can see.</p></div>`;
+  } else {
+    const m = MAILBOXES.find(x=>x.id===state.try);
+    res.innerHTML = `<div class="refusal"><h4>403 — refused before anything was read</h4>
+      <div class="err">GET /users/${m?esc(m.em.split("@")[0]):"…"}@…/calendarView
+→ 403 ErrorAccessDenied
+  "Access to OData is disabled: the application
+   access policy denies access to this mailbox."</div>
+      <p class="note">Nothing was read and nothing could be — the refusal happens in the tenant, not in the service’s code. The attempt is written to the log with actor, target and reason, like every other touch. This is the demonstration that ended the argument in section 05: it fails cleanly outside the group.</p></div>`;
+  }
+  document.querySelectorAll("[data-mb]").forEach(b=>b.addEventListener("click",()=>{ state.try=b.dataset.mb; syncUrl(); renderScope(); }));
+}
+
+function renderLog(){
+  const rows = [];
+  if (state.applied) {
+    rows.push(
+      { w:"13 Aug 06:00:37", a:"calendar-sync", act:["b-busy","busy · delete"], t:"nikhil.rao — Wed 13, 18:00", r:"Google item cancelled; block removed", fresh:true },
+      { w:"13 Aug 06:00:31", a:"calendar-sync", act:["b-busy","busy · update"], t:"nikhil.rao — Fri 15, 08:30 → 09:00", r:"Google item moved; one occurrence updated", fresh:true },
+      { w:"13 Aug 06:00:26", a:"calendar-sync", act:["b-busy","busy · create"], t:"nikhil.rao — Thu 14, 15:30", r:"new item on Google feed; block written with no detail", fresh:true },
+      { w:"13 Aug 06:00:19", a:"calendar-sync", act:["b-fwd","forward"], t:"Board prep read-through — Fri 15", r:"external organiser; invite forwarded", fresh:true },
+      { w:"13 Aug 06:00:16", a:"calendar-sync", act:["b-fwd","forward"], t:"Partner eval — Thu 14", r:"external organiser; invite forwarded", fresh:true },
+      { w:"13 Aug 06:00:12", a:"calendar-sync", act:["b-patch","add attendee"], t:"Dev-kit triage — Wed 13 occurrence", r:"mailbox organises; attendee patched via calendarView", fresh:true },
+      { w:"13 Aug 06:00:09", a:"calendar-sync", act:["b-patch","add attendee"], t:"AMS / RTL sync — Thu 14 occurrence", r:"mailbox organises; attendee patched via calendarView", fresh:true },
+      { w:"13 Aug 06:00:06", a:"calendar-sync", act:["b-patch","add attendee"], t:"YR31 bring-up review — Wed 13 occurrence", r:"mailbox organises; attendee patched via calendarView", fresh:true },
+    );
+  }
+  rows.push(...LOG_BASE);
+  const tb = $("#log-table tbody"); tb.innerHTML="";
+  rows.forEach(r=>{
+    const cls = r.act[0]==="b-warn" ? "lr-incident" : r.act[0]==="b-crit" ? "lr-refusal" : r.fresh ? "lr-new" : "";
+    tb.insertAdjacentHTML("beforeend",
+      `<tr class="${cls}"><td class="mono" style="white-space:nowrap;color:var(--dim)">${r.w}</td>
+       <td style="color:var(--bright)">${esc(r.a)}</td>
+       <td><span class="badge ${r.act[0]}">${r.act[1]}</span></td>
+       <td class="note">${esc(r.t)}</td><td class="note">${esc(r.r)}</td></tr>`);
+  });
+  $("#log-count").textContent = rows.length + " shown · retained 12 months";
+}
+
+function toast(msg){
+  const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),3600);
+}
+
+function render(){
+  renderTabs();
+  if (state.view==="dryrun") renderDryrun();
+  if (state.view==="mirror") renderMirror();
+  if (state.view==="scope") renderScope();
+  if (state.view==="log") renderLog();
+}
+
+document.querySelectorAll("nav [data-v]").forEach(b=>b.addEventListener("click",()=>{ state.view=b.dataset.v; syncUrl(); render(); }));
+$("#btn-apply").addEventListener("click",()=>{
+  if (state.applied) return;
+  state.applied = true;
+  toast("8 writes committed — 8 rows appended to the write log, every one with actor, target and reason");
+  renderDryrun();
+});
+
+(function init(){
+  const q = new URLSearchParams(location.search);
+  const v = q.get("view");
+  if (v && ["dryrun","mirror","scope","log"].includes(v)) state.view = v;
+  const ev = q.get("ev");
+  if (ev && PAIR_NOTES[ev]) state.ev = ev;
+  const tr = q.get("try");
+  if (tr && MAILBOXES.some(m=>m.id===tr)) state.try = tr;
+  render();
+})();
+</script>
+</body>
+</html>

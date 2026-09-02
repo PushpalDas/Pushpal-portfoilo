@@ -72,6 +72,10 @@ const nextConfig: NextConfig = {
 				source: '/demo/team-performance',
 				destination: '/demo/team-performance.html',
 			},
+			{
+				source: '/demo/calendar-sync',
+				destination: '/demo/calendar-sync.html',
+			},
 			// The four Ricky Kids demos. Each is a recreation of the bench,
 			// tank or batch tool its case study describes, not a product.
 			{

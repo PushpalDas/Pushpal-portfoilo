@@ -71,7 +71,12 @@
   "/static/images/project/ixana-sprint-planning.png": "/demo/scrum-desk?tab=planning",
   "/static/images/project/ixana-sprint-burndown.png": "/demo/scrum-desk?tab=burndown",
   "/static/images/project/ixana-sprint-drift.png": "/demo/scrum-desk?tab=drift",
-  "/static/images/project/ixana-sprint-ledger.png": "/demo/scrum-desk?tab=ledger"
+  "/static/images/project/ixana-sprint-ledger.png": "/demo/scrum-desk?tab=ledger",
+  "/static/images/project/ixana-calsync-mirror.jpg": "/demo/calendar-sync?view=mirror&ev=g-dentist",
+  "/static/images/project/ixana-calsync-scope.jpg": "/demo/calendar-sync?view=scope&try=ceo",
+  "/static/images/project/ixana-calsync-log.jpg": "/demo/calendar-sync?view=log"
  },
- "interface": {}
+ "interface": {
+  "/static/images/project/ixana-calsync-dryrun.jpg": "/demo/calendar-sync?view=dryrun"
+ }
 }
