@@ -61,8 +61,7 @@ export const filters = [
 	{ key: 'all', label: 'All' },
 	{ key: 'silicon', label: 'Silicon & systems' },
 	{ key: 'ai', label: 'AI programs & platforms' },
-	{ key: 'prototypes', label: 'Prototypes & research' },
-	{ key: 'others', label: 'Others' },
+	{ key: 'personal', label: 'Personal' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];
@@ -115,7 +114,7 @@ export async function PUT(request: Request) {
 		const content = generateConstantsFile(items);
 		fs.writeFileSync(filePath, content, 'utf-8');
 		return NextResponse.json({ success: true });
-	} catch (error) {
+	} catch {
 		return NextResponse.json(
 			{ error: 'Failed to save changes' },
 			{ status: 500 },

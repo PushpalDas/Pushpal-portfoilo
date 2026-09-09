@@ -2,14 +2,18 @@
 
 import gsap from 'gsap';
 import { useEffect, useRef } from 'react';
+import type { FilterKey } from './constants';
+import { HEADER_COPY } from './header-copy';
 
 interface WorkHeaderProps {
+	activeFilter: FilterKey;
 	filters?: React.ReactNode;
 }
 
-export default function WorkHeader({ filters }: WorkHeaderProps) {
+export default function WorkHeader({ activeFilter, filters }: WorkHeaderProps) {
 	const headerRef = useRef<HTMLDivElement>(null);
 	const line1Ref = useRef<HTMLSpanElement>(null);
+	const copy = HEADER_COPY[activeFilter];
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
@@ -27,41 +31,30 @@ export default function WorkHeader({ filters }: WorkHeaderProps) {
 	return (
 		<header ref={headerRef} className='work-header-section'>
 			<div className='work-header-container'>
+				{/* Title row: the H1 with the filter pills top-aligned beside it,
+				    so the pills read as part of the headline and the copy below
+				    gets the full width. */}
 				<div className='work-header-row'>
-					<div className='work-header-col'>
-						<h1 className='work-header-title'>
-							<span className='work-header-line'>
-								<span ref={line1Ref} className='work-header-line-inner'>
-									From Silicon to AI
-								</span>
+					<h1 className='work-header-title'>
+						<span className='work-header-line'>
+							<span ref={line1Ref} className='work-header-line-inner'>
+								From Silicon to AI
 							</span>
-						</h1>
-						<div className='work-header-subline-wrap'>
-							{/* The scannable line: named tools, for a recruiter reading in
-							    seconds. Every keyword here is one the case studies can back —
-							    see the tags in data/case-studies.json. */}
-							<p className='work-header-stack'>
-								Product management · Program management · Project management ·
-								RTL · AMS · Embedded firmware · Body area networks · Python ·
-								FastAPI · NumPy · Next.js · React · Three.js · PostgreSQL ·
-								Azure AD · JWT · RAG · Dense retrieval (bge-m3) · LLM re-ranking
-								· nDCG evaluation · Multi-agent LLM systems · Microsoft Graph ·
-								ClickUp API · Google Calendar API · Webhooks · n8n · Excel and
-								Google Sheets dashboards
-							</p>
-							<p className='work-header-subline'>
-								Silicon delivery, embedded firmware and board bring-up, RAG
-								retrieval and evaluation, multi-agent LLM systems, and the
-								internal platforms built around them.
-							</p>
-							<p className='work-header-sample-note'>
-								Sample portfolio — body area network silicon, RAG platforms and
-								internal tools. Figures on the cards and case study pages are
-								invented placeholders, and screens are recreations.
-							</p>
-						</div>
-					</div>
+						</span>
+					</h1>
 					{filters && <div className='work-header-filters'>{filters}</div>}
+				</div>
+				{/* Both lines follow the active filter pill — see header-copy.ts.
+				    The key remounts them so the fade runs on every change. */}
+				<div
+					key={activeFilter}
+					className='work-header-subline-wrap work-header-copy-swap'
+				>
+					<p className='work-header-subline'>{copy.subline}</p>
+					{/* The scannable line: named tools and skills for a recruiter
+					    reading in seconds. Every keyword is one the cards or case
+					    studies can back. */}
+					<p className='work-header-stack'>{copy.stack.join(' · ')}</p>
 				</div>
 			</div>
 		</header>

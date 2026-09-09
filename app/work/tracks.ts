@@ -7,25 +7,34 @@
  */
 
 import { workItems } from './constants';
+import { filterWorkItems, sortWorkItems } from './order';
 import type { WorkItem } from './types';
 
 export type TrackKey = NonNullable<WorkItem['track']>;
 
-/** Every product entry carrying this track. */
-export function productsInTrack(track: TrackKey): WorkItem[] {
-	return workItems.filter(
-		(item) => item.category === 'product' && item.track === track,
-	);
+/** The cards /work shows under this track's pill, in the order it shows them. */
+export function shownInTrack(track: TrackKey): WorkItem[] {
+	return filterWorkItems(sortWorkItems(workItems), track);
 }
 
 /**
- * The "+n more" figure: products on this track that the home page is not
- * already showing. Featured slugs are passed in so the count can never
- * drift from the highlights list.
+ * The "+n more" figure: cards under this track's pill that the home page
+ * is not already showing — the same list the tile links to, so the
+ * number a reader clicks is the number of cards they land on. Featured
+ * slugs are passed in so the count can never drift from the highlights.
  */
 export function moreInTrack(track: TrackKey, featuredSlugs: string[]): number {
 	const featured = new Set(featuredSlugs);
-	return productsInTrack(track).filter(
+	return shownInTrack(track).filter(
 		(item) => !item.slug || !featured.has(item.slug),
 	).length;
+}
+
+/**
+ * The first `n` cards the /work page shows under this track's pill, in
+ * the order it shows them — the track's serial numbers 1..n. The home
+ * page's highlights are held to exactly this list.
+ */
+export function leadingInTrack(track: TrackKey, n: number): WorkItem[] {
+	return shownInTrack(track).slice(0, n);
 }

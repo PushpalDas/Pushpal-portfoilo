@@ -5,12 +5,20 @@ import { Suspense, useMemo } from 'react';
 import Contact from '../components/contact';
 import { type FilterKey, filters, workItems } from './constants';
 import './work.css';
-import { WORK_STATUS_ORDER } from './status';
+import { filterWorkItems, sortWorkItems } from './order';
 import WorkFilters from './work-filters';
 import WorkGrid from './work-grid';
 import WorkHeader from './work-header';
 
 const FILTER_KEYS: FilterKey[] = filters.map((f) => f.key);
+
+/**
+ * The pill /work opens on when the URL names none. Silicon & systems, at
+ * the author's request (2026-09-10) — the page leads with the silicon
+ * work rather than the whole catalogue. All is one pill away and keeps
+ * its own URL, ?filter=all.
+ */
+const DEFAULT_FILTER: FilterKey = 'silicon';
 
 const isFilterKey = (value: string | null): value is FilterKey =>
 	FILTER_KEYS.includes(value as FilterKey);
@@ -22,9 +30,12 @@ const isFilterKey = (value: string | null): value is FilterKey =>
  */
 const LEGACY_KEYS: Record<string, FilterKey> = {
 	product: 'all',
-	engineering: 'others',
+	engineering: 'personal',
 	silicon: 'silicon',
 	ai: 'ai',
+	// Prototypes & research and Others were folded into Personal (2026-09-10).
+	prototypes: 'personal',
+	others: 'personal',
 };
 
 function WorkPageInner() {
@@ -42,11 +53,11 @@ function WorkPageInner() {
 		? filterParam
 		: (LEGACY_KEYS[filterParam ?? ''] ??
 			LEGACY_KEYS[domainParam ?? ''] ??
-			'all');
+			DEFAULT_FILTER);
 
 	const setFilterWithUrl = (filter: FilterKey) => {
 		const params = new URLSearchParams(searchParams.toString());
-		if (filter === 'all') {
+		if (filter === DEFAULT_FILTER) {
 			params.delete('filter');
 		} else {
 			params.set('filter', filter);
@@ -56,57 +67,18 @@ function WorkPageInner() {
 		router.replace(`?${params.toString()}`, { scroll: false });
 	};
 
-	const sortedItems = useMemo(() => {
-		const withIndex = workItems.map((item, index) => ({ item, index }));
-
-		withIndex.sort((a, b) => {
-			const aStatus = a.item.status || 'none';
-			const bStatus = b.item.status || 'none';
-
-			const aStatusRank = WORK_STATUS_ORDER[aStatus];
-			const bStatusRank = WORK_STATUS_ORDER[bStatus];
-
-			if (aStatusRank !== bStatusRank) {
-				return aStatusRank - bStatusRank;
-			}
-
-			const aYear = Number.parseInt(a.item.year.replace(/\D/g, ''), 10) || 0;
-			const bYear = Number.parseInt(b.item.year.replace(/\D/g, ''), 10) || 0;
-
-			if (aYear !== bYear) {
-				return bYear - aYear;
-			}
-
-			return a.index - b.index;
-		});
-
-		return withIndex.map((w) => w.item);
-	}, []);
-
-	/**
-	 * The flat grid, restored at the author's request: three per row in the
-	 * original status/year/file order. The program-overview card is the one
-	 * exception — it was never part of this grid, so it stays off it (the
-	 * page itself remains at /work/ixana-internal-ai-program). Tier fields
-	 * on the data survive as metadata only.
-	 */
-	const filteredItems = useMemo(() => {
-		const items = sortedItems.filter((w) => !w.programHead);
-		if (activeFilter === 'all') return items;
-		if (activeFilter === 'others') {
-			return items.filter((w) => w.category === 'engineering');
-		}
-		if (activeFilter === 'prototypes') {
-			return items.filter(
-				(w) => w.status === 'prototype' || w.status === 'research',
-			);
-		}
-		return items.filter((w) => w.track === activeFilter);
-	}, [activeFilter, sortedItems]);
+	// One sort and one filter, shared with the home page's Selected work
+	// section (app/work/order.ts) so both number a shelf the same way.
+	const sortedItems = useMemo(() => sortWorkItems(workItems), []);
+	const filteredItems = useMemo(
+		() => filterWorkItems(sortedItems, activeFilter),
+		[activeFilter, sortedItems],
+	);
 
 	return (
 		<div className='work-page'>
 			<WorkHeader
+				activeFilter={activeFilter}
 				filters={
 					<WorkFilters
 						activeFilter={activeFilter}

@@ -11,6 +11,13 @@ export interface WorkItem {
 	track?: 'silicon' | 'ai';
 	status: WorkStatus | null;
 	/**
+	 * Hand-set position inside a status group. Cards that carry one sort
+	 * ahead of cards that do not, ascending; the year/file-order fallback
+	 * only decides among cards without it. Set on the ten shipped
+	 * Silicon & systems cards so that shelf reads in the author's order.
+	 */
+	order?: number;
+	/**
 	 * Curation tier. 1 = flagship (the front door), 2 = the internal AI
 	 * program (one head card, chapters beneath it), 3 = selected standalone
 	 * work, 4 = archive. Engineering builds are the appendix regardless.

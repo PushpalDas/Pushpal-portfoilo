@@ -46,6 +46,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 1,
 		outcome:
 			'Second-generation body-area silicon that holds an on-body link in the single-digit milliwatt class, roughly a tenth of the radio budget it replaces.',
 		image: 'Image__2_.jpg',
@@ -63,6 +64,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 4,
 		outcome:
 			'Turned Wi-R eval silicon into a shipping dev kit built around one acceptance bar: open the box, reach an on-body link the same day — every variable that killed early bring-ups fixed inside it.',
 		image: 'Image__10_.jpg',
@@ -80,6 +82,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 1,
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
 		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
@@ -96,6 +99,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'research',
+		order: 1,
 		outcome:
 			'A deterministic guard strips any citation retrieval never returned — fabrication is prevented by architecture, not reduced by prompting — and a distance gate makes refusal a first-class answer.',
 		image: 'Image__1_.jpg',
@@ -111,6 +115,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 2,
 		outcome:
 			'The first Wi-R body-area part to reach customer hardware — the silicon under the BAN dev kit and every on-body reference design that followed.',
 		image: 'Image__3_.jpg',
@@ -128,6 +133,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'research',
+		order: 3,
 		outcome:
 			'Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.',
 		image: 'Gemini_Generated_Image_xejg8vxejg8vxejg.png',
@@ -145,6 +151,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 6,
 		outcome:
 			'Successor near-field part: 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — a 100 MB firmware image inside a one-minute service window, on the same sub-6 mW budget.',
 		image: 'Image__8_.jpg',
@@ -162,6 +169,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 3,
 		outcome:
 			'The near-field electric part that moved Wi-R from a lab demonstration to a component a partner could design into a product.',
 		image: 'Image__9_.jpg',
@@ -179,6 +187,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 13,
 		outcome:
 			'Hyperspectral workflow that estimated surface mineral abundance from satellite bands, taking a field-sampling round out of the survey loop.',
 		tier: 4,
@@ -193,9 +202,10 @@ export const workItems: WorkItem[] = [
 		domain: 'Learning tools',
 		category: 'product',
 		track: 'ai',
-		status: 'prototype',
+		status: 'research',
+		order: 7,
 		outcome:
-			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.',
+			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a research build and never went out to learners.',
 		image: 'Gemini_Generated_Image_dafj5odafj5odafj.png',
 		slug: 'quantum-circuit-simulator-interactive-10-qubit-delivering-re',
 		tier: 3,
@@ -210,9 +220,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'customer-testing',
+		order: 15,
 		outcome:
 			'In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.',
-		image: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
+		image: 'procurement-orchestrator-card.png',
 		slug: 'procurement-orchestrator-procurement-process-automation-with',
 		tier: 2,
 		demoUrl: '/demo/procurement-desk',
@@ -226,6 +237,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 8,
 		outcome:
 			'Replaced a paper key register with an audited electronic cabinet, shipped as a catalogue product with per-key accountability.',
 		image: 'Image__1_.png',
@@ -243,6 +255,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 5,
 		outcome:
 			'Reference designs proving Wi-R carries live video to smartglasses and voice to a tactical radio over the body rather than the air.',
 		image: 'Gemini_Generated_Image_ef658pef658pef65.png',
@@ -260,6 +273,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 10,
 		outcome:
 			'Cut the smartwatch bill of materials to a price Indian retail could carry while keeping heart-rate sensing and phone notifications.',
 		image: 'Gemini_Generated_Image_io6t60io6t60io6t.png',
@@ -292,9 +306,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 4,
 		outcome:
 			'One engine produces the weekly, monthly and quarterly performance report for all five delivery teams — four of which had no standing report at all.',
-		image: 'Image__14_.jpg',
+		image: 'team-performance-cover.png',
 		slug: 'team-performance-reporting',
 		tier: 2,
 		demoUrl: '/demo/team-performance',
@@ -308,9 +323,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 8,
 		outcome:
 			'Standup, backlog and burndown now read from the same task data instead of three separately maintained views.',
-		image: 'Image__15_.jpg',
+		image: 'Gemini_Generated_Image_yx3tutyx3tutyx3t.png',
 		slug: 'ixana-scrum-ecosystem',
 		tier: 2,
 		demoUrl: '/demo/scrum-desk',
@@ -324,9 +340,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 2,
 		outcome:
 			'One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.',
-		image: 'Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png',
+		image: 'flow-tracker-card.jpg',
 		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 		tier: 1,
 		demoUrl: 'https://xana-nine.vercel.app/efficiency?view=tracker',
@@ -340,9 +357,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 11,
 		outcome:
 			'Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.',
-		image: 'Image__16_.jpg',
+		image: 'Gemini_Generated_Image_s7x6ths7x6ths7x6.png',
 		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
 		tier: 2,
 		demoUrl: '/demo/clickup-audit',
@@ -356,6 +374,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 7,
 		outcome:
 			'Made every recording searchable by transcript, so people jump to the minute that matters instead of scrubbing an hour of video.',
 		image: 'Gemini_Generated_Image_i9dz41i9dz41i9dz.png',
@@ -372,6 +391,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 10,
 		outcome:
 			'Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.',
 		image: 'Gemini_Generated_Image_s97ql7s97ql7s97q.png',
@@ -388,9 +408,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'customer-testing',
+		order: 16,
 		outcome:
 			'In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.',
-		image: 'Image__17_.jpg',
+		image: 'Gemini_Generated_Image_km636skm636skm63.png',
 		slug: 'ai-salary-generator',
 		tier: 2,
 		href: 'https://www.ixana.ai/products',
@@ -405,6 +426,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 5,
 		outcome:
 			"Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner's work, enforced in code, and unknowns stop the pipeline instead of being papered over.",
 		image: 'Gemini_Generated_Image_6dagw16dagw16dag.png',
@@ -420,10 +442,11 @@ export const workItems: WorkItem[] = [
 		domain: 'Legal tooling',
 		category: 'product',
 		track: 'ai',
-		status: 'prototype',
+		status: 'customer-testing',
+		order: 14,
 		outcome:
 			'Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.',
-		image: 'Gemini_Generated_Image_2sua6e2sua6e2sua.png',
+		image: 'Gemini_Generated_Image_3huiw63huiw63hui.png',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
 		tier: 1,
 		demoUrl: '/demo/ai-lawyer',
@@ -437,9 +460,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 6,
 		outcome:
 			'Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.',
-		image: 'Gemini_Generated_Image_h59yuyh59yuyh59y.png',
+		image: 'Gemini_Generated_Image_o6qjjgo6qjjgo6qj.png',
 		slug: 'ai-pm-customized-multi-view-for-pms',
 		tier: 2,
 		demoUrl: '/demo/clickup-gantt',
@@ -453,6 +477,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 9,
 		outcome:
 			'Kept transcripts and minutes inside the tenant instead of routing every internal meeting through a third-party bot.',
 		image: 'Image__18_.jpg',
@@ -469,6 +494,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 3,
 		outcome:
 			'Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.',
 		image: 'Gemini_Generated_Image_strjxvstrjxvstrj.png',
@@ -485,6 +511,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 12,
 		outcome:
 			'A daily sync that versions and diffs every workspace document - immutable versions only on real content change, and nothing tracked is ever pruned.',
 		image: 'Gemini_Generated_Image_jt9prtjt9prtjt9p.png',
@@ -501,6 +528,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 9,
 		outcome:
 			'Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.',
 		image: 'Gemini_Generated_Image_cqoga8cqoga8cqog.png',
@@ -531,6 +559,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 7,
 		outcome:
 			'Bench instrument that synthesised downhole sensor signals, so tool electronics could be tested without waiting on a well.',
 		image: 'Gemini_Generated_Image_dwoxzldwoxzldwox.png',
@@ -544,9 +573,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'prototype',
+		order: 1,
 		outcome:
 			'Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.',
-		image: 'demo-card-ornithopter.jpg',
+		// The wide airframe render, at the author's request (2026-09-10). The
+		// "… copy.png" beside it in the folder is byte-identical; this is the
+		// one without the space in its name. demo-card-ornithopter.jpg is the
+		// demo's own capture and is not used on the card.
+		image: 'Gemini_Generated_Image_aglyabaglyabagly.png',
 		slug: 'srm-uav-ornithopter-for-surveillance',
 		tier: 3,
 		demoUrl: '/demo/ornithopter-concept',
@@ -561,6 +595,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 8,
 		outcome:
 			'Feasibility study on whether a small EV could offset more carbon than it embodied — the answer turned entirely on grid mix.',
 		image: 'Gemini_Generated_Image_y44ktyy44ktyy44k.png',
@@ -577,6 +612,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 5,
 		outcome:
 			'Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.',
 		image: 'Gemini_Generated_Image_wzokgjwzokgjwzok.png',
@@ -594,6 +630,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 6,
 		outcome:
 			'Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.',
 		image: 'Gemini_Generated_Image_fpkpjsfpkpjsfpkp.png',
@@ -609,7 +646,8 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Road safety',
 		category: 'product',
-		track: 'ai',
+		// No track: taken off the AI programs & platforms pill at the author's
+		// request (2026-09-02). Reachable from All only.
 		status: 'internal',
 		outcome:
 			'Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.',
@@ -628,6 +666,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'prototype',
+		order: 2,
 		outcome:
 			'Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.',
 		image: 'Screenshot_2026-07-06_161758.png',
@@ -645,6 +684,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 2,
 		outcome:
 			'Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.',
 		image: 'Gemini_Generated_Image_gx3u69gx3u69gx3u.png',
@@ -869,6 +909,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 4,
 		outcome:
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
 		image: 'Gemini_Generated_Image_orqf1borqf1borqf.png',
@@ -887,16 +928,16 @@ export const workItems: WorkItem[] = [
  * Engineering builds file under Others.
  *
  * `prototypes` is the one pill that cuts the other way: it filters by
- * maturity, not by track, so its items also appear under Silicon or AI.
- * That overlap is the point — it is the shelf for work that has not
- * shipped, wherever it came from.
+ * maturity, not by track. It is the shelf for work that has not shipped,
+ * wherever it came from. Silicon & systems shows shipped work only, so
+ * its prototypes and research live on that shelf alone; AI programs &
+ * platforms keeps its unshipped items in both places.
  */
 export const filters = [
 	{ key: 'all', label: 'All' },
 	{ key: 'silicon', label: 'Silicon & systems' },
 	{ key: 'ai', label: 'AI programs & platforms' },
-	{ key: 'prototypes', label: 'Prototypes & research' },
-	{ key: 'others', label: 'Others' },
+	{ key: 'personal', label: 'Personal' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];

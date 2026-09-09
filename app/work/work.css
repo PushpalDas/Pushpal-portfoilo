@@ -27,22 +27,66 @@
 	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
+/* Title row: H1 left, filter pills to its right. The row is
+   baseline-aligned, so the first line of pills sits on the headline's
+   text baseline: "From Silicon to AI" and the four categories read as
+   words on one invisible line. Others hangs a step below that line. */
 .work-header-row {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-}
-
-.work-header-col {
-	flex: 1;
+	align-items: baseline;
+	gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .work-header-filters {
-	flex-shrink: 0;
+	flex: 0 0 auto;
+	min-width: 0;
+	/* Baseline alignment puts the pill TEXT on the headline's baseline; the
+	   pill outline then hangs below it by descent + padding + border, which
+	   measures about 1em of the pill's 0.9rem type. Lift by that much so
+	   the bottom edge of each pill sits on the invisible line instead. */
+	position: relative;
+	top: -0.9rem;
+}
+
+@media screen and (min-width: 768px) {
+	.work-header-title {
+		white-space: nowrap;
+	}
+}
+
+/* Pills inside the header: sized so all four sit in one row beside the
+   headline from 1024px up. Between 768px and 1023px they may wrap,
+   right-aligned. */
+.work-header-filters .work-filters-row {
+	align-items: flex-end;
+	gap: 0.4rem;
+}
+
+.work-header-filters .work-filters-toggle-row {
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+@media screen and (min-width: 1024px) {
+	.work-header-filters .work-filters-toggle-row {
+		flex-wrap: nowrap;
+	}
+}
+
+/* Four pills, sized to read as a line of their own beside the headline. */
+.work-header-filters .work-filter-btn {
+	padding: 0.5em 1.1em;
+	font-size: 0.9rem;
+	letter-spacing: 0.01em;
+	white-space: nowrap;
 }
 
 .work-header-title {
-	font-size: clamp(2.5rem, 7vw, 5.5rem);
+	/* Capped below the old 5.5rem so the headline and the single row of
+	   four filter pills share one line; nowrap is applied from 768px up. */
+	font-size: clamp(2.5rem, 5.6vw, 4.5rem);
+	flex: 0 0 auto;
 	font-weight: 400;
 	line-height: 1.1;
 	letter-spacing: -0.03em;
@@ -57,7 +101,10 @@ html:not(.dark) .work-header-title {
 .work-header-line {
 	display: block;
 	position: relative;
-	overflow: hidden;
+	/* Masks the rise-in like overflow: hidden would, but a clip-path is
+	   not a scroll container, so the text baseline still propagates up
+	   to the H1 for the baseline-aligned title row. */
+	clip-path: inset(0);
 }
 
 .work-header-line-inner {
@@ -80,18 +127,22 @@ html:not(.dark) .work-header-title {
 	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
+/* Two stacked pill rows: the on-the-line group, then Others below it. */
 .work-filters-row {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 1rem;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
 }
 
 .work-filters-toggle-row {
 	display: flex;
 	gap: 0.5rem;
 	flex-wrap: wrap;
+}
+
+.work-filters-below-row:empty {
+	display: none;
 }
 
 .work-filters-grid-row {
@@ -656,6 +707,27 @@ html:not(.dark) .work-tile-info-col p {
 		padding-bottom: 1.5rem;
 	}
 
+	/* Pills drop under the headline, left-aligned, before the copy. */
+	.work-header-row {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1rem;
+	}
+
+	.work-header-filters {
+		margin-top: 0;
+		/* Stacked under the headline here, so no baseline to sit on. */
+		top: 0;
+	}
+
+	.work-header-filters .work-filters-row {
+		align-items: flex-start;
+	}
+
+	.work-header-filters .work-filters-toggle-row {
+		justify-content: flex-start;
+	}
+
 	.work-list-col-info {
 		display: none;
 	}
@@ -686,26 +758,44 @@ html:not(.dark) .work-tile-info-col p {
 /* Header Subline */
 /* The keyword line — read by scanners and skimmers, so it sits above the
    sentence and runs a step smaller and wider than it. */
-.work-header-stack {
-	font-size: clamp(0.8rem, 1vw, 0.92rem);
-	font-weight: 300;
-	letter-spacing: 0.01em;
-	color: rgba(255, 255, 255, 0.55);
-	margin: 1.25rem 0 0;
-	max-width: 900px;
-	line-height: 1.7;
+/* Both lines swap with the filter pill; the wrapper is remounted on each
+   change so the fade runs every time. */
+.work-header-copy-swap {
+	animation: work-header-copy-fade 0.45s ease-out both;
 }
 
-html:not(.dark) .work-header-stack {
-	color: rgba(0, 0, 0, 0.5);
+@keyframes work-header-copy-fade {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.work-header-copy-swap {
+		animation: none;
+	}
+}
+
+/* The copy block runs the full container width under the title row, with
+   the sentence held to a readable measure and the keyword line allowed
+   to use the remaining width. */
+.work-header-subline-wrap {
+	margin-top: clamp(1rem, 2vw, 1.5rem);
 }
 
 .work-header-subline {
 	font-size: clamp(1rem, 1.5vw, 1.25rem);
 	font-weight: 300;
 	color: rgba(255, 255, 255, 0.7);
-	margin: 1rem 0 0;
-	max-width: 800px;
+	margin: 0;
+	/* Same measure as the keyword line, so each track's sentence holds
+	   one line on desktop. */
+	max-width: 1040px;
 	line-height: 1.5;
 }
 
@@ -713,19 +803,19 @@ html:not(.dark) .work-header-subline {
 	color: rgba(0, 0, 0, 0.6);
 }
 
-/* Sample-portfolio disclosure — figures across the grid are invented */
-.work-header-sample-note {
-	font-size: 0.8rem;
+/* The keyword line: one step smaller and wider than the sentence above it */
+.work-header-stack {
+	font-size: clamp(0.8rem, 1vw, 0.92rem);
 	font-weight: 300;
 	letter-spacing: 0.01em;
-	color: rgba(255, 255, 255, 0.4);
-	margin: 0.75rem 0 0;
-	max-width: 640px;
-	line-height: 1.5;
+	color: rgba(255, 255, 255, 0.55);
+	margin: 0.9rem 0 0;
+	max-width: 1040px;
+	line-height: 1.7;
 }
 
-html:not(.dark) .work-header-sample-note {
-	color: rgba(0, 0, 0, 0.45);
+html:not(.dark) .work-header-stack {
+	color: rgba(0, 0, 0, 0.5);
 }
 
 /* Meta Col push to bottom */
@@ -920,7 +1010,9 @@ html:not(.dark) .work-empty {
 	border-radius: 8px;
 	text-decoration: none;
 	color: inherit;
-	transition: border-color 0.15s ease, background 0.15s ease;
+	transition:
+		border-color 0.15s ease,
+		background 0.15s ease;
 }
 .work-chapters a:hover {
 	border-color: rgba(128, 128, 140, 0.6);
