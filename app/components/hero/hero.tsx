@@ -33,9 +33,9 @@ export default function Hero() {
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
 								Principal PM in the CTO&apos;s office at Ixana — I run the Wi-R
-								silicon programs from spec to production, the patent program
-								around them, and the AI platforms the company plans, delivers
-								and searches with.
+								silicon programs, the patent program around them, and the
+								internal AI platforms the company plans, delivers and searches
+								with.
 							</p>
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>
@@ -96,7 +96,7 @@ export default function Hero() {
 								data-skip-splash-cursor
 							>
 								<Magnetic strength={20}>
-									<Link href='/work'>See the work →</Link>
+									<Link href='/work'>See all work →</Link>
 								</Magnetic>
 							</div>
 						</section>

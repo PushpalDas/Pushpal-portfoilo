@@ -9,12 +9,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import '../../work/work.css';
 import Magnetic from '../Magnetic';
 import './work-highlights.css';
-import {
-	type Highlight,
-	type HighlightTrack,
-	highlightGroups,
-	workHighlights,
-} from './workHighlights';
+import type { HighlightTrack } from './workHighlights';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,71 +21,76 @@ interface Badge {
 	colorClass: string;
 }
 
-/** Everything the card borrows from the work item /work renders. */
-export interface CardMeta {
-	badge: Badge | null;
+/**
+ * One home card. Every field is the work page's own — the work item in
+ * app/work/constants.ts and its case study in data/case-studies-v2.json —
+ * assembled in works.tsx at build time. Nothing here is typed by hand.
+ */
+export interface HighlightCardData {
+	/** Case study at /work/<slug>. */
+	slug: string;
+	/** The /work card's title. */
+	title: string;
+	/** The /work card's one-line outcome. */
+	outcome: string;
+	/** The /work card's meta row: company · domain, and the demo it links. */
+	company: string;
+	domain: string;
+	demoUrl: string;
 	image: string;
 	color?: string;
+	badge: Badge | null;
+	/** The first few numbers from the case study's own metrics block. */
+	metrics: {
+		value: string;
+		sub?: string;
+		label: string;
+		/** Set only when `value` is a bare integer; animates 0 → value once. */
+		countUp?: number;
+	}[];
+	/** The case study's summary — Problem, What I did, Result. */
+	summary: { lead: string; text: string }[];
+	role: string;
+	stage: string;
+}
+
+export interface HighlightGroupData {
+	track: HighlightTrack;
+	label: string;
+	moreHref: string;
+	/** Products on the track the home page is not already showing. */
+	moreCount: number;
+	cards: HighlightCardData[];
 }
 
 interface WorkHighlightsProps {
-	/** Products on each track the home page is not already showing. */
-	moreCounts: Partial<Record<HighlightTrack, number>>;
-	/** Badge, image and tile colour per slug, from app/work/constants.ts. */
-	cards: Record<string, CardMeta>;
+	groups: HighlightGroupData[];
+	/** The /work "All" pill's label. */
+	allLabel: string;
 }
 
-function Features({ features }: { features: string[] }) {
-	// Two interleaved columns, so list order reads across rather than down.
-	return (
-		<div className='wh-features'>
-			<ul className='wh-features-col'>
-				{features
-					.filter((_, i) => i % 2 === 0)
-					.map((feature) => (
-						<li key={feature}>{feature}</li>
-					))}
-			</ul>
-			<ul className='wh-features-col'>
-				{features
-					.filter((_, i) => i % 2 === 1)
-					.map((feature) => (
-						<li key={feature}>{feature}</li>
-					))}
-			</ul>
-		</div>
-	);
-}
+type Pick = 'all' | HighlightTrack;
 
 /**
- * A /work tile, carrying everything the old detail panel held.
- *
- * The numbers stay on the face of the card — they are the most valuable
- * thing on it and should never be a click away. Features and who's
- * interested sit behind one disclosure that opens the card in place, so
- * eleven programmes fit on the page without a second reading surface.
+ * A /work tile with the case study's numbers on its face and its summary
+ * behind one disclosure, so twelve pieces of work fit on the page without
+ * a second reading surface. The numbers are the most valuable thing on
+ * the card and are never a click away.
  */
-function HighlightCard({
-	highlight,
-	card,
-}: {
-	highlight: Highlight;
-	card: CardMeta;
-}) {
+function HighlightCard({ card }: { card: HighlightCardData }) {
 	const [open, setOpen] = useState(false);
 	const detailsId = useId();
 	const cardRef = useRef<HTMLLIElement>(null);
 	const counted = useRef(false);
 
-	const href = `/work/${highlight.slug}${FROM_HOME}`;
-	const stacked = highlight.panelItems.length > 1;
+	const href = `/work/${card.slug}${FROM_HOME}`;
 
 	// Count-ups run once, when the card first arrives.
 	useEffect(() => {
-		const card = cardRef.current;
-		if (!card) return;
+		const el = cardRef.current;
+		if (!el) return;
 
-		const nodes = card.querySelectorAll<HTMLElement>('[data-countup]');
+		const nodes = el.querySelectorAll<HTMLElement>('[data-countup]');
 		if (nodes.length === 0) return;
 
 		const reduced = window.matchMedia(
@@ -126,7 +126,7 @@ function HighlightCard({
 		}
 
 		const trigger = ScrollTrigger.create({
-			trigger: card,
+			trigger: el,
 			start: 'top 88%',
 			once: true,
 			onEnter: run,
@@ -164,21 +164,60 @@ function HighlightCard({
 					</div>
 
 					<div className='work-tile-title-col'>
-						{card.badge && (
-							<span className={`work-status-badge ${card.badge.colorClass}`}>
-								{card.badge.label}
-							</span>
-						)}
+						{/* Status on the left, the disclosure on the right, in the same
+						    pill and the same colour family as the status — so a card in
+						    production opens on green, one in testing on amber. */}
+						<div className='wh-card-status-row'>
+							{card.badge && (
+								<span className={`work-status-badge ${card.badge.colorClass}`}>
+									{card.badge.label}
+								</span>
+							)}
+							<button
+								type='button'
+								className={`work-status-badge wh-card-toggle ${card.badge?.colorClass ?? 'status-muted'}`}
+								aria-expanded={open}
+								aria-controls={detailsId}
+								onClick={() => setOpen((v) => !v)}
+							>
+								<span className='wh-card-toggle-label'>
+									{open ? 'Hide details' : 'Details'}
+								</span>
+								{/* A single downward arrow beside the label; it points up
+								    while the card is open. */}
+								<span
+									className='wh-card-chevron'
+									aria-hidden='true'
+									data-open={open}
+								>
+									<svg
+										aria-hidden='true'
+										focusable='false'
+										viewBox='0 0 12 12'
+										width='1em'
+										height='1em'
+										fill='none'
+										stroke='currentColor'
+										strokeWidth='1.6'
+										strokeLinecap='round'
+										strokeLinejoin='round'
+									>
+										<path d='M6 1.5v9' />
+										<path d='M2.5 7l3.5 3.5L9.5 7' />
+									</svg>
+								</span>
+							</button>
+						</div>
 						<h4 className='work-tile-title-clamp'>
 							<Link href={href} className='wh-card-title-link'>
-								{highlight.title}
+								{card.title}
 							</Link>
 						</h4>
-						<p className='work-tile-outcome'>{highlight.headline}</p>
+						<p className='work-tile-outcome'>{card.outcome}</p>
 					</div>
 
 					<dl className='wh-card-metrics'>
-						{highlight.metrics.map((metric) => (
+						{card.metrics.map((metric) => (
 							<div className='wh-card-metric' key={metric.label}>
 								<dt className='wh-card-metric-value'>
 									{metric.countUp === undefined ? (
@@ -186,83 +225,49 @@ function HighlightCard({
 									) : (
 										<span data-countup={metric.countUp}>{metric.value}</span>
 									)}
+									{metric.sub && (
+										<span className='wh-card-metric-sub'> {metric.sub}</span>
+									)}
 								</dt>
 								<dd className='wh-card-metric-label'>{metric.label}</dd>
 							</div>
 						))}
 					</dl>
 
+					{/* The same meta row as the /work card — company · domain on the
+					    left, the Demo marker on the right, one line — with the case
+					    study link between them. The marker links the demo the work
+					    item itself carries. */}
 					<div className='work-tile-meta-col'>
-						<div className='work-tile-stripe' />
-						<div className='work-tile-info-col'>
-							<p>{highlight.eyebrow}</p>
-							{highlight.proof && (
-								<a
-									href={highlight.proof.href}
-									target='_blank'
-									rel='noopener noreferrer'
-									className='work-demo-marker wh-card-proof'
-								>
-									{highlight.proof.text} ↗
-								</a>
-							)}
+						<div className='work-tile-stripe wh-card-stripe' />
+						<div className='work-tile-info-col wh-card-meta-row'>
+							<p>
+								{card.company} &middot; {card.domain}
+							</p>
+							<Link href={href} className='wh-card-case'>
+								Case study →
+							</Link>
+							<a
+								className='work-demo-marker'
+								href={card.demoUrl}
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								Demo ↗
+							</a>
 						</div>
 					</div>
 
-					<div className='wh-card-foot'>
-						<button
-							type='button'
-							className='wh-card-toggle'
-							aria-expanded={open}
-							aria-controls={detailsId}
-							onClick={() => setOpen((v) => !v)}
-						>
-							<span className='wh-card-toggle-label'>
-								{open ? 'Hide details' : 'Details'}
-							</span>
-							<span
-								className='wh-card-chevron'
-								aria-hidden='true'
-								data-open={open}
-							>
-								⌄
-							</span>
-						</button>
-						<Link href={href} className='wh-card-case'>
-							Read the case study →
-						</Link>
-					</div>
-
+					{/* The case study's own summary, verbatim. */}
 					<div className='wh-card-details' id={detailsId} data-open={open}>
 						<div className='wh-card-details-inner'>
-							<h5 className='wh-card-sub'>What it does</h5>
-							<Features features={highlight.features} />
-
-							<h5 className='wh-card-sub'>
-								{highlight.panelLabel ?? "Who's interested?"}
-							</h5>
-							<ul
-								className={`wh-panel-items${stacked ? ' wh-panel-items--stacked' : ''}`}
-							>
-								{highlight.panelItems.map((item) => (
-									<li key={item.text}>
-										{item.href ? (
-											<a
-												href={item.href}
-												target='_blank'
-												rel='noopener noreferrer'
-											>
-												{item.text}
-											</a>
-										) : (
-											item.text
-										)}
-									</li>
-								))}
-							</ul>
-
+							{card.summary.map((para) => (
+								<p className='wh-card-summary' key={para.lead}>
+									<strong>{para.lead}</strong> {para.text}
+								</p>
+							))}
 							<p className='wh-card-role'>
-								{highlight.role} · {highlight.status} · {highlight.years}
+								{card.role} · {card.stage}
 							</p>
 						</div>
 					</div>
@@ -273,10 +278,27 @@ function HighlightCard({
 }
 
 export default function WorkHighlights({
-	moreCounts,
-	cards,
+	groups,
+	allLabel,
 }: WorkHighlightsProps) {
 	const rootRef = useRef<HTMLElement>(null);
+
+	// The same three pills /work opens with, in the same order, doing the
+	// same thing: All shows both groups, a track shows its own.
+	const [pick, setPick] = useState<Pick>('all');
+	const pills: { key: Pick; label: string }[] = [
+		{ key: 'all', label: allLabel },
+		...groups.map((g) => ({ key: g.track, label: g.label })),
+	];
+	const shown = groups.filter((g) => pick === 'all' || g.track === pick);
+
+	// Switching pills moves the remaining group up the page; the reveal
+	// triggers were measured for where it used to be, so re-measure once
+	// React has committed the new layout.
+	const choose = (next: Pick) => {
+		setPick(next);
+		requestAnimationFrame(() => ScrollTrigger.refresh());
+	};
 
 	const lenis = useLenis();
 
@@ -321,76 +343,85 @@ export default function WorkHighlights({
 			<div className='wh-shell'>
 				<header className='wh-head'>
 					<h2 className='wh-title wh-reveal'>Selected work.</h2>
+					<div className='work-filters-toggle-row wh-pills wh-reveal'>
+						{pills.map((pill) => (
+							<Magnetic key={pill.key} strength={15}>
+								<button
+									type='button'
+									className={`work-filter-btn${pick === pill.key ? ' active' : ''}`}
+									onClick={() => choose(pill.key)}
+									aria-pressed={pick === pill.key}
+								>
+									<span className='work-filter-btn-fill' />
+									<span className='work-filter-btn-text'>{pill.label}</span>
+								</button>
+							</Magnetic>
+						))}
+					</div>
 				</header>
 
-				{highlightGroups.map((group) => {
-					const tiles = workHighlights.filter((h) => h.track === group.track);
-					return (
-						<section className='wh-group' key={group.track}>
-							<h3 className='wh-group-line wh-reveal'>{group.label}</h3>
+				{shown.map((group) => (
+					<section className='wh-group' key={group.track}>
+						<h3 className='wh-group-line wh-reveal'>{group.label}</h3>
 
-							<div className='work-section-divider wh-reveal'>
-								<span className='work-section-divider-text'>CASE STUDIES</span>
-								<div className='work-section-divider-line' />
-							</div>
+						<div className='work-section-divider wh-reveal'>
+							<span className='work-section-divider-text'>CASE STUDIES</span>
+							<div className='work-section-divider-line' />
+						</div>
 
-							<ul className='work-grid-items work-grid-3'>
-								{tiles.map((highlight) => (
-									<HighlightCard
-										key={highlight.slug}
-										highlight={highlight}
-										card={cards[highlight.slug]}
-									/>
-								))}
+						<ul className='work-grid-items work-grid-3'>
+							{group.cards.map((card) => (
+								<HighlightCard key={card.slug} card={card} />
+							))}
 
-								{/* The rest of the track, as a tile rather than a button
-								    under the grid — it belongs to the same row of work.
-								    Built from /work's own tile parts, so it inherits the
-								    same hover zoom rather than imitating it. */}
-								<li className='work-tile wh-more-tile'>
-									<div className='work-tile-wrap'>
-										<Link
-											href={group.more.href}
-											className='work-tile-link wh-more-card'
-										>
-											<div className='work-tile-image-col'>
-												<div className='work-tile-image'>
-													<div className='work-tile-image-bg wh-more-bg' />
-													<span className='work-tile-icon-display wh-more-display'>
-														<span className='wh-more-count'>
-															+{moreCounts[group.track] ?? 0}
-														</span>
-														<span className='wh-more-word'>more</span>
+							{/* The rest of the track, as a tile rather than a button
+							    under the grid — it belongs to the same row of work.
+							    Built from /work's own tile parts, so it inherits the
+							    same hover zoom rather than imitating it. */}
+							<li className='work-tile wh-more-tile'>
+								<div className='work-tile-wrap'>
+									<Link
+										href={group.moreHref}
+										className='work-tile-link wh-more-card'
+									>
+										<div className='work-tile-image-col'>
+											<div className='work-tile-image'>
+												<div className='work-tile-image-bg wh-more-bg' />
+												<span className='work-tile-icon-display wh-more-display'>
+													<span className='wh-more-count'>
+														+{group.moreCount}
 													</span>
-												</div>
+													<span className='wh-more-word'>more</span>
+												</span>
 											</div>
-											<div className='work-tile-title-col'>
-												<h4 className='work-tile-title-clamp'>
-													<span>{group.label}</span>
-												</h4>
-												<p className='work-tile-outcome'>
-													The rest of the track, on the work page.
-												</p>
+										</div>
+										<div className='work-tile-title-col'>
+											<h4 className='work-tile-title-clamp'>
+												<span>{group.label}</span>
+											</h4>
+											<p className='work-tile-outcome'>
+												The rest of the track, on the work page.
+											</p>
+										</div>
+										<div className='work-tile-meta-col'>
+											<div className='work-tile-stripe' />
+											<div className='work-tile-info-col'>
+												<p>See the rest →</p>
 											</div>
-											<div className='work-tile-meta-col'>
-												<div className='work-tile-stripe' />
-												<div className='work-tile-info-col'>
-													<p>See the rest →</p>
-												</div>
-											</div>
-										</Link>
-									</div>
-								</li>
-							</ul>
-						</section>
-					);
-				})}
+										</div>
+									</Link>
+								</div>
+							</li>
+						</ul>
+					</section>
+				))}
 
 				{/* This section is a slice of the work page; the link lands on the
-				    unfiltered row it was sliced from. */}
+				    unfiltered row it was sliced from. /work itself opens on
+				    Silicon & systems, so All is named explicitly. */}
 				<p className='wh-all wh-reveal'>
 					<Magnetic strength={12}>
-						<Link href='/work' className='wh-all-link'>
+						<Link href='/work?filter=all' className='wh-all-link'>
 							See all work →
 						</Link>
 					</Magnetic>
