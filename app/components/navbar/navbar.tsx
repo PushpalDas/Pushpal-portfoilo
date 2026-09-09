@@ -36,8 +36,13 @@ export default function Navbar() {
 	const [scrolled, setScrolled] = useState(false);
 	const [mobileOpen, setMobileOpen] = useState(false);
 
+	// Detail pages carry their own sticky "Back to …" bar, so the floating
+	// navbar steps aside there: a work case study, and a certificate page
+	// in the same layout. The list pages keep it.
 	const isCaseStudySubpage =
-		pathname.startsWith('/work/') && pathname !== '/work';
+		(pathname.startsWith('/work/') && pathname !== '/work') ||
+		(pathname.startsWith('/certifications/') &&
+			pathname !== '/certifications');
 
 	const connectActive = pathname.startsWith(CONNECT.href);
 
