@@ -17,14 +17,14 @@
 
 .hoobie-page {
 	/* ground */
-	--h-bg: #080808;
+	--h-bg: #000000;
 	--h-surface: #111210;
 	--h-text: #f1efe7;
 	--h-muted: #a8a7a1;
 	--h-line: rgba(241, 239, 231, 0.18);
 
 	/* the one brand colour, and the tint small text can use.
-	   #455ce9 is ~3.8:1 on #080808 and fails for captions;
+	   #455ce9 is ~3.8:1 on #000000 and fails for captions;
 	   #7d90ff is ~7:1 and passes. */
 	--h-accent: #455ce9;
 	--h-accent-text: #7d90ff;
@@ -59,13 +59,7 @@
 .hoobie-page {
 	position: relative;
 	min-height: 100svh;
-	background:
-		radial-gradient(
-			110% 60% at 50% 0%,
-			rgba(69, 92, 233, 0.12) 0%,
-			transparent 60%
-		),
-		var(--h-bg);
+	background: var(--h-bg);
 	color: var(--h-text);
 	overflow-x: hidden;
 }
@@ -225,6 +219,85 @@
 .hoobie-cta:focus-visible {
 	color: #fff;
 	border-color: var(--h-accent);
+}
+
+/* --- the collection switch ----------------------------------- */
+
+/* Photography or Books, chosen at the top. The switch is in the flow,
+   centred under the navbar, and both heroes hang from it at the same
+   distance — top-aligned, with one shared top padding — so the eyebrow
+   line sits the same way under the pills whichever collection is up. */
+.hobby-shell {
+	--hobby-switch-top: clamp(5.5rem, 10vh, 7rem);
+	--hobby-switch-gap: clamp(3rem, 6vh, 4.5rem);
+	position: relative;
+	background: #000;
+}
+
+.hobby-switch {
+	position: relative;
+	z-index: 30;
+	display: flex;
+	width: max-content;
+	margin: 0 auto;
+	padding: var(--hobby-switch-top) 0 0;
+	gap: 0.5rem;
+}
+
+.hobby-shell .hoobie-hero,
+.hobby-shell .books-hero {
+	align-items: flex-start;
+	min-height: 0;
+	padding-top: var(--hobby-switch-gap);
+}
+
+/* Both hero grids top-align their copy too, so the eyebrow line lands
+   at the padding edge rather than at the centre of a taller column. */
+.hobby-shell .hoobie-hero-grid,
+.hobby-shell .books-hero-grid {
+	align-items: start;
+}
+
+/* The switch sits outside either page, so the pill cannot lean on the
+   page tokens; every value it needs is spelled out here. */
+.hobby-switch-btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	min-height: 36px;
+	padding: 0.5rem 1.2rem;
+	border: 1px solid rgba(241, 239, 231, 0.18);
+	border-radius: 100px;
+	overflow: hidden;
+	background: none;
+	color: #a8a7a1;
+	font: inherit;
+	font-size: 0.7rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition:
+		color 0.4s cubic-bezier(0.76, 0, 0.24, 1),
+		border-color 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.hobby-switch-btn .hoobie-cta-fill {
+	background: #455ce9;
+	transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.hobby-switch-btn:hover,
+.hobby-switch-btn:focus-visible,
+.hobby-switch-btn[data-active="true"] {
+	color: #fff;
+	border-color: #455ce9;
+}
+
+.hobby-switch-btn:hover .hoobie-cta-fill,
+.hobby-switch-btn:focus-visible .hoobie-cta-fill,
+.hobby-switch-btn[data-active="true"] .hoobie-cta-fill {
+	transform: translateY(0);
 }
 
 /* --- hero --------------------------------------------------- */
@@ -518,7 +591,7 @@
 	z-index: 100;
 	display: flex;
 	flex-direction: column;
-	background: rgba(8, 8, 8, 0.97);
+	background: rgba(0, 0, 0, 0.97);
 }
 
 .hoobie-viewer-stage {

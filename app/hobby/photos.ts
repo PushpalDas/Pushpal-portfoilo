@@ -155,6 +155,16 @@ const archiveNames: Record<string, Omit<Curated, 'id'>> = {
 		category: 'Nature',
 		alt: 'A winged ant on pale cloth, its shadow thrown out behind it.',
 	},
+	'IMG_6202.jpg': {
+		title: 'The turn',
+		category: 'Nature',
+		alt: 'A pelican banking hard against a blue sky, one wing dropped, a dark tree line below.',
+	},
+	'IMG_6207.jpg': {
+		title: 'Blue above, gold below',
+		category: 'Nature',
+		alt: 'A spot-billed pelican riding rippled water, blue in the upper half of the frame and gold in the lower.',
+	},
 	'IMG_6205.jpg': {
 		title: 'Nothing but sky',
 		category: 'Nature',
@@ -479,6 +489,8 @@ const HANG = [
 	'IMG_6223.jpg', // 029 Eye level with a god
 	'IMG_6280.jpg', // 077 Alleppey, doubled
 	'IMG_6215.jpg', // 023 A footing on nothing
+	'IMG_6202.jpg', // 014 The turn
+	'IMG_6207.jpg', // 016 Blue above, gold below
 	'IMG_6278.jpg', // 075 Locked, still receiving post
 	'IMG_6260.jpg', // 09 Winter silence
 	'IMG_6281.jpg', // 11 Weather turning

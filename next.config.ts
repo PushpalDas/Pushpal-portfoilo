@@ -1,4 +1,3 @@
-import path from 'node:path';
 import type { NextConfig } from 'next';
 
 const umami_url = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_URL ?? '';
@@ -24,6 +23,13 @@ const nextConfig: NextConfig = {
 			{
 				source: '/hoobie',
 				destination: '/hobby',
+				permanent: true,
+			},
+			// The reading list moved under Hobby, behind the switch at the top
+			// of that page. Book pages themselves stay at /books/<slug>.
+			{
+				source: '/books',
+				destination: '/hobby?view=books',
 				permanent: true,
 			},
 			// Book a meeting was folded into Let's connect, which now carries

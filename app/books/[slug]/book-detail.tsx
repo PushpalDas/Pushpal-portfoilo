@@ -21,7 +21,7 @@ export default function BookDetail({ book }: { book: Book }) {
 	return (
 		<main className='books-page'>
 			<div className='books-shell books-detail'>
-				<Link href='/books' className='books-back'>
+				<Link href='/hobby?view=books' className='books-back'>
 					<span aria-hidden='true'>←</span> Back to the shelf
 				</Link>
 
@@ -64,20 +64,6 @@ export default function BookDetail({ book }: { book: Book }) {
 						)}
 					</div>
 				</article>
-
-				{/* What stayed with me from the book, ten at a time. Written as
-				    notes in my own words, not as quotations — see the note in
-				    constants.ts on why this shelf never reproduces the text. */}
-				{book.takeaways.length > 0 && (
-					<section className='books-takeaways' aria-label='Bookmarked'>
-						<h2 className='books-takeaways-head'>Bookmarked</h2>
-						<ol className='books-takeaways-list'>
-							{book.takeaways.map((t) => (
-								<li key={t}>{t}</li>
-							))}
-						</ol>
-					</section>
-				)}
 
 				{(previous || next) && (
 					<nav

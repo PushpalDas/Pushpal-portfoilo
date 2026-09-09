@@ -260,6 +260,27 @@ export const books: Book[] = [
 			'Read it after the gentler books, not instead of them.',
 		],
 	},
+	{
+		slug: 'sing-dance-and-lead',
+		title: 'Sing, Dance and Lead',
+		author: 'Hindol Sengupta',
+		year: '2025',
+		category: 'Life',
+		cover: 'sing-dance-and-lead.webp',
+		note: 'Subtitled “leadership lessons from the teachings of Srila Prabhupada”. A historian reads the founding of a global movement — begun at sixty-nine, with almost nothing, and built in eleven years — as a case study in leadership by service. The one book on this shelf written for the office rather than the temple.',
+		takeaways: [
+			'Leadership is framed as service first; authority is what follows, not what starts it.',
+			'Starting late with nothing is treated as a fact of the case, not an excuse in it.',
+			'A movement scales on the people it trains, so training is the leader’s main work.',
+			'Joy is a management tool — the singing and dancing are the method, not a break from it.',
+			'Discipline is set as a small daily routine and then never negotiated.',
+			'Thousands of letters: the leader wrote back, and the writing back held the organisation together.',
+			'Delegate early, and to people who are not yet ready, because that is how they become ready.',
+			'Purpose fixed once lets every other decision be made quickly.',
+			'Tolerance of criticism is the price of being visible, and it is paid without complaint.',
+			'The modern management vocabulary is mapped onto the tradition, and the fit is closer than expected.',
+		],
+	},
 
 	// ── Product ───────────────────────────────────────────────
 	{

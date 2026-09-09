@@ -18,8 +18,8 @@ const navLinks = [
 	{ href: '/experience', label: 'Experience' },
 	{ href: '/work', label: 'Work' },
 	{ href: '/certifications', label: 'Certifications' },
+	// Books live under Hobby now, behind the switch at the top of that page.
 	{ href: '/hobby', label: 'Hobby' },
-	{ href: '/books', label: 'Books' },
 ];
 
 /**

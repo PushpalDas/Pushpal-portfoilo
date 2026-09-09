@@ -19,12 +19,14 @@ import {
  * the stack reads as a shelf rather than as a grid.
  */
 const CLUSTER = [
+	// Top row.
 	'bhagavad-gita-as-it-is',
-	'innovators-dilemma',
+	'path-of-perfection',
 	'science-of-self-realization',
-	'atomic-habits',
+	// Bottom row.
 	'chip-war',
-	'ikigai',
+	'steve-jobs',
+	'innovators-dilemma',
 ];
 
 /** Anchor id for a shelf, derived so the index and the sections cannot drift. */
@@ -101,7 +103,7 @@ export default function BooksPage() {
 						<p className='books-lead reveal' data-reveal-delay='0.12'>
 							{books.length} books on four shelves — spirituality, product,
 							physics, and the ones about getting out of your own way. Covers
-							only; a line or two on each, and ten things worth keeping.
+							only, and a line or two on each.
 						</p>
 						<span className='reveal' data-reveal-delay='0.18'>
 							<Magnetic strength={18}>

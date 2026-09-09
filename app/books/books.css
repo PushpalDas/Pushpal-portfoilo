@@ -18,7 +18,7 @@
 /* --- tokens ------------------------------------------------- */
 
 .books-page {
-	--b-bg: #080808;
+	--b-bg: #000000;
 	--b-surface: #111210;
 	--b-text: #f1efe7;
 	--b-muted: #a8a7a1;
@@ -51,13 +51,7 @@
 .books-page {
 	position: relative;
 	min-height: 100svh;
-	background:
-		radial-gradient(
-			110% 60% at 50% 0%,
-			rgba(69, 92, 233, 0.1) 0%,
-			transparent 60%
-		),
-		var(--b-bg);
+	background: var(--b-bg);
 	color: var(--b-text);
 	overflow-x: hidden;
 }
