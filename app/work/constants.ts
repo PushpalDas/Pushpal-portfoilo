@@ -31,12 +31,12 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
-	development: 2,
-	internal: 3,
-	'customer-testing': 4,
-	prototype: 5,
-	research: 6,
-	null: 7,
+	development: 1,
+	internal: 2,
+	'customer-testing': 3,
+	prototype: 4,
+	research: 5,
+	null: 6,
 };
 
 export const workItems: WorkItem[] = [
@@ -239,7 +239,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
-		order: 8,
+		order: 11,
 		outcome:
 			'Replaced a paper key register with an audited electronic cabinet, shipped as a catalogue product with per-key accountability.',
 		image: 'Image__1_.png',
@@ -275,7 +275,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
-		order: 10,
+		order: 13,
 		outcome:
 			'Cut the smartwatch bill of materials to a price Indian retail could carry while keeping heart-rate sensing and phone notifications.',
 		image: 'Gemini_Generated_Image_io6t60io6t60io6t.png',
@@ -294,7 +294,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
-		order: 1,
+		order: 7,
 		outcome:
 			'The next Wi-R part: mass-production tapeout at the end of August, customer sampling starting. Part number and specification withheld.',
 		image: 'confidential-chip.png',
@@ -313,7 +313,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
-		order: 2,
+		order: 8,
 		outcome:
 			'A new platform chip, sampling tapeout scheduled for November 2026. What it is for stays confidential until it ships.',
 		image: 'confidential-chip.png',
@@ -332,7 +332,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
-		order: 3,
+		order: 9,
 		outcome:
 			'The Wi-R generation after that, production tapeout targeted for Q1 2027. Part number and specification withheld.',
 		image: 'confidential-chip.png',
@@ -587,7 +587,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
-		order: 9,
+		order: 12,
 		outcome:
 			'Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.',
 		image: 'Gemini_Generated_Image_cqoga8cqoga8cqog.png',
@@ -618,7 +618,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
-		order: 7,
+		order: 10,
 		outcome:
 			'Bench instrument that synthesised downhole sensor signals, so tool electronics could be tested without waiting on a well.',
 		image: 'Gemini_Generated_Image_dwoxzldwoxzldwox.png',

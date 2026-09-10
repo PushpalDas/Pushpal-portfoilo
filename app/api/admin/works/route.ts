@@ -49,12 +49,12 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
-	development: 2,
-	internal: 3,
-	'customer-testing': 4,
-	prototype: 5,
-	research: 6,
-	null: 7,
+	development: 1,
+	internal: 2,
+	'customer-testing': 3,
+	prototype: 4,
+	research: 5,
+	null: 6,
 };
 `;
 

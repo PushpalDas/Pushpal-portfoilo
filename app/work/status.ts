@@ -15,10 +15,12 @@ export type WorkStatus = keyof typeof WORK_STATUSES;
 
 export const WORK_STATUS_ORDER: Record<WorkStatus | 'none', number> = {
 	production: 1,
-	development: 2,
-	internal: 3,
-	'customer-testing': 4,
-	prototype: 5,
-	research: 6,
-	none: 7,
+	// Silicon in flight hangs among the shipped parts, placed by `order`,
+	// so the Wi-R roadmap reads in one run before the older embedded work.
+	development: 1,
+	internal: 2,
+	'customer-testing': 3,
+	prototype: 4,
+	research: 5,
+	none: 6,
 };
