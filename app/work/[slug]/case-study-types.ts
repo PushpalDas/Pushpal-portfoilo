@@ -48,6 +48,7 @@ export interface ProjectNav {
 
 export type CaseStudyStatus =
 	| 'production'
+	| 'development'
 	| 'internal'
 	| 'customer-testing'
 	| 'prototype'

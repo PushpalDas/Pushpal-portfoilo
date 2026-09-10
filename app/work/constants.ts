@@ -14,6 +14,7 @@ export const STATUS_CONFIG: Record<
 	{ label: string; colorClass: string }
 > = {
 	production: { label: 'In production', colorClass: 'status-green' },
+	development: { label: 'In development', colorClass: 'status-amber' },
 	internal: { label: 'Shipped internally', colorClass: 'status-green' },
 	'customer-testing': {
 		label: 'In customer testing',
@@ -30,11 +31,12 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
-	internal: 2,
-	'customer-testing': 3,
-	prototype: 4,
-	research: 5,
-	null: 6,
+	development: 2,
+	internal: 3,
+	'customer-testing': 4,
+	prototype: 5,
+	research: 6,
+	null: 7,
 };
 
 export const workItems: WorkItem[] = [
@@ -280,6 +282,63 @@ export const workItems: WorkItem[] = [
 		slug: 'eegrab-smart-watch',
 		tier: 3,
 		color: '#dbeafe',
+	},
+	{
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer. The case study says the same, at more length.
+		title: 'Wi-R — XA-XXXXXXX · customer sampling',
+		company: 'Ixana',
+		year: '2026 - present',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 1,
+		outcome:
+			'The next Wi-R part: mass-production tapeout at the end of August, customer sampling starting. Part number and specification withheld.',
+		image: 'confidential-chip.png',
+		slug: 'wi-r-xa-customer-sampling',
+		tier: 3,
+		color: '#fef3c7',
+	},
+	{
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer. The case study says the same, at more length.
+		title: 'Confidential platform chip — XA-XXXXXXX',
+		company: 'Ixana',
+		year: '2026 - present',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 2,
+		outcome:
+			'A new platform chip, sampling tapeout scheduled for November 2026. What it is for stays confidential until it ships.',
+		image: 'confidential-chip.png',
+		slug: 'confidential-platform-chip',
+		tier: 3,
+		color: '#fef3c7',
+	},
+	{
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer. The case study says the same, at more length.
+		title: 'Wi-R — XA-XXXXXXX · next generation',
+		company: 'Ixana',
+		year: '2026 - present',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 3,
+		outcome:
+			'The Wi-R generation after that, production tapeout targeted for Q1 2027. Part number and specification withheld.',
+		image: 'confidential-chip.png',
+		slug: 'wi-r-xa-next-generation',
+		tier: 3,
+		color: '#fef3c7',
 	},
 	{
 		title: 'The internal AI program — fourteen tools, one doctrine',

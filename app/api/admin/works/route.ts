@@ -32,6 +32,7 @@ export const STATUS_CONFIG: Record<
 	{ label: string; colorClass: string }
 > = {
 	production: { label: 'In production', colorClass: 'status-green' },
+	development: { label: 'In development', colorClass: 'status-amber' },
 	internal: { label: 'Shipped internally', colorClass: 'status-green' },
 	'customer-testing': {
 		label: 'In customer testing',
@@ -48,11 +49,12 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
-	internal: 2,
-	'customer-testing': 3,
-	prototype: 4,
-	research: 5,
-	null: 6,
+	development: 2,
+	internal: 3,
+	'customer-testing': 4,
+	prototype: 5,
+	research: 6,
+	null: 7,
 };
 `;
 

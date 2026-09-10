@@ -83,7 +83,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Recalled a document exists",
@@ -309,7 +313,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Breadth vs reliability",
@@ -373,9 +381,30 @@
               "form": "lineArea",
               "title": "Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70",
               "yMax": 120,
-              "yTicks": [0, 40, 80, 120],
-              "xLabels": ["Week 1", "Week 4", "Week 7", "Week 10"],
-              "points": [18, 36, 44, 62, 68, 84, 94, 104, 112, 118],
+              "yTicks": [
+                0,
+                40,
+                80,
+                120
+              ],
+              "xLabels": [
+                "Week 1",
+                "Week 4",
+                "Week 7",
+                "Week 10"
+              ],
+              "points": [
+                18,
+                36,
+                44,
+                62,
+                68,
+                84,
+                94,
+                104,
+                112,
+                118
+              ],
               "threshold": {
                 "value": 70,
                 "label": "Pre-agreed floor: 70 of 140"
@@ -515,7 +544,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Wired the transceiver to their own MCU",
@@ -715,7 +748,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Configurability vs first-hour success",
@@ -786,8 +823,22 @@
               "form": "cumulative",
               "title": "Cumulative dev kits shipped by quarter, from 4 in the first quarter to 62 by the sixth, against a pre-agreed floor of 40",
               "yMax": 70,
-              "xLabels": ["Q3 24", "Q4 24", "Q1 25", "Q2 25", "Q3 25", "Q4 25"],
-              "points": [4, 13, 24, 38, 52, 62],
+              "xLabels": [
+                "Q3 24",
+                "Q4 24",
+                "Q1 25",
+                "Q2 25",
+                "Q3 25",
+                "Q4 25"
+              ],
+              "points": [
+                4,
+                13,
+                24,
+                38,
+                52,
+                62
+              ],
               "threshold": {
                 "value": 40,
                 "label": "Pre-agreed floor: 40 kits"
@@ -918,7 +969,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Exported the task list",
@@ -1126,7 +1181,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Comparability vs team fit",
@@ -1341,7 +1400,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Searched for the meeting by title",
@@ -1539,7 +1602,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Answer fidelity vs cost per question",
@@ -1749,7 +1816,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Accepted an invite in one tenant",
@@ -1949,7 +2020,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Usefulness vs disclosure",
@@ -2035,27 +2110,51 @@
               "columns": [
                 {
                   "name": "W1",
-                  "values": [41, 22, 8]
+                  "values": [
+                    41,
+                    22,
+                    8
+                  ]
                 },
                 {
                   "name": "W2",
-                  "values": [48, 26, 11]
+                  "values": [
+                    48,
+                    26,
+                    11
+                  ]
                 },
                 {
                   "name": "W3",
-                  "values": [52, 29, 9]
+                  "values": [
+                    52,
+                    29,
+                    9
+                  ]
                 },
                 {
                   "name": "W4",
-                  "values": [57, 31, 14]
+                  "values": [
+                    57,
+                    31,
+                    14
+                  ]
                 },
                 {
                   "name": "W5",
-                  "values": [61, 33, 12]
+                  "values": [
+                    61,
+                    33,
+                    12
+                  ]
                 },
                 {
                   "name": "W6",
-                  "values": [66, 35, 15]
+                  "values": [
+                    66,
+                    35,
+                    15
+                  ]
                 }
               ]
             },
@@ -2208,7 +2307,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the reporting did", "Where it broke", "Evidence"],
+            "head": [
+              "What the reporting did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Counted completed and delayed tasks (AMS)",
@@ -2432,7 +2535,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Reach vs fit",
@@ -2656,7 +2763,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Hand-drew a timeline before planning",
@@ -2827,7 +2938,11 @@
           },
           {
             "kind": "table",
-            "head": ["Surface", "What it answers", "The rule underneath it"],
+            "head": [
+              "Surface",
+              "What it answers",
+              "The rule underneath it"
+            ],
             "rows": [
               [
                 "Timeline",
@@ -2898,7 +3013,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Correcting data vs protecting it",
@@ -2972,22 +3091,46 @@
               "form": "stackedArea",
               "title": "Weekly sessions by role over ten weeks, rising from 24 to 133, split between leads, architects and project managers",
               "yMax": 150,
-              "xLabels": ["W1", "W3", "W5", "W7", "W10"],
+              "xLabels": [
+                "W1",
+                "W3",
+                "W5",
+                "W7",
+                "W10"
+              ],
               "series": [
                 {
                   "name": "Leads",
                   "color": "#5b7cfa",
-                  "points": [14, 31, 44, 55, 62]
+                  "points": [
+                    14,
+                    31,
+                    44,
+                    55,
+                    62
+                  ]
                 },
                 {
                   "name": "Architects",
                   "color": "#2c3a73",
-                  "points": [6, 14, 22, 31, 41]
+                  "points": [
+                    6,
+                    14,
+                    22,
+                    31,
+                    41
+                  ]
                 },
                 {
                   "name": "Project managers",
                   "color": "#3fae8b",
-                  "points": [4, 9, 16, 24, 30]
+                  "points": [
+                    4,
+                    9,
+                    16,
+                    24,
+                    30
+                  ]
                 }
               ]
             },
@@ -3130,7 +3273,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Opened the task's activity feed",
@@ -3341,7 +3488,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Completeness vs readability",
@@ -3767,7 +3918,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Diff quality vs time to ship",
@@ -3837,17 +3992,35 @@
               "form": "dualLine",
               "title": "Documents tracked rising from 248 to 301 while documents changed per night stays between 9 and 34, over eight weeks",
               "yMax": 320,
-              "xLabels": ["W1", "W3", "W5", "W6", "W8"],
+              "xLabels": [
+                "W1",
+                "W3",
+                "W5",
+                "W6",
+                "W8"
+              ],
               "series": [
                 {
                   "name": "Documents tracked",
                   "color": "#5b7cfa",
-                  "points": [248, 251, 278, 296, 301]
+                  "points": [
+                    248,
+                    251,
+                    278,
+                    296,
+                    301
+                  ]
                 },
                 {
                   "name": "Changed that night",
                   "color": "#3fae8b",
-                  "points": [12, 9, 31, 34, 18]
+                  "points": [
+                    12,
+                    9,
+                    31,
+                    34,
+                    18
+                  ]
                 }
               ]
             },
@@ -3970,7 +4143,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the plan did", "Where it broke", "Evidence"],
+            "head": [
+              "What the plan did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Filled gaps in the brief",
@@ -4196,7 +4373,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Independent review vs cost per run",
@@ -4412,7 +4593,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Emailed a request to procurement",
@@ -4655,7 +4840,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Speed to pilot vs control depth",
@@ -4912,7 +5101,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What people did", "Where it broke", "Evidence"],
+            "head": [
+              "What people did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Opened last year’s sheet for the family",
@@ -5136,7 +5329,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Traceability vs coverage",
@@ -5377,7 +5574,10 @@
               "title": "Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4",
               "max": 16,
               "unit": "count, one run each",
-              "seriesNames": ["Marketing whitepaper", "Engineering documents"],
+              "seriesNames": [
+                "Marketing whitepaper",
+                "Engineering documents"
+              ],
               "rows": [
                 {
                   "name": "Candidate concepts found",
@@ -5400,7 +5600,11 @@
           },
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Searched patent databases by keyword",
@@ -5752,7 +5956,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Applied gates as matrix arithmetic",
@@ -5904,8 +6112,24 @@
               "title": "State vector computation time against qubit count, rising from 4 milliseconds at four qubits to 1420 at twelve, against a 200 millisecond interactivity budget",
               "yMax": 1500,
               "yUnit": "ms",
-              "xLabels": ["4", "6", "8", "9", "10", "11", "12"],
-              "points": [4, 15, 62, 121, 244, 610, 1420],
+              "xLabels": [
+                "4",
+                "6",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+              ],
+              "points": [
+                4,
+                15,
+                62,
+                121,
+                244,
+                610,
+                1420
+              ],
               "ceiling": {
                 "value": 200,
                 "label": "200 ms interactivity budget"
@@ -6073,7 +6297,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the analysis did", "Where it broke", "Evidence"],
+            "head": [
+              "What the analysis did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Reported a burst index",
@@ -6403,7 +6631,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What people did", "Where it broke", "Evidence"],
+            "head": [
+              "What people did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Asked a general model",
@@ -6700,7 +6932,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it stalled", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it stalled",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Powered the board and looked for a link",
@@ -6884,7 +7120,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Schedule vs a clean part",
@@ -7094,15 +7334,24 @@
               "columns": [
                 {
                   "name": "Bluetooth LE",
-                  "values": [12, 23]
+                  "values": [
+                    12,
+                    23
+                  ]
                 },
                 {
                   "name": "NFC",
-                  "values": [1, 64]
+                  "values": [
+                    1,
+                    64
+                  ]
                 },
                 {
                   "name": "Wi-R NFE",
-                  "values": [1, 7]
+                  "values": [
+                    1,
+                    7
+                  ]
                 }
               ]
             },
@@ -7312,7 +7561,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Second line vs BAN's dates",
@@ -7387,12 +7640,32 @@
                 "Linux SoC",
                 "Low-power MCU"
               ],
-              "cols": ["5 cm profile", "15 cm profile", "25 cm profile"],
+              "cols": [
+                "5 cm profile",
+                "15 cm profile",
+                "25 cm profile"
+              ],
               "cells": [
-                [100, 98, 94],
-                [100, 96, 91],
-                [98, 97, 89],
-                [96, 88, 62]
+                [
+                  100,
+                  98,
+                  94
+                ],
+                [
+                  100,
+                  96,
+                  91
+                ],
+                [
+                  98,
+                  97,
+                  89
+                ],
+                [
+                  96,
+                  88,
+                  62
+                ]
               ],
               "max": 100,
               "unit": "%",
@@ -7532,7 +7805,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Stage reached", "What killed it there", "Evidence"],
+            "head": [
+              "Stage reached",
+              "What killed it there",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Link working on a kit or eval board",
@@ -7715,7 +7992,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Protecting layout IP vs unblocking integration",
@@ -7810,12 +8091,24 @@
               "rows": [
                 {
                   "name": "Before",
-                  "values": [2, 3, 2, 3, 1],
+                  "values": [
+                    2,
+                    3,
+                    2,
+                    3,
+                    1
+                  ],
                   "label": "11 weeks"
                 },
                 {
                   "name": "After",
-                  "values": [1, 0, 0.5, 0.5, 1],
+                  "values": [
+                    1,
+                    0,
+                    0.5,
+                    0.5,
+                    1
+                  ],
                   "label": "3 weeks"
                 }
               ]
@@ -7958,7 +8251,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What came back", "What it cost them", "Evidence"],
+            "head": [
+              "What came back",
+              "What it cost them",
+              "Evidence"
+            ],
             "rows": [
               [
                 "\"We had to compress harder than planned\"",
@@ -8143,7 +8440,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Rate vs energy per bit",
@@ -8395,7 +8696,11 @@
                 "About 3.4 Mbit/s real throughput",
                 "9 of 14"
               ],
-              ["Sub-millisecond latency", "Met, comfortably", "12 of 14"],
+              [
+                "Sub-millisecond latency",
+                "Met, comfortably",
+                "12 of 14"
+              ],
               [
                 "Operation at 1–5 cm through a sealed wall",
                 "Met, but tuned for longer range than asked",
@@ -8591,7 +8896,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Throughput vs range",
@@ -8663,17 +8972,29 @@
               "title": "Transfer time against payload size: gen-1 leaves the one-minute service window between 25 and 50 megabytes, gen-2 stays inside it to 100 megabytes",
               "yMax": 250,
               "yUnit": "seconds",
-              "xLabels": ["25 MB", "50 MB", "100 MB"],
+              "xLabels": [
+                "25 MB",
+                "50 MB",
+                "100 MB"
+              ],
               "series": [
                 {
                   "name": "XA-NFE2001 (gen-1)",
                   "color": "#2c3a73",
-                  "points": [59, 118, 235]
+                  "points": [
+                    59,
+                    118,
+                    235
+                  ]
                 },
                 {
                   "name": "XA-NFE3001 (gen-2)",
                   "color": "#5b7cfa",
-                  "points": [15, 30, 59]
+                  "points": [
+                    15,
+                    30,
+                    59
+                  ]
                 }
               ],
               "threshold": {
@@ -8801,7 +9122,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the analyst had", "Where it broke down", "Evidence"],
+            "head": [
+              "What the analyst had",
+              "Where it broke down",
+              "Evidence"
+            ],
             "rows": [
               [
                 "A log file and a fault code",
@@ -8983,7 +9308,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Realism vs repeatability",
@@ -9381,7 +9710,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Per-slot locking vs one cabinet door",
@@ -9474,25 +9807,45 @@
                   "name": "Data-centre halls",
                   "weight": 1450,
                   "weightLabel": "1,450 keys",
-                  "values": [86.1, 9, 4.5, 0.4]
+                  "values": [
+                    86.1,
+                    9,
+                    4.5,
+                    0.4
+                  ]
                 },
                 {
                   "name": "Manufacturing plants",
                   "weight": 1150,
                   "weightLabel": "1,150 keys",
-                  "values": [74, 18, 7.4, 0.6]
+                  "values": [
+                    74,
+                    18,
+                    7.4,
+                    0.6
+                  ]
                 },
                 {
                   "name": "Commercial estates",
                   "weight": 620,
                   "weightLabel": "620 keys",
-                  "values": [81.1, 13, 5.4, 0.5]
+                  "values": [
+                    81.1,
+                    13,
+                    5.4,
+                    0.5
+                  ]
                 },
                 {
                   "name": "Utility substations",
                   "weight": 200,
                   "weightLabel": "200 keys",
-                  "values": [69.2, 22, 7.7, 1.1]
+                  "values": [
+                    69.2,
+                    22,
+                    7.7,
+                    1.1
+                  ]
                 }
               ]
             },
@@ -9628,7 +9981,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What we opened", "What it cost them", "Across 9 watches"],
+            "head": [
+              "What we opened",
+              "What it cost them",
+              "Across 9 watches"
+            ],
             "rows": [
               [
                 "A colour screen behind glass",
@@ -9747,7 +10104,11 @@
               "Over-the-air firmware update",
               "A second display option in the same footprint"
             ],
-            "cut": ["Colour screen", "Blood-oxygen readings", "Wi-Fi"]
+            "cut": [
+              "Colour screen",
+              "Blood-oxygen readings",
+              "Wi-Fi"
+            ]
           },
           {
             "kind": "para",
@@ -9812,7 +10173,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Shelf appeal vs daily use",
@@ -10221,7 +10586,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Sort capsules vs calibrate units",
@@ -10307,12 +10676,66 @@
                   "name": "Capsules as delivered",
                   "label": "60 measured, three lots",
                   "values": [
-                    -2.95, -2.6, -2.4, -2.1, -1.9, -1.8, -1.6, -1.5, -1.4, -1.2,
-                    -1.1, -0.9, -0.8, -0.6, -0.4, -0.2, 0.1, 0.3, 0.4, 0.6,
-                    -2.8, -1.7, -1.3, -0.7, -0.3, 0.2, 0.5, 0.8, 0.9, 1.1, 1.2,
-                    1.4, 1.5, 1.7, 1.8, 2, 2.2, 2.4, 2.6, 2.9, -0.5, 0, 0.7, 1,
-                    1.3, 1.6, 1.9, 2.1, 2.3, 2.5, 2.7, 2.8, 1.45, 0.95, 0.35,
-                    -0.15, -1.05, -2.2, 2.45, 0.55
+                    -2.95,
+                    -2.6,
+                    -2.4,
+                    -2.1,
+                    -1.9,
+                    -1.8,
+                    -1.6,
+                    -1.5,
+                    -1.4,
+                    -1.2,
+                    -1.1,
+                    -0.9,
+                    -0.8,
+                    -0.6,
+                    -0.4,
+                    -0.2,
+                    0.1,
+                    0.3,
+                    0.4,
+                    0.6,
+                    -2.8,
+                    -1.7,
+                    -1.3,
+                    -0.7,
+                    -0.3,
+                    0.2,
+                    0.5,
+                    0.8,
+                    0.9,
+                    1.1,
+                    1.2,
+                    1.4,
+                    1.5,
+                    1.7,
+                    1.8,
+                    2,
+                    2.2,
+                    2.4,
+                    2.6,
+                    2.9,
+                    -0.5,
+                    0,
+                    0.7,
+                    1,
+                    1.3,
+                    1.6,
+                    1.9,
+                    2.1,
+                    2.3,
+                    2.5,
+                    2.7,
+                    2.8,
+                    1.45,
+                    0.95,
+                    0.35,
+                    -0.15,
+                    -1.05,
+                    -2.2,
+                    2.45,
+                    0.55
                   ]
                 },
                 {
@@ -10320,11 +10743,46 @@
                   "label": "240 measured at final test",
                   "own": true,
                   "values": [
-                    -0.38, -0.34, -0.31, -0.29, -0.26, -0.24, -0.21, -0.19,
-                    -0.16, -0.14, -0.11, -0.09, -0.06, -0.04, -0.01, 0.02, 0.04,
-                    0.07, 0.09, 0.12, 0.14, 0.17, 0.19, 0.22, 0.24, 0.27, 0.29,
-                    0.32, 0.35, 0.38, -0.36, -0.27, -0.18, -0.08, 0.01, 0.11,
-                    0.21, 0.31, -0.22, 0.16
+                    -0.38,
+                    -0.34,
+                    -0.31,
+                    -0.29,
+                    -0.26,
+                    -0.24,
+                    -0.21,
+                    -0.19,
+                    -0.16,
+                    -0.14,
+                    -0.11,
+                    -0.09,
+                    -0.06,
+                    -0.04,
+                    -0.01,
+                    0.02,
+                    0.04,
+                    0.07,
+                    0.09,
+                    0.12,
+                    0.14,
+                    0.17,
+                    0.19,
+                    0.22,
+                    0.24,
+                    0.27,
+                    0.29,
+                    0.32,
+                    0.35,
+                    0.38,
+                    -0.36,
+                    -0.27,
+                    -0.18,
+                    -0.08,
+                    0.01,
+                    0.11,
+                    0.21,
+                    0.31,
+                    -0.22,
+                    0.16
                   ]
                 }
               ]
@@ -10488,7 +10946,11 @@
                 "Altitude dominates by roughly three to one",
                 "3 of 4"
               ],
-              ["Flights in clear air", "None flown in precipitation", "4 of 4"]
+              [
+                "Flights in clear air",
+                "None flown in precipitation",
+                "4 of 4"
+              ]
             ]
           },
           {
@@ -10879,17 +11341,29 @@
               "rows": [
                 {
                   "name": "Routine observation",
-                  "values": [3.5, 1.2, 4.8],
+                  "values": [
+                    3.5,
+                    1.2,
+                    4.8
+                  ],
                   "label": "9.5 min"
                 },
                 {
                   "name": "Medication round",
-                  "values": [3.5, 4.1, 4.8],
+                  "values": [
+                    3.5,
+                    4.1,
+                    4.8
+                  ],
                   "label": "12.4 min"
                 },
                 {
                   "name": "Patient request",
-                  "values": [3.5, 2.6, 4.8],
+                  "values": [
+                    3.5,
+                    2.6,
+                    4.8
+                  ],
                   "label": "10.9 min"
                 }
               ]
@@ -11004,11 +11478,36 @@
                 "Beyond 2 m"
               ],
               "cells": [
-                ["pass", "pass", "marginal", "marginal"],
-                ["pass", "marginal", "fail", "fail"],
-                ["marginal", "fail", "fail", "fail"],
-                ["none", "none", "none", "none"],
-                ["none", "none", "none", "none"]
+                [
+                  "pass",
+                  "pass",
+                  "marginal",
+                  "marginal"
+                ],
+                [
+                  "pass",
+                  "marginal",
+                  "fail",
+                  "fail"
+                ],
+                [
+                  "marginal",
+                  "fail",
+                  "fail",
+                  "fail"
+                ],
+                [
+                  "none",
+                  "none",
+                  "none",
+                  "none"
+                ],
+                [
+                  "none",
+                  "none",
+                  "none",
+                  "none"
+                ]
               ],
               "legend": {
                 "pass": "within the agreed margin",
@@ -12312,17 +12811,29 @@
               "rows": [
                 {
                   "name": "Visual and sound prompts",
-                  "values": [12, 2, 0],
+                  "values": [
+                    12,
+                    2,
+                    0
+                  ],
                   "label": "12 of 14"
                 },
                 {
                   "name": "Teacher-assigned content",
-                  "values": [10, 3, 1],
+                  "values": [
+                    10,
+                    3,
+                    1
+                  ],
                   "label": "10 of 14"
                 },
                 {
                   "name": "Guided-writing gantry",
-                  "values": [5, 4, 5],
+                  "values": [
+                    5,
+                    4,
+                    5
+                  ],
                   "label": "5 of 14"
                 }
               ]
@@ -12444,17 +12955,38 @@
                 {
                   "name": "Visual and sound prompts",
                   "color": "#3fae8b",
-                  "values": [5, 5, 4, 4, 4, 4]
+                  "values": [
+                    5,
+                    5,
+                    4,
+                    4,
+                    4,
+                    4
+                  ]
                 },
                 {
                   "name": "Teacher-assigned content",
                   "color": "#5b7cfa",
-                  "values": [5, 4, 5, 2, 3, 3]
+                  "values": [
+                    5,
+                    4,
+                    5,
+                    2,
+                    3,
+                    3
+                  ]
                 },
                 {
                   "name": "Guided-writing gantry",
                   "color": "#d0745a",
-                  "values": [2, 3, 4, 2, 2, 2]
+                  "values": [
+                    2,
+                    3,
+                    4,
+                    2,
+                    2,
+                    2
+                  ]
                 }
               ]
             },
@@ -12825,7 +13357,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Deterrence vs measurement",
@@ -12898,8 +13434,28 @@
             "chart": {
               "form": "confusion",
               "title": "Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two",
-              "classes": ["1 rider", "2 riders", "3 or more"],
-              "cells": [[624, 12, 3], [20, 956, 64], [1, 14, 146]],
+              "classes": [
+                "1 rider",
+                "2 riders",
+                "3 or more"
+              ],
+              "cells": [
+                [
+                  624,
+                  12,
+                  3
+                ],
+                [
+                  20,
+                  956,
+                  64
+                ],
+                [
+                  1,
+                  14,
+                  146
+                ]
+              ],
               "rowLabel": "Ground truth",
               "colLabel": "Model said",
               "marginLabel": "correct"
@@ -13059,7 +13615,11 @@
                 "The rhythm of the flapping, not the shape",
                 "19 of 24"
               ],
-              ["Did you hear anything?", "Nobody mentioned a sound", "24 of 24"]
+              [
+                "Did you hear anything?",
+                "Nobody mentioned a sound",
+                "24 of 24"
+              ]
             ]
           },
           {
@@ -13069,8 +13629,18 @@
               "title": "Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80",
               "yMax": 100,
               "yUnit": "% of observers saying \"a bird\"",
-              "xLabels": ["20 m", "40 m", "60 m", "80 m"],
-              "points": [29, 67, 83, 88],
+              "xLabels": [
+                "20 m",
+                "40 m",
+                "60 m",
+                "80 m"
+              ],
+              "points": [
+                29,
+                67,
+                83,
+                88
+              ],
               "ceiling": {
                 "value": 60,
                 "label": "the level we needed to claim it hides in plain sight"
@@ -13385,7 +13955,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Asked what was owed on a matter",
@@ -13504,27 +14078,69 @@
               "columns": [
                 {
                   "name": "H1 '24",
-                  "values": [5, 0, 2, 0, 0, 1]
+                  "values": [
+                    5,
+                    0,
+                    2,
+                    0,
+                    0,
+                    1
+                  ]
                 },
                 {
                   "name": "H2 '24",
-                  "values": [3, 4, 2, 0, 0, 1]
+                  "values": [
+                    3,
+                    4,
+                    2,
+                    0,
+                    0,
+                    1
+                  ]
                 },
                 {
                   "name": "H1 '25",
-                  "values": [1, 4, 3, 2, 1, 1]
+                  "values": [
+                    1,
+                    4,
+                    3,
+                    2,
+                    1,
+                    1
+                  ]
                 },
                 {
                   "name": "H2 '25",
-                  "values": [1, 2, 2, 4, 2, 1]
+                  "values": [
+                    1,
+                    2,
+                    2,
+                    4,
+                    2,
+                    1
+                  ]
                 },
                 {
                   "name": "H1 '26",
-                  "values": [0, 1, 0, 3, 2, 1]
+                  "values": [
+                    0,
+                    1,
+                    0,
+                    3,
+                    2,
+                    1
+                  ]
                 },
                 {
                   "name": "H2 '26 (to date)",
-                  "values": [0, 0, 0, 1, 1, 1]
+                  "values": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1
+                  ]
                 }
               ],
               "markers": [
@@ -13718,7 +14334,11 @@
           },
           {
             "kind": "table",
-            "head": ["Surface", "Who uses it", "The decision it carries"],
+            "head": [
+              "Surface",
+              "Who uses it",
+              "The decision it carries"
+            ],
             "rows": [
               [
                 "Mail-triggered spine",
@@ -13774,7 +14394,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Cycle time vs inventor time",
@@ -13854,17 +14478,41 @@
               "form": "survival",
               "title": "Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent",
               "xTitle": "Days since the action became owed",
-              "xLabels": ["0", "15", "30", "45", "60", "75", "90+"],
+              "xLabels": [
+                "0",
+                "15",
+                "30",
+                "45",
+                "60",
+                "75",
+                "90+"
+              ],
               "series": [
                 {
                   "name": "Before",
                   "color": "#d0745a",
-                  "points": [100, 82, 61, 44, 33, 26, 21]
+                  "points": [
+                    100,
+                    82,
+                    61,
+                    44,
+                    33,
+                    26,
+                    21
+                  ]
                 },
                 {
                   "name": "After",
                   "color": "#5b7cfa",
-                  "points": [100, 46, 18, 8, 4, 2, 2]
+                  "points": [
+                    100,
+                    46,
+                    18,
+                    8,
+                    4,
+                    2,
+                    2
+                  ]
                 }
               ],
               "threshold": {
@@ -13990,22 +14638,38 @@
               "rows": [
                 {
                   "name": "In-tenant notetaker",
-                  "values": [212, 0, 0],
+                  "values": [
+                    212,
+                    0,
+                    0
+                  ],
                   "label": "212 covered"
                 },
                 {
                   "name": "Vendor bot, all",
-                  "values": [0, 212, 0],
+                  "values": [
+                    0,
+                    212,
+                    0
+                  ],
                   "label": "212 leave the tenant"
                 },
                 {
                   "name": "Vendor bot, cleared",
-                  "values": [0, 66, 146],
+                  "values": [
+                    0,
+                    66,
+                    146
+                  ],
                   "label": "66 covered"
                 },
                 {
                   "name": "Human minutes rota",
-                  "values": [30, 0, 182],
+                  "values": [
+                    30,
+                    0,
+                    182
+                  ],
                   "label": "30 covered"
                 }
               ]
@@ -14026,7 +14690,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What was assumed", "What the trace found", "Evidence"],
+            "head": [
+              "What was assumed",
+              "What the trace found",
+              "Evidence"
+            ],
             "rows": [
               [
                 "The meetings that matter get minuted",
@@ -14208,7 +14876,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Residency vs transcript quality",
@@ -14291,7 +14963,10 @@
               "title": "Where 24 traced decisions could be found, January against July: a durable written record 5 to 21, a chat thread someone had to locate 7 to 2, somebody's memory 12 to 1",
               "max": 24,
               "unit": "decisions",
-              "seriesNames": ["Jan 2026 — before", "Jul 2026 — after"],
+              "seriesNames": [
+                "Jan 2026 — before",
+                "Jul 2026 — after"
+              ],
               "rows": [
                 {
                   "name": "Durable written record",
@@ -14443,7 +15118,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Artefact", "Where it broke", "Evidence"],
+            "head": [
+              "Artefact",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Standup document",
@@ -14469,7 +15148,10 @@
               "title": "Rows checked against rows that disagreed with the task record, by artefact, over six sprints",
               "max": 90,
               "unit": "rows",
-              "seriesNames": ["Rows checked", "Rows that disagreed"],
+              "seriesNames": [
+                "Rows checked",
+                "Rows that disagreed"
+              ],
               "rows": [
                 {
                   "name": "Standup document",
@@ -14499,7 +15181,9 @@
       {
         "num": "03",
         "heading": "My role and approach",
-        "body": ["I owned scope, the write boundary and the ceremony rules."],
+        "body": [
+          "I owned scope, the write boundary and the ceremony rules."
+        ],
         "blocks": [
           {
             "kind": "decisions",
@@ -14641,7 +15325,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Changing state vs protecting the workspace",
@@ -14726,11 +15414,33 @@
               ],
               "upper": {
                 "name": "Standup length",
-                "points": [18, 17, 15, 13, 11, 10, 10, 9, 9, 9]
+                "points": [
+                  18,
+                  17,
+                  15,
+                  13,
+                  11,
+                  10,
+                  10,
+                  9,
+                  9,
+                  9
+                ]
               },
               "lower": {
                 "name": "Minutes not spent reading out state",
-                "points": [7, 7, 8, 8, 8, 8, 8, 8, 8, 8]
+                "points": [
+                  7,
+                  7,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8
+                ]
               },
               "gapLabel": "read out from a document",
               "marker": {
@@ -15004,7 +15714,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "One doctrine vs per-team fit",
@@ -15048,5 +15762,239 @@
       }
     ],
     "sampleNote": "This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own data note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation."
+  },
+  "wi-r-xa-customer-sampling": {
+    "slug": "wi-r-xa-customer-sampling",
+    "eyebrow": "Ixana · 2026–present · Silicon",
+    "title": "Wi-R — XA-XXXXXXX · customer sampling",
+    "deck": "The next Wi-R part: mass-production tapeout at the end of August 2026, and customer sampling starting now. The part number and specification are withheld.",
+    "status": "development",
+    "meta": {
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
+      "timeline": "2026 – present",
+      "stage": "In development — mass-production tapeout at the end of August 2026; customer sampling starting"
+    },
+    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "fast": {
+      "pull": "This is the next Wi-R part after the ones in production.",
+      "facts": [
+        {
+          "text": "Mass-production tapeout at the end of August 2026",
+          "cls": "B"
+        },
+        {
+          "text": "Customer sampling starting",
+          "cls": "B"
+        },
+        {
+          "text": "Part number and specification withheld",
+          "cls": "B"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet."
+      },
+      {
+        "lead": "What I do.",
+        "text": "The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public."
+      },
+      {
+        "lead": "Where it stands.",
+        "text": "Mass-production tapeout at the end of august 2026; customer sampling starting."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Where it stands",
+        "body": [
+          "This is the next Wi-R part after the ones in production. Its mass-production tapeout landed at the end of August 2026, and customer sampling is starting — the first silicon is leaving the building.",
+          "What the part is, what it is specified to do and who is sampling it are under NDA. The page exists so the roadmap is visible: there is a part behind the shipping ones, and it has reached the stage where customers hold it."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "What success looks like by March 2027",
+        "body": [
+          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
+        ],
+        "blocks": [
+          {
+            "kind": "definition",
+            "lead": "The gates advance.",
+            "text": "Mask, package, test, supply and first-silicon readiness each move on plan, so that sampling turns into qualified production without a stage being skipped."
+          }
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "Why the page is written this way",
+        "body": [
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "When the part is announced, the page will carry its number and its specification, like the others."
+        ]
+      }
+    ],
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
+  },
+  "confidential-platform-chip": {
+    "slug": "confidential-platform-chip",
+    "eyebrow": "Ixana · 2026–present · Silicon",
+    "title": "Confidential platform chip — XA-XXXXXXX",
+    "deck": "A new platform chip on the roadmap: sampling tapeout scheduled for November 2026. What it is for stays confidential until it ships.",
+    "status": "development",
+    "meta": {
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
+      "timeline": "2026 – present",
+      "stage": "In development — sampling tapeout scheduled for November 2026"
+    },
+    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "fast": {
+      "pull": "A platform chip rather than a Wi-R part: a new line, with its sampling tapeout scheduled for November 2026..",
+      "facts": [
+        {
+          "text": "Sampling tapeout scheduled for November 2026",
+          "cls": "B"
+        },
+        {
+          "text": "A new platform line, not a Wi-R part",
+          "cls": "B"
+        },
+        {
+          "text": "Application and part number withheld",
+          "cls": "B"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet."
+      },
+      {
+        "lead": "What I do.",
+        "text": "The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public."
+      },
+      {
+        "lead": "Where it stands.",
+        "text": "Sampling tapeout scheduled for november 2026."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Where it stands",
+        "body": [
+          "A platform chip rather than a Wi-R part: a new line, with its sampling tapeout scheduled for November 2026.",
+          "What the chip does, and the platform it is for, are under NDA until it ships. The page records only that the line exists and where it is in the flow."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "What success looks like by March 2027",
+        "body": [
+          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
+        ],
+        "blocks": [
+          {
+            "kind": "definition",
+            "lead": "The chip is validated.",
+            "text": "First silicon works as expected on the bench and can be sampled to the partners waiting for it."
+          }
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "Why the page is written this way",
+        "body": [
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "When the part is announced, the page will carry its number and its specification, like the others."
+        ]
+      }
+    ],
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
+  },
+  "wi-r-xa-next-generation": {
+    "slug": "wi-r-xa-next-generation",
+    "eyebrow": "Ixana · 2026–present · Silicon",
+    "title": "Wi-R — XA-XXXXXXX · next generation",
+    "deck": "The Wi-R generation after the one now sampling: production tapeout targeted for Q1 2027. The part number and specification are withheld.",
+    "status": "development",
+    "meta": {
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
+      "timeline": "2026 – present",
+      "stage": "In development — production tapeout targeted for Q1 2027"
+    },
+    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "fast": {
+      "pull": "The Wi-R generation after the part now sampling.",
+      "facts": [
+        {
+          "text": "Production tapeout targeted for Q1 2027",
+          "cls": "B"
+        },
+        {
+          "text": "One generation behind the part now sampling",
+          "cls": "B"
+        },
+        {
+          "text": "Part number and specification withheld",
+          "cls": "B"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet."
+      },
+      {
+        "lead": "What I do.",
+        "text": "The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public."
+      },
+      {
+        "lead": "Where it stands.",
+        "text": "Production tapeout targeted for q1 2027."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Where it stands",
+        "body": [
+          "The Wi-R generation after the part now sampling. Its production tapeout is targeted for the first quarter of 2027, which puts it one step behind on the same delivery system.",
+          "Its specification is under NDA. What can be said is the shape of the pipeline: one Wi-R part in production, one sampling, one heading to tapeout — and that the same five functions across two sites carry all three."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "What success looks like by March 2027",
+        "body": [
+          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
+        ],
+        "blocks": [
+          {
+            "kind": "definition",
+            "lead": "The part is taped out.",
+            "text": "Production tapeout closes on target and the part is production-ready, with the line one generation deeper than it was a year earlier."
+          }
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "Why the page is written this way",
+        "body": [
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "When the part is announced, the page will carry its number and its specification, like the others."
+        ]
+      }
+    ],
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
   }
 }
