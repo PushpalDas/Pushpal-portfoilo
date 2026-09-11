@@ -15765,30 +15765,30 @@
   },
   "wi-r-xa-customer-sampling": {
     "slug": "wi-r-xa-customer-sampling",
-    "eyebrow": "Ixana · 2026–present · Silicon",
+    "eyebrow": "Ixana · Current · Silicon",
     "title": "Wi-R — XA-XXXXXXX · customer sampling",
-    "deck": "The next Wi-R part: mass-production tapeout at the end of August 2026, and customer sampling starting now. The part number and specification are withheld.",
+    "deck": "The next Wi-R part after the ones in production, now in customer sampling. The part number and specification are withheld.",
     "status": "development",
     "meta": {
       "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
-      "timeline": "2026 – present",
-      "stage": "In development — mass-production tapeout at the end of August 2026; customer sampling starting"
+      "timeline": "Current",
+      "stage": "In development — customer sampling"
     },
-    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "confidentiality": "Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
     "fast": {
-      "pull": "This is the next Wi-R part after the ones in production.",
+      "pull": "This is the next Wi-R part after the ones in production, and it has reached customer sampling.",
       "facts": [
         {
-          "text": "Mass-production tapeout at the end of August 2026",
-          "cls": "B"
-        },
-        {
-          "text": "Customer sampling starting",
+          "text": "Customer sampling",
           "cls": "B"
         },
         {
           "text": "Part number and specification withheld",
+          "cls": "B"
+        },
+        {
+          "text": "Same delivery system as the parts in production",
           "cls": "B"
         }
       ]
@@ -15804,7 +15804,7 @@
       },
       {
         "lead": "Where it stands.",
-        "text": "Mass-production tapeout at the end of August 2026; customer sampling starting."
+        "text": "Customer sampling."
       }
     ],
     "sections": [
@@ -15812,53 +15812,39 @@
         "num": "01",
         "heading": "Where it stands",
         "body": [
-          "This is the next Wi-R part after the ones in production. Its mass-production tapeout landed at the end of August 2026, and customer sampling is starting — the first silicon is leaving the building.",
-          "What the part is, what it is specified to do and who is sampling it are under NDA. The page exists so the roadmap is visible: there is a part behind the shipping ones, and it has reached the stage where customers hold it."
+          "This is the next Wi-R part after the ones in production, and it has reached customer sampling.",
+          "What the part is, what it is specified to do and who is sampling it are under NDA. The page exists so the roadmap is visible: there is a part behind the shipping ones, and customers hold it."
         ]
       },
       {
         "num": "02",
-        "heading": "What success looks like by March 2027",
-        "body": [
-          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
-        ],
-        "blocks": [
-          {
-            "kind": "definition",
-            "lead": "The gates advance.",
-            "text": "Mask, package, test, supply and first-silicon readiness each move on plan, so that sampling turns into qualified production without a stage being skipped."
-          }
-        ]
-      },
-      {
-        "num": "03",
         "heading": "Why the page is written this way",
         "body": [
-          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.",
           "When the part is announced, the page will carry its number and its specification, like the others."
         ]
       }
     ],
-    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation."
   },
   "confidential-platform-chip": {
     "slug": "confidential-platform-chip",
-    "eyebrow": "Ixana · 2026–present · Silicon",
+    "eyebrow": "Ixana · Current · Silicon",
     "title": "Confidential platform chip — XA-XXXXXXX",
-    "deck": "A new platform chip on the roadmap: sampling tapeout scheduled for November 2026. What it is for stays confidential until it ships.",
+    "deck": "A new platform chip on the roadmap, ahead of its sampling tapeout. What it is for stays confidential until it ships.",
     "status": "development",
     "meta": {
       "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
-      "timeline": "2026 – present",
-      "stage": "In development — sampling tapeout scheduled for November 2026"
+      "timeline": "Current",
+      "stage": "In development — ahead of sampling tapeout"
     },
-    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "confidentiality": "Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
     "fast": {
-      "pull": "A platform chip rather than a Wi-R part: a new line, with its sampling tapeout scheduled for November 2026..",
+      "pull": "A platform chip rather than a Wi-R part: a new line, working towards its sampling tapeout.",
       "facts": [
         {
-          "text": "Sampling tapeout scheduled for November 2026",
+          "text": "Ahead of sampling tapeout",
           "cls": "B"
         },
         {
@@ -15882,7 +15868,7 @@
       },
       {
         "lead": "Where it stands.",
-        "text": "Sampling tapeout scheduled for November 2026."
+        "text": "Ahead of sampling tapeout."
       }
     ],
     "sections": [
@@ -15890,53 +15876,39 @@
         "num": "01",
         "heading": "Where it stands",
         "body": [
-          "A platform chip rather than a Wi-R part: a new line, with its sampling tapeout scheduled for November 2026.",
+          "A platform chip rather than a Wi-R part: a new line, working towards its sampling tapeout.",
           "What the chip does, and the platform it is for, are under NDA until it ships. The page records only that the line exists and where it is in the flow."
         ]
       },
       {
         "num": "02",
-        "heading": "What success looks like by March 2027",
-        "body": [
-          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
-        ],
-        "blocks": [
-          {
-            "kind": "definition",
-            "lead": "The chip is validated.",
-            "text": "First silicon works as expected on the bench and can be sampled to the partners waiting for it."
-          }
-        ]
-      },
-      {
-        "num": "03",
         "heading": "Why the page is written this way",
         "body": [
-          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.",
           "When the part is announced, the page will carry its number and its specification, like the others."
         ]
       }
     ],
-    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation."
   },
   "wi-r-xa-next-generation": {
     "slug": "wi-r-xa-next-generation",
-    "eyebrow": "Ixana · 2026–present · Silicon",
+    "eyebrow": "Ixana · Current · Silicon",
     "title": "Wi-R — XA-XXXXXXX · next generation",
-    "deck": "The Wi-R generation after the one now sampling: production tapeout targeted for Q1 2027. The part number and specification are withheld.",
+    "deck": "The Wi-R generation after the part now sampling, ahead of its production tapeout. The part number and specification are withheld.",
     "status": "development",
     "meta": {
       "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
-      "timeline": "2026 – present",
-      "stage": "In development — production tapeout targeted for Q1 2027"
+      "timeline": "Current",
+      "stage": "In development — ahead of production tapeout"
     },
-    "confidentiality": "Confidential silicon. The part number, specification, application and every customer are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
+    "confidentiality": "Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.",
     "fast": {
-      "pull": "The Wi-R generation after the part now sampling.",
+      "pull": "The Wi-R generation after the part now sampling, working towards its production tapeout on the same delivery system.",
       "facts": [
         {
-          "text": "Production tapeout targeted for Q1 2027",
+          "text": "Ahead of production tapeout",
           "cls": "B"
         },
         {
@@ -15960,7 +15932,7 @@
       },
       {
         "lead": "Where it stands.",
-        "text": "Production tapeout targeted for Q1 2027."
+        "text": "Ahead of production tapeout."
       }
     ],
     "sections": [
@@ -15968,33 +15940,19 @@
         "num": "01",
         "heading": "Where it stands",
         "body": [
-          "The Wi-R generation after the part now sampling. Its production tapeout is targeted for the first quarter of 2027, which puts it one step behind on the same delivery system.",
-          "Its specification is under NDA. What can be said is the shape of the pipeline: one Wi-R part in production, one sampling, one heading to tapeout — and that the same five functions across two sites carry all three."
+          "The Wi-R generation after the part now sampling, working towards its production tapeout on the same delivery system.",
+          "Its specification is under NDA. What can be said is that the same five functions across two sites carry it, as they carried every Wi-R part before it."
         ]
       },
       {
         "num": "02",
-        "heading": "What success looks like by March 2027",
-        "body": [
-          "Each part in flight has one gate it is measured against by the end of the fiscal year. This is the gate for this one."
-        ],
-        "blocks": [
-          {
-            "kind": "definition",
-            "lead": "The part is taped out.",
-            "text": "Production tapeout closes on target and the part is production-ready, with the line one generation deeper than it was a year earlier."
-          }
-        ]
-      },
-      {
-        "num": "03",
         "heading": "Why the page is written this way",
         "body": [
-          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to, the stage it has reached, and the gate ahead of it.",
+          "The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.",
           "When the part is announced, the page will carry its number and its specification, like the others."
         ]
       }
     ],
-    "sampleNote": "This page describes a confidential programme. The part number, specification, application and customers are withheld and no figure is shown; the milestones are the programme’s own, stated at the level the company communicates them. I’m glad to walk through the programme in a conversation."
+    "sampleNote": "This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation."
   }
 }

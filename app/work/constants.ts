@@ -286,17 +286,17 @@ export const workItems: WorkItem[] = [
 	{
 		// Confidential silicon in flight, at the author's request (2026-09-10).
 		// Identified by line and stage only: no part number, no application,
-		// no customer. The case study says the same, at more length.
+		// no customer, no date. The case study says the same, at more length.
 		title: 'Wi-R — XA-XXXXXXX · customer sampling',
 		company: 'Ixana',
-		year: '2026 - present',
+		year: 'Current',
 		domain: 'Silicon',
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
 		order: 7,
 		outcome:
-			'The next Wi-R part: mass-production tapeout at the end of August, customer sampling starting. Part number and specification withheld.',
+			'The next Wi-R part, now with customers for sampling. Part number and specification withheld.',
 		image: 'confidential-chip.png',
 		slug: 'wi-r-xa-customer-sampling',
 		tier: 3,
@@ -305,17 +305,17 @@ export const workItems: WorkItem[] = [
 	{
 		// Confidential silicon in flight, at the author's request (2026-09-10).
 		// Identified by line and stage only: no part number, no application,
-		// no customer. The case study says the same, at more length.
+		// no customer, no date. The case study says the same, at more length.
 		title: 'Confidential platform chip — XA-XXXXXXX',
 		company: 'Ixana',
-		year: '2026 - present',
+		year: 'Current',
 		domain: 'Silicon',
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
 		order: 8,
 		outcome:
-			'A new platform chip, sampling tapeout scheduled for November 2026. What it is for stays confidential until it ships.',
+			'A new platform chip, ahead of its sampling tapeout. What it is for stays confidential until it ships.',
 		image: 'confidential-chip.png',
 		slug: 'confidential-platform-chip',
 		tier: 3,
@@ -324,17 +324,17 @@ export const workItems: WorkItem[] = [
 	{
 		// Confidential silicon in flight, at the author's request (2026-09-10).
 		// Identified by line and stage only: no part number, no application,
-		// no customer. The case study says the same, at more length.
+		// no customer, no date. The case study says the same, at more length.
 		title: 'Wi-R — XA-XXXXXXX · next generation',
 		company: 'Ixana',
-		year: '2026 - present',
+		year: 'Current',
 		domain: 'Silicon',
 		category: 'product',
 		track: 'silicon',
 		status: 'development',
 		order: 9,
 		outcome:
-			'The Wi-R generation after that, production tapeout targeted for Q1 2027. Part number and specification withheld.',
+			'The Wi-R generation after that, ahead of its production tapeout. Part number and specification withheld.',
 		image: 'confidential-chip.png',
 		slug: 'wi-r-xa-next-generation',
 		tier: 3,
