@@ -13,7 +13,7 @@ import { join } from 'node:path';
 import sharp from 'sharp';
 
 const ROOT = process.cwd();
-const DIR = join(ROOT, 'public', 'Photography');
+const DIR = join(ROOT, 'public', 'photography');
 const LIST = join(ROOT, 'app', 'hobby', 'photo-files.json');
 const OUT = join(ROOT, 'app', 'hobby', 'photo-manifest.json');
 
@@ -26,7 +26,7 @@ if (new Set(files).size !== files.length) {
 
 const missing = files.filter((f) => !onDisk.has(f));
 if (missing.length > 0) {
-	throw new Error(`Missing from public/Photography: ${missing.join(', ')}`);
+	throw new Error(`Missing from public/photography: ${missing.join(', ')}`);
 }
 
 const unreferenced = [...onDisk].filter(

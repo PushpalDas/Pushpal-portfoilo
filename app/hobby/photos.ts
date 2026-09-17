@@ -407,7 +407,7 @@ const build = (id: string, i: number): Photo => {
 	return {
 		...metaOf(id),
 		id,
-		src: `/Photography/${id}`,
+		src: `/photography/${id}`,
 		number: i + 1,
 		title: c?.title ?? '',
 		category: c?.category ?? null,
