@@ -79,6 +79,31 @@ function Block({ block }: { block: CaseStudyBlock }) {
 		case 'para':
 			return <p>{block.text}</p>;
 
+		case 'links':
+			return (
+				<>
+					{block.label && <h3>{block.label}</h3>}
+					<ul className='links-list'>
+						{block.items.map((l) => (
+							<li key={l.href}>
+								<a
+									href={l.href}
+									target={/^https?:/.test(l.href) ? '_blank' : undefined}
+									rel={
+										/^https?:/.test(l.href)
+											? 'noopener noreferrer'
+											: undefined
+									}
+								>
+									{l.label}
+								</a>
+								{l.note && <span className='links-note'> {l.note}</span>}
+							</li>
+						))}
+					</ul>
+				</>
+			);
+
 		case 'figure':
 			return (
 				<figure>
@@ -256,7 +281,7 @@ function Block({ block }: { block: CaseStudyBlock }) {
 										<img
 											className='gallery-img'
 											src={it.image}
-											alt={it.label ?? it.caption}
+											alt={it.alt ?? it.label ?? it.caption}
 											loading='lazy'
 										/>
 									</ShotFrame>
@@ -266,9 +291,7 @@ function Block({ block }: { block: CaseStudyBlock }) {
 								<figcaption>
 									{it.label && <b className='gallery-label'>{it.label}</b>}
 									{it.caption}
-									{it.href && (
-										<DemoLink href={it.href} label={it.hrefLabel} />
-									)}
+									{it.href && <DemoLink href={it.href} label={it.hrefLabel} />}
 								</figcaption>
 							</figure>
 						))}
@@ -307,8 +330,53 @@ function Block({ block }: { block: CaseStudyBlock }) {
 	}
 }
 
+/**
+ * What kind of proof a Verify link is, read off its URL. The strip exists
+ * so the genuinely checkable assets — a public spec page, a paper, a live
+ * demo — lead the page instead of sitting in a link list.
+ */
+function verifyKind(url: string): string {
+	if (url.startsWith('/demo/') || url.includes('xana-nine')) return 'Live demo';
+	// Peer-reviewed / indexed research only — a project write-up is not a
+	// research paper and must not borrow the label.
+	if (
+		url.includes('arxiv.org') ||
+		url.includes('doi.org') ||
+		url.includes('hdl.handle') ||
+		url.includes('iopscience')
+	)
+		return 'Research paper';
+	if (url.includes('patents.google')) return 'Patent';
+	if (
+		url.startsWith('/papers/') ||
+		url.startsWith('/static/docs/') ||
+		url.endsWith('.pdf')
+	)
+		return 'Docs';
+	if (url.includes('ixana.ai')) return 'Public spec';
+	if (url.includes('youtube.com') || url.includes('vimeo.com')) return 'Video';
+	if (url.includes('drive.google') || url.includes('docs.google'))
+		return 'Files';
+	return 'Link';
+}
+
+/**
+ * The single disclosure component (§ data note). One shape, one placement
+ * discipline, everywhere — the same information the notes always carried,
+ * presented as professional routine rather than scattered apology.
+ */
+function DataNote({ children }: { children: ReactNode }) {
+	return (
+		<aside className='data-note'>
+			<span className='data-note-kicker'>Data note</span>
+			<p>{children}</p>
+		</aside>
+	);
+}
+
 export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 	const badge = STATUS_CONFIG[data.status];
+	const facts = data.fast?.facts ?? [];
 
 	return (
 		<div className='cs2'>
@@ -326,6 +394,29 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 					<span className={`badge ${badge.colorClass}`}>{badge.label}</span>
 				</header>
 
+				{data.evidence && data.evidence.length > 0 && (
+					<nav className='verify' aria-label='Verify this page'>
+						<span className='verify-label'>Verify</span>
+						{data.evidence.map((e) => {
+							const kind = verifyKind(e.url);
+							const external = /^https?:/.test(e.url);
+							return (
+								<a
+									key={e.url}
+									className='verify-chip'
+									data-kind={kind}
+									href={e.url}
+									target={external ? '_blank' : undefined}
+									rel={external ? 'noopener noreferrer' : undefined}
+								>
+									<span className='verify-kind'>{kind}</span>
+									{e.label}
+								</a>
+							);
+						})}
+					</nav>
+				)}
+
 				<dl className='meta'>
 					<div>
 						<dt>Role</dt>
@@ -336,28 +427,30 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 						<dd>{data.meta.team}</dd>
 					</div>
 					<div>
-						<dt>Timeline</dt>
-						<dd>{data.meta.timeline}</dd>
-					</div>
-					<div>
 						<dt>Stage</dt>
 						<dd>{data.meta.stage}</dd>
 					</div>
 				</dl>
 
-				<p className='demo'>
-					<span>{data.confidentiality}</span>
-					{data.evidence?.map((e) => (
-						<a
-							key={e.url}
-							href={e.url}
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							{e.label}
-						</a>
-					))}
-				</p>
+				{facts.length > 0 && (
+					<ul className='fast-facts'>
+						{facts.map((f) => (
+							<li key={f.text} data-cls={f.cls}>
+								{f.text}
+							</li>
+						))}
+					</ul>
+				)}
+
+				{data.fast?.pull && (
+					<p className='pull-line'>
+						<span aria-hidden='true'>“</span>
+						{data.fast.pull}
+						<span aria-hidden='true'>”</span>
+					</p>
+				)}
+
+				<DataNote>{data.confidentiality}</DataNote>
 
 				<div className='summary'>
 					{data.summary.map((s) => (
@@ -367,8 +460,17 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 					))}
 				</div>
 
+				<nav className='secnav' aria-label='Sections'>
+					{data.sections.map((sec) => (
+						<a key={sec.num} href={`#s${sec.num}`}>
+							<span className='secnav-num'>{sec.num}</span>
+							{sec.heading}
+						</a>
+					))}
+				</nav>
+
 				{data.sections.map((sec) => (
-					<section key={sec.num}>
+					<section key={sec.num} id={`s${sec.num}`}>
 						<h2>
 							<span className='num'>{sec.num}</span>
 							{sec.heading}
@@ -385,11 +487,7 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 					</section>
 				))}
 
-				<p className='note'>
-					<span className='sample'>Sample page — replace all figures</span>
-					<br />
-					{data.sampleNote}
-				</p>
+				<DataNote>{data.sampleNote}</DataNote>
 			</div>
 		</div>
 	);

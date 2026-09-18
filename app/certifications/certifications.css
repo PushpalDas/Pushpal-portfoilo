@@ -402,10 +402,24 @@ html:not(.dark) .certifications-list-col-info p {
 	position: relative;
 }
 
+/* Now a <button>, so the browser's own control styling has to go. */
 .certifications-tile-link {
 	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: none;
+	font: inherit;
+	text-align: left;
 	text-decoration: none;
 	color: inherit;
+	cursor: pointer;
+}
+
+.certifications-tile-link:focus-visible {
+	outline: 2px solid #455ce9;
+	outline-offset: 4px;
+	border-radius: 12px;
 }
 
 .certifications-tile-image-col {
@@ -414,22 +428,34 @@ html:not(.dark) .certifications-list-col-info p {
 	margin-bottom: 1rem;
 }
 
+/* ── The plate ───────────────────────────────────────────────
+   Pitch black, the same #000 the body carries in dark mode, so there is no
+   plate to see: the certificate sits on the page itself. No ring, no
+   shadow, no tint — the screenshots' own white framing was cropped off the
+   files instead, which is the only way to remove framing that is baked
+   into an image. See public/static/images/certificates. */
 .certifications-tile-image {
 	position: relative;
 	width: 100%;
 	padding-top: 66.67%;
 	border-radius: 8px;
 	overflow: hidden;
+	background: #000;
 }
 
 .certifications-tile-image-bg {
 	position: absolute;
 	inset: 0;
 	z-index: 0;
+	background: #000;
 }
 
+/* `contain`, not `cover`. These are documents: cover cropped the edges off
+   every one of them, which on a certificate means losing the issuer, the
+   date or the signature. Whatever `contain` letterboxes is #000, so it is
+   page, not framing. */
 .certifications-tile-img {
-	object-fit: cover;
+	object-fit: contain;
 	object-position: center;
 	z-index: 1;
 	transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
@@ -448,7 +474,7 @@ html:not(.dark) .certifications-list-col-info p {
 
 .certifications-tile-link:hover .certifications-tile-img,
 .certifications-tile-link:hover .certifications-tile-icon-display {
-	transform: scale(1.05);
+	transform: scale(1.03);
 }
 
 .certifications-tile-title-col {
@@ -486,6 +512,22 @@ html:not(.dark) .certifications-tile-stripe {
 
 html:not(.dark) .certifications-tile-info-col p {
 	color: rgba(0, 0, 0, 0.5);
+}
+
+/* Only on records holding several certificates: the tile leads to a page
+   rather than opening a plate, and the reader should know that before the
+   click. */
+.certifications-tile-count {
+	font-size: clamp(0.7rem, 0.85vw, 0.78rem);
+	font-weight: 300;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.45);
+	margin: 0.55rem 0 0;
+}
+
+html:not(.dark) .certifications-tile-count {
+	color: rgba(0, 0, 0, 0.4);
 }
 
 /* ============================================
@@ -615,5 +657,218 @@ html:not(.dark) .certifications-tile-info-col p {
 	.floating-cursor,
 	.floating-cursor-label {
 		display: none;
+	}
+}
+
+/* ============================================
+   CERTIFICATE VIEWER — opens in place on click
+   ============================================ */
+
+/* Black, like the plates. The certificate is the only lit thing in the
+   frame, and it is shown whole. */
+.cert-viewer {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: clamp(1rem, 4vw, 3rem);
+}
+
+.cert-viewer-scrim {
+	position: absolute;
+	inset: 0;
+	border: 0;
+	padding: 0;
+	background: rgba(4, 4, 6, 0.88);
+	backdrop-filter: blur(6px);
+	cursor: pointer;
+	animation: cert-viewer-fade 0.25s ease both;
+}
+
+.cert-viewer-panel {
+	position: relative;
+	z-index: 1;
+	width: min(1040px, 100%);
+	max-height: 100%;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: clamp(0.75rem, 2vw, 1.25rem);
+	padding: clamp(1rem, 2.5vw, 1.75rem);
+	border-radius: 14px;
+	background: #000;
+	box-shadow:
+		inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+		0 30px 80px rgba(0, 0, 0, 0.7);
+	animation: cert-viewer-rise 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cert-viewer-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.cert-viewer-count {
+	font-size: 0.6875rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.45);
+	font-variant-numeric: tabular-nums;
+}
+
+.cert-viewer-close,
+.cert-viewer-nav button {
+	min-height: 44px;
+	padding: 0 1rem;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: 999px;
+	background: transparent;
+	color: rgba(255, 255, 255, 0.85);
+	font: inherit;
+	font-size: 0.8125rem;
+	cursor: pointer;
+	transition:
+		border-color 0.3s ease,
+		background 0.3s ease;
+}
+
+.cert-viewer-close:hover,
+.cert-viewer-nav button:hover {
+	border-color: rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.06);
+}
+
+.cert-viewer-close:focus-visible,
+.cert-viewer-nav button:focus-visible,
+.cert-viewer-credential:focus-visible {
+	outline: 2px solid #455ce9;
+	outline-offset: 3px;
+}
+
+/* The document, whole, on pitch black — no plate, no inset, no rim. */
+.cert-viewer-plate {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 10;
+	overflow: hidden;
+	background: #000;
+}
+
+.cert-viewer-img {
+	object-fit: contain;
+	object-position: center;
+}
+
+.cert-viewer-body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.cert-viewer-cats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.cert-viewer-cats li {
+	padding: 0.25rem 0.6rem;
+	border: 1px solid rgba(255, 255, 255, 0.16);
+	border-radius: 999px;
+	font-size: 0.6875rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.cert-viewer-title {
+	margin: 0;
+	font-size: clamp(1.25rem, 2.6vw, 1.85rem);
+	font-weight: 400;
+	line-height: 1.2;
+	color: #fff;
+}
+
+.cert-viewer-detail {
+	margin: 0;
+	max-width: 68ch;
+	font-size: 0.9375rem;
+	font-weight: 300;
+	line-height: 1.6;
+	color: rgba(255, 255, 255, 0.66);
+}
+
+.cert-viewer-credential {
+	align-self: flex-start;
+	min-height: 44px;
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.875rem;
+	color: #fff;
+	text-decoration: none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.cert-viewer-credential:hover {
+	border-bottom-color: #455ce9;
+}
+
+.cert-viewer-nav {
+	display: flex;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+@keyframes cert-viewer-fade {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes cert-viewer-rise {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cert-viewer-scrim,
+	.cert-viewer-panel {
+		animation-duration: 0.01ms;
+	}
+
+	.certifications-tile-img,
+	.certifications-tile-icon-display {
+		transition-duration: 0.01ms;
+	}
+
+	.certifications-tile-link:hover .certifications-tile-img,
+	.certifications-tile-link:hover .certifications-tile-icon-display {
+		transform: none;
+	}
+}
+
+@media screen and (max-width: 640px) {
+	.cert-viewer {
+		padding: 0.75rem;
+	}
+
+	.cert-viewer-plate {
+		aspect-ratio: 4 / 3;
 	}
 }

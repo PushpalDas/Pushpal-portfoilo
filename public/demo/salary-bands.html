@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Band Desk — the AI Salary Generator pilot</title>
+<meta name="description" content="Interactive demo of the salary benchmarking and offer drafting pilot: weighted market bands computed by rule, a rationale written by a model, an evidence floor that refuses rather than guesses, and a source behind every figure on the page.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   AI Salary Generator — interactive demo ("Band Desk").
+   Native sibling of the XANA house system: warm near-black
+   ground, one orange accent, bordered-not-shadowed cards, dense
+   13px type with mono tabular numerics. Deliberately single-
+   theme: an internal HR surface, dark by design, every colour
+   painted explicitly so it holds on any host ground.
+   The layout is a requisition list where refusals are the
+   first-class object — a refusal is the product working, and it
+   wears the accent, never the error red.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #0E0805;
+  --surface: #1A1410;
+  --surface-2: #221A14;
+  --surface-3: #2A2420;
+  --deep: #140F0B;
+  --line: #3A3028;
+  --line-hover: #5A4838;
+  --line-soft: #2A2018;
+  --hairline: rgba(255, 255, 255, 0.06);
+  --ink: #FFFFFF;
+  --body-c: #E0D0C0;
+  --warm: #E8E0D8;
+  --dim: #A89888;
+  --faint: #8C8175;
+  --accent: #FF6321;
+  --accent-soft: #FF8A56;
+  --accent-cite: #FF8C5A;
+  --accent-deep: #CD3D00;
+  --accent-line: rgba(255, 99, 33, 0.38);
+  --accent-line-dim: rgba(255, 99, 33, 0.22);
+  --accent-wash: rgba(255, 99, 33, 0.09);
+  --ok: #22C55E;
+  --ok-line: rgba(34, 197, 94, 0.40);
+  --ok-wash: rgba(34, 197, 94, 0.09);
+  --warn: #FFB020;
+  --warn-line: rgba(255, 176, 32, 0.42);
+  --warn-wash: rgba(255, 176, 32, 0.10);
+  --crit: #FF6B6B;
+  --crit-line: rgba(239, 68, 68, 0.45);
+  --crit-wash: rgba(239, 68, 68, 0.10);
+  --sans: Geist, Arial, Helvetica, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --dur: 200ms;
+  --oute: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0; background: var(--bg); color: var(--body-c);
+  font-family: var(--sans); font-size: 13px; line-height: 1.55;
+  letter-spacing: -0.1px;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+button { font: inherit; color: inherit; cursor: pointer; letter-spacing: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.app { min-height: 100vh; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; border-left: 1px solid var(--hairline); border-right: 1px solid var(--hairline); }
+
+/* -- Top bar: blurred, orange underline on the active view --- */
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(14, 8, 5, 0.78); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--hairline);
+}
+.tb-row { display: flex; align-items: center; gap: 12px; padding: 13px 22px 9px; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; gap: 2px; margin-right: auto; }
+.brand .eyebrow {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--dim);
+}
+.brand h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.5px; color: var(--ink); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--surface);
+  border-radius: 999px; padding: 5px 12px;
+  font-size: 11px; font-family: var(--mono); color: var(--body-c); white-space: nowrap;
+}
+.chip b { color: var(--ink); font-weight: 600; }
+.chip.ok { border-color: var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.chip.ref { border-color: var(--accent-line); border-style: dashed; color: var(--accent-soft); background: var(--accent-wash); }
+.chip.quiet { color: var(--dim); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex: none; }
+.dot.good { background: var(--ok); }
+.dot.accent { background: var(--accent); }
+
+.tabs { display: flex; gap: 22px; padding: 0 22px; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  position: relative; background: transparent; border: 0; padding: 8px 1px 11px;
+  font-size: 13px; font-weight: 600; letter-spacing: -0.25px; color: var(--faint);
+  white-space: nowrap; transition: color var(--dur);
+}
+.tab:hover { color: var(--ink); }
+.tab[aria-current="true"] { color: var(--ink); }
+.tab[aria-current="true"]::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--accent);
+}
+.tab .tn { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--faint); margin-right: 6px; }
+.tab[aria-current="true"] .tn { color: var(--accent); }
+
+/* -- Shell: requisition rail + pane -------------------------- */
+.shell { display: grid; grid-template-columns: 288px minmax(0, 1fr); flex: 1; }
+.rail {
+  border-right: 1px solid var(--line-soft); padding: 16px 12px 26px;
+  display: flex; flex-direction: column; gap: 4px; background: var(--bg);
+}
+.rail h6 {
+  margin: 2px 10px 8px; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500;
+}
+.reqitem {
+  display: block; width: 100%; text-align: left;
+  background: transparent; border: 1px solid transparent; border-radius: 12px;
+  padding: 10px 12px 12px;
+  transition: background var(--dur), border-color var(--dur);
+}
+.reqitem:hover { background: var(--surface); border-color: var(--line-soft); }
+.reqitem[aria-current="true"] { background: var(--accent-wash); border-color: var(--accent-line-dim); }
+.ri-top { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+.ri-title { display: block; margin-top: 4px; font-size: 13px; color: var(--warm); line-height: 1.35; }
+.reqitem[aria-current="true"] .ri-title { color: var(--ink); font-weight: 500; }
+.ri-meta { display: block; margin-top: 2px; font-family: var(--mono); font-size: 10.5px; color: var(--faint); }
+.rtag {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 2px 8px; white-space: nowrap;
+}
+.rtag.ok { border: 1px solid var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.rtag.ref { border: 1px dashed var(--accent-line); color: var(--accent-soft); background: transparent; }
+.mini { position: relative; display: block; height: 6px; margin-top: 9px; border-radius: 999px; background: var(--deep); border: 1px solid var(--line-soft); overflow: hidden; }
+.mini i { position: absolute; top: 0; bottom: 0; }
+.mini .mini-mkt { background: rgba(255, 255, 255, 0.07); }
+.mini .mini-off { background: linear-gradient(90deg, var(--accent-deep), var(--accent)); border-radius: 999px; }
+.mini.held { background: transparent; border: 1px dashed #4A3E33; }
+.rail .rail-note {
+  margin: 12px 10px 0; font-size: 11.5px; line-height: 1.5; color: var(--faint);
+  border-top: 1px solid var(--line-soft); padding-top: 12px;
+}
+
+.pane { padding: 24px 28px 44px; min-width: 0; }
+
+/* -- Common blocks ------------------------------------------- */
+.head { margin-bottom: 18px; }
+.head h2 { margin: 0 0 6px; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; color: var(--ink); }
+.head p { margin: 0; max-width: 76ch; color: var(--dim); font-size: 13px; line-height: 1.6; }
+.head .kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 7px;
+}
+
+.card { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 15px 16px; margin-bottom: 14px; }
+.card > h3 {
+  margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: -0.1px;
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+.card > h3 .sub { font-weight: 400; color: var(--faint); font-size: 11.5px; font-family: var(--mono); }
+.card > p { margin: 0 0 10px; font-size: 12.5px; color: var(--dim); max-width: 88ch; line-height: 1.6; }
+.card > p:last-child { margin-bottom: 0; }
+.card > p b, .head p b { color: var(--warm); font-weight: 500; }
+
+.badge {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 2.5px 9px; border: 1px solid var(--line); color: var(--dim); white-space: nowrap;
+}
+.badge.rule { border-color: var(--accent-line); color: var(--accent-soft); background: var(--accent-wash); }
+.badge.model { border-color: var(--warn-line); color: var(--warn); background: var(--warn-wash); }
+.badge.ok { border-color: var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.badge.ref { border-color: var(--accent-line); border-style: dashed; color: var(--accent-soft); background: transparent; }
+.badge.warn { border-color: var(--warn-line); color: var(--warn); background: var(--warn-wash); }
+.badge.bad { border-color: var(--crit-line); color: var(--crit); background: var(--crit-wash); }
+
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(216px, 1fr)); gap: 12px; }
+
+/* -- Tables -------------------------------------------------- */
+.tablewrap { overflow-x: auto; margin: 12px -16px -15px; border-top: 1px solid var(--line-soft); border-radius: 0 0 11px 11px; }
+.tablewrap.tight { margin-top: 0; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.tablewrap table { min-width: 560px; }
+thead th {
+  text-align: left; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--dim); font-weight: 600;
+  padding: 8px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft); white-space: nowrap;
+}
+tbody td { padding: 9px 14px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr.click { cursor: pointer; transition: background var(--dur); }
+tbody tr.click:hover { background: var(--surface-2); }
+td .t { color: var(--warm); }
+td .sub { display: block; color: var(--faint); font-size: 11px; margin-top: 2px; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+th.num { text-align: right; }
+.srcid { font-family: var(--mono); font-size: 11px; color: var(--accent-cite); }
+
+/* -- Cited figure: the house citation grammar, inline -------- */
+.fig {
+  font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--ink);
+  background: none; border: 0; border-bottom: 1px dashed var(--accent-line);
+  padding: 0 1px; cursor: pointer; transition: color var(--dur), background var(--dur);
+}
+.fig:hover { border-bottom-style: solid; color: var(--accent-soft); background: var(--accent-wash); }
+.fig sup { font-size: 8.5px; color: var(--accent-cite); margin-left: 2px; letter-spacing: 0.04em; }
+.uncited { font-family: var(--mono); color: var(--crit); border-bottom: 1px dashed var(--crit-line); }
+
+/* -- Band strip: hero surface #1 ----------------------------- */
+.band { margin: 8px 0 4px; }
+.band-track {
+  position: relative; height: 76px; border-radius: 12px;
+  background: var(--deep); border: 1px solid var(--line); overflow: hidden;
+}
+.band-fill {
+  position: absolute; top: 12px; bottom: 12px; background: rgba(255, 255, 255, 0.045);
+  border-left: 1px solid var(--line-hover); border-right: 1px solid var(--line-hover);
+}
+.band-offer {
+  position: absolute; top: 0; bottom: 0;
+  background: linear-gradient(90deg, rgba(205, 61, 0, 0.30), rgba(255, 99, 33, 0.30));
+  border-left: 2px solid var(--accent-deep); border-right: 2px solid var(--accent);
+  box-shadow: 0 4px 12px rgba(255, 99, 33, 0.16);
+}
+.band-res {
+  position: absolute; top: 0; bottom: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 6px, rgba(255, 255, 255, 0.05) 6px 7px);
+  border-right: 1px dashed var(--line-hover);
+}
+.band-res b {
+  position: absolute; top: 7px; left: 8px; font-family: var(--mono); font-weight: 500;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); white-space: nowrap;
+}
+.band-tick { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.band-tick.p50 { width: 2px; background: var(--accent); }
+.band-labels { position: relative; height: 22px; margin-top: 6px; }
+.band-labels span { position: absolute; transform: translateX(-50%); font-family: var(--mono); font-size: 11px; color: var(--dim); white-space: nowrap; }
+.band-labels span.p50 { color: var(--accent-soft); }
+.band-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--faint); margin-top: 4px; }
+.band-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; font-size: 11.5px; color: var(--dim); }
+.band-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.sw { width: 12px; height: 12px; border-radius: 4px; flex: none; }
+.sw.mkt { background: rgba(255, 255, 255, 0.045); border: 1px solid var(--line-hover); }
+.sw.off { background: linear-gradient(90deg, rgba(205, 61, 0, 0.4), rgba(255, 99, 33, 0.4)); border: 1px solid var(--accent-line); }
+.sw.res { background: repeating-linear-gradient(135deg, transparent 0 4px, rgba(255, 255, 255, 0.09) 4px 5px); border: 1px dashed var(--line-hover); }
+
+/* -- Refusal panel: hero surface #2 -------------------------- */
+.refusal {
+  border: 1px solid var(--line); background: var(--deep); border-radius: 16px;
+  padding: 18px 20px; margin-bottom: 14px;
+}
+.refusal .ref-kicker {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.refusal h3 { margin: 0 0 12px; font-size: 17px; font-weight: 600; letter-spacing: -0.25px; color: var(--ink); }
+.ref-rule { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--line-soft); }
+.ref-id {
+  font-family: var(--mono); font-size: 21px; font-weight: 600; color: var(--accent);
+  border: 1px dashed var(--accent-line); border-radius: 10px; padding: 6px 11px; flex: none; line-height: 1;
+  background: var(--accent-wash);
+}
+.ref-rule .ref-name { display: block; font-size: 13px; font-weight: 600; color: var(--warm); }
+.ref-rule .ref-got { display: block; font-size: 12.5px; color: var(--body-c); margin-top: 4px; line-height: 1.7; }
+.ref-rule .ref-why { display: block; font-size: 12px; color: var(--faint); margin-top: 4px; line-height: 1.55; }
+.ref-clear { margin: 12px 0 0; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-size: 12.5px; color: var(--body-c); line-height: 1.6; }
+.ref-clear b { color: var(--warm); font-weight: 600; }
+.ref-note { margin: 12px 0 0; font-size: 12px; color: var(--faint); line-height: 1.6; max-width: 84ch; }
+.ref-note b { color: var(--dim); font-weight: 500; }
+
+.pass-strip {
+  border: 1px solid var(--ok-line); background: var(--ok-wash); border-radius: 12px;
+  padding: 12px 15px; margin-bottom: 14px;
+}
+.pass-strip h4 { margin: 0 0 5px; font-size: 13px; color: var(--ok); font-weight: 600; }
+.pass-strip p { margin: 0; font-size: 12.5px; color: var(--body-c); }
+.pass-strip p b { color: var(--warm); font-weight: 500; }
+
+/* -- Offer summary tiles ------------------------------------- */
+.offerhead { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.offerhead > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.offerhead h6 {
+  margin: 0; padding: 7px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--dim); font-weight: 600;
+}
+.offerhead .val { color: var(--ink); font-size: 19px; font-family: var(--mono); line-height: 1.3; padding: 11px 14px 13px; }
+.offerhead .val small { display: block; color: var(--faint); font-size: 11px; margin-top: 5px; font-family: var(--mono); }
+.offerhead .val.range .fig { color: var(--accent); }
+
+.rationale {
+  border: 1px solid var(--line); background: var(--deep); border-radius: 12px;
+  padding: 14px 18px; margin: 2px 0 0;
+  color: var(--warm); font-size: 13.5px; line-height: 1.7;
+}
+.rationale p { margin: 0 0 10px; }
+.rationale p:last-child { margin-bottom: 0; }
+.rationale.raw { color: var(--dim); background: var(--surface-2); border-style: dashed; }
+
+/* -- Equity -------------------------------------------------- */
+.quart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.quart > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.quart h6 {
+  margin: 0; padding: 6px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-weight: 600;
+}
+.quart .c { font-family: var(--mono); font-size: 23px; color: var(--ink); padding: 10px 12px 12px; }
+.quart .c small { font-size: 11px; color: var(--faint); }
+.quart .hit { border-color: var(--accent-line-dim); }
+.quart .hit .c { color: var(--accent); }
+
+/* -- Floor rules list ---------------------------------------- */
+.rules { list-style: none; margin: 0; padding: 0; }
+.rules li {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 11px 0; border-bottom: 1px solid var(--line-soft);
+}
+.rules li:last-child { border-bottom: 0; }
+.rules .mk {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  border-radius: 999px; padding: 3px 9px; flex: none; margin-top: 1px;
+}
+.rules .mk.ok { border: 1px solid var(--ok-line); color: var(--ok); background: var(--ok-wash); }
+.rules .mk.no { border: 1px dashed var(--accent-line); color: var(--accent-soft); background: var(--accent-wash); }
+.rules .r-t { display: block; color: var(--warm); font-size: 13px; font-weight: 500; }
+.rules .r-s { display: block; color: var(--dim); font-size: 12px; margin-top: 3px; line-height: 1.6; }
+
+/* -- Stat tiles ---------------------------------------------- */
+.tile { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.tile h4 {
+  margin: 0; padding: 7px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
+  font-size: 10px; font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-weight: 600;
+}
+.tile .tb { padding: 11px 14px 13px; }
+.tile .n { font-family: var(--mono); font-size: 27px; font-weight: 600; color: var(--accent); line-height: 1.1; }
+.tile .n small { font-size: 11.5px; color: var(--faint); font-weight: 400; }
+.tile .why { font-size: 11.5px; color: var(--dim); margin-top: 8px; line-height: 1.55; }
+
+/* -- Buttons ------------------------------------------------- */
+.btn {
+  border: 1px solid var(--line); background: var(--surface); color: var(--body-c);
+  border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 500;
+  transition: color var(--dur), border-color var(--dur), background var(--dur);
+}
+.btn:hover { color: var(--ink); border-color: var(--line-hover); background: var(--surface-2); }
+.btn[aria-pressed="true"] { border-color: var(--warn-line); background: var(--warn-wash); color: var(--warn); }
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.btnrow .hint { font-size: 11.5px; color: var(--faint); max-width: 60ch; line-height: 1.5; }
+
+/* -- Drawer -------------------------------------------------- */
+.scrim {
+  position: fixed; inset: 0; background: rgba(8, 4, 2, 0.62); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity var(--dur) ease; z-index: 60;
+}
+.scrim.show { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 94vw);
+  background: var(--deep); border-left: 1px solid var(--line);
+  transform: translateX(100%); transition: transform 0.3s var(--oute);
+  z-index: 70; overflow-y: auto; padding: 22px 24px 44px;
+}
+.drawer.show { transform: none; }
+.drawer h3 { margin: 0 0 4px; font-size: 21px; font-family: var(--mono); color: var(--ink); font-weight: 600; }
+.drawer .dsub { font-family: var(--mono); font-size: 11px; color: var(--dim); margin: 0 0 16px; }
+.drawer .x {
+  position: absolute; top: 14px; right: 16px; background: transparent; border: 0;
+  color: var(--dim); font-size: 20px; line-height: 1; padding: 5px 9px; border-radius: 999px;
+  transition: color var(--dur), background var(--dur);
+}
+.drawer .x:hover { color: var(--ink); background: var(--surface-2); }
+.calc { font-family: var(--mono); font-size: 12px; color: var(--body-c); line-height: 1.95; font-variant-numeric: tabular-nums; }
+.calc b { color: var(--ink); font-weight: 600; }
+.calc .op { color: var(--faint); }
+.calc .sum { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; }
+.calc .post { margin-top: 8px; }
+
+/* -- Footer -------------------------------------------------- */
+.foot { border-top: 1px solid var(--hairline); margin-top: 10px; padding: 24px 22px 44px; background: var(--deep); }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 1160px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
+.foot p { margin: 0 0 8px; font-size: 12px; color: var(--dim); line-height: 1.65; }
+.foot p b { color: var(--body-c); font-weight: 500; }
+.foot .conf { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line-soft); font-size: 11.5px; color: var(--faint); max-width: 96ch; line-height: 1.6; }
+
+/* -- Responsive ---------------------------------------------- */
+@media (max-width: 1024px) {
+  .shell { grid-template-columns: 1fr; }
+  .rail { border-right: 0; border-bottom: 1px solid var(--line-soft); flex-direction: row; overflow-x: auto; gap: 8px; padding: 12px 14px; background: var(--surface); }
+  .rail h6, .rail .rail-note { display: none; }
+  .reqitem { width: 232px; flex: none; background: var(--bg); border-color: var(--line-soft); }
+  .pane { padding: 20px 18px 36px; }
+}
+@media (max-width: 768px) {
+  .tb-row { padding: 11px 16px 8px; }
+  .tabs { padding: 0 16px; gap: 16px; }
+  .quart { grid-template-columns: repeat(2, 1fr); }
+  .head h2 { font-size: 19px; }
+  .ref-id { font-size: 17px; padding: 5px 9px; }
+}
+@media (max-width: 420px) {
+  .pane { padding: 16px 12px 32px; }
+  .card { padding: 13px 13px; }
+  .tablewrap { margin: 12px -13px -13px; }
+}
+
+/* -- Reduced motion: everything still lands, instantly ------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="tb-row">
+      <div class="brand">
+        <span class="eyebrow">Ixana &middot; HR tooling &middot; Controlled pilot</span>
+        <h1>Band Desk</h1>
+      </div>
+      <span class="chip quiet"><span class="dot"></span>Pilot day &middot; 28 Aug 2026</span>
+      <span class="chip ok" title="Every percentile, band edge and offer figure on this page is computed by rule from the comparator rows. The model writes the rationale and nothing else."><span class="dot good"></span><b>0</b>&nbsp;figures written by a model</span>
+      <span class="chip" id="citeChip"><span class="dot accent"></span>Every figure cited</span>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Views"></nav>
+  </header>
+
+  <div class="shell">
+    <nav class="rail" id="rail" aria-label="Requisitions"></nav>
+    <main class="pane" id="pane"></main>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A working recreation of the salary benchmarking and offer drafting pilot described in the case study. <b>Every computed figure on the requisition you have open &mdash; every percentile, band edge, observation count, weight and spread &mdash; is clickable, and every click ends at the comparator rows and the arithmetic that produced it.</b> The only bare numerals are the floor&rsquo;s own thresholds and the internal band edges: those cite an agreement with people operations and finance, not a computation, and the screens say so where they appear. The comparator data is invented; the weight table, the evidence floor and the refusals are the real ones.</p>
+      </div>
+      <div>
+        <h5>The four rules it makes visible</h5>
+        <p><b>1.</b> Numbers are <span class="badge rule">rule</span>, prose is <span class="badge model">model</span>. No percentile, band edge or offer figure passes through a language model, and the screen says which is which.</p>
+        <p><b>2.</b> A figure with no source does not render. There is no fallback estimate and no &ldquo;approximately&rdquo; &mdash; the cell says what is missing instead.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>3.</b> Four evidence-floor rules can each refuse a whole role. A refusal names the rule and what would clear it; it never widens the band to cover thin data. A refusal here wears the product&rsquo;s own colour, not an error state, because it is the product working.</p>
+        <p><b>4.</b> It drafts a range and never a number, and the range stops at the market median. Paying above that is a decision a person makes and signs, not a default the tool hands over.</p>
+      </div>
+    </div>
+    <p class="conf">Every comparator source, observation count, percentile, band, role, requisition and figure on this page is invented for the demo. No employee&rsquo;s pay, no candidate, no real survey and no real offer appears here, and by design none could: the tool holds aggregate comparator rows, never individual compensation records. The internal distribution on the equity screen is suppressed below eight people in a band, which is the same rule the pilot runs.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Source detail" tabindex="-1"></aside>
+
+<script>
+/* ============================================================
+   DATA + pure derivation. No DOM in this block — it is the part
+   a test can swallow whole.
+
+   Seven requisitions opened during the pilot. Three cleared the
+   evidence floor and were banded; four were refused. Every
+   percentile shown anywhere in this demo is computed from the
+   SOURCES rows at render time — nothing is stored, which is why
+   no figure can drift from its citation.
+   ============================================================ */
+
+const TODAY = "28 Aug 2026";
+
+/* The four floor rules, agreed with people operations and
+   finance before the tool drafted anything. Each one can refuse
+   an entire role on its own.                                   */
+const FLOOR = [
+  { id: "F1", n: "At least 3 independent sources", d: "Two sources cannot disagree usefully. Three is the smallest set where an outlier is visible as an outlier." },
+  { id: "F2", n: "At least 12 observations in total", d: "Below this a percentile is a description of a handful of people, not of a market." },
+  { id: "F3", n: "No source over 12 months old may carry more than 25% of weight", d: "Stale data does not announce itself. A band led by an old survey looks exactly like a band led by a current one." },
+  { id: "F4", n: "Inter-source spread at the median within 20%", d: "When sources disagree that far they are not measuring the same job, and averaging them invents a market that does not exist." }
+];
+
+/* ONE weight table for the whole pilot. A weight belongs to a
+   collection method, never to a role: a role's shares are these
+   fixed weights renormalised over the methods present at market
+   weight, so the ratio between methods never changes. Self-
+   reported is the lowest-weighted method and is never dropped
+   where a feed exists.                                         */
+const METHODS = {
+  survey:    { w: 0.40, n: "Employer-reported survey",  why: "The job level is matched by the survey rather than claimed by the respondent. Also the most expensive and the slowest, which is why it is never the only source." },
+  offers:    { w: 0.20, n: "Our own accepted offers",   why: "Real accepted base at hire — a source, not the answer. Weighting our own history higher is how a band drifts away from the market it is supposed to measure, one hire at a time." },
+  posted:    { w: 0.18, n: "Posted-range midpoints",    why: "Verifiable and current, but a posted floor is an advertisement — consistently the lowest source in every role in this pilot." },
+  recruiter: { w: 0.12, n: "Recruiter-supplied offers", why: "Candidate-declared and agency-relayed: twice removed from a payroll, and the agency has a side." },
+  self:      { w: 0.10, n: "Self-reported aggregators", why: "Who chooses to report is not random. Least weight, never dropped where a feed exists — the direction of the bias is the useful part." }
+};
+
+/* m: the collection method — this is what decides the weight,
+   and it is on the screen next to every row. Rows marked
+   local:false are held and shown at zero market weight.       */
+const SOURCES = {
+  "de4-sj": [
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3,  obs: 41, p25: 172, p50: 189, p75: 208 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 63, p25: 168, p50: 192, p75: 221 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 22, p25: 165, p50: 183, p75: 205 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 9,  p25: 170, p50: 185, p75: 199 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 14, p25: 175, p50: 195, p75: 214 }
+  ],
+  "fw3-sj": [
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 38, p25: 149, p50: 163, p75: 181 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 31, p25: 145, p50: 158, p75: 174 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 6, obs: 12, p25: 150, p50: 161, p75: 176 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 17, p25: 148, p50: 167, p75: 186 }
+  ],
+  "pm5-sj": [
+    { id: "S1", n: "Paid cross-industry compensation survey", m: "survey",   method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 29, p25: 197, p50: 219, p75: 246 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 24, p25: 192, p50: 221, p75: 252 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 11, p25: 195, p50: 214, p75: 238 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 7, obs: 7,  p25: 199, p50: 217, p75: 240 }
+  ],
+  "rf5-sj": [
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 4, p25: 208, p50: 231, p75: 259 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 3, p25: 215, p50: 244, p75: 271 }
+  ],
+  "de4-blr": [
+    { id: "S4", n: "Our own accepted offers (Bengaluru)",    m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 8, obs: 6, p25: 34, p50: 41, p75: 49, local: true },
+    { id: "S1", n: "Paid semiconductor survey (San Jose)",   m: "survey",    method: "Employer-reported, different market",     date: "H1 2026", age: 3, obs: 41, p25: 172, p50: 189, p75: 208, local: false },
+    { id: "S3", n: "Disclosed ranges (San Jose postings)",   m: "posted",    method: "Posted range midpoint, different market", date: "Jun–Aug 2026", age: 1, obs: 22, p25: 165, p50: 183, p75: 205, local: false }
+  ],
+  "tw3-sj": [
+    { id: "S1", n: "Paid cross-industry compensation survey", m: "survey",   method: "Employer-reported, matched to a job level", date: "H1 2025", age: 19, obs: 26, p25: 96, p50: 108, p75: 124 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jul–Aug 2026", age: 1, obs: 8, p25: 101, p50: 112, p75: 129 },
+    { id: "S4", n: "Our own accepted offers",                m: "offers",    method: "Internal, accepted base at hire",         date: "Last 18 months", age: 11, obs: 3, p25: 99, p50: 107, p75: 118 }
+  ],
+  "dv4-sj": [
+    { id: "S1", n: "Paid semiconductor compensation survey", m: "survey",    method: "Employer-reported, matched to a job level", date: "H1 2026", age: 3, obs: 19, p25: 146, p50: 158, p75: 172 },
+    { id: "S2", n: "Self-reported salary aggregator",        m: "self",      method: "Self-reported, employer unverified",      date: "Pulled 3 Aug 2026", age: 1, obs: 28, p25: 172, p50: 191, p75: 218 },
+    { id: "S3", n: "Disclosed ranges in public postings",    m: "posted",    method: "Posted range midpoint, transparency filings", date: "Jun–Aug 2026", age: 1, obs: 14, p25: 196, p50: 214, p75: 239 },
+    { id: "S5", n: "Recruiter-supplied competing offers",    m: "recruiter", method: "Agency-reported, candidate-declared",     date: "Q2 2026", age: 4, obs: 12, p25: 168, p50: 186, p75: 205 }
+  ]
+};
+
+/* Wire the global table onto the rows. A row from another
+   market carries zero weight no matter what its method earns. */
+Object.keys(SOURCES).forEach(function (rid) {
+  SOURCES[rid].forEach(function (s) { s.w = s.local === false ? 0 : METHODS[s.m].w; });
+});
+
+/* Internal band and the aggregate distribution of people in it.
+   Counts only, never individuals, and suppressed below 8.      */
+const INTERNAL = {
+  "de4-sj":  { band: [165, 205], holders: 11, q: [2, 5, 3, 1], family: "Digital design, L4" },
+  "fw3-sj":  { band: [142, 178], holders: 9,  q: [1, 4, 3, 1], family: "Embedded firmware, L3" },
+  "pm5-sj":  { band: [190, 240], holders: 4,  q: null,          family: "Product management, L5" },
+  "rf5-sj":  { band: [200, 262], holders: 3,  q: null,          family: "Analog and RF design, L5" },
+  "de4-blr": { band: [32, 52],   holders: 7,  q: null,          family: "Digital design, L4 (Bengaluru)" },
+  "tw3-sj":  { band: [95, 125],  holders: 5,  q: null,          family: "Technical writing, L3" },
+  "dv4-sj":  { band: [148, 186], holders: 8,  q: [2, 3, 2, 1],  family: "Design verification, L4" }
+};
+
+const ROLES = [
+  { id: "de4-sj",  title: "Digital design engineer, L4",    loc: "San Jose, CA",   cur: "USD", req: "REQ-2211", opened: "11 Aug 2026", hm: "Priya Raghavan",  comp: false },
+  { id: "fw3-sj",  title: "Embedded firmware engineer, L3", loc: "San Jose, CA",   cur: "USD", req: "REQ-2214", opened: "14 Aug 2026", hm: "Tomas Lindqvist", comp: false },
+  { id: "pm5-sj",  title: "Product manager, L5",            loc: "San Jose, CA",   cur: "USD", req: "REQ-2218", opened: "19 Aug 2026", hm: "Aarti Kulkarni",  comp: true  },
+  { id: "dv4-sj",  title: "Design verification engineer, L4", loc: "San Jose, CA", cur: "USD", req: "REQ-2221", opened: "21 Aug 2026", hm: "Priya Raghavan",  comp: false },
+  { id: "rf5-sj",  title: "Analog and RF design engineer, L5", loc: "San Jose, CA", cur: "USD", req: "REQ-2224", opened: "24 Aug 2026", hm: "Ravi Menon",     comp: true  },
+  { id: "tw3-sj",  title: "Technical writer, L3",           loc: "San Jose, CA",   cur: "USD", req: "REQ-2226", opened: "25 Aug 2026", hm: "Meera Pillai",    comp: false },
+  { id: "de4-blr", title: "Digital design engineer, L4",    loc: "Bengaluru, IN",  cur: "USD", req: "REQ-2228", opened: "26 Aug 2026", hm: "Priya Raghavan",  comp: false }
+];
+
+/* The rationale the model wrote for each banded role. Prose
+   only — every market numeral in it is a {figure} token replaced
+   at render time with the computed value and its citation, so
+   the model cannot state a number that the rules did not
+   produce.                                                     */
+const RATIONALE = {
+  "de4-sj": [
+    "The market for this level is unusually well evidenced: {sources} independent sources covering {obs} observations, with our own hiring record the oldest of them and nothing close to the staleness line. The paid survey and our accepted offers agree closely at the median, which is the pair most worth agreeing.",
+    "The {sources} sources disagree by {gap} at the median, and the self-reported aggregator is the highest of them — which is also why its method carries the least weight, since who chooses to report is not random. Dropping it entirely would move the band by less than that spread.",
+    "A draft opening at {low} and closing at {high} places a standard hire between the market's lower quartile and its median, inside the existing internal band for the family. Anything above the median is reserved: it needs a named reason and a second approver, because the comparator set supports the band, not the position within it."
+  ],
+  "fw3-sj": [
+    "{sources} sources and {obs} observations, disagreeing by {gap} at the median. Postings sit lowest of them, which is the pattern across every role in this pilot — a posted range floor is an advertisement, not a market.",
+    "The internal band for this family is narrower than the market spread. The draft therefore closes at the market median rather than the internal midpoint, and a candidate at the top of the range would enter in the upper half of the current holders.",
+    "A draft of {low} to {high} is defensible on this evidence. What it cannot tell you is whether this particular candidate should sit at the top of it — that judgement is not in the comparator rows and the tool does not pretend otherwise."
+  ],
+  "pm5-sj": [
+    "This requisition is flagged competitive, which widens the draft to close above the market median rather than at it, and nothing else — the flag changes one rule and is recorded on the requisition so the widening can be traced later.",
+    "Evidence is thinner than for the engineering roles: {sources} sources and {obs} observations, and our own accepted offers contribute only {ownObs} of them. The band is honest but wider than it looks, and the {gap} spread between sources at the median is the number to watch rather than the median itself.",
+    "A draft of {low} to {high} clears the internal band floor. The internal population is under the suppression line, so no distribution is shown on the equity screen — below eight people in a band the tool suppresses counts rather than describing individuals."
+  ]
+};
+
+const VIEWS = [
+  { id: "requisition", n: "01", label: "Requisition" },
+  { id: "evidence",    n: "02", label: "Market evidence" },
+  { id: "band",        n: "03", label: "The band" },
+  { id: "equity",      n: "04", label: "Internal equity" },
+  { id: "offer",       n: "05", label: "Offer draft" },
+  { id: "floor",       n: "06", label: "Evidence floor" }
+];
+
+/* Pilot record. Every one of these is a count against its
+   denominator; 18 drafts cannot support a rate.               */
+const PILOT = {
+  drafts: 18, cited: 18, refused: 4, outside: 2, modelFigures: 0,
+  beforeDays: 6, afterHours: 4,
+  overrides: [
+    { req: "REQ-2189", why: "Counter-offer at a competitor exceeded the drafted high. Approved above the range with a named reason and a second approver." },
+    { req: "REQ-2203", why: "Candidate had a scarce mixed-signal skill the level does not describe. The level was wrong, not the band, and the requisition was re-levelled afterwards." }
+  ]
+};
+
+const CLEAR = {
+  "rf5-sj": "One further independent source with nine or more observations. A paid survey module for the family was quoted and is the open decision.",
+  "de4-blr": "Local comparator rows for the Bengaluru market. The San Jose sources are held and shown, and carry no weight, because a labelled cross-market adjustment was cut from scope.",
+  "tw3-sj": "A current survey for the family, or enough posted ranges to carry the weight the 19-month-old survey is holding.",
+  "dv4-sj": "A level review first. Sources this far apart at the median are describing different jobs, and the band cannot fix that."
+};
+
+/* --- pure derivations, parameterised by role id ------------- */
+function srcsFor(id) { return SOURCES[id] || []; }
+function weightedFor(id) { return srcsFor(id).filter(function (s) { return s.w > 0; }); }
+
+function bandFor(id) {
+  const ws = weightedFor(id);
+  const tw = ws.reduce(function (a, s) { return a + s.w; }, 0) || 1;
+  const at = function (key) { return ws.reduce(function (a, s) { return a + s[key] * s.w; }, 0) / tw; };
+  return { p25: at("p25"), p50: at("p50"), p75: at("p75"), sources: ws.length, obs: ws.reduce(function (a, s) { return a + s.obs; }, 0), tw: tw };
+}
+
+/* A standard hire is drafted from the market 25th percentile to
+   the market median — the range stops at the median. A
+   requisition flagged competitive closes at the median plus a
+   third of the gap to the 75th, and the flag is recorded on the
+   requisition rather than applied silently.                    */
+function draftFor(id) {
+  const b = bandFor(id);
+  const r = ROLES.find(function (x) { return x.id === id; });
+  const high = r.comp ? b.p50 + (b.p75 - b.p50) / 3 : b.p50;
+  return { low: b.p25, high: high, reserved: [high, b.p75], competitive: r.comp };
+}
+
+/* The spread between the highest and lowest weighted source at
+   the median — the one quantity the rationale is allowed to talk
+   about, computed here so the prose cannot state a disagreement
+   the rows do not support. It is also what rule F4 tests.      */
+function gapFor(id) {
+  const ws = weightedFor(id);
+  if (ws.length < 2) return 0;
+  const p50 = ws.map(function (s) { return s.p50; });
+  return Math.max.apply(null, p50) - Math.min.apply(null, p50);
+}
+
+/* Everything the four floor rules need, in one pass. The stale
+   share is a share of the weight actually present, because that
+   is the weight the stale source would lead.                   */
+function floorStats(id) {
+  const rows = srcsFor(id);
+  const ws = rows.filter(function (s) { return s.w > 0; });
+  const tw = ws.reduce(function (a, s) { return a + s.w; }, 0) || 1;
+  const obs = ws.reduce(function (a, s) { return a + s.obs; }, 0);
+  const stale = ws.filter(function (s) { return s.age > 12; });
+  const staleShare = stale.reduce(function (a, s) { return a + s.w; }, 0) / tw;
+  const p50s = ws.map(function (s) { return s.p50; });
+  const med = p50s.length ? p50s.slice().sort(function (a, b) { return a - b; })[Math.floor(p50s.length / 2)] : 0;
+  const spreadAbs = p50s.length > 1 ? Math.max.apply(null, p50s) - Math.min.apply(null, p50s) : 0;
+  const spread = med ? spreadAbs / med : 0;
+  const held = rows.filter(function (s) { return s.local === false; });
+  const oks = [ws.length >= 3, obs >= 12, staleShare <= 0.25, p50s.length > 1 && spread <= 0.20];
+  return { ws: ws, tw: tw, obs: obs, stale: stale, staleShare: staleShare, p50s: p50s, med: med, spreadAbs: spreadAbs, spread: spread, held: held, oks: oks, pass: oks.every(Boolean) };
+}
+const passesFloor = function (id) { return floorStats(id).pass; };
+</script>
+
+<script>
+/* ============================================================
+   STATE, chrome and citation plumbing.
+   ============================================================ */
+
+const state = { view: "offer", role: "de4-sj", showModel: false };
+
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const role = () => ROLES.find((r) => r.id === state.role) || ROLES[0];
+const srcs = () => srcsFor(state.role);
+const weighted = () => weightedFor(state.role);
+const band = () => bandFor(state.role);
+const draft = () => draftFor(state.role);
+const k = (v) => "$" + Math.round(v) + "k";
+const pct = (v) => Math.round(v * 100) + "%";
+
+/* --- cited figure ------------------------------------------- */
+/* Nothing renders a computed number except this. A figure with
+   no cite list renders as a refusal, which is why the screen
+   cannot quietly show an uncited value.                        */
+function fig(value, cite, note) {
+  if (value === null || value === undefined || !cite || !cite.length) {
+    return '<span class="uncited" title="No source — this figure will not render">no source</span>';
+  }
+  /* A long citation list is collapsed to its range so the figure
+     stays readable; the click still opens every row behind it. */
+  const mark = cite.length > 3 ? cite[0] + "–" + cite[cite.length - 1] : cite.join(" ");
+  return '<button class="fig" data-cite="' + esc(cite.join(",")) + '" data-note="' + esc(note || "") +
+    '" data-val="' + esc(String(value)) + '" title="Sources ' + esc(cite.join(", ")) + '">' +
+    esc(String(value)) + "<sup>" + esc(mark) + "</sup></button>";
+}
+
+function openDrawer(html) {
+  const d = $("#drawer");
+  d.innerHTML = '<button class="x" aria-label="Close">&times;</button>' + html;
+  d.classList.add("show"); d.setAttribute("aria-hidden", "false");
+  $("#scrim").classList.add("show");
+  $(".x", d).onclick = closeDrawer;
+  d.focus();
+}
+function closeDrawer() {
+  $("#drawer").classList.remove("show");
+  $("#drawer").setAttribute("aria-hidden", "true");
+  $("#scrim").classList.remove("show");
+}
+function syncUrl() {
+  const u = new URL(location.href);
+  u.searchParams.set("view", state.view);
+  u.searchParams.set("role", state.role);
+  history.replaceState(null, "", u);
+}
+
+/* --- the floor, formatted with citations --------------------- */
+/* Each "got" string routes its numerals through fig(), so even
+   the refusal's evidence is clickable back to the rows.
+   Only ever rendered for the open requisition.                 */
+function floorCheck(id) {
+  const st = floorStats(id);
+  const ids = st.ws.map((s) => s.id);
+  const gots = [
+    fig(String(st.ws.length), ids, "sources") + " weighted source" + (st.ws.length === 1 ? "" : "s") +
+      (st.held.length ? ", " + fig(String(st.held.length), st.held.map((s) => s.id), "held") + " more from another market carrying no weight" : ""),
+    fig(String(st.obs), ids, "obs") + " observation" + (st.obs === 1 ? "" : "s"),
+    st.staleShare > 0
+      ? fig(pct(st.staleShare), st.stale.map((s) => s.id), "stale") + " of weight carried by a source over 12 months old"
+      : "no weighted source over 12 months old",
+    st.p50s.length > 1
+      ? "medians " + st.ws.map((s) => fig(String(Math.round(s.p50)), [s.id], "src50")).join(", ") +
+        " — spread " + fig(pct(st.spread), ids, "spread") + " of the mid median"
+      : "only one weighted median — a spread cannot even be evaluated, which is itself the refusal"
+  ];
+  return FLOOR.map((r, i) => ({ r: r, ok: st.oks[i], got: gots[i] }));
+}
+</script>
+
+<script>
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+/* Hero surface #2: the refusal. It names the failed rule, shows
+   the cited evidence for the failure, and says what would clear
+   it. Deliberately not an error state — accent, dashed, calm.  */
+function refusalPanel() {
+  const st = floorStats(state.role);
+  if (st.pass) return "";
+  const checks = floorCheck(state.role);
+  const failed = checks.filter((c) => !c.ok);
+  return '<section class="refusal">' +
+    '<div class="ref-kicker">The output &mdash; a refusal, not an error</div>' +
+    "<h3>No band for " + esc(role().req) + " &middot; " +
+      (failed.length === 1 ? "rule " + esc(failed[0].r.id) + " not met" : failed.length + " floor rules not met") + "</h3>" +
+    failed.map((c) =>
+      '<div class="ref-rule"><span class="ref-id">' + esc(c.r.id) + "</span><div>" +
+      '<span class="ref-name">' + esc(c.r.n) + "</span>" +
+      '<span class="ref-got">Currently ' + c.got + ".</span>" +
+      '<span class="ref-why">' + esc(c.r.d) + "</span>" +
+      "</div></div>").join("") +
+    '<p class="ref-clear"><b>What would clear it.</b> ' + esc(CLEAR[state.role] || "") + "</p>" +
+    '<p class="ref-note">The tool does not widen a band to cover thin evidence, and does not fall back to a neighbouring role. It says what is missing and stops. <b>06 Evidence floor</b> has all four rules and the other refusals.</p>' +
+  "</section>";
+}
+
+/* -- 01 Requisition ------------------------------------------ */
+function viewRequisition() {
+  const r = role();
+  const ok = passesFloor(r.id);
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">01 &middot; What the tool is given</div>' +
+      "<h2>" + esc(r.req) + " &middot; " + esc(r.title) + "</h2>" +
+      "<p>Four inputs and nothing else: a job family and level, a location, a currency, and whether the requisition has been flagged competitive. There is no free-text brief for a model to interpret, because everything downstream has to be reproducible from what is on this screen.</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Inputs <span class=\"badge rule\">deterministic</span></h3>" +
+      '<div class="tablewrap tight"><table><tbody>' +
+        "<tr><td style=\"width:220px\">Job family and level</td><td class=\"t\">" + esc(r.title) + "</td></tr>" +
+        "<tr><td>Location</td><td class=\"t\">" + esc(r.loc) + " &mdash; comparator rows must be local to this market</td></tr>" +
+        "<tr><td>Currency</td><td class=\"t\">" + esc(r.cur) + ", base salary only. Equity and bonus are out of scope and named as such in the draft.</td></tr>" +
+        "<tr><td>Competitive flag</td><td class=\"t\">" + (r.comp
+          ? '<span class="badge model">set</span> — the draft closes above the market median instead of at it, and this row is why'
+          : '<span class="badge">not set</span> — the draft closes at the market median') + "</td></tr>" +
+        "<tr><td>Hiring manager</td><td class=\"t\">" + esc(r.hm) + "</td></tr>" +
+        "<tr><td>Opened</td><td class=\"t\">" + esc(r.opened) + "</td></tr>" +
+      "</tbody></table></div>" +
+    "</div>" +
+
+    (ok
+      ? '<div class="pass-strip"><h4>Evidence floor cleared</h4><p>All four rules pass on the comparator set for this role, so a band was computed. Open <b>02 Market evidence</b> for the rows it used, or go straight to <b>05 Offer draft</b>.</p></div>'
+      : refusalPanel()) +
+
+    '<div class="card">' +
+      "<h3>All seven pilot requisitions <span class=\"sub\">Aug 2026</span></h3>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Req</th><th>Role</th><th>Location</th><th>Opened</th><th class="num">Sources</th><th class="num">Obs</th><th>Outcome</th></tr></thead><tbody>' +
+      ROLES.map((x) => {
+        const st = floorStats(x.id);
+        return '<tr class="click" data-role="' + x.id + '">' +
+          "<td><span class=\"srcid\">" + esc(x.req) + "</span></td>" +
+          "<td class=\"t\">" + esc(x.title) + (x.comp ? ' <span class="badge model">competitive</span>' : "") + "</td>" +
+          "<td>" + esc(x.loc) + "</td><td class=\"num\" style=\"text-align:left\">" + esc(x.opened) + "</td>" +
+          '<td class="num">' + st.ws.length + '</td><td class="num">' + st.obs + "</td>" +
+          "<td>" + (st.pass ? '<span class="badge ok">banded</span>' : '<span class="badge ref">refused</span>') + "</td></tr>";
+      }).join("") +
+      "</tbody></table></div>" +
+    "</div>";
+}
+
+/* -- 02 Market evidence -------------------------------------- */
+function viewEvidence() {
+  const rows = srcs();
+  const st = floorStats(state.role);
+  const b = band();
+  const cites = st.ws.map((s) => s.id);
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">02 &middot; The comparator rows</div>' +
+      "<h2>Market evidence</h2>" +
+      "<p>Every row the band is computed from, with how the figure was obtained, when, over how many observations, and what weight the method earns it. This screen exists so that a band can be argued with rather than believed &mdash; the argument is always about a row.</p>" +
+    "</div>" +
+
+    refusalPanel() +
+
+    '<div class="card">' +
+      "<h3>Sources for " + esc(role().title) + " <span class=\"sub\">" + esc(role().loc) + "</span> <span class=\"badge rule\">weights fixed by method, not chosen per role</span></h3>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Ref</th><th>Source and method</th><th>As of</th><th class="num">Obs</th><th class="num">Method wt</th><th class="num">In this band</th><th class="num">P25</th><th class="num">P50</th><th class="num">P75</th></tr></thead><tbody>' +
+      rows.map((s) => {
+        const stale = s.age > 12;
+        const zero = s.w === 0;
+        return '<tr class="click" data-src="' + s.id + '">' +
+          "<td><span class=\"srcid\">" + s.id + "</span></td>" +
+          "<td class=\"t\">" + esc(s.n) +
+            (stale ? ' <span class="badge warn">' + s.age + " months old</span>" : "") +
+            (zero ? ' <span class="badge ref">different market — no weight</span>' : "") +
+            "<span class=\"sub\">" + esc(s.method) + "</span></td>" +
+          "<td>" + esc(s.date) + "</td>" +
+          '<td class="num">' + s.obs + "</td>" +
+          '<td class="num">' + (zero ? "&mdash;" : pct(METHODS[s.m].w)) + "</td>" +
+          '<td class="num">' + (zero ? "&mdash;" : pct(s.w / st.tw)) + "</td>" +
+          '<td class="num">' + k(s.p25) + '</td><td class="num">' + k(s.p50) + '</td><td class="num">' + k(s.p75) + "</td>" +
+        "</tr>";
+      }).join("") +
+      "</tbody></table></div>" +
+      (st.pass
+        ? "<p style=\"margin-top:12px\">Weighted across " + fig(String(b.sources), cites, "sources") + " sources and " + fig(String(b.obs), cites, "obs") +
+          " observations: P25 " + fig(k(b.p25), cites, "p25") + ", P50 " + fig(k(b.p50), cites, "p50") + ", P75 " + fig(k(b.p75), cites, "p75") +
+          ". Every one of those three is a weighted mean of the column above it &mdash; press a figure anywhere in this demo to see the arithmetic.</p>"
+        : "<p style=\"margin-top:12px\">No weighted band is computed for this role, so the three percentile figures do not exist to display. That is the intended output, not a gap in the screen.</p>") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>One weight table for the whole pilot <span class=\"badge rule\">fixed by method</span></h3>" +
+      "<p>A weight belongs to a collection method, never to a role. A role&rsquo;s shares are these fixed weights renormalised over the methods present at market weight, so the ratio between methods never changes &mdash; the &ldquo;in this band&rdquo; column above is this table divided by what showed up.</p>" +
+      '<div class="tablewrap"><table><thead><tr><th>Method</th><th class="num">Fixed weight</th><th>Why it earns it</th></tr></thead><tbody>' +
+      Object.keys(METHODS).map((key) => {
+        const m = METHODS[key];
+        return "<tr><td class=\"t\" style=\"white-space:nowrap\">" + esc(m.n) + "</td>" +
+          '<td class="num">' + pct(m.w) + "</td>" +
+          "<td style=\"max-width:52ch\">" + esc(m.why) + "</td></tr>";
+      }).join("") +
+      "</tbody></table></div>" +
+    "</div>";
+}
+
+/* -- 03 The band: hero surface #1 ----------------------------- */
+function viewBand() {
+  if (!passesFloor(state.role)) {
+    return '<div class="head"><div class="kicker">03 &middot; Computed by rule</div><h2>The band</h2>' +
+      "<p>Nothing is computed for this role. A refusal is the output.</p></div>" + refusalPanel();
+  }
+  const b = band();
+  const d = draft();
+  const lo = Math.floor((b.p25 - 18) / 10) * 10;
+  const hi = Math.ceil((b.p75 + 12) / 10) * 10;
+  const pos = (v) => ((v - lo) / (hi - lo)) * 100;
+  const ws = weighted();
+  const cites = ws.map((s) => s.id);
+
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">03 &middot; Computed by rule, not by a model</div>' +
+      "<h2>The band</h2>" +
+      "<p>Three weighted percentiles and a draft range derived from them. No language model touches any figure on this screen; the arithmetic is a weighted mean and it is shown in full behind every number.</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>" + esc(role().title) + " &middot; " + esc(role().loc) + ' <span class="badge rule">weighted mean of ' + ws.length + " sources</span>" +
+      (d.competitive ? ' <span class="badge model">competitive — closes above the median</span>' : "") + "</h3>" +
+      '<div class="band"><div class="band-track">' +
+        '<div class="band-fill" style="left:' + pos(b.p25) + "%;width:" + (pos(b.p75) - pos(b.p25)) + '%"></div>' +
+        '<div class="band-res" style="left:' + pos(d.high) + "%;width:" + (pos(b.p75) - pos(d.high)) + '%"><b>reserved</b></div>' +
+        '<div class="band-offer" style="left:' + pos(d.low) + "%;width:" + (pos(d.high) - pos(d.low)) + '%"></div>' +
+        '<div class="band-tick p50" style="left:' + pos(b.p50) + '%"></div>' +
+      "</div>" +
+      '<div class="band-labels">' +
+        '<span style="left:' + pos(b.p25) + '%">P25 ' + fig(k(b.p25), cites, "p25") + "</span>" +
+        '<span class="p50" style="left:' + pos(b.p50) + '%">P50 ' + fig(k(b.p50), cites, "p50") + "</span>" +
+        '<span style="left:' + pos(b.p75) + '%">P75 ' + fig(k(b.p75), cites, "p75") + "</span>" +
+      "</div>" +
+      '<div class="band-scale"><span>' + k(lo) + "</span><span>" + k(hi) + "</span></div>" +
+      '<div class="band-legend">' +
+        '<span><i class="sw mkt"></i>Market P25 to P75, weighted</span>' +
+        '<span><i class="sw off"></i>Drafted offer range</span>' +
+        '<span><i class="sw res"></i>Reserved &mdash; needs a named reason and a second approver</span>' +
+      "</div></div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Every figure, and what is behind it</h3>" +
+      '<div class="tablewrap tight"><table><thead><tr><th>Figure</th><th class="num">Value</th><th>Rule that produced it</th><th>Sources</th></tr></thead><tbody>' +
+        "<tr><td class=\"t\">Market 25th percentile</td><td class=\"num\">" + fig(k(b.p25), cites, "p25") + "</td><td>Weighted mean of each source's P25, weights fixed by method</td><td>" + cites.join(", ") + "</td></tr>" +
+        "<tr><td class=\"t\">Market median</td><td class=\"num\">" + fig(k(b.p50), cites, "p50") + "</td><td>Weighted mean of each source's P50</td><td>" + cites.join(", ") + "</td></tr>" +
+        "<tr><td class=\"t\">Market 75th percentile</td><td class=\"num\">" + fig(k(b.p75), cites, "p75") + "</td><td>Weighted mean of each source's P75</td><td>" + cites.join(", ") + "</td></tr>" +
+        "<tr><td class=\"t\">Draft opens at</td><td class=\"num\">" + fig(k(d.low), cites, "p25") + "</td><td>The market 25th percentile, unchanged</td><td>" + cites.join(", ") + "</td></tr>" +
+        "<tr><td class=\"t\">Draft closes at</td><td class=\"num\">" + fig(k(d.high), cites, d.competitive ? "comp" : "p50") + "</td><td>" +
+          (d.competitive ? "Median plus a third of the gap to P75 — this requisition is flagged competitive" : "The market median. Above it is reserved.") +
+          "</td><td>" + cites.join(", ") + "</td></tr>" +
+        "<tr><td class=\"t\">Observations behind the band</td><td class=\"num\">" + fig(String(b.obs), cites, "obs") + "</td><td>Sum of the observation counts of the weighted sources</td><td>" + cites.join(", ") + "</td></tr>" +
+      "</tbody></table></div>" +
+      "<p style=\"margin-top:11px\">Six figures, six citations. There is no seventh figure on this screen, because a number that could not carry a citation would not have been rendered.</p>" +
+    "</div>";
+}
+
+/* -- 04 Internal equity -------------------------------------- */
+function viewEquity() {
+  const inl = INTERNAL[state.role];
+  const ok = passesFloor(state.role);
+  const d = ok ? draft() : null;
+  const cites = ok ? weighted().map((s) => s.id) : [];
+  const suppressed = !inl.q;
+  /* Which quartile of the internal band the drafted high lands in,
+     and the counts either side of it — computed, not asserted.  */
+  let qi = 0, ahead = 0, behind = 0;
+  if (ok && inl.q) {
+    const qw = (inl.band[1] - inl.band[0]) / 4;
+    qi = Math.min(3, Math.max(0, Math.floor((d.high - inl.band[0]) / qw)));
+    ahead = inl.q.slice(0, qi).reduce((a, v) => a + v, 0);
+    behind = inl.q.slice(qi + 1).reduce((a, v) => a + v, 0);
+  }
+
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">04 &middot; Aggregate only, and suppressed below eight</div>' +
+      "<h2>Internal equity</h2>" +
+      "<p>Where the drafted range sits against the band the company already operates for this family, and how the people in that band are distributed across it. Counts by quartile, never individuals &mdash; and below eight people in a band, not even counts.</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>" + esc(inl.family) + ' <span class="sub">internal band ' + k(inl.band[0]) + " &ndash; " + k(inl.band[1]) + " &middot; a policy, not a computation</span></h3>" +
+      (ok
+        ? "<p>The draft opens at " + fig(k(d.low), cites, "p25") + " and closes at " + fig(k(d.high), cites, d.competitive ? "comp" : "p50") + ". Against the internal band that is " +
+          (d.low >= inl.band[0] ? "above the floor" : "<b style=\"color:var(--crit)\">below the floor</b>") + " and " +
+          (d.high <= inl.band[1] ? "inside the ceiling" : "<b style=\"color:var(--crit)\">above the ceiling</b>") +
+          ", so no band exception is required. Where a draft falls outside, the tool says so here and the requisition cannot proceed on the draft alone.</p>"
+        : "<p>No draft exists for this role, so there is nothing to compare against the internal band. The internal band itself is unaffected by a refusal &mdash; it is a fact about the company, not about the comparator set.</p>") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Where current holders sit <span class=\"sub\">" + inl.holders + " people in band</span> " +
+        (suppressed ? '<span class="badge ref">suppressed</span>' : '<span class="badge rule">counts only</span>') + "</h3>" +
+      (suppressed
+        ? "<p>Fewer than eight people hold this band, so the distribution is not shown. At " + inl.holders +
+          " people a quartile count is close enough to naming someone, and the person it would name is the one furthest from the middle. The band edges above are still shown, because they are a policy, not a person.</p>"
+        : '<div class="quart">' +
+            ["Below P25", "P25 – P50", "P50 – P75", "Above P75"].map((lbl, i) =>
+              '<div class="' + (ok && i === qi ? "hit" : "") + '"><h6>' + esc(lbl) + '</h6><div class="c">' + inl.q[i] +
+              " <small>of " + inl.holders + "</small></div></div>").join("") +
+          "</div>" +
+          (ok ? "<p style=\"margin-top:11px\">A hire at the top of the drafted range would enter in the " +
+            ["first", "second", "third", "fourth"][qi] + " quartile of the internal band, ahead of " +
+            ahead + " current holder" + (ahead === 1 ? "" : "s") + " and behind " + behind +
+            ". That sentence is the entire output of this screen &mdash; there is no per-person view behind it to open.</p>" : "")) +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>What this screen refuses to become</h3>" +
+      "<p><b>No individual's pay, ever.</b> The tool holds aggregate comparator rows and band edges. It has no table of employee compensation to query, which is a design choice rather than an access control &mdash; the data is not there to leak.</p>" +
+      "<p><b>No recommendation to adjust anyone.</b> A tool that drafts offers and also flags existing employees as underpaid would be doing performance-adjacent work on data that does not describe performance. That was cut, and it is the cut most often asked about.</p>" +
+    "</div>";
+}
+
+/* -- 05 Offer draft ------------------------------------------ */
+function viewOffer() {
+  if (!passesFloor(state.role)) {
+    return '<div class="head"><div class="kicker">05 &middot; The draft</div><h2>Offer draft</h2>' +
+      "<p>No draft is produced for this role, and no partial one either.</p></div>" + refusalPanel() +
+      '<div class="card"><h3>What a recruiter gets instead</h3>' +
+      "<p>The refusal above, in the requisition, with the rule that failed and the specific thing that would clear it. The alternative &mdash; a wide band with a caveat under it &mdash; was tried first and read as a band, because a caveat is not a number and the number is what gets pasted into the approval.</p></div>";
+  }
+  const r = role();
+  const b = band();
+  const d = draft();
+  const ws = weighted();
+  const cites = ws.map((s) => s.id);
+  const own = ws.find((s) => s.id === "S4");
+
+  const tokens = {
+    sources: fig(String(b.sources), cites, "sources"),
+    obs: fig(String(b.obs), cites, "obs"),
+    low: fig(k(d.low), cites, "p25"),
+    high: fig(k(d.high), cites, d.competitive ? "comp" : "p50"),
+    gap: fig(k(Math.abs(gapFor(state.role))), cites, "gap"),
+    ownObs: own ? fig(String(own.obs), ["S4"], "obs") : '<span class="uncited">no source</span>'
+  };
+  const prose = (RATIONALE[state.role] || []).map((p) =>
+    "<p>" + p.replace(/\{(\w+)\}/g, (m, key) => tokens[key] || m) + "</p>").join("");
+
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">05 &middot; A range, and the reason for it</div>' +
+      "<h2>Offer draft &mdash; " + esc(r.req) + "</h2>" +
+      "<p>What a recruiter takes into the approval conversation: a range, never a number; the rationale that argues it; and a citation on every figure inside that rationale. Press any underlined figure to land on the rows it came from.</p>" +
+    "</div>" +
+
+    '<div class="offerhead">' +
+      "<div><h6>Drafted range</h6><div class=\"val range\">" + fig(k(d.low), cites, "p25") + " &ndash; " + fig(k(d.high), cites, d.competitive ? "comp" : "p50") +
+        "<small>base salary, " + esc(r.cur) + ". Equity and bonus are out of scope.</small></div></div>" +
+      "<div><h6>Market median</h6><div class=\"val\">" + fig(k(b.p50), cites, "p50") + "<small>weighted across " + b.sources + " sources</small></div></div>" +
+      "<div><h6>Reserved above</h6><div class=\"val\">" + fig(k(d.high), cites, d.competitive ? "comp" : "p50") +
+        "<small>named reason and a second approver</small></div></div>" +
+      "<div><h6>Evidence</h6><div class=\"val\">" + fig(String(b.obs), cites, "obs") + "<small>observations, " + b.sources + " sources, floor cleared</small></div></div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Rationale <span class=\"badge model\">written by a model</span> <span class=\"badge rule\">every figure inside it computed</span></h3>" +
+      "<p>The model was given the computed band and the comparator rows and asked for an argument, not for a number. Each market numeral below is a token the renderer replaced with a computed figure and its citation &mdash; the model could not have written a different one, because it never wrote one at all.</p>" +
+      '<div class="rationale">' + prose + "</div>" +
+      '<div class="btnrow">' +
+        '<button class="btn" id="toggleModel" aria-pressed="' + state.showModel + '">' +
+          (state.showModel ? "Hide the raw model output" : "Show the raw model output") + "</button>" +
+        '<span class="hint">The raw output is the same prose with the tokens still in it. That is the whole guardrail: the model produced a shape, and the rules filled it.</span>' +
+      "</div>" +
+      (state.showModel
+        ? '<div style="margin-top:12px"><h3 style="margin:0 0 8px;font-size:12px;color:var(--ink);display:flex;gap:9px;align-items:center">Raw model output <span class="badge model">before token replacement</span></h3>' +
+          '<div class="rationale raw">' +
+          (RATIONALE[state.role] || []).map((p) => "<p>" + esc(p) + "</p>").join("") + "</div></div>"
+        : "") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>What the draft deliberately does not say</h3>" +
+      "<p><b>A single number.</b> A point figure would be quoted as the offer and the range would be forgotten by the second email. The range is the output and the position inside it is a decision with a name on it.</p>" +
+      "<p><b>Anything about this candidate.</b> The comparator rows describe a market and a level. Nothing in them knows who applied, and a tool that inferred a number from a r&eacute;sum&eacute; would be doing the one part of this that has to stay with a person.</p>" +
+      "<p><b>Total compensation.</b> Base only, said plainly, because a blended figure is where a defensible band quietly becomes an indefensible one.</p>" +
+    "</div>";
+}
+
+/* -- 06 Evidence floor --------------------------------------- */
+function viewFloor() {
+  const checks = floorCheck(state.role);
+  const refused = ROLES.filter((r) => !passesFloor(r.id));
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">06 &middot; Agreed before the tool drafted anything</div>' +
+      "<h2>Evidence floor</h2>" +
+      "<p>Four rules, written with people operations and finance before a single band was produced, so that none of them could be relaxed by whatever the comparator data turned out to look like. Any one of them refuses a whole role on its own.</p>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>" + esc(role().title) + " &middot; " + esc(role().loc) + " <span class=\"sub\">" + esc(role().req) + "</span> " +
+        (passesFloor(state.role) ? '<span class="badge ok">all four clear</span>' : '<span class="badge ref">refused</span>') + "</h3>" +
+      '<ul class="rules">' +
+        checks.map((c) =>
+          "<li><span class=\"mk " + (c.ok ? "ok" : "no") + "\">" + (c.ok ? "pass" : "refuses") + "</span><span>" +
+          '<span class="r-t">' + esc(c.r.id) + " &middot; " + esc(c.r.n) + "</span>" +
+          '<span class="r-s">Currently ' + c.got + " &mdash; " + esc(c.r.d) + "</span></span></li>").join("") +
+      "</ul>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>The four roles the pilot refused <span class=\"sub\">of seven requisitions</span></h3>" +
+      "<p>Between them these four fire every one of the rules, which is the reason all four survived review: a floor whose later rules never refuse anything is not a floor, it is a comment. Press a row to open that requisition.</p>" +
+      '<div class="tablewrap"><table><thead><tr><th>Req</th><th>Role</th><th>Rule that refused it</th><th>What would clear it</th></tr></thead><tbody>' +
+      refused.map((x) => {
+        const st = floorStats(x.id);
+        const f = FLOOR.filter((r, i) => !st.oks[i]);
+        return '<tr class="click" data-role="' + x.id + '">' +
+          "<td><span class=\"srcid\">" + esc(x.req) + "</span></td>" +
+          "<td class=\"t\">" + esc(x.title) + "<span class=\"sub\">" + esc(x.loc) + "</span></td>" +
+          "<td>" + f.map((c) => '<span class="badge ref">' + esc(c.id) + "</span> " + esc(c.n)).join("<br>") + "</td>" +
+          "<td style=\"max-width:40ch\">" + esc(CLEAR[x.id] || "") + "</td></tr>";
+      }).join("") +
+      "</tbody></table></div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Pilot record <span class=\"sub\">18 drafts, Jun &ndash; Aug 2026</span> <span class=\"badge\">counts, not rates</span></h3>" +
+      '<div class="grid3">' +
+        tile("Offer drafts produced", PILOT.drafts, "", "The denominator for everything else on this screen. Eighteen drafts can show whether the contract holds and cannot support a rate.") +
+        tile("Drafts where every figure carried a source", PILOT.cited, "of " + PILOT.drafts, "The thing the tool exists for. A single uncited figure in a published draft would stop the pilot.") +
+        tile("Roles refused at the floor", PILOT.refused, "of 7", "Four refusals in seven requisitions is high, and it is the number people operations found hardest to accept before they saw which four.") +
+        tile("Offers made outside the drafted range", PILOT.outside, "of " + PILOT.drafts, "Both were approved above the range with a named reason. One of them turned out to be a levelling error rather than a band error.") +
+        tile("Figures written by a model", PILOT.modelFigures, "", "Zero, and this is the guardrail: a model that is occasionally wrong about a salary figure destroys the tool faster than one that is occasionally vague about a market.") +
+        tile("Median time to a defensible range", PILOT.afterHours, "hours", "From " + PILOT.beforeDays + " days. The days were never spent computing anything — they were spent finding somebody who could say where the last number came from.") +
+      "</div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>How a citation is counted <span class=\"badge rule\">definition</span></h3>" +
+      "<p>A figure carries a source when the published draft resolves it to at least one named comparator row with a date, an observation count and a method. A figure sourced to &ldquo;market data&rdquo;, to a previous draft, or to another figure in the same document counts as <b>uncited</b> &mdash; those three were how the old spreadsheets cited themselves, and each one is a citation that cannot be followed anywhere.</p>" +
+    "</div>";
+}
+
+function tile(label, value, sub, why) {
+  return '<div class="tile"><h4>' + esc(label) + "</h4>" +
+    '<div class="tb"><div class="n">' + esc(String(value)) + (sub ? " <small>" + esc(sub) + "</small>" : "") + "</div>" +
+    '<div class="why">' + esc(why) + "</div></div></div>";
+}
+
+/* -- citation drawer ----------------------------------------- */
+function citeDrawer(cites, note, val) {
+  const ids = cites.split(",");
+  const all = srcs().filter((s) => ids.indexOf(s.id) > -1);
+  const rows = note === "held" ? all : all.filter((s) => s.w > 0);
+  const tw = rows.reduce((a, s) => a + s.w, 0) || 1;
+  const st = floorStats(state.role);
+  const key = { p25: "p25", p50: "p50", p75: "p75", comp: "p50" }[note] || null;
+
+  let calc = "";
+  if (key) {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + k(s[key]) + " &times; " +
+      pct(s.w) + " method weight</span> = " + (s[key] * s.w).toFixed(1) + "</div>").join("") +
+      '<div class="sum"><b>Sum</b> ' +
+      rows.reduce((a, s) => a + s[key] * s.w, 0).toFixed(1) + ' <span class="op">&divide; methods present ' + tw.toFixed(2) + "</span> = <b>" +
+      k(rows.reduce((a, s) => a + s[key] * s.w, 0) / tw) + "</b></div>" +
+      '<div class="post"><span class="op">the division is the renormalisation: one fixed weight table, shared by every role, scaled over the methods that showed up.</span></div>' +
+      (note === "comp" ? '<div class="post"><span class="op">competitive flag:</span> median + (P75 &minus; median) &divide; 3 = <b>' + k(draft().high) + "</b></div>" : "");
+  } else if (note === "obs") {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + s.obs + " observations</span></div>").join("") +
+      '<div class="sum"><b>Total</b> ' + rows.reduce((a, s) => a + s.obs, 0) + "</div>";
+  } else if (note === "gap") {
+    const p50 = rows.map((s) => s.p50);
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">median</span> " + k(s.p50) + "</div>").join("") +
+      '<div class="sum"><b>Highest</b> ' + k(Math.max.apply(null, p50)) +
+      ' <span class="op">&minus;</span> <b>lowest</b> ' + k(Math.min.apply(null, p50)) + " = <b>" + k(Math.max.apply(null, p50) - Math.min.apply(null, p50)) +
+      '</b></div><div class="post"><span class="op">rule F4 tests this against 20% of the mid median.</span></div>';
+  } else if (note === "spread") {
+    const p50 = rows.map((s) => s.p50);
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">median</span> " + k(s.p50) + "</div>").join("") +
+      '<div class="sum"><b>Highest</b> ' + k(Math.max.apply(null, p50)) + ' <span class="op">&minus;</span> <b>lowest</b> ' + k(Math.min.apply(null, p50)) +
+      " = <b>" + k(st.spreadAbs) + "</b> <span class=\"op\">&divide; mid median " + k(st.med) + "</span> = <b>" + pct(st.spread) + "</b></div>" +
+      '<div class="post"><span class="op">rule F4 allows 20%. ' +
+      (st.spread > 0.20 ? "This is over the line, so the role is refused — sources this far apart are not measuring the same job." : "Inside the line.") + "</span></div>";
+  } else if (note === "stale") {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + s.age + " months old &middot; method weight</span> " + pct(s.w) + "</div>").join("") +
+      '<div class="sum"><b>Stale weight</b> ' + rows.reduce((a, s) => a + s.w, 0).toFixed(2) +
+      ' <span class="op">&divide; weight present ' + st.tw.toFixed(2) + "</span> = <b>" + pct(st.staleShare) + "</b></div>" +
+      '<div class="post"><span class="op">rule F3 allows 25% from sources over 12 months old. ' +
+      (st.staleShare > 0.25 ? "This source would lead the band, so the role is refused." : "Inside the line.") + "</span></div>";
+  } else if (note === "held") {
+    calc = rows.map((s) => "<div><b>" + s.id + "</b> <span class=\"op\">" + esc(s.method) + "</span></div>").join("") +
+      '<div class="post"><span class="op">Held and shown at zero market weight: the comparator must be local to the requisition&rsquo;s market, and a labelled cross-market adjustment was cut from scope. They stay on screen because the tempting thing to do with them is exactly what the rule forbids.</span></div>';
+  } else if (note === "src50") {
+    calc = "<div><b>" + rows[0].id + "</b> <span class=\"op\">reports a median of</span> <b>" + k(rows[0].p50) + "</b> <span class=\"op\">for this role, as published.</span></div>" +
+      '<div class="post"><span class="op">No arithmetic — rule F4 compares these medians to each other before any averaging is allowed to happen.</span></div>';
+  } else if (note === "sources") {
+    calc = "<div>" + rows.length + " sources carry weight. Sources held but not weighted are listed on <b>02 Market evidence</b> and are excluded from every figure.</div>";
+  } else {
+    calc = "<div>Derived from the rows below.</div>";
+  }
+
+  openDrawer(
+    "<h3>" + esc(val) + "</h3>" +
+    '<p class="dsub">' + esc(role().title) + " &middot; " + esc(role().loc) + " &middot; " + ids.length + " source" + (ids.length === 1 ? "" : "s") + "</p>" +
+    '<div class="card"><h3>The arithmetic <span class="badge rule">no model in this path</span></h3><div class="calc">' + calc + "</div></div>" +
+    '<div class="card"><h3>The rows behind it</h3><div class="tablewrap tight"><table><thead><tr><th>Ref</th><th>Source</th><th>As of</th><th class="num">Obs</th><th class="num">Weight</th></tr></thead><tbody>' +
+      rows.map((s) => "<tr><td><span class=\"srcid\">" + s.id + "</span></td><td class=\"t\">" + esc(s.n) +
+        "<span class=\"sub\">" + esc(s.method) + "</span></td><td>" + esc(s.date) + '</td><td class="num">' + s.obs +
+        '</td><td class="num">' + (s.w ? pct(s.w) : "&mdash;") + "</td></tr>").join("") +
+    "</tbody></table></div></div>" +
+    '<div class="card"><h3>Why this can be followed</h3><p style="color:var(--body-c);font-size:12.5px;margin:0;line-height:1.6">Every figure in this tool ends here, at a row with a date, an observation count and a method. That is the whole product: the band is not more accurate than the spreadsheet it replaced, it is <b style="color:var(--warm)">answerable</b>, and the argument in the approval meeting is now about a row rather than about who remembers what.</p></div>'
+  );
+}
+
+/* -- chrome + router ----------------------------------------- */
+function railItem(r) {
+  const st = floorStats(r.id);
+  let viz, tag;
+  if (st.pass) {
+    const b = bandFor(r.id), d = draftFor(r.id);
+    const span = (b.p75 - b.p25) || 1;
+    const lo = b.p25 - span * 0.3, hi = b.p75 + span * 0.18;
+    const pos = (v) => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+    viz = '<span class="mini" aria-hidden="true">' +
+      '<i class="mini-mkt" style="left:' + pos(b.p25).toFixed(1) + "%;width:" + (pos(b.p75) - pos(b.p25)).toFixed(1) + '%"></i>' +
+      '<i class="mini-off" style="left:' + pos(d.low).toFixed(1) + "%;width:" + (pos(d.high) - pos(d.low)).toFixed(1) + '%"></i>' +
+      "</span>";
+    tag = '<span class="rtag ok">banded</span>';
+  } else {
+    const failed = FLOOR.filter((f, i) => !st.oks[i]).map((f) => f.id);
+    viz = '<span class="mini held" aria-hidden="true"></span>';
+    tag = '<span class="rtag ref">refused &middot; ' + failed.join(" ") + "</span>";
+  }
+  return '<button class="reqitem" data-role="' + r.id + '" aria-current="' + (state.role === r.id) + '">' +
+    '<span class="ri-top"><span class="srcid">' + esc(r.req) + "</span>" + tag + "</span>" +
+    '<span class="ri-title">' + esc(r.title) + "</span>" +
+    '<span class="ri-meta">' + esc(r.loc.split(",")[0]) + " &middot; " + st.ws.length + " src &middot; " + st.obs + " obs" + (r.comp ? " &middot; competitive" : "") + "</span>" +
+    viz + "</button>";
+}
+
+function renderChrome() {
+  const ok = passesFloor(state.role);
+  const cc = $("#citeChip");
+  cc.className = "chip " + (ok ? "ok" : "ref");
+  cc.innerHTML = ok
+    ? '<span class="dot good"></span>Every figure cited'
+    : '<span class="dot accent"></span>Refused at the floor &mdash; that is the output';
+
+  $("#tabs").innerHTML = VIEWS.map((v) =>
+    '<button class="tab" data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '"><span class="tn">' + v.n + "</span>" + esc(v.label) + "</button>"
+  ).join("");
+  document.querySelectorAll("#tabs .tab").forEach((b) => {
+    b.onclick = () => { state.view = b.dataset.view; render(); };
+  });
+
+  $("#rail").innerHTML = "<h6>Requisitions &middot; Aug 2026</h6>" + ROLES.map(railItem).join("") +
+    '<p class="rail-note">Three banded, four refused. A dashed track is a requisition the evidence floor refused &mdash; the more interesting screens, and deliberately not an error state.</p>';
+  document.querySelectorAll("#rail .reqitem").forEach((b) => {
+    b.onclick = () => { state.role = b.dataset.role; render(); };
+  });
+}
+
+function render() {
+  renderChrome();
+  const map = {
+    requisition: viewRequisition, evidence: viewEvidence, band: viewBand,
+    equity: viewEquity, offer: viewOffer, floor: viewFloor
+  };
+  $("#pane").innerHTML = (map[state.view] || viewOffer)();
+
+  document.querySelectorAll("tr[data-role]").forEach((tr) => {
+    tr.onclick = () => { state.role = tr.dataset.role; render(); };
+  });
+  document.querySelectorAll("tr[data-src]").forEach((tr) => {
+    tr.onclick = () => {
+      const s = srcs().find((x) => x.id === tr.dataset.src);
+      const st = floorStats(state.role);
+      openDrawer(
+        "<h3 style=\"font-family:var(--sans);font-size:17px\">" + esc(s.n) + "</h3>" +
+        '<p class="dsub">' + esc(s.id) + " &middot; " + esc(s.date) + " &middot; " + s.obs + " observations</p>" +
+        '<div class="card"><h3>Method</h3><p style="color:var(--body-c);font-size:12.5px;margin:0">' + esc(s.method) + "</p></div>" +
+        '<div class="card"><h3>What it contributes</h3><div class="tablewrap tight"><table><tbody>' +
+          "<tr><td style=\"width:130px\">Weight</td><td class=\"t\">" + (s.w
+            ? pct(METHODS[s.m].w) + " by method — fixed for the whole pilot, renormalised to " + pct(s.w / st.tw) + " of this band over the methods present"
+            : "none — held for reference only, a different market") + "</td></tr>" +
+          "<tr><td>Age</td><td class=\"t\">" + s.age + " months" + (s.age > 12 ? " — over the 12-month line in rule F3" : "") + "</td></tr>" +
+          "<tr><td>P25 / P50 / P75</td><td class=\"t\">" + k(s.p25) + " / " + k(s.p50) + " / " + k(s.p75) + "</td></tr>" +
+        "</tbody></table></div></div>"
+      );
+    };
+  });
+  /* rows are real click targets for the keyboard too */
+  document.querySelectorAll("tr.click").forEach((tr) => {
+    tr.tabIndex = 0;
+    tr.setAttribute("role", "button");
+    tr.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tr.click(); }
+    });
+  });
+  document.querySelectorAll("button.fig").forEach((b) => {
+    b.onclick = () => citeDrawer(b.dataset.cite, b.dataset.note, b.dataset.val);
+  });
+  const tm = $("#toggleModel");
+  if (tm) tm.onclick = () => { state.showModel = !state.showModel; render(); };
+
+  syncUrl();
+  window.scrollTo({ top: 0 });
+}
+
+(function () {
+  const p = new URLSearchParams(location.search);
+  const view = p.get("view");
+  if (view && VIEWS.some((v) => v.id === view)) state.view = view;
+  const r = p.get("role");
+  if (r && ROLES.some((x) => x.id === r)) state.role = r;
+
+  $("#scrim").onclick = closeDrawer;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  render();
+})();
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Non-contact Monitoring — The Bench</title>
+<meta name="description" content="The bench feasibility study behind Ricky Kids' non-contact COVID monitoring: which parameters a non-contact channel could obtain, under which conditions, and how many gowning cycles that would actually remove. An engineering study; no patient took part.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<style>
+/* ============================================================
+   P33 · Calm clinical utility — a daylight ward tool.
+   Single-theme by design (light): every colour painted
+   explicitly so nothing borrows a host background.
+   Type: Atkinson Hyperlegible (humane, hyper-legible) +
+   Spline Sans Mono (rounded tabular figures).
+   ============================================================ */
+:root {
+  color-scheme: light;
+  --bg: #f2f5f4;            /* pale neutral ground, faint green cast */
+  --surface: #ffffff;
+  --surface-2: #f8faf9;
+  --surface-3: #ebf0ef;
+  --border: #d7e0de;
+  --border-soft: #e5ebe9;
+  --ink: #1a2b28;
+  --body-c: #33443f;
+  --dim: #50605c;
+  --faint: #5e6e69;
+  --accent: #0f766e;        /* clinical blue-green */
+  --accent-deep: #0b5d57;
+  --accent-wash: #e2efed;
+  --accent-ring: rgba(15, 118, 110, 0.30);
+  --ok: #17694a;
+  --ok-border: #b9dcc9;
+  --ok-wash: #e4f2ea;
+  --warn: #7c5200;
+  --warn-border: #e4d0a0;
+  --warn-wash: #f8efd8;
+  --crit: #9c3a29;
+  --crit-border: #e6c4b9;
+  --crit-wash: #f8ebe6;
+  --none-ink: #5c6b67;      /* "no path exists" — calm fact, not a failure */
+  --none-border: #c9d4d1;
+  --sans: "Atkinson Hyperlegible", "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --mono: "Spline Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --r-s: 6px; --r-m: 10px; --r-l: 14px;
+  --shadow: 0 1px 2px rgba(26, 43, 40, 0.05), 0 4px 14px rgba(26, 43, 40, 0.05);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; background: var(--bg); color: var(--body-c);
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+input { font: inherit; color: inherit; }
+b, strong { font-weight: 700; }
+.mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.caps {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 500;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--faint);
+}
+
+.app { max-width: 1180px; margin: 0 auto; padding: 0 20px 56px; }
+
+/* ---- masthead ---- */
+.masthead { padding: 26px 0 0; }
+.mast-row { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.brand { margin-right: auto; }
+.brand .eyebrow { display: block; margin-bottom: 5px; }
+.brand h1 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+.facts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.fact {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 13px;
+  font-size: 12.5px; color: var(--dim); white-space: nowrap;
+}
+.fact b { font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.fact.zero { border-color: var(--crit-border); background: var(--crit-wash); color: var(--crit); }
+.fact.zero b { color: var(--crit); }
+
+.notice {
+  margin-top: 18px; background: var(--accent-wash);
+  border: 1px solid #c6dfdb; border-left: 4px solid var(--accent);
+  border-radius: var(--r-s); padding: 11px 16px;
+  font-size: 13.5px; color: #23453f; max-width: 100%;
+}
+.notice b { color: var(--accent-deep); }
+
+/* ---- condition row (sticky) ---- */
+.condrow {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin: 18px -20px 0; padding: 10px 20px;
+  background: rgba(242, 245, 244, 0.92); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.condrow .spacer { flex: 1; }
+.refnote { font-size: 12.5px; color: var(--dim); white-space: nowrap; }
+.statechip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: 999px; padding: 5px 13px; font-size: 12.5px; font-weight: 700;
+  border: 1px solid var(--border); background: var(--surface); color: var(--dim);
+}
+.statechip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); flex: none; }
+.statechip.good { border-color: var(--ok-border); background: var(--ok-wash); color: var(--ok); }
+.statechip.good .dot { background: var(--ok); }
+.statechip.stay { border-color: var(--border); background: var(--surface); color: var(--ink); }
+.statechip.stay .dot { background: var(--crit); }
+
+.segmented {
+  display: inline-flex; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--r-m);
+  padding: 3px; gap: 2px; box-shadow: var(--shadow);
+}
+.segmented button {
+  background: none; border: 0; border-radius: 7px; padding: 6px 14px;
+  text-align: left; color: var(--dim); transition: background 0.16s ease, color 0.16s ease;
+}
+.segmented button b { display: block; font-size: 13px; font-weight: 700; letter-spacing: 0; }
+.segmented button span {
+  display: block; font-family: var(--mono); font-size: 9.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin-top: 1px;
+}
+.segmented button:hover { color: var(--ink); }
+.segmented button[aria-pressed="true"] { background: var(--accent); color: #ffffff; }
+.segmented button[aria-pressed="true"] span { color: #e3f2f0; }
+
+/* ---- lede ---- */
+.lede { padding: 26px 0 4px; max-width: 76ch; }
+.lede h2 { margin: 6px 0 10px; font-size: 27px; line-height: 1.25; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+.lede p { margin: 0; font-size: 15px; color: var(--body-c); }
+.lede p b { color: var(--ink); }
+
+/* ---- layout ---- */
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start; margin-top: 20px; }
+@media (max-width: 1020px) { .grid2 { grid-template-columns: 1fr; } }
+
+/* ---- the channel-status board (hero) ---- */
+.board {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-l); box-shadow: var(--shadow); overflow: hidden;
+}
+.board-head { padding: 16px 18px 12px; border-bottom: 1px solid var(--border-soft); }
+.board-head h3 { margin: 0 0 3px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.board-head p { margin: 0; font-size: 13px; color: var(--dim); max-width: 66ch; }
+.board-head .scope { margin-top: 7px; font-size: 13px; color: var(--body-c); }
+.board-head .scope b { color: var(--accent-deep); }
+.boardwrap { overflow-x: auto; }
+.matrix {
+  display: grid; grid-template-columns: minmax(196px, 1.25fr) repeat(4, minmax(108px, 1fr));
+  gap: 5px; padding: 14px 14px 6px; min-width: 640px;
+}
+.matrix .h {
+  display: grid; align-content: end; justify-items: center; text-align: center;
+  padding: 4px 4px 7px; gap: 3px;
+}
+.matrix .h .cn { font-size: 12.5px; font-weight: 700; color: var(--dim); font-family: var(--sans); }
+.matrix .h .cs { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+.matrix .h .mark { width: 26px; height: 3px; border-radius: 2px; background: transparent; }
+.matrix .h.here .cn { color: var(--accent-deep); }
+.matrix .h.here .mark { background: var(--accent); }
+.matrix .rh { display: flex; align-items: center; padding: 4px 2px; transition: opacity 0.18s ease; }
+.matrix .rh label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.matrix .rh input { accent-color: var(--accent); width: 16px; height: 16px; margin-top: 2px; flex: none; }
+.matrix .rh .pn { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.matrix .rh .ps { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--faint); margin-top: 1px; font-weight: 400; }
+.matrix .cell {
+  display: grid; place-content: center; text-align: center; gap: 2px;
+  border-radius: var(--r-s); padding: 12px 6px; min-height: 52px;
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.07em; text-transform: uppercase;
+  transition: opacity 0.18s ease, box-shadow 0.18s ease;
+}
+.matrix .cell small { font-size: 10.5px; letter-spacing: 0.02em; text-transform: none; font-weight: 600; }
+.matrix .cell.pass { background: var(--ok-wash); border: 1px solid var(--ok-border); color: var(--ok); }
+.matrix .cell.marginal { background: var(--warn-wash); border: 1px solid var(--warn-border); color: var(--warn); }
+.matrix .cell.fail { background: var(--crit-wash); border: 1px solid var(--crit-border); color: var(--crit); }
+.matrix .cell.none { background: transparent; border: 1px dashed var(--none-border); color: var(--none-ink); }
+.matrix .cell.here { box-shadow: 0 0 0 2px var(--accent-ring); }
+.matrix .rh.off, .matrix .cell.off { opacity: 0.32; }
+.board-caption { padding: 4px 18px 12px; font-size: 12.5px; color: var(--dim); }
+.board-caption b { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+.board-note { margin: 0 14px 16px; border-radius: var(--r-s); padding: 10px 14px; font-size: 13px; background: var(--surface-2); border: 1px solid var(--border-soft); color: var(--body-c); }
+.board-note b { color: var(--ink); }
+
+/* ---- the answer rail ---- */
+.answer {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-l); box-shadow: var(--shadow); padding: 18px 20px;
+}
+.answer .anslabel { margin: 0 0 8px; }
+.ansrow { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ansrow .big {
+  font-family: var(--mono); font-size: 52px; font-weight: 600; line-height: 1;
+  letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.ansrow .big.ok { color: var(--accent-deep); }
+.ansrow .big.no { color: var(--crit); }
+.ansrow .of { font-size: 13.5px; color: var(--dim); }
+.ansrow .of b { font-family: var(--mono); color: var(--ink); font-weight: 600; }
+.answer .sub { margin: 10px 0 0; font-size: 13.5px; color: var(--body-c); }
+.answer .sub b { color: var(--ink); }
+.entrybar { display: flex; height: 30px; border-radius: var(--r-s); overflow: hidden; border: 1px solid var(--border); margin-top: 13px; }
+.entrybar > span { display: grid; place-items: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; white-space: nowrap; overflow: hidden; min-width: 54px; }
+.entrybar .saved { background: var(--ok-wash); color: var(--ok); border-right: 1px solid var(--border-soft); }
+.entrybar .stay { background: var(--surface-3); color: var(--ink); border-right: 1px solid var(--border-soft); }
+.entrybar .other { background: var(--surface-2); color: var(--dim); border-right: 1px solid var(--border-soft); }
+.entrybar .other:last-child { border-right: 0; }
+.mixlegend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 9px; font-family: var(--mono); font-size: 10.5px; color: var(--dim); }
+.mixlegend b { color: var(--ink); font-weight: 600; }
+
+.railcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-l); box-shadow: var(--shadow); padding: 15px 18px; margin-top: 14px; }
+.dial { display: grid; grid-template-columns: minmax(96px, auto) 1fr 62px; gap: 12px; align-items: center; }
+.dial label { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+.dial label small { display: block; font-family: var(--mono); font-size: 9.5px; font-weight: 400; letter-spacing: 0.07em; text-transform: uppercase; color: var(--faint); margin-top: 1px; }
+.dial .v { font-family: var(--mono); font-size: 13.5px; font-weight: 600; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 2px; background: var(--surface-3); outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); cursor: pointer; }
+
+.railcard .tv { font-family: var(--mono); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.railcard .tv.ok { color: var(--accent-deep); }
+.railcard .tv.no { color: var(--crit); }
+.railcard .tl { font-size: 13px; color: var(--body-c); margin-top: 5px; }
+.anatomy { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--border-soft); }
+.abar { display: flex; height: 14px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+.abar i { display: block; height: 100%; }
+.abar .gown { background: #bcd8d3; }
+.abar .inroom { background: var(--accent); }
+.abar .doff { background: #bcd8d3; border-left: 1px solid var(--surface); }
+.abar .gown { border-right: 1px solid var(--surface); }
+.alegend { margin-top: 7px; font-family: var(--mono); font-size: 10.5px; color: var(--dim); line-height: 1.7; }
+.alegend b { color: var(--ink); font-weight: 600; }
+.afoot { margin-top: 5px; font-size: 12px; color: var(--dim); }
+.esc-line { display: flex; align-items: baseline; gap: 9px; }
+.esc-line .tv { flex: none; }
+
+/* ---- verdict ---- */
+.verdict { margin-top: 22px; }
+.callout { border-radius: var(--r-m); border: 1px solid var(--border); border-left-width: 4px; background: var(--surface); box-shadow: var(--shadow); padding: 14px 18px; font-size: 14px; color: var(--body-c); max-width: 100%; }
+.callout b { color: var(--ink); }
+.callout.good { border-left-color: var(--ok); }
+.callout.warn { border-left-color: #c9973f; }
+.callout.crit { border-left-color: var(--crit); }
+.callout.plain { border-left-color: var(--border); }
+
+/* ---- footer ---- */
+.foot { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 26px; }
+.foot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+.foot h5 { margin: 0 0 8px; font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: var(--faint); }
+.foot p { margin: 0 0 8px; font-size: 13px; color: var(--dim); line-height: 1.65; }
+.foot p b { color: var(--body-c); }
+.foot .conf { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--border-soft); font-size: 12px; color: var(--faint); max-width: 96ch; }
+
+@media (max-width: 560px) {
+  .lede h2 { font-size: 22px; }
+  .ansrow .big { font-size: 44px; }
+  .condrow { gap: 10px; }
+  .refnote { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+</style>
+
+<div class="app">
+  <header class="masthead">
+    <div class="mast-row">
+      <div class="brand">
+        <span class="eyebrow caps">Ricky Kids &middot; SRM Kattankulathur &middot; Isolation wards</span>
+        <h1>Non-contact monitoring &mdash; the bench</h1>
+      </div>
+      <div class="facts">
+        <span class="fact"><b>24</b> bench sessions</span>
+        <span class="fact"><b>6</b> healthy volunteers</span>
+        <span class="fact zero"><b>0</b> patients, ever</span>
+      </div>
+    </div>
+    <p class="notice"><b>This is an engineering agreement study, not a clinical one.</b> It measures how far each non-contact channel sits from a contact instrument on the same volunteer in the same minute. It says nothing about diagnosis, and nothing here was ever used on a patient.</p>
+  </header>
+
+  <div class="condrow">
+    <span class="caps">Bench condition</span>
+    <div class="segmented" id="conds" role="group" aria-label="Bench condition"></div>
+    <span class="spacer"></span>
+    <span class="refnote">Reference: a commercial contact monitor</span>
+    <span class="statechip" id="stateChip"></span>
+  </div>
+
+  <main>
+    <div class="lede">
+      <span class="caps">Bench feasibility &middot; the premise, not the prototype</span>
+      <h2>How many gowning cycles does this actually remove?</h2>
+      <p>Fifty-eight per cent of entries into an isolation room exist only to read numbers off a patient, and each one costs about nine and a half minutes of gowning and doffing around a minute of measurement. <b>A device removes that entry only if it removes every reason to go in.</b></p>
+    </div>
+
+    <div class="grid2">
+      <section class="board" aria-label="Channel status board">
+        <div class="board-head">
+          <h3>What a non-contact channel could obtain</h3>
+          <p>Tick the parameters this round has to report. The marked column is the bench condition selected above.</p>
+          <p class="scope"><b>Our design set out to report four of these five</b> &mdash; pulse rides along on the reference monitor.</p>
+        </div>
+        <div class="boardwrap">
+          <div class="matrix" id="matrix"></div>
+        </div>
+        <p class="board-caption">Respiration at &ldquo;still&rdquo;: <b>&plusmn;1.4 breaths/min</b> against the contact reference, seated and still &mdash; the study&rsquo;s guardrail figure.</p>
+        <p class="board-note" id="matrixNote"></p>
+      </section>
+
+      <aside>
+        <div class="answer">
+          <p class="anslabel caps">Gowning cycles removed &middot; per patient &middot; per day</p>
+          <div class="ansrow">
+            <span class="big" id="cycV">&mdash;</span>
+            <span class="of" id="cycOf"></span>
+          </div>
+          <p class="sub" id="skipSub"></p>
+          <div class="entrybar" id="entrybar"></div>
+          <div class="mixlegend">
+            <span>observation <b>58%</b></span>
+            <span>medication <b>27%</b></span>
+            <span>request <b>15%</b></span>
+          </div>
+        </div>
+
+        <div class="railcard" id="dials"></div>
+
+        <div class="railcard" id="minTile">
+          <div class="tv" id="minV">&mdash;</div>
+          <div class="tl">Staff minutes back per patient per day</div>
+          <div class="anatomy">
+            <div class="abar" role="img" aria-label="Anatomy of a 9.5 minute observation entry: gowning 3.5 minutes, in-room 1.2 minutes, doffing and disposal 4.8 minutes">
+              <i class="gown" style="flex:3.5"></i><i class="inroom" style="flex:1.2"></i><i class="doff" style="flex:4.8"></i>
+            </div>
+            <p class="alegend">the 9.5-min observation entry &mdash; gowning <b>3.5</b> &middot; in-room <b>1.2</b> &middot; doffing &amp; disposal <b>4.8</b></p>
+            <p class="afoot">Medication entries spend 4.1 min in-room and requests 2.6 &mdash; the gowning shell around them is the same.</p>
+          </div>
+        </div>
+
+        <div class="railcard">
+          <div class="esc-line">
+            <div class="tv no">0<span style="font-size:15px;color:var(--dim);font-weight:400"> of 2</span></div>
+            <div class="tl" style="margin-top:0">Escalation parameters reachable without contact <span style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:2px">oxygen saturation &middot; blood pressure</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="verdict" id="verdict"></div>
+  </main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>The feasibility question from the case study, made arithmetic &mdash; <b>not the device</b>. There is no hardware here and no reading is taken. It replays which channels the bench could and could not obtain, and turns that into the only number that mattered: how many entries into a room the design would actually have removed.</p>
+      </div>
+      <div>
+        <h5>The finding, in one move</h5>
+        <p>Leave every parameter ticked, as a standard round requires, and the saving is zero at every condition. <b>Oxygen saturation and blood pressure have no non-contact route at all</b>, so somebody still gowns up and goes in.</p>
+      </div>
+      <div>
+        <h5>The tempting version</h5>
+        <p>Untick those two &mdash; and pulse, which was marginal at best &mdash; and the device looks excellent. That is exactly the framing our own materials used, and it is the one the study does not support.</p>
+      </div>
+    </div>
+    <p class="conf">Student research at SRM Kattankulathur with collaborators at Jadavpur University and VIT Vellore. This is an engineering feasibility study on a bench: six healthy volunteers, scripted conditions, a commercial contact monitor as reference. No patient took part at any point, nothing here was clinically evaluated, and no diagnostic, therapeutic or clinical claim is made or implied. Every figure on this page is invented for this sample and reconciled with the case study.</p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA — the status grid published in the case study.
+   pass = within the agreed margin · marginal = outside it but
+   still tracking · fail = no usable agreement · none = there
+   was no non-contact path we could build at all.
+   ============================================================ */
+const CONDS = [
+  { k: "still", n: "Still", sub: "seated, 1.2 m" },
+  { k: "small", n: "Small movement", sub: "shifting" },
+  { k: "repos", n: "Repositioning", sub: "turning in bed" },
+  { k: "far", n: "Beyond 2 m", sub: "across the room" }
+];
+
+const PARAMS = [
+  { k: "temp",  n: "Skin temperature", sub: "infrared element", cells: ["pass", "pass", "marginal", "marginal"] },
+  { k: "resp",  n: "Respiration rate", sub: "camera, chest motion", cells: ["pass", "marginal", "fail", "fail"] },
+  { k: "pulse", n: "Pulse rate", sub: "camera, colour change", cells: ["marginal", "fail", "fail", "fail"] },
+  { k: "spo2",  n: "Oxygen saturation", sub: "escalation parameter", cells: ["none", "none", "none", "none"] },
+  { k: "bp",    n: "Blood pressure", sub: "escalation parameter", cells: ["none", "none", "none", "none"] }
+];
+
+const MIX = { obs: 58, med: 27, req: 15 };
+const ENTRY_MIN = 9.5;               /* gowning 3.5 + in-room 1.2 + doffing/disposal 4.8 */
+const ENTRY_SPLIT = { gown: 3.5, inroom: 1.2, doff: 4.8, medInroom: 4.1, reqInroom: 2.6 };
+
+const DIALS = [
+  { k: "rounds", n: "Observation rounds", sub: "per patient per day", min: 2, max: 24, val: 12, fmt: (v) => v + " / day" }
+];
+
+const state = { cond: "still", need: { temp: true, resp: true, pulse: true, spo2: true, bp: true }, rounds: 12 };
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const ci = () => CONDS.findIndex((c) => c.k === state.cond);
+const needed = () => PARAMS.filter((p) => state.need[p.k]);
+/* a round is skippable only if every parameter it reports clears
+   the agreed margin at this condition — marginal is not clear */
+const blocking = () => needed().filter((p) => p.cells[ci()] !== "pass");
+const skippable = () => needed().length > 0 && blocking().length === 0;
+</script>
+<script>
+function renderConds() {
+  $("conds").innerHTML = CONDS.map((c) =>
+    `<button data-c="${c.k}" aria-pressed="${state.cond === c.k}"><b>${esc(c.n)}</b><span>${esc(c.sub)}</span></button>`).join("");
+  document.querySelectorAll("[data-c]").forEach((b) => (b.onclick = () => { state.cond = b.dataset.c; render(); }));
+}
+
+function renderMatrix() {
+  const i = ci();
+  const LABEL = { pass: "within margin", marginal: "outside margin", fail: "no agreement", none: "no path exists" };
+  $("matrix").innerHTML =
+    `<span class="h" aria-hidden="true"></span>` +
+    CONDS.map((c, j) => `<span class="h ${j === i ? "here" : ""}"><span class="cn">${esc(c.n)}</span><span class="cs">${esc(c.sub)}</span><span class="mark"></span></span>`).join("") +
+    PARAMS.map((p) => {
+      const on = state.need[p.k];
+      return `<span class="rh ${on ? "" : "off"}"><label for="p-${p.k}"><input type="checkbox" id="p-${p.k}" ${on ? "checked" : ""} aria-label="${esc(p.n)}"><span class="pn">${esc(p.n)}<span class="ps">${esc(p.sub)}</span></span></label></span>` +
+        p.cells.map((v, j) => {
+          const detail = (p.k === "resp" && j === 0) ? `<small>&plusmn;1.4 br/min</small>` : "";
+          return `<span class="cell ${v} ${j === i ? "here" : ""} ${on ? "" : "off"}">${LABEL[v]}${detail}</span>`;
+        }).join("");
+    }).join("");
+  PARAMS.forEach((p) => ($("p-" + p.k).onchange = (e) => { state.need[p.k] = e.target.checked; render(); }));
+  const b = blocking();
+  $("matrixNote").innerHTML = b.length
+    ? `<b>${b.length} of ${needed().length} required parameters do not clear the margin at &ldquo;${esc(CONDS[ci()].n.toLowerCase())}&rdquo;:</b> ${b.map((x) => esc(x.n.toLowerCase())).join(", ")}. A round reporting any of them still needs somebody in the room.`
+    : needed().length
+      ? `<b>Every required parameter clears the margin at this condition.</b> A round reporting only these could be taken from outside the room.`
+      : `<b>Nothing selected.</b> Tick at least one parameter a round has to report.`;
+}
+
+function renderDials() {
+  $("dials").innerHTML = DIALS.map((d) =>
+    `<div class="dial"><label for="d-${d.k}">${esc(d.n)}<small>${esc(d.sub)}</small></label>
+     <input type="range" id="d-${d.k}" min="${d.min}" max="${d.max}" value="${state[d.k]}" aria-label="${esc(d.n)}">
+     <span class="v" id="v-${d.k}">${d.fmt(state[d.k])}</span></div>`).join("");
+  DIALS.forEach((d) => ($("d-" + d.k).oninput = (e) => { state[d.k] = Number(e.target.value); render(); }));
+}
+
+function renderRound() {
+  const ok = skippable();
+  const savedPct = ok ? MIX.obs : 0;
+  const cycles = ok ? state.rounds : 0;
+  $("cycV").className = "big " + (ok ? "ok" : "no");
+  $("cycV").textContent = cycles;
+  $("cycOf").innerHTML = `of <b>${state.rounds}</b> observation rounds &middot; <b>${savedPct}%</b> of all entries`;
+  $("skipSub").innerHTML = ok
+    ? `Every routine observation could be taken from outside the room &mdash; the gowning cycle goes with each one.`
+    : `<b>Zero.</b> The observation round still has to happen, so all ${state.rounds} gowning cycles happen with it.`;
+  $("entrybar").innerHTML =
+    (ok ? `<span class="saved" style="flex:${MIX.obs}">observation saved</span>` : `<span class="stay" style="flex:${MIX.obs}">observation stays</span>`) +
+    `<span class="other" style="flex:${MIX.med}">medication</span><span class="other" style="flex:${MIX.req}">request</span>`;
+  const mins = ok ? Math.round(state.rounds * ENTRY_MIN) : 0;
+  $("minV").textContent = mins ? mins + " min" : "0";
+  $("minV").className = "tv " + (mins ? "ok" : "no");
+  const c = $("stateChip");
+  c.className = "statechip " + (ok ? "good" : "stay");
+  c.innerHTML = `<span class="dot"></span>${ok ? "Round can be taken remotely" : "Somebody still goes in"}`;
+}
+
+function renderVerdict() {
+  const b = blocking(), noPath = b.filter((x) => x.cells[ci()] === "none");
+  let html;
+  if (!needed().length) {
+    html = `<div class="callout plain"><b>Tick the parameters a round has to report.</b> A standard observation in these wards reports all five.</div>`;
+  } else if (noPath.length) {
+    html = `<div class="callout crit"><b>${noPath.map((x) => esc(x.n.toLowerCase())).join(" and ")} ${noPath.length > 1 ? "have" : "has"} no non-contact route at all</b> &mdash; not a worse reading, no reading. Those are the two parameters staff escalate on, and they are the reason this study concluded against its own premise. No amount of standoff, sensor or processing changes a column that was never buildable; a morning's reading before the stand was designed would have said so.</div>`;
+  } else if (b.length) {
+    html = `<div class="callout warn"><b>${b.map((x) => esc(x.n.toLowerCase())).join(", ")} sit outside the agreed margin at this condition.</b> The channel is still tracking, which is the tempting result &mdash; the agreement bar was set under the movement a real patient produces rather than under stillness, precisely because anyone can pass stillness.</div>`;
+  } else {
+    html = `<div class="callout good"><b>This round could be taken from outside the room</b> &mdash; ${state.rounds} gowning cycles and ${Math.round(state.rounds * ENTRY_MIN)} staff minutes per patient per day. It is also not the round these wards run: a standard observation reports oxygen saturation and blood pressure, and this configuration reports neither.</div>`;
+  }
+  $("verdict").innerHTML = html;
+}
+
+function render() { renderConds(); renderMatrix(); renderDials(); renderRound(); renderVerdict(); }
+
+(function init() {
+  const q = new URLSearchParams(location.search);
+  if (CONDS.some((c) => c.k === q.get("cond"))) state.cond = q.get("cond");
+  const need = q.get("need");
+  if (need !== null) {
+    const set = new Set(need.split(",").filter(Boolean));
+    PARAMS.forEach((p) => (state.need[p.k] = set.has(p.k)));
+  }
+  const r = Number(q.get("rounds"));
+  if (r >= 2 && r <= 24) state.rounds = r;
+  render();
+})();
+</script>
+
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

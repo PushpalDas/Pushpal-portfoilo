@@ -5,14 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Magnetic from '../components/Magnetic';
 import ContactSheet from './contact-sheet';
-import {
-	archive,
-	count,
-	frameNumber,
-	hero,
-	type Photo,
-	selected,
-} from './photos';
+import { archive, count, frameNumber, hang, hero, type Photo } from './photos';
 import { useRevealGroup } from './use-reveal';
 
 const CHAPTERS = [
@@ -30,25 +23,9 @@ const CHAPTERS = [
 const SIZES = {
 	heroCentre: '(max-width: 640px) 92vw, (max-width: 900px) 88vw, 34vw',
 	heroSide: '(max-width: 640px) 44vw, (max-width: 900px) 42vw, 16vw',
-	hangLarge: '(max-width: 640px) 100vw, (max-width: 900px) 58vw, 590px',
-	hangMedium: '(max-width: 640px) 84vw, (max-width: 900px) 46vw, 470px',
-	hangSmall: '(max-width: 640px) 84vw, (max-width: 900px) 34vw, 350px',
+	/* Collage columns: 2 below 640, 3 to 900, 4 above. */
+	hang: '(max-width: 640px) 46vw, (max-width: 900px) 30vw, (max-width: 1200px) 23vw, 280px',
 } as const;
-
-/** Span class per frame drives which `sizes` string it gets. */
-const HANG_SIZE: Record<number, string> = {
-	2: SIZES.hangLarge,
-	3: SIZES.hangSmall,
-	4: SIZES.hangMedium,
-	5: SIZES.hangSmall,
-	6: SIZES.hangLarge,
-	7: SIZES.hangSmall,
-	8: SIZES.hangMedium,
-	9: SIZES.hangLarge,
-	10: SIZES.hangSmall,
-	11: SIZES.hangLarge,
-	12: SIZES.hangMedium,
-};
 
 function Plate({
 	photo,
@@ -155,8 +132,6 @@ export default function HobbyPage() {
 		return () => observer.disconnect();
 	}, []);
 
-	const hang = selected.slice(1);
-
 	return (
 		<main className='hoobie-page' ref={pageRef}>
 			<nav className='hoobie-chapters' aria-label='Page chapters'>
@@ -259,32 +234,36 @@ export default function HobbyPage() {
 							Frames I return to
 						</h2>
 						<p className='hoobie-lead reveal' data-reveal-delay='0.12'>
-							Twelve observations from a growing personal archive.
+							{hang.length} frames from a growing personal archive.
 						</p>
 					</header>
 
-					<div className='hoobie-hang'>
-						{hang.map((photo) => (
+					{/* A collage rather than a hang: every frame at its own ratio,
+					    small enough to be seen whole, columns doing the alignment. */}
+					<div className='hoobie-collage'>
+						{hang.map((photo, i) => (
 							<figure
 								key={photo.id}
-								className='hoobie-hang-figure reveal'
-								data-frame={photo.number}
+								className='hoobie-collage-figure reveal'
+								data-rhythm={i % 7}
 							>
 								<button
 									type='button'
 									className='hoobie-frame-button'
 									onClick={() => openAt(photo.number - 1)}
 									ref={(el) => registerRef(photo.number - 1, el)}
-									aria-label={`Open ${photo.title} in the image viewer`}
+									aria-label={
+										photo.title
+											? `Open ${photo.title} in the image viewer`
+											: `Open frame ${frameNumber(photo.number)} in the image viewer`
+									}
 								>
-									<Plate
-										photo={photo}
-										sizes={HANG_SIZE[photo.number] ?? SIZES.hangMedium}
-										quality={88}
-									/>
+									<Plate photo={photo} sizes={SIZES.hang} quality={88} />
 								</button>
-								<figcaption className='hoobie-caption hoobie-hang-caption'>
-									{frameNumber(photo.number)} · {photo.title} · {photo.category}
+								<figcaption className='hoobie-caption hoobie-collage-caption'>
+									{frameNumber(photo.number)}
+									{photo.title ? ` · ${photo.title}` : ''}
+									{photo.category ? ` · ${photo.category}` : ''}
 								</figcaption>
 							</figure>
 						))}

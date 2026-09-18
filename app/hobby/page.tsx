@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
-import HobbyPage from './hobby-page';
+import '../books/books.css';
+import HobbySwitch from './hobby-switch';
 import './hoobie.css';
 
 export const metadata: Metadata = {
-	title: 'Photography & Hobby',
+	title: 'Photography & Books',
 	description:
-		'A personal photography archive by Pushpal Das — people, wildlife, places and passing light.',
+		'Pushpal Das off the clock — a personal photography archive of people, wildlife, places and passing light, and the books he reads and returns to.',
 };
 
 export default function Page() {
-	return <HobbyPage />;
+	return <HobbySwitch />;
 }

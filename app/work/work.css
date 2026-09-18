@@ -27,22 +27,66 @@
 	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
+/* Title row: H1 left, filter pills to its right. The row is
+   baseline-aligned, so the first line of pills sits on the headline's
+   text baseline: "From Silicon to AI" and the four categories read as
+   words on one invisible line. Others hangs a step below that line. */
 .work-header-row {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-}
-
-.work-header-col {
-	flex: 1;
+	align-items: baseline;
+	gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 .work-header-filters {
-	flex-shrink: 0;
+	flex: 0 0 auto;
+	min-width: 0;
+	/* Baseline alignment puts the pill TEXT on the headline's baseline; the
+	   pill outline then hangs below it by descent + padding + border, which
+	   measures about 1em of the pill's 0.9rem type. Lift by that much so
+	   the bottom edge of each pill sits on the invisible line instead. */
+	position: relative;
+	top: -0.9rem;
+}
+
+@media screen and (min-width: 768px) {
+	.work-header-title {
+		white-space: nowrap;
+	}
+}
+
+/* Pills inside the header: sized so all four sit in one row beside the
+   headline from 1024px up. Between 768px and 1023px they may wrap,
+   right-aligned. */
+.work-header-filters .work-filters-row {
+	align-items: flex-end;
+	gap: 0.4rem;
+}
+
+.work-header-filters .work-filters-toggle-row {
+	justify-content: flex-end;
+	gap: 0.5rem;
+}
+
+@media screen and (min-width: 1024px) {
+	.work-header-filters .work-filters-toggle-row {
+		flex-wrap: nowrap;
+	}
+}
+
+/* Four pills, sized to read as a line of their own beside the headline. */
+.work-header-filters .work-filter-btn {
+	padding: 0.5em 1.1em;
+	font-size: 0.9rem;
+	letter-spacing: 0.01em;
+	white-space: nowrap;
 }
 
 .work-header-title {
-	font-size: clamp(2.5rem, 7vw, 5.5rem);
+	/* Capped below the old 5.5rem so the headline and the single row of
+	   four filter pills share one line; nowrap is applied from 768px up. */
+	font-size: clamp(2.5rem, 5.6vw, 4.5rem);
+	flex: 0 0 auto;
 	font-weight: 400;
 	line-height: 1.1;
 	letter-spacing: -0.03em;
@@ -57,7 +101,10 @@ html:not(.dark) .work-header-title {
 .work-header-line {
 	display: block;
 	position: relative;
-	overflow: hidden;
+	/* Masks the rise-in like overflow: hidden would, but a clip-path is
+	   not a scroll container, so the text baseline still propagates up
+	   to the H1 for the baseline-aligned title row. */
+	clip-path: inset(0);
 }
 
 .work-header-line-inner {
@@ -80,18 +127,22 @@ html:not(.dark) .work-header-title {
 	padding: 0 clamp(1.5rem, 4vw, 4rem);
 }
 
+/* Two stacked pill rows: the on-the-line group, then Others below it. */
 .work-filters-row {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 1rem;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
 }
 
 .work-filters-toggle-row {
 	display: flex;
 	gap: 0.5rem;
 	flex-wrap: wrap;
+}
+
+.work-filters-below-row:empty {
+	display: none;
 }
 
 .work-filters-grid-row {
@@ -439,15 +490,20 @@ html:not(.dark) .work-list-col-info p {
 	height: 100%;
 }
 
+/* The wrap carries the column now, because the meta row lives beside
+   the card's link rather than inside it. The link takes the remaining
+   height so the meta row still sits on the floor of the card. */
 .work-tile-wrap {
 	position: relative;
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .work-tile-link {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	flex: 1 1 auto;
 	text-decoration: none;
 	color: inherit;
 }
@@ -651,6 +707,27 @@ html:not(.dark) .work-tile-info-col p {
 		padding-bottom: 1.5rem;
 	}
 
+	/* Pills drop under the headline, left-aligned, before the copy. */
+	.work-header-row {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1rem;
+	}
+
+	.work-header-filters {
+		margin-top: 0;
+		/* Stacked under the headline here, so no baseline to sit on. */
+		top: 0;
+	}
+
+	.work-header-filters .work-filters-row {
+		align-items: flex-start;
+	}
+
+	.work-header-filters .work-filters-toggle-row {
+		justify-content: flex-start;
+	}
+
 	.work-list-col-info {
 		display: none;
 	}
@@ -679,12 +756,46 @@ html:not(.dark) .work-tile-info-col p {
    ============================================ */
 
 /* Header Subline */
+/* The keyword line — read by scanners and skimmers, so it sits above the
+   sentence and runs a step smaller and wider than it. */
+/* Both lines swap with the filter pill; the wrapper is remounted on each
+   change so the fade runs every time. */
+.work-header-copy-swap {
+	animation: work-header-copy-fade 0.45s ease-out both;
+}
+
+@keyframes work-header-copy-fade {
+	from {
+		opacity: 0;
+		transform: translateY(6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.work-header-copy-swap {
+		animation: none;
+	}
+}
+
+/* The copy block runs the full container width under the title row, with
+   the sentence held to a readable measure and the keyword line allowed
+   to use the remaining width. */
+.work-header-subline-wrap {
+	margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+
 .work-header-subline {
 	font-size: clamp(1rem, 1.5vw, 1.25rem);
 	font-weight: 300;
 	color: rgba(255, 255, 255, 0.7);
-	margin: 1rem 0 0;
-	max-width: 800px;
+	margin: 0;
+	/* Same measure as the keyword line, so each track's sentence holds
+	   one line on desktop. */
+	max-width: 1040px;
 	line-height: 1.5;
 }
 
@@ -692,19 +803,19 @@ html:not(.dark) .work-header-subline {
 	color: rgba(0, 0, 0, 0.6);
 }
 
-/* Sample-portfolio disclosure — figures across the grid are invented */
-.work-header-sample-note {
-	font-size: 0.8rem;
+/* The keyword line: one step smaller and wider than the sentence above it */
+.work-header-stack {
+	font-size: clamp(0.8rem, 1vw, 0.92rem);
 	font-weight: 300;
 	letter-spacing: 0.01em;
-	color: rgba(255, 255, 255, 0.4);
-	margin: 0.75rem 0 0;
-	max-width: 640px;
-	line-height: 1.5;
+	color: rgba(255, 255, 255, 0.55);
+	margin: 0.9rem 0 0;
+	max-width: 1040px;
+	line-height: 1.7;
 }
 
-html:not(.dark) .work-header-sample-note {
-	color: rgba(0, 0, 0, 0.45);
+html:not(.dark) .work-header-stack {
+	color: rgba(0, 0, 0, 0.5);
 }
 
 /* Meta Col push to bottom */
@@ -766,6 +877,7 @@ html:not(.dark) .work-tile-outcome {
 .work-demo-marker {
 	display: inline-flex;
 	align-items: center;
+	gap: 0.3em;
 	font-size: 0.7rem;
 	font-weight: 500;
 	color: #fff;
@@ -774,6 +886,46 @@ html:not(.dark) .work-tile-outcome {
 	border-radius: 4px;
 	margin-left: 0.75rem;
 	vertical-align: middle;
+	text-decoration: none;
+	transition: background 0.2s ease;
+}
+
+.work-demo-marker:hover,
+.work-demo-marker:focus-visible {
+	background: #2f45cc;
+}
+
+/* In the grid the marker is a link out of the card rather than a badge
+   about it, so it stays quiet — transparent, on the card's right border,
+   level with the company line — and fills only under the cursor. That
+   fill is the whole tell that it is clickable, since everything else in
+   the tile leads to the case study instead. */
+.work-tile-info-col .work-demo-marker {
+	margin-left: 0;
+	background: transparent;
+	border: 1px solid rgba(69, 92, 233, 0.5);
+	color: #8b98f2;
+	transition:
+		background-color 0.2s ease,
+		border-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.work-tile-info-col .work-demo-marker:hover,
+.work-tile-info-col .work-demo-marker:focus-visible {
+	background: #455ce9;
+	border-color: #455ce9;
+	color: #fff;
+}
+
+html:not(.dark) .work-tile-info-col .work-demo-marker {
+	color: #455ce9;
+	border-color: rgba(69, 92, 233, 0.35);
+}
+
+html:not(.dark) .work-tile-info-col .work-demo-marker:hover,
+html:not(.dark) .work-tile-info-col .work-demo-marker:focus-visible {
+	color: #fff;
 }
 
 /* Case Studies Divider */
@@ -812,58 +964,6 @@ html:not(.dark) .work-section-divider-line {
 	background: rgba(0, 0, 0, 0.1);
 }
 
-/* ============================================
-   DOMAIN PILLS — deep-linked from the home page +n rows
-   ============================================ */
-/* The row is the sub-level of Products, so it reveals rather than appearing. */
-.work-domain-reveal {
-	display: grid;
-	grid-template-rows: 0fr;
-	opacity: 0;
-	transition:
-		grid-template-rows 0.25s cubic-bezier(0.76, 0, 0.24, 1),
-		opacity 0.25s ease;
-}
-
-.work-domain-reveal[data-open="true"] {
-	grid-template-rows: 1fr;
-	opacity: 1;
-}
-
-.work-domain-reveal-inner {
-	overflow: hidden;
-	min-height: 0;
-	width: 100%;
-	max-width: 1200px;
-	margin: 0 auto;
-	/* Matches .work-grid-container, so the pills line up with the cards. */
-	padding: 0 clamp(1.5rem, 4vw, 4rem);
-}
-
-/* Under the CASE STUDIES line, in the grid container, aligned right to
-   the Products toggle that reveals them. */
-
-.work-domain-row {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-end;
-	gap: 0.45rem;
-	padding-bottom: 1.75rem;
-}
-
-/* One size step down from the Products / Engineering toggle above it. */
-.work-domain-btn {
-	font-size: 0.72rem;
-	padding: 0.42em 1em;
-	min-height: 34px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.work-domain-reveal {
-		transition-duration: 0.01ms;
-	}
-}
-
 .work-empty {
 	width: 100%;
 	max-width: 1200px;
@@ -873,4 +973,92 @@ html:not(.dark) .work-section-divider-line {
 }
 html:not(.dark) .work-empty {
 	color: rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   TIERED FRONT DOOR (perception pass). The tier a card sits in
+   must be legible in a second: flagships large, the program as
+   one head card with quiet chapter rows, prototypes labelled,
+   the archive as a single-line register.
+   ============================================================ */
+
+.work-tier-sub {
+	margin: 0.5rem 0 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: var(--work-muted, #8a8a93);
+	max-width: 62ch;
+}
+
+.work-chapters {
+	list-style: none;
+	margin: 1.25rem 0 2.5rem;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.6rem 1.25rem;
+}
+@media (max-width: 760px) {
+	.work-chapters {
+		grid-template-columns: 1fr;
+	}
+}
+.work-chapters a {
+	display: block;
+	padding: 0.7rem 0.9rem;
+	border: 1px solid rgba(128, 128, 140, 0.25);
+	border-radius: 8px;
+	text-decoration: none;
+	color: inherit;
+	transition:
+		border-color 0.15s ease,
+		background 0.15s ease;
+}
+.work-chapters a:hover {
+	border-color: rgba(128, 128, 140, 0.6);
+	background: rgba(128, 128, 140, 0.06);
+}
+.work-chapter-title {
+	display: block;
+	font-weight: 600;
+	font-size: 0.95rem;
+	line-height: 1.35;
+}
+.work-chapter-note {
+	display: block;
+	margin-top: 0.2rem;
+	font-size: 0.8rem;
+	line-height: 1.45;
+	color: var(--work-muted, #8a8a93);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.work-archive {
+	list-style: none;
+	margin: 1rem 0 2rem;
+	padding: 0;
+}
+.work-archive li {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	align-items: baseline;
+	padding: 0.45rem 0;
+	border-bottom: 1px solid rgba(128, 128, 140, 0.15);
+	font-size: 0.9rem;
+}
+.work-archive a {
+	color: inherit;
+	text-decoration: none;
+}
+.work-archive a:hover {
+	text-decoration: underline;
+}
+.work-archive-meta {
+	color: var(--work-muted, #8a8a93);
+	font-size: 0.8rem;
+	white-space: nowrap;
 }

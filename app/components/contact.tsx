@@ -3,9 +3,11 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { LINKEDIN_URL } from '../lib/social';
+import { LinkedinIcon } from './layouts/icons/linkedin-icon';
 import Magnetic from './Magnetic';
-import { LINKEDIN_URL, X_URL } from '../lib/social';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,15 +17,14 @@ export default function Contact() {
 	const line1Ref = useRef<HTMLSpanElement>(null);
 	const line2Ref = useRef<HTMLSpanElement>(null);
 	const btnRef = useRef<HTMLAnchorElement>(null);
-	const emailRef = useRef<HTMLAnchorElement>(null);
 	const dividerRef = useRef<HTMLDivElement>(null);
 	const bottomRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const ctx = gsap.context(() => {
-			// Animate heading lines sliding up
+			// Animate the two heading lines sliding up
 			gsap.from([line1Ref.current, line2Ref.current], {
-				y: '100%',
+				y: '110%',
 				duration: 1,
 				ease: 'power3.out',
 				stagger: 0.08,
@@ -56,19 +57,6 @@ export default function Contact() {
 				scrollTrigger: {
 					trigger: dividerRef.current,
 					start: 'top 90%',
-					toggleActions: 'play none none reset',
-				},
-			});
-
-			// Animate email link
-			gsap.from(emailRef.current, {
-				y: 30,
-				opacity: 0,
-				duration: 0.8,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: emailRef.current,
-					start: 'top 92%',
 					toggleActions: 'play none none reset',
 				},
 			});
@@ -110,12 +98,12 @@ export default function Contact() {
 											className='contact-profile-pic'
 										/>
 									</span>
-									Let&apos;s work
+									Let&apos;s
 								</span>
 							</span>
 							<span className='contact-heading-line'>
 								<span ref={line2Ref} className='contact-heading-line-inner'>
-									together
+									work together
 								</span>
 							</span>
 						</h2>
@@ -126,32 +114,27 @@ export default function Contact() {
 						<div ref={dividerRef} className='contact-divider' />
 						<div className='contact-btn-fixed'>
 							<Magnetic strength={50}>
-								<a
+								<Link
 									ref={btnRef}
-									href='mailto:pushpaldas2001@gmail.com'
+									href='/lets-connect'
 									className='contact-round-btn'
 								>
 									<span className='contact-round-btn-fill' />
 									<span className='contact-round-btn-text'>Get in touch</span>
-								</a>
+								</Link>
+							</Magnetic>
+							<Magnetic strength={25}>
+								<Link
+									href={LINKEDIN_URL}
+									target='_blank'
+									rel='noreferrer'
+									aria-label='linkedin'
+									className='contact-linkedin'
+								>
+									<LinkedinIcon className='h-9 w-9' />
+								</Link>
 							</Magnetic>
 						</div>
-					</div>
-
-					{/* Email */}
-					<div className='contact-email-row'>
-						<Magnetic strength={25}>
-							<a
-								ref={emailRef}
-								href='mailto:pushpaldas2001@gmail.com'
-								className='contact-email-link'
-							>
-								<span className='contact-email-fill' />
-								<span className='contact-email-text'>
-									pushpaldas2001@gmail.com
-								</span>
-							</a>
-						</Magnetic>
 					</div>
 				</div>
 
@@ -164,57 +147,13 @@ export default function Contact() {
 								{new Date().getFullYear()} © Edition
 							</p>
 						</div>
+					</div>
+					<div className='contact-bottom-col contact-bottom-col--right'>
 						<div className='contact-bottom-group'>
 							<h5 className='contact-bottom-label'>Local time</h5>
 							<p className='contact-bottom-value'>
 								<LocalTime />
 							</p>
-						</div>
-					</div>
-					<div className='contact-bottom-col'>
-						<div className='contact-bottom-socials'>
-							<h5 className='contact-bottom-label'>Socials</h5>
-							{/* X now reads X_URL, the same constant the hero and the contact
-							    page use. TODO(pushpal): 0.1 — confirm the handle in
-							    app/lib/social.ts. */}
-							<ul className='contact-socials-list'>
-								<li>
-									<Magnetic strength={15}>
-										<a
-											href='https://github.com/PushpalDas'
-											target='_blank'
-											rel='noopener noreferrer'
-											className='contact-social-link'
-										>
-											Github
-										</a>
-									</Magnetic>
-								</li>
-								<li>
-									<Magnetic strength={15}>
-										<a
-											href={LINKEDIN_URL}
-											target='_blank'
-											rel='noopener noreferrer'
-											className='contact-social-link'
-										>
-											LinkedIn
-										</a>
-									</Magnetic>
-								</li>
-								<li>
-									<Magnetic strength={15}>
-										<a
-											href={X_URL}
-											target='_blank'
-											rel='noopener noreferrer'
-											className='contact-social-link'
-										>
-											Twitter
-										</a>
-									</Magnetic>
-								</li>
-							</ul>
 						</div>
 					</div>
 				</div>
@@ -260,18 +199,27 @@ export default function Contact() {
 				}
 
 				.contact-heading {
-					font-size: clamp(2.75rem, 5.5vw, 4.25rem);
+					/* Two lines in the display serif the site already loads for its
+					   largest type: the photograph and “Let's” on the first, “work
+					   together” on the second. */
+					font-family: var(--font-fraunces), Georgia, serif;
+					font-optical-sizing: auto;
+					font-size: clamp(2.75rem, 6vw, 5rem);
 					font-weight: 400;
-					line-height: 1.1;
+					line-height: 1.05;
 					margin: 0;
-					letter-spacing: -0.02em;
-					font-family: inherit;
+					letter-spacing: -0.03em;
+					white-space: nowrap;
 				}
 
 				.contact-heading-line {
 					display: block;
 					position: relative;
 					overflow: hidden;
+					/* The mask clips the rise-in; the padding keeps the descender of the
+					   g and the lowered photograph inside it instead of shaving them. */
+					padding: 0.06em 0.05em 0.3em 0;
+					margin-bottom: -0.2em;
 				}
 
 				.contact-heading-line-inner {
@@ -303,7 +251,7 @@ export default function Contact() {
 				/* CTA row */
 				.contact-cta-row {
 					position: relative;
-					padding-bottom: clamp(2.5rem, 5vw, 4rem);
+					padding-bottom: clamp(4.5rem, 9vw, 7.5rem);
 				}
 
 				.contact-divider {
@@ -312,12 +260,38 @@ export default function Contact() {
 					background: rgba(255, 255, 255, 0.2);
 				}
 
-				.contact-btn-fixed {
+								.contact-btn-fixed {
 					position: absolute;
 					right: clamp(2rem, 5vw, 6rem);
 					top: 0;
 					transform: translate(0%, -50%);
 					z-index: 20;
+					/* The round button and, to its right, the same LinkedIn mark
+					   the home hero uses. */
+					display: flex;
+					align-items: center;
+					gap: clamp(0.75rem, 1.5vw, 1.25rem);
+				}
+
+				.contact-linkedin {
+					/* A round plate the size of the icon's button, in the footer's own
+					   colour, so the divider stops behind it instead of running through
+					   the mark. Reads as a small sibling of the disc beside it. */
+					display: inline-flex;
+					align-items: center;
+					justify-content: center;
+					width: clamp(3rem, 4vw, 3.75rem);
+					height: clamp(3rem, 4vw, 3.75rem);
+					border-radius: 50%;
+					border: 1px solid rgba(255, 255, 255, 0.25);
+					background: #1c1d20;
+					color: #fff;
+					transition: border-color 0.4s ease, background-color 0.4s ease;
+				}
+
+				.contact-linkedin:hover {
+					border-color: #455ce9;
+					background: #455ce9;
 				}
 
 				.contact-round-btn {
@@ -367,50 +341,6 @@ export default function Contact() {
 					text-align: center;
 				}
 
-				/* Email link */
-				.contact-email-row {
-					padding-bottom: clamp(3rem, 6vw, 5rem);
-				}
-
-				.contact-email-link {
-					position: relative;
-					display: inline-flex;
-					align-items: center;
-					padding: 0.8em 2em;
-					border: 1px solid rgba(255, 255, 255, 0.25);
-					border-radius: 100px;
-					color: #fff;
-					text-decoration: none;
-					font-size: clamp(0.9rem, 1.2vw, 1.3rem);
-					font-weight: 300;
-					overflow: hidden;
-					transition: color 0.4s ease, border-color 0.4s ease;
-					cursor: pointer;
-					background: transparent;
-				}
-
-				.contact-email-fill {
-					position: absolute;
-					inset: 0;
-					background: #455CE9;
-					border-radius: 100px;
-					transform: translateY(100%);
-					transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
-				}
-
-				.contact-email-link:hover .contact-email-fill {
-					transform: translateY(0%);
-				}
-
-				.contact-email-link:hover {
-					border-color: #455CE9;
-				}
-
-				.contact-email-text {
-					position: relative;
-					z-index: 2;
-				}
-
 				/* Bottom footer — align with original bottom-footer spacing */
 				.contact-bottom-footer {
 					width: 100%;
@@ -418,6 +348,10 @@ export default function Contact() {
 					justify-content: space-between;
 					padding: clamp(3.5rem, 6vw, 4.5rem) clamp(2.5rem, 5vw, 4rem)
 						clamp(2.25rem, 4vw, 3rem) clamp(2.5rem, 5vw, 4rem);
+				}
+
+				.contact-bottom-col--right {
+					text-align: right;
 				}
 
 				.contact-bottom-col {
@@ -446,51 +380,16 @@ export default function Contact() {
 					font-weight: 300;
 				}
 
-				.contact-bottom-socials {
-					display: flex;
-					flex-direction: column;
-				}
-
-				.contact-socials-list {
-					display: flex;
-					gap: 1.5em;
-					list-style: none;
-					margin: 0;
-					padding: 0;
-				}
-
-				.contact-social-link {
-					color: rgba(255, 255, 255, 0.7);
-					text-decoration: none;
-					font-size: 0.85rem;
-					font-weight: 300;
-					position: relative;
-					transition: color 0.3s ease;
-				}
-
-				.contact-social-link::after {
-					content: '';
-					position: absolute;
-					bottom: -2px;
-					left: 0;
-					width: 0;
-					height: 1px;
-					background: #fff;
-					transition: width 0.3s ease;
-				}
-
-				.contact-social-link:hover {
-					color: #fff;
-				}
-
-				.contact-social-link:hover::after {
-					width: 100%;
-				}
-
 				/* Responsive */
 				@media screen and (max-width: 768px) {
 					.contact-heading {
-						font-size: clamp(2rem, 10vw, 3.5rem);
+						font-size: clamp(2rem, 11vw, 3.25rem);
+					}
+
+					/* The disc is centred on the divider and rises 45px above it; the
+					   heading row must leave that much room or the two collide. */
+					.contact-heading-row {
+						padding-bottom: 4.5rem;
 					}
 
 					.contact-profile-pic-wrapper {
@@ -509,17 +408,9 @@ export default function Contact() {
 						font-size: 0.7rem;
 					}
 
+					/* Version stays left and the time right, on one row, even on a phone. */
 					.contact-bottom-footer {
-						flex-direction: column;
-						gap: 2rem;
-					}
-
-					.contact-bottom-col:first-child {
-						order: 2;
-					}
-
-					.contact-email-row {
-						padding-bottom: clamp(3rem, 8vw, 5rem);
+						gap: 1.5rem;
 					}
 
 					.contact-arrow {

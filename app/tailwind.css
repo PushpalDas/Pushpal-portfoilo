@@ -21,6 +21,11 @@
 }
 
 @theme inline {
+  --font-mukta: 'Mukta', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-merriweather: 'Merriweather', Georgia, serif;
+  --font-fraunces: 'Fraunces', Georgia, serif;
+
   --color-primary-100: #dbeafe;
   --color-primary-200: #bfdbfe;
   --color-primary-300: #93c5fd;
@@ -154,3 +159,20 @@ html {
     clip-path: circle(150% at top right);
   }
 }
+
+.font-mukta {
+  font-family: var(--font-mukta), sans-serif;
+}
+
+.font-inter {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.font-merriweather {
+  font-family: var(--font-merriweather), serif;
+}
+
+.font-fraunces {
+  font-family: var(--font-fraunces), serif;
+}
+

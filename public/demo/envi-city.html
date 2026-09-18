@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ENVI-City — the published vision, made explorable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ENVI-City — optimistic civic
+   Daylight palette: clear sky ground, paper surfaces, one
+   optimistic green + one civic blue, warm neutrals.
+   ============================================================ */
+:root{
+  --bg:#e9f1f7;            /* clear sky */
+  --paper:#fdfcf9;         /* paper surface */
+  --paper-2:#f3f0e8;       /* warm secondary surface */
+  --road:#e3dfd3;
+  --under:#efe9db;
+  --line:#cfd3cd;
+  --hairline:#e2e2d8;
+  --ink:#20282b;
+  --body:#3d4649;
+  --dim:#5c6a6e;
+  --green:#1b7a41;         /* optimistic green (validated) */
+  --green-deep:#10552d;
+  --green-soft:#dcefe2;
+  --blue:#1e5fa8;          /* civic blue (validated) */
+  --blue-deep:#143f72;
+  --blue-soft:#dfeaf7;
+  --warm:#955a17;          /* warm ochre (validated) */
+  --warm-soft:#f3e8d8;
+  --olive:#836200;         /* verdict: deferred */
+  --olive-soft:#f1ecd6;
+  --rust:#b02a37;          /* verdict: dropped */
+  --rust-soft:#f8e4e2;
+  --r-s:4px; --r-m:8px; --r-l:12px;
+  --dur:200ms; --ease:cubic-bezier(.3,.7,.3,1);
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0; background:var(--bg); color:var(--body);
+  font-family:"Figtree","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  font-size:15px; line-height:1.55; letter-spacing:.005em;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:"DM Mono","Cascadia Mono",ui-monospace,Consolas,monospace; font-variant-numeric:tabular-nums}
+a{color:var(--blue)}
+a:hover{color:var(--blue-deep)}
+button{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--blue); outline-offset:2px; border-radius:2px}
+.wrap{max-width:1220px; margin:0 auto; padding:0 20px}
+
+/* ---------- masthead ---------- */
+header.mast{padding:36px 0 0}
+.mast-top{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.roundel{flex:0 0 auto; width:34px; height:34px}
+.eyebrow{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim)}
+h1{margin:10px 0 6px; font-size:clamp(26px,4vw,38px); font-weight:800; letter-spacing:-.015em; color:var(--ink); line-height:1.12}
+h1 .thin{font-weight:500; color:var(--dim)}
+.standfirst{max-width:64ch; margin:0 0 18px; font-size:16.5px; color:var(--body)}
+.honesty{
+  display:flex; gap:12px; align-items:flex-start;
+  background:var(--paper); border:1.5px solid var(--ink); border-radius:var(--r-m);
+  padding:12px 16px; margin:4px 0 26px; max-width:860px;
+}
+.honesty svg{flex:0 0 auto; margin-top:2px}
+.honesty p{margin:0; font-size:14.5px}
+.honesty strong{color:var(--ink)}
+.honesty .cite{display:block; margin-top:4px; font-size:12px; color:var(--dim)}
+
+/* ---------- funnel fixture ---------- */
+.funnel{margin:0 0 22px}
+.funnel-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px}
+.funnel-head h2{margin:0; font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink)}
+.funnel-head .src{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:11.5px; color:var(--dim)}
+.stages{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+.stage-btn{
+  position:relative; text-align:left; cursor:pointer;
+  background:var(--paper); border:1px solid var(--line); border-radius:var(--r-m);
+  padding:10px 12px 12px; transition:border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.stage-btn:hover{border-color:var(--green)}
+.stage-btn[aria-pressed="true"]{border-color:var(--green-deep); background:#f2f8f2; box-shadow:inset 0 0 0 1px var(--green-deep)}
+.stage-n{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-variant-numeric:tabular-nums; font-size:30px; font-weight:500; color:var(--ink); line-height:1}
+.stage-name{display:block; margin-top:3px; font-size:12.5px; line-height:1.35; color:var(--body)}
+.stage-bar{display:block; margin-top:8px; height:6px; border-radius:3px; background:var(--paper-2); overflow:hidden}
+.stage-bar i{display:block; height:6px; border-radius:3px}
+.stage-btn:nth-child(1) .stage-bar i{background:#9fceac}
+.stage-btn:nth-child(2) .stage-bar i{background:#5fa878}
+.stage-btn:nth-child(3) .stage-bar i{background:var(--green)}
+.stage-btn:nth-child(4) .stage-bar i{background:var(--green-deep)}
+.funnel-cap{margin:8px 0 0; font-size:12.5px; color:var(--dim); max-width:96ch}
+
+/* ---------- main grid ---------- */
+.grid{display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:18px; align-items:start}
+.board{background:var(--paper); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden}
+.chips{display:flex; gap:6px; flex-wrap:wrap; padding:12px 14px; border-bottom:1px solid var(--hairline); background:var(--paper)}
+.chip{
+  cursor:pointer; border:1px solid var(--line); background:var(--paper); border-radius:999px;
+  padding:5px 13px; font-size:13px; font-weight:600; color:var(--body);
+  transition:background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.chip:hover{border-color:var(--blue)}
+.chip[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.stage-wrap{overflow-x:auto; background:var(--bg)}
+.stage-wrap svg{display:block; min-width:820px; width:100%; height:auto}
+.board-foot{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:10px 14px; border-top:1px solid var(--hairline); font-size:12px; color:var(--dim)}
+.board-foot .mono{font-size:11px}
+
+/* diagram element states */
+.el{cursor:pointer; transition:opacity 250ms var(--ease)}
+.el .hit{fill:transparent; stroke:none; pointer-events:all}
+.el:hover .hit{fill:rgba(30,95,168,.06)}
+.el:focus-visible{outline:none}
+.el:focus-visible .hit{stroke:var(--blue); stroke-width:2; stroke-dasharray:none; fill:rgba(30,95,168,.06)}
+.el.dim{opacity:.22}
+.el.sel .hit{stroke:var(--green-deep); stroke-width:2}
+svg text{user-select:none}
+.lbl{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:10.5px; fill:var(--dim)}
+.lbl-ink{fill:var(--ink)}
+
+/* ---------- claim panel ---------- */
+.panel{position:sticky; top:14px; background:var(--paper); border:1px solid var(--line); border-radius:var(--r-l); padding:18px; min-height:340px}
+.panel .kicker{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim)}
+.panel h3{margin:6px 0 12px; font-size:19px; font-weight:800; letter-spacing:-.01em; color:var(--ink); line-height:1.25}
+.panel .sec{font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin:14px 0 6px}
+.panel .paper-claim{margin:0; font-size:14.5px; color:var(--ink); border-left:3px solid var(--green); padding:2px 0 2px 12px}
+.panel .cite{display:block; margin-top:6px; font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:11.5px; color:var(--dim)}
+.audit-rows{list-style:none; margin:0; padding:0; border-top:1px solid var(--hairline)}
+.audit-rows li{display:flex; justify-content:space-between; gap:12px; padding:7px 0; border-bottom:1px solid var(--hairline); font-size:13.5px}
+.audit-rows .v{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:12.5px; font-weight:500}
+.audit-rows .v.yes{color:var(--green-deep)}
+.audit-rows .v.no{color:var(--dim)}
+.verdict{display:inline-flex; align-items:center; gap:7px; margin-top:10px; padding:5px 12px; border-radius:999px; font-size:13px; font-weight:700; border:1px solid}
+.verdict svg{flex:0 0 auto}
+.verdict.kept{color:var(--green-deep); background:var(--green-soft); border-color:var(--green)}
+.verdict.input{color:var(--blue-deep); background:var(--blue-soft); border-color:var(--blue)}
+.verdict.deferred{color:#5c4500; background:var(--olive-soft); border-color:var(--olive)}
+.verdict.dropped{color:#7d1e28; background:var(--rust-soft); border-color:var(--rust)}
+.panel .reason{margin:10px 0 0; font-size:14px; color:var(--body)}
+.panel .reason-src{display:block; margin-top:6px; font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:11px; color:var(--dim)}
+.panel .empty{color:var(--dim); font-size:14.5px; margin:0}
+.panel .empty b{color:var(--ink)}
+.panel .hintlist{margin:12px 0 0; padding:0 0 0 18px; font-size:13.5px; color:var(--dim)}
+.panel .hintlist li{margin:4px 0}
+.panel-anim{animation:rise 180ms var(--ease)}
+@keyframes rise{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+
+/* ---------- index table ---------- */
+.index{margin:26px 0 0; background:var(--paper); border:1px solid var(--line); border-radius:var(--r-l); overflow:hidden}
+.index-head{padding:14px 16px 4px}
+.index-head h2{margin:0; font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink)}
+.index-head p{margin:4px 0 8px; font-size:13px; color:var(--dim)}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse; width:100%; min-width:760px}
+th,td{padding:9px 14px; text-align:left; border-top:1px solid var(--hairline); font-size:13.5px; vertical-align:middle}
+th{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); border-top:none}
+th.c,td.c{text-align:center}
+td.id{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:12px; color:var(--dim); white-space:nowrap}
+td .rowbtn{background:none; border:none; padding:0; cursor:pointer; font-weight:600; color:var(--ink); text-align:left}
+td .rowbtn:hover{color:var(--blue); text-decoration:underline}
+td .yes{font-family:"DM Mono",ui-monospace,Consolas,monospace; color:var(--green-deep); font-weight:500}
+td .no{font-family:"DM Mono",ui-monospace,Consolas,monospace; color:var(--dim)}
+tr.dim-row td{opacity:.38}
+tr.sel-row{background:#f3f8f3}
+td .verdict{margin-top:0; padding:3px 10px; font-size:12px}
+
+/* ---------- footer ---------- */
+footer{margin:26px 0 46px; font-size:13px; color:var(--dim)}
+.foot-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.foot-card{background:var(--paper-2); border:1px solid var(--hairline); border-radius:var(--r-m); padding:14px 16px}
+.foot-card h3{margin:0 0 8px; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink)}
+.foot-card p{margin:0 0 8px}
+.foot-card code, .params code{font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:12px; background:var(--paper); border:1px solid var(--hairline); border-radius:3px; padding:1px 5px; color:var(--ink)}
+.params{margin:0; padding:0; list-style:none}
+.params li{margin:0 0 6px}
+.id-list{display:flex; flex-wrap:wrap; gap:5px; margin-top:6px}
+.id-list button{cursor:pointer; font-family:"DM Mono",ui-monospace,Consolas,monospace; font-size:11.5px; background:var(--paper); border:1px solid var(--line); border-radius:999px; padding:2px 9px; color:var(--body)}
+.id-list button:hover{border-color:var(--blue); color:var(--blue-deep)}
+.colophon{margin-top:16px; border-top:1px solid var(--line); padding-top:12px}
+.colophon .mono{font-size:11.5px}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .panel{position:static; min-height:0}
+  .stages{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  body{font-size:14px}
+  .stages{grid-template-columns:1fr 1fr; gap:6px}
+  .stage-n{font-size:24px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important; animation:none !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <div class="mast-top">
+    <svg class="roundel" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="17" cy="17" r="15.5" fill="var(--green-soft)" stroke="var(--green-deep)" stroke-width="1.6"/>
+      <path d="M9 23h16M11 23v-6h4v6M17 23v-9h4v9" fill="none" stroke="var(--green-deep)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="24.5" cy="10.5" r="2.6" fill="none" stroke="var(--green-deep)" stroke-width="1.6"/>
+    </svg>
+    <div>
+      <div class="eyebrow">Ricky Kids · ECS Transactions 107(1) 11007 · 2022</div>
+    </div>
+  </div>
+  <h1>ENVI-City <span class="thin">— the paper, made explorable</span></h1>
+  <p class="standfirst">Every element drawn below is a claim from the published vision of a sustainable smart city. Select one to read what the paper proposes for it — and the verdict from the audit that followed.</p>
+  <div class="honesty">
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="var(--ink)" stroke-width="1.5"/><path d="M9 5.2v4.6" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round"/><circle cx="9" cy="12.6" r="1" fill="var(--ink)"/></svg>
+    <p><strong>Nothing was built.</strong> This page is the published vision, drawn — and the audit that followed it. Every claim traces to <a href="https://doi.org/10.1149/10701.11007ecst" rel="noopener">“Envi-city: Vision of a Sustainable Smart City of the Future”, ECS Trans. 107(1) 11007–11016 (2022)</a>; every verdict traces to the authors’ own follow-up audit. This demo asserts nothing the paper does not.
+    <span class="cite mono">doi 10.1149/10701.11007ecst · Das, Elumalai, Sarkar, Santhosh Kumar R</span></p>
+  </div>
+</header>
+
+<!-- ============ the 11 → 7 → 4 → 1 funnel ============ -->
+<section class="funnel" aria-label="Audit funnel: claims narrowed to what could be tested">
+  <div class="funnel-head">
+    <h2>The audit, in four counts</h2>
+    <span class="src">our own paper, audited against itself · Q1 2022</span>
+  </div>
+  <div class="stages" role="group" aria-label="Select an audit stage to highlight the claims that pass it">
+    <button class="stage-btn" data-stage="1" aria-pressed="false">
+      <span class="stage-n mono" data-count="1">11</span>
+      <span class="stage-name">claims in the published vision</span>
+      <span class="stage-bar"><i style="width:100%"></i></span>
+    </button>
+    <button class="stage-btn" data-stage="2" aria-pressed="false">
+      <span class="stage-n mono" data-count="2">7</span>
+      <span class="stage-name">with a stated mechanism</span>
+      <span class="stage-bar"><i style="width:63.6%"></i></span>
+    </button>
+    <button class="stage-btn" data-stage="3" aria-pressed="false">
+      <span class="stage-n mono" data-count="3">4</span>
+      <span class="stage-name">we could put a number on</span>
+      <span class="stage-bar"><i style="width:36.4%"></i></span>
+    </button>
+    <button class="stage-btn" data-stage="4" aria-pressed="false">
+      <span class="stage-n mono" data-count="4">1</span>
+      <span class="stage-name">testable at one-block scale</span>
+      <span class="stage-bar"><i style="width:9.1%"></i></span>
+    </button>
+  </div>
+  <p class="funnel-cap">Press a count to grey the drawing down to the claims that survive that stage — press the last one and the whole vision dims except a single loop. Bars are proportional to the count; the drop from eleven to one is the finding before the finding.</p>
+</section>
+
+<!-- ============ diagram + panel ============ -->
+<div class="grid">
+  <section class="board" aria-label="City-block systems drawing">
+    <div class="chips" role="group" aria-label="Layer filter">
+      <button class="chip" data-layer="all" aria-pressed="true">All layers</button>
+      <button class="chip" data-layer="energy" aria-pressed="false">Energy</button>
+      <button class="chip" data-layer="air" aria-pressed="false">Air</button>
+      <button class="chip" data-layer="network" aria-pressed="false">Network</button>
+      <button class="chip" data-layer="water" aria-pressed="false">Water</button>
+      <button class="chip" data-layer="waste" aria-pressed="false">Waste</button>
+    </div>
+
+    <div class="stage-wrap" tabindex="0" aria-label="Scrollable drawing of one city block">
+    <svg viewBox="0 0 1180 620" role="group" aria-label="Systems drawing of one ENVI-City block: eleven selectable claims">
+      <defs>
+        <marker id="arr" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0.8 0.8 L6.8 4 L0.8 7.2" fill="none" stroke="var(--green-deep)" stroke-width="1.4" stroke-linecap="round"/>
+        </marker>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e3eef8"/>
+          <stop offset="1" stop-color="#f0f4f2"/>
+        </linearGradient>
+      </defs>
+
+      <!-- ground / road / underground furniture (not interactive) -->
+      <g aria-hidden="true">
+        <rect x="0" y="0" width="1180" height="470" fill="url(#sky)"/>
+        <rect x="0" y="470" width="1180" height="30" fill="var(--road)"/>
+        <line x1="0" y1="470" x2="1180" y2="470" stroke="var(--ink)" stroke-width="1.75"/>
+        <line x1="0" y1="500" x2="1180" y2="500" stroke="var(--ink)" stroke-width="1"/>
+        <line x1="20" y1="486" x2="1160" y2="486" stroke="#fdfcf9" stroke-width="2" stroke-dasharray="18 16"/>
+        <rect x="0" y="500" width="1180" height="120" fill="var(--under)"/>
+        <text class="lbl" x="24" y="518">below street level</text>
+        <!-- block boundary -->
+        <line x1="300" y1="88" x2="300" y2="612" stroke="var(--ink)" stroke-width="1.25" stroke-dasharray="5 6"/>
+        <text class="lbl lbl-ink" x="308" y="100">block boundary</text>
+      </g>
+
+      <!-- 07 · transmission losses (outside the block) -->
+      <g class="el" id="el-transmission-losses" data-claim="transmission-losses" tabindex="0" role="button"
+         aria-label="Transmission losses — the paper's 8 to 15 percent figure, open claim">
+        <rect class="hit" x="18" y="300" width="272" height="176" rx="8"/>
+        <g fill="none" stroke="var(--ink)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="392" width="88" height="78" fill="var(--paper-2)"/>
+          <rect x="56" y="344" width="20" height="48" fill="var(--paper-2)"/>
+          <rect x="94" y="360" width="16" height="32" fill="var(--paper-2)"/>
+          <!-- pylons -->
+          <path d="M164 470 L172 372 L180 470 M166 400 h12 M168 386 h8 M158 372 h28"/>
+          <path d="M238 470 L246 376 L254 470 M240 404 h12 M242 390 h8 M232 376 h28"/>
+          <!-- catenary wires toward the block -->
+          <path d="M128 350 C 148 366, 158 370, 172 366 M186 366 C 208 380, 226 380, 240 370 M260 370 C 276 382, 288 384, 300 380" stroke-width="1.25"/>
+        </g>
+        <text class="lbl lbl-ink" x="40" y="326">8–15% lost between</text>
+        <text class="lbl lbl-ink" x="40" y="339">plant and consumer</text>
+        <text class="lbl" x="42" y="462" style="fill:var(--dim)">the grid it leaves behind</text>
+      </g>
+
+      <!-- 10 · the headline (sun) -->
+      <g class="el" id="el-full-renewable" data-claim="full-renewable" tabindex="0" role="button"
+         aria-label="Fully renewable — the paper's headline claim, open claim">
+        <rect class="hit" x="1010" y="24" width="150" height="130" rx="8"/>
+        <g fill="none" stroke="var(--warm)" stroke-width="1.75" stroke-linecap="round">
+          <circle cx="1084" cy="76" r="26" fill="var(--warm-soft)"/>
+          <path d="M1084 34v-8 M1084 118v8 M1042 76h-8 M1126 76h8 M1054 46l-6 -6 M1114 46l6 -6 M1054 106l-6 6 M1114 106l6 6"/>
+        </g>
+        <text class="lbl" x="1032" y="146">the headline claim</text>
+      </g>
+
+      <!-- buildings (furniture) -->
+      <g aria-hidden="true" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.75" stroke-linejoin="round">
+        <rect x="320" y="230" width="90" height="240"/>
+        <rect x="435" y="300" width="105" height="170"/>
+        <rect x="565" y="200" width="95" height="270"/>
+        <rect x="685" y="340" width="105" height="130"/>
+      </g>
+      <g aria-hidden="true" fill="var(--bg)" stroke="var(--ink)" stroke-width="1">
+        <rect x="334" y="252" width="16" height="20"/><rect x="360" y="252" width="16" height="20"/><rect x="386" y="252" width="10" height="20"/>
+        <rect x="334" y="292" width="16" height="20"/><rect x="360" y="292" width="16" height="20"/>
+        <rect x="334" y="332" width="16" height="20"/><rect x="386" y="332" width="10" height="20"/>
+        <rect x="334" y="372" width="16" height="20"/><rect x="360" y="372" width="16" height="20"/>
+        <rect x="452" y="322" width="18" height="22"/><rect x="482" y="322" width="18" height="22"/><rect x="512" y="322" width="14" height="22"/>
+        <rect x="452" y="366" width="18" height="22"/><rect x="512" y="366" width="14" height="22"/>
+        <rect x="452" y="410" width="18" height="22"/><rect x="482" y="410" width="18" height="22"/>
+        <rect x="580" y="222" width="16" height="20"/><rect x="606" y="222" width="16" height="20"/><rect x="632" y="222" width="14" height="20"/>
+        <rect x="580" y="262" width="16" height="20"/><rect x="632" y="262" width="14" height="20"/>
+        <rect x="580" y="302" width="16" height="20"/><rect x="606" y="302" width="16" height="20"/>
+        <rect x="580" y="342" width="16" height="20"/><rect x="632" y="342" width="14" height="20"/>
+        <rect x="580" y="382" width="16" height="20"/><rect x="606" y="382" width="16" height="20"/>
+        <rect x="700" y="360" width="18" height="22"/><rect x="730" y="360" width="18" height="22"/><rect x="760" y="360" width="16" height="22"/>
+        <rect x="700" y="404" width="18" height="22"/><rect x="760" y="404" width="16" height="22"/>
+      </g>
+
+      <!-- 01 · rooftop solar (B1 + B3) -->
+      <g class="el" id="el-rooftop-solar" data-claim="rooftop-solar" tabindex="0" role="button"
+         aria-label="Rooftop solar cells on residential buildings, open claim">
+        <rect class="hit" x="316" y="186" width="100" height="46" rx="6"/>
+        <rect class="hit" x="561" y="156" width="104" height="46" rx="6"/>
+        <g fill="var(--green-soft)" stroke="var(--green-deep)" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M326 228 L338 202 L406 202 L394 228 Z"/>
+          <path d="M571 198 L583 172 L653 172 L641 198 Z"/>
+        </g>
+        <g stroke="var(--green-deep)" stroke-width="0.9">
+          <path d="M348 202 L338 228 M366 202 L356 228 M384 202 L374 228"/>
+          <path d="M594 172 L584 198 M612 172 L602 198 M630 172 L620 198"/>
+        </g>
+      </g>
+
+      <!-- 02 · roadside vertical-axis wind turbines -->
+      <g class="el" id="el-roadside-vawt" data-claim="roadside-vawt" tabindex="0" role="button"
+         aria-label="Vertical-axis wind turbines along the roadside, open claim">
+        <rect class="hit" x="408" y="382" width="34" height="90" rx="6"/>
+        <rect class="hit" x="538" y="382" width="34" height="90" rx="6"/>
+        <rect class="hit" x="658" y="382" width="34" height="90" rx="6"/>
+        <g fill="none" stroke-linecap="round">
+          <g stroke="var(--ink)" stroke-width="1.75">
+            <path d="M425 470v-58 M555 470v-58 M675 470v-58"/>
+            <path d="M417 470h16 M547 470h16 M667 470h16"/>
+          </g>
+          <g stroke="var(--green)" stroke-width="1.75">
+            <path d="M417 412 c-5 12 -5 24 0 36 M433 412 c5 12 5 24 0 36 M417 412 h16 M417 448 h16"/>
+            <path d="M547 412 c-5 12 -5 24 0 36 M563 412 c5 12 5 24 0 36 M547 412 h16 M547 448 h16"/>
+            <path d="M667 412 c-5 12 -5 24 0 36 M683 412 c5 12 5 24 0 36 M667 412 h16 M667 448 h16"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- 03 · automated air purifiers (rooftops of B2 + B4) -->
+      <g class="el" id="el-air-purifiers" data-claim="air-purifiers" tabindex="0" role="button"
+         aria-label="Automated solar-powered air purifiers responsive to PPM levels, open claim">
+        <rect class="hit" x="486" y="252" width="120" height="48" rx="6"/>
+        <rect class="hit" x="742" y="292" width="60" height="48" rx="6"/>
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round">
+          <rect x="496" y="268" width="28" height="32" rx="3"/>
+          <rect x="752" y="308" width="28" height="32" rx="3"/>
+        </g>
+        <g stroke="var(--ink)" stroke-width="1">
+          <path d="M501 278h18 M501 286h18 M501 294h18"/>
+          <path d="M757 318h18 M757 326h18 M757 334h18"/>
+        </g>
+        <g stroke="var(--green-deep)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M496 264h28 M752 304h28"/>
+        </g>
+        <text class="lbl lbl-ink" x="412" y="260">dust / gas PPM sensed</text>
+      </g>
+
+      <!-- 06 · IoT interconnection (facade nodes) -->
+      <g class="el" id="el-iot-management" data-claim="iot-management" tabindex="0" role="button"
+         aria-label="IoT-based interconnection of day-to-day electronics, open claim">
+        <rect class="hit" x="398" y="430" width="300" height="34" rx="6"/>
+        <g fill="var(--blue)" stroke="none">
+          <rect x="402" y="442" width="7" height="7" rx="1.5"/>
+          <rect x="528" y="442" width="7" height="7" rx="1.5"/>
+          <rect x="648" y="442" width="7" height="7" rx="1.5"/>
+          <rect x="688" y="442" width="7" height="7" rx="1.5"/>
+        </g>
+        <g stroke="var(--blue)" stroke-width="1" stroke-dasharray="3 4" fill="none">
+          <path d="M409 445 H528 M535 445 H648 M655 445 H688"/>
+        </g>
+      </g>
+
+      <!-- 04 · electromagnetic regulation: tower filtered out, fibre + short-range Wi-Fi in -->
+      <g class="el" id="el-em-regulation" data-claim="em-regulation" tabindex="0" role="button"
+         aria-label="High-bandwidth telecom signals filtered out, replaced by short-range Wi-Fi over WAN fibre, open claim">
+        <rect class="hit" x="856" y="238" width="150" height="234" rx="8"/>
+        <rect class="hit" x="306" y="546" width="856" height="30" rx="6"/>
+        <rect class="hit" x="336" y="196" width="52" height="34" rx="6"/>
+        <rect class="hit" x="700" y="306" width="52" height="34" rx="6"/>
+        <!-- lattice mast -->
+        <g fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M894 470 L916 258 L938 470"/>
+          <path d="M900 428 L932 428 M903 396 L929 396 M906 364 L926 364 M909 332 L923 332 M912 300 L920 300"/>
+          <path d="M900 428 L929 396 M903 396 L926 364 M906 364 L923 332 M909 332 L920 300"/>
+          <path d="M908 258 h16 M910 246 v12 M922 246 v12"/>
+        </g>
+        <!-- the filter strike -->
+        <g stroke-linecap="round">
+          <path d="M872 262 L960 462" stroke="#fdfcf9" stroke-width="7"/>
+          <path d="M872 262 L960 462" stroke="var(--ink)" stroke-width="2.5"/>
+        </g>
+        <text class="lbl lbl-ink" x="954" y="270">filtered out</text>
+        <!-- short-range wi-fi on rooftops -->
+        <g fill="none" stroke="var(--blue)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M362 226 v-6 M354 214 a11 11 0 0 1 16 0 M348 206 a20 20 0 0 1 28 0"/>
+          <path d="M726 336 v-6 M718 324 a11 11 0 0 1 16 0 M712 316 a20 20 0 0 1 28 0"/>
+        </g>
+        <!-- WAN fibre under the street -->
+        <g fill="none" stroke="var(--blue)" stroke-width="1.75" stroke-linecap="round">
+          <path d="M310 560 H1156" stroke-dasharray="9 7"/>
+          <path d="M365 560 V470 M487 560 V470 M612 560 V470 M737 560 V470" stroke-width="1" stroke-dasharray="3 5"/>
+        </g>
+        <text class="lbl" x="1052" y="552" style="fill:var(--blue-deep)">WAN fibre</text>
+        <text class="lbl" x="310" y="608">short-range Wi-Fi above, cables below — in place of the tower</text>
+      </g>
+
+      <!-- 05 · the bird correlation -->
+      <g class="el" id="el-bird-decline" data-claim="bird-decline" tabindex="0" role="button"
+         aria-label="Claimed correlation between electromagnetic radiation and urban bird decline, open claim">
+        <rect class="hit" x="928" y="118" width="130" height="90" rx="8"/>
+        <g fill="none" stroke="var(--ink)" stroke-width="1.75" stroke-linecap="round">
+          <path d="M944 172 c6 -8 12 -8 16 -2 c4 -6 10 -6 14 2"/>
+          <path d="M990 142 c6 -8 12 -8 16 -2 c4 -6 10 -6 14 2"/>
+          <path d="M960 188 c5 -7 10 -7 13 -2 c3 -5 9 -5 13 2"/>
+        </g>
+        <text class="lbl" x="932" y="207">the birds the paper worries for</text>
+      </g>
+
+      <!-- 08 · automated flood + rainwater management -->
+      <g class="el" id="el-flood-management" data-claim="flood-management" tabindex="0" role="button"
+         aria-label="Automated flood and rainwater management, open claim">
+        <rect class="hit" x="428" y="44" width="130" height="86" rx="8"/>
+        <rect class="hit" x="452" y="474" width="130" height="112" rx="8"/>
+        <!-- cloud + rain -->
+        <g fill="var(--paper)" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M446 96 a13 13 0 0 1 12 -18 a16 16 0 0 1 30 -6 a13 13 0 0 1 22 10 a10 10 0 0 1 -4 14 z"/>
+        </g>
+        <g stroke="var(--blue)" stroke-width="1.6" stroke-linecap="round">
+          <path d="M456 108 l-5 12 M476 108 l-5 12 M496 108 l-5 12"/>
+        </g>
+        <!-- street drain + harvest tank -->
+        <g fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round">
+          <rect x="506" y="478" width="34" height="8" fill="var(--paper-2)"/>
+          <path d="M511 480v4 M519 480v4 M527 480v4 M535 480v4" stroke-width="1"/>
+        </g>
+        <path d="M523 486 V520" fill="none" stroke="var(--blue)" stroke-width="1.75"/>
+        <g>
+          <rect x="470" y="520" width="106" height="52" rx="6" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="1.6"/>
+          <path d="M478 538 q8 -6 16 0 t16 0 t16 0 t16 0 t16 0 t8 0" fill="none" stroke="var(--blue)" stroke-width="1.4"/>
+        </g>
+        <text class="lbl" x="472" y="586" style="fill:var(--blue-deep)">rain harvested, streets kept dry</text>
+      </g>
+
+      <!-- 09 · waste management -->
+      <g class="el" id="el-waste-management" data-claim="waste-management" tabindex="0" role="button"
+         aria-label="Automated waste management, open claim">
+        <rect class="hit" x="796" y="418" width="76" height="56" rx="6"/>
+        <g fill="var(--warm-soft)" stroke="var(--warm)" stroke-width="1.6" stroke-linejoin="round">
+          <rect x="806" y="438" width="18" height="26" rx="2"/>
+          <rect x="830" y="438" width="18" height="26" rx="2"/>
+          <path d="M804 438 h46 M812 432 h8 M836 432 h8" fill="none"/>
+        </g>
+        <path d="M800 468 h58" stroke="var(--warm)" stroke-width="1.75" stroke-linecap="round"/>
+        <text class="lbl" x="798" y="430" style="fill:var(--warm)">auto collection</text>
+      </g>
+
+      <!-- 11 · the coupled loop — the one testable claim -->
+      <g class="el" id="el-coupled-loop" data-claim="coupled-loop" tabindex="0" role="button"
+         aria-label="Water, power and waste as one coupled loop — the one claim testable at block scale, open claim">
+        <rect class="hit" x="562" y="466" width="180" height="72" rx="10"/>
+        <g fill="none" stroke="var(--green-deep)" stroke-width="2" stroke-linecap="round">
+          <path d="M380 240 C 340 380, 400 520, 508 546" marker-end="url(#arr)" stroke-dasharray="7 6"/>
+          <path d="M582 552 C 680 566, 790 540, 828 486" marker-end="url(#arr)" stroke-dasharray="7 6"/>
+          <path d="M826 428 C 760 300, 560 220, 422 218" marker-end="url(#arr)" stroke-dasharray="7 6"/>
+        </g>
+        <g fill="var(--green-deep)">
+          <circle cx="380" cy="236" r="4.5"/>
+          <circle cx="523" cy="548" r="4.5"/>
+          <circle cx="829" cy="452" r="4.5"/>
+        </g>
+        <g>
+          <rect x="570" y="474" width="164" height="56" rx="8" fill="var(--paper)" stroke="var(--green-deep)" stroke-width="1.6"/>
+          <text x="584" y="496" style="font-family:Figtree,sans-serif; font-size:13px; font-weight:700; fill:var(--green-deep)">water · power · waste</text>
+          <text class="lbl lbl-ink" x="584" y="514">one loop — the one</text>
+          <text class="lbl lbl-ink" x="584" y="526">testable claim</text>
+        </g>
+      </g>
+    </svg>
+    </div>
+
+    <div class="board-foot">
+      <span>One block of the vision, drawn to the paper’s claims — nothing pictured was built.</span>
+      <span class="mono">select any element · tab reaches every one</span>
+    </div>
+  </section>
+
+  <!-- claim panel -->
+  <aside class="panel" id="panel" aria-live="polite" aria-label="Claim details"></aside>
+</div>
+
+<!-- ============ index of all eleven ============ -->
+<section class="index" aria-label="All eleven claims">
+  <div class="index-head">
+    <h2>All eleven claims, audited in place</h2>
+    <p>Verdicts and one-line reasons are the case study’s own; the columns reproduce its audit. Counts: 11 claims · 7 mechanisms · 4 quantifiable · 1 block-testable.</p>
+  </div>
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Claim</th>
+        <th scope="col" class="c">Stated mechanism</th>
+        <th scope="col" class="c">A number on it</th>
+        <th scope="col" class="c">Testable at one block</th>
+        <th scope="col">Verdict</th>
+      </tr>
+    </thead>
+    <tbody id="index-body"></tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ============ footer ============ -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-card">
+      <h3>Deep links</h3>
+      <ul class="params">
+        <li><code>?layer=&lt;energy|air|network|water|waste&gt;</code> — open with that layer highlighted, the rest greyed.</li>
+        <li><code>?claim=&lt;id&gt;</code> — open with that claim’s panel open and its element marked.</li>
+      </ul>
+      <p style="margin-top:10px">Claim ids (each is a link):</p>
+      <div class="id-list" id="id-list"></div>
+    </div>
+    <div class="foot-card">
+      <h3>What this page cites</h3>
+      <p>Every “what the paper proposes” line paraphrases <em>Envi-city: Vision of a Sustainable Smart City of the Future</em>, Pushpal Das, Vijayaragavan Elumalai, Abhishek Sarkar, Santhosh Kumar R — ECS Transactions 107(1) 11007–11016 (2022), <a href="https://doi.org/10.1149/10701.11007ecst" rel="noopener">doi&nbsp;10.1149/10701.11007ecst</a>. The 8–15% transmission figure is the paper’s own; no other number on this page describes the world.</p>
+      <p>Every verdict, reason and the 11&nbsp;→&nbsp;7&nbsp;→&nbsp;4&nbsp;→&nbsp;1 funnel come from the authors’ follow-up audit of their own paper (the “ENVI-City” case study, Q1&nbsp;2022). Nothing was built, measured or deployed.</p>
+    </div>
+  </div>
+  <div class="colophon">
+    <span class="mono">ENVI-City claims explorer · a portfolio demo · asserts nothing the paper does not</span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- the eleven claims — the only data on the page ---------- */
+var SRC_PAPER = "ECS Trans. 107(1) 11007 — abstract";
+var SRC_AUDIT = "— the case study’s audit of the paper, Q1 2022";
+
+var CLAIMS = [
+  { id:"rooftop-solar", name:"Rooftop solar on residential buildings", layers:["energy"],
+    paper:"Rooftop solar cells on residential buildings generate power where it is consumed.",
+    cite:SRC_PAPER, mech:true, quant:true, block:false, verdict:"input",
+    reason:"Generation figures exist, but not at block resolution — kept as an input to the block model." },
+  { id:"roadside-vawt", name:"Vertical-axis wind turbines along roadsides", layers:["energy"],
+    paper:"Vertical-axis wind turbines run along the roadsides, harvesting street-level wind.",
+    cite:SRC_PAPER, mech:true, quant:true, block:false, verdict:"input",
+    reason:"Generation figures exist, but not at block resolution — kept as an input to the block model." },
+  { id:"air-purifiers", name:"Automated solar-powered air purifiers", layers:["air"],
+    paper:"Automated air purifiers, powered by solar, respond to real-time dust and gas PPM levels.",
+    cite:SRC_PAPER, mech:true, quant:false, block:false, verdict:"dropped",
+    reason:"No defensible model at that volume — city-scale air purification was dropped." },
+  { id:"em-regulation", name:"Telecom signals filtered, fibre + Wi-Fi instead", layers:["network"],
+    paper:"High-bandwidth mobile and telecom signal waves are filtered out of the city, replaced by short-range Wi-Fi devices interconnected with WAN cables.",
+    cite:SRC_PAPER, mech:true, quant:false, block:false, verdict:"dropped",
+    reason:"Three citations carried the networking claim — a trade article, a news interview and a review. Dropped with the bird claim it existed to serve." },
+  { id:"bird-decline", name:"EM radiation and urban bird decline", layers:["network"],
+    paper:"The stated motivation for the network change: a correlation between electromagnetic radiation and the decline of urban bird populations.",
+    cite:SRC_PAPER, mech:false, quant:false, block:false, verdict:"dropped",
+    reason:"A correlation, and no mechanism we could test — dropped." },
+  { id:"iot-management", name:"IoT-run day-to-day electronics", layers:["network"],
+    paper:"IoT-based interconnection manages day-to-day electronics automatically.",
+    cite:SRC_PAPER, mech:false, quant:false, block:false, verdict:"dropped",
+    reason:"An ambition without a stated mechanism — it became context, not a foundation." },
+  { id:"transmission-losses", name:"8–15% lost between plant and consumer", layers:["energy"],
+    paper:"Between generating plants and consumers, 8–15% of power is lost in transmission — the paper’s case for generating inside the block.",
+    cite:"ECS Trans. 107(1) 11007 — the paper’s own figure", mech:true, quant:true, block:false, verdict:"input",
+    reason:"The paper’s own number, and the motivation the block model inherits — kept as an input." },
+  { id:"flood-management", name:"Automated flood + rainwater management", layers:["water"],
+    paper:"Automated flood and rainwater management answers urban waterlogging.",
+    cite:SRC_PAPER, mech:true, quant:false, block:false, verdict:"deferred",
+    reason:"A control design, but no catchment data — deferred." },
+  { id:"waste-management", name:"Automated waste management", layers:["waste"],
+    paper:"Waste management joins the automated fabric of the city.",
+    cite:SRC_PAPER, mech:false, quant:false, block:false, verdict:"input",
+    reason:"The smallest line, and the only one that can be turned back into the largest — kept as an input to the coupled loop." },
+  { id:"full-renewable", name:"A city run fully on renewable energy", layers:["energy"],
+    paper:"The headline: a smart eco-city run fully on renewable energy.",
+    cite:SRC_PAPER, mech:false, quant:false, block:false, verdict:"dropped",
+    reason:"Envi-city stopped being described as a city and became a block pattern that suits residential density — the headline did not survive the audit." },
+  { id:"coupled-loop", name:"Water, power and waste as one loop", layers:["energy","water","waste"],
+    paper:"Water, power and waste, treated as one coupled loop rather than three independent utilities.",
+    cite:"ECS Trans. 107(1) 11007 — the vision’s water, power and waste elements, read together",
+    mech:true, quant:true, block:true, verdict:"kept",
+    reason:"The one claim testable at one-block scale — kept, and modelled in the case study, interval and all." }
+];
+
+var VERDICT = {
+  kept:     { label:"Kept",             cls:"kept",     glyph:"M3 8.5 L6.5 12 L13 4" },
+  input:    { label:"Kept as an input", cls:"input",    glyph:"M3 8 H12 M9 4.5 L13 8 L9 11.5" },
+  deferred: { label:"Deferred",         cls:"deferred", glyph:"M5 3.5 V12.5 M11 3.5 V12.5" },
+  dropped:  { label:"Dropped",          cls:"dropped",  glyph:"M4 4 L12 12 M12 4 L4 12" }
+};
+var LAYERS = ["energy","air","network","water","waste"];
+var LAYER_LABEL = { energy:"Energy", air:"Air", network:"Network", water:"Water", waste:"Waste" };
+
+var byId = {};
+CLAIMS.forEach(function(c){ byId[c.id] = c; });
+
+/* the funnel counts are computed, never typed twice */
+var counts = [
+  CLAIMS.length,
+  CLAIMS.filter(function(c){return c.mech;}).length,
+  CLAIMS.filter(function(c){return c.quant;}).length,
+  CLAIMS.filter(function(c){return c.block;}).length
+];
+document.querySelectorAll(".stage-n").forEach(function(el,i){ el.textContent = counts[i]; });
+
+/* ---------- state ---------- */
+var mode = { type:"all", value:null };   /* all | layer | stage */
+var sel = null;                          /* selected claim id or null */
+
+function passesStage(c, s){
+  if (s === 1) return true;
+  if (s === 2) return c.mech;
+  if (s === 3) return c.quant;
+  return c.block;
+}
+function isActive(c){
+  if (mode.type === "layer") return c.layers.indexOf(mode.value) !== -1;
+  if (mode.type === "stage") return passesStage(c, mode.value);
+  return true;
+}
+
+/* ---------- rendering ---------- */
+var panel = document.getElementById("panel");
+var els = {};
+document.querySelectorAll(".el[data-claim]").forEach(function(g){ els[g.getAttribute("data-claim")] = g; });
+
+function verdictChip(v, small){
+  var m = VERDICT[v];
+  return '<span class="verdict ' + m.cls + '">' +
+    '<svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="' + m.glyph +
+    '" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+    m.label + '</span>';
+}
+function yn(b){ return b ? '<span class="v yes">yes</span>' : '<span class="v no">—</span>'; }
+
+function renderPanel(){
+  if (!sel){
+    panel.innerHTML =
+      '<div class="panel-anim">' +
+      '<p class="empty"><b>Select anything drawn.</b> Every element opens the paper’s claim for it — and the verdict from the audit that followed.</p>' +
+      '<ul class="hintlist">' +
+      '<li>Toggle a layer to isolate one system.</li>' +
+      '<li>Press a funnel count to grey the vision down to what survives that stage.</li>' +
+      '<li>The dashed green loop is the one claim that survived to a model.</li>' +
+      '</ul></div>';
+    return;
+  }
+  var c = byId[sel];
+  var layers = c.layers.map(function(l){ return LAYER_LABEL[l]; }).join(" · ");
+  panel.innerHTML =
+    '<div class="panel-anim">' +
+    '<div class="kicker">' + layers + ' · <span class="mono">' + c.id + '</span></div>' +
+    '<h3>' + c.name + '</h3>' +
+    '<div class="sec">What the paper proposes</div>' +
+    '<p class="paper-claim">' + c.paper +
+    '<span class="cite">' + c.cite + '</span></p>' +
+    '<div class="sec">The audit that followed</div>' +
+    '<ul class="audit-rows">' +
+    '<li><span>Stated mechanism</span>' + yn(c.mech) + '</li>' +
+    '<li><span>A number we could put on it</span>' + yn(c.quant) + '</li>' +
+    '<li><span>Testable at one-block scale</span>' + yn(c.block) + '</li>' +
+    '</ul>' +
+    verdictChip(c.verdict) +
+    '<p class="reason">' + c.reason +
+    '<span class="reason-src">' + SRC_AUDIT + '</span></p>' +
+    '</div>';
+}
+
+function apply(){
+  CLAIMS.forEach(function(c){
+    var g = els[c.id];
+    if (!g) return;
+    var active = isActive(c);
+    g.classList.toggle("dim", !active && sel !== c.id);
+    g.classList.toggle("sel", sel === c.id);
+    g.setAttribute("aria-pressed", sel === c.id ? "true" : "false");
+  });
+  document.querySelectorAll(".chip").forEach(function(b){
+    var v = b.getAttribute("data-layer");
+    var on = (mode.type === "layer" && mode.value === v) || (mode.type !== "layer" && mode.type !== "stage" && v === "all");
+    b.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+  document.querySelectorAll(".stage-btn").forEach(function(b){
+    var s = +b.getAttribute("data-stage");
+    b.setAttribute("aria-pressed", (mode.type === "stage" && mode.value === s) ? "true" : "false");
+  });
+  document.querySelectorAll("#index-body tr").forEach(function(tr){
+    var c = byId[tr.getAttribute("data-claim")];
+    tr.classList.toggle("dim-row", !isActive(c) && sel !== c.id);
+    tr.classList.toggle("sel-row", sel === c.id);
+  });
+  renderPanel();
+  syncURL();
+}
+
+function syncURL(){
+  var q = [];
+  if (mode.type === "layer") q.push("layer=" + mode.value);
+  if (sel) q.push("claim=" + sel);
+  var url = location.pathname + (q.length ? "?" + q.join("&") : "");
+  try { history.replaceState(null, "", url); } catch(e){}
+}
+
+/* ---------- index table ---------- */
+var tbody = document.getElementById("index-body");
+tbody.innerHTML = CLAIMS.map(function(c){
+  return '<tr data-claim="' + c.id + '">' +
+    '<td class="id">' + c.id + '</td>' +
+    '<td><button type="button" class="rowbtn" data-open="' + c.id + '">' + c.name + '</button></td>' +
+    '<td class="c">' + (c.mech ? '<span class="yes">yes</span>' : '<span class="no">—</span>') + '</td>' +
+    '<td class="c">' + (c.quant ? '<span class="yes">yes</span>' : '<span class="no">—</span>') + '</td>' +
+    '<td class="c">' + (c.block ? '<span class="yes">yes</span>' : '<span class="no">—</span>') + '</td>' +
+    '<td>' + verdictChip(c.verdict) + '</td>' +
+    '</tr>';
+}).join("");
+
+/* footer id list */
+document.getElementById("id-list").innerHTML = CLAIMS.map(function(c){
+  return '<button type="button" data-open="' + c.id + '">' + c.id + '</button>';
+}).join("");
+
+/* ---------- interactions ---------- */
+function selectClaim(id, scroll){
+  sel = (sel === id) ? null : id;
+  if (sel){
+    var c = byId[sel];
+    if (mode.type === "layer" && c.layers.indexOf(mode.value) === -1) mode = { type:"all", value:null };
+    if (mode.type === "stage" && !passesStage(c, mode.value)) mode = { type:"all", value:null };
+  }
+  apply();
+  if (scroll && sel){
+    var p = document.getElementById("panel");
+    if (p.getBoundingClientRect().top > window.innerHeight - 120 || p.getBoundingClientRect().bottom < 0){
+      var rm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      p.scrollIntoView({ behavior: rm ? "auto" : "smooth", block:"nearest" });
+    }
+  }
+}
+
+Object.keys(els).forEach(function(id){
+  var g = els[id];
+  g.addEventListener("click", function(){ selectClaim(id, true); });
+  g.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === " " || e.key === "Spacebar"){
+      e.preventDefault(); selectClaim(id, true);
+    }
+  });
+});
+
+document.querySelectorAll(".chip").forEach(function(b){
+  b.addEventListener("click", function(){
+    var v = b.getAttribute("data-layer");
+    mode = (v === "all" || (mode.type === "layer" && mode.value === v)) ? { type:"all", value:null } : { type:"layer", value:v };
+    if (sel && mode.type === "layer" && byId[sel].layers.indexOf(mode.value) === -1) sel = null;
+    apply();
+  });
+});
+
+document.querySelectorAll(".stage-btn").forEach(function(b){
+  b.addEventListener("click", function(){
+    var s = +b.getAttribute("data-stage");
+    mode = (mode.type === "stage" && mode.value === s) ? { type:"all", value:null } : { type:"stage", value:s };
+    if (sel && mode.type === "stage" && !passesStage(byId[sel], mode.value)) sel = null;
+    apply();
+  });
+});
+
+document.addEventListener("click", function(e){
+  var t = e.target.closest && e.target.closest("[data-open]");
+  if (t){ selectClaim(t.getAttribute("data-open"), true); }
+});
+
+/* ---------- deep links: ?layer= and ?claim= (validated) ---------- */
+(function(){
+  var p = new URLSearchParams(location.search);
+  var l = p.get("layer");
+  if (l && LAYERS.indexOf(l) !== -1) mode = { type:"layer", value:l };
+  var c = p.get("claim");
+  if (c && byId[c]){
+    sel = c;
+    if (mode.type === "layer" && byId[c].layers.indexOf(mode.value) === -1) mode = { type:"all", value:null };
+  }
+  apply();
+})();
+
+})();
+</script>
+</body>
+</html>

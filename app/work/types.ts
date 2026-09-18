@@ -7,9 +7,25 @@ export interface WorkItem {
 	year: string;
 	domain: string;
 	category: 'product' | 'engineering';
-	/** Highlight track — also the /work ?domain= filter. Products only. */
+	/** Highlight track — also the /work filter pill. Products only. */
 	track?: 'silicon' | 'ai';
 	status: WorkStatus | null;
+	/**
+	 * Hand-set position inside a status group. Cards that carry one sort
+	 * ahead of cards that do not, ascending; the year/file-order fallback
+	 * only decides among cards without it. Set on the ten shipped
+	 * Silicon & systems cards so that shelf reads in the author's order.
+	 */
+	order?: number;
+	/**
+	 * Curation tier. 1 = flagship (the front door), 2 = the internal AI
+	 * program (one head card, chapters beneath it), 3 = selected standalone
+	 * work, 4 = archive. Engineering builds are the appendix regardless.
+	 * Nothing is hidden by a tier — everything is placed by one.
+	 */
+	tier?: 1 | 2 | 3 | 4;
+	/** True only on the program-overview card that fronts tier 2. */
+	programHead?: boolean;
 	outcome: string;
 	image: string;
 	href?: string;

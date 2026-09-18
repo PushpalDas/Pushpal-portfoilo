@@ -63,10 +63,22 @@ const evidence = new Map();
 const disagreements = new Map();
 const configs = new Set();
 
+// The program overview page uses its own section format (no §08, no standard
+// headings), so the per-status rules below do not apply to it.
+const FORMAT_EXCEPTIONS = new Set(['ixana-internal-ai-program']);
+
 for (const [slug, cs] of Object.entries(v2)) {
+  if (FORMAT_EXCEPTIONS.has(slug)) continue;
   const st = cs.status;
   const band = BANDS[st];
   const wc = prose(cs);
+  // A status the brief does not know (the three in-development silicon
+  // parts carry one) has no band, no dropped-section rule and no §08
+  // heading to check. Report it and move on rather than crash the run.
+  if (!band) {
+    problems.push(`${slug}: status "${st}" has no rules in this checker — skipped`);
+    continue;
+  }
   const headings = cs.sections.map((s) => s.heading);
   const all = JSON.stringify(cs);
 
@@ -79,9 +91,9 @@ for (const [slug, cs] of Object.entries(v2)) {
   // three summary paragraphs
   if (cs.summary.length !== 3) problems.push(`${slug}: summary has ${cs.summary.length} paragraphs, expected 3`);
 
-  // meta four fields
+  // meta three fields — no timeline, the pages carry no dates
   const mk = Object.keys(cs.meta).join(',');
-  if (mk !== 'role,team,timeline,stage') problems.push(`${slug}: meta order is ${mk}`);
+  if (mk !== 'role,team,stage') problems.push(`${slug}: meta order is ${mk}`);
 
   // confidentiality + footer
   if (!cs.confidentiality) problems.push(`${slug}: no confidentiality line`);
@@ -162,23 +174,30 @@ for (const [slug, cs] of Object.entries(v2)) {
 
   // ── differentiation keys ──
   const outSec = cs.sections.find((s) => s.heading === expect08);
-  const form = (outSec.blocks || []).filter((b) => b.kind === 'figure').map((b) => b.chart.form).join('+');
-  if (chartForms.has(form)) problems.push(`DIFF: §08 chart form "${form}" shared by ${slug} and ${chartForms.get(form)}`);
-  chartForms.set(form, slug);
+  const form = outSec
+    ? (outSec.blocks || []).filter((b) => b.kind === 'figure').map((b) => b.chart.form).join('+')
+    : '';
+  if (outSec) {
+    if (chartForms.has(form)) problems.push(`DIFF: §08 chart form "${form}" shared by ${slug} and ${chartForms.get(form)}`);
+    chartForms.set(form, slug);
+  }
 
   const tk = tiles.map((t) => t.label).sort().join('|');
   if (tileSets.has(tk)) problems.push(`DIFF: identical metric tile set in ${slug} and ${tileSets.get(tk)}`);
   tileSets.set(tk, slug);
 
   const sec02 = cs.sections.find((s) => s.heading === 'The problem as people experienced it');
-  const ev = (sec02.body || []).join(' ');
-  const evKey = ev.slice(0, 60);
-  if (evidence.has(evKey)) problems.push(`DIFF: identical §02 evidence method in ${slug} and ${evidence.get(evKey)}`);
-  evidence.set(evKey, slug);
+  if (!sec02) problems.push(`${slug}: missing section "The problem as people experienced it"`);
+  const ev = sec02 ? (sec02.body || []).join(' ') : '';
+  if (sec02) {
+    const evKey = ev.slice(0, 60);
+    if (evidence.has(evKey)) problems.push(`DIFF: identical §02 evidence method in ${slug} and ${evidence.get(evKey)}`);
+    evidence.set(evKey, slug);
+  }
 
   const sec05 = cs.sections.find((s) => s.heading === 'How I got it agreed');
-  if (sec05) {
-    const d = (sec05.body || [])[0].slice(0, 50);
+  if (sec05 && (sec05.body || []).length) {
+    const d = sec05.body[0].slice(0, 50);
     if (disagreements.has(d)) problems.push(`DIFF: identical §05 disagreement in ${slug} and ${disagreements.get(d)}`);
     disagreements.set(d, slug);
   }

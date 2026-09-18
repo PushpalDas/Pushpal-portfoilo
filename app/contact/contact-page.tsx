@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import ConnectForm from '../components/connect-form';
 import SplashCursor from '../components/splash-cursor';
-import { merryWeather } from '../fonts';
+import { fraunces } from '../fonts';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,10 +21,10 @@ export default function ContactPage() {
 		const ctx = gsap.context(() => {
 			// Heading text reveal
 			gsap.from([line1Ref.current, line2Ref.current], {
-				y: '100%',
+				y: '110%',
+				stagger: 0.08,
 				duration: 1,
 				ease: 'power3.out',
-				stagger: 0.1,
 				delay: 0.3,
 			});
 
@@ -53,10 +53,7 @@ export default function ContactPage() {
 			<section ref={sectionRef} className='lc-page'>
 				{/* ── Hero Heading ── */}
 				<div className='lc-hero'>
-					<h1
-						ref={headingRef}
-						className={`lc-heading ${merryWeather.className}`}
-					>
+					<h1 ref={headingRef} className={`lc-heading ${fraunces.className}`}>
 						<span className='lc-heading-line'>
 							<span ref={line1Ref} className='lc-heading-inner'>
 								<span className='lc-avatar-wrap'>
@@ -68,12 +65,12 @@ export default function ContactPage() {
 										className='lc-avatar'
 									/>
 								</span>
-								Let&apos;s work
+								Let&apos;s
 							</span>
 						</span>
 						<span className='lc-heading-line'>
 							<span ref={line2Ref} className='lc-heading-inner'>
-								together
+								work together
 							</span>
 						</span>
 					</h1>
@@ -117,17 +114,21 @@ export default function ContactPage() {
 						width: 100%;
 					}
 
-					.lc-heading {
-						font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+										.lc-heading {
+						font-optical-sizing: auto;
+						font-size: clamp(2.75rem, 6vw, 5.25rem);
 						font-weight: 400;
-						line-height: 1.1;
+						line-height: 1.05;
 						margin: 0 0 1.5rem;
-						letter-spacing: -0.02em;
+						letter-spacing: -0.03em;
+						white-space: nowrap;
 					}
 
 					.lc-heading-line {
 						display: block;
 						overflow: hidden;
+						padding: 0.06em 0.05em 0.3em 0;
+						margin-bottom: -0.2em;
 					}
 
 					.lc-heading-inner {
@@ -195,7 +196,7 @@ export default function ContactPage() {
 					/* ── Responsive ── */
 					@media screen and (max-width: 768px) {
 						.lc-heading {
-							font-size: clamp(2rem, 10vw, 3.25rem);
+							font-size: clamp(2rem, 11vw, 3.25rem);
 						}
 
 						.lc-avatar-wrap {

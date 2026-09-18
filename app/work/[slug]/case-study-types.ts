@@ -48,6 +48,7 @@ export interface ProjectNav {
 
 export type CaseStudyStatus =
 	| 'production'
+	| 'development'
 	| 'internal'
 	| 'customer-testing'
 	| 'prototype'
@@ -531,6 +532,16 @@ export interface CaseStudySection {
 export type CaseStudyBlock =
 	/** A paragraph placed between two blocks, where ordering matters */
 	| { kind: 'para'; text: string }
+	/**
+	 * A list of internal or external links with a one-line note each —
+	 * built for the program page's chapter list, where a name has to be
+	 * the way into the page it names.
+	 */
+	| {
+			kind: 'links';
+			label?: string;
+			items: { label: string; href: string; note?: string }[];
+	  }
 	| { kind: 'figure'; chart: ChartSpec; caption: string }
 	/** Evidence / tradeoff table. `head` labels are reused as mobile row labels. */
 	| { kind: 'table'; head: string[]; rows: string[][] }
@@ -582,6 +593,13 @@ export type CaseStudyBlock =
 				placeholder?: string;
 				label?: string;
 				caption: string;
+				/**
+				 * Describes the screen for a reader who cannot see it. The
+				 * label is a title, not a description, so it makes poor alt
+				 * text; where this is absent the label is still used, which
+				 * is why it is optional rather than required.
+				 */
+				alt?: string;
 				/** The live surface this screen is a picture of. */
 				href?: string;
 				hrefLabel?: string;
@@ -597,17 +615,27 @@ export type CaseStudyBlock =
 
 export interface CaseStudyV2 {
 	slug: string;
-	/** Company · Year · Domain */
+	/** Company · Domain — no dates */
 	eyebrow: string;
 	title: string;
 	/** One line stating the outcome */
 	deck: string;
 	status: CaseStudyStatus;
-	meta: { role: string; team: string; timeline: string; stage: string };
+	meta: { role: string; team: string; stage: string };
 	/** Confidentiality line under the meta strip */
 	confidentiality: string;
 	/** Public, verifiable evidence — datasheets, product pages, patents */
 	evidence?: { label: string; url: string }[];
+	/**
+	 * The fast layer for a skimming reader. Facts carry only claims a
+	 * public source or the linked demo can back (Class A) or that the page
+	 * declares real-but-masked (Class B) — never illustrative placeholders.
+	 * The pull line is harvested from the page's own prose, never written new.
+	 */
+	fast?: {
+		pull?: string;
+		facts?: { text: string; cls: 'A' | 'B' }[];
+	};
 	/** Exactly three: Problem / What I did / Result */
 	summary: { lead: string; text: string }[];
 	sections: CaseStudySection[];

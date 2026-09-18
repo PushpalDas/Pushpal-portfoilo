@@ -17,14 +17,14 @@
 
 .hoobie-page {
 	/* ground */
-	--h-bg: #080808;
+	--h-bg: #000000;
 	--h-surface: #111210;
 	--h-text: #f1efe7;
 	--h-muted: #a8a7a1;
 	--h-line: rgba(241, 239, 231, 0.18);
 
 	/* the one brand colour, and the tint small text can use.
-	   #455ce9 is ~3.8:1 on #080808 and fails for captions;
+	   #455ce9 is ~3.8:1 on #000000 and fails for captions;
 	   #7d90ff is ~7:1 and passes. */
 	--h-accent: #455ce9;
 	--h-accent-text: #7d90ff;
@@ -59,13 +59,7 @@
 .hoobie-page {
 	position: relative;
 	min-height: 100svh;
-	background:
-		radial-gradient(
-			110% 60% at 50% 0%,
-			rgba(69, 92, 233, 0.12) 0%,
-			transparent 60%
-		),
-		var(--h-bg);
+	background: var(--h-bg);
 	color: var(--h-text);
 	overflow-x: hidden;
 }
@@ -227,6 +221,85 @@
 	border-color: var(--h-accent);
 }
 
+/* --- the collection switch ----------------------------------- */
+
+/* Photography or Books, chosen at the top. The switch is in the flow,
+   centred under the navbar, and both heroes hang from it at the same
+   distance — top-aligned, with one shared top padding — so the eyebrow
+   line sits the same way under the pills whichever collection is up. */
+.hobby-shell {
+	--hobby-switch-top: clamp(5.5rem, 10vh, 7rem);
+	--hobby-switch-gap: clamp(3rem, 6vh, 4.5rem);
+	position: relative;
+	background: #000;
+}
+
+.hobby-switch {
+	position: relative;
+	z-index: 30;
+	display: flex;
+	width: max-content;
+	margin: 0 auto;
+	padding: var(--hobby-switch-top) 0 0;
+	gap: 0.5rem;
+}
+
+.hobby-shell .hoobie-hero,
+.hobby-shell .books-hero {
+	align-items: flex-start;
+	min-height: 0;
+	padding-top: var(--hobby-switch-gap);
+}
+
+/* Both hero grids top-align their copy too, so the eyebrow line lands
+   at the padding edge rather than at the centre of a taller column. */
+.hobby-shell .hoobie-hero-grid,
+.hobby-shell .books-hero-grid {
+	align-items: start;
+}
+
+/* The switch sits outside either page, so the pill cannot lean on the
+   page tokens; every value it needs is spelled out here. */
+.hobby-switch-btn {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	min-height: 36px;
+	padding: 0.5rem 1.2rem;
+	border: 1px solid rgba(241, 239, 231, 0.18);
+	border-radius: 100px;
+	overflow: hidden;
+	background: none;
+	color: #a8a7a1;
+	font: inherit;
+	font-size: 0.7rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition:
+		color 0.4s cubic-bezier(0.76, 0, 0.24, 1),
+		border-color 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.hobby-switch-btn .hoobie-cta-fill {
+	background: #455ce9;
+	transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.hobby-switch-btn:hover,
+.hobby-switch-btn:focus-visible,
+.hobby-switch-btn[data-active="true"] {
+	color: #fff;
+	border-color: #455ce9;
+}
+
+.hobby-switch-btn:hover .hoobie-cta-fill,
+.hobby-switch-btn:focus-visible .hoobie-cta-fill,
+.hobby-switch-btn[data-active="true"] .hoobie-cta-fill {
+	transform: translateY(0);
+}
+
 /* --- hero --------------------------------------------------- */
 
 .hoobie-hero {
@@ -344,21 +417,37 @@
 	max-width: 46ch;
 }
 
-.hoobie-hang {
-	display: grid;
-	grid-template-columns: 1fr;
-	column-gap: 1rem;
-	row-gap: clamp(2rem, 5vw, 6rem);
-	align-items: start;
+/* A collage, laid out in columns. Each frame keeps its own ratio, so the
+   heights vary and the columns stagger themselves — no hand-placed offsets,
+   and nothing is cropped. Small frames are also the sharp ones here: every
+   source file is 1179px wide, so a 280px column is still crisp at 3x. */
+.hoobie-collage {
+	columns: 2;
+	column-gap: clamp(0.75rem, 2vw, 1.5rem);
 }
 
-.hoobie-hang-figure {
-	margin: 0;
-	min-width: 0;
+.hoobie-collage-figure {
+	break-inside: avoid;
+	margin: 0 0 clamp(1.25rem, 3vw, 2.25rem);
+	/* Chrome needs this to stop a figure splitting across a column. */
+	display: inline-block;
+	width: 100%;
 }
 
-.hoobie-hang-caption {
-	margin-top: 0.75rem;
+/* Three widths on a seven-frame cycle, so the collage reads as hung by hand
+   rather than poured into a grid. */
+.hoobie-collage-figure[data-rhythm="2"],
+.hoobie-collage-figure[data-rhythm="5"] {
+	width: 88%;
+	margin-left: auto;
+}
+
+.hoobie-collage-figure[data-rhythm="4"] {
+	width: 82%;
+}
+
+.hoobie-collage-caption {
+	margin-top: 0.6rem;
 }
 
 .hoobie-wall-text {
@@ -502,7 +591,7 @@
 	z-index: 100;
 	display: flex;
 	flex-direction: column;
-	background: rgba(8, 8, 8, 0.97);
+	background: rgba(0, 0, 0, 0.97);
 }
 
 .hoobie-viewer-stage {
@@ -565,65 +654,8 @@
 		grid-column: 1 / -1;
 	}
 
-	.hoobie-hang {
-		grid-template-columns: repeat(12, minmax(0, 1fr));
-	}
-
-	/* The hang, placed by the real ratios rather than the labels the old
-	   code carried. There is no landscape frame among the twelve — eight
-	   of them sit between 0.57 and 0.58 — so the rhythm comes from span
-	   and offset, not from shape. No two consecutive frames share a span
-	   or a side. */
-	.hoobie-hang-figure[data-frame="2"] {
-		grid-column: 2 / 8;
-	}
-
-	.hoobie-hang-figure[data-frame="3"] {
-		grid-column: 9 / 13;
-		margin-top: 8rem;
-	}
-
-	.hoobie-hang-figure[data-frame="4"] {
-		grid-column: 1 / 6;
-		margin-top: 2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="5"] {
-		grid-column: 9 / 12;
-		margin-top: 6rem;
-	}
-
-	.hoobie-hang-figure[data-frame="6"] {
-		grid-column: 2 / 9;
-	}
-
-	.hoobie-hang-figure[data-frame="7"] {
-		grid-column: 9 / 13;
-		margin-top: 10rem;
-	}
-
-	.hoobie-hang-figure[data-frame="8"] {
-		grid-column: 1 / 6;
-		margin-top: -2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="9"] {
-		grid-column: 7 / 13;
-		margin-top: 6rem;
-	}
-
-	.hoobie-hang-figure[data-frame="10"] {
-		grid-column: 2 / 6;
-		margin-top: 2rem;
-	}
-
-	.hoobie-hang-figure[data-frame="11"] {
-		grid-column: 6 / 13;
-		margin-top: 4rem;
-	}
-
-	.hoobie-hang-figure[data-frame="12"] {
-		grid-column: 4 / 10;
+	.hoobie-collage {
+		columns: 3;
 	}
 
 	.hoobie-wall-text {
@@ -636,6 +668,13 @@
 	.hoobie-hero-grid {
 		grid-template-columns: 5fr 7fr;
 		align-items: center;
+	}
+
+	/* Four columns from here up. The `sizes` string in hobby-page.tsx is
+	   written for this count — at three, every frame would be served an
+	   image about a third narrower than the box it fills. */
+	.hoobie-collage {
+		columns: 4;
 	}
 
 	/* Three prints hung together. Both side plates share one height and

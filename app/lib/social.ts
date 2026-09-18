@@ -3,10 +3,10 @@
  * and the shared footer cannot drift apart again.
  */
 
-// TODO(pushpal): confirm this vanity URL is the live profile. The repo carried
-// two spellings — this one and /in/pushpal-das-98485a1b5/ — and LinkedIn answers
-// HTTP 999 to unauthenticated fetches, so neither could be verified from here.
-export const LINKEDIN_URL = 'https://www.linkedin.com/in/pushpaldas/';
+// Confirmed by Pushpal: this is the live profile, not the /in/pushpaldas/
+// vanity spelling the repo also carried.
+export const LINKEDIN_URL =
+	'https://www.linkedin.com/in/pushpal-das-98485a1b5/';
 
 // TODO(pushpal): confirm the handle. The repo carried three spellings —
 // x.com/Pushpal_D (hero), twitter.com/pushpaldas (footer) and

@@ -47,6 +47,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
 					sizes='16x16'
 					href='/static/favicons/favicon.ico'
 				/>
+				<link rel='preconnect' href='https://fonts.googleapis.com' />
+				<link
+					rel='preconnect'
+					href='https://fonts.gstatic.com'
+					crossOrigin='anonymous'
+				/>
+				<link
+					rel='stylesheet'
+					href='https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Inter:wght@300..700&family=Merriweather:wght@300;400;700;900&family=Mukta:wght@200;300;400;500;600;700&display=swap'
+				/>
 				<meta name='msapplication-TileColor' content='#000000' />
 				<meta name='theme-color' content='#000000' />
 				<link rel='alternate' type='application/rss+xml' href='/feed.xml' />

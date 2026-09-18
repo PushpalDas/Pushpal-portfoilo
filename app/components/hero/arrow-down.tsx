@@ -1,7 +1,7 @@
 'use client';
 
-import Magnetic from '../Magnetic';
 import { ArrowDownIcon } from '../layouts/icons/arrow-down-icon';
+import Magnetic from '../Magnetic';
 
 export default function ArrowDown() {
 	return (
@@ -11,14 +11,16 @@ export default function ArrowDown() {
 		>
 			<button
 				type='button'
-				aria-label='Scroll down'
+				aria-label='Scroll to selected work'
 				onClick={() => {
-					const intro = document.querySelector('#intro');
+					// The Selected work section on the home page (id="work").
+					const work = document.querySelector('#work');
 
-					intro?.scrollIntoView({ behavior: 'smooth' });
+					work?.scrollIntoView({ behavior: 'smooth' });
 				}}
-				className='cursor-pointer dark:text-white'
+				className='cursor-pointer dark:text-white flex flex-col items-center gap-2'
 			>
+				<span className='text-sm'>Selected work</span>
 				<ArrowDownIcon size={18} />
 			</button>
 		</Magnetic>

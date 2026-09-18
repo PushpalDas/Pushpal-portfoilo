@@ -1,0 +1,17 @@
+/* ============================================================
+   CERTIFICATION DETAIL
+
+   Everything else on this page is case-study-v2.css. These two
+   rules only give the lead certificate — the specialization or
+   professional certificate a programme closes with — the full
+   width of the gallery grid, so it reads as the record and the
+   courses under it read as its parts.
+   ============================================================ */
+
+.cs2 .gallery figure.lead {
+	grid-column: 1 / -1;
+}
+
+.cs2 .gallery figure.lead .gallery-img {
+	aspect-ratio: 16 / 10;
+}

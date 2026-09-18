@@ -266,7 +266,9 @@ html:not(.dark) .about-figure figcaption {
 	}
 
 	/* the plane belongs beside the opening section, not below it */
-	.about-container > .about-figure-plane {
+	/* The opening still is pinned to row 1 so it sits beside "Curiosity came
+	   first" rather than below it. */
+	.about-container > .about-figure-lead {
 		grid-row: 1;
 		margin-top: 0.35rem;
 	}

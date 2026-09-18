@@ -19,7 +19,7 @@ Generated from `data/case-studies-v2.json` · 35 case studies · 2026-08-25
 11. [WishKey — Key Management System](#11-wishkey-key-management-system) — EEGRAB · 2023 · Access control
 12. [Wi-R reference designs — smartglasses and tactical headset](#12-wi-r-reference-designs-smartglasses-and-tactical-headset) — Ixana · 2024–2026 · Wearable systems
 13. [Cost-effective smart watch](#13-cost-effective-smart-watch) — EEGRAB · 2023 · Consumer wearable
-14. [AMS monthly performance dashboard](#14-ams-monthly-performance-dashboard) — Ixana · 2026 · Delivery reporting
+14. [Team performance reporting](#14-team-performance-reporting) — Ixana · 2026 · Delivery reporting
 15. [Automated engineering bandwidth reporting](#15-automated-engineering-bandwidth-reporting) — Ixana · 2025 · Resource planning
 16. [Flow Tracker](#16-flow-tracker) — Ixana · 2026 · Engineering ops
 17. [Task change audit trail](#17-task-change-audit-trail) — Ixana · 2026 · Audit tooling
@@ -2097,160 +2097,195 @@ I also accepted the charging cradle. The teardowns told me a proprietary connect
 
 ---
 
-## 14. AMS monthly performance dashboard
+## 14. Team performance reporting
 
 *Ixana · 2026 · Delivery reporting*
 
-**Turned a two-day manual report into one automated run, and made every delay carry a root cause a named person had signed.**
+**One engine, five delivery teams, three reporting windows — and every published delay carries a root cause a named person signed.**
 
 | Field | Detail |
 | --- | --- |
 | Role | Product manager, delivery owner |
-| Team | 1 automation engineer, with the AMS delivery manager as reviewer |
+| Team | 1 automation engineer, with the five delivery leads as reviewers |
 | Timeline | Jan – May 2026 |
-| Stage | Live, running monthly |
+| Stage | Live across five teams; weekly, monthly and quarterly |
 | Status | Shipped internally |
-| Slug | `ai-pm-generative-ai-engine-for-rca-report-automation` |
+| Slug | `team-performance-reporting` |
 
-> **Confidentiality.** Internal reporting. All figures on this page are invented placeholders for this sample; no task, customer or individual's performance data appears on this page.
+**Evidence:** [Open the working demo — five teams, three windows, one engine](/demo/team-performance) · [Or start where a lead starts, at the week's open and overdue work](/demo/team-performance?team=rtl&cad=weekly&sheet=open)
+
+> **Confidentiality.** Internal reporting. The five team names are real internal groupings; every person, task, comment, cause and figure on this page and in the demo is invented for this sample. No individual's performance data appears anywhere.
 
 ### Summary
 
-- **Problem.** The monthly AMS performance report took about two days to assemble, and coding six months of circulated reports showed only 21% of delayed tasks arrived with a stated cause. The explanation existed — sitting in a task comment thread — but reconstructing it by hand was the most expensive part of the report, so it mostly did not happen.
-- **What I did.** I split the report along a line nobody had drawn: counting is deterministic and stays rule-based, synthesis is the actual work and goes to a model. Then I put a signature gate in front of publication, because the section people act on was the one a model wrote.
-- **Result.** The report is produced in a single run of about twelve minutes. Root cause coverage rose from 21% to 84%, one version circulates instead of three, and no cause has been published without a named owner signing it.
+- **Problem.** AMS spent about two days a month on a performance report in which only 21% of delayed tasks arrived with a stated cause. The other four delivery teams had no standing report at all, and paid for that once a quarter in a lead's week.
+- **What I did.** I split the report along a line nobody had drawn — counting is deterministic and stays rule-based, synthesis goes to a model — then made it a function of two parameters, team and window, rather than a product built five times.
+- **Result.** Five teams now run one engine on three windows. In the May run 84% of delayed tasks carry a cause a named owner signed, against 21% before, and no count on any report is computed by a model.
 
 ### 01 — Why this, and why now
 
-Three reporting problems were on the table: the monthly performance report was the most expensive to produce, a customer-facing status summary the most visible, real-time delivery alerts the most requested. I sized them by how often each changed a decision, tracing six months of circulated artefacts and the meetings that followed — a report nobody acts on is a cost with no offsetting benefit however cheap it becomes.
+Three reporting problems were on the table at the start: the monthly AMS report was the most expensive to produce, a status summary the most visible, real-time alerts the most requested. I sized them by how often each changed a decision — a report nobody acts on is a cost with no offsetting benefit however cheap it becomes.
 
-**Figure — Decisions traceable to each reporting artefact over six months: monthly performance report 14, customer status summary 3, real-time alerts 0**  
-*Chart: `hbar` · unit decisions / 6 months*
+Once AMS was running the second question arrived: build it four more times, or make the one that exists take a parameter.
+
+**Figure — Lead hours spent assembling material before each quarterly review, by team: AMS 4, RTL 19, FW 17, PS 16, HW 14**  
+*Chart: `hbar` · unit lead hours per quarterly review*
 
 | Item | Value |
 | --- | --- |
-| Monthly performance report | 14 decisions · value: 14 |
-| Customer status summary | 3 decisions · value: 3 |
-| Real-time delivery alerts | not yet built · value: 0 |
+| RTL — no standing report | 19 hours · value: 19 |
+| FW — no standing report | 17 hours · value: 17 |
+| PS — no standing report | 16 hours · value: 16 |
+| HW — no standing report | 14 hours · value: 14 |
+| AMS — monthly report to draw on | 4 hours · value: 4 |
 
-> Prioritisation, Dec 2025, by tracing resourcing and escalation decisions in six months of meeting records back to the artefact that prompted them. The monthly report was already the document that moved things, which is why making it cheaper and better beat building a new one.
+> Timed against calendar and document history for the four quarterly reviews of 2025, Dec 2025. AMS is the control: the team with a standing monthly report spent a quarter of what the others did, and the gap is the whole argument for parameterising rather than rebuilding.
 
-Eleven of those fourteen decisions were about which projects to staff, taken from a report where four delayed tasks in five had no stated cause. It was steering resourcing on counts alone.
+Sixty-six hours a quarter is not the expensive part; the expensive part is that it is assembled from memory in the week before the review it is for, which is why that review was where a slip was first heard about.
 
 ### 02 — The problem as people experienced it
 
-I read six months of circulated reports against the underlying task data and coded what each said versus what was knowable. That beat interviews here: the people producing the report could describe the effort accurately and had no view of what was being lost.
+I read six months of AMS reports against the underlying task data and coded what each said versus what was knowable, then coded sixteen quarterly review decks the same way. The people producing this material could describe the effort accurately and had no view of what was being lost.
 
-| What the report did | Where it broke | Evidence |
+| What the reporting did | Where it broke | Evidence |
 | --- | --- | --- |
-| Counted completed and delayed tasks | Counts were right and stood alone | 6 of 6 reports; the only reliable section |
-| Named delayed tasks | Cause left blank or given as "pending" | 79% of delayed tasks over 6 months |
-| Summarised the month in prose | Written from memory, not from the sheets | 3 reports contradicted their own tables |
+| Counted completed and delayed tasks (AMS) | Counts were right and stood alone | 6 of 6 reports; the only reliable section |
+| Named delayed tasks (AMS) | Cause left blank or given as "pending" | 79% of delayed tasks over 6 months |
+| Summarised the month in prose (AMS) | Written from memory, not from the sheets | 3 reports contradicted their own tables |
+| Built a deck per quarter (RTL, PS, HW, FW) | Figures reconstructed by hand at the deadline | 5 of 16 decks contradicted the task data |
 | Circulated to leadership | Different versions in different inboxes | 3 versions of one month's report found |
 
-**Figure — Across six monthly reports: 79 percent of delayed tasks had no stated cause, 44 percent of comment threads held one, 12 percent of summaries contradicted their own tables**  
+**Figure — Across six AMS monthly reports and sixteen quarterly decks: 79 percent of delayed tasks had no stated cause, 44 percent of comment threads already held one, 31 percent of decks contradicted the task data, and one team in five had a standing report**  
 *Chart: `hbar` · unit % of cases*
 
 | Item | Value |
 | --- | --- |
 | Delayed tasks with no stated cause | 79% · value: 79 |
-| Cause recoverable from comments | 44% · value: 44 |
-| Summaries contradicting their tables | 12% · value: 12 |
+| Cause already written in the thread | 44% · value: 44 |
+| Quarterly decks contradicting the task data | 5 of 16 · value: 31 |
+| Teams with any standing report | 1 of 5 · value: 20 |
 
-> Retrospective coding of six monthly reports, Jun–Nov 2025, against the underlying task records. The middle bar decided the design: in nearly half of unexplained delays the explanation had already been written by an engineer and was simply never read.
+> Retrospective coding, Jun–Nov 2025 for AMS and the four 2025 quarterly reviews for the rest, against the underlying task records. The second bar decided the design: in nearly half of unexplained delays the explanation had already been written by an engineer and was simply never read.
 
-The reframe: this was a reading problem, not a collection problem. Engineers were explaining delays in comment threads as they happened, and the reporting process had no way to spend attention on forty threads a month.
+The reframe: this was a reading problem, not a collection problem. Engineers on all five teams explained delays in comment threads as they happened, and no process could spend attention on forty threads a month.
 
 ### 03 — My role and approach
 
-I owned the workflow from trigger to published dashboard, and the rule about where judgement is allowed. The design question was not what to automate but what must never be, and I answered it before scoping anything.
+I owned the workflow from trigger to published report, and the rule about where judgement is allowed — and, before the expansion, whether a second team is a second product.
 
 **Key decisions**
 
-- **Counting stays deterministic; only synthesis goes to a model.** A model occasionally wrong about a count destroys trust far faster than one occasionally vague about a cause.
-- **The second pass reads the generated sheets, not the raw tasks.** Summaries generated from source data drift from the tables beside them, which produced the contradictions in section 02.
-- **Root cause analysis on the worst decile, not on everything.** A full pass produces forty paragraphs nobody reads. Concentrating it where the delay is largest made the output actionable.
-- **Nothing publishes without a named signature.** A root cause is a claim about why something went wrong, usually implicating a team. Requiring a person to sign each one made the feature acceptable at all.
+- **A report is two parameters, not five products.** Five copies drift inside a quarter and cannot then be compared.
+- **The window decides what the model is for.** A worst decile of nine rows is one row. Weekly runs on a threshold, monthly on the decile, the quarter on nothing.
+- **Counting stays deterministic; only synthesis goes to a model.** A model occasionally wrong about a count destroys trust faster than one occasionally vague about a cause.
+- **Nothing publishes unsigned from monthly upwards, and deliberately not below.** Requiring a signature made the feature acceptable; requiring one weekly would teach everybody that signing means nothing.
 
 ### 04 — What I cut
 
 **Scope**
 
-- *Shipped:* Efficiency summary per assignee; Team performance distribution; Delay detail with generated root causes; Key metrics and project distribution; Critical issues and recommendations
-- *Deferred:* Trend comparison across months; Customer-facing export; Automatic distribution by email
-- *Cut:* Root cause analysis on every delayed task; Predicted delay risk; Individual performance ratings in the published report
+- *Shipped:* Weekly, monthly and quarterly windows for all five teams; Open and overdue work, reported weekly and nowhere else; Delay detail with generated root causes and a signature gate; Six shared cause categories, clustered into recurring blockers at the quarter; A portfolio sheet reporting coverage and nothing else
+- *Deferred:* Per-team sheets beyond the shared shape; Customer-facing export; Automatic distribution by email
+- *Cut:* Any ordering or ranking of the five teams; Root cause analysis on every delayed task; Individual performance ratings in any published report
 
-Running root cause analysis on every delayed task was the hardest cut, because partial coverage is easy to attack. It failed on attention rather than cost: a full pass produced forty paragraphs a month, and in a two-week trial the delivery manager read the first six. Everything below the worst decile appears with its delay and comment thread linked — nothing is hidden, it is just not pre-digested.
+Ranking the five teams was the hardest cut, because leadership asked for it directly. It fails on comparability, not cost: post-silicon is bench hours, firmware is release cycles, hardware is board spins around a fabrication slot. A number meaning "late" in one does not mean "late" in another, so any ordering is an artefact of the vocabulary we agreed rather than a fact about delivery. What covers the gap is a portfolio sheet comparing coverage — how much of what a report claims carries a name — a fact about the report, and the same measurement everywhere. The cost is that the question is still asked, and answered in a room where nobody can check it.
 
 ### 05 — How I got it agreed
 
-The AMS delivery manager objected to machine-written root causes in a report leadership reads, and his objection was about accountability rather than accuracy: a root cause names a reason a team missed a date, that reason gets quoted in a resourcing conversation, and a model cannot be asked what it meant. He would be answering for it either way.
+The RTL lead had seen the AMS report and did not want it. His objection was vocabulary: a delayed task in AMS is a design block that missed a date, and half his team's work is regression triage that never had one. A shared report would force his work into a shape wrong in a way leadership could not detect.
 
-So I stopped defending the analysis and addressed his actual problem, authorship. Generated causes became drafts until a named person signs them, the signature appears beside the cause in the published report, and anything unsigned at the cut-off reads "cause not confirmed" rather than being dropped.
+So I made the shared surface as small as it could be and still add up: six cause categories and a report shape. Group names, what counts as a task and how projects map stay each team's own. The categories cost every team a distinction it cared about.
 
-He accepted, and added a condition that improved it: the signer must own the affected work rather than being whoever compiles the report, so signing is a review and not a formality. It costs his leads about forty minutes a month, and it is why the section gets quoted with confidence.
+He accepted, and added the condition that improved it: if the five teams appear on one page at all, the only column is coverage. It measures the report rather than the work, and it is the one number a lead controls.
 
 ### 06 — What was built
 
-A workflow that clears prior dashboard rows, fetches completed tasks for a window, and runs three parallel branches: per-assignee efficiency, team performance distribution, and delayed task analysis that pulls each item's comment history and generates a root cause. A second pass reads the generated sheets to produce key metrics, project distribution and critical issues.
+One n8n sub-workflow that takes a team and a window. It clears the prior rows, fetches tasks due inside the window, and runs parallel branches — efficiency per assignee, group distribution, and delayed-task analysis that pulls each comment history and drafts a cause. A second pass reads the generated sheets rather than the source, which is why the narrative and the tables agree. At the quarter nothing is fetched.
 
-**Screen — Delay detail sheet with generated root causes and signature column, recreated with invented tasks — with numbered callout arrows drawn on top**
+**Screen — The monthly delay detail sheet for AMS. The team and window controls sit above the report; coverage reads 84 per cent, 32 signed of 38; the worst four rows carry a model-written draft cause, a worst-decile badge and a cause category, with the signer's name beside each.**
 
+![The monthly delay detail sheet for AMS. The team and window controls sit above the report; coverage reads 84 per cent, 32 signed of 38; the worst four rows carry a model-written draft cause, a worst-decile badge and a cause category, with the signer's name beside each.](/static/images/project/ixana-team-perf-delay.jpg)
+
+- **The team and the window sit above the report, never inside a menu.** They are the whole product. A reader who cannot see which two parameters produced a number will eventually quote it as though it were another team's.
 - **The signature column sits beside the cause, not at the end of the row.** An unsigned cause has to be distinguishable from a signed one at a glance, or the gate becomes a formality.
-- **Every generated cause links to the comment thread it came from.** The objection was about answerability, and a claim you can trace in one click is one a person can defend or retract.
-- **Counts are visually separated from written analysis.** The two have different reliability, and presenting them in the same register invited readers to trust them equally.
-- **Unconfirmed causes read "cause not confirmed", never blank.** A blank cell reads as no delay to explain. The previous report was 79% blank cells, and that is exactly how it was misread.
+- **Every row carries one of the six shared categories.** It is the only field five teams fill the same way, and the only reason the quarterly can count anything across them.
+- **Unconfirmed causes read "cause not confirmed", never blank.** A blank cell reads as no delay to explain. The old AMS report was 79% blank cells, and that is exactly how it was misread.
 
-> Recreated from the internal workbook. Structure and columns are accurate; all tasks, causes and figures shown are invented. Happy to walk through the real report in a conversation.
+> Recreated from the internal workbook as a working demo. Structure, columns, rules and the signature gate are accurate; every task, name, comment thread, cause and figure shown is invented. Happy to walk through the real reports in a conversation. [Open this sheet in the demo and sign a cause](/demo/team-performance?team=ams&cad=monthly&sheet=delay)
+
+**The rest of the system**
+
+![The completed monthly run for AMS: eight steps, each badged rule or model, with the two model steps and their outputs visible.](/static/images/project/ixana-team-perf-run.jpg)
+
+- **One workflow, three shapes** The run screen names the window it is running and how many of its steps reach a model — six, eight and seven steps for weekly, monthly and quarterly. Switching the window changes the pipeline, not the product; the button on it runs the report again. [Open the run screen](/demo/team-performance?team=ams&cad=monthly&sheet=run)
+
+![The drawer for T-2214: a model-written root cause analysis, the two comments it drew on marked in the thread below it, and the signature panel.](/static/images/project/ixana-team-perf-thread.jpg)
+
+- **A generated cause, beside the thread it came from** The analysis names the comments it drew on and they are marked in the thread. Signing is refused unless the person signing owns the affected work — try it as another group's lead. [Open this task and try to sign it](/demo/team-performance?team=ams&cad=monthly&sheet=delay&task=T-2214&signed=0)
+
+![The RTL weekly: three tasks open past their date, each with days overdue, a cause category and the latest comment in its thread.](/static/images/project/ixana-team-perf-weekly.jpg)
+
+- **The weekly, and the only sheet that names open work** A monthly report counts what closed. The weekly is the only window that names work still open past its date — the part a lead can still change — and it carries no signature anywhere. [Open the weekly for RTL](/demo/team-performance?team=rtl&cad=weekly&sheet=open)
+
+![The AMS quarterly recurring blockers: three categories with a March, April, May spark beside each and a recommendation under each.](/static/images/project/ixana-team-perf-blockers.jpg)
+
+- **The quarter reads the months** No task record is fetched at this window. The blockers are signed causes from three published reports, grouped — and the one falling fastest is "no cause recorded", which is the reporting improving rather than the delivery. [Open the quarterly for AMS](/demo/team-performance?team=ams&cad=quarterly&sheet=blockers&state=published)
+
+![The portfolio sheet: five teams with reports published, causes signed and coverage, above a banner naming what is deliberately absent.](/static/images/project/ixana-team-perf-portfolio.jpg)
+
+- **The one page the five teams share** Coverage and nothing else. On-time rate, delay days and any ordering of the teams are deliberately absent, and the sheet says so where a reader would look for them. [Open the portfolio sheet](/demo/team-performance?team=hw&cad=quarterly&sheet=portfolio&state=published)
+
+> Every screen above is the state its own link opens, captured from the running demo on invented data and a simulated run. It exists so the argument on this page can be checked rather than taken on trust: switch team, switch window, sign a cause, try to sign someone else's, or publish a quarter over a month that has not been published and watch the gate refuse.
 
 ### 07 — Tradeoffs
 
 | Tension | What I chose | What it cost |
 | --- | --- | --- |
-| Coverage vs attention | Generated analysis on the worst decile only | Roughly nine delayed tasks in ten arrive as a row and a link rather than an explanation |
-| Speed vs accountability | Nothing publishes unsigned | Publication waits on human review, and about one cause in seven ships unconfirmed |
-| Narrative accuracy vs freshness | Summaries generated from the sheets, not the source | A correction to a task after the run is invisible until the next month |
-| Maintainability vs precision | A fixed team roster mapped to live identities | Every joiner or leaver is a manual edit, and a missed one silently drops a person |
+| Reach vs fit | One report shape and six categories across five teams | Every team gave up a distinction its own work turns on, and the report is thinner than any one of them would have designed |
+| Comparability vs the question leadership asked | Coverage as the only cross-team number | The ranking is still wanted, and now gets made informally in a room where nobody can check it |
+| Coverage vs attention | Written analysis on the worst decile, floor of two rows | Roughly nine delayed tasks in ten arrive as a row and a link rather than an explanation |
+| Speed vs accountability | Nothing publishes unsigned from monthly upwards | About one cause in seven ships unconfirmed, and a quarter cannot publish over a month that has not been |
+| Maintainability vs precision | Five fixed rosters mapped to live identities | Fifty-four people across five teams; every joiner or leaver is a manual edit, and a missed one silently drops a person |
 
 ### 08 — Impact and outcomes
 
-We agreed before build that this failed if a leadership report ever went out containing a root cause no named person had signed — automation could make the report cheaper and not anonymous. Version count was the guardrail, because three versions circulating was the symptom that the process had lost its single source.
+We agreed before build that this failed if a report ever went out carrying a root cause nobody had signed. Version count was the guardrail: three versions of one month circulating was the symptom the process had lost its single source, and five monthly reports where there had been one is the fastest way to lose it again.
 
 | Metric | Value |
 | --- | --- |
-| Time to produce the monthly report | 2 days → 12m |
-| Delayed tasks with a stated root cause | 21% → 84% |
-| Published causes carrying a signature | 100% (unconfirmed items publish as 'cause not confirmed') |
-| Versions of the report in circulation (guardrail) | 3 → 1 |
-| Dashboard sheets refreshed per run | 6 |
+| Teams with a standing performance report | 1 → 5 |
+| Time to produce one monthly report | 2 days → 12m |
+| AMS delayed tasks with a stated root cause | 21% → 84% |
+| Delayed tasks with a signed cause, all five teams | 84% (May 2026 — 69 of 82) |
+| Versions of a report in circulation (guardrail) | 3 → 1 |
 | Counts or percentages computed by a model | 0 |
 
-**Figure — Share of delayed tasks carrying a stated root cause, before and after, by project: rising from between 15 and 28 percent to between 79 and 91 percent**  
+**Figure — Share of delayed tasks carrying a signed root cause, by team, from each team's first run to its third: rising from between 45 and 60 percent to between 80 and 89 percent**  
 *Chart: `slope` · unit %*
 
-| Line | Before (6-month average) | After (3 runs) |
+| Line | First run | Third run |
 | --- | --- | --- |
-| Project A | 28 | 91 |
-| Project B | 24 | 86 |
-| Project C | 19 | 82 |
-| Project D | 15 | 79 |
+| AMS | 60 | 84 |
+| FW | 54 | 80 |
+| PS | 53 | 82 |
+| RTL | 47 | 86 |
+| HW | 45 | 89 |
 
-> Root cause coverage by project, before from the six-month coding exercise, after from three runs in Mar–May 2026. The lines stay in the same order, which matters: projects whose engineers write more in comment threads still end up better explained, because the workflow reads what exists rather than creating it.
+> Signed-cause coverage per team across its first three runs, Mar–May 2026. The lines cross, which is the finding: the team that started lowest finished highest, and the two that finished lowest are the two whose leads sign inside a release or a tapeout week. Coverage tracks when a lead can stop, not how much their engineers write — which is not what the AMS evidence predicted.
 
-> **How we counted.** A delayed task carries a stated root cause when the published report contains a specific reason attributable to a signed owner. "Pending", "under investigation" and a blank cell all count as no cause, which is why the before figure is as low as it is.
+> **How we counted.** A delayed task carries a stated root cause when the published report contains a specific reason attributable to a signed owner. "Pending", "under investigation" and a blank cell all count as no cause. The other four teams have no before figure at all, rather than a zero.
 
-`Technical configuration — n8n sub-workflow with 3 parallel branches · paginated task retrieval over a reporting window · rule-based counting and delay classification · gpt-4o-mini for root cause synthesis and dashboard narrative · second pass reads the generated sheets · 6 Excel sheets rewritten with headers preserved`
+`Technical configuration — one n8n sub-workflow with team and window as parameters · 3 run shapes of 6, 8 and 7 steps · paginated task retrieval on the weekly and monthly windows, none at the quarter · rule-based counting, delay classification and six-category tagging · gpt-4o-mini for root cause synthesis, quarterly clustering and dashboard narrative · second pass reads the generated sheets, the quarterly reads published reports · 3, 6 and 4 Excel sheets rewritten with headers preserved`
 
 ### 09 — What I'd do differently
 
-I built the signature gate as a spreadsheet column, which works and is the wrong shape. Signing forty causes a month means opening a workbook, reading a thread in another tab and typing a name — and the one in seven that ships unconfirmed is nearly always one where the owner was travelling. A notification with the thread inline would have cost a day and taken that to near zero.
+I built the signature gate as a spreadsheet column, which works and is the wrong shape. It is now seventeen group leads opening a workbook, reading a thread in another tab and typing a name, and the cause in seven that ships unconfirmed is almost always an owner who was travelling.
 
-I also never tested whether the generated causes are right. Coverage went from 21% to 84% and I can prove the first number and not the second — nobody has sampled signed causes against what actually happened. A signature makes someone answerable for each one, which is not the same as knowing the analysis is accurate, and I have been quoting an adoption metric as though it were a quality one.
+I also rolled to four more teams on one team's evidence. Coverage rose everywhere, which is equally consistent with leads signing whatever draft they are shown — nobody has sampled a signed cause against what actually happened. I can prove the 21% and not the 84%.
 
-> **Note.** This is internal reporting. The sheet described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
+> **Note.** This is internal reporting. The screens in section 06 are a working recreation with invented content, and all figures on this page are invented placeholders for this sample. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is made up. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.
 
 ---
-
 ## 15. Automated engineering bandwidth reporting
 
 *Ixana · 2025 · Resource planning*
@@ -2420,7 +2455,9 @@ I would also push harder on the undated tasks rather than routing around them. R
 | Status | Shipped internally |
 | Slug | `ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic` |
 
-> **Confidentiality.** Internal product — the screen described in section 06 is a recreation with invented task data, and all figures on this page are invented placeholders for this sample.
+**Evidence:** [Open the working demo — three pipelines, their delays and the reasons behind them](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong)
+
+> **Confidentiality.** Internal product — the screens in section 06 are a running recreation with invented task data, and all figures on this page are invented placeholders for this sample. Every task name, owner, comment and date in the demo is made up for publication; owners are roles rather than people, for the same reason the leaderboard ranks teams.
 
 ### Summary
 
@@ -2503,14 +2540,36 @@ He agreed on two conditions. RTL keeps its own stage vocabulary rather than a no
 
 A tracker showing where each task sits in its team's pipeline, with a delay mode for overdue work across a chosen window, a drill-down drawer for one task's history, a velocity leaderboard, and an assistant answering efficiency questions against stored records. It classifies work into stages and stores the result so history survives.
 
-**Screen — Pipeline view with the delay drawer open, recreated in Figma — numbered callout arrows drawn on top**
+**Screen — The PS delay view: an eleven-stage test flow in the team's own words, one stage panel open showing its classification confidence and a control to move the work to another stage, and every late task decomposed into start, length and completion delay beside it.**
 
-- **Stage names are the team's own words.** Normalising them into a shared vocabulary was the thing the RTL lead refused, and he was right — a stage nobody recognises is a stage nobody corrects.
-- **The correction control sits on the stage itself.** Classification will be wrong some of the time. Putting the fix where the error appears is what turned the correction rate into a metric we actually receive.
-- **Delay reasons show the source comment, not a summary alone.** In the observations, leads did not trust a delay explanation they could not trace back to who wrote it.
-- **The leaderboard ranks teams, never individuals.** The same data ranked by person would have changed how tasks get written within a week, and the tracker would have started measuring the writing rather than the work.
+![The PS delay view: an eleven-stage test flow in the team's own words, one stage panel open showing its classification confidence and a control to move the work to another stage, and every late task decomposed into start, length and completion delay beside it.](/static/images/project/ixana-flow-pipeline.jpg)
 
-> Recreated from the internal interface. Layout and interactions are accurate; all task names, teams and figures shown are invented. Happy to walk through the real product in a conversation.
+- **Stage names are the team's own words.** Request intake, bench setup, characterisation, sign-off — PS's vocabulary, not a normalised one. That was the thing the RTL lead refused, and he was right: a stage nobody recognises is a stage nobody corrects.
+- **The correction control sits on the stage itself.** The open panel names what put the work there and how sure it was, then offers one move. Classification will be wrong some of the time; putting the fix where the error appears is what turned the correction rate into a metric we actually receive.
+- **The correction rate is on the header, not in a report.** Two of 48 stages corrected, 4.2%, beside the line saying stages are model-classified. The guardrail on automatic classification is only a guardrail if the people relying on it can see it without asking.
+- **A delay is three numbers, not one.** Every row splits into start, length and completion delay against the planned window. Leads argued about different things once they could see which of the three had moved.
+
+> The running demo, on an invented set of 48 tasks across three pipelines. Layout and interactions are the real ones; every task name, owner, comment and date is made up for publication. [Open this screen in the demo — the panel opens with it](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&panel=3)
+
+**The rest of the system**
+
+![Three pipelines, three vocabularies](/static/images/project/ixana-flow-rtl.jpg)
+
+- **Three pipelines, three vocabularies** RTL's eleven stages are verification stages, and nothing maps them onto the eleven test-flow stages in the shot above. The header says stages here are set by the team: automatic inference for RTL reached 54% on a sample of 200 and was cut, so this team types the stage in. The link opens the bug-triage stage already selected. [Open RTL on the stage that is holding it](https://xana-nine.vercel.app/efficiency?view=tracker&team=rtl&mode=wrong&stage=9)
+
+![Delay reasons show the source comment](/static/images/project/ixana-flow-delay.jpg)
+
+- **Delay reasons show the source comment** Planned window against what actually happened, the delay split three ways, and under it the comment thread the reason came from, attributed and dated. In the observations leads would not carry an explanation into a review that they could not trace back to whoever wrote it. The link opens this task with its drawer already open. [Open this drawer in the demo](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&panel=3&task=ps-04)
+
+![The leaderboard ranks teams, never individuals](/static/images/project/ixana-flow-standings.jpg)
+
+- **The leaderboard ranks teams, never individuals** Three pipelines compared on stage timestamps — the one field they share — and a line saying the per-person view was never built. The same data ranked by person would have changed how tasks get written within a week, and the tracker would have started measuring the writing rather than the work. [Open the leaderboard](https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&board=1)
+
+![The assistant shows the filter, not just the answer](/static/images/project/ixana-flow-assistant.jpg)
+
+- **The assistant shows the filter, not just the answer** A question becomes a filter over stored records, and the filter is printed under the answer. A wrong answer is then a wrong filter — visible, and fixable — rather than a fluent invention. Ask it who the best engineer is and it says the ranking does not exist. The link opens this question already asked. [Ask this question in the demo](https://xana-nine.vercel.app/efficiency?q=Why%20is%20the%20AMS%20layout%20behind%3F)
+
+> Four screens from the same invented dataset as the shot above. Each link opens the screen in the picture — the stage panel, the drawer, the leaderboard and the answered question all travel in the URL, so a link lands on what it shows rather than near it.
 
 ### 07 — Tradeoffs
 
@@ -3461,7 +3520,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 | Status | Shipped internally |
 | Slug | `ixana-patent-program` |
 
-**Evidence:** [Granted — wearable EQS-HBC device (US12619308B2)](https://patents.google.com/patent/US12619308B2/en) · [Published — human-body-resonance data transfer (US20250379663A1)](https://patents.google.com/patent/US20250379663A1/en) · [Published — error-proportional encoding for body area networks (US20250192915A1)](https://patents.google.com/patent/US20250192915A1/en)
+**Evidence:** [Open the working demo — the whole system on an invented portfolio](https://xana-nine.vercel.app/patents)
 
 > **Confidentiality.** Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, and figures are invented or relative.
 
@@ -3589,6 +3648,8 @@ A mail-triggered spine and four surfaces over it. Documents from any of the thre
 
 ![Patent portfolio spend and milestone timeline, one lane per matter across 2024 to 2026](/static/images/project/ixana-patent-gantt.png)
 
+[Open the spend and milestone timeline ↗](https://xana-nine.vercel.app/patents/spend)
+
 - **Deadline triage is a policy, not a colour.** The bands are sixty days, six months, a year. I set them so the weekly review has a fixed size: anything inside sixty days gets read out, everything else gets read once a month.
 - **Every date on this screen is ours.** Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so the two kinds are drawn differently and the origin travels with the date.
 - **Each firm sees its own matters and only its own.** The same view is shared read-only, filtered per firm. It removed most of the status email in both directions and cost nothing, because the filter already existed for my own use.
@@ -3598,21 +3659,31 @@ A mail-triggered spine and four surfaces over it. Documents from any of the thre
 
 ![Lifecycle tracker](/static/images/project/ixana-patent-tracker.png)
 
+[Open the lifecycle tracker ↗](https://xana-nine.vercel.app/patents/tracker)
+
 > **Lifecycle tracker** Every matter in one of six stages, and an explicit unclassified stage beside them. Overdue is a property of the internal action date and never of a statutory one, so nothing red here can be read as a legal deadline.
 
 ![Portfolio dashboard](/static/images/project/ixana-patent-dashboard.png)
+
+[Open the portfolio dashboard ↗](https://xana-nine.vercel.app/patents)
 
 > **Portfolio dashboard** The founder’s view — composition by stage and by technology category, and the next actions owed with a named person against each. Unclassified appears in the category table rather than being absorbed into the total.
 
 ![Ask the portfolio](/static/images/project/ixana-patent-ask.png)
 
+[Open Ask the portfolio ↗](https://xana-nine.vercel.app/patents)
+
 > **Ask the portfolio** A question answered in a sentence, with a provenance box underneath it. I would not ship this until the answer could say which half came from the firm’s docket and which half was ours.
 
 ![Invoice approval](/static/images/project/ixana-patent-approval.png)
 
+[Open the invoice approval lens ↗](https://xana-nine.vercel.app/patents/tracker?view=approvals)
+
 > **Invoice approval** Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has confirmed it.
 
 ![image](/static/images/project/ixana-patent-pipeline.png)
+
+[Open the pipeline on the tracker ↗](https://xana-nine.vercel.app/patents/tracker)
 
 > **** Pipeline — a document arriving by mail is extracted, resolved to one internal matter identity across three firms, given a lifecycle stage and a technology category, and written into the single record every surface reads. Anything the match cannot place lands in an explicit unclassified stage rather than defaulting into the pipeline, and the firm’s docket enters as a mirrored authority that the system never recomputes.
 
@@ -4327,6 +4398,8 @@ I would also have designed the contribution path on day one. Forty labs see faul
 | Status | Prototype |
 | Slug | `srm-uav-ornithopter-for-surveillance` |
 
+**Evidence:** [The demo is the paper — Ornithopter for surveillance, the full project proposal (PDF)](/papers/srm-uav-ornithopter-for-surveillance.pdf) · [Then the concept of operations — the proposal's own coverage arithmetic, before a motor was chosen](/demo/ornithopter-concept) · [Or set the endurance to the forty-one seconds that actually flew](/demo/ornithopter-concept?preset=flew)
+
 > **Confidentiality.** Student club work at SRM Kattankulathur. The concept, the surveillance framing, the component list and the build sequence come from the project's own documents. Every number on this page is invented for this sample — flight times, attempt counts, payload margin and the observer trials. The concept was pitched to DRDO; nothing on this page describes any response to that pitch, because none is recorded.
 
 ### Summary
@@ -4401,7 +4474,15 @@ A single-motor flapping-wing airframe: a gear train turning rotary motion into s
 - **The camera moved aft after the fifth flight.** In the nose it looked right and pitched the aircraft down. Moving it behind the spar cost us the head silhouette and bought the three flights that finished.
 - **Flap rhythm tuned for how it reads, not only for lift.** Once observers told us the rhythm was what made it a bird, frequency stopped being purely a thrust parameter and became the thing the product is.
 
-> The concept render carried on the project card. It is not a photograph of the built aircraft: the project folder holds no photograph of the airframe that flew, and the deck's other images are stock press photography, so nothing else here is ours to publish.
+> The concept render carried on the project card. It is not a photograph of the built aircraft: the project folder holds no photograph of the airframe that flew, and the deck's other images are stock press photography, so nothing else here is ours to publish. The concept arithmetic below checks the proposal against itself — patrol radius against endurance, and the airframes a 24/7 shift pattern would need. It flies nothing and simulates no airframe; it only does the sums the proposal was written with, which is the check that should have come first. [Open the concept arithmetic — the sums, not a flight](/demo/ornithopter-concept)
+
+**The rest of the system**
+
+![The concept-of-operations demo: endurance set to 41 seconds, a time budget short by 103 minutes before the aircraft reaches the station, and a note that no fleet size works.](/static/images/project/srm-uav-ornithopter-demo-concept.jpg)
+
+- **The proposal, checked against itself** Twenty-five kilometres of patrol radius and one hour of endurance are both in our proposal, and at any plausible cruise speed the transit eats the hour twice over. Set the dial to the forty-one seconds that flew and the fleet arithmetic has nothing left to divide. [Open the concept arithmetic](/demo/ornithopter-concept?preset=flew)
+
+> The patrol radius, the coverage figure, the shift pattern and the one-hour target are the project's own; the cruise speed, turnaround and fleet arithmetic are a worked illustration for this sample. No operator ever flew this aircraft. The full write-up is the first link at the top of this page.
 
 ### 05 — What we learned
 
@@ -4463,6 +4544,8 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 | Stage | Research — concept and modelling study. No vehicle was built and nothing was measured in service. |
 | Status | Research |
 | Slug | `ricky-kids-carbon-positive-ev` |
+
+**Evidence:** [The demo is the paper — Carbon Positive e-car, the full concept write-up (PDF)](/papers/ricky-kids-carbon-positive-ev.pdf)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, its system diagrams and its component list are the project's own. The carbon model, its scenarios and every figure on this page are invented for this sample — no vehicle exists, so nothing here has been measured.
 
@@ -4540,12 +4623,17 @@ A concept, drawn and costed. Air enters at the radiator, turns a cylindrical tur
 - **The filters were chosen for particulates and odours, then credited against carbon.** HEPA captures particles and activated carbon adsorbs volatile organics. Both are real and useful. Neither touches carbon dioxide, and that is the whole distance between the name and the model.
 - **Keeping the drawing on the page after the finding.** The temptation was to quietly redraw it without the turbine. Leaving it is the only reason this page is worth reading.
 
-> Our own system diagram from the project deck. This is a concept drawing: no vehicle, subsystem or filter stack was ever built, and nothing in it was measured.
+> Our own system diagram from the project deck. This is a concept drawing: no vehicle, subsystem or filter stack was ever built, and nothing in it was measured. The full concept write-up is linked below — the carbon model, the turbine argument and the grid-mix conditional, as we wrote them at the time. [Read the paper](/papers/ricky-kids-carbon-positive-ev.pdf)
 
 ![image](/static/images/project/ricky-kids-carbon-positive-ev-solar.jpg)
 
 > **** The solar path, which is the part that holds up. Panels across roof, bonnet and boot into a charge controller and the pack — real generation from a source the vehicle is not itself paying for. It is also capped by the area of a car, which is why it contributes about 2% of lifetime energy and cannot be scaled by wanting it more.
 
+**The rest of the system**
+
+![The solar path, which is the part that holds up. Panels across roof, bonnet and boot into a charge controller and the pack — real generation from a source the vehicle is not itself](/static/images/project/ricky-kids-carbon-positive-ev-solar.jpg)
+
+- The solar path, which is the part that holds up. Panels across roof, bonnet and boot into a charge controller and the pack — real generation from a source the vehicle is not itself paying for. It is also capped by the area of a car, which is why it contributes about 2% of lifetime energy and cannot be scaled by wanting it more.
 ### 05 — Finding and what it changed
 
 We agreed before build that this failed if we could not show the concept carbon positive — net removal across its whole life — under some assumption set we were prepared to defend in front of somebody who disagreed with us.
@@ -4606,7 +4694,7 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 | Status | Research |
 | Slug | `ricky-kids-uav-weather-radar-calibration` |
 
-**Evidence:** [Umeyama Matsumoto — UAV-based far-field antenna characterisation for polarimetric weather radars](https://hdl.handle.net/11244/326678) · [UAV antenna characterisation against a pedestal reference — IEEE Access](https://doi.org/10.1109/ACCESS.2020.3027790) · [UAV-carried sphere calibration of an S-band radar — IEEE TGRS](https://doi.org/10.1109/TGRS.2019.2933912)
+**Evidence:** [The papers this method was decomposed from — UAV-based far-field antenna characterisation for polarimetric weather radars (Umeyama, Matsumoto)](https://hdl.handle.net/11244/326678) · [Paper — UAV antenna characterisation against a pedestal reference, IEEE Access](https://doi.org/10.1109/ACCESS.2020.3027790) · [Paper — UAV-carried sphere calibration of an S-band radar, IEEE TGRS](https://doi.org/10.1109/TGRS.2019.2933912) · [Then the error budget — five terms, a 1.5 dB budget, and the term it turns on](/demo/radar-error-budget)
 
 > **Confidentiality.** Student research with SRM and NIT Tiruchirappalli, mentored from ISRO. The proposal, its component list and the literature it rests on are real. The error budget on this page is our own analysis and its numbers are invented for this sample — no flight data exists, because the work was funded as a two-year programme and this page covers only the study that preceded it.
 
@@ -4683,7 +4771,15 @@ What exists is a specified system and the model that justifies it: a hexacopter 
 - **A passive sphere, not an active transponder.** The whole method rests on a target whose radar cross section is known from geometry. Anything powered introduces a second thing needing calibration.
 - **Altitude accuracy prioritised over horizontal.** It falls out of the analysis in section 05 rather than out of preference, and it changes which GNSS solution is worth paying for.
 
-> Drawn from the proposal's methodology rather than photographed: this system was specified and costed, not flown. The staging folder holds the submission-format reference and cited figures, none of which are our own imagery, so nothing has been published here in place of a real one.
+> Drawn from the proposal's methodology rather than photographed: this system was specified and costed, not flown. The staging folder holds the submission-format reference and cited figures, none of which are our own imagery, so nothing has been published here in place of a real one. The error budget below is the decomposition on this page made adjustable — five terms, a 1.5 dB budget and a positioning dial. It is arithmetic and nothing else: no airframe, no radar, no sphere and no measurement anywhere in it, which is exactly the stage this project reached. [Open the error budget — arithmetic, not a flight](/demo/radar-error-budget)
+
+**The rest of the system**
+
+![The error-budget demo at the bill-of-materials preset: a 5.73 dB total against a 1.5 dB budget, with sphere altitude dominating the five-term tornado.](/static/images/project/ricky-kids-radar-demo-budget.jpg)
+
+- **The term the method turns on** Drag the positioning dial from the ±0.35 m the budget demands to the ±1.5 m the module in our own bill of materials gives, and the total goes from 1.46 dB to 5.73. Every other term can be made perfect and it still misses. [Open the error budget](/demo/radar-error-budget?preset=bom)
+
+> A worked illustration of the decomposition described above, not a measurement. No flights were conducted, no radar was calibrated and no hardware was built.
 
 ### 05 — Finding and what it changed
 
@@ -4744,7 +4840,7 @@ We would also have written the pass mark into the proposal. It shaped everything
 | Status | Research |
 | Slug | `ricky-kids-noncontact-covid-monitoring` |
 
-**Evidence:** [Prior art the architecture was written against — wireless data communication in a medical device network](https://patents.google.com/patent/US20070254593A1/en) · [MQTT — the messaging standard the telemetry path uses](https://mqtt.org/)
+**Evidence:** [The demo is the paper — Non-contact based COVID-19 monitoring system, the full write-up (PDF)](/papers/ricky-kids-noncontact-covid-monitoring.pdf) · [Then the bench — which channels worked, and how many gowning cycles that removes](/demo/covid-bench) · [Or leave every parameter ticked, as a standard round requires, and watch the saving stay at zero](/demo/covid-bench?cond=still) · [Prior art the architecture was written against — wireless data communication in a medical device network](https://patents.google.com/patent/US20070254593A1/en) · [MQTT — the messaging standard the telemetry path uses](https://mqtt.org/)
 
 > **Confidentiality.** Student research at SRM, with collaborators at Jadavpur University and VIT Vellore. This page describes an engineering feasibility test and makes no diagnostic or clinical claim of any kind. The workflow observations, the bench comparison and every number on this page are invented for this sample; what is real is the project, its architecture and the contact monitor we measured against.
 
@@ -4822,7 +4918,15 @@ A bench: a volunteer seated at a measured standoff, our non-contact channels log
 - **The cables in the basket are the finding.** Electrodes, a finger probe and a cuff — the reference cannot produce two of these five numbers without touching somebody, and neither, it turned out, could we.
 - **Nothing here was ever taken to a bedside.** The stand was designed to be wipeable and moved between rooms, and it never was. This is a bench, and the page claims nothing beyond one.
 
-> My own photograph of the commercial contact monitor used as the reference instrument. It is not our device and nothing we built is shown. No patient, ward or clinical setting appears in this photograph or anywhere in this project.
+> My own photograph of the commercial contact monitor used as the reference instrument. It is not our device and nothing we built is shown. No patient, ward or clinical setting appears in this photograph or anywhere in this project. The bench below is the feasibility question rather than the device: which channels cleared the agreed margin under which conditions, and how many entries into a room that would actually have removed. It takes no reading, contains no hardware, and no patient appears anywhere in it. [Open the bench — the feasibility question, not the device](/demo/covid-bench)
+
+**The rest of the system**
+
+![The bench demo: a five-parameter by four-condition status grid with oxygen saturation and blood pressure reading 'no path exists' throughout, and a panel reading 0 per cent of entr](/static/images/project/ricky-kids-covid-demo-bench.jpg)
+
+- **The premise, checked** Tick the parameters a round has to report and the saving is zero at every condition, because oxygen saturation and blood pressure have no non-contact route at all. Untick those two and the device looks excellent — which is the framing our own materials used, and the one the study does not support. [Open the bench](/demo/covid-bench)
+
+> A recreation of the feasibility question, not of the device. No patient took part in any part of this project and no clinical claim is made or implied. The full write-up is the first link at the top of this page.
 
 ### 05 — Finding and what it changed
 
@@ -4885,6 +4989,8 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 | Stage | In internal use — scores road-safety survey clips for the campus. Never connected to a live camera and never used to identify or penalise anyone. |
 | Status | Shipped internally |
 | Slug | `ricky-kids-triple-riding-avoidance` |
+
+**Evidence:** [The demo is the paper — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)](/papers/ricky-kids-triple-riding-avoidance.pdf) · [Then the working tool — counts only, no frame anywhere](/demo/rider-count) · [Or start at the evaluation, on the 64 clips it over-counted](/demo/rider-count?view=eval&cell=1-2)
 
 > **Confidentiality.** Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. The system diagram, the detection approach and the team are real. No footage, number plate, face or person appears anywhere on this page, and none is published: the model runs on survey clips and outputs counts. The accuracy figures, the labelled sample and the observation counts are invented for this sample.
 
@@ -4977,7 +5083,19 @@ Three detection models in sequence — motorcycle, then riders and helmets withi
 - **Counting helmets in the same pass as riders.** It is the same crop and the same question, so it was nearly free. It also gave the survey a second number that needs no identity to be useful.
 - **Batch scoring of stored clips, with no path to a live feed.** The concession from section 05, made structural rather than procedural: there is no camera input in what we built, so connecting one is a rewrite rather than a setting.
 
-> Our own system diagram from the project paper, showing the design including the parts that were cut. No footage, frame, face, number plate or person from this project is published here or anywhere on this page.
+> Our own system diagram from the project paper, showing the design including the parts that were cut. No footage, frame, face, number plate or person from this project is published here or anywhere on this page. The tool below is the shipped half of this diagram running on invented clips — batch scoring, the hand-labelled evaluation, and the parts that were cut. No model runs in it and no frame exists in it: it is the counts sheet and the argument around it, not the detector. [Open the survey tool — the counts, not the detector](/demo/rider-count)
+
+**The rest of the system**
+
+![The evaluation view: a three-by-three confusion matrix with the 64-clip over-count cell selected, 94 per cent agreement and a 6.2 per cent false-positive guardrail beside it.](/static/images/project/ricky-kids-triple-riding-demo-eval.jpg)
+
+- **The direction of the error is the finding** Sixty-four two-rider clips called three, against fourteen the other way. Click a cell in the demo and it says what that error means for a survey number, and what it would have meant for a notice sent to a student. [Open the evaluation](/demo/rider-count?view=eval&cell=1-2)
+
+![The 'what it will not do' view: four cut capabilities with reasons, a disabled live-camera button, and a panel reading zero plates, faces, identities, records and cameras.](/static/images/project/ricky-kids-triple-riding-demo-cut.jpg)
+
+- **The half that was written up and never built** Plate recognition, the offender database, automatic notices and any live camera. The button offering to connect a camera explains there is no input to connect one to — the concession made structural rather than procedural. [Open what it will not do](/demo/rider-count?view=cut)
+
+> Both screens are the state their own link opens. No footage, frame, face or number plate from this project is published here or anywhere on this page — the tool as described extracts none. The full write-up is the first link at the top of this page.
 
 ### 07 — Tradeoffs
 
@@ -5042,6 +5160,8 @@ I would also have written the sampling plan before scoring anything. We scored t
 | Stage | Prototype — built, demonstrated at a student expo and reviewed by special-education teachers. It never went to users: no child ever used it. |
 | Status | Prototype |
 | Slug | `ricky-kids-toys-for-autistic-kids` |
+
+**Evidence:** [The demo is the paper — Toys for Autistic Kids, the full project write-up (PDF)](/papers/ricky-kids-toys-for-autistic-kids.pdf) · [Then the bench review, playable — three interactions, fourteen criteria, and the stop test](/demo/autism-bench) · [Or go straight to the gantry and pull the hand away](/demo/autism-bench?i=gantry&letter=A&test=pull)
 
 > **Confidentiality.** Student work at SRM Kattankulathur. The prototype, its hardware and the reviews with special-education teachers are real; the teachers and the autism care centre involved are not named here. This page makes no clinical or therapeutic claim of any kind, and no child took part in any part of this project. The review scores and every figure are invented for this sample.
 
@@ -5119,7 +5239,19 @@ Three interactions on one kit: visual and sound prompts for a letter, a teacher'
 - **Built in wood so it could be rebuilt in an afternoon.** The right call for iteration and the wrong material for a classroom, where everything has to be wiped down. We knew the first half and not the second.
 - **It never left this table.** The kit was demonstrated at a student expo and reviewed by teachers on a bench. No child has used it, and after the review we did not build a version that one could.
 
-> Our own photograph of the prototype gantry. No child, teacher or care setting appears in this image or anywhere in this project's photography, and nothing here was ever used by a child.
+> Our own photograph of the prototype gantry. No child, teacher or care setting appears in this image or anywhere in this project's photography, and nothing here was ever used by a child. The bench review below is a recreation of the design review, not of this machine: it replays the three interactions, the fourteen criteria and the stop test in a browser. Its gantry is a traced path and generated G-code — no hardware moves, and no child appears in it. [Open the bench review — the review, not the hardware](/demo/autism-bench)
+
+**The rest of the system**
+
+![The gantry view of the bench review: a traced letter A, the generated G-code beside it, and the criteria panel showing 'stops the instant a child withdraws' marked not met.](/static/images/project/ricky-kids-toys-demo-gantry.jpg)
+
+- **The objection, made operable** The stage traces our own letter paths and the G-code beside it is generated from them. Pull the hand away mid-stroke and it finishes the stroke — which is criterion 01, marked not met by both teachers, and criteria 02, 09 and 10 failing for the same reason. [Open the gantry and try it](/demo/autism-bench?i=gantry&letter=A&test=pull)
+
+![The letter card interaction: a large letter A, the words 'A for apple', a sound indicator, and a criteria panel reading 12 of 14 met.](/static/images/project/ricky-kids-toys-demo-card.jpg)
+
+- **The interaction they would allow** A letter, its word and a fixed four-second prompt that ends on its own. Twelve of fourteen criteria met, and nothing on the bench is holding anything — which is the whole difference between this and the screen above. [Open the letter card](/demo/autism-bench?i=prompt)
+
+> Both screens are the state their own link opens, captured from the running bench review. The kit and its hardware are real; the criteria, the verdicts and the teachers' words are invented for this sample, and no child took part in any of it. The full write-up is the first link at the top of this page.
 
 ### 05 — What we learned
 
@@ -5173,6 +5305,8 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 | Stage | Research — test-tank study, entered in the 2021-22 Technology Infusion Grand Challenge. Never deployed in a live sewer. |
 | Status | Research |
 | Slug | `ricky-kids-sludge-traversing-rov` |
+
+**Evidence:** [The demo is the paper — Sludge-Traversing ROV, the full write-up (PDF)](/papers/ricky-kids-sludge-traversing-rov.pdf) · [Then the test lane — a density dial, three drives, and the traction limit](/demo/sludge-envelope) · [Or start in the fresh analogue and run the tracked drive into a stall](/demo/sludge-envelope?medium=fresh&run=1)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The vehicle drawings are our own SolidWorks models and the component list is the project's real one. The test-tank trials and every number on this page — densities, sinkage, run counts, success rates — are invented for this sample. Nothing here was tested in a real sewer.
 
@@ -5252,11 +5386,23 @@ The tank came first, and the vehicle below is what it produced: a sealed acrylic
 - **Paddle wheels for the surface, ducted thrusters for the fluid.** Two propulsion modes because the medium has two regimes and we could not predict which one a given line would be in. It doubles the drive count and it is why the vehicle works either side of the boundary.
 - **One sealed cylinder, transparent, with the camera looking out of the end cap.** Every wire leaves through one bulkhead. Acrylic because we needed to see condensation and seal failure before it mattered, not after.
 
-> Our own SolidWorks model, from the project paper. This is a design, not a photograph of hardware: the vehicle was modelled and costed, and no version of it was ever put into a live sewer.
+> Our own SolidWorks model, from the project paper. This is a design, not a photograph of hardware: the vehicle was modelled and costed, and no version of it was ever put into a live sewer. The test lane below is the density study rather than this vehicle: one axis, three drive configurations and the traction limit, with the runs that completed the lane drawn against the modelled envelope. Nothing in it simulates this hull, and nothing in it was ever wet. [Open the test lane — the density study, not the vehicle](/demo/sludge-envelope)
 
 ![image](/static/images/project/ricky-kids-sludge-rov-top-view.jpg)
 
 > **** Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ring and never bears on the medium. The four thrusters sit outboard on the loop, where they push without disturbing what is beneath.
+
+**The rest of the system**
+
+![Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ri](/static/images/project/ricky-kids-sludge-rov-top-view.jpg)
+
+- Top view. The pipe loop closes all the way round, so the buoyancy is distributed around the vehicle rather than concentrated under it — the electronics cylinder hangs inside the ring and never bears on the medium. The four thrusters sit outboard on the loop, where they push without disturbing what is beneath.
+
+![The test-lane demo: a density dial at 1.02 grams per cubic centimetre, three drive envelopes against a 1.15 traction limit, and a tank view showing 118 mm of sinkage against a 60 m](/static/images/project/ricky-kids-sludge-demo-lane.jpg)
+
+- **The finding on one axis** The density dial against the traction limit, with each drive's modelled envelope and the runs that actually completed the lane drawn on the same track. Run the tracked drive in the fresh analogue and it sinks past the track height while still turning. [Run the lane yourself](/demo/sludge-envelope?medium=fresh&run=1)
+
+> The vehicle drawings are our own SolidWorks models. The lane, the analogues and every number in the demo are invented for this sample, and nothing here was tested in a real sewer. The full write-up is the first link at the top of this page.
 
 ### 05 — Finding and what it changed
 
@@ -5318,7 +5464,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 | Status | Research |
 | Slug | `ricky-kids-envi-city` |
 
-**Evidence:** [Envi-city: Vision of a Sustainable Smart City of the Future — ECS Transactions 107(1)](https://doi.org/10.1149/10701.11007ecst)
+**Evidence:** [The demo is the paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007](https://doi.org/10.1149/10701.11007ecst)
 
 > **Confidentiality.** Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are invented for this sample — nothing was built, measured or deployed anywhere.
 
@@ -5398,7 +5544,7 @@ What exists is a published vision and a model that survived it. The poster below
 - **Keeping the poster on the page after cutting four fifths of it.** Replacing it with a tidy diagram of the surviving claim would have hidden the part of this project worth showing, which is the distance between what we announced and what we could support.
 - **The energy, water and waste icons stayed; the rest became context.** They are the three that share a physical boundary at block scale, so they are the only three that can be coupled rather than merely co-located.
 
-> Our own conference poster from ICTSGS 2021, with a personal email address redacted. Nothing shown was built: this is a concept presentation, and the model described on this page came afterwards.
+> Our own conference poster from ICTSGS 2021, with a personal email address redacted. Nothing shown was built: this is a concept presentation, and the model described on this page came afterwards. The full paper is linked below: the published version in ECS Transactions, which carries the eleven claims this page narrows to one. [Read the published paper](https://doi.org/10.1149/10701.11007ecst)
 
 ### 05 — Finding and what it changed
 

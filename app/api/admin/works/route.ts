@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server';
 import fs from 'node:fs';
 import path from 'node:path';
-import { workItems, filters } from '../../../work/constants';
+import { NextResponse } from 'next/server';
+import { filters, workItems } from '../../../work/constants';
 
 export async function GET(request: Request) {
 	const authHeader = request.headers.get('x-admin-password');
@@ -32,6 +32,7 @@ export const STATUS_CONFIG: Record<
 	{ label: string; colorClass: string }
 > = {
 	production: { label: 'In production', colorClass: 'status-green' },
+	development: { label: 'In development', colorClass: 'status-amber' },
 	internal: { label: 'Shipped internally', colorClass: 'status-green' },
 	'customer-testing': {
 		label: 'In customer testing',
@@ -48,6 +49,7 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
+	development: 1,
 	internal: 2,
 	'customer-testing': 3,
 	prototype: 4,
@@ -59,15 +61,18 @@ export const STATUS_ORDER: Record<string, number> = {
 const FILE_FOOTER = `
 export const filters = [
 	{ key: 'all', label: 'All' },
-	{ key: 'product', label: 'Product' },
-	{ key: 'engineering', label: 'Engineering' },
+	{ key: 'silicon', label: 'Silicon & systems' },
+	{ key: 'ai', label: 'AI programs & platforms' },
+	{ key: 'personal', label: 'Personal' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];
 `;
 
 const q = (value: unknown): string =>
-	String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+	String(value ?? '')
+		.replace(/\\/g, '\\\\')
+		.replace(/'/g, "\\'");
 
 function generateConstantsFile(items: typeof workItems): string {
 	const itemsStr = items
@@ -111,7 +116,7 @@ export async function PUT(request: Request) {
 		const content = generateConstantsFile(items);
 		fs.writeFileSync(filePath, content, 'utf-8');
 		return NextResponse.json({ success: true });
-	} catch (error) {
+	} catch {
 		return NextResponse.json(
 			{ error: 'Failed to save changes' },
 			{ status: 500 },

@@ -14,6 +14,7 @@ export const STATUS_CONFIG: Record<
 	{ label: string; colorClass: string }
 > = {
 	production: { label: 'In production', colorClass: 'status-green' },
+	development: { label: 'In development', colorClass: 'status-amber' },
 	internal: { label: 'Shipped internally', colorClass: 'status-green' },
 	'customer-testing': {
 		label: 'In customer testing',
@@ -30,6 +31,7 @@ export const STATUS_CONFIG: Record<
  */
 export const STATUS_ORDER: Record<string, number> = {
 	production: 1,
+	development: 1,
 	internal: 2,
 	'customer-testing': 3,
 	prototype: 4,
@@ -46,11 +48,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 1,
 		outcome:
 			'Second-generation body-area silicon that holds an on-body link in the single-digit milliwatt class, roughly a tenth of the radio budget it replaces.',
 		image: 'Image__2_.jpg',
 		href: 'https://www.ixana.ai/products/chips/wi-r-ban',
 		slug: 'wi-r-ban-yr31',
+		tier: 1,
+		demoUrl: 'https://www.ixana.ai/products/chips/wi-r-ban',
 		color: '#dbeafe',
 	},
 	{
@@ -61,26 +66,31 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 4,
 		outcome:
-			'Turned Wi-R eval silicon into a shipping dev kit — partner teams bring up a working on-body link in under a day instead of weeks of RF debugging.',
+			'Turned Wi-R eval silicon into a shipping dev kit built around one acceptance bar: open the box, reach an on-body link the same day — every variable that killed early bring-ups fixed inside it.',
 		image: 'Image__10_.jpg',
 		href: 'https://www.ixana.ai/products/dev-kits',
 		slug: 'wi-r-dev-kits-ban-yr23-and-nfe-xa-nfe2001',
+		tier: 3,
+		demoUrl: 'https://www.ixana.ai/products/dev-kits',
 		color: '#dbeafe',
 	},
 	{
 		title: 'Ixana-Wiki — multifile RAG knowledge platform',
 		company: 'Ixana',
-		year: '2026 ',
+		year: '2025',
 		domain: 'Internal platform',
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 1,
 		outcome:
 			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
 		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
-		href: 'https://github.com/PushpalDas/Ixana-Wiki',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
+		tier: 1,
+		demoUrl: 'https://xana-nine.vercel.app/',
 		color: '#dbeafe',
 	},
 	{
@@ -91,10 +101,12 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'research',
+		order: 1,
 		outcome:
-			'Proved a retrieval engine can answer scripture questions with zero fabricated citations across 100 evaluated answers, up from 17.',
+			'A deterministic guard strips any citation retrieval never returned — fabrication is prevented by architecture, not reduced by prompting — and a distance gate makes refusal a first-class answer.',
 		image: 'Image__1_.jpg',
 		slug: 'dsa-generative-ai-engine-for-a-guided-spiritual-path',
+		tier: 1,
 		color: '#dbeafe',
 	},
 	{
@@ -105,11 +117,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 2,
 		outcome:
 			'The first Wi-R body-area part to reach customer hardware — the silicon under the BAN dev kit and every on-body reference design that followed.',
 		image: 'Image__3_.jpg',
 		href: 'https://www.ixana.ai/products/chips/wi-r-ban',
 		slug: 'wi-r-ban-yr23',
+		tier: 3,
+		demoUrl: 'https://www.ixana.ai/products/chips/wi-r-ban',
 		color: '#ffedd5',
 	},
 	{
@@ -120,11 +135,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'research',
+		order: 3,
 		outcome:
 			'Replaced ad-hoc spike-train scripts with one standardized feature set, so two labs computing "burst index" finally mean the same thing.',
 		image: 'Gemini_Generated_Image_xejg8vxejg8vxejg.png',
 		href: 'https://drive.google.com/drive/u/0/folders/1B0mtA9-xkNbbo6ZUXztuHZiMmlovNtLw',
+		demoUrl: '/demo/neuroadapt',
 		slug: 'neuroadapt-agentic-rag-engine-for-neuroscience-research',
+		tier: 3,
 		color: '#dbeafe',
 	},
 	{
@@ -135,11 +153,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 6,
 		outcome:
-			'Successor near-field part that widened usable coupling range without raising the transmit power budget partners had already designed around.',
+			'Successor near-field part: 20 Mbit/s PHY, ~13.5 Mbit/s real throughput — a 100 MB firmware image inside a one-minute service window, on the same sub-6 mW budget.',
 		image: 'Image__8_.jpg',
 		href: 'https://www.ixana.ai/products/chips/wi-r-nfe',
 		slug: 'wi-r-nfe-xa-nfe3001',
+		tier: 3,
+		demoUrl: 'https://www.ixana.ai/products/chips/wi-r-nfe',
 		color: '#dbeafe',
 	},
 	{
@@ -150,11 +171,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 3,
 		outcome:
 			'The near-field electric part that moved Wi-R from a lab demonstration to a component a partner could design into a product.',
 		image: 'Image__9_.jpg',
 		href: 'https://www.ixana.ai/products/chips/wi-r-nfe',
 		slug: 'wi-r-nfe-xa-nfe2001',
+		tier: 3,
+		demoUrl: 'https://www.ixana.ai/products/chips/wi-r-nfe',
 		color: '#dbeafe',
 	},
 	{
@@ -165,8 +189,10 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 13,
 		outcome:
 			'Hyperspectral workflow that estimated surface mineral abundance from satellite bands, taking a field-sampling round out of the survey loop.',
+		tier: 4,
 		image: 'Image__5_.jpg',
 		href: 'https://drive.google.com/drive/u/0/folders/1tYViz5kUrsL5PZ_9DsghxZ1uno1qYQzs',
 		color: '#dbeafe',
@@ -178,25 +204,32 @@ export const workItems: WorkItem[] = [
 		domain: 'Learning tools',
 		category: 'product',
 		track: 'ai',
-		status: 'prototype',
+		status: 'research',
+		order: 7,
 		outcome:
-			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.',
+			'A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a research build and never went out to learners.',
 		image: 'Gemini_Generated_Image_dafj5odafj5odafj.png',
 		slug: 'quantum-circuit-simulator-interactive-10-qubit-delivering-re',
+		tier: 3,
+		demoUrl: '/demo/quantum-simulator',
 		color: '#dbeafe',
 	},
 	{
-		title: 'Procurement Orchestrator — M365-native request workflow',
+		title:
+			'Ops Orchestrator — procurement, shipment and presentation workflows on M365',
 		company: 'Ixana',
-		year: '2026 ',
-		domain: 'Procurement ops',
+		year: '2026',
+		domain: 'Ops workflows',
 		category: 'product',
 		track: 'ai',
 		status: 'customer-testing',
+		order: 15,
 		outcome:
-			'In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.',
-		image: 'Gemini_Generated_Image_ene5eiene5eiene5__1_.png',
-		slug: 'procurement-orchestrator-procurement-process-automation-with',
+			'In pilot across three request streams: one operating contract names a person within a business day, and no purchase, shipment or Thursday slot moves without a recorded decision.',
+		image: 'procurement-orchestrator-card.png',
+		slug: 'ixana-ops-orchestrator',
+		tier: 2,
+		demoUrl: '/demo/ops-desk',
 		color: '',
 	},
 	{
@@ -207,11 +240,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 11,
 		outcome:
 			'Replaced a paper key register with an audited electronic cabinet, shipped as a catalogue product with per-key accountability.',
 		image: 'Image__1_.png',
 		href: 'https://eegrab.com/wp-content/uploads/2021/brochure/Wishkey_brochure.pdf',
 		slug: 'eegrab-wishkey',
+		tier: 3,
+		demoUrl: 'https://www.youtube.com/watch?v=8etIl_0wj0I',
 		color: '#dbeafe',
 	},
 	{
@@ -222,11 +258,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 5,
 		outcome:
 			'Reference designs proving Wi-R carries live video to smartglasses and voice to a tactical radio over the body rather than the air.',
 		image: 'Gemini_Generated_Image_ef658pef658pef65.png',
 		href: 'https://www.ixana.ai/products/reference-designs',
 		slug: 'wi-r-reference-designs',
+		tier: 3,
+		demoUrl: 'https://www.ixana.ai/products/reference-designs',
 		color: '#dbeafe',
 	},
 	{
@@ -237,39 +276,104 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 13,
 		outcome:
 			'Cut the smartwatch bill of materials to a price Indian retail could carry while keeping heart-rate sensing and phone notifications.',
 		image: 'Gemini_Generated_Image_io6t60io6t60io6t.png',
 		slug: 'eegrab-smart-watch',
+		tier: 3,
 		color: '#dbeafe',
 	},
 	{
-		title: 'AMS monthly performance dashboard — automated RCA reporting',
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer, no date. The case study says the same, at more length.
+		title: 'Wi-R — XA-XXXXXXX · customer sampling',
+		company: 'Ixana',
+		year: 'Current',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 7,
+		outcome:
+			'The next Wi-R part, now with customers for sampling. Part number and specification withheld.',
+		image: 'confidential-chip.png',
+		slug: 'wi-r-xa-customer-sampling',
+		tier: 3,
+		color: '#fef3c7',
+	},
+	{
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer, no date. The case study says the same, at more length.
+		title: 'Confidential platform chip — XA-XXXXXXX',
+		company: 'Ixana',
+		year: 'Current',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 8,
+		outcome:
+			'A new platform chip, ahead of its sampling tapeout. What it is for stays confidential until it ships.',
+		image: 'confidential-chip.png',
+		slug: 'confidential-platform-chip',
+		tier: 3,
+		color: '#fef3c7',
+	},
+	{
+		// Confidential silicon in flight, at the author's request (2026-09-10).
+		// Identified by line and stage only: no part number, no application,
+		// no customer, no date. The case study says the same, at more length.
+		title: 'Wi-R — XA-XXXXXXX · next generation',
+		company: 'Ixana',
+		year: 'Current',
+		domain: 'Silicon',
+		category: 'product',
+		track: 'silicon',
+		status: 'development',
+		order: 9,
+		outcome:
+			'The Wi-R generation after that, ahead of its production tapeout. Part number and specification withheld.',
+		image: 'confidential-chip.png',
+		slug: 'wi-r-xa-next-generation',
+		tier: 3,
+		color: '#fef3c7',
+	},
+	{
+		title: 'The internal AI program — fourteen tools, one doctrine',
+		company: 'Ixana',
+		year: '2025 - 2026',
+		domain: 'Internal platform',
+		category: 'product',
+		track: 'ai',
+		status: 'internal',
+		tier: 2,
+		programHead: true,
+		outcome:
+			'What it is to build the internal AI operating system of a silicon company: fourteen tools under one doctrine — deterministic counts, model-written prose, provenance on every claim, and refusal where the data runs out.',
+		image: 'ixana-wiki-search.jpg',
+		slug: 'ixana-internal-ai-program',
+		demoUrl: 'https://xana-nine.vercel.app/',
+		color: '#dbeafe',
+	},
+	{
+		title: 'Team performance reporting — five teams, three windows',
 		company: 'Ixana',
 		year: '2026 ',
 		domain: 'Delivery reporting',
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 4,
 		outcome:
-			'Monthly AMS performance report went from a two-day manual compile to one automated run that produces six dashboard sheets.',
-		image: 'Image__14_.jpg',
-		slug: 'ai-pm-generative-ai-engine-for-rca-report-automation',
+			'One engine produces the weekly, monthly and quarterly performance report for all five delivery teams — four of which had no standing report at all.',
+		image: 'team-performance-cover.png',
+		slug: 'team-performance-reporting',
+		tier: 2,
+		demoUrl: '/demo/team-performance',
 		color: '#ddd6fe',
-	},
-	{
-		title: 'Automated engineering bandwidth reporting',
-		company: 'Ixana',
-		year: '2025',
-		domain: 'Resource planning',
-		category: 'product',
-		track: 'ai',
-		status: 'internal',
-		outcome:
-			'Capacity forecasts across 58 task lists and 30 engineers stopped depending on developers remembering to file an update.',
-		image: 'Gemini_Generated_Image_gqlkm8gqlkm8gqlk.png',
-		slug: 'ai-pm-generative-ai-engine-for-resource-allocation',
-		color: '#fae8ff',
 	},
 	{
 		title: 'Scrum ecosystem — one workspace for sprint ceremonies',
@@ -279,9 +383,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 8,
 		outcome:
 			'Standup, backlog and burndown now read from the same task data instead of three separately maintained views.',
-		image: 'Image__15_.jpg',
+		image: 'Gemini_Generated_Image_yx3tutyx3tutyx3t.png',
+		slug: 'ixana-scrum-ecosystem',
+		tier: 2,
+		demoUrl: '/demo/scrum-desk',
 		color: '#fae8ff',
 	},
 	{
@@ -292,10 +400,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 2,
 		outcome:
-			'One live view across the PS, AMS and RTL pipelines — leads stopped assembling the weekly review deck from three sources.',
-		image: 'Gemini_Generated_Image_8c4hfs8c4hfs8c4h.png',
+			'One live view across the PS, AMS and RTL pipelines — three stage vocabularies kept, one shared surface, and an assistant that answers from filtered records or refuses.',
+		image: 'flow-tracker-card.jpg',
 		slug: 'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
+		tier: 1,
+		demoUrl: 'https://xana-nine.vercel.app/efficiency?view=tracker',
 		color: '#fae8ff',
 	},
 	{
@@ -306,10 +417,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 11,
 		outcome:
-			'Turned a raw activity feed into a searchable who-changed-what timeline, so audit questions get answered in seconds not hours.',
-		image: 'Image__16_.jpg',
+			'Turned a raw activity feed into a searchable who-changed-what timeline — previous values retained, raw payloads stored before parsing, every retry deduplicated.',
+		image: 'Gemini_Generated_Image_s7x6ths7x6ths7x6.png',
 		slug: 'github-for-clickup-automation-on-the-changes-going-outside-p',
+		tier: 2,
+		demoUrl: '/demo/clickup-audit',
 		color: '#fae8ff',
 	},
 	{
@@ -320,10 +434,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 7,
 		outcome:
 			'Made every recording searchable by transcript, so people jump to the minute that matters instead of scrubbing an hour of video.',
 		image: 'Gemini_Generated_Image_i9dz41i9dz41i9dz.png',
 		slug: 'ixana-video-library-automated-company-video-library',
+		tier: 2,
+		demoUrl: 'https://xana-nine.vercel.app/videolibrary',
 		color: '#fae8ff',
 	},
 	{
@@ -334,10 +451,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 10,
 		outcome:
-			'Ended the double-booking that came from living in two tenants, without exposing a single private event title across them.',
-		image: 'Gemini_Generated_Image_18w83818w83818w8.png',
+			'Kept two calendar tenants in step without a single event title able to cross - reflected time is an opaque block by design, and every write previews before it lands.',
+		image: 'Gemini_Generated_Image_s97ql7s97ql7s97q.png',
 		slug: 'calendar-automation-real-time-bi-directional-sync-engine-wit',
+		demoUrl: '/demo/calendar-sync',
+		tier: 2,
 		color: '#fae8ff',
 	},
 	{
@@ -348,10 +468,14 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'customer-testing',
+		order: 16,
 		outcome:
 			'In pilot: benchmarks a role against market bands and drafts an offer range where every figure traces back to its source.',
-		image: 'Image__17_.jpg',
+		image: 'Gemini_Generated_Image_km636skm636skm63.png',
+		slug: 'ai-salary-generator',
+		tier: 2,
 		href: 'https://www.ixana.ai/products',
+		demoUrl: '/demo/salary-bands',
 		color: '#fee2e2',
 	},
 	{
@@ -362,10 +486,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 5,
 		outcome:
-			'Turns a raw brief into a reviewed, execution-ready plan in 3–8 minutes, with a second model required to approve the first one.',
+			"Turns a raw brief into a reviewed, execution-ready plan — a different model must approve the planner's work, enforced in code, and unknowns stop the pipeline instead of being papered over.",
 		image: 'Gemini_Generated_Image_6dagw16dagw16dag.png',
 		slug: 'ai-prd-multi-agent-multi-llm-shared-memory-generative-system',
+		tier: 2,
+		demoUrl: '/demo/prd-os',
 		color: '#dbeafe',
 	},
 	{
@@ -375,11 +502,14 @@ export const workItems: WorkItem[] = [
 		domain: 'Legal tooling',
 		category: 'product',
 		track: 'ai',
-		status: 'prototype',
+		status: 'customer-testing',
+		order: 14,
 		outcome:
-			'Built and tested the provenance, cost and containment core, then stopped before the drafting agents because prior-art recall was not proven.',
-		image: 'Gemini_Generated_Image_1i9ozk1i9ozk1i9o.png',
+			'Drafts an attorney-review filing package — and refuses a novelty conclusion when the search looked in the wrong art, with the roadmap-deciding corpus measurement real and computed over public patent data.',
+		image: 'Gemini_Generated_Image_3huiw63huiw63hui.png',
 		slug: 'ai-lawyer-multi-agent-multi-llm-shared-memory-generative-sys',
+		tier: 1,
+		demoUrl: '/demo/ai-lawyer',
 		color: '#dbeafe',
 	},
 	{
@@ -390,10 +520,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 6,
 		outcome:
 			'Gave leads a read-only Gantt and bandwidth view over live task data, with AI explaining why each late task actually slipped.',
-		image: 'Gemini_Generated_Image_h59yuyh59yuyh59y.png',
+		image: 'Gemini_Generated_Image_o6qjjgo6qjjgo6qj.png',
 		slug: 'ai-pm-customized-multi-view-for-pms',
+		tier: 2,
+		demoUrl: '/demo/clickup-gantt',
 		color: '#dbeafe',
 	},
 	{
@@ -404,9 +537,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 9,
 		outcome:
 			'Kept transcripts and minutes inside the tenant instead of routing every internal meeting through a third-party bot.',
 		image: 'Image__18_.jpg',
+		slug: 'ixana-meeting-notetaker',
+		tier: 2,
+		demoUrl: 'https://xana-nine.vercel.app/meetingrecordings',
 		color: '#dbeafe',
 	},
 	{
@@ -417,24 +554,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 3,
 		outcome:
-			'Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.',
+			'Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar and a drafting clock on which every date is a cited message.',
 		image: 'Gemini_Generated_Image_strjxvstrjxvstrj.png',
 		slug: 'ixana-patent-program',
-		color: '#dbeafe',
-	},
-	{
-		title: 'Patent dashboard sync',
-		company: 'Ixana',
-		year: '2025',
-		domain: 'Portfolio ops',
-		category: 'product',
-		track: 'ai',
-		status: 'internal',
-		outcome:
-			'Stopped the patent dashboard double-counting continuation rows, and made the master workbook rebuild itself from its three sources.',
-		image: 'Image__19_.jpg',
-		slug: 'patent-tracker-generative-ai-engine-for-data-extraction',
+		tier: 2,
+		demoUrl: 'https://xana-nine.vercel.app/patents',
 		color: '#dbeafe',
 	},
 	{
@@ -445,10 +571,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'ai',
 		status: 'internal',
+		order: 12,
 		outcome:
-			'A daily sync that versions and diffs every workspace doc, so the 34 of 301 that changed last night are visible without asking.',
-		image: 'Image__21_.jpg',
+			'A daily sync that versions and diffs every workspace document - immutable versions only on real content change, and nothing tracked is ever pruned.',
+		image: 'Gemini_Generated_Image_jt9prtjt9prtjt9p.png',
 		slug: 'clickup-document-tracker-data-extraction-easy-visibility-for',
+		tier: 2,
+		demoUrl: 'https://xana-nine.vercel.app/myfiles?tab=clickup',
 		color: '#dbeafe',
 	},
 	{
@@ -459,10 +588,12 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 12,
 		outcome:
-			'Brought a studio-class condenser capsule to a shippable price by redesigning the preamp around a cheaper JFET front end.',
+			'Refused to sort capsules and calibrated every unit instead — gain taken passively in a transformer before any active part, and a trim that may correct but never rescue.',
 		image: 'Gemini_Generated_Image_cqoga8cqoga8cqog.png',
 		slug: 'eegrab-condenser-microphone',
+		tier: 3,
 		color: '#dbeafe',
 	},
 	{
@@ -480,6 +611,7 @@ export const workItems: WorkItem[] = [
 	},
 	{
 		slug: 'slb-sensor-signal-generator',
+		tier: 3,
 		title: 'Sensor signal generator',
 		company: 'SLB',
 		year: '2023',
@@ -487,6 +619,7 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'production',
+		order: 10,
 		outcome:
 			'Bench instrument that synthesised downhole sensor signals, so tool electronics could be tested without waiting on a well.',
 		image: 'Gemini_Generated_Image_dwoxzldwoxzldwox.png',
@@ -500,10 +633,17 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'prototype',
+		order: 1,
 		outcome:
 			'Flapping-wing surveillance airframe that flew a stable circuit; it stayed in the lab and never went to an operator.',
-		image: 'Image__20_.jpg',
+		// The wide airframe render, at the author's request (2026-09-10). The
+		// "… copy.png" beside it in the folder is byte-identical; this is the
+		// one without the space in its name. demo-card-ornithopter.jpg is the
+		// demo's own capture and is not used on the card.
+		image: 'Gemini_Generated_Image_aglyabaglyabagly.png',
 		slug: 'srm-uav-ornithopter-for-surveillance',
+		tier: 3,
+		demoUrl: '/demo/ornithopter-concept',
 		href: 'https://drive.google.com/drive/u/0/folders/1v5Woj-5XMv07hJ-PMSneMdFDRAmq5nQs',
 		color: '#dbeafe',
 	},
@@ -515,10 +655,12 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 8,
 		outcome:
 			'Feasibility study on whether a small EV could offset more carbon than it embodied — the answer turned entirely on grid mix.',
 		image: 'Gemini_Generated_Image_y44ktyy44ktyy44k.png',
 		slug: 'ricky-kids-carbon-positive-ev',
+		tier: 3,
 		href: 'https://drive.google.com/drive/u/0/folders/1UFIFRPfj_T6rlZwSt5imc6q1aBv4Wm-e',
 		color: '#dbeafe',
 	},
@@ -530,10 +672,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 5,
 		outcome:
 			'Tested whether a UAV-carried reflector could calibrate ground weather radar in place, instead of a fixed tower reference.',
 		image: 'Gemini_Generated_Image_wzokgjwzokgjwzok.png',
 		slug: 'ricky-kids-uav-weather-radar-calibration',
+		tier: 3,
+		demoUrl: '/demo/radar-error-budget',
 		href: 'https://drive.google.com/drive/u/0/folders/1rDmPZo8yHV0OFcVruwNqiDJHfU8SeUED',
 		color: '#dbeafe',
 	},
@@ -545,10 +690,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 6,
 		outcome:
-			'Measured respiration rate at a distance with a thermal and radar pair, so isolation wards could monitor without contact.',
+			'Bench-tested which vital signs survive distance: temperature and respiration have a non-contact route; the two staff escalate on do not — a study that concluded against its own premise.',
 		image: 'Gemini_Generated_Image_fpkpjsfpkpjsfpkp.png',
 		slug: 'ricky-kids-noncontact-covid-monitoring',
+		tier: 3,
+		demoUrl: '/demo/covid-bench',
 		href: 'https://drive.google.com/drive/u/0/folders/198wp9t5QOvHIX3rZbVzw9IehQD7HToc5',
 		color: '#dbeafe',
 	},
@@ -558,12 +706,15 @@ export const workItems: WorkItem[] = [
 		year: '2022',
 		domain: 'Road safety',
 		category: 'product',
-		track: 'ai',
+		// No track: taken off the AI programs & platforms pill at the author's
+		// request (2026-09-02). Reachable from All only.
 		status: 'internal',
 		outcome:
 			'Vision model that flagged three-up motorcycle riding in roadside footage, used internally to score road-safety survey clips.',
 		image: 'Gemini_Generated_Image_6d6qur6d6qur6d6q.png',
 		slug: 'ricky-kids-triple-riding-avoidance',
+		tier: 1,
+		demoUrl: '/demo/rider-count',
 		href: 'https://drive.google.com/drive/u/0/folders/11Bx3DJGQsSQoCqb6T8OjxarnfehbDbIk',
 		color: '#dbeafe',
 	},
@@ -575,10 +726,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'prototype',
+		order: 2,
 		outcome:
 			'Sensory play prototypes designed with two special-education teachers — built and demonstrated, never taken past the workshop.',
 		image: 'Screenshot_2026-07-06_161758.png',
 		slug: 'ricky-kids-toys-for-autistic-kids',
+		tier: 3,
+		demoUrl: '/demo/autism-bench',
 		href: 'https://drive.google.com/drive/u/0/folders/14Cx5kE8ckME3dmSky9t9Eryn2wERSMcC',
 		color: '#dbeafe',
 	},
@@ -590,10 +744,13 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 2,
 		outcome:
 			'Studied whether a tracked ROV could cross settled sludge without fluidising it — traction failed below a density threshold.',
 		image: 'Gemini_Generated_Image_gx3u69gx3u69gx3u.png',
 		slug: 'ricky-kids-sludge-traversing-rov',
+		tier: 3,
+		demoUrl: '/demo/sludge-envelope',
 		href: 'https://drive.google.com/drive/u/0/folders/1xcXPJ-9sD7xQWy-5TUwYhE5nlHJs1pqI',
 		color: '#dbeafe',
 	},
@@ -812,19 +969,35 @@ export const workItems: WorkItem[] = [
 		category: 'product',
 		track: 'silicon',
 		status: 'research',
+		order: 4,
 		outcome:
 			'Concept study modelling water, power and waste for a city block as one loop rather than three separate utilities.',
 		image: 'Gemini_Generated_Image_orqf1borqf1borqf.png',
 		slug: 'ricky-kids-envi-city',
+		tier: 3,
+		demoUrl: '/demo/envi-city',
 		href: 'https://drive.google.com/drive/u/0/folders/1XhqFiIQJZtQN9ZVzuRBbMfDo5szeg9W0',
 		color: '#dbeafe',
 	},
 ];
 
+/**
+ * One flat row. The two product tracks are the filter now — the old
+ * Product/Engineering split had Products standing in front of the two
+ * groupings people actually browse by, so it was collapsed into them.
+ * Engineering builds file under Others.
+ *
+ * `prototypes` is the one pill that cuts the other way: it filters by
+ * maturity, not by track. It is the shelf for work that has not shipped,
+ * wherever it came from. Silicon & systems shows shipped work only, so
+ * its prototypes and research live on that shelf alone; AI programs &
+ * platforms keeps its unshipped items in both places.
+ */
 export const filters = [
 	{ key: 'all', label: 'All' },
-	{ key: 'product', label: 'Product' },
-	{ key: 'engineering', label: 'Engineering' },
+	{ key: 'silicon', label: 'Silicon & systems' },
+	{ key: 'ai', label: 'AI programs & platforms' },
+	{ key: 'personal', label: 'Personal' },
 ] as const;
 
 export type FilterKey = (typeof filters)[number]['key'];

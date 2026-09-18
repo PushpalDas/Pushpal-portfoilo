@@ -38,7 +38,7 @@ export default function AboutHeader() {
 						<div className='about-header-subline-wrap'>
 							<p className='about-header-subline'>
 								I&apos;m Pushpal Das. I build products where electronics meets
-								people — currently Principal PM in the CTO&apos;s office at
+								people — currently PM in the CTO&apos;s office at
 								Ixana.
 							</p>
 							<p className='about-header-note'>
