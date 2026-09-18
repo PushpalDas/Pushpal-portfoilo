@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drafting Clock — the patent programme's nine-stage timeline</title>
+<meta name="description" content="Interactive demo of the drafting clock inside Ixana's patent programme: nine drafting stages per matter, every date read from a mail, a calendar event or a Teams message, days between stages measured against the T0 targets, a stage card whose reasons for delay cite the messages they rest on, and the provenance and review queues a person works.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..700&display=swap">
+</head>
+<body>
+<style>
+/* ============================================================
+   Drafting Clock — interactive demo. Tier-B sibling of the
+   deployed XANA app and of Ops Desk: the same warm near-black
+   ground, #1A1410 surfaces under 1px #3A3028 borders, one
+   #FF6321 accent held for primary actions and hero numbers,
+   13px dense UI with mono tabular numerics. The layout is this
+   product's own: a nine-column stage grid whose cells carry a
+   date and, beneath it, the days taken against the target.
+   Deliberately single-theme dark; every colour painted.
+   ============================================================ */
+:root {
+  color-scheme: dark;
+  --bg: #0E0805; --surface: #1A1410; --surface-2: #221A14; --surface-3: #2A2420; --deep: #140F0B;
+  --line: #3A3028; --line-hover: #5A4838; --line-soft: #2A2018; --hairline: rgba(255,255,255,0.06);
+  --ink: #FFFFFF; --body: #E0E0E0; --prose: #E8E0D8; --warm: #C0B6AC; --dim: #A89888; --muted: #808080; --faint: #606060;
+  --accent: #FF6321; --accent-deep: #CD3D00; --accent-soft: #FF8A56;
+  --ok: #22C55E; --warn: #F59E0B; --warn-hi: #FFB020; --crit: #EF4444; --crit-soft: #F87171;
+  --grad: linear-gradient(90deg, #CD3D00 0%, #FF6321 100%);
+  --glow: 0 4px 12px rgba(255,99,33,0.16); --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  --sans: "Geist", Arial, Helvetica, sans-serif; --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --dur: 200ms; --ease: cubic-bezier(0.16, 1, 0.3, 1); --gx: 16px;
+}
+@media (min-width: 768px) { :root { --gx: 24px; } }
+@media (min-width: 1100px) { :root { --gx: 48px; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--body); font-family: var(--sans); font-size: 13px; line-height: 1.6; letter-spacing: -0.1px; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; padding: 0; }
+select, input { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { position: sticky; top: 0; z-index: 40; background: rgba(14,8,5,0.72); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid var(--hairline); }
+.topbar-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; max-width: 1400px; margin: 0 auto; padding: 14px var(--gx) 10px; }
+.brand { display: flex; align-items: center; gap: 11px; margin-right: auto; }
+.mark { width: 30px; height: 30px; border-radius: 8px; flex: none; background: linear-gradient(135deg, #CD3D00 0%, #FF6321 100%); display: grid; place-items: center; color: #fff; box-shadow: var(--glow); }
+.mark svg { width: 16px; height: 16px; }
+.brand-t { display: flex; flex-direction: column; }
+.brand .eyebrow { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.brand h1 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink); line-height: 1.25; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(255,255,255,0.09); background: rgba(255,255,255,0.03); border-radius: 999px; padding: 5px 11px; font-family: var(--mono); font-size: 11px; color: var(--warm); white-space: nowrap; }
+.chip b { color: var(--ink); font-weight: 600; }
+.chip.ok { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.08); color: var(--ok); } .chip.ok b { color: var(--ok); }
+.chip.warn { border-color: rgba(255,176,32,0.45); background: rgba(255,176,32,0.10); color: var(--warn-hi); } .chip.warn b { color: var(--warn-hi); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.good { background: var(--ok); } .dot.warn { background: var(--warn-hi); } .dot.accent { background: var(--accent); }
+.views { display: flex; gap: 4px; max-width: 1400px; margin: 0 auto; padding: 0 var(--gx); overflow-x: auto; scrollbar-width: none; }
+.views::-webkit-scrollbar { display: none; }
+.views button { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 10px 12px 12px; font-size: 13px; font-weight: 600; color: var(--muted); white-space: nowrap; transition: color var(--dur) var(--ease); }
+.views button:hover, .views button[aria-current="true"] { color: var(--ink); }
+.views button[aria-current="true"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--accent); border-radius: 2px 2px 0 0; }
+.views button .n { font-family: var(--mono); font-size: 9.5px; color: var(--faint); }
+.views button[aria-current="true"] .n { color: var(--accent); }
+.views button .tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); border: 1px solid var(--line-soft); border-radius: 999px; padding: 1px 7px; }
+.paramnote { max-width: 1400px; margin: 0 auto; padding: 8px var(--gx) 12px; font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.paramnote b { color: var(--warm); font-weight: 600; }
+
+.pane { flex: 1; max-width: 1400px; width: 100%; margin: 0 auto; padding: 26px var(--gx) 56px; }
+.head { margin-bottom: 20px; }
+.head .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.head h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.7px; color: var(--ink); }
+.head p { margin: 0; max-width: 84ch; color: var(--warm); font-size: 13px; line-height: 1.65; }
+.head p b { color: var(--prose); }
+.card { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 18px 20px; margin: 0 0 16px; }
+.card > h3 { margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.card > h3 .sub { font-weight: 500; color: var(--muted); font-size: 11px; font-family: var(--mono); }
+.card > p { margin: 0 0 10px; font-size: 12px; color: var(--dim); max-width: 92ch; line-height: 1.65; }
+.card > p b { color: var(--prose); font-weight: 600; }
+.card > p:last-child { margin-bottom: 0; }
+.badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--warm); vertical-align: middle; }
+.badge.auto { border-color: rgba(255,99,33,0.35); color: var(--accent-soft); background: rgba(255,99,33,0.08); }
+.badge.human { border-color: rgba(255,176,32,0.45); color: var(--warn-hi); background: rgba(255,176,32,0.10); }
+.badge.ok { border-color: rgba(34,197,94,0.35); color: var(--ok); background: rgba(34,197,94,0.08); }
+.badge.bad { border-color: rgba(239,68,68,0.40); color: var(--crit-soft); background: rgba(239,68,68,0.09); }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(216px, 1fr)); gap: 14px; }
+.tile { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; background: var(--surface); }
+.tile h4 { margin: 0 0 6px; font-size: 12px; color: var(--warm); font-weight: 600; }
+.tile .n { font-family: var(--mono); font-size: 28px; color: var(--ink); letter-spacing: -0.8px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .n small { font-size: 11px; color: var(--muted); margin-left: 5px; letter-spacing: 0; }
+.tile .n.acc { color: var(--accent); }
+.tile .why { font-size: 11px; color: var(--muted); margin: 8px 0 0; line-height: 1.5; }
+.btn { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; font-size: 12px; font-weight: 600; color: var(--warm); background: var(--surface-2); transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+.btn:hover { border-color: var(--line-hover); color: var(--ink); }
+.btn.primary { border-color: transparent; background: var(--grad); color: #fff; }
+.btn.small { padding: 5px 10px; font-size: 11px; }
+.btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.btnrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.hint { font-size: 11px; color: var(--muted); }
+.filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 12px; font-size: 12px; color: var(--warm); }
+.filters select, .filters input { background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--ink); font-size: 12px; }
+.filters input { width: 240px; }
+.filters label { display: inline-flex; align-items: center; gap: 6px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 11.5px; color: var(--muted); margin: 0 0 10px; }
+.legend .g { color: var(--ok); font-weight: 600; font-family: var(--mono); } .legend .y { color: var(--warn-hi); font-weight: 600; font-family: var(--mono); } .legend .r { color: var(--crit-soft); font-weight: 600; font-family: var(--mono); }
+
+/* the nine-column grid */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; font-size: 12.5px; min-width: 1320px; width: 100%; }
+thead th { background: var(--surface-2); color: var(--warm); font-weight: 600; text-align: center; padding: 10px 8px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line-soft); vertical-align: bottom; }
+thead th:first-child { text-align: left; border-left: 0; position: sticky; left: 0; z-index: 3; background: var(--surface-2); min-width: 250px; }
+thead th .st { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); display: block; }
+thead th .tg { font-family: var(--mono); font-size: 9.5px; color: var(--muted); display: block; margin-top: 2px; font-weight: 500; }
+tbody td { padding: 0; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); text-align: center; vertical-align: middle; }
+tbody td:first-child { text-align: left; border-left: 0; position: sticky; left: 0; z-index: 2; background: var(--surface); padding: 10px 12px; }
+tbody tr:hover td { background: var(--surface-2); }
+tbody tr:hover td:first-child { background: var(--surface-2); }
+.ref { font-weight: 600; color: var(--ink); display: block; }
+.ref .id { font-family: var(--mono); color: var(--accent); font-size: 11px; margin-right: 6px; }
+.refsub { font-size: 11px; color: var(--muted); display: block; margin-top: 1px; }
+.cell { display: block; padding: 9px 8px; cursor: pointer; min-width: 112px; }
+.cell:hover { background: rgba(255,99,33,0.06); }
+.cell.active { box-shadow: inset 0 0 0 2px var(--accent); }
+.date { font-family: var(--mono); font-size: 12px; color: var(--ink); font-weight: 500; }
+.date.none { color: var(--faint); }
+.date .flag { color: var(--warn-hi); margin-left: 3px; }
+.gap { font-family: var(--mono); font-size: 11px; margin-top: 2px; font-weight: 600; }
+.gap .g { color: var(--ok); } .gap .y { color: var(--warn-hi); } .gap .r { color: var(--crit-soft); } .gap .gr { color: var(--muted); }
+.gap .sofar { font-size: 9.5px; color: var(--muted); font-weight: 400; }
+.gap.pending { font-style: italic; }
+.pill { display: inline-block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; border: 1px solid rgba(255,99,33,0.35); color: var(--accent-soft); background: rgba(255,99,33,0.08); }
+.pill.done { border-color: rgba(34,197,94,0.35); color: var(--ok); background: rgba(34,197,94,0.08); }
+.pill.wait { border-color: rgba(255,176,32,0.45); color: var(--warn-hi); background: rgba(255,176,32,0.10); }
+.pill.miss { border-color: var(--line); color: var(--muted); background: transparent; }
+
+/* stage card = drawer */
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,0.55); opacity: 0; pointer-events: none; transition: opacity 0.35s var(--ease); z-index: 60; }
+.scrim.show { opacity: 1; pointer-events: auto; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(600px, 94vw); background: var(--deep); border-left: 1px solid var(--line); transform: translateX(100%); transition: transform 0.35s var(--ease); z-index: 70; overflow-y: auto; padding: 22px 24px 44px; }
+.drawer.show { transform: none; }
+.drawer h3 { margin: 0 0 4px; font-size: 17px; color: var(--ink); font-weight: 700; letter-spacing: -0.4px; }
+.drawer .dsub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0 0 16px; }
+.drawer .x { position: absolute; top: 14px; right: 16px; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; color: var(--warm); font-size: 18px; }
+.facts { display: grid; grid-template-columns: 128px 1fr; gap: 4px 12px; font-size: 12.5px; }
+.facts dt { color: var(--muted); } .facts dd { margin: 0; color: var(--prose); }
+.status { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 0 0 14px; }
+.status h5 { margin: 0 0 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.status p { margin: 0; color: var(--prose); font-size: 13px; line-height: 1.6; }
+.reason { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line-soft); }
+.reason:first-of-type { border-top: 0; }
+.party { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; text-align: center; border-radius: 6px; padding: 4px 6px; color: #fff; margin-top: 2px; }
+.party.firm { background: #a4532a; } .party.internal { background: #1f4d8c; } .party.open { background: #6a4a7e; }
+.reason p { margin: 0; font-size: 12.5px; color: var(--prose); line-height: 1.55; }
+.cite { display: inline-block; font-family: var(--mono); font-size: 10px; color: var(--accent-soft); border: 1px solid rgba(255,99,33,0.4); border-radius: 5px; padding: 0 5px; margin-left: 4px; cursor: pointer; }
+.cite:hover { background: rgba(255,99,33,0.12); }
+.ev { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: var(--surface); font-size: 12px; }
+.ev .evh { display: flex; gap: 10px; align-items: center; font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-bottom: 4px; }
+.ev .evh b { color: var(--accent-soft); font-weight: 600; }
+.ev .side { border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; }
+.ev p { margin: 0; color: var(--warm); }
+.summ { font-size: 12.5px; color: var(--warm); line-height: 1.65; }
+.aicap { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 8px; }
+.block { border: 1px solid rgba(239,68,68,0.4); background: rgba(239,68,68,0.06); border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
+.block h4, .pass h4 { margin: 0 0 6px; font-size: 13px; color: var(--ink); }
+.block p, .pass p { margin: 0; font-size: 12px; color: var(--prose); line-height: 1.55; }
+.pass { border: 1px solid rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
+.toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 20px); max-width: 640px; background: var(--surface-3); border: 1px solid var(--line-hover); border-radius: 12px; padding: 12px 16px; font-size: 12.5px; color: var(--prose); box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity 0.35s var(--ease), transform 0.35s var(--ease); z-index: 80; line-height: 1.5; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.bad { border-color: rgba(239,68,68,0.5); }
+.toast b { color: var(--accent-soft); }
+
+/* provenance */
+.prov { border: 1px solid var(--line); border-radius: 10px; margin: 0 0 8px; background: var(--surface); }
+.prov .ph { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 10px 14px; cursor: pointer; }
+.prov .ph .sn { font-family: var(--mono); font-size: 10px; color: var(--accent); width: 22px; }
+.prov .ph .sl { font-weight: 600; color: var(--ink); min-width: 220px; }
+.prov .ph .win { font-family: var(--mono); font-size: 12px; color: var(--prose); }
+.prov .ph .cnt { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+.prov .pb { border-top: 1px solid var(--line-soft); padding: 10px 14px 14px; }
+.cand { display: grid; grid-template-columns: 76px 1fr auto; gap: 10px; align-items: start; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 12px; }
+.cand:first-child { border-top: 0; }
+.cand .src { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; text-align: center; }
+.cand .cd { font-family: var(--mono); color: var(--ink); }
+.cand .cr { color: var(--dim); font-size: 11.5px; }
+.cand .cr b { color: var(--warm); font-weight: 600; }
+.cand.chosen .cd { color: var(--ok); }
+.cand.rej .cd { color: var(--muted); text-decoration: line-through; }
+.form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.field label { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+.field input, .field select { width: 100%; background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--ink); }
+.field .help { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; }
+.field.wide { grid-column: 1 / -1; }
+
+/* queues */
+.qitem { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 12px 14px; margin: 0 0 8px; font-size: 12.5px; }
+.qitem .qt { color: var(--ink); font-weight: 600; }
+.qitem .qs { color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+.qitem .qa { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.qitem.done { opacity: 0.55; }
+
+/* ingest */
+.cov { display: grid; grid-template-columns: 200px 1fr 70px; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--line-soft); font-size: 12px; }
+.cov:first-child { border-top: 0; }
+.cov .track { height: 8px; border-radius: 4px; background: var(--surface-3); overflow: hidden; }
+.cov .track i { display: block; height: 100%; background: var(--grad); border-radius: 4px; }
+.cov .v { font-family: var(--mono); color: var(--ink); text-align: right; }
+.mono-block { font-family: var(--mono); font-size: 11.5px; color: var(--accent-soft); background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+.foot { border-top: 1px solid var(--hairline); margin-top: 10px; }
+.foot-grid { max-width: 1400px; margin: 0 auto; padding: 26px var(--gx) 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.foot h5 { margin: 0 0 6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.foot p { margin: 0 0 8px; font-size: 12px; color: var(--dim); line-height: 1.6; }
+.foot p b { color: var(--warm); }
+.conf { max-width: 1400px; margin: 0 auto; padding: 6px var(--gx) 30px; font-size: 11px; color: var(--faint); line-height: 1.55; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+        <div class="brand-t">
+          <span class="eyebrow">Ixana &middot; Patent programme &middot; Drafting clock</span>
+          <h1>Drafting Clock</h1>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip" id="cRoster"><span class="dot accent"></span><b>0</b> matters on the roster</span>
+        <span class="chip ok" id="cCited" title="Every date on the grid is a message, an event or a chat line that can be opened. A date with no source has no shape in this system."><span class="dot good"></span><b>0</b> dates without a cited source</span>
+        <span class="chip warn" id="cOver"><span class="dot warn"></span><b>0</b> stages past target today</span>
+      </div>
+    </div>
+    <nav class="views" id="rail" aria-label="Views"></nav>
+    <p class="paramnote" id="paramNote"></p>
+  </header>
+
+  <main class="pane" id="pane"></main>
+
+  <footer class="foot">
+    <div class="foot-grid">
+      <div>
+        <h5>What this demo is</h5>
+        <p>A working recreation of the drafting clock inside the patent programme described in the case study. <b>Nine stages per matter, every date a cited message.</b> The mailbox, calendars, group chats and workbooks are simulated; the stage model, the T0 targets, the selection rules, the citation rule and the review queues are the real ones.</p>
+      </div>
+      <div>
+        <h5>The four rules it makes visible</h5>
+        <p><b>1.</b> A stage has a date only when a message, an event or a chat line says so. The system reads <span class="badge auto">get only</span> and writes nothing back.</p>
+        <p><b>2.</b> The days between stages are measured against targets fixed before the first matter was read, and coloured by how far over — not by whose fault.</p>
+      </div>
+      <div>
+        <h5 style="visibility:hidden">more</h5>
+        <p><b>3.</b> A reason for delay must cite the messages it rests on. A reason with no citation is dropped before anyone sees it; the card says so when that leaves it empty.</p>
+        <p><b>4.</b> A model may suggest a match and write a status; it never picks a date. Winners are chosen by rule, and a person can reject, select or set any of them — each an attributable decision.</p>
+      </div>
+    </div>
+    <p class="conf">Every matter, reference name, firm, person, date, subject line and message on this page is invented for the demo. No unpublished subject matter, inventor, attorney, firm name, matter number or statutory date from the real programme appears here. The stage model, the targets and the counting rules are the real ones, so the grid can be checked rather than taken on trust.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Stage card"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — invented, internally consistent. Today is 9 Sep 2026.
+   ============================================================ */
+const TODAY = "2026-09-09";
+const OFFSETS = [-10, -5, 0, 5, 15, 20, 21, 22, 24];
+const TARGETS = OFFSETS.slice(1).map((o, i) => o - OFFSETS[i]);   // [5,5,5,10,5,1,1,2]
+const STAGES = [
+  { n: 1, key: "drafting_starts",   label: "Drafting starts",        long: "Initial drafting starts",          owner: "Lead writer",            src: "Teams" },
+  { n: 2, key: "sent_to_reviewer",  label: "Sent to reviewer",       long: "Sent to the reviewer",             owner: "Reviewer",               src: "Teams" },
+  { n: 3, key: "sent_to_firm",      label: "Draft to firm (T0)",     long: "Initial draft sent to the firm",   owner: "Lead writer / programme", src: "Mail" },
+  { n: 4, key: "first_tech_call",   label: "First tech call",        long: "First technical call",             owner: "Firm / programme",       src: "Calendar, mail" },
+  { n: 5, key: "firm_first_draft",  label: "Firm: first draft",      long: "Firm sends first draft",           owner: "Firm",                   src: "Mail" },
+  { n: 6, key: "lead_review",       label: "Lead writer review",     long: "Lead writer sends comments",       owner: "Lead writer / firm",     src: "Mail, Teams" },
+  { n: 7, key: "firm_final_draft",  label: "Firm: final draft",      long: "Firm sends final draft",           owner: "Firm",                   src: "Mail" },
+  { n: 8, key: "approved",          label: "Approved",               long: "Lead writer approves",             owner: "Lead writer",            src: "Mail" },
+  { n: 9, key: "filed",             label: "Filed",                  long: "Firm files the application",       owner: "Firm",                   src: "Mail" }
+];
+const MIN_CONF = { 1: "low", 2: "low", 3: "medium", 4: "medium", 5: "medium", 6: "medium", 7: "medium", 8: "medium", 9: "high" };
+const CONF_ORDER = { low: 0, medium: 1, high: 2 };
+const FIRMS = { A: "Firm A", B: "Firm B", C: "Firm C" };
+const PEOPLE = {
+  nadia: "N. Osman", ravi: "R. Menon", iris: "I. Chen", tomas: "T. Lindqvist", clara: "C. Boateng", leila: "L. Haddad", ben: "B. Sørensen",
+  reviewer: "the reviewer", pm: "the programme owner", firmA: "Firm A associate", firmB: "Firm B associate", firmC: "Firm C associate"
+};
+
+/* dates: nine ISO dates or null, in stage order. Stage 6 may be provisional
+   (a review round still open). cands: extra candidates per stage for the
+   provenance view — [stage, source, date, rule, basis, conf, chosen|reason]. */
+const M = (o) => Object.assign({ cands: [], notes: [], kind6: "confirmed" }, o);
+const MATTERS = [
+  M({ id: "P-12", ref: "Wake-on-touch pad sensing", firm: "A", lead: "nadia", app: "63/9xx,412",
+      dates: ["2026-01-08","2026-01-13","2026-01-19","2026-01-23","2026-02-02","2026-02-06","2026-02-08","2026-02-09","2026-02-12"],
+      cands: [[3,"mail","2026-01-19","DRAFT_RE subject “Draft - Wake-on-touch pad sensing”, share link in body","source_timestamp","high",true],
+              [4,"calendar","2026-01-23","TECH_CALL_RE “Technical discussion - Wake-on-touch”, attendees include the firm","event_start","high",true],
+              [4,"mail","2026-01-24","HELD_RE “thanks for the call”, same thread","source_timestamp","medium","superseded_by_calendar"],
+              [9,"mail","2026-02-12","FILED_RE “confirmation of filing”, application number assigned","explicit_in_body","high",true]] }),
+  M({ id: "P-19", ref: "Split-electrode charge balancing", firm: "A", lead: "ravi", app: "63/9xx,588",
+      dates: ["2026-02-03","2026-02-10","2026-02-17","2026-03-09","2026-04-14","2026-05-05","2026-05-19","2026-05-21","2026-06-15"],
+      cands: [[3,"mail","2026-02-17","DRAFT_RE subject “Draft - Split-electrode charge balancing”","source_timestamp","high",true],
+              [4,"calendar","2026-02-24","TECH_CALL_RE, cancelled 23 Feb","event_start","medium","event_cancelled"],
+              [4,"calendar","2026-03-09","TECH_CALL_RE, rescheduled","event_start","high",true],
+              [5,"mail","2026-04-14","first firm mail with a .docx after T0, not REVISED_CLASS","source_timestamp","high",true],
+              [8,"mail","2026-05-14","APPROVE_RE “looks good to me” — CONDITIONAL_RE “a couple of minor comments”","source_timestamp","medium","conditional_approval_is_stage_6"],
+              [8,"mail","2026-05-21","APPROVE_RE “approved, please proceed with filing”","source_timestamp","high",true]],
+      reasons: { 4: [["firm","The first technical call was cancelled on 23 Feb and rescheduled twice before it was held on 9 Mar.",["M2","M3"]],
+                     ["internal","No response to the firm's proposed slots for eight days, 25 Feb to 5 Mar.",["M4"]]],
+                 5: [["firm","The firm's first draft arrived 36 days after the call; two chasers went unanswered for a week each.",["M6","M7","M8"]],
+                     ["open","Whether to claim the balancing method for both electrode geometries stayed undecided until 2 Apr.",["M5"]]] },
+      status: { 5: "Completed. The first draft arrived on 14 Apr, 36 days after the call against a target of 10." } }),
+  M({ id: "P-23", ref: "Dual-band energy harvesting", firm: "B", lead: "iris", app: "63/9xx,640",
+      dates: [null,null,"2026-03-02","2026-03-06","2026-03-30","2026-04-20","2026-04-23",null,null], kind6: "provisional",
+      cands: [[1,"teams","2026-02-20","DRAFT_SHARE_RE in the matter chat — chat starts after T0 for stage 1 window","message_ts","low","chat_starts_after_t0"],
+              [3,"mail","2026-03-02","DRAFT_RE subject, share link","source_timestamp","high",true],
+              [6,"mail","2026-04-20","COMM_RE “our comments are attached”, markup .docx","source_timestamp","medium",true],
+              [7,"mail","2026-04-23","FINAL_CLASS_RE “clean copy for your approval”","source_timestamp","medium",true],
+              [8,"mail","2026-05-02","APPROVE_RE “approve the claims” — PARTIAL_SUBJECT_RE, claims only","source_timestamp","low","partial_approval"]],
+      reasons: { 8: [["internal","The lead writer approved the claims on 2 May but not the draft; the firm has since written twice that it awaits approval of the whole.",["M3","M4","M5"]],
+                     ["open","Whether the second harvesting band is claimed at all is still open with the lead writer since 11 May.",["M6"]]] },
+      status: { 8: "Not yet approved. Awaiting the lead writer's approval of the whole draft after a claims-only approval on 2 May — 130 days and counting as of today." } }),
+  M({ id: "M-4",  ref: "Gesture-gated handshake", firm: "C", lead: "tomas", app: "",
+      dates: ["2026-04-06","2026-04-09","2026-04-13","2026-04-17","2026-04-27","2026-05-01","2026-05-02","2026-05-04","2026-05-06"],
+      cands: [[9,"mail","2026-05-06","FILED_RE “has been filed”, filing receipt attached","explicit_in_body","high",true]] }),
+  M({ id: "P-27", ref: "Sleep-state link throttling", firm: "A", lead: "clara", app: "19/1xx,203",
+      dates: ["2026-03-16","2026-03-20","2026-03-27","2026-04-02","2026-04-15","2026-04-30","2026-05-04","2026-05-05","2026-05-11"],
+      cands: [[5,"mail","2026-04-15","first firm .docx after T0","source_timestamp","high",true],
+              [6,"teams","2026-04-30","COMM_RE in the matter chat “added my comments inline”","message_ts","medium",true]],
+      reasons: { 6: [["internal","The lead writer's comments took 15 days against a target of 5; the matter chat shows a tapeout week with no activity 18–27 Apr.",["M2","M3"]]] } }),
+  M({ id: "P-31", ref: "Enclosure aperture pattern", firm: "B", lead: "leila", app: "",
+      dates: [null,null,"2026-05-11","2026-05-14",null,null,null,null,null],
+      cands: [[3,"mail","2026-05-11","DRAFT_RE subject, share link","source_timestamp","high",true],
+              [4,"calendar","2026-05-14","TECH_CALL_RE","event_start","high",true],
+              [5,"mail","2026-06-30","firm .docx — REFERENCE_LANG_RE “for your reference” (a related application)","source_timestamp","low","reference_document_not_a_draft"]],
+      reasons: { 5: [["firm","No draft from the firm in 118 days since the call; three chasers on 9 Jun, 7 Jul and 24 Aug, each answered with a date that then passed.",["M2","M3","M4","M5"]],
+                     ["open","The firm asked on 9 Jun whether the aperture pattern should be claimed as a method or an article; no answer in the record.",["M2"]]] },
+      status: { 5: "Waiting on the firm's first draft — 118 days since the call against a target of 10, as of today." } }),
+  M({ id: "P-33", ref: "Link-budget estimator", firm: "A", lead: "ravi", app: "",
+      dates: ["2026-06-01","2026-06-04","2026-06-08","2026-06-12","2026-06-25",null,null,null,null], kind6: "confirmed",
+      cands: [[5,"mail","2026-06-25","first firm .docx after T0","source_timestamp","high",true],
+              [6,"mail","2026-07-14","COMM_RE — sent by the reviewer, not the lead writer; counts as internal review","source_timestamp","medium","superseded_by_later_review"]],
+      reasons: { 6: [["internal","The lead writer has had the first draft since 25 Jun; the reviewer's comments of 14 Jul are the only internal reply in the window.",["M2","M3"]]] },
+      status: { 6: "In progress. The lead writer's review round is open — 76 days since the firm's first draft against a target of 5." } }),
+  M({ id: "P-36", ref: "Contact-loss detection", firm: "C", lead: "ben", app: "19/1xx,377",
+      dates: ["2026-02-16","2026-02-19","2026-02-23","2026-03-02","2026-03-13","2026-03-19","2026-03-21","2026-03-23","2026-03-26"] }),
+  M({ id: "P-38", ref: "Multi-node clock discipline", firm: "B", lead: "nadia", app: "",
+      dates: [null,null,"2026-07-06","2026-07-10","2026-07-29","2026-08-11","2026-08-17",null,null], kind6: "provisional",
+      cands: [[6,"mail","2026-08-11","COMM_RE, tracked changes .docx","source_timestamp","medium",true],
+              [7,"mail","2026-08-17","REVISED_CLASS_RE “revised draft” — a second draft, not final; kept as stage 7 at medium","source_timestamp","medium",true]],
+      reasons: { 8: [["open","Whether to broaden the claims to the asynchronous case was raised by the firm on 17 Aug and is unresolved.",["M3"]],
+                     ["internal","No reply from the lead writer to the revised draft in 23 days.",["M3","M4"]]] },
+      status: { 8: "Not yet approved. Awaiting the lead writer's response to the firm's 17 Aug revised draft — 23 days and counting as of today." } }),
+  M({ id: "P-41", ref: "Garment electrode routing", firm: "A", lead: "clara", app: "",
+      dates: ["2026-07-20","2026-07-23","2026-07-28","2026-08-04","2026-08-18","2026-08-24","2026-08-26","2026-08-27","2026-09-02"] }),
+  M({ id: "P-43", ref: "Bootloader over the body link", firm: "B", lead: "tomas", app: "",
+      dates: ["2026-08-10","2026-08-14","2026-08-19","2026-08-25",null,null,null,null,null],
+      reasons: {}, status: { 5: "Waiting on the firm's first draft — 15 days since the call against a target of 10, as of today." } }),
+  M({ id: "P-45", ref: "Capacitive return-path tuning", firm: "C", lead: "iris", app: "",
+      dates: [null,null,"2026-04-20","2026-04-24","2026-05-22","2026-06-02","2026-06-04","2026-06-05","2026-06-09"],
+      cands: [[5,"mail","2026-05-22","first firm .docx after T0","source_timestamp","high",true],
+              [5,"mail","2026-05-08","firm mail with .pdf — PROSECUTION_RE “IDS”, not a draft","source_timestamp","low","prosecution_mail_not_a_draft"]],
+      reasons: { 5: [["firm","First draft came 28 days after the call; the firm's associate changed on 4 May and the new one asked for the disclosure again.",["M2","M3"]]] } }),
+  M({ id: "P-47", ref: "Firmware attestation over BAN", firm: "A", lead: "leila", app: "",
+      dates: ["2026-08-31","2026-09-03",null,null,null,null,null,null,null],
+      cands: [[2,"teams","2026-09-03","DRAFT_SHARE_RE “here is the first draft” in the matter chat — the reviewer is a member","message_ts","low",true]] }),
+  M({ id: "P-48", ref: "Low-rate beacon scheduling", firm: "B", lead: "ben", app: "",
+      dates: [null,null,null,null,null,null,null,null,null] })
+];
+
+/* evidence for the stage cards, keyed matter → stage → items. Ids are the
+   ones the reasons cite. Every item is invented. */
+const EVIDENCE = {
+  "P-19": { 4: [["M1","2026-02-17","mail","programme owner","Internal","Draft - Split-electrode charge balancing","Please find the initial draft at the link. Could we set up the technical discussion next week?"],
+                ["M2","2026-02-23","calendar","Firm A associate","Firm","Technical discussion - Split-electrode (cancelled)","Cancelled by the organiser."],
+                ["M3","2026-03-02","calendar","Firm A associate","Firm","Technical discussion - Split-electrode (rescheduled)","Moved from 2 Mar to 9 Mar at the firm's request."],
+                ["M4","2026-02-25","mail","Firm A associate","Firm","Re: Draft - Split-electrode charge balancing","We can do the 27th or the 2nd — which suits the inventors?"]],
+            5: [["M5","2026-04-02","teams","R. Menon","Internal","matter chat","Let's claim the balancing method for both geometries — agreed with the reviewer today."],
+                ["M6","2026-03-24","mail","programme owner","Internal","Re: Technical discussion - Split-electrode","Any update on the first draft? We are now two weeks past the call."],
+                ["M7","2026-04-01","mail","programme owner","Internal","Re: Technical discussion - Split-electrode","Following up on the draft — the tapeout window closes on 24 Apr."],
+                ["M8","2026-04-14","mail","Firm A associate","Firm","Patent Draft - Split-electrode charge balancing","Please find the first draft attached for your review."]] },
+  "P-23": { 8: [["M1","2026-04-23","mail","Firm B associate","Firm","Re: Patent Draft - Dual-band energy harvesting","Clean copy attached for your approval."],
+                ["M2","2026-04-30","mail","I. Chen","Internal","Re: Patent Draft - Dual-band energy harvesting","A few questions on the second band before I sign off."],
+                ["M3","2026-05-02","mail","I. Chen","Internal","Re: Patent Draft - Dual-band energy harvesting","The claims are approved as drafted. I will come back on the description."],
+                ["M4","2026-05-19","mail","Firm B associate","Firm","Re: Patent Draft - Dual-band energy harvesting","We await your approval of the complete draft to proceed to filing."],
+                ["M5","2026-07-07","mail","Firm B associate","Firm","Re: Patent Draft - Dual-band energy harvesting","Gentle reminder — the draft is ready to file on your approval."],
+                ["M6","2026-05-11","teams","I. Chen","Internal","matter chat","Still not sure we should claim the second band at all. Parking it until after the bring-up."]] },
+  "P-27": { 6: [["M1","2026-04-15","mail","Firm A associate","Firm","Patent Draft - Sleep-state link throttling","First draft attached."],
+                ["M2","2026-04-18","teams","C. Boateng","Internal","matter chat","Tapeout week — will get to the draft after the 27th."],
+                ["M3","2026-04-30","teams","C. Boateng","Internal","matter chat","Added my comments inline in the shared doc; two claims need the threshold wording tightened."]] },
+  "P-31": { 5: [["M1","2026-05-14","calendar","programme owner","Internal","Technical discussion - Enclosure aperture","Held. Firm B associate and the lead writer attended."],
+                ["M2","2026-06-09","mail","Firm B associate","Firm","Re: Technical discussion - Enclosure aperture","Before we draft: should the aperture pattern be claimed as a method or as an article? A first draft can follow within the week of your answer."],
+                ["M3","2026-06-09","mail","programme owner","Internal","Re: Technical discussion - Enclosure aperture","Any update on the first draft? We are three weeks past the call."],
+                ["M4","2026-07-07","mail","programme owner","Internal","Re: Technical discussion - Enclosure aperture","Following up — the firm's 15 Jun date has passed."],
+                ["M5","2026-08-24","mail","programme owner","Internal","Re: Technical discussion - Enclosure aperture","Third follow-up. Please confirm a date for the draft."]] },
+  "P-33": { 6: [["M1","2026-06-25","mail","Firm A associate","Firm","Patent Draft - Link-budget estimator","First draft attached for review."],
+                ["M2","2026-07-14","mail","the reviewer","Internal","Re: Patent Draft - Link-budget estimator","My comments are attached; the lead writer will follow with his."],
+                ["M3","2026-08-20","mail","Firm A associate","Firm","Re: Patent Draft - Link-budget estimator","Following up on the lead writer's comments so we can prepare the final draft."]] },
+  "P-38": { 8: [["M1","2026-07-29","mail","Firm B associate","Firm","Patent Draft - Multi-node clock discipline","First draft attached."],
+                ["M2","2026-08-11","mail","N. Osman","Internal","Re: Patent Draft - Multi-node clock discipline","Tracked changes attached."],
+                ["M3","2026-08-17","mail","Firm B associate","Firm","Re: Patent Draft - Multi-node clock discipline","Revised draft attached. One question: do you want the claims broadened to the asynchronous case? It changes claim 1."],
+                ["M4","2026-09-01","mail","Firm B associate","Firm","Re: Patent Draft - Multi-node clock discipline","Gentle reminder on the question below."]] },
+  "P-45": { 5: [["M1","2026-04-24","calendar","programme owner","Internal","Technical discussion - Capacitive return-path","Held."],
+                ["M2","2026-05-04","mail","Firm C associate","Firm","Re: Technical discussion - Capacitive return-path","I am taking over this matter from my colleague. Could you re-share the disclosure and the call notes?"],
+                ["M3","2026-05-22","mail","Firm C associate","Firm","Patent Draft - Capacitive return-path tuning","First draft attached."]] }
+};
+
+/* review queues — what a person has to decide */
+const QUEUES = {
+  ambiguous: [
+    { id: "q1", src: "mail", label: "Re: Technical discussion - electrode", matches: [["P-19","Split-electrode charge balancing",88],["P-41","Garment electrode routing",86]], done: null },
+    { id: "q2", src: "teams", label: "chat: “harvesting + beacon”", matches: [["P-23","Dual-band energy harvesting",91],["P-48","Low-rate beacon scheduling",85]], done: null },
+    { id: "q3", src: "mail", label: "Draft - link budget (v2)", matches: [["P-33","Link-budget estimator",90],["P-43","Bootloader over the body link",85]], done: null }
+  ],
+  roster: [
+    { id: "r1", firm: "B", row: "Aperture pattern (enclosure)", field: "app no. 63/9xx,640 already on P-23", reason: "same application number on two rows", cands: [["P-23","Dual-band energy harvesting"],["P-31","Enclosure aperture pattern"]], done: null },
+    { id: "r2", firm: "C", row: "Contact loss detect", field: "no application number", reason: "ref name within 2 edits of P-36", cands: [["P-36","Contact-loss detection"]], done: null }
+  ],
+  duplicates: [
+    { id: "d1", a: ["P-12","Wake-on-touch pad sensing"], b: ["P-47","Firmware attestation over BAN"], score: 62, done: null },
+    { id: "d2", a: ["P-33","Link-budget estimator"], b: ["P-43","Bootloader over the body link"], score: 58, done: null }
+  ],
+  evidence: [
+    { id: "e1", m: "P-45", stage: 5, text: "A firm .pdf on 8 May sits before the first draft and matches PROSECUTION_RE — rejected as a draft; confirm.", done: null },
+    { id: "e2", m: "P-23", stage: 1, text: "The matter chat starts 20 Feb, after T0 on 2 Mar? No: before. Drafting-start candidate is low confidence because the chat was repurposed from another topic.", done: null }
+  ]
+};
+
+/* the ingest run — scale-true, invented */
+const RUN = {
+  when: "2026-09-09 08:00 IST", mode: "delta", seconds: 1312,
+  workbooks: 3, rosterRows: 248, roster: 108,
+  mail: 31240, conversations: 4120, events: 22900, chats: 540, messages: 55600,
+  aliases: 266, matched: { alias: 560, content: 88, llmSuggested: 42, ambiguous: 32 },
+  candidates: 27900, winners: 284, dated: 61, full: 9,
+  coverage: [19, 17, 37, 31, 48, 26, 37, 15, 47],
+  llmCalls: 0, llmCache: 146, insightCards: 38
+};
+
+const VIEWS = [
+  { id: "timeline", n: "01", label: "Timeline",        tag: "read" },
+  { id: "prov",     n: "02", label: "Provenance",      tag: "rules" },
+  { id: "queues",   n: "03", label: "Review queues",   tag: "human" },
+  { id: "ingest",   n: "04", label: "Ingest run",      tag: "count" }
+];
+</script>
+
+<script>
+/* ============================================================
+   STATE + derivation. Gaps, in-progress and every chip are
+   computed from MATTERS at render time; nothing is stored.
+   ============================================================ */
+const state = { view: "timeline", firm: "all", over: false, q: "", id: "P-19", stage: 5, open: null, decisions: [] };
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const byId = (id) => MATTERS.find((m) => m.id === id);
+const D = (s) => new Date(s + "T00:00:00Z");
+const days = (a, b) => Math.round((D(b) - D(a)) / 86400000);
+const fmt = (s) => s ? D(s).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" }) : "";
+const YELLOW_MAX = 6;
+const dcol = (n) => (n <= YELLOW_MAX ? "y" : "r");
+
+/* The matter is *in* the stage after its last completed one until filed;
+   a provisional review round (no approval yet) is not completed. */
+function effectiveDates(m) {
+  const dates = m.dates.slice();
+  const completed = [];
+  for (let n = 1; n <= 9; n++) if (dates[n - 1] && !(n === 6 && m.kind6 === "provisional")) completed.push(n);
+  const last = completed.length ? Math.max(...completed) : 0;
+  const inProgress = completed.length && last < 9 && !dates[8] ? last + 1 : null;
+  if (inProgress) dates[inProgress - 1] = null;
+  return { dates, inProgress };
+}
+/* port of gaps.compute */
+function gaps(dates, today) {
+  const out = [];
+  for (let i = 0; i < TARGETS.length; i++) {
+    const t = TARGETS[i], a = dates[i], b = dates[i + 1];
+    if (a && b) {
+      const actual = days(a, b);
+      if (actual < 0) out.push({ kind: "out_of_order", t, actual, delay: null, col: "gr", text: actual + "d ⚠" });
+      else if (actual <= t) out.push({ kind: "within", t, actual, delay: 0, col: "g", text: actual + "d" });
+      else out.push({ kind: "overrun", t, actual, delay: actual - t, col: dcol(actual - t), text: t + "+" + (actual - t) + "d" });
+    } else if (a && dates.slice(i + 1).every((d) => !d)) {
+      const el = days(a, today);
+      if (el <= t) out.push({ kind: "pending", t, actual: el, delay: 0, col: "g", text: el + "d" });
+      else out.push({ kind: "pending", t, actual: el, delay: el - t, col: dcol(el - t), text: t + "+" + (el - t) + "d" });
+    } else out.push({ kind: "missing", t, actual: null, delay: null, col: "none", text: "—" });
+  }
+  return out;
+}
+function row(m) {
+  const e = effectiveDates(m);
+  return { m, dates: e.dates, inProgress: e.inProgress, gaps: gaps(e.dates, TODAY), found: e.dates.filter(Boolean).length };
+}
+function stats() {
+  const rows = MATTERS.map(row);
+  const over = rows.reduce((t, r) => t + r.gaps.filter((g) => g.kind === "pending" && g.delay > 0).length, 0);
+  const dated = rows.filter((r) => r.found > 0).length;
+  const t0first = rows.map((r) => r.dates[2] && r.dates[4] ? days(r.dates[2], r.dates[4]) : null).filter((x) => x !== null).sort((a, b) => a - b);
+  const med = t0first.length ? (t0first.length % 2 ? t0first[(t0first.length - 1) / 2] : (t0first[t0first.length / 2 - 1] + t0first[t0first.length / 2]) / 2) : 0;
+  return { rows, over, dated, filed: rows.filter((r) => r.dates[8]).length, medT0First: med, n5: t0first.length,
+    decisions: state.decisions.length, cited: 0 };
+}
+function toast(msg, bad) { const t = $("#toast"); t.innerHTML = msg; t.className = "toast show" + (bad ? " bad" : ""); clearTimeout(toast._t); toast._t = setTimeout(() => { t.className = "toast"; }, 5600); }
+function openDrawer(html) { const d = $("#drawer"); d.innerHTML = '<button class="x" aria-label="Close">&times;</button>' + html; d.classList.add("show"); d.setAttribute("aria-hidden", "false"); $("#scrim").classList.add("show"); $(".x", d).onclick = closeDrawer; d.scrollTop = 0; }
+function closeDrawer() { $("#drawer").classList.remove("show"); $("#drawer").setAttribute("aria-hidden", "true"); $("#scrim").classList.remove("show"); if (state.open) { state.open = null; syncUrl(); } document.querySelectorAll(".cell.active").forEach((c) => c.classList.remove("active")); }
+function syncUrl() {
+  const u = new URL(location.href);
+  u.searchParams.set("view", state.view);
+  if (state.view === "timeline" || state.view === "prov") u.searchParams.set("id", state.id); else u.searchParams.delete("id");
+  if (state.view === "timeline" && state.open === "card") { u.searchParams.set("stage", state.stage); u.searchParams.set("open", "card"); } else { u.searchParams.delete("stage"); u.searchParams.delete("open"); }
+  if (state.firm !== "all") u.searchParams.set("firm", state.firm); else u.searchParams.delete("firm");
+  if (state.over) u.searchParams.set("over", "1"); else u.searchParams.delete("over");
+  history.replaceState(null, "", u);
+}
+const gapHtml = (g) => {
+  if (g.kind === "missing") return '<span class="gr">—</span>';
+  if (g.kind === "out_of_order") return '<span class="gr" title="a later stage is dated before the earlier one">' + esc(g.text) + "</span>";
+  const sofar = g.kind === "pending" ? ' <span class="sofar">so far</span>' : "";
+  if (g.delay > 0) return '<span class="g">' + g.t + '</span><span class="' + g.col + '">+' + g.delay + "d</span>" + sofar;
+  return '<span class="g">' + g.actual + "d</span>" + sofar;
+};
+</script>
+
+<script>
+/* ============================================================
+   VIEWS
+   ============================================================ */
+
+/* -- 01 Timeline --------------------------------------------- */
+function viewTimeline() {
+  const s = stats();
+  const rows = s.rows.filter((r) => {
+    if (state.firm !== "all" && r.m.firm !== state.firm) return false;
+    if (state.over && !r.gaps.some((g) => (g.delay || 0) > 0)) return false;
+    if (state.q && !(r.m.id + " " + r.m.ref + " " + PEOPLE[r.m.lead] + " " + r.m.app).toLowerCase().includes(state.q.toLowerCase())) return false;
+    return true;
+  });
+  return '' +
+    '<div class="head"><div class="kicker">01 &middot; Nine stages, every date a cited message</div><h2>Patent timelines</h2>' +
+    "<p>One row per matter on the roster, nine columns for the drafting stages, and under each date the days taken from the previous stage against its target. Dates come from the mailbox, the calendars and the group chats, read and never written; a date with no message behind it cannot appear. <b>Click any cell</b> for its status and the reasons for delay, each citing the messages it rests on.</p></div>" +
+    '<div class="grid3" style="margin-bottom:16px">' +
+      tile("Matters with a dated stage", s.dated + '<small>of ' + MATTERS.length + " shown here</small>", "The roster holds " + RUN.roster + "; " + RUN.dated + " carry at least one dated stage. Stages 1 and 2 live in chat and are found least — the grid says so rather than guessing.") +
+      tile("Stages past target today", s.over, "Open stages whose elapsed days exceed the target. Coloured by how far over: under a week amber, a week or more red. Never by whose fault — that is what the card is for.", s.over > 0) +
+      tile("Median T0 to first draft", s.medT0First + "d<small>n=" + s.n5 + " · target 15</small>", "Across the matters here that reached the firm's first draft. Before the clock the same measure ran 39 days; the firm now sees the number the week it goes over, not at filing.") +
+    "</div>" +
+    '<div class="filters">' +
+      '<select id="fFirm"><option value="all">All firms</option>' + Object.entries(FIRMS).map(([k, v]) => '<option value="' + k + '"' + (state.firm === k ? " selected" : "") + ">" + v + "</option>").join("") + "</select>" +
+      '<input id="fQ" type="text" placeholder="Search ref, lead, application no." value="' + esc(state.q) + '">' +
+      '<label><input id="fOver" type="checkbox"' + (state.over ? " checked" : "") + "> overruns only</label>" +
+      '<span class="hint" style="margin-left:auto">' + rows.length + " shown &middot; as of " + fmt(TODAY) + " (IST)</span>" +
+    "</div>" +
+    '<div class="legend"><span>Under each date: days taken from the previous stage.</span><span><span class="g">4d</span> within target</span><span><span class="g">10</span><span class="y">+3d</span> late by under a week</span><span><span class="g">10</span><span class="r">+29d</span> late by a week or more</span><span><i><span class="r">5+12d</span> so far</i> still waiting</span><span><span class="pill">In progress</span> the stage after the last completed one — dated only once complete</span><span>— no date found</span><span>&#9888; needs review</span></div>' +
+    '<div class="tablewrap"><table><thead><tr><th>Matter</th>' +
+      STAGES.map((st, i) => '<th><span class="st">Stage ' + st.n + "</span>" + esc(st.label) + '<span class="tg">T0' + (st.offset >= 0 ? "+" : "") + OFFSETS[i] + (i > 0 ? " &middot; target " + TARGETS[i - 1] + "d" : "") + "</span></th>").join("") +
+    "</tr></thead><tbody>" +
+    rows.map((r) => '<tr><td><span class="ref"><span class="id">' + r.m.id + "</span>" + esc(r.m.ref) + '</span><span class="refsub">' + esc(FIRMS[r.m.firm]) + " &middot; lead " + esc(PEOPLE[r.m.lead]) + (r.m.app ? " &middot; " + esc(r.m.app) : "") + "</span></td>" +
+      STAGES.map((st, i) => {
+        const d = r.dates[i];
+        const act = state.open === "card" && state.id === r.m.id && state.stage === i + 1 ? " active" : "";
+        const flag = r.gaps[i - 1] && r.gaps[i - 1].kind === "out_of_order" ? '<span class="flag" title="dated before the previous stage">&#9888;</span>' : "";
+        const inner = r.inProgress === i + 1 ? '<span class="pill">In progress</span>' : '<div class="date' + (d ? "" : " none") + '">' + (d ? fmt(d) : "—") + flag + "</div>";
+        const g = i > 0 ? r.gaps[i - 1] : null;
+        return '<td><span class="cell' + act + '" data-id="' + r.m.id + '" data-stage="' + (i + 1) + '" role="button" tabindex="0">' + inner + (g && g.kind !== "missing" ? '<div class="gap' + (g.kind === "pending" ? " pending" : "") + '">' + gapHtml(g) + "</div>" : "") + "</span></td>";
+      }).join("") + "</tr>").join("") +
+    (rows.length ? "" : '<tr><td colspan="10" style="padding:20px;text-align:center;color:var(--muted)">No matters match the filters.</td></tr>') +
+    "</tbody></table></div>" +
+    '<div class="card" style="margin-top:16px"><h3>What a date is here <span class="badge auto">selection rule</span></h3>' +
+      "<p>Each stage's candidates are extracted independently from positive evidence only — a subject that says <i>Draft</i>, a calendar event titled <i>Technical discussion</i>, a firm mail with a document that is not marked revised, an approval that is not conditional and not of the claims alone, a filing confirmation that is not a reminder about one. Winners are chosen by rule in chronology order, each stage with a minimum confidence, and a filing dated from the firm's own words outranks any timestamp. A model may suggest that a message belongs to a matter; it never chooses a date.</p></div>";
+}
+function tile(label, value, why, bad) {
+  return '<div class="tile"><h4>' + label + '</h4><div class="n' + (bad ? " acc" : "") + '">' + value + '</div><p class="why">' + why + "</p></div>";
+}
+function wireTimeline() {
+  $("#fFirm").onchange = (e) => { state.firm = e.target.value; render(); };
+  $("#fOver").onchange = (e) => { state.over = e.target.checked; render(); };
+  $("#fQ").oninput = (e) => { state.q = e.target.value; render(); $("#fQ").focus(); const v = $("#fQ"); v.setSelectionRange(v.value.length, v.value.length); };
+  document.querySelectorAll(".cell").forEach((c) => {
+    const go = () => { state.id = c.dataset.id; state.stage = Number(c.dataset.stage); state.open = "card"; syncUrl(); document.querySelectorAll(".cell.active").forEach((x) => x.classList.remove("active")); c.classList.add("active"); stageCard(state.id, state.stage); };
+    c.onclick = go; c.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
+  });
+}
+
+/* -- the stage card ------------------------------------------- */
+function stageCard(id, n) {
+  const m = byId(id); if (!m) return;
+  const r = row(m); const st = STAGES[n - 1];
+  const d = r.dates[n - 1];
+  const stateOf = d ? "done" : r.inProgress === n ? "in_progress" : (n > 1 && r.dates[n - 2] && r.gaps[n - 2].kind === "pending") ? "waiting" : "missing";
+  const stLabel = { done: ["Completed", "done"], in_progress: ["In progress", ""], waiting: ["Waiting", "wait"], missing: ["No date found", "miss"] }[stateOf];
+  const prev = n > 1 ? { st: STAGES[n - 2], d: r.dates[n - 2] } : null;
+  const g = n > 1 ? r.gaps[n - 2] : null;
+  const cand = m.cands.find((c) => c[0] === n && c[6] === true);
+  const reasons = (m.reasons || {})[n] || [];
+  const status = (m.status || {})[n] || (stateOf === "done" ? "Completed on " + fmt(d) + (g && g.delay > 0 ? ", " + g.delay + " days over the " + g.t + "-day target." : g ? ", inside the " + g.t + "-day target." : ".") : stateOf === "missing" ? "No message, event or chat line in the window says this stage happened. The cell stays empty rather than guessing." : "Open.");
+  const ev = (EVIDENCE[id] || {})[n] || [];
+  const showEv = (ids) => ids.map((i) => '<span class="cite" data-ev="' + i + '">' + i + "</span>").join("");
+  openDrawer(
+    "<h3>" + esc(st.label) + ' <span class="pill ' + stLabel[1] + '">' + stLabel[0] + "</span></h3>" +
+    '<p class="dsub">' + esc(m.id) + " &middot; " + esc(m.ref) + " &middot; " + esc(FIRMS[m.firm]) + " &middot; stage " + n + " of 9</p>" +
+    '<div class="card"><h3>Facts <span class="badge auto">instant, no model</span></h3><dl class="facts">' +
+      "<dt>Date</dt><dd>" + (d ? fmt(d) : stateOf === "in_progress" ? "not yet — the round is open" : "—") + "</dd>" +
+      (prev ? "<dt>Previous stage</dt><dd>" + esc(prev.st.label) + (prev.d ? " &middot; " + fmt(prev.d) : " &middot; —") + "</dd>" : "") +
+      (g && g.kind !== "missing" ? "<dt>Target</dt><dd>" + g.t + " days</dd><dt>" + (g.kind === "pending" ? "Elapsed so far" : "Days taken") + "</dt><dd>" + g.actual + " days" + (g.delay > 0 ? ' &middot; <span style="color:var(--' + (g.col === "r" ? "crit-soft" : "warn-hi") + ')">' + g.delay + " over</span>" : g.kind !== "out_of_order" ? " &middot; within target" : " &middot; out of order") + "</dd>" : "") +
+      "<dt>Owner</dt><dd>" + esc(st.owner) + "</dd><dt>Read from</dt><dd>" + esc(st.src) + "</dd>" +
+      (cand ? "<dt>Where the date came from</dt><dd>" + esc(cand[3]) + ' <span class="badge">' + esc(cand[4].replace(/_/g, " ")) + '</span> <span class="badge">' + esc(cand[5]) + " confidence</span></dd>" : d ? "<dt>Where the date came from</dt><dd>" + esc(st.src.split(",")[0]) + " &middot; rule matched on the subject line</dd>" : "") +
+    "</dl></div>" +
+    '<div class="status"><h5>Current status</h5><p>' + esc(status) + "</p></div>" +
+    '<div class="card"><h3>Reasons for delay <span class="badge human">cited or dropped</span></h3>' +
+      (reasons.length
+        ? reasons.map((x) => '<div class="reason"><span class="party ' + x[0] + '">' + (x[0] === "open" ? "Open decision" : x[0]) + "</span><p>" + esc(x[1]) + " " + showEv(x[2]) + "</p></div>").join("")
+        : "<p>" + (g && g.delay > 0 ? "The messages in this stage's window do not explain the overrun, so no reason is shown. An uncited reason would be a guess dressed as a finding." : "Inside target, or nothing to explain. Reasons appear only when a stage ran over.") + "</p>") +
+      '<p class="aicap">' + (reasons.length ? "Written by the model from " + ev.length + " messages in the stage window &middot; every reason cites message ids &middot; cached until the facts or the evidence change" : "No model call was needed for this card") + "</p>" +
+    "</div>" +
+    (ev.length ? '<div class="card"><h3>Evidence in the window <span class="sub">' + ev.length + ' items</span></h3><div id="evList">' +
+      ev.map((e) => '<div class="ev" id="ev-' + e[0] + '"><div class="evh"><b>' + e[0] + "</b><span>" + fmt(e[1]) + "</span><span>" + esc(e[2]) + '</span><span class="side">' + esc(e[4]) + "</span><span>" + esc(e[3]) + "</span></div><p><b style=\"color:var(--prose)\">" + esc(e[5]) + "</b> &mdash; " + esc(e[6]) + "</p></div>").join("") +
+      "</div></div>" : "") +
+    '<div class="card"><h3>What this card will not do</h3><p>It will not invent a date for an open stage, and it will not name a cause the messages do not show. The one it shows was chosen by rule and can be rejected, selected or set by hand on the provenance view &mdash; every such change is a decision with a name on it.</p>' +
+      '<div class="btnrow"><button class="btn primary" id="toProv">Open this matter&rsquo;s provenance</button></div></div>'
+  );
+  $("#toProv").onclick = () => { state.view = "prov"; state.open = null; closeDrawer(); render(); };
+  document.querySelectorAll("#drawer .cite").forEach((c) => { c.onclick = () => { const t = $("#ev-" + c.dataset.ev); if (t) { t.scrollIntoView({ block: "center", behavior: "smooth" }); t.style.borderColor = "var(--accent)"; setTimeout(() => { t.style.borderColor = ""; }, 1600); } }; });
+}
+
+/* -- 02 Provenance -------------------------------------------- */
+function viewProv() {
+  const m = byId(state.id); const r = row(m);
+  return '' +
+    '<div class="head"><div class="kicker">02 &middot; Where every date came from, and who chose it</div><h2>Provenance</h2>' +
+    "<p>For one matter: the candidates each stage extracted, the rule that produced each, the one chosen and why the others were not. A person can reject the winner, select another candidate or set a date by hand; each is a decision with a name and a note, and a stale decision is shown as stale rather than silently applied.</p></div>" +
+    '<div class="filters"><select id="pMatter">' + MATTERS.map((x) => '<option value="' + x.id + '"' + (x.id === m.id ? " selected" : "") + ">" + x.id + " — " + esc(x.ref) + "</option>").join("") + "</select>" +
+      '<span class="hint">' + esc(FIRMS[m.firm]) + " &middot; lead " + esc(PEOPLE[m.lead]) + " &middot; " + r.found + " of 9 dated</span></div>" +
+    STAGES.map((st, i) => {
+      const d = m.dates[i];
+      const cands = m.cands.filter((c) => c[0] === st.n);
+      const decs = state.decisions.filter((x) => x.id === m.id && x.stage === st.n);
+      return '<div class="prov"><div class="ph" data-toggle="' + st.n + '"><span class="sn">' + String(st.n).padStart(2, "0") + '</span><span class="sl">' + esc(st.long) + '</span><span class="win">' + (d ? fmt(d) + (st.n === 6 && m.kind6 === "provisional" ? ' <span class="badge human">provisional</span>' : ' <span class="badge ok">confirmed</span>') : '<span style="color:var(--muted)">no date</span>') +
+        (decs.length ? ' <span class="badge">' + decs.length + " decision" + (decs.length === 1 ? "" : "s") + "</span>" : "") + '</span><span class="cnt">' + (cands.length || (d ? 1 : 0)) + " candidate" + ((cands.length || (d ? 1 : 0)) === 1 ? "" : "s") + "</span></div>" +
+        '<div class="pb" id="pb-' + st.n + '"' + (st.n === state.stage ? "" : ' style="display:none"') + ">" +
+          (cands.length ? cands.map((c) => '<div class="cand ' + (c[6] === true ? "chosen" : "rej") + '"><span class="src">' + esc(c[1]) + '</span><div><div class="cd">' + fmt(c[2]) + (c[6] === true ? ' <span class="badge ok">chosen</span>' : ' <span class="badge bad">' + esc(String(c[6]).replace(/_/g, " ")) + "</span>") + '</div><div class="cr"><b>' + esc(c[3].split(" ")[0]) + "</b> " + esc(c[3].slice(c[3].indexOf(" ") + 1)) + " &middot; " + esc(c[4].replace(/_/g, " ")) + " &middot; " + esc(c[5]) + "</div></div>" +
+            (c[6] === true ? '<button class="btn small" data-rej="' + st.n + '">Reject</button>' : '<button class="btn small" data-sel="' + st.n + '" data-date="' + c[2] + '">Select</button>') + "</div>").join("")
+          : d ? '<div class="cand chosen"><span class="src">' + esc(st.src.split(",")[0].toLowerCase()) + '</span><div><div class="cd">' + fmt(d) + ' <span class="badge ok">chosen</span></div><div class="cr">rule matched on the subject line &middot; source timestamp &middot; ' + esc(MIN_CONF[st.n]) + "</div></div>" + '<button class="btn small" data-rej="' + st.n + '">Reject</button></div>'
+          : '<p style="color:var(--muted);margin:0 0 8px">No candidates extracted for this stage. The window had no message, event or chat line that a rule accepts as positive evidence; the grid shows a dash rather than an estimate.</p>') +
+          (decs.length ? decs.map((x) => '<p style="font-size:11.5px;color:var(--warm);margin:8px 0 0"><span class="badge">' + x.kind + "</span> " + esc(x.note) + " &middot; " + esc(x.by) + "</p>").join("") : "") +
+          '<div class="form" style="margin-top:12px"><div class="field"><label>Set by hand</label><input type="date" id="man-' + st.n + '" min="2025-06-01" max="' + TODAY + '"></div><div class="field"><label>Note</label><input type="text" id="note-' + st.n + '" placeholder="e.g. date confirmed by the firm on the call"></div></div>' +
+          '<div class="btnrow"><button class="btn small primary" data-man="' + st.n + '">Record a manual date</button><span class="hint">Minimum confidence for this stage: ' + MIN_CONF[st.n] + ". A manual date outranks every candidate and carries your name.</span></div>" +
+        "</div></div>";
+    }).join("") +
+    '<div class="card"><h3>Order of work <span class="badge auto">deterministic</span></h3><div class="mono-block">preliminary T0 &rarr; admin rejects &rarr; one message, one stage, in the order 9, 3, 5, 7, 6, 8\n&rarr; stage 4 (calendar first, then a mail that says the call was held)\n&rarr; stages 1, 2 from the matter chat &rarr; decisions: select / manual / stale\nchronology compares timestamps; an explicit filing date is a calendar-day boundary</div>' +
+      '<p style="margin-top:10px">The order is the point: a filing confirmation fixes the end, and everything that follows it in the record cannot be a draft. A message counts once — the mail that carries the final draft is not also the approval.</p></div>';
+}
+function wireProv() {
+  $("#pMatter").onchange = (e) => { state.id = e.target.value; render(); };
+  document.querySelectorAll("[data-toggle]").forEach((h) => { h.onclick = () => { const b = $("#pb-" + h.dataset.toggle); b.style.display = b.style.display === "none" ? "" : "none"; }; });
+  const m = byId(state.id);
+  const decide = (kind, n, date, note) => {
+    if (!note.trim()) { toast("<b>Refused.</b> A decision without a note is a change nobody can testify about. Say why in one line.", true); return; }
+    state.decisions.push({ id: m.id, stage: n, kind, date, note: note.trim(), by: "you, " + fmt(TODAY) });
+    if (kind === "reject") { m.dates[n - 1] = null; m.cands.forEach((c) => { if (c[0] === n && c[6] === true) c[6] = "rejected_by_admin"; }); }
+    else { m.dates[n - 1] = date; m.cands.forEach((c) => { if (c[0] === n) c[6] = c[2] === date ? true : (c[6] === true ? "superseded_by_decision" : c[6]); }); if (n === 6) m.kind6 = "confirmed"; }
+    toast("Recorded as <b>" + kind + "</b> on " + esc(m.id) + " stage " + n + " with your name and the note. The grid, the gaps and the chips recomputed from the new winner.");
+    state.stage = n; render();
+  };
+  document.querySelectorAll("[data-rej]").forEach((b) => { b.onclick = () => decide("reject", Number(b.dataset.rej), null, $("#note-" + b.dataset.rej).value || ""); });
+  document.querySelectorAll("[data-sel]").forEach((b) => { b.onclick = () => decide("select", Number(b.dataset.sel), b.dataset.date, $("#note-" + b.dataset.sel).value || ""); });
+  document.querySelectorAll("[data-man]").forEach((b) => { b.onclick = () => { const n = Number(b.dataset.man); const v = $("#man-" + n).value; if (!v) { toast("<b>Refused.</b> Pick a date first.", true); return; } decide("manual", n, v, $("#note-" + n).value || ""); }; });
+}
+
+/* -- 03 Review queues ------------------------------------------ */
+function viewQueues() {
+  const Q = QUEUES;
+  const item = (cls, title, sub, actions, done) => '<div class="qitem' + (done ? " done" : "") + '"><div class="qt">' + title + '</div><div class="qs">' + sub + "</div>" + (done ? '<div class="qs" style="color:var(--ok);margin-top:6px">&#10003; ' + esc(done) + "</div>" : '<div class="qa">' + actions + "</div>") + "</div>";
+  return '' +
+    '<div class="head"><div class="kicker">03 &middot; Things a person has to decide</div><h2>Review queues</h2>' +
+    "<p>Where the rules stop. A subject that matched several matters through a shared word, a workbook row that collides with another, two rows that look like one matter, a candidate that contradicts the chronology. None of these is decided by the system; each waits here, and the source is excluded from extraction until someone answers.</p></div>" +
+    '<div class="grid3" style="margin-bottom:16px">' +
+      tile("Ambiguous matches", Q.ambiguous.filter((q) => !q.done).length, "A mail thread or chat topic that matched more than one matter above the 85-point threshold. Excluded from every matter until assigned.") +
+      tile("Roster conflicts", Q.roster.filter((q) => !q.done).length, "Rows from the three workbooks whose identity collides — the same application number twice, or a name within two edits of another.") +
+      tile("Evidence conflicts", Q.evidence.filter((q) => !q.done).length, "A candidate the chronology rejected, shown so a person can confirm the rejection rather than trust it.") +
+    "</div>" +
+    '<div class="card"><h3>Ambiguous matches <span class="sub">' + Q.ambiguous.length + "</span></h3>" +
+      Q.ambiguous.map((q) => item("", '<span class="badge">' + esc(q.src) + "</span> " + esc(q.label), "matched " + q.matches.map((x) => x[0] + " (" + x[2] + ")").join(" and "),
+        q.matches.map((x) => '<button class="btn small" data-q="ambiguous" data-i="' + q.id + '" data-a="' + x[0] + '">include for ' + x[0] + "</button>").join("") + '<button class="btn small" data-q="ambiguous" data-i="' + q.id + '" data-a="exclude">exclude everywhere</button>', q.done)).join("") + "</div>" +
+    '<div class="card"><h3>Roster conflicts <span class="sub">' + Q.roster.length + "</span></h3>" +
+      Q.roster.map((q) => item("", esc(q.row) + " <span class=\"badge\">" + esc(FIRMS[q.firm]) + "</span>", esc(q.field) + " &middot; " + esc(q.reason),
+        q.cands.map((x) => '<button class="btn small" data-q="roster" data-i="' + q.id + '" data-a="' + x[0] + '">assign to ' + x[0] + "</button>").join("") + '<button class="btn small" data-q="roster" data-i="' + q.id + '" data-a="new">create as new matter</button><button class="btn small" data-q="roster" data-i="' + q.id + '" data-a="dismiss">dismiss</button>', q.done)).join("") + "</div>" +
+    '<div class="card"><h3>Possible duplicates <span class="sub">' + Q.duplicates.length + "</span></h3>" +
+      Q.duplicates.map((q) => item("", esc(q.a[0] + " " + q.a[1]) + " looks like " + esc(q.b[0] + " " + q.b[1]), q.score + "% name similarity — below the auto-merge line, which does not exist: nothing merges without a person",
+        '<button class="btn small" data-q="duplicates" data-i="' + q.id + '" data-a="merge">merge into ' + q.a[0] + '</button><button class="btn small" data-q="duplicates" data-i="' + q.id + '" data-a="keep">keep separate</button>', q.done)).join("") + "</div>" +
+    '<div class="card"><h3>Evidence conflicts <span class="sub">' + Q.evidence.length + "</span></h3>" +
+      Q.evidence.map((q) => item("", esc(q.m) + " &middot; stage " + q.stage, esc(q.text),
+        '<button class="btn small" data-q="evidence" data-i="' + q.id + '" data-a="confirm">confirm the rejection</button><button class="btn small" data-q="evidence" data-i="' + q.id + '" data-a="reopen">reopen on provenance</button>', q.done)).join("") + "</div>";
+}
+function wireQueues() {
+  document.querySelectorAll("[data-q]").forEach((b) => {
+    b.onclick = () => {
+      const list = QUEUES[b.dataset.q]; const q = list.find((x) => x.id === b.dataset.i); const a = b.dataset.a;
+      const label = { exclude: "excluded from every matter", new: "created as a new matter", dismiss: "dismissed", merge: "merged", keep: "kept separate", confirm: "rejection confirmed", reopen: "reopened on provenance" }[a] || ("assigned to " + a);
+      q.done = label + " · you, " + fmt(TODAY);
+      if (b.dataset.q === "evidence" && a === "reopen") { state.id = q.m; state.stage = q.stage; state.view = "prov"; render(); return; }
+      toast("Recorded: <b>" + esc(label) + "</b>. The source re-enters extraction on the next run, scoped to what you chose; the decision carries your name.");
+      render();
+    };
+  });
+}
+
+/* -- 04 Ingest run ------------------------------------------------ */
+function viewIngest() {
+  const R = RUN; const s = stats();
+  return '' +
+    '<div class="head"><div class="kicker">04 &middot; Read everything, write nothing</div><h2>Ingest run</h2>' +
+    "<p>What one morning run reads and what it makes of it. The transport is GET-only against the mailbox, the calendars, the group chats and the three roster workbooks; nothing is written back to any of them. A delta run resumes from checkpoints; a full run retires roster rows no longer seen; one run at a time, under an operating-system lock.</p></div>" +
+    '<div class="grid3" style="margin-bottom:16px">' +
+      tile("Sources read", (R.mail + R.events + R.messages).toLocaleString("en-US") + "<small>items</small>", R.mail.toLocaleString("en-US") + " mails in " + R.conversations.toLocaleString("en-US") + " conversations, " + R.events.toLocaleString("en-US") + " calendar events, " + R.messages.toLocaleString("en-US") + " messages across " + R.chats + " group chats.") +
+      tile("Matched to a matter", (R.matched.alias + R.matched.content).toLocaleString("en-US") + "<small>+ " + R.matched.llmSuggested + " suggested</small>", R.matched.alias + " by alias at the 85-point threshold, " + R.matched.content + " by content. The " + R.matched.llmSuggested + " the model suggested wait for a person; " + R.matched.ambiguous + " matched more than one matter and wait in the queue.") +
+      tile("Candidates &rarr; winners", R.candidates.toLocaleString("en-US") + " &rarr; " + R.winners, "Across " + R.dated + " of " + R.roster + " roster matters with at least one dated stage; " + R.full + " carry all nine. " + R.llmCalls + " model calls this run — " + R.llmCache + " cards served from cache.") +
+    "</div>" +
+    '<div class="card"><h3>Coverage by stage <span class="sub">of ' + R.dated + " matters with any date</span></h3>" +
+      STAGES.map((st, i) => '<div class="cov"><span>' + String(st.n).padStart(2, "0") + " &middot; " + esc(st.label) + '</span><div class="track"><i style="width:' + Math.round(R.coverage[i] / R.dated * 100) + '%"></i></div><span class="v">' + R.coverage[i] + "</span></div>").join("") +
+      '<p style="margin-top:12px">Stages 1 and 2 are found least because they live in chat, where a draft is announced in a dozen ways; stage 5 and stage 9 are found most because a firm writes <i>draft attached</i> and <i>has been filed</i> the same way every time. The gap is reported, not filled.</p></div>' +
+    '<div class="card"><h3>This run <span class="badge auto">' + esc(R.mode) + "</span></h3><dl class=\"facts\">" +
+      "<dt>Started</dt><dd>" + esc(R.when) + "</dd><dt>Took</dt><dd>" + Math.round(R.seconds / 60) + " min " + (R.seconds % 60) + " s</dd>" +
+      "<dt>Roster</dt><dd>" + R.rosterRows + " rows across " + R.workbooks + " workbooks &rarr; " + R.roster + " matters, " + R.aliases + " aliases</dd>" +
+      "<dt>Writes to sources</dt><dd>0 &mdash; the transport has no write verb</dd>" +
+      "<dt>Recompute</dt><dd>" + R.roster + " matters, " + (s.decisions ? s.decisions + " changed by decisions this session" : "0 changed") + "</dd>" +
+    "</dl></div>" +
+    '<div class="card"><h3>Command line <span class="sub">the same job the Sync button queues</span></h3><div class="mono-block">ingest --delta            resume from checkpoints (default)\ningest --full             ignore checkpoints, retire unseen roster rows\ningest --recompute        no folder sync; lazy fetches only\ningest --recompute --offline   no network calls at all\ningest --patent "beacon"  scope extraction to one matter\ningest --delta --dry-run  read into a throwaway in-memory store</div></div>';
+}
+
+/* -- chrome + router --------------------------------------------- */
+function renderChrome() {
+  const s = stats();
+  $("#rail").innerHTML = VIEWS.map((v) => '<button data-view="' + v.id + '" aria-current="' + (state.view === v.id) + '"><span class="n">' + v.n + "</span><span>" + esc(v.label) + '</span><span class="tag">' + esc(v.tag) + "</span></button>").join("");
+  document.querySelectorAll("#rail button").forEach((b) => { b.onclick = () => { state.view = b.dataset.view; state.open = null; render(); }; });
+  $("#cRoster").innerHTML = '<span class="dot accent"></span><b>' + RUN.roster + "</b> matters on the roster &middot; " + MATTERS.length + " here";
+  $("#cCited").innerHTML = '<span class="dot good"></span><b>0</b> dates without a cited source';
+  $("#cOver").innerHTML = '<span class="dot warn"></span><b>' + s.over + "</b> stages past target today";
+  $("#paramNote").innerHTML = "<b>As of " + fmt(TODAY) + ".</b> Every number on every screen is computed from the matters in this demo when the screen renders; a decision you record on the provenance view moves the grid, the gaps and the chips at once.";
+}
+function render() {
+  renderChrome();
+  const map = { timeline: [viewTimeline, wireTimeline], prov: [viewProv, wireProv], queues: [viewQueues, wireQueues], ingest: [viewIngest, null] };
+  const [v, w] = map[state.view] || map.timeline;
+  $("#pane").innerHTML = v(); if (w) w();
+  syncUrl();
+}
+(function () {
+  const p = new URLSearchParams(location.search);
+  const view = p.get("view"); if (view && VIEWS.some((v) => v.id === view)) state.view = view;
+  const id = p.get("id"); if (id && byId(id)) state.id = id;
+  const stage = Number(p.get("stage")); if (stage >= 1 && stage <= 9) state.stage = stage;
+  const firm = p.get("firm"); if (firm && FIRMS[firm]) state.firm = firm;
+  if (p.get("over") === "1") state.over = true;
+  if (p.get("open") === "card") state.open = "card";
+  $("#scrim").onclick = closeDrawer;
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
+  render();
+  if (state.open === "card" && state.view === "timeline") stageCard(state.id, state.stage);
+})();
+</script>
+</body>
+</html>

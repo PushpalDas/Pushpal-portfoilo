@@ -72,6 +72,13 @@ for (const [slug, cs] of Object.entries(v2)) {
   const st = cs.status;
   const band = BANDS[st];
   const wc = prose(cs);
+  // A status the brief does not know (the three in-development silicon
+  // parts carry one) has no band, no dropped-section rule and no §08
+  // heading to check. Report it and move on rather than crash the run.
+  if (!band) {
+    problems.push(`${slug}: status "${st}" has no rules in this checker — skipped`);
+    continue;
+  }
   const headings = cs.sections.map((s) => s.heading);
   const all = JSON.stringify(cs);
 
@@ -84,9 +91,9 @@ for (const [slug, cs] of Object.entries(v2)) {
   // three summary paragraphs
   if (cs.summary.length !== 3) problems.push(`${slug}: summary has ${cs.summary.length} paragraphs, expected 3`);
 
-  // meta four fields
+  // meta three fields — no timeline, the pages carry no dates
   const mk = Object.keys(cs.meta).join(',');
-  if (mk !== 'role,team,timeline,stage') problems.push(`${slug}: meta order is ${mk}`);
+  if (mk !== 'role,team,stage') problems.push(`${slug}: meta order is ${mk}`);
 
   // confidentiality + footer
   if (!cs.confidentiality) problems.push(`${slug}: no confidentiality line`);

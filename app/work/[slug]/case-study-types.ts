@@ -615,13 +615,13 @@ export type CaseStudyBlock =
 
 export interface CaseStudyV2 {
 	slug: string;
-	/** Company · Year · Domain */
+	/** Company · Domain — no dates */
 	eyebrow: string;
 	title: string;
 	/** One line stating the outcome */
 	deck: string;
 	status: CaseStudyStatus;
-	meta: { role: string; team: string; timeline: string; stage: string };
+	meta: { role: string; team: string; stage: string };
 	/** Confidentiality line under the meta strip */
 	confidentiality: string;
 	/** Public, verifiable evidence — datasheets, product pages, patents */

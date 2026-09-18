@@ -257,3 +257,28 @@ No Playwright or Puppeteer in the project; Chrome headless is on the machine and
 ```
 
 Two traps: `--screenshot` **must** get an absolute Windows path or Chrome fails with `Access is denied`; and mermaid sizes its SVG to natural size, so force `.mermaid svg{width:1240px!important}` and `sharp().trim()` the white margin afterwards.
+
+
+---
+
+## 13. Change record — 2026-09-15, the drafting clock
+
+**What was added.** One feature: the nine-stage drafting clock (dates read GET-only from the mailbox, calendars and group chats, measured against the T0 offsets −10, −5, 0, +5, +15, +20, +21, +22, +24; winners chosen by rule with a minimum confidence per stage; stage cards whose reasons for delay must cite message ids or are dropped; provenance and review queues for every machine choice). Source material: the `patent timeline` project folder (FastAPI + SQLite backend, Next.js frontend, two PRD-style screenshots, the ingest logs). **None of it was copied into the repo** — it holds an `.env`, a live SQLite store and real matter names.
+
+**Where it landed on the page.** Deck; all three summary paragraphs; §01 after; §02 after; §03 fifth decision; §04 scope (3 shipped, 1 cut) and the will-not-automate doc (item 5); §05 third paragraph; §06 body, the `shot` (now the clock grid, 4 callouts), the `gallery` (spend timeline moved in, stage card added, invoice upload folded into the approval caption — 6 items), the surface table (2 rows) and `config` (appended); §07 (1 row); §08 body and tiles; §09 second paragraph; `evidence` (second link); `fast.facts`; `confidentiality`; `sampleNote`. Card outcome line in `constants.ts` and `changes/work-products.md`.
+
+**Number spine additions.** Median T0 → firm's first draft **39d → 20d, n=10** (summary Result, tile 2, and computed live from the demo's own rows via `stats().medT0First`). **0 of 284** dated drafting stages without a cited source (tile 6; the demo's header chip). **108** roster matters / **61** with any dated stage / **9** with all nine (demo ingest view, the `RUN` literal). All invented; scale taken from the real ingest log and rounded away from it.
+
+**Tiles removed to stay at six.** `41 → 0 of 248` double-counted rows (that counting rule belongs to the Patent dashboard sync page, per §5) and `6 → 1` places opened (still in the §02 chart and table).
+
+**Demo.** `public/demo/patent-clock.html` (Drafting Clock), a Tier-B XANA sibling like Ops Desk; four views — timeline, provenance, review queues, ingest run; a decision recorded on provenance recomputes the grid, gaps and chips. Rewrite `/demo/patent-clock` in `next.config.ts`. Captures by `scripts/_elev-capture-patent-clock.mjs`: `ixana-patent-clock.jpg` (grid, scrolled so the table fills the frame) and `ixana-patent-clock-card.jpg` (`?view=timeline&id=P-19&stage=5&open=card`).
+
+**Confidentiality gate, extended.** The regression grep now also covers the reviewer's and lead writers' names, the firm domains and every real ref-name phrase seen in the source logs:
+
+```bash
+grep -ic "metayage\|purdue\|K&K\|prasa\|shreyas\|subodh\|arunashish\|praneetha\|In-brain\|18/840\|600 mbps\|keepout\|pendant electrode\|HS-eNFC\|time-sync network\|underwater comm\|credential shari\|multi-human" data/case-studies-v2.json public/demo/patent-clock.html
+```
+
+Both files return 0. Every matter, reference name, firm, person, subject line and message in the demo is invented; the stage model, targets, selection order, minimum confidences and citation rule are the real ones.
+
+**Verifier row after the change:** `ixana-patent-program  internal  992  9  6  survival  I`.

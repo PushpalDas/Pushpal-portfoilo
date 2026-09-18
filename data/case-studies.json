@@ -146,13 +146,7 @@
     "dateRange": "",
     "role": "",
     "teamSize": "",
-    "tags": [
-      "Quantum Computing",
-      "FastAPI",
-      "Next.js",
-      "Three.js",
-      "NumPy"
-    ],
+    "tags": ["Quantum Computing", "FastAPI", "Next.js", "Three.js", "NumPy"],
     "isConfidential": false,
     "confidentialNote": "",
     "tldr": "Problem: Learners and developers lacked an accessible web tool to interactively build quantum circuits and visualize state vector shifts in real time.\n\nWhat we did: I managed the development of a full-stack quantum gate simulator combining a FastAPI numerical engine with a Next.js and Three.js frontend.\n\nResult: We delivered an interactive simulator supporting up to 10 qubits with real-time 3D Bloch sphere rendering and complete test coverage across physics operations.",
@@ -570,11 +564,11 @@
       "footerNote": "This is an internal product. Architecture diagrams are shown from the project record; screens should be recreated with illustrative content before public publication. Sensitive figures are omitted rather than estimated."
     }
   },
-  "procurement-orchestrator-procurement-process-automation-with": {
-    "slug": "procurement-orchestrator-procurement-process-automation-with",
+  "ixana-ops-orchestrator": {
+    "slug": "ixana-ops-orchestrator",
     "company": "Microsoft",
     "organization": "",
-    "title": "Procurement Orchestrator Lean Pilot Product Specification",
+    "title": "Ops Orchestrator — procurement, shipment and presentation workflows on M365",
     "dateRange": "21 July 2026",
     "role": "",
     "teamSize": "",

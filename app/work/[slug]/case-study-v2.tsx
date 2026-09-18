@@ -427,10 +427,6 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 						<dd>{data.meta.team}</dd>
 					</div>
 					<div>
-						<dt>Timeline</dt>
-						<dd>{data.meta.timeline}</dd>
-					</div>
-					<div>
 						<dt>Stage</dt>
 						<dd>{data.meta.stage}</dd>
 					</div>

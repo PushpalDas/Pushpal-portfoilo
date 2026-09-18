@@ -1,6 +1,6 @@
 # Product Portfolio — Pushpal Das (full case-study export)
 
-_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-09-02. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
+_Complete export of every product and its case study, compiled from `app/work/constants.ts` and `data/case-studies-v2.json` on 2026-09-15. This is the full-depth version: it carries the section prose, decision records, scope calls, data tables, chart datasets, interface reasoning and technical configuration — not only the summaries. Regenerate with `python scripts/export-products.py`._
 
 ## How to read this
 
@@ -23,42 +23,45 @@ _Complete export of every product and its case study, compiled from `app/work/co
 | 7 | Wi-R Near Field Electric — XA-NFE3001 | Ixana | 2024 - present | silicon | production | Silicon |
 | 8 | Wi-R Near Field Electric — XA-NFE2001 | Ixana | 2024 - 2026 | silicon | production | Silicon |
 | 9 | Accurate estimation of mineral present in soil | IIRS-ISRO, Govt. of India | 2022 | ai | internal | Remote sensing |
-| 10 | Quantum Gate Simulator — interactive 10-qubit circuit builder | Personal | 2026 - present | ai | prototype | Learning tools |
-| 11 | Procurement Orchestrator — M365-native request workflow | Ixana | 2026 | ai | customer-testing | Procurement ops |
+| 10 | Quantum Gate Simulator — interactive 10-qubit circuit builder | Personal | 2026 - present | ai | research | Learning tools |
+| 11 | Ops Orchestrator — procurement, shipment and presentation workflows on M365 | Ixana | 2026 | ai | customer-testing | Ops workflows |
 | 12 | WishKey — Key Management System | EEGRAB | 2023 | silicon | production | Access control |
 | 13 | Wi-R reference designs — video smartglasses and tactical headset | Ixana | 2024 - 2026 | silicon | production | Wearable systems |
 | 14 | Cost-effective smart watch | EEGRAB | 2023 | silicon | production | Consumer wearable |
-| 15 | Team performance reporting — five teams, three windows | Ixana | 2026 | ai | internal | Delivery reporting |
-| 16 | Scrum ecosystem — one workspace for sprint ceremonies | Ixana | 2026 | ai | internal | Agile tooling |
-| 17 | Flow Tracker — real-time delivery pipeline diagnostics | Ixana | 2026 | ai | internal | Engineering ops |
-| 18 | ClickUp Activity Tracker — task change audit trail | Ixana | 2026 | ai | internal | Audit tooling |
-| 19 | Video library and meeting recordings | Ixana | 2026 | ai | internal | Meeting intelligence |
-| 20 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation |
-| 21 | AI Salary Generator | Ixana | 2026 - present | ai | customer-testing | HR tooling |
-| 22 | AI product planning operating system | Ixana | 2026 | ai | internal | Planning tooling |
-| 23 | AI Lawyer — multi-agent patent drafting system | Ixana | 2026 | ai | prototype | Legal tooling |
-| 24 | ClickUp reporting and Gantt dashboard | Ixana | 2026 | ai | internal | PM tooling |
-| 25 | In-house meeting notetaker | Ixana | 2026 | ai | internal | Meeting intelligence |
-| 26 | Patent program operations | Ixana | 2026 | ai | internal | Patent operations |
-| 27 | Document change intelligence | Ixana | 2026 | ai | internal | Documentation ops |
-| 28 | Condenser microphone | EEGRAB | 2024 | silicon | production | Audio hardware |
-| 29 | Sensor signal generator | SLB | 2023 | silicon | production | Test engineering |
-| 30 | Ornithopter for surveillance | SRM UAV | 2021 - 2023 | silicon | prototype | Aerial robotics |
-| 31 | Carbon positive e-car | Ricky Kids | 2020 | silicon | research | Sustainable mobility |
-| 32 | UAV-aided weather radar calibration | NIT Tiruchirapalli  & SRM University | 2022 | silicon | research | Weather instrumentation |
-| 33 | Non-contact COVID patient monitoring | Ricky Kids | 2021 | silicon | research | Health sensing |
-| 34 | Triple riding avoidance | Ricky Kids | 2022 | ai | internal | Road safety |
-| 35 | Toys for autistic kids | Ricky Kids | 2021 - 2023 | silicon | prototype | Assistive play |
-| 36 | Sludge-traversing ROV | Ricky Kids | 2022 | silicon | research | Field robotics |
-| 37 | ENVI-City — sustainable smart city concept | Ricky Kids | 2022 | silicon | research | Urban concept |
+| 15 | Wi-R — XA-XXXXXXX · customer sampling | Ixana | Current | silicon | development | Silicon |
+| 16 | Confidential platform chip — XA-XXXXXXX | Ixana | Current | silicon | development | Silicon |
+| 17 | Wi-R — XA-XXXXXXX · next generation | Ixana | Current | silicon | development | Silicon |
+| 18 | Team performance reporting — five teams, three windows | Ixana | 2026 | ai | internal | Delivery reporting |
+| 19 | Scrum ecosystem — one workspace for sprint ceremonies | Ixana | 2026 | ai | internal | Agile tooling |
+| 20 | Flow Tracker — real-time delivery pipeline diagnostics | Ixana | 2026 | ai | internal | Engineering ops |
+| 21 | ClickUp Activity Tracker — task change audit trail | Ixana | 2026 | ai | internal | Audit tooling |
+| 22 | Video library and meeting recordings | Ixana | 2026 | ai | internal | Meeting intelligence |
+| 23 | Calendar sync — Outlook and Gmail without leaking detail | Ixana | 2025 | ai | internal | Workplace automation |
+| 24 | AI Salary Generator | Ixana | 2026 - present | ai | customer-testing | HR tooling |
+| 25 | AI product planning operating system | Ixana | 2026 | ai | internal | Planning tooling |
+| 26 | AI Lawyer — multi-agent patent drafting system | Ixana | 2026 | ai | customer-testing | Legal tooling |
+| 27 | ClickUp reporting and Gantt dashboard | Ixana | 2026 | ai | internal | PM tooling |
+| 28 | In-house meeting notetaker | Ixana | 2026 | ai | internal | Meeting intelligence |
+| 29 | Patent program operations | Ixana | 2026 | ai | internal | Patent operations |
+| 30 | Document change intelligence | Ixana | 2026 | ai | internal | Documentation ops |
+| 31 | Condenser microphone | EEGRAB | 2024 | silicon | production | Audio hardware |
+| 32 | Sensor signal generator | SLB | 2023 | silicon | production | Test engineering |
+| 33 | Ornithopter for surveillance | SRM UAV | 2021 - 2023 | silicon | prototype | Aerial robotics |
+| 34 | Carbon positive e-car | Ricky Kids | 2020 | silicon | research | Sustainable mobility |
+| 35 | UAV-aided weather radar calibration | NIT Tiruchirapalli  & SRM University | 2022 | silicon | research | Weather instrumentation |
+| 36 | Non-contact COVID patient monitoring | Ricky Kids | 2021 | silicon | research | Health sensing |
+| 37 | Triple riding avoidance | Ricky Kids | 2022 |  | internal | Road safety |
+| 38 | Toys for autistic kids | Ricky Kids | 2021 - 2023 | silicon | prototype | Assistive play |
+| 39 | Sludge-traversing ROV | Ricky Kids | 2022 | silicon | research | Field robotics |
+| 40 | ENVI-City — sustainable smart city concept | Ricky Kids | 2022 | silicon | research | Urban concept |
 
 ## Distribution
 
-- **Total products:** 37 (plus 17 engineering/hardware builds, in the appendix)
-- **By track:** ai 20 · silicon 17
-- **By status:** internal 14 · production 10 · research 7 · prototype 4 · customer-testing 2
-- **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli  & SRM University 1
-- **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Procurement ops 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
+- **Total products:** 40 (plus 17 engineering/hardware builds, in the appendix)
+- **By track:** silicon 20 · ai 19 · None 1
+- **By status:** internal 14 · production 10 · research 8 · customer-testing 3 · development 3 · prototype 2
+- **By company:** Ixana 24 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli  & SRM University 1
+- **By domain:** Silicon 7 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Ops workflows 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
 
 ---
 
@@ -1420,17 +1423,17 @@ _No long-form case study on file — card-level entry only._
 | Years | 2026 - present |
 | Track | ai |
 | Domain | Learning tools |
-| Status | prototype |
+| Status | research |
 | Context | Personal · 2026 · Learning tools |
 | Role | Product lead, personal project |
 | Team | 2 people |
 | Timeline | Jan – Jun 2026 |
-| Stage | Prototype — complete and working, never released to learners |
+| Stage | Research — complete and working, never released to learners |
 | Link | /demo/quantum-simulator |
 
 **Positioning.** A working 10-qubit circuit builder with live Bloch-sphere rendering, built to make state evolution visible — and never put in front of a learner.
 
-**Outcome (card copy).** A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a prototype and never went out to learners.
+**Outcome (card copy).** A working 10-qubit simulator with real-time 3D Bloch rendering; it stayed a research build and never went out to learners.
 
 **Problem.** People learning quantum logic can compute what a gate does and cannot see it. Observing a teaching session and surveying 31 learners found 24 could apply a Hadamard correctly on paper and 7 could describe what it did to the state vector.
 
@@ -1501,7 +1504,7 @@ _The prototype’s own engine, ported into the browser and running: a GHZ state,
 
 _The demo is the prototype’s Python state-vector engine ported into a single file and running in the browser. It builds the full 2ⁿ × 2ⁿ operator per gate by Kronecker product exactly as the deployed one does, because the cost of doing it that way is the finding in section 05 and an optimised port would have made that claim uncheckable. Nothing on it is a stored number: change the circuit, flip a qubit’s initial state, or push it to ten qubits and watch the update time leave the budget._
 
-#### 05. What we learned
+#### 05. Finding and what it changed
 
 We agreed before building that the interaction failed if state-vector computation at the ceiling exceeded a 200ms budget — beyond that a placement stops feeling connected to its result. Correctness was the guardrail: a fast renderer computing the wrong state is worse than a slow one, so the physics suite ran on every engine change.
 
@@ -1524,9 +1527,9 @@ _Measured computation time by qubit count, Jun 2026, median of 20 runs per point
 | 32 | Physics tests passing (guardrail) |
 | 0 | Learners; it was never released |
 
-The second thing learned is what the prototype cannot tell us. It was built to test a claim about intuition, and because it never reached a learner that claim is exactly as unproven as in December. Everything above is about the software, not about whether watching a Bloch sphere move teaches anyone anything.
+The second thing learned is what the study cannot tell us. It was built to test a claim about intuition, and because it never reached a learner that claim is exactly as unproven as in December. Everything above is about the software, not about whether watching a Bloch sphere move teaches anyone anything.
 
-`Prototype configuration — FastAPI and NumPy state vector engine · 10-qubit cap · Next.js front end with React Three Fiber Bloch rendering · prebuilt Bell and GHZ circuit library · 32 backend tests, 1.34 second suite`
+`Research configuration — FastAPI and NumPy state vector engine · 10-qubit cap · Next.js front end with React Three Fiber Bloch rendering · prebuilt Bell and GHZ circuit library · 32 backend tests, 1.34 second suite`
 
 By the letter of that bar, ten qubits fails it: the honest cap was nine, and we kept ten because the overshoot was imperceptible in use — a revision of the budget we made silently and should have made out loud.
 
@@ -1536,201 +1539,209 @@ I built the whole thing before showing it to a single learner. A paper prototype
 
 I would also have measured the qubit ceiling first. It shaped every other decision and I estimated it, which happened to be close. Wrong by two qubits the other way, the entire interaction model would have rested on an assumption checkable in a day.
 
-> **Note on this sample.** This is a personal prototype that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the prototype’s own engine so they can be checked. I’m glad to walk through the full prototype, backend and 3D renderer included, in a conversation.
+> **Note on this sample.** This is a personal research build that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the build’s own engine so they can be checked. I’m glad to walk through the full build, backend and 3D renderer included, in a conversation.
 
 ---
 
-### 11. Procurement Orchestrator — M365-native request workflow
+### 11. Ops Orchestrator — procurement, shipment and presentation workflows on M365
 
 | Field | Value |
 |---|---|
-| Slug | `procurement-orchestrator-procurement-process-automation-with` |
+| Slug | `ixana-ops-orchestrator` |
 | Company | Ixana |
 | Years | 2026 |
 | Track | ai |
-| Domain | Procurement ops |
+| Domain | Ops workflows |
 | Status | customer-testing |
-| Context | Ixana · 2026 · Procurement ops |
+| Context | Ixana · 2026 · Ops workflows |
 | Role | Product manager, pilot owner |
-| Team | 2 operations analysts, 1 platform administrator |
+| Team | 2 operations analysts, 1 shipping manager, 1 operations coordinator, 1 platform administrator |
 | Timeline | Apr 2026 – present |
-| Stage | Controlled pilot across three internal organisations |
-| Link | /demo/procurement-desk |
+| Stage | Controlled pilot: three request streams across three internal organisations |
+| Link | /demo/ops-desk |
 
-**Positioning.** A pilot whose operating contract is the product: one named owner within a business day, no transition without evidence, and launch gates written before the first request.
+**Positioning.** One operating contract — a named person within a business day, every decision an event with evidence, a morning check that reads the list and not the flow — applied to procurement, shipments and the Thursday presentations.
 
-**Outcome (card copy).** In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.
+**Outcome (card copy).** In pilot across three request streams: one operating contract names a person within a business day, and no purchase, shipment or Thursday slot moves without a recorded decision.
 
-**Problem.** A physical-goods request entered a process with no named owner. Nineteen interviews and a thread analysis of 63 completed requests found a median of 4 chase emails each, and 22 of the 63 progressed with no recorded approval — not because anyone bypassed a control, but because none existed.
+**Problem.** Three kinds of internal request — a purchase, a shipment, a slot in the Thursday presentation series — failed the same way: the request was nobody's until somebody complained. Across 63 procurement threads, 41 shipping asks and 26 weeks of the schedule, 22 purchases progressed with no recorded approval, 29 shipments arrived with no project named, and 6 Thursdays learned of a missing speaker that morning.
 
-**What I did.** I scoped a lean pilot on tooling we already own, spending the effort on the operating contract rather than the software: who owns a request within a business day, what a status transition must carry as evidence, and which pre-agreed gates would stop the pilot.
+**What I did.** I wrote one operating contract in words a flow could enforce, proved it on procurement with owned tooling, then applied it unchanged to shipments and to the presentation reminders.
 
-**Result.** Early signal only — deliberately below any rate-claim threshold. What held is the contract: no request reaches order without a recorded approval, the ceiling refuses what the pilot has no business handling, and every launch gate is counted live from the demo’s own requests. The running totals below are the worked example.
+**Result.** Early signal only, n stated on every figure. Of 48 completed requests, 45 had a named person inside a business day, none was ordered or shipped without a recorded approval, and all three flow failures were caught by the morning check the same day.
 
 **Evidence / demos**
 
-- [Open the working demo — the pilot as a requester, an analyst, the controller and a manager](/demo/procurement-desk)
-- [Or start at the gate that is failing, and the two requests that fail it](/demo/procurement-desk?view=gates&as=priya)
+- [Open the working demo — three streams, one board, as a requester, an analyst, an approver or the coordinator](/demo/ops-desk)
+- [Or start at the gate that is not met, and the three requests that miss it](/demo/ops-desk?view=gates&as=owen)
 
-> **Confidentiality.** Internal pilot — the screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price or requester appears on this page.
+> **Confidentiality.** Internal pilot — every screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price, requester or presenter appears on this page.
 
 #### 01. Why this, and why now
 
-The obvious answer was a procurement platform, and the company had looked at three. I argued for one quarter proving the operating model on tooling we own: every failure in the thread analysis was one of accountability, and a platform bought to fix that tends to reproduce it with better reporting.
+The obvious answer was a platform, and the company had looked at three procurement systems and a shipping one. I argued for a quarter proving the operating model on tooling we own: every failure in the records was one of accountability, which a platform reproduces with better reporting. The stronger argument arrived later — a contract written once let two more workflows be added in weeks.
 
-**Figure — Weeks to a working process under each option: lean pilot on existing tooling 5, extend the finance system 14, buy a procurement platform 26**
+**Figure — Weeks to a working process: buy a platform 26, extend the finance system 14, the first stream on owned tooling 5, the second stream on the same contract 3, the third 1**
 
 | name | value | label |
 |---|---|---|
-| Lean pilot on existing tooling | 5 | 5 weeks |
-| Extend the finance system | 14 | 14 weeks |
 | Buy a procurement platform | 26 | 26 weeks plus licensing |
+| Extend the finance system | 14 | 14 weeks |
+| Procurement, on owned tooling | 5 | 5 weeks |
+| Shipments, on the same contract | 3 | 3 weeks |
+| Presentation reminders, same contract | 1 | 1 week |
 
-_Options sizing, Mar 2026, estimated with the platform administrator and the finance systems owner. At fewer than ten requests a week the lean option is not a compromise — it is proportionate, and the only one that tests the operating model before committing to a platform._
+_Options sizing, Mar 2026, estimated with the platform administrator and the finance systems owner; the two lower bars are the elapsed time each later stream actually took, Jul and Jun 2026. The compounding is the argument: a contract written once is what a second and third stream inherit._
 
-Volume is what makes this defensible. Under ten requests a week does not justify a control plane, and I set a trigger — fifty a week — at which the architecture must be revisited rather than stretched.
+Under ten purchases and five shipments a week does not justify a control plane; past fifty a week the architecture is revisited, not stretched.
 
 #### 02. The problem as people experienced it
 
-I interviewed 19 people who had raised a request in the previous six months, then read and coded the full email thread of 63 completed requests. The interviews explained how it felt; the threads showed where a request stopped moving and for how long.
+I read three request streams the same way: the full email thread of 63 completed purchases, the Teams and email asks behind 41 shipments, and 26 weeks of the presentation schedule against what happened on the Thursday. Nineteen requester interviews explained how it felt; the records showed where each request stopped, and that it was the same place in all three.
 
-| What they did | Where it broke | Evidence |
+| Stream | Where it broke | Evidence |
 |---|---|---|
-| Emailed a request to procurement | No acknowledgement, no owner assigned | 51 of 63 threads; median 3.6 days to a reply |
-| Chased for a status | Whoever replied guessed from memory | Median 4 chase emails per request |
-| Waited for approval | Approval sometimes verbal or absent | 22 of 63 progressed with no recorded approval |
-| Asked when it would arrive | No verified ETA existed anywhere | 17 of 19 interviewed raised this unprompted |
+| Purchases, emailed to procurement | No acknowledgement, no owner; approval sometimes verbal or absent | 51 of 63 threads unacknowledged; 22 of 63 progressed with no recorded approval |
+| Shipments, asked of one person in Teams | The shipping desk could not say which project a box belonged to, or chased for an address | 29 of 41 with no project or owner recorded; 17 of 41 needed a follow-up for address or documents |
+| Presentations, kept in a schedule workbook | Nobody asked the speaker until the morning | 9 of 26 slots unconfirmed the day before; 6 of 26 discovered a missing speaker on the day |
 
-**Figure — Across 63 completed request threads: 51 had no acknowledgement, 34 had an unclear owner throughout, 22 progressed without a recorded approval, 9 were rebuilt in a spreadsheet**
+**Figure — Share of each stream that reached the person who had to act with nobody named: purchases 51 of 63 unacknowledged, purchases 22 of 63 with no recorded approval, shipments 29 of 41 with no project or owner, shipments 17 of 41 chased for details, presentations 9 of 26 unconfirmed the day before**
 
 | name | value | label |
 |---|---|---|
-| No acknowledgement at all | 51 | 51 / 63 |
-| Owner unclear throughout | 34 | 34 / 63 |
-| No recorded approval | 22 | 22 / 63 |
-| Tracked in a private spreadsheet | 9 | 9 / 63 |
+| Purchases: no acknowledgement | 51 | 51 / 63 |
+| Purchases: no recorded approval | 22 | 22 / 63 |
+| Shipments: no project or owner recorded | 29 | 29 / 41 |
+| Shipments: chased for address or documents | 17 | 17 / 41 |
+| Presentations: unconfirmed the day before | 9 | 9 / 26 |
 
-_Thread analysis of 63 completed requests, Oct 2025 – Mar 2026, coded from the email record. The last bar predicts failure: nine people had already built their own tracking, and a pilot that does not beat a private spreadsheet will be ignored by exactly those people._
+_Records coded Oct 2025 – Mar 2026: 63 procurement threads from the shared mailbox, 41 shipping asks reconstructed from the shipping desk's Teams history, 26 schedule rows against the meeting record. Three streams, one shape — the request that nobody named is the request that stopped._
 
-The reframe: requesters were not asking for speed. 17 of 19 said they could plan around a slow request and not around an unknown one, which makes the product problem a reliable answer to "who has this and what happens next".
+Nobody was asking for speed. People could plan around a slow purchase, a late box or a swapped speaker — not around an unknown.
 
 #### 03. My role and approach
 
-I own the pilot scope, the operating model and the launch contract. Most of the work was writing rules precisely enough for a flow to enforce, and deciding what stays with a person.
+I own the contract, each stream's scope and the launch gates; most of the work was writing rules a flow could enforce.
 
 **Key decisions**
 
-- **One canonical list, and requesters cannot edit it.** Requester edits are how status drifts from reality. They get a controlled path to add information rather than change state.
-- **Every status change carries actor, timestamp, source and evidence.** The 22 requests that progressed without a recorded approval did so because a status was a word, not an event.
-- **Automate routing, reminders and approvals; keep supplier choice with people.** The deterministic parts fail silently by hand; the judgement parts are where an automated mistake is expensive and hard to detect.
-- **Physical goods only, one item type per request.** Services and software carry different approval paths and would have doubled the rule set. Narrowing made the contract specific enough to test.
+- **One canonical list per stream; requesters cannot edit it.** The shipment list is flat, one row per line item, and the desk writes only to blank cells.
+- **A decision is an event with evidence, or it is not written.** A document reference, a card response stamped on every row, or the row's own token.
+- **The flows refuse rather than warn.** The ceiling blocks submission; a trigger condition lets only line one through; a tampered link acts on nothing.
+- **The morning check reads the list, never the flow.** Reminders due against sent, cards sent against requests pending, rows a run skipped.
 
 #### 04. What I cut
 
 **Scope**
 
-- _Shipped:_ Canonical request list with a submission form · Routing and approver maps · One financial approval stage · Reminders, escalation and ageing views · Daily integrity check with an exceptions log
-- _Deferred:_ Supplier catalogue integration · Multi-currency handling · Requester-visible spend reporting
-- _Cut:_ Services and software requests · Multi-stage approval chains · Automated supplier selection
+- _Shipped:_ Procurement: request list, submission form, routing and approver maps, one approval stage, ageing views, exceptions log · Shipments: intake form that mints SHIP-YYYY-NNNNNN by creating the request's folder, flat list with one row per line, tiered Teams approval card, shipping desk · Presentations: 08:00 reminder job at T-2 and T-1, escalation on the day, token-bearing confirmation webhook, daily digest to the ops group · One daily integrity check across the three lists
+- _Deferred:_ Carrier tracking and address validation through carrier APIs · Auto-population from ERP and purchase-order data · Multi-currency handling and requester-visible spend reporting
+- _Cut:_ Services and software requests · The shipping lifecycle dashboard: carrier scorecards, exception management, label storage, ERP integrations · Free-form quotes in card text — the intake form blocks the two characters that break the card
 
-Cutting services and software was the hardest call, because they are the requests people complain about most — which is exactly why they were wrong for a pilot. Their approval logic depends on contract value, renewal dates and legal review, none of which the lean tooling models. They keep the email path: unsatisfying and honest.
+The hardest cut was the shipping dashboard the shipping team had specified: fourteen sections of request-to-delivery platform sized for half a million shipments. We send a few boxes a week with one carrier. What survived is an intake form, one flat list, one approval card and a desk that fills the blank half of each row. The cost: on-time performance is a date somebody types, not a feed — right at five shipments a week, wrong at fifty.
 
-**The pilot does not exit to production unless all of the following hold — From the pilot specification — launch gates, v1.2**
+**No stream exits to production unless all of the following hold — From the pilot specification — launch gates, v2.0**
 
-- **Assignment.** 100% of requests assigned to one named owner within one business day of submission.
-- **Approval integrity.** Zero requests ordered without a valid recorded approval.
-- **Failure visibility.** Zero silent flow failures, and no known-incorrect status left unresolved beyond one business day.
-- **Volume.** At least 20 completed pilot requests before production exit is considered.
+- **Named person.** 100% of requests owned, decided or answered by a named individual within one business day.
+- **Decision integrity.** Zero requests ordered or shipped without a valid recorded approval.
+- **One card per request.** Zero duplicate approval cards after 16 Jul 2026.
+- **Failure visibility.** Zero silent flow failures, and no known-incorrect state left unresolved beyond one business day.
+- **Volume.** At least 20 completed requests in a stream before its exit is considered.
 
-_One page from the pilot specification. Organisation names and approver thresholds removed._
+_One page from the pilot specification. The first four gates were written for procurement in April; the third was added in July when the shipment flow taught us a new way to fail. Organisation names and approver thresholds removed._
 
 #### 05. How I got it agreed
 
-The finance controller wanted two approval stages — budget holder then finance — because that is the control the company operates above a certain value, and a weaker one looked like using the pilot to erode it. She was right to be suspicious; pilots have a way of becoming the permanent process.
+The shipping manager had written the intake specification herself, and it asked the requester for everything — every field required, because each had at some point been the thing she had to chase. She was right about the chasing.
 
-I did not argue that one stage was sufficient, because for larger purchases it plainly is not. I proposed a value ceiling: requests above the finance-approval threshold route out of the pilot entirely, so it could not weaken any control because the requests those controls exist for never enter it.
+I was watching engineers abandon a seventy-field form at the address section: they did not know the freight class, and the carrier held every existing vendor's address. Rather than argue for fewer fields, I proposed splitting the form by who knows the answer — the engineer says what, why, when and to whom; the shipping team says how, on the same rows, once the card has cleared them.
 
-She agreed, and added a condition I would not have proposed: the routing rule is a blocking validation — a request above the ceiling cannot be submitted at all. It has blocked four; four times the pilot would have quietly swallowed something it had no business handling.
+She agreed, and added a condition I had not planned for: the shipping-requirements section I thought redundant stays, and ship-from is optional only for a vendor the carrier already knows.
 
 #### 06. What was built
 
-A submission form writing into a canonical request list, with routing and approver maps, a shipments list and an exceptions log. Requesters see owner, status, next action, verified ETA and timeline. Procurement works one queue from assignment through delivery, and managers get a grouped view of ageing work.
+Three canonical lists on one SharePoint site. Procurement: a form, a request list, approver maps, an exceptions log. Shipments: an intake form that mints the request ID by creating its attachment folder, a flat list, a tiered Teams approval card stamped on every row, a shipping desk. Presentations: a schedule workbook read by a job that posts reminder cards, a webhook that checks each answer against its row, a daily digest.
 
-**Interface — The requester view of PR-2043. A strip across the top names the owner, the status, the next action as a named person, and an expected delivery date flagged verified with the supplier. Below it the timeline lists seven transitions, each carrying an actor, a timestamp, a source and an evidence reference.**
+**Interface — The Ops board: the three questions written out, then three columns for procurement, shipments and presentations, each answering them with a large number over its denominator — 21 of 23, 14 of 14 and 10 of 11 named within a day; 23 of 23 and 13 of 13 with a recorded approval; and the silent failure, the duplicate cards and the stopped run each stream found.**
 
-[Open this request and try to change its status](/demo/procurement-desk?view=request&id=PR-2043&as=nadia)
+[Open the board, then approve a card and watch a column move](/demo/ops-desk?view=board&as=owen)
 
-- **Next action names a person, not a stage.** "In procurement" is what 34 of 63 threads effectively said. A named person is the difference between a status and an answer.
-- **The ETA is labelled verified or unverified.** An unverified ETA presented as fact is how a requester plans around a date that was always a guess.
-- **The timeline shows who changed what, with its evidence.** This is where the 22 unapproved progressions become impossible — a transition without evidence cannot be recorded at all.
-- **Requesters can add information but not change state.** Letting requesters edit status is the fastest route back to a list nobody trusts, which is the failure this replaced.
+- **The same three questions, asked of three unrelated streams.** Buying, sending and turning up to speak share nothing as work and everything as failure. One board, not three dashboards, because the failure was one failure.
+- **Every number is counted from the rows behind the other screens.** Nothing on the board is stored, so it cannot drift from the queue, the shipment list or the schedule it describes. Approve a card and the column moves.
+- **The failing cell is shown, with its cause.** Three misses of 48 — two Friday requests and one unanswered speaker — read as amber with the exception that explains each. A board that only showed green would be measuring nothing.
+- **A stream can be added without adding a question.** Shipments reused the procurement gates and added one; presentations reused all five and added none. That is the evidence the contract is the product.
 
-_Recreated from the pilot interface as a working demo. The fields, the transition rules, the value ceiling and the four gates are the real ones; every organisation, requester, supplier, item, price and date shown is invented. Happy to walk through the real pilot in a conversation._
+_Recreated from the pilot as a working demo. The lists, the trigger condition, the card, the token rule and the five gates are the real ones; every organisation, requester, approver, presenter, supplier, item, price and date is invented. Happy to walk through the real pilot in a conversation._
 
 **Gallery**
 
-- **The ceiling refuses, it does not warn.** — [Open the refusal, then change the number](/demo/procurement-desk?view=submit&as=nadia&item=Probe%20card%20for%20the%20YR31%20test%20programme&amount=18400&try=1)  The finance controller’s condition, and the reason one approval stage was acceptable at all: a request at or above the threshold cannot be submitted into the pilot. Four hit this rule — four times the pilot did not quietly swallow something it had no business handling. This link opens the refusal itself; drop the value below the ceiling and the same button writes the request.
-- **A transition is an event, not a word.** — [Open the queue and try assigning to the team mailbox](/demo/procurement-desk?view=queue&as=dana)  The two analysts work one queue from assignment through delivery. Every button asks for the document the transition can be checked against, and refuses to write without one — including the refusal that matters most, which is assigning a request to “Procurement” rather than to a person.
-- **Visible at three days, escalated only on a breach.** — [Open the manager view](/demo/procurement-desk?view=ageing&as=priya)  Managers see everything older than three days, grouped by organisation. Nobody is messaged for appearing here; a direct escalation fires only when a gate is actually breached. The cost is named in the tradeoffs — a request can sit visible and unescalated for several days.
-- **The check that found the failure that reported success.** — [Open the exceptions log](/demo/procurement-desk?view=exceptions&as=dana)  Short flows fail quietly. Four exceptions in five months, one of them a reminder flow that failed on a throttled connector and returned success — which is why the daily check now compares reminders due against reminders sent rather than reading the flow’s own result.
-- **The gate that is failing, and why that is useful.** — [Open the gates](/demo/procurement-desk?view=gates&as=priya)  Three of the four launch gates hold and one does not. Every number here is counted from the requests in the demo rather than stored, so the gate cannot drift from the queue it describes — drive a request through to delivery and watch the denominator move.
+- **One request, one card, however many lines.** — [Open the card as the director](/demo/ops-desk?view=shipments&id=SHIP-2026-000112&open=card&as=owen)  A three-line Critical shipment is three list rows and one card, posted to the manager, then the shipping manager, then the director, each waiting on the one before. The trigger condition on the flow is the reason there is one card and not three; the decision on it is stamped on every row. This link opens the card as the director, the only person holding its buttons at that tier.
+- **The desk fills what is blank and never overwrites a decision.** — [Open the desk and fill the delivery date](/demo/ops-desk?view=shipments&id=SHIP-2026-000113&open=desk&as=elena)  What the shipping team sees for a request the card has cleared: the requestor's half read-only, the flow's approval stamps read-only, and every blank tracking cell an input. A save writes only the filled cells, to every row of the request, and the page says which it skipped. This is the form split the shipping manager agreed to, seen from her side.
+- **A speaker who has answered, or an escalation before the day.** — [Run the job as of 25 Aug, then open the card](/demo/ops-desk?view=presentations&asof=25%20Aug%202026&as=maya)  The schedule with its Sent stamps and tokens, and the 08:00 job run by hand as of a chosen morning so the T-2 reminder, the T-1 reminder and the escalation can be seen without waiting a week. Run it as of 25 Aug and the first card goes to the 27 Aug speaker with a freshly minted token; confirm from the card and the later steps never fire.
+- **The ceiling refuses, it does not warn.** — [Open the refusal, then change the number](/demo/ops-desk?view=submit&as=nadia&item=Probe%20card%20for%20the%20YR31%20test%20programme&amount=18400&try=1)  The finance controller's condition, and the reason one approval stage was acceptable at all: a purchase at or above the threshold cannot be submitted into the pilot. Four hit this rule — four times the pilot did not quietly swallow something it had no business handling. Drop the value below the ceiling and the same button writes the request.
+- **A transition is an event, not a word.** — [Open the queue and try assigning to the team mailbox](/demo/ops-desk?view=queue&as=dana)  The two analysts work one queue from assignment through delivery. Every button asks for the document the transition can be checked against, and refuses to write without one — including the refusal that matters most, which is assigning a request to “Procurement” rather than to a person.
+- **Five gates, one not met, and why that is useful.** — [Open the gates](/demo/ops-desk?view=gates&as=owen)  The gates written before the first request, now counted across all three streams. Four hold and one does not: three requests of 48 waited more than a business day, each for a named, fixable reason. Every number is counted from the demo's own rows, so drive a card to a decision and watch the denominator move.
 
-_Every screen above is the state its own link opens, captured from the running demo on invented data. It exists so the argument on this page can be checked rather than taken on trust: submit above the ceiling, assign a request to the team mailbox instead of a person, record a transition with the evidence field empty, or approve something as the wrong role and read what each one refuses._
+_Every screen above is the state its own link opens, captured from the running demo on invented data. It exists so the argument on this page can be checked rather than taken on trust: submit above the ceiling, assign to the team mailbox, approve a card as the wrong tier, tamper with a confirmation token, and read what each one refuses._
 
 #### 07. Tradeoffs
 
 | Tension | What I chose | What it cost |
 |---|---|---|
-| Speed to pilot vs control depth | Short flows, daily integrity checks, human verification | Integrity depends on a check running rather than on the system being incapable of drift |
-| Requester visibility vs status accuracy | Full visibility, no requester edits | Requesters who spot a wrong status must ask someone to correct it |
-| Automation vs governance | Automate routing and reminders, keep supplier choice human | Procurement still spends real time on quotes, which is where the calendar days mostly go |
-| Management visibility vs alert fatigue | All ageing work visible after three days, direct escalation only on breach | A request can sit visible-but-unescalated for several days |
+| Speed to pilot vs control depth | Short flows, a daily check, human verification | Integrity depends on a check running rather than on the system being incapable of drift |
+| One flat list vs a normalised store | One row per line item, the request tied by a shared ID | Every request-level write touches every row, and the approval flow needed a trigger condition to run once |
+| A custom card vs the built-in approvals connector | A card that shows every line, package and justification in the chat | The card is JSON assembled from field values, so the form must block two characters at intake |
+| A confirmation link vs a sign-in | A token per row, carried in the link, revocable by clearing one cell | Anyone holding the card can answer for that row until the cell is cleared |
+| A workbook as the schedule of record vs a list | The coordinator keeps the sheet she already kept | Dates arrive as day counts and a noon slot as a bare 12; the job parses every shape the sheet has produced |
 
 #### 08. Early signal and what I'm watching
 
-The numbers below come from 23 completed requests across three organisations — enough to see whether the operating contract holds and nowhere near enough to claim an effect size. Every figure is a count against its denominator, and none of it should be read as a result.
+The numbers come from 48 completed requests — 23 purchases, 14 shipments, 11 presentations — enough to see whether the contract holds, not enough to claim an effect size. Every figure is a count against its denominator; the two newer streams sit below the twenty-request floor for exit.
 
 **Metrics**
 
 | Value | Measure |
 |---|---|
-| 23 | Pilot requests completed so far (n for all figures) |
-| 21 (of 23) | Assigned to a named owner within one business day |
-| 0 (of 23) | Ordered without a recorded approval |
-| 3.6d → 0.6d | Median time from submission to a named owner |
-| 2 (of 23) | Requesters who still chased by email |
+| 48 | Requests completed across three streams (n for all figures) |
+| 45 (of 48) | Owned, decided or answered by a named person within one business day |
+| 0 (of 36) | Ordered or shipped without a recorded approval |
+| 3 → 1 | Approval cards for a three-line shipment request, before and after the trigger condition |
+| 10 (of 11) | Thursday presentations confirmed by the speaker before the day |
 | 1 | Silent flow failure, caught by the daily check (guardrail) |
 
-**Figure — Pilot performance against each pre-agreed launch gate: assignment 21 of 23 against a target of 23, approval integrity 23 of 23, failure resolution 1 of 1 within a day, volume 23 against a floor of 20**
+**Figure — Pilot performance against each pre-agreed launch gate across the three streams: named person within a business day 45 of 48 against a target of 48, decision integrity 36 of 36, duplicate cards since the trigger condition 0 against a target of 0, flow failures resolved 3 of 3, volume 48 against a floor of 20**
 
 | name | value | target | max | label | targetLabel | pass |
 |---|---|---|---|---|---|---|
-| Assigned within 1 business day | 21 | 23 | 25 | 21 of 23 | gate: 23 | False |
-| Ordered with valid approval | 23 | 23 | 25 | 23 of 23 | gate: 23 | True |
-| Failures resolved within 1 day | 1 | 1 | 25 | 1 of 1 | gate: all | True |
-| Completed pilot requests | 23 | 20 | 25 | 23 | floor: 20 | True |
+| Named person within 1 business day | 45 | 48 | 50 | 45 of 48 | gate: 48 | False |
+| Ordered or shipped with a recorded approval | 36 | 36 | 50 | 36 of 36 | gate: 36 | True |
+| Duplicate approval cards since 16 Jul | 0 | 0 | 50 | 0 | gate: 0 | True |
+| Flow failures resolved within 1 day | 3 | 3 | 50 | 3 of 3 | gate: all | True |
+| Completed requests across the pilot | 48 | 20 | 50 | 48 | floor: 20 | True |
 
-_Performance against the four launch gates, Apr–Aug 2026, n=23. Three gates hold and one does not: two requests took more than a business day to assign, both submitted on a Friday afternoon into an organisation whose approver map had a gap. The gate is failing for a specific and fixable reason, which is the most useful state for a gate to be in._
+_Performance against the five launch gates, Apr–Aug 2026, n=48. Four hold and one does not: two purchases submitted on a Friday afternoon into an organisation whose approver map had a gap, and one speaker who answered neither reminder and was reached by phone after the escalation. The gate is failing for specific and fixable reasons, which is the most useful state for a gate to be in._
 
-**How we counted.** Assignment means a named individual recorded as owner, not a team or a queue, timed from submission to assignment. A request assigned to "Procurement" counts as unassigned, because that is precisely the answer 34 of the 63 original threads were giving.
+**How we counted.** A named person means an individual recorded as owner, the first approver's card response, or the speaker's own answer, timed in working hours. A purchase assigned to "Procurement", a card still with an approver, or a speaker confirmed by phone count as not met.
 
-`Pilot configuration — Microsoft Lists canonical request list · SharePoint views for queue and management · short Power Automate flows for routing, reminders and escalation · Outlook shared mailbox · one approval stage below the finance ceiling · daily integrity check · no Azure SQL, message bus, custom API or model in the critical path`
+`Pilot configuration — one SharePoint site with three canonical lists: Procurement Requests, Shipment Requests (flat, one row per line item, one attachment folder per SHIP-YYYY-NNNNNN) and an approver Settings list · two small Next.js apps, intake and desk, writing through Microsoft Graph app-only · one Power Automate approval flow with a LineNumber = 1 trigger condition and a Teams Adaptive Card per approver tier · a self-hosted n8n instance reading the presentation schedule workbook, posting 1:1 Teams cards, a webhook for confirmations and a daily digest · one morning integrity check · no Azure SQL, message bus, custom API or model in the critical path`
 
 #### 09. What would make me stop
 
-These were written down before the pilot opened, and each is a stop rather than a discussion — every one is a condition under which I would find an explanation persuasive.
+Written down before each stream opened, each a stop rather than a discussion.
 
-Any request ordered without a recorded approval stops the pilot immediately. A second silent flow failure stops it too: the first told us the integrity check works, a repeat would tell us the check has become the mechanism rather than the safety net.
+Any purchase ordered or shipment sent without a recorded approval stops that stream immediately. A second silent flow failure stops the pilot: the first proved the check works, a repeat would prove it had become the mechanism. A second duplicate card stops the shipment flow; a confirmation link that acts on any row but its own stops the reminder flow.
 
-Two softer gates run to the end. If more than a fifth of requesters still chase by email at 40 requests, the pilot has produced a better record without changing the experience it exists to fix. Past fifty a week, the lean architecture stops being proportionate.
+Two softer gates: a fifth of requesters still chasing by email at 40 purchases, or fifty requests a week.
 
 #### 10. What I'd do differently
 
-I built the approver map as configuration and treated it as settled. Both assignment-gate failures trace to one organisation whose map had a gap nobody noticed until a Friday request fell through it — a wrong map looks right until that moment.
+I built the approver map as configuration and treated it as settled; both procurement misses trace to one gap nobody noticed until a Friday request fell through it.
 
-I would also have measured chasing from the start rather than month two. The number I care most about has a denominator of 23 and no clean baseline.
+I shipped the shipment form as the specification wrote it and learned in week six what the abandonment already showed. Three engineers filling it in front of me would have found the split.
 
-> **Note on this sample.** This is an internal pilot. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample — every one is quoted against its sample size because a pilot this small cannot support a rate. No supplier, price or requester is shown. I'm glad to walk through the real pilot and its gates in a conversation.
+I let a workbook stay the schedule of record without reading how it stores things.
+
+> **Note on this sample.** This is an internal pilot. Every screen in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample — every one is quoted against its sample size because a pilot this small cannot support a rate. No supplier, price, requester or presenter is shown. I'm glad to walk through the real pilot and its gates in a conversation.
 
 ---
 
@@ -2256,7 +2267,139 @@ I also accepted the charging cradle. The teardowns told me a proprietary connect
 
 ---
 
-### 15. Team performance reporting — five teams, three windows
+### 15. Wi-R — XA-XXXXXXX · customer sampling
+
+| Field | Value |
+|---|---|
+| Slug | `wi-r-xa-customer-sampling` |
+| Company | Ixana |
+| Years | Current |
+| Track | silicon |
+| Domain | Silicon |
+| Status | development |
+| Context | Ixana · Current · Silicon |
+| Role | Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Team | 5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US |
+| Timeline | Current |
+| Stage | In development — customer sampling |
+
+**Positioning.** The next Wi-R part after the ones in production, now in customer sampling. The part number and specification are withheld.
+
+**Outcome (card copy).** The next Wi-R part, now with customers for sampling. Part number and specification withheld.
+
+**Problem.** A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet.
+
+**What I do.** The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public.
+
+**Where it stands.** Customer sampling.
+
+> **Confidentiality.** Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.
+
+#### 01. Where it stands
+
+This is the next Wi-R part after the ones in production, and it has reached customer sampling.
+
+What the part is, what it is specified to do and who is sampling it are under NDA. The page exists so the roadmap is visible: there is a part behind the shipping ones, and customers hold it.
+
+#### 02. Why the page is written this way
+
+The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.
+
+When the part is announced, the page will carry its number and its specification, like the others.
+
+> **Note on this sample.** This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation.
+
+---
+
+### 16. Confidential platform chip — XA-XXXXXXX
+
+| Field | Value |
+|---|---|
+| Slug | `confidential-platform-chip` |
+| Company | Ixana |
+| Years | Current |
+| Track | silicon |
+| Domain | Silicon |
+| Status | development |
+| Context | Ixana · Current · Silicon |
+| Role | Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Team | 5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US |
+| Timeline | Current |
+| Stage | In development — ahead of sampling tapeout |
+
+**Positioning.** A new platform chip on the roadmap, ahead of its sampling tapeout. What it is for stays confidential until it ships.
+
+**Outcome (card copy).** A new platform chip, ahead of its sampling tapeout. What it is for stays confidential until it ships.
+
+**Problem.** A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet.
+
+**What I do.** The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public.
+
+**Where it stands.** Ahead of sampling tapeout.
+
+> **Confidentiality.** Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.
+
+#### 01. Where it stands
+
+A platform chip rather than a Wi-R part: a new line, working towards its sampling tapeout.
+
+What the chip does, and the platform it is for, are under NDA until it ships. The page records only that the line exists and where it is in the flow.
+
+#### 02. Why the page is written this way
+
+The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.
+
+When the part is announced, the page will carry its number and its specification, like the others.
+
+> **Note on this sample.** This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation.
+
+---
+
+### 17. Wi-R — XA-XXXXXXX · next generation
+
+| Field | Value |
+|---|---|
+| Slug | `wi-r-xa-next-generation` |
+| Company | Ixana |
+| Years | Current |
+| Track | silicon |
+| Domain | Silicon |
+| Status | development |
+| Context | Ixana · Current · Silicon |
+| Role | Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) |
+| Team | 5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US |
+| Timeline | Current |
+| Stage | In development — ahead of production tapeout |
+
+**Positioning.** The Wi-R generation after the part now sampling, ahead of its production tapeout. The part number and specification are withheld.
+
+**Outcome (card copy).** The Wi-R generation after that, ahead of its production tapeout. Part number and specification withheld.
+
+**Problem.** A roadmap that is invisible from outside reads as a company with one part. Three are in flight behind the ones in production, and none of them can be named yet.
+
+**What I do.** The same delivery system as the parts in production — first-silicon scope, launch gates and the validation calendar across five functions and two sites — applied to a part that cannot be described in public.
+
+**Where it stands.** Ahead of production tapeout.
+
+> **Confidentiality.** Confidential silicon. The part number, specification, application, every customer and every date are withheld; the part is identified only by its line and its stage. Nothing on this page is drawn from an internal document, and no figure is given.
+
+#### 01. Where it stands
+
+The Wi-R generation after the part now sampling, working towards its production tapeout on the same delivery system.
+
+Its specification is under NDA. What can be said is that the same five functions across two sites carry it, as they carried every Wi-R part before it.
+
+#### 02. Why the page is written this way
+
+The parts in production are described on this site down to their throughput and energy per bit, because the company has published those numbers. This part has not been announced, so the page stops where the announcement would start: the line it belongs to and the stage it has reached. No date is given either, because a schedule is as much a disclosure as a specification.
+
+When the part is announced, the page will carry its number and its specification, like the others.
+
+> **Note on this sample.** This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation.
+
+---
+
+### 18. Team performance reporting — five teams, three windows
 
 | Field | Value |
 |---|---|
@@ -2432,7 +2575,7 @@ I also rolled to four more teams on one team's evidence. Coverage rose everywher
 
 ---
 
-### 16. Scrum ecosystem — one workspace for sprint ceremonies
+### 19. Scrum ecosystem — one workspace for sprint ceremonies
 
 | Field | Value |
 |---|---|
@@ -2607,7 +2750,7 @@ And I would have solved the retrospective instead of cutting it. The cut was cor
 
 ---
 
-### 17. Flow Tracker — real-time delivery pipeline diagnostics
+### 20. Flow Tracker — real-time delivery pipeline diagnostics
 
 | Field | Value |
 |---|---|
@@ -2781,7 +2924,7 @@ I also built the velocity leaderboard because it was easy, and it is the feature
 
 ---
 
-### 18. ClickUp Activity Tracker — task change audit trail
+### 21. ClickUp Activity Tracker — task change audit trail
 
 | Field | Value |
 |---|---|
@@ -2952,7 +3095,7 @@ I would also start the retention conversation earlier. The service holds every r
 
 ---
 
-### 19. Video library and meeting recordings
+### 22. Video library and meeting recordings
 
 | Field | Value |
 |---|---|
@@ -3128,7 +3271,7 @@ I would also set the cache differently. Five minutes protected an API quota with
 
 ---
 
-### 20. Calendar sync — Outlook and Gmail without leaking detail
+### 23. Calendar sync — Outlook and Gmail without leaking detail
 
 | Field | Value |
 |---|---|
@@ -3302,7 +3445,7 @@ I would also not have built the subscribable feed. It is used by two people, and
 
 ---
 
-### 21. AI Salary Generator
+### 24. AI Salary Generator
 
 | Field | Value |
 |---|---|
@@ -3490,7 +3633,7 @@ I would also have measured provenance time before there was a tool to fix it. Th
 
 ---
 
-### 22. AI product planning operating system
+### 25. AI product planning operating system
 
 | Field | Value |
 |---|---|
@@ -3664,7 +3807,7 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 
 ---
 
-### 23. AI Lawyer — multi-agent patent drafting system
+### 26. AI Lawyer — multi-agent patent drafting system
 
 | Field | Value |
 |---|---|
@@ -3673,12 +3816,12 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 | Years | 2026 |
 | Track | ai |
 | Domain | Legal tooling |
-| Status | prototype |
+| Status | customer-testing |
 | Context | Ixana · 2026 · Legal tooling |
 | Role | Product manager, build owner |
 | Team | 2 engineers, with a patent attorney as domain reviewer |
 | Timeline | Feb – Aug 2026 |
-| Stage | Prototype — loopback only, no authentication, never run on a real inventor disclosure and never put in front of an attorney |
+| Stage | In customer testing — loopback only, no authentication, and nothing it produced has been filed |
 | Link | /demo/ai-lawyer |
 
 **Positioning.** Turns a disclosure into an attorney-review filing package with containment enforced at every boundary — and refuses to draw a novelty conclusion when the search looked in the wrong art.
@@ -3689,9 +3832,9 @@ I would also have calibrated the scorecard before running it in anger. Early on,
 
 **What I did.** I put the parts that cannot be retrofitted first — containment, provenance, cost — then measured what any ranker could reach on the corpus we had before letting anyone tune one. It changed what the system reports, not what it retrieves.
 
-**Result.** It drafts a full filing package — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The key measurement is real, over public patent data: 84.6% of ground-truth prior art was absent from the corpus, reframing the ranker from broken to nearly done. It has never been run on a real disclosure and no attorney has used it.
+**Result.** It drafts a full filing package — claims, specification, §1.84-measured drawings, a DOCX set — behind an intake gate that refuses to run without a publication decision. The key measurement is real, over public patent data: 84.6% of ground-truth prior art was absent from the corpus, reframing the ranker from broken to nearly done. It is in customer testing with one reviewing attorney, and nothing it has produced has been filed.
 
-> **Confidentiality.** Internal prototype. Nothing it produced has been filed, no attorney has used it, and it has never been run on a real inventor disclosure. The linked demo runs on an invented one: every document, claim, reference identifier, name and cost shown there is made up for publication. The corpus measurement in section 05 is the real result, computed over public patent data.
+> **Confidentiality.** Internal pilot in customer testing with one reviewing patent attorney. Nothing it produced has been filed, and every disclosure it has run on was prepared for the pilot. The linked demo runs on an invented one: every document, claim, reference identifier, name and cost shown there is made up for publication. The corpus measurement in section 05 is the real result, computed over public patent data.
 
 #### 01. Why this, and why now
 
@@ -3772,9 +3915,9 @@ _The running prototype rather than a mock-up — the four states, their rational
 
 _Six screens from the running demo. The pipeline, the verdicts and the checks are the real ones; the disclosure they run on is invented, and so is every claim, reference identifier, assignee and cost shown._
 
-#### 05. What we learned
+#### 05. Early signal and what I'm watching
 
-We agreed before building the eval that a ranker within 85% of what the corpus made achievable was not worth tuning. Measuring the ceiling first told us 84.6% of ground-truth prior art was not in the corpus at all — and the cause was not the date floor everyone assumed but the classification filter the corpus was built on. Prior art for a UI invention is not UI-classified. Containment was the guardrail: blocked outbound calls were counted from week one.
+We agreed before building the eval that a ranker within 85% of what the corpus made achievable was not worth tuning. Measuring the ceiling first told us 84.6% of ground-truth prior art (2,876 of 3,399 citations) was not in the corpus at all — and the cause was not the date floor everyone assumed but the classification filter the corpus was built on. Prior art for a UI invention is not UI-classified. Containment was the guardrail: blocked outbound calls were counted from week one. The pilot counts below come from eight reviewed disclosures — enough to see whether the operating rules hold, nowhere near enough to claim an effect.
 
 **Figure — The same ranker reported two ways: 91 percent of what the corpus makes achievable, or 14 percent absolute — against a corpus ceiling of 15.4 percent that would rise to 73.5 percent if the classification filter were widened**
 
@@ -3794,23 +3937,35 @@ _Retrieval evaluation against an 80-patent gold set and its 3,399 front-page cit
 | 5m 12s ($1.77 per run) | Disclosure to a filing package with drawings and a DOCX set |
 | 15.4% (ceiling, not a score) | Ground-truth prior art present in the corpus at all |
 | 507 | Tests passing across the pipeline and the web UI |
-| 0 | Real inventor disclosures processed, and no attorney has used it |
+| 8 (reviewed, 0 filed) | Disclosures through attorney review in the pilot (n for the counts) |
+| 0 (of 8) | Outbound calls that left containment with disclosure text (guardrail) |
+| 7 (of 8) | Gap lists the attorney sent to the inventor unchanged |
 
 The ceiling is a property of the stopgap, not the architecture — the corpus exists only because patent-office credentials were pending, and those APIs search everything server-side. The recommendation was to not widen it: the most valuable thing the evaluation produced, and a decision to do less.
 
-`Prototype configuration — 2 documents read as one disclosure · 9 source drawing sheets, one vision call each · 3 critics concurrent and blind, capped at 3 rounds · retrieval corpus 304k documents, ceiling 15.4% · prompt cache 30 minutes and 24 hours by model · 447 Python and 60 frontend tests · $1.77–$2.31 per draft cycle · loopback only, no authentication`
+**How we counted.** A ground-truth citation counts as reachable only if it is in the corpus at all, and recall is the share of reachable citations in the top 20 over the 80-patent gold set. Reported absolutely, the corpus's gaps are charged to the ranker — which is the error this line exists to prevent. A gap list counts as sent unchanged only if the attorney forwarded it without adding or removing a question.
 
-#### 06. What I'd do differently
+`Pilot configuration — 2 documents read as one disclosure · 9 source drawing sheets, one vision call each · 3 critics concurrent and blind, capped at 3 rounds · retrieval corpus 304k documents, ceiling 15.4% · prompt cache 30 minutes and 24 hours by model · 447 Python and 60 frontend tests · $1.77–$2.31 per draft cycle · loopback only, no authentication`
+
+#### 06. What would make me stop
+
+These were written down before the first attorney run, and each is a stop rather than a discussion — every one is a condition under which I would find an explanation persuasive.
+
+Any outbound call that leaves containment carrying disclosure text stops the pilot the same day; no draft quality buys that back. A coverage verdict that reports the art as present when the gold set says it is absent — one instance across the 80 patents — stops it too, because a confident draft over the wrong art is the silent failure the system exists to make loud.
+
+Two softer gates run to the end. If the attorney rewrites the gap list on more than 3 of the first 12 disclosures, the questionnaire is not the product I think it is. And if a draft cycle passes $5 at the capped three rounds, the cost stops being proportionate to attorney review.
+
+#### 07. What I'd do differently
 
 I would build the gold set in month one, not month five. Everything that mattered was decided by a measurement that took three weeks to construct.
 
 I would also have shown the attorney the gap list before a draft. Seeing both, he was uninterested in the claims and wanted the questionnaire on every disclosure, drafted or not — a product, and a much smaller one than I had been building toward.
 
-> **Note on this sample.** This is a prototype. It has never been run on a real inventor disclosure, no attorney has used it, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data, and the attorney-hours figures in section 01 are invented placeholders for this sample. I'm glad to walk through the real prototype in a conversation.
+> **Note on this sample.** This is a pilot in customer testing: it runs loopback-only with one patent attorney as reviewer, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data; the attorney-hours figures in section 01 and the pilot counts in section 05 are invented placeholders for this sample. I'm glad to walk through the real pilot in a conversation.
 
 ---
 
-### 24. ClickUp reporting and Gantt dashboard
+### 27. ClickUp reporting and Gantt dashboard
 
 | Field | Value |
 |---|---|
@@ -3994,7 +4149,7 @@ I would also revisit the thirty-minute cache on delay analysis. It was set to co
 
 ---
 
-### 25. In-house meeting notetaker
+### 28. In-house meeting notetaker
 
 | Field | Value |
 |---|---|
@@ -4169,7 +4324,7 @@ I would also build the correction path first. There is still no way to fix a wro
 
 ---
 
-### 26. Patent program operations
+### 29. Patent program operations
 
 | Field | Value |
 |---|---|
@@ -4186,27 +4341,28 @@ I would also build the correction path first. There is still no way to fix a wro
 | Stage | Live, running across three outside firms |
 | Link | https://xana-nine.vercel.app/patents |
 
-**Positioning.** Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, and no statutory date ever computed in-house.
+**Positioning.** Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, no statutory date ever computed in-house, and a drafting clock on which every date is a cited message.
 
-**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.
+**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar and a drafting clock on which every date is a cited message.
 
-**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — about seventy-five people when this programme began in 2024, roughly 140 by mid-2025. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox: a disclosure past its filing date was discovered, not decided.
+**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — seventy-five people when this began in 2024. Roadmap and patent estate were one decision surface run as two, and a matter's state lived in somebody's inbox: a disclosure past its filing date was discovered, not decided.
 
-**What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
+**What I did.** I owned both sides: the patent estate end to end, and the six Wi-R programmes those filings protect. Underneath, a mail-triggered spine routed every document to one matter identity, and a nine-stage drafting clock read each matter's dates from mail, calendar and chat, refusing any it could not cite.
 
-**Result.** Fifty-plus filings across six product lines, owned end to end. The system underneath automates nothing irreversible: routing and reminders yes, dates and scope never — counsel's docket stays the sole statutory authority, mirrored and never computed. The cycle-time and inventor-minutes figures below are the worked example.
+**Result.** Fifty-plus filings across six product lines. Nothing irreversible is automated: routing, reminders and a date read from a message, yes; a date, scope or approval decided by a machine, never. The clock's first signal, n stated: median T0 to first draft 39 → 20 days.
 
 **Evidence / demos**
 
 - [Open the working demo — five surfaces on an invented portfolio](https://xana-nine.vercel.app/patents)
+- [Or open the drafting clock — nine stages, every date a cited message, and the queues a person works](/demo/patent-clock)
 
-> **Confidentiality.** Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, and figures are invented or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.
+> **Confidentiality.** Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, the drafting clock runs on invented matters, and figures are invented or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.
 
 #### 01. Why this, and why now
 
-What gets taped out decides what is patentable. What is already filed decides what we can publish or demo. And a disclosure landing before its filing destroys protection nobody can recover — so the roadmap and the estate are one decision surface.
+What gets taped out decides what is patentable. What is already filed decides what we can publish or demo. A disclosure landing before its filing destroys protection nobody can recover — so the roadmap and the estate are one decision surface.
 
-I sat on both sides. Over the tenure I owned 50-plus filings end to end — what to protect, how broadly, when to file — while running the six Wi-R product programmes those filings protect. Disclosure date and filing date come off the same roadmap; until 2024 different people set them.
+I sat on both sides: 50-plus filings owned end to end — what to protect, how broadly, when to file — while running the six Wi-R programmes they protect. Disclosure date and filing date come off the same roadmap; until 2024 different people set them.
 
 **Figure — Annual cost of each option against the same filing rate: commercial IP suite 48 thousand, docketing pushed wholly to counsel 90 thousand, hire a paralegal 75 thousand, build on the stack we already run 12 thousand**
 
@@ -4219,11 +4375,11 @@ I sat on both sides. Over the tenure I owned 50-plus filings end to end — what
 
 _Options sizing, Jan 2024, costed against the ~25 applications a year the company files. All four buy docketing, which counsel already does properly and is not the thing that was missing — so the cheapest option won on the same argument that would have won at any price: none of them links a filing to the tapeout that makes it possible._
 
-About twenty-five applications a year is large for seventy-five people, nearly all landing on the same few who are also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade — which is why the guardrail is inventor time.
+Twenty-five applications a year is large for seventy-five people, landing on the few also taping out silicon every five months. Spending engineering hours to save legal ones is the wrong trade — so the guardrail is inventor time.
 
 #### 02. The problem as people experienced it
 
-I did not ask anyone how it felt. I took every docketed action over twelve months — 214 — and for each counted the distinct places a person had to open to answer one question: what is owed here, by whom, and by when. I timed it as the founder, with counsel, and as myself.
+I did not ask anyone how it felt. I took every docketed action over twelve months — 214 — and for each counted the distinct places a person had to open to answer one question: what is owed here, by whom, by when.
 
 | What they did | Where it broke | Evidence |
 |---|---|---|
@@ -4242,18 +4398,19 @@ I did not ask anyone how it felt. I took every docketed action over twelve month
 
 _214 docketed actions over twelve months, Sep 2024 – Aug 2025, walked and timed separately for each role. Counsel answered fastest from the fewest places, because the firm’s docket is one system that is genuinely maintained — the whole cost sat on our side of the boundary, which is what made this ours to fix rather than something to ask them for._
 
-The reframe came from the 23 disagreements. Nobody was missing data: three people read the same mail spool and built three different states, because a matter’s state was never written down — inferred, freshly, each time. What was missing was a place for the answer to live.
+The reframe came from the 23 disagreements. Three people read the same mail spool and built three different states, because a matter's state was never written down. What was missing was a place for the answer to live — later, a clock that read the spool so nobody had to.
 
 #### 03. My role and approach
 
-I was the interface. The founder/CTO wanted to know what was protected before a demo; engineering wanted a disclosure to cost as little of the week as possible; counsel wanted complete inputs and one authority.
+I was the interface: the founder/CTO wanted to know what was protected, engineering wanted a disclosure to cost little of the week, counsel wanted one authority.
 
 **Key decisions**
 
-- **Anchor filing decisions to the tapeout, not the write-up.** Every cycle is both a disclosure risk and a priority date, so I decided on the roadmap’s calendar.
-- **Breadth is a roadmap question, not a legal one.** Counsel could say what was claimable; only the roadmap knew whether we would still build that way.
-- **Automate only where being wrong is recoverable.** Routing and reminders can be fixed the same afternoon. A date, a scope or an approval cannot.
-- **One matter identity, owned by us.** Three firms, three naming habits. Until I resolved those to one identity, nothing counted.
+- **Anchor filing decisions to the tapeout, not the write-up.** Every cycle is a disclosure risk and a priority date, so I decided on the roadmap's calendar.
+- **Breadth is a roadmap question, not a legal one.** Counsel could say what was claimable; only the roadmap knew what we would still build.
+- **Automate only where being wrong is recoverable.** Routing, reminders and a date read from a message can be fixed the same afternoon. A scope a machine decided cannot.
+- **One matter identity, owned by us.** Three firms, three naming habits; until resolved to one identity, nothing counted.
+- **A date is a cited message, or it is not a date.** The clock extracts from positive evidence, chooses by rule, and drops any reason it cannot cite.
 
 **Figure — Filings by product line per half-year from 2024 to 2026 — 8, 10, 12, 12, 7 and 3 — with each line’s first public disclosure marked**
 
@@ -4281,13 +4438,13 @@ _One page from the quarterly review. The per-line detail and every matter refere
 
 **Scope**
 
-- _Shipped:_ Mail-triggered extraction into matter and category · One internal matter identity across three firms · Lifecycle view over six stages, plus an explicit unclassified stage · Internal readiness dates, each carrying its provenance · Invoice lines matched against the quoted schedule · Weekly reconciliation against counsel’s docket · Deduplicated portfolio counting across three source workbooks · A combined master view derived from its sources, never authored · An annotation column preserved untouched through every rebuild
+- _Shipped:_ Mail-triggered extraction into matter and category · One internal matter identity across three firms · Lifecycle view over six stages, plus an explicit unclassified stage · Nine-stage drafting clock: dates read GET-only from mail, calendar and Teams, measured against the T0 targets · Stage cards — current status and reasons for delay, each citing the messages it rests on · Provenance and review queues for every machine choice · Internal readiness dates, each carrying its provenance · Invoice lines matched against the quoted schedule · Weekly reconciliation against counsel’s docket · Deduplicated portfolio counting across three source workbooks · A combined master view derived from its sources, never authored · An annotation column preserved untouched through every rebuild
 - _Deferred:_ Inventor-facing disclosure portal · Family-level cost roll-up · Category coverage measured against the roadmap
-- _Cut:_ Machine-drafted claim language · Automated freedom-to-operate scoring · Any statutory date computed by us · Write-back to the source workbooks
+- _Cut:_ Machine-drafted claim language · Automated freedom-to-operate scoring · Any statutory date computed by us · Write-back to the source workbooks · A model choosing a date, or a reason for delay it cannot cite
 
 Machine-drafted claim language was the hardest cut. It fails two stated constraints: anything a model proposes becomes part of the record of what the applicant considered, and a wrong claim scope is unrecoverable once filed. But I stopped it because drafting was never the bottleneck — attorney turnaround ran in days, inventor input in weeks. Automating the fast half of a slow process is the most expensive way to find the queue.
 
-What handled the gap was unglamorous: structured disclosure capture front-loading exactly the fields counsel asks for anyway, plus a prior-art shortlist that is cited and never written. The honest cost is that it saves no legal spend — only the schedule moves.
+What handled the gap: structured disclosure capture front-loading the fields counsel asks for anyway, plus a prior-art shortlist that is cited and never written. The honest cost is that it saves no legal spend — only the schedule moves.
 
 **Three categories stay with a person, permanently, and not as a first-version simplification — From the programme note — what we will not automate, v1.1**
 
@@ -4295,46 +4452,50 @@ What handled the gap was unglamorous: structured disclosure capture front-loadin
 - **Anything unrecoverable.** Claim language and filing scope. A wrong scope survives to grant and cannot be argued away afterwards.
 - **Anything that becomes evidence.** Machine-generated assessments of third-party rights. What the applicant considered is discoverable, and a generated opinion is worse than no opinion.
 - **Anything that silently corrects a record.** The reconciliation found 32 rows with real errors and the service still does not fix one of them. A tool that quietly amends a legal record is a tool nobody can testify about; it reports discrepancies and a person applies them, which costs twenty minutes a month and keeps every change attributable.
+- **Anything a model asserts without a citation.** A reason for delay that cites no message is dropped before it is shown, and a match the model suggests waits for a person. The model writes prose from the record; it never writes the record.
 
 _One page from the programme note. The examples naming live matters have been removed._
 
 #### 05. How I got it agreed
 
-The objection came from counsel’s docketing partner, and it was the best one raised. Their docket is the legal record; a system deriving dates from email creates a second source of truth the firm cannot indemnify, and a founder acting on our date is harmed by something the firm will still answer for.
+The objection came from counsel's docketing partner, and it was the best one raised. Their docket is the legal record; a system deriving dates from email is a second source of truth the firm cannot indemnify, and a founder acting on our date is harmed by something the firm still answers for.
 
-I could not win that, so I removed what she objected to. The system computes no statutory dates at all: it mirrors the firm’s docket as sole authority and calculates only internal readiness dates.
+I could not win that, so I removed what she objected to: the system computes no statutory dates, mirrors the firm's docket as sole authority, and calculates only internal readiness dates.
 
-She agreed, then asked for three things: a provenance stamp on every date, internal dates drawn so they cannot be mistaken for statutory ones, and no reminder without the firm’s own date beside ours. The third is why the founder has never acted on a date I invented.
+She agreed, then asked for three things: a provenance stamp on every date, internal dates drawn so they cannot be mistaken for statutory ones, and no reminder without the firm's own date beside ours. The clock inherited all three.
 
 #### 06. What was built
 
-A mail-triggered spine, a workbook sync beneath it, and five surfaces over both. Documents from any of the three firms are extracted, matched to one matter identity, given a stage and a category, and written into one record — five views, not five tools.
+A mail-triggered spine, a workbook sync beneath it, six surfaces over both. Documents from any of the three firms are matched to one matter identity, given a stage and a category, and written into one record. The newest surface is the drafting clock: nine stages per matter, each date a message the reader can open, measured against targets fixed in advance.
 
-**Interface — The spend and milestone timeline: eighteen lanes, one per matter, running from February 2024 to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane**
+**Interface — The drafting clock grid: invented matters as rows, nine stage columns from drafting starts to filed, each cell carrying a date and beneath it the days taken against the target in green, amber or red; several rows carry an In progress pill where a review round or a first draft is still open, with the elapsed days running beneath it; the header chips read 108 matters on the roster, 0 dates without a cited source and 6 stages past target today.**
 
-[Open the timeline in the demo](https://xana-nine.vercel.app/patents/spend)
+[Open the clock, then click a red cell](/demo/patent-clock?view=timeline)
 
-- **Deadline triage is a policy, not a colour.** The bands are sixty days, six months, a year. I set them so the weekly review has a fixed size: anything inside sixty days gets read out, everything else gets read once a month.
-- **Every date on this screen is ours.** Statutory dates live in the firm’s docket and are mirrored, never computed. A founder acting on a date the system derived is a failure mode counsel cannot insure, so this timeline carries only our internal readiness dates — anything statutory is read from the docket where it lives, and the tracker says so in as many words.
-- **Each firm sees its own matters and only its own.** The same view is shared read-only, filtered per firm. It removed most of the status email in both directions and cost nothing, because the filter already existed for my own use.
-- **Spend is grouped by stage of work, never by matter.** Draft, filing, office action. That makes an invoice checkable against the engagement, and keeps everyone out of arguing about what any single matter is worth.
+- **A date is a cited message, or the cell stays empty.** Every date is read from the mailbox, the calendars or a group chat, and the reader can open the message behind it. Twelve roster matters show nothing because nothing in the record says a stage happened — a dash, not an estimate.
+- **Targets were fixed before the first matter was read.** T0 is the draft reaching the firm; the offsets are the plan's own. The colour is how far over the target, never whose fault — the fault lives on the card, with its citations.
+- **In progress is a definition, not a guess.** The stage after the last completed one, until filed. An open review round is not complete, so its cell carries no date and the elapsed days keep running against the target.
+- **Every machine choice has a human undo.** A winner was chosen by rule; on the provenance view a person can reject it, select another candidate or set a date by hand. Each is a decision with a name and a note, and the grid recomputes.
 
-_The running demo rather than a mock-up — same code, same layout, on an invented portfolio of 18 matters across 3 firms, $61,900 across 70 payments and 115 dated events. Matter names, application numbers, firms and fees are invented for publication; the stage model, the category set and the payment breakdown are the real ones._
+_A working recreation of the drafting clock, not a mock-up: the nine-stage model, the T0 offsets, the selection order, the minimum confidence per stage and the citation rule are the real ones. Every matter, reference name, firm, person, subject line and message is invented. The deployed portfolio demo linked above carries the other five surfaces._
 
 **Gallery**
 
+- **Spend and milestone timeline** — [Open the spend timeline](https://xana-nine.vercel.app/patents/spend)  Eighteen lanes, one per matter, with filings, publications, office actions, payments and grants drawn along each. Every date on it is ours — statutory dates live in the firm's docket and are mirrored, never computed — and spend is grouped by stage of work, never by matter, so an invoice is checkable against the engagement.
+- **Stage card: reasons for delay, cited or dropped** — [Open this stage card](/demo/patent-clock?view=timeline&id=P-19&stage=5&open=card)  One cell, opened. The facts arrive at once — dates, target, days over, the rule and message the date came from. The status and the reasons for delay are written by a model from the messages in the stage window, each reason tagged Firm, Internal or Open decision and citing the message ids it rests on; a reason it cannot cite is dropped before anyone sees it, and the card says so when that leaves it empty.
 - **Portfolio dashboard** — [Open the dashboard](https://xana-nine.vercel.app/patents)  The founder’s view — composition by stage and by technology category, and the next actions owed. Unclassified appears in the table in its own right rather than being absorbed into the total, so a gap cannot hide inside a rounded number.
 - **Lifecycle tracker** — [Open the lifecycle tracker](https://xana-nine.vercel.app/patents/tracker)  Every matter in one of six stages, with an explicit unclassified stage beside them. Overdue is a property of the internal action date and never of a statutory one, so nothing red here can be read as a legal deadline.
 - **Ask the portfolio** — [Ask the portfolio a question](https://xana-nine.vercel.app/patents)  It reads the same eighteen matters every other view reads and answers from them, naming the matters it used. Asked what is past its internal action date it returns six of fifteen with their refs, stages and dates — and says in the same breath that these are readiness dates and not statutory ones.
-- **Invoice approval** — [Open invoice approval](https://xana-nine.vercel.app/patents/invoices)  Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it.
-- **Upload an invoice** — [Open the upload half](https://xana-nine.vercel.app/patents/invoices?view=upload)  The other half of the same section. Most invoices arrive by mail and are matched before anyone looks; this is the path for the ones that did not, and it runs the same extraction and the same match. Firm and matter are chosen by hand rather than read off the PDF, because those two are what bind the invoice to the portfolio.
+- **Invoice approval** — [Open invoice approval](https://xana-nine.vercel.app/patents/invoices)  Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it. The upload half of the same section runs the same extraction for the few invoices the mail spine missed.
 
-_The five surfaces over the mail-triggered spine, on the same invented portfolio as the timeline above. Each link opens the screen its image shows._
+_The other surfaces over the same spine, each link opening the screen its image shows — five on the deployed demo's invented portfolio, and the stage card from the drafting-clock recreation._
 
 | Surface | Who uses it | The decision it carries |
 |---|---|---|
 | Mail-triggered spine | Nobody — it runs underneath | What can be automated at all: routing yes, dates never |
 | Workbook sync | Nobody — it runs underneath | What one patent means: a family counts once, and the master is derived, never authored |
+| Drafting clock | Me weekly; each firm, read-only | Which stage is past its target, by how much, and — from the record — why |
+| Provenance and review queues | Me, when a rule stops | Whether a machine's match or date stands, decided by a person with a note |
 | Spend and milestone timeline | Me at quarter end; each firm, read-only | Whether a matter is worth what it is costing, by stage |
 | Lifecycle tracker | Me weekly; the founder before a review | Which matters are past their internal action date |
 | Portfolio dashboard | Founder/CTO, and counsel on the monthly call | Where the estate is thin against the roadmap |
@@ -4342,7 +4503,7 @@ _The five surfaces over the mail-triggered spine, on the same invented portfolio
 | Invoice approval | Me, then the founder | Whether the work billed matches the engagement |
 | Invoice upload | Me, for anything the mail spine missed | Which matter an invoice belongs to, decided by a person |
 
-`System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system`
+`System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system · nine-stage drafting clock with T0 offsets −10, −5, 0, +5, +15, +20, +21, +22 and +24 days, read GET-only from one mailbox, the calendars and the group chats · alias match at an 85-point threshold · winners chosen by rule in chronology order with a minimum confidence per stage · stage cards cite message ids or drop the reason · 0 writes to any source`
 
 #### 07. Tradeoffs
 
@@ -4354,21 +4515,22 @@ _The five surfaces over the mail-triggered spine, on the same invented portfolio
 | Automation vs attributability | Machine-made links stay marked until a person confirms them | Every invoice needs a human minute before approval, and a backlog forms whenever I travel |
 | Correctness vs a record that can be testified about | Report discrepancies, never correct a source workbook | Known errors sit uncorrected until a person applies them, sometimes for weeks |
 | A derived view vs someone’s working surface | Derived columns rebuild every cycle; the annotation column is preserved untouched | The sync halts whenever a rebuild would drop an annotated row — twice so far, both justified |
+| Evidence-only dates vs coverage | A stage is dated only by a message that says it happened | Stages that live in chat are found for barely a third of matters; the grid shows the gap rather than an estimate |
 
 #### 08. Impact and outcomes
 
-We agreed before build that this failed if any date the system showed disagreed with counsel’s docket at the weekly reconciliation twice running — at which point we would switch it off. It has not happened. The guardrail was inventor minutes per disclosure: cycle time bought with engineering hours is not a win here.
+We agreed before build that this failed if any date the system showed disagreed with counsel's docket at the weekly reconciliation twice running. It has not happened. The guardrail was inventor minutes per disclosure: cycle time bought with engineering hours is not a win. The clock adds one early signal.
 
 **Metrics**
 
 | Value | Measure |
 |---|---|
 | 14w → 6w | Median disclosure to filing |
-| 41 → 0 (of 248 rows) | Double-counted rows in the portfolio total |
+| 39d → 20d (n=10) | Median T0 to the firm's first draft, against a 15-day target (drafting clock) |
 | 19 → 2 (of 54) | Active matters with no owned next action |
 | 95m → 40m | Inventor minutes per disclosure (guardrail) |
-| 0 | Dates disagreeing with counsel’s docket · source sheets modified |
-| 6 → 1 | Places opened to answer what is owed |
+| 0 | Dates disagreeing with counsel's docket · source sheets modified |
+| 0 (of 284) | Dated drafting stages without a cited source message |
 
 **Figure — Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent**
 
@@ -4385,15 +4547,15 @@ _Share of open matters still waiting, by how long the next action had been owed.
 
 #### 09. What I'd do differently
 
-I built the mechanism before I wrote down the strategy. For a year the filing decisions lived in my head and in conversations with the founder, while what got documented was the plumbing. How a tapeout maps to a filing decision is still the part I cannot hand over.
+I built the mechanism before I wrote down the strategy. For a year the filing decisions lived in my head and in conversations, while what got documented was the plumbing. How a tapeout maps to a filing decision is still the part I cannot hand over.
 
-I would also have measured the tail earlier. Section 08 says we fixed the first thirty days and left the rest alone — that tail is inventor availability in a tapeout crunch.
+And I would have started the clock a year earlier. The overrun it shows most — the firm's first draft — was the one everyone felt and nobody measured; the tail past sixty days is inventor availability in a tapeout crunch.
 
-> **Note on this sample.** Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline in section 06 is the actual product re-rendered on a synthetic dataset, the four surfaces beside it are recreations built from the real layouts. No raw capture was published, cropped or traced, because every one of them carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I’m glad to walk through the real programme and the underlying numbers in a conversation.
+> **Note on this sample.** Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline and the four portfolio surfaces are the actual product re-rendered on a synthetic dataset, and the drafting clock is a working recreation on invented matters. No raw capture was published, cropped or traced, because every one carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I'm glad to walk through the real programme and the underlying numbers in a conversation.
 
 ---
 
-### 27. Document change intelligence
+### 30. Document change intelligence
 
 | Field | Value |
 |---|---|
@@ -4564,7 +4726,7 @@ I would also have built owner notifications before the dashboard. The eleven doc
 
 ---
 
-### 28. Condenser microphone
+### 31. Condenser microphone
 
 | Field | Value |
 |---|---|
@@ -4730,7 +4892,7 @@ I also characterised on-axis response properly, published a tolerance for it, an
 
 ---
 
-### 29. Sensor signal generator
+### 32. Sensor signal generator
 
 | Field | Value |
 |---|---|
@@ -4893,7 +5055,7 @@ I would also have designed the contribution path on day one. Forty labs see faul
 
 ---
 
-### 30. Ornithopter for surveillance
+### 33. Ornithopter for surveillance
 
 | Field | Value |
 |---|---|
@@ -5049,7 +5211,7 @@ I would also have left the camera off until the airframe flew. Integrating it ea
 
 ---
 
-### 31. Carbon positive e-car
+### 34. Carbon positive e-car
 
 | Field | Value |
 |---|---|
@@ -5200,7 +5362,7 @@ I would also separate the two good ideas from the bad one earlier. Solar on a ca
 
 ---
 
-### 32. UAV-aided weather radar calibration
+### 35. UAV-aided weather radar calibration
 
 | Field | Value |
 |---|---|
@@ -5354,7 +5516,7 @@ We would also have written the pass mark into the proposal. It shaped everything
 
 ---
 
-### 33. Non-contact COVID patient monitoring
+### 36. Non-contact COVID patient monitoring
 
 | Field | Value |
 |---|---|
@@ -5508,14 +5670,14 @@ We also let the enthusiasm of the moment set the framing. Our materials describe
 
 ---
 
-### 34. Triple riding avoidance
+### 37. Triple riding avoidance
 
 | Field | Value |
 |---|---|
 | Slug | `ricky-kids-triple-riding-avoidance` |
 | Company | Ricky Kids |
 | Years | 2022 |
-| Track | ai |
+| Track |  |
 | Domain | Road safety |
 | Status | internal |
 | Context | Ricky Kids · 2022 · Road safety |
@@ -5681,7 +5843,7 @@ I would also have written the sampling plan before scoring anything. We scored t
 
 ---
 
-### 35. Toys for autistic kids
+### 38. Toys for autistic kids
 
 | Field | Value |
 |---|---|
@@ -5832,7 +5994,7 @@ I would also stop calling it a toy. The word made it sound harmless and made us 
 
 ---
 
-### 36. Sludge-traversing ROV
+### 39. Sludge-traversing ROV
 
 | Field | Value |
 |---|---|
@@ -5985,7 +6147,7 @@ We also kept the project name after the finding contradicted it. Calling it a sl
 
 ---
 
-### 37. ENVI-City — sustainable smart city concept
+### 40. ENVI-City — sustainable smart city concept
 
 | Field | Value |
 |---|---|

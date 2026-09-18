@@ -10,7 +10,11 @@ import type { FilterKey } from './constants';
  * for that slice, held to about a dozen so it reads as a line rather than
  * a wall. Every keyword is one the cards or case studies can back —
  * tags and `meta.role` in `data/case-studies*.json`, and the card titles in
- * `constants.ts` for the engineering builds under Others.
+ * `constants.ts` for the engineering builds under Others. The exceptions
+ * are the day-to-day tools: Jira (SLB) and Asana (EEGRAB) sit with the
+ * silicon and embedded work they tracked; the Ixana work ran on ClickUp.
+ * Power BI is the author's reporting tool; the case studies name the
+ * in-house equivalents.
  */
 export interface HeaderCopy {
 	subline: string;
@@ -34,6 +38,8 @@ export const HEADER_COPY: Record<FilterKey, HeaderCopy> = {
 			'PostgreSQL',
 			'ClickUp API',
 			'Microsoft Graph',
+			'Jira',
+			'Power BI',
 		],
 	},
 
@@ -53,10 +59,14 @@ export const HEADER_COPY: Record<FilterKey, HeaderCopy> = {
 			'Yield',
 			'Embedded firmware',
 			'Schematics and BOM',
+			'Budgets and BOM costing',
 			'Datasheets',
 			'Dev kits',
 			'Reference designs',
 			'Body area networks',
+			'Jira',
+			'Asana',
+			'ClickUp',
 		],
 	},
 
@@ -71,6 +81,9 @@ export const HEADER_COPY: Record<FilterKey, HeaderCopy> = {
 			'AI product strategy',
 			'Pilot design',
 			'Adoption metrics',
+			'Budgets and option costing',
+			'Vendor evaluation',
+			'Data protection and consent',
 			'RAG',
 			'Dense retrieval (bge-m3)',
 			'LLM re-ranking',
@@ -81,6 +94,10 @@ export const HEADER_COPY: Record<FilterKey, HeaderCopy> = {
 			'FastAPI',
 			'Next.js',
 			'ClickUp API',
+			'Power Automate',
+			'Teams Adaptive Cards',
+			'Power BI',
+			'Excel reporting',
 		],
 	},
 

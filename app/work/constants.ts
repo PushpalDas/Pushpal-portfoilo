@@ -215,20 +215,21 @@ export const workItems: WorkItem[] = [
 		color: '#dbeafe',
 	},
 	{
-		title: 'Procurement Orchestrator — M365-native request workflow',
+		title:
+			'Ops Orchestrator — procurement, shipment and presentation workflows on M365',
 		company: 'Ixana',
-		year: '2026 ',
-		domain: 'Procurement ops',
+		year: '2026',
+		domain: 'Ops workflows',
 		category: 'product',
 		track: 'ai',
 		status: 'customer-testing',
 		order: 15,
 		outcome:
-			'In pilot: the operating contract names one accountable owner within a business day, and a status transition cannot be written without evidence.',
+			'In pilot across three request streams: one operating contract names a person within a business day, and no purchase, shipment or Thursday slot moves without a recorded decision.',
 		image: 'procurement-orchestrator-card.png',
-		slug: 'procurement-orchestrator-procurement-process-automation-with',
+		slug: 'ixana-ops-orchestrator',
 		tier: 2,
-		demoUrl: '/demo/procurement-desk',
+		demoUrl: '/demo/ops-desk',
 		color: '',
 	},
 	{
@@ -555,7 +556,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		order: 3,
 		outcome:
-			'Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar.',
+			'Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar and a drafting clock on which every date is a cited message.',
 		image: 'Gemini_Generated_Image_strjxvstrjxvstrj.png',
 		slug: 'ixana-patent-program',
 		tier: 2,

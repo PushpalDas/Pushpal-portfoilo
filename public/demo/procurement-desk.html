@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Request Desk — the Procurement Orchestrator pilot</title>
-<meta name="description" content="Interactive demo of the M365-native procurement pilot: one canonical request list, a named owner within a business day, transitions that cannot be recorded without evidence, a blocking value ceiling, and a daily integrity check.">
+<title>Ops Desk — the Ops Orchestrator pilot</title>
+<meta name="description" content="Interactive demo of the M365-native operations pilot: one operating contract applied to three request streams — procurement requests, shipment requests with a tiered Teams approval card, and Thursday presentation reminders with a per-row confirmation token — plus a daily integrity check and launch gates counted live.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..700&display=swap">
@@ -425,6 +425,92 @@ td .sub { display: block; color: var(--muted); font-size: 11px; margin-top: 2px;
   z-index: 70; overflow-y: auto; padding: 22px 24px 44px;
 }
 .drawer.show { transform: none; }
+
+/* -- Streams 2 + 3: shipments, presentations, the ops board -- */
+.pill.auto { border-color: rgba(255, 138, 86, 0.40); color: var(--accent-soft); background: rgba(255, 99, 33, 0.07); }
+.pill.transit, .pill.label { border-color: rgba(255, 176, 32, 0.45); color: var(--warn-hi); background: rgba(255, 176, 32, 0.10); }
+.pill.cancelled, .pill.declined { border-color: rgba(239, 68, 68, 0.40); color: var(--crit-soft); background: rgba(239, 68, 68, 0.09); }
+.pill.pending, .pill.reschedule { border-color: rgba(255, 176, 32, 0.45); color: var(--warn-hi); background: rgba(255, 176, 32, 0.10); }
+.pill.confirmed, .pill.approved, .pill.delivered { border-color: rgba(34, 197, 94, 0.35); color: var(--ok); background: rgba(34, 197, 94, 0.08); }
+.pill.muted { border-color: var(--line); color: var(--muted); background: transparent; }
+.prio { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+.prio.Critical { color: var(--crit-soft); } .prio.High { color: var(--warn-hi); } .prio.Medium { color: var(--accent-soft); } .prio.Low { color: var(--muted); }
+
+/* The Teams Adaptive Card, recreated. Same information hierarchy as
+   approval-card.json; painted in the demo's own palette rather than
+   Teams' chrome, because this is a recreation and should read as one. */
+.acard {
+  border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
+  padding: 16px 18px; margin: 0 0 14px; max-width: 560px;
+}
+.acard .ah { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.acard .ah h4 { margin: 0; font-size: 12px; color: var(--warm); font-weight: 600; }
+.acard .ah .rid { display: block; font-family: var(--mono); font-size: 22px; color: var(--accent); font-weight: 600; letter-spacing: -0.4px; margin-top: 2px; }
+.acard .ah .rt { text-align: right; font-size: 11px; color: var(--muted); }
+.acard .ah .rt b { display: block; font-size: 12px; }
+.acard .sub { color: var(--muted); font-size: 11.5px; margin: 6px 0 10px; }
+.acard .facts { display: grid; grid-template-columns: 110px 1fr; gap: 3px 12px; font-size: 12.5px; margin: 0 0 10px; }
+.acard .facts dt { color: var(--muted); } .acard .facts dd { margin: 0; color: var(--prose); }
+.acard h5 { margin: 12px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--warm); font-weight: 600; }
+.acard .items { margin: 0; padding: 0 0 0 16px; font-size: 12.5px; color: var(--prose); }
+.acard .items li { margin: 0 0 2px; }
+.acard .just { font-size: 12.5px; color: var(--dim); margin: 0; font-style: italic; }
+.acard .abtn { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.acard textarea { width: 100%; min-height: 54px; margin-top: 12px; background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; color: var(--ink); resize: vertical; }
+.btn.ok { border: 1px solid rgba(34, 197, 94, 0.5); color: var(--ok); background: rgba(34, 197, 94, 0.08); }
+.btn.no { border: 1px solid rgba(239, 68, 68, 0.5); color: var(--crit-soft); background: rgba(239, 68, 68, 0.08); }
+.btn.ghost { border: 1px solid var(--line); color: var(--warm); }
+.chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.chain li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-size: 12.5px; }
+.chain .st { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-family: var(--mono); font-size: 9.5px; color: var(--muted); margin-top: 1px; }
+.chain .st.ok { border-color: var(--ok); color: var(--ok); } .chain .st.no { border-color: var(--crit); color: var(--crit-soft); } .chain .st.now { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 3px rgba(255, 99, 33, 0.15); }
+.chain .who2 { color: var(--ink); font-weight: 500; } .chain .rl2 { color: var(--muted); font-size: 11px; }
+.chain .nt { color: var(--dim); font-size: 11.5px; display: block; margin-top: 1px; }
+.mono-block { font-family: var(--mono); font-size: 11.5px; color: var(--accent-soft); background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+
+/* Shipping desk: filled cells read-only, blank cells editable. */
+.desk { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 14px; }
+.desk .f label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+.desk .f .ro { border: 1px solid var(--line-soft); background: var(--surface-2); border-radius: 8px; padding: 7px 10px; font-size: 12.5px; color: var(--warm); min-height: 32px; }
+.desk .f .ro.lock { color: var(--muted); }
+.desk .f .ro.flow { border-color: rgba(255, 99, 33, 0.35); color: var(--accent-soft); }
+.desk .f input, .desk .f select { width: 100%; background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--ink); font-size: 12.5px; }
+.desk .f .tag { font-size: 9.5px; margin-left: 6px; color: var(--faint); text-transform: none; letter-spacing: 0; }
+.rows-strip { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 0; }
+.rows-strip span { font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--line); border-radius: 6px; padding: 2px 7px; color: var(--warm); }
+.rows-strip span.one { border-color: var(--accent); color: var(--accent); }
+
+/* Presentations: the schedule and the simulated 08:00 run. */
+.runbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 0 0 12px; }
+.runbar select { background: var(--deep); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; color: var(--ink); }
+.act { display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--line); color: var(--muted); }
+.act.r1, .act.r2 { border-color: rgba(255, 99, 33, 0.4); color: var(--accent-soft); }
+.act.esc { border-color: rgba(239, 68, 68, 0.45); color: var(--crit-soft); }
+.tok { font-family: var(--mono); font-size: 10.5px; color: var(--muted); word-break: break-all; }
+.tok b { color: var(--accent-soft); font-weight: 500; }
+.resp { border-radius: 12px; padding: 16px 18px; margin-top: 12px; border: 1px solid var(--line); background: var(--surface); }
+.resp.ok { border-top: 3px solid var(--ok); } .resp.bad { border-top: 3px solid var(--crit); }
+.resp h4 { margin: 0 0 6px; font-size: 14px; color: var(--ink); }
+.resp p { margin: 0; font-size: 12.5px; color: var(--dim); }
+.digest { font-size: 12.5px; color: var(--prose); line-height: 1.7; }
+.digest b { color: var(--ink); }
+
+/* The ops board: one contract, three columns. */
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.stream { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 16px 18px; }
+.stream h4 { margin: 0 0 2px; font-size: 14px; color: var(--ink); }
+.stream .n { font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0 0 12px; }
+.stream .q { border-top: 1px solid var(--line-soft); padding: 10px 0; }
+.stream .q:last-child { padding-bottom: 0; }
+.stream .q .ql { font-size: 11.5px; color: var(--warm); margin: 0 0 4px; }
+.stream .q .qv { font-family: var(--mono); font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -0.5px; line-height: 1.1; }
+.stream .q .qv small { font-size: 11px; color: var(--muted); margin-left: 4px; }
+.stream .q .qv.bad { color: var(--warn-hi); }
+.stream .q .qn { font-size: 11px; color: var(--muted); margin: 3px 0 0; line-height: 1.5; }
+.qrow { display: grid; grid-template-columns: 1fr; gap: 2px; margin: 0 0 14px; }
+.qrow .qq { font-size: 12px; color: var(--warm); }
+.qrow .qq b { color: var(--prose); font-weight: 600; font-family: var(--mono); font-size: 11px; margin-right: 8px; color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .chain .st.now { box-shadow: none; } }
 .drawer h3 { margin: 0 0 4px; font-size: 17px; color: var(--ink); font-weight: 700; letter-spacing: -0.4px; }
 .drawer .dsub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin: 0 0 18px; }
 .drawer .card { background: var(--surface); }
@@ -495,13 +581,13 @@ td .sub { display: block; color: var(--muted); font-size: 11px; margin-top: 2px;
       <div class="brand">
         <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="4" rx="1"></rect><path d="M17 4.5h1.5a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2H7"></path><path d="m8.8 13.4 2.2 2.2 4.4-4.8"></path></svg></span>
         <div class="brand-t">
-          <span class="eyebrow">Ixana &middot; Procurement ops &middot; Controlled pilot</span>
-          <h1>Request Desk</h1>
+          <span class="eyebrow">Ixana &middot; Ops workflows &middot; Controlled pilot</span>
+          <h1>Ops Desk</h1>
         </div>
       </div>
       <div class="chips">
-        <span class="chip" id="nChip"><span class="dot accent"></span><b>23</b> completed pilot requests</span>
-        <span class="chip ok" id="apprChip" title="No request in the pilot has reached ordered without an approval event carrying a document reference."><span class="dot good"></span><b>0</b> ordered unapproved</span>
+        <span class="chip" id="nChip"><span class="dot accent"></span><b>48</b> completed requests &middot; 3 streams</span>
+        <span class="chip ok" id="apprChip" title="No request in the pilot has reached ordered, and no shipment has left the building, without an approval event carrying a document reference."><span class="dot good"></span><b>0</b> ordered or shipped unapproved</span>
         <span class="chip warn" id="ceilChip" title="Requests at or above the finance approval threshold cannot be submitted into the pilot at all.">Ceiling <b>$5,000</b></span>
       </div>
       <div class="persona">
@@ -520,20 +606,20 @@ td .sub { display: block; color: var(--muted); font-size: 11px; margin-top: 2px;
     <div class="foot-grid">
       <div>
         <h5>What this demo is</h5>
-        <p>A working recreation of the M365-native procurement pilot described in the case study. <b>One canonical request list is the source of truth; every screen here is a view of it.</b> The lists, flows and mailbox are simulated; the operating contract, the field rules and the gates are the real ones.</p>
+        <p>A working recreation of the M365-native operations pilot described in the case study: three request streams &mdash; procurement, shipments and the Thursday presentations &mdash; run on one operating contract. <b>Each stream has one canonical list; every screen here is a view of one of them.</b> The lists, flows, cards and mailbox are simulated; the contract, the field rules and the gates are the real ones.</p>
       </div>
       <div>
         <h5>The four rules it makes visible</h5>
-        <p><b>1.</b> A request is assigned to a <span class="badge human">named person</span>, never to a queue. &ldquo;Procurement&rdquo; counts as unassigned, on this screen and in the gate.</p>
-        <p><b>2.</b> Every status change carries actor, timestamp, source and evidence. A transition with no evidence cannot be recorded &mdash; try it in the queue.</p>
+        <p><b>1.</b> Every request gets a <span class="badge human">named person</span> within a business day &mdash; an owner, an approver or a speaker who has answered. A queue, a team mailbox or silence counts as nobody.</p>
+        <p><b>2.</b> Every decision is an event carrying actor, timestamp, source and evidence. A transition without a document reference, an approval without a card response, a confirmation without its token: none can be written.</p>
       </div>
       <div>
         <h5 style="visibility:hidden">more</h5>
-        <p><b>3.</b> The value ceiling is a blocking validation, not a warning. A request at or above the finance threshold cannot enter the pilot, so the pilot cannot weaken a control it never touches.</p>
-        <p><b>4.</b> Requesters read everything and write nothing. They add information through a controlled path; they cannot move a status, which is what kept the old list untrustworthy.</p>
+        <p><b>3.</b> The flows refuse rather than warn. A request at or above the finance ceiling cannot be submitted; a second approval card for the same shipment cannot fire; a confirmation link cannot act on any row but the one it was minted for.</p>
+        <p><b>4.</b> A check runs every morning against each list, not against what the flows report about themselves. Every failure it has found is on the exceptions screen with what changed because of it.</p>
       </div>
     </div>
-    <p class="conf">All organisations, requesters, owners, suppliers, items, prices, dates and figures on this page are invented for the demo. No supplier, price or requester from the real pilot appears here. The 23 completed requests reproduce the counts quoted in section 08 of the case study &mdash; 21 assigned inside a business day, 0 ordered unapproved, 2 requesters who still chased by email, 1 silent flow failure caught by the daily check &mdash; so the gate screen can be checked rather than taken on trust.</p>
+    <p class="conf">All organisations, requesters, owners, approvers, presenters, suppliers, items, prices, dates and figures on this page are invented for the demo. No supplier, price, requester or speaker from the real pilot appears here. The 48 completed requests reproduce the counts quoted in section 08 of the case study &mdash; 23 procurement requests with 21 assigned inside a business day, 14 shipment requests each decided inside a business day, 11 presentations with 10 confirmed before the day before, 0 ordered or shipped unapproved, 1 silent flow failure caught by the daily check &mdash; so the gate screen can be checked rather than taken on trust.</p>
   </footer>
 </div>
 
@@ -837,33 +923,44 @@ const REFUSED = [
 /* The daily integrity check. One entry is the silent flow
    failure named as a guardrail in section 08.                 */
 const EXCEPTIONS = [
-  { id: "EX-014", d: "2 Jun 2026", kind: "Unassigned beyond 1 business day", req: "PR-2050",
+  { id: "EX-014", d: "2 Jun 2026", kind: "Unassigned beyond 1 business day", req: "PR-2050", stream: "proc",
     detail: "Submitted 16:35 on a Friday. Routing found no approver row for the Silicon facilities cost centre and stopped without raising anything.",
     found: "Daily integrity check", resolved: "Same day", state: "closed",
     fix: "Manually assigned; approver map row SI-facilities added the following morning." },
-  { id: "EX-018", d: "21 Jun 2026", kind: "Silent flow failure", req: "PR-2053",
+  { id: "EX-018", d: "21 Jun 2026", kind: "Silent flow failure", req: "PR-2053", stream: "proc",
     detail: "The reminder flow failed on a throttled connector and reported success. No reminder was sent for two days and nothing in the list showed it.",
     found: "Daily integrity check", resolved: "Same day", state: "closed",
     fix: "Retry with back-off added; the check now compares reminders sent against reminders due, which is what caught it.",
-    guardrail: true },
-  { id: "EX-021", d: "14 Jul 2026", kind: "Unassigned beyond 1 business day", req: "PR-2058",
+    guardrail: true, flow: true },
+  { id: "EX-021", d: "14 Jul 2026", kind: "Unassigned beyond 1 business day", req: "PR-2058", stream: "proc",
     detail: "Submitted 16:20 on a Friday into the same Silicon facilities cost centre. The map row added in June covered lab, not facilities.",
     found: "Daily integrity check", resolved: "Same day", state: "closed",
     fix: "Approver map row SI-facilities corrected; a map-coverage test now runs inside the daily check." },
-  { id: "EX-025", d: "5 Aug 2026", kind: "Status disputed by requester", req: "PR-2056",
+  { id: "EX-022", d: "16 Jul 2026", kind: "Three approval cards for one shipment request", req: "SHIP-2026-000102", stream: "ship",
+    detail: "The shipment list is flat: a three-line request is three rows sharing a Title. The approval flow's create trigger fired once per row, and the shipping manager received three cards for one request.",
+    found: "Approver report", resolved: "Same day", state: "closed", flow: true,
+    fix: "A trigger condition — LineNumber equals 1 and ApprovalStatus equals Pending — so the flow runs once per request and only for the ones that need a human. The daily check now compares approval cards sent against requests pending." },
+  { id: "EX-023", d: "28 Jul 2026", kind: "Reminder run stopped by a departed presenter", req: "P-10", stream: "pres",
+    detail: "A schedule row still carried the address of someone who had left the company. The directory lookup returned 404 and the 08:00 run stopped there, before any other card went out and before the digest posted.",
+    found: "Daily digest did not post", resolved: "Same day", state: "closed", flow: true,
+    fix: "Lookups continue on failure so one bad row cannot stop the run; the row was reassigned, and the digest now names any row it had to skip." },
+  { id: "EX-025", d: "5 Aug 2026", kind: "Status disputed by requester", req: "PR-2056", stream: "proc",
     detail: "Requester reported the delivery date as wrong. The recorded ETA was unverified and had been read as a commitment.",
     found: "Requester report", resolved: "Same day", state: "closed",
     fix: "ETA re-verified with the supplier and relabelled. The unverified label was already on the screen; it was not prominent enough." }
 ];
 
 const VIEWS = [
-  { id: "request",    n: "01", label: "Requester view",  tag: "read" },
-  { id: "submit",     n: "02", label: "Submit a request", tag: "form" },
-  { id: "queue",      n: "03", label: "Procurement queue", tag: "write" },
-  { id: "approvals",  n: "04", label: "Approvals",       tag: "gate" },
-  { id: "ageing",     n: "05", label: "Ageing",          tag: "read" },
-  { id: "exceptions", n: "06", label: "Exceptions log",  tag: "check" },
-  { id: "gates",      n: "07", label: "Launch gates",    tag: "count" }
+  { id: "board",         n: "01", label: "Ops board",          tag: "count" },
+  { id: "request",       n: "02", label: "Requester view",     tag: "read" },
+  { id: "submit",        n: "03", label: "Submit a request",   tag: "form" },
+  { id: "queue",         n: "04", label: "Procurement queue",  tag: "write" },
+  { id: "approvals",     n: "05", label: "Approvals",          tag: "gate" },
+  { id: "shipments",     n: "06", label: "Shipments",          tag: "card" },
+  { id: "presentations", n: "07", label: "Presentations",      tag: "remind" },
+  { id: "ageing",        n: "08", label: "Ageing",             tag: "read" },
+  { id: "exceptions",    n: "09", label: "Exceptions log",     tag: "check" },
+  { id: "gates",         n: "10", label: "Launch gates",       tag: "count" }
 ];
 
 const STATUS_LABEL = {
@@ -897,13 +994,18 @@ const NEXT_ACTION = {
    ============================================================ */
 
 const state = {
-  view: "request",
+  view: "board",
   id: "PR-2043",
   persona: "nadia",
   draft: { title: "", amount: "", type: "goods", org: "si", need: "", justify: "" },
   refusal: null,     // last blocking-validation result on the form
   submitted: null,   // a request created in this session
-  writes: []         // this session's transitions, appended to the timeline
+  writes: [],        // this session's transitions, appended to the timeline
+  shipId: "SHIP-2026-000112",   // the shipment the shipments view opens on
+  presId: "P-12",               // the presentation row the presentations view opens on
+  open: null,                   // "card" | "desk" | "pcard" — a drawer the URL asked for
+  asof: "21 Aug 2026",          // the date the simulated 08:00 reminder run is run as
+  guard: ""                     // the intake-guard field on the shipments view
 };
 
 const $ = (s, r) => (r || document).querySelector(s);
@@ -931,6 +1033,10 @@ const gateStats = () => {
   const chased = done.filter((r) => r.chased).length;
   const hrs = done.filter((r) => r.assignH !== null).map((r) => r.assignH).sort((a, b) => a - b);
   const med = hrs.length % 2 ? hrs[(hrs.length - 1) / 2] : (hrs[hrs.length / 2 - 1] + hrs[hrs.length / 2]) / 2;
+  /* Streams 2 and 3, counted from their own rows the same way. */
+  const sh = shipStats();
+  const pr = presStats();
+  const flowFail = EXCEPTIONS.filter((e) => e.flow);
   return {
     n: done.length,
     assigned,
@@ -942,7 +1048,16 @@ const gateStats = () => {
     unresolved: EXCEPTIONS.filter((e) => e.state !== "closed").length,
     silent: EXCEPTIONS.filter((e) => e.guardrail).length,
     silentResolved: EXCEPTIONS.filter((e) => e.guardrail && e.state === "closed").length,
-    refused: REFUSED.length
+    flowFail: flowFail.length,
+    flowFailResolved: flowFail.filter((e) => e.state === "closed").length,
+    refused: REFUSED.length,
+    ship: sh,
+    pres: pr,
+    /* the contract, across all three streams */
+    total: done.length + sh.n + pr.n,
+    withinDay: assigned + sh.withinDay + pr.confirmedByT1,
+    gated: done.length + sh.shipped,
+    gatedUnapproved: unapproved + sh.shippedUnapproved
   };
 };
 
@@ -976,11 +1091,19 @@ function closeDrawer() {
   $("#drawer").classList.remove("show");
   $("#drawer").setAttribute("aria-hidden", "true");
   $("#scrim").classList.remove("show");
+  if (state.open) { state.open = null; syncUrl(); }
 }
 function syncUrl() {
   const u = new URL(location.href);
   u.searchParams.set("view", state.view);
-  if (state.view === "request") u.searchParams.set("id", state.id); else u.searchParams.delete("id");
+  if (state.view === "request") u.searchParams.set("id", state.id);
+  else if (state.view === "shipments") u.searchParams.set("id", state.shipId);
+  else if (state.view === "presentations") u.searchParams.set("id", state.presId);
+  else u.searchParams.delete("id");
+  /* A drawer the screenshot was taken with stays in the link; the
+     simulated run date does too, so a reminder state is shareable. */
+  if (state.open && (state.view === "shipments" || state.view === "presentations")) u.searchParams.set("open", state.open); else u.searchParams.delete("open");
+  if (state.view === "presentations" && state.asof !== TODAY) u.searchParams.set("asof", state.asof); else u.searchParams.delete("asof");
   u.searchParams.set("as", state.persona);
   /* The submission form's state — including a refusal — is shareable:
      while on the submit view the draft and the try flag live in the
@@ -1018,7 +1141,7 @@ function viewRequest() {
 
   return '' +
     '<div class="head">' +
-      '<div class="kicker">01 &middot; What the requester sees</div>' +
+      '<div class="kicker">02 &middot; What the requester sees</div>' +
       "<h2>" + esc(r.id) + " &middot; " + esc(r.title) + "</h2>" +
       "<p>The whole request in one screen: who holds it, what happens next and who does it, whether the date is a fact or a guess, and every transition with the evidence that let it be recorded. This is read-only for the requester by design.</p>" +
     "</div>" +
@@ -1093,7 +1216,7 @@ function wireRequest() {
   const tryS = $("#tryStatus");
   if (tryS) tryS.onclick = () => {
     if (can("deliver")) {
-      toast("You hold this queue, so the transition is available &mdash; but it still needs a goods receipt reference before it can be written. Open <b>03 Procurement queue</b> and try it there.");
+      toast("You hold this queue, so the transition is available &mdash; but it still needs a goods receipt reference before it can be written. Open <b>04 Procurement queue</b> and try it there.");
     } else {
       toast("<b>Refused.</b> " + esc(person(state.persona).n) + " is a " + esc(person(state.persona).r).toLowerCase() +
         " on this request, and no role except the assigned owner can move a status. Ask the owner to correct it &mdash; that ask is the cost of this rule, and it is named in the tradeoffs.", true);
@@ -1107,7 +1230,7 @@ function viewSubmit() {
   const ref = state.refusal;
   return '' +
     '<div class="head">' +
-      '<div class="kicker">02 &middot; The blocking validation</div>' +
+      '<div class="kicker">03 &middot; The blocking validation</div>' +
       "<h2>Submit a request</h2>" +
       "<p>The finance controller's condition, and the one I would not have proposed: requests at or above the " + money(CEILING) +
       " approval threshold are not warned about, they are <b>refused at submission</b>. The pilot cannot weaken a control if the requests that control exists for never enter it. Try " + money(18400) + ".</p>" +
@@ -1208,7 +1331,7 @@ function viewQueue() {
   const allowed = can("assign");
   return '' +
     '<div class="head">' +
-      '<div class="kicker">03 &middot; One queue, assignment through delivery</div>' +
+      '<div class="kicker">04 &middot; One queue, assignment through delivery</div>' +
       "<h2>Procurement queue</h2>" +
       "<p>The working surface for the two analysts. Every button here writes a transition, and every transition asks for its evidence before it will write &mdash; there is no path that records a status change as a bare word.</p>" +
     "</div>" +
@@ -1371,7 +1494,7 @@ function viewApprovals() {
   const done = completed();
   return '' +
     '<div class="head">' +
-      '<div class="kicker">04 &middot; One stage, and a ceiling above it</div>' +
+      '<div class="kicker">05 &middot; One stage, and a ceiling above it</div>' +
       "<h2>Approvals</h2>" +
       "<p>Below " + money(CEILING) + " a single financial approval clears a request. At or above it, nothing arrives here &mdash; the submission form refused it. That split is what made one stage acceptable to a controller who operates two.</p>" +
     "</div>" +
@@ -1486,7 +1609,7 @@ function viewAgeing() {
   const breach = live.filter((r) => r.st === "submitted" && ageDays(r) >= 1);
   return '' +
     '<div class="head">' +
-      '<div class="kicker">05 &middot; Visible at three days, escalated only on breach</div>' +
+      '<div class="kicker">08 &middot; Visible at three days, escalated only on breach</div>' +
       "<h2>Ageing work</h2>" +
       "<p>Managers see everything older than three days, grouped by organisation. Escalation &mdash; a direct message to a named manager &mdash; fires only when a gate is actually breached. The cost of that choice is named in the tradeoffs: a request can sit visible-but-unescalated for several days.</p>" +
     "</div>" +
@@ -1531,25 +1654,26 @@ function viewExceptions() {
   const s = gateStats();
   return '' +
     '<div class="head">' +
-      '<div class="kicker">06 &middot; The daily integrity check</div>' +
+      '<div class="kicker">09 &middot; The daily integrity check</div>' +
       "<h2>Exceptions log</h2>" +
       "<p>Short flows fail quietly. The pilot's answer is not a better flow, it is a check that runs every morning against the canonical list and writes what it cannot explain &mdash; and a gate that stops the pilot if what it writes goes unresolved past a business day.</p>" +
     "</div>" +
 
     '<div class="grid3" style="margin-bottom:16px">' +
-      factTile("Exceptions raised", s.exceptions, "", "Four in five months. Each one is a thing the flows did not do and did not report.") +
+      factTile("Exceptions raised", s.exceptions, "across 3 streams", "Six in five months, four of them in procurement. Each one is a thing a flow did not do and did not report.") +
       gateTile("Silent flow failures", s.silent, s.silent, 2, "One. The gate says a second one stops the pilot: the first told us the check works, a repeat would tell us the check has become the mechanism rather than the safety net.") +
       gateTile("Unresolved past a business day", s.unresolved, 0, 1, "Zero. This is the failure-visibility gate, and it is the one that would be easiest to quietly fail.") +
     "</div>" +
 
     '<div class="card">' +
       "<h3>Log <span class=\"sub\">Apr &ndash; Aug 2026</span></h3>" +
-      "<table><thead><tr><th>Ref</th><th>Date</th><th>What the check found</th><th>Request</th><th>Found by</th><th>State</th></tr></thead><tbody>" +
+      "<table><thead><tr><th>Ref</th><th>Date</th><th>What the check found</th><th>Stream</th><th>Request</th><th>Found by</th><th>State</th></tr></thead><tbody>" +
       EXCEPTIONS.map((e) =>
         '<tr class="click" data-ex="' + e.id + '">' +
           "<td><span class=\"rid\">" + e.id + "</span></td><td>" + esc(e.d) + "</td>" +
-          "<td class=\"t\">" + esc(e.kind) + (e.guardrail ? ' <span class="badge bad">guardrail</span>' : "") +
+          "<td class=\"t\">" + esc(e.kind) + (e.guardrail ? ' <span class="badge bad">guardrail</span>' : "") + (e.flow ? ' <span class="badge auto">flow</span>' : "") +
             "<span class=\"sub\">" + esc(e.detail.slice(0, 96)) + "&hellip;</span></td>" +
+          "<td>" + esc(STREAM_LABEL[e.stream]) + "</td>" +
           "<td><span class=\"rid\">" + esc(e.req) + "</span></td>" +
           "<td>" + esc(e.found) + "</td>" +
           '<td><span class="badge ok">closed ' + esc(e.resolved.toLowerCase()) + "</span></td>" +
@@ -1561,8 +1685,10 @@ function viewExceptions() {
       "<h3>What the check compares each morning <span class=\"badge auto\">automated</span></h3>" +
       "<p><b>Every request with no named owner past one business day.</b> This is what caught both assignment-gate failures, and both trace to one approver map with a gap &mdash; a wrong map is indistinguishable from a right one until a request falls through it.</p>" +
       "<p><b>Every reminder due against every reminder sent.</b> Added after EX-018, because that failure reported success. A flow that lies cannot be caught by reading the flow's own result.</p>" +
-      "<p><b>Every ordered request against its approval event.</b> The one comparison that has never found anything, and the one whose gate stops the pilot immediately if it ever does.</p>" +
+      "<p><b>Every ordered request against its approval event, and every shipped request against its card response.</b> The two comparisons that have never found anything, and the ones whose gate stops the pilot immediately if they ever do.</p>" +
+      "<p><b>Every approval card sent against every shipment request pending.</b> Added after EX-022 &mdash; a flat list fires a create trigger once per line, and three cards for one request is a fatigue problem before it is a control problem.</p>" +
       "<p><b>Every approver map row against the cost centres in use.</b> Added after EX-021 &mdash; the map row from June covered lab and not facilities, and nothing was testing that.</p>" +
+      "<p><b>Every schedule row the reminder run skipped.</b> Added after EX-023 &mdash; a row that stops the run is a failure the run cannot report, so the digest reports it instead.</p>" +
     "</div>";
 }
 
@@ -1570,16 +1696,23 @@ function wireExceptions() {
   document.querySelectorAll("tr[data-ex]").forEach((tr) => {
     tr.onclick = () => {
       const e = EXCEPTIONS.find((x) => x.id === tr.dataset.ex);
+      const target = e.stream === "ship" ? (shipById(e.req) || {}).project || "" : e.stream === "pres" ? (presById(e.req) || {}).topic || "" : (byId(e.req) || { title: "" }).title;
+      const goLabel = e.stream === "ship" ? "Open it in the shipments view" : e.stream === "pres" ? "Open it in the presentations view" : "Open it in the requester view";
       openDrawer(
         "<h3>" + esc(e.kind) + "</h3>" +
-        '<p class="dsub">' + esc(e.id) + " &middot; " + esc(e.d) + " &middot; found by " + esc(e.found.toLowerCase()) + "</p>" +
+        '<p class="dsub">' + esc(e.id) + " &middot; " + esc(e.d) + " &middot; " + esc(STREAM_LABEL[e.stream]) + " &middot; found by " + esc(e.found.toLowerCase()) + "</p>" +
         '<div class="card"><h3>What happened</h3><p style="color:var(--body)">' + esc(e.detail) + "</p></div>" +
         '<div class="card"><h3>What changed because of it</h3><p style="color:var(--body)">' + esc(e.fix) + "</p></div>" +
         '<div class="card"><h3>Affected request</h3><p><span class="rid">' + esc(e.req) + "</span> &mdash; " +
-          esc((byId(e.req) || { title: "" }).title) + '</p><div class="btnrow"><button class="btn primary" id="exGo">Open it in the requester view</button></div></div>'
+          esc(target) + '</p><div class="btnrow"><button class="btn primary" id="exGo">' + goLabel + '</button></div></div>'
       );
       const g = $("#exGo");
-      if (g) g.onclick = () => { state.view = "request"; state.id = e.req; closeDrawer(); render(); };
+      if (g) g.onclick = () => {
+        if (e.stream === "ship") { state.view = "shipments"; state.shipId = e.req; state.open = null; }
+        else if (e.stream === "pres") { state.view = "presentations"; state.presId = e.req; state.open = null; }
+        else { state.view = "request"; state.id = e.req; }
+        closeDrawer(); render();
+      };
     };
   });
 }
@@ -1588,28 +1721,31 @@ function wireExceptions() {
 function viewGates() {
   const s = gateStats();
   const rows = [
-    { name: "Assigned to a named owner within 1 business day", v: s.assigned, t: s.n, max: 25,
-      label: s.assigned + " of " + s.n, tl: "gate: " + s.n, pass: s.assigned >= s.n,
-      why: "Two requests took longer, both submitted on a Friday afternoon into the one organisation whose approver map had a gap. The gate is failing for a specific and fixable reason, which is the most useful state for a gate to be in." },
-    { name: "Ordered with a valid recorded approval", v: s.ordered - s.unapproved, t: s.n, max: 25,
-      label: (s.ordered - s.unapproved) + " of " + s.n, tl: "gate: " + s.n, pass: s.unapproved === 0,
-      why: "Every completed request carries an approval event with a document reference, recorded before its order event. A single breach stops the pilot rather than starting a discussion." },
-    { name: "Flow failures resolved within 1 business day", v: s.silentResolved, t: s.silent, max: 25,
-      label: s.silentResolved + " of " + s.silent, tl: "gate: all", pass: s.silentResolved >= s.silent,
-      why: "One silent flow failure, caught by the daily check and closed the same day. A second one stops the pilot: the first proved the check works, a repeat would prove the check had become the mechanism." },
-    { name: "Completed pilot requests", v: s.n, t: 20, max: 25,
-      label: String(s.n), tl: "floor: 20", pass: s.n >= 20,
-      why: "The floor below which no exit to production is even considered. Twenty-three is enough to see whether the operating contract holds and nowhere near enough to claim an effect size." }
+    { name: "Owned or answered within 1 business day, across the three streams", v: s.withinDay, t: s.total, max: 50,
+      label: s.withinDay + " of " + s.total, tl: "gate: " + s.total, pass: s.withinDay >= s.total,
+      why: "Three misses: two procurement requests submitted on a Friday afternoon into the one organisation whose approver map had a gap, and one presenter who answered neither reminder and was reached by phone after the escalation. Every shipment request had its first approver's decision inside a business day. The gate is failing for specific and fixable reasons, which is the most useful state for a gate to be in." },
+    { name: "Ordered or shipped with a valid recorded approval", v: s.gated - s.gatedUnapproved, t: s.gated, max: 50,
+      label: (s.gated - s.gatedUnapproved) + " of " + s.gated, tl: "gate: " + s.gated, pass: s.gatedUnapproved === 0,
+      why: "Every completed procurement request carries an approval event before its order event, and every shipment that left the building carries a card response — or an auto-approval the form wrote for a Low priority. A single breach stops the pilot rather than starting a discussion." },
+    { name: "Duplicate approval cards since the trigger condition", v: s.ship.dupAfter, t: 0, max: 50,
+      label: String(s.ship.dupAfter), tl: "gate: 0", pass: s.ship.dupAfter === 0,
+      why: "Zero since 16 Jul. Before it, one three-line request produced three cards (EX-022): the list is flat, one row per line item, and a create trigger fires per row. Approver fatigue is how an approval control dies quietly, so a repeat is a stop." },
+    { name: "Flow failures resolved within 1 business day", v: s.flowFailResolved, t: s.flowFail, max: 50,
+      label: s.flowFailResolved + " of " + s.flowFail, tl: "gate: all", pass: s.flowFailResolved >= s.flowFail,
+      why: "Three flow failures across the three streams — a reminder flow that reported success, a trigger that fired per line, a run stopped by a departed presenter — each closed the same day. The one that was silent is the guardrail; a second silent one stops the pilot." },
+    { name: "Completed requests across the pilot", v: s.total, t: 20, max: 50,
+      label: String(s.total), tl: "floor: 20", pass: s.total >= 20,
+      why: "The floor below which no exit to production is even considered. Forty-eight across three streams is enough to see whether the operating contract holds; fourteen shipments and eleven presentations are nowhere near enough to claim a rate for either, and the case study does not." }
   ];
   return '' +
     '<div class="head">' +
-      '<div class="kicker">07 &middot; Written before the pilot opened</div>' +
+      '<div class="kicker">10 &middot; Written before the pilot opened</div>' +
       "<h2>Launch gates</h2>" +
-      "<p>Four gates, agreed in the pilot specification before a single request was submitted, so that none of them could be renegotiated by whatever the data turned out to say. Every number here is counted from the requests in this demo &mdash; nothing on this screen is stored.</p>" +
+      "<p>Five gates, agreed in the pilot specification before a single request was submitted, so that none of them could be renegotiated by whatever the data turned out to say. The first four were written for procurement and apply unchanged to the two streams added later; the third was added when the shipment flow taught us a new way to fail. Every number here is counted from the rows in this demo &mdash; nothing on this screen is stored.</p>" +
     "</div>" +
 
     '<div class="card">' +
-      "<h3>Performance against each gate <span class=\"sub\">n = " + s.n + " completed requests</span></h3>" +
+      "<h3>Performance against each gate <span class=\"sub\">n = " + s.total + " completed requests &middot; " + s.n + " procurement, " + s.ship.n + " shipments, " + s.pres.n + " presentations</span></h3>" +
       rows.map((r) => {
         const pct = Math.min(100, (r.v / r.max) * 100);
         const tpct = Math.min(100, (r.t / r.max) * 100);
@@ -1633,6 +1769,12 @@ function viewGates() {
           "Down from 3.6 days across the 63 threads read before the pilot. Lower is the good direction here, which is why this is a fact rather than a gate.") +
         factTile("Requests refused by the ceiling", s.refused, "",
           "Four. Above the threshold the pilot cannot accept a request at all, so it cannot weaken a control it never touches.") +
+        factTile("Median working hours to a shipment decision", s.ship.medianH, "hours, first approver",
+          "Counted from submission to the first approver's card response, in working hours. Low priority never reaches a card; the form auto-approves it and the flow does not run.") +
+        factTile("Presentations confirmed at the first reminder", s.pres.confirmedAtR1, "of " + s.pres.n,
+          "Two days out, from the card's Confirm button. The rest confirmed at the second reminder except one, which needed the escalation and a phone call.") +
+        factTile("Reminders sent, duplicates", s.pres.reminders + " / " + s.pres.dup, "",
+          "The Sent columns on the schedule row are the guard: a reminder stamps the row before the next run can consider it again, so a re-run cannot double-send.") +
       "</div>" +
     "</div>" +
 
@@ -1641,6 +1783,683 @@ function viewGates() {
       "<p>A named individual recorded as owner, not a team or a queue, timed from submission to assignment in working hours. A request assigned to &ldquo;Procurement&rdquo; counts as <b>unassigned</b> &mdash; because that is precisely the answer 34 of the 63 original threads were giving, and a gate that accepted it would be measuring nothing.</p>" +
       "<p>Volume is the reason all of this is proportionate rather than thin. Under ten requests a week does not justify a control plane; past fifty a week the lean architecture stops being the right answer and the trigger says revisit it rather than stretch it.</p>" +
     "</div>";
+}
+
+/* ============================================================
+   STREAMS 2 + 3 — shipment requests and the Thursday
+   presentations. The same contract as procurement — a named
+   person within a business day, a decision that is an event
+   with evidence, a morning check that reads the list and not
+   the flow — applied to two more kinds of request. Every count
+   the board and the gates show is derived from these rows.
+   ============================================================ */
+
+const STREAM_LABEL = { proc: "Procurement", ship: "Shipments", pres: "Presentations" };
+
+/* Three more people the two streams need. */
+PEOPLE.push(
+  { id: "elena", n: "Elena Marsh",   r: "Shipping manager",       org: "ops" },
+  { id: "owen",  n: "Owen Blake",    r: "Director of operations", org: "ops" },
+  { id: "maya",  n: "Maya Okafor",   r: "Operations coordinator", org: "ops" }
+);
+PERSONAS.find((p) => p.id === "priya").can.push("ship-approve");
+PERSONAS.find((p) => p.id === "priya").note =
+  "An engineering manager. Sees ageing work across the three organisations after three days; escalation reaches them only on a breach. First-tier approver on every shipment card above Low priority.";
+PERSONAS.push(
+  { id: "elena", see: "all", can: ["ship-approve", "desk"],
+    note: "The shipping manager. Second-tier approver on High and Critical shipments, and the person who fills the tracking half of a request once the card has cleared it." },
+  { id: "owen",  see: "all", can: ["ship-approve"],
+    note: "Director of operations. Third-tier approver on Critical shipments only, and the person the presentation escalations and the daily digest are addressed to." },
+  { id: "maya",  see: "all", can: ["run", "desk"],
+    note: "Operations coordinator. Keeps the Thursday schedule, runs the 08:00 reminder job when it needs a hand, and answers the escalations." }
+);
+
+const toDate = (s) => new Date(String(s).replace(/(\d+) (\w+) (\d+).*/, "$2 $1, $3"));
+const dayDiff = (later, earlier) => Math.round((toDate(later) - toDate(earlier)) / 86400000);
+
+/* ---- Stream 2: shipment requests --------------------------- */
+/* PRD routing. Low never reaches a card: the form writes Auto-Approved. */
+const SHIP_TIERS = { Low: [], Medium: ["priya"], High: ["priya", "elena"], Critical: ["priya", "elena", "owen"] };
+const TIER_LABEL = { priya: "Manager", elena: "Shipping manager", owen: "Director" };
+const TRIGGER_CONDITION = "@and(equals(triggerOutputs()?['body/LineNumber'], 1),\n     equals(triggerOutputs()?['body/ApprovalStatus/Value'], 'Pending'))";
+const FIX_DATE = "16 Jul 2026";
+
+/* items: [part, description, qty, unit value USD, kg]
+   chain: [approver, when, decision, note] — one row per card response
+   decidedH: working hours from submission to the first approver's response */
+const SHIP = (o) => Object.assign({ carrier: "FedEx", att: 1, cards: 1, tracking: "", flags: {}, desk: {} }, o);
+const SHIPMENTS = [
+  SHIP({ id: "SHIP-2026-000101", req: "nadia", org: "si", type: "Sample", priority: "Medium", sub: "14 Jul 2026 10:20", project: "YR31 customer sampling", purpose: "Customer demo unit",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 1, 1850, 2.1]], pkg: "1 × Box, 2.1 kg", speed: "2-Day", dest: "Northwind Systems · Mountain View, CA",
+    chain: [["priya", "14 Jul 13:05", "Approve", "Demo confirmed for 22 Jul"]], decidedH: 3, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3345", att: 2,
+    desk: { coordinator: "elena", shipDate: "15 Jul 2026", eta: "17 Jul 2026", delivered: "17 Jul 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000102", req: "ravi", org: "si", type: "Outbound", priority: "High", sub: "15 Jul 2026 15:40", project: "Partner integration — Cascade", purpose: "Partner integration sample",
+    items: [["IXN-SNS-04", "Sensor board rev C", 4, 210, 0.3], ["IXN-PSU-15", "Power supply and cable set", 2, 120, 1.1], ["IXN-ANT-09", "Antenna assembly, 2.4 GHz", 6, 95, 0.2]], pkg: "2 × Box, 4.6 kg", speed: "Overnight", dest: "Cascade Robotics · Portland, OR",
+    chain: [["priya", "16 Jul 09:10", "Approve", ""], ["elena", "16 Jul 11:30", "Approve", "Three cards arrived for this one request — logged as EX-022"]], decidedH: 5, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3402", att: 3, cards: 3, flags: { dup: true, exception: "EX-022" },
+    desk: { coordinator: "elena", shipDate: "16 Jul 2026", eta: "17 Jul 2026", delivered: "17 Jul 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000103", req: "sam", org: "ops", type: "Return", priority: "Low", sub: "17 Jul 2026 09:05", project: "RMA-0417", purpose: "Return under warranty",
+    items: [["IXN-CTL-30", "Line controller module, rev B (RMA)", 1, 3200, 1.4]], pkg: "1 × Box, 1.4 kg", speed: "Ground", dest: "Helio Instruments · Cambridge, MA",
+    chain: [], decidedH: 0, approval: "Auto-Approved", ship: "Delivered", tracking: "7489 0021 3477", cards: 0,
+    desk: { coordinator: "elena", shipDate: "20 Jul 2026", eta: "24 Jul 2026", delivered: "23 Jul 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000104", req: "tomas", org: "sf", type: "Outbound", priority: "Medium", sub: "21 Jul 2026 11:15", project: "Evaluation hardware — Atlas", purpose: "Evaluation hardware for prospect",
+    items: [["IXN-SNS-04", "Sensor board rev C", 8, 210, 0.3]], pkg: "1 × Box, 2.6 kg", speed: "2-Day", dest: "Atlas Precision · Charlotte, NC",
+    chain: [["priya", "21 Jul 14:40", "Approve", ""]], decidedH: 3, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3510", att: 2,
+    desk: { coordinator: "elena", shipDate: "22 Jul 2026", eta: "24 Jul 2026", delivered: "24 Jul 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000105", req: "clara", org: "sf", type: "Sample", priority: "Medium", sub: "23 Jul 2026 16:20", project: "Field trial — Summit", purpose: "Field service spare",
+    items: [["IXN-ANT-09", "Antenna assembly, 2.4 GHz", 12, 95, 0.2]], pkg: "1 × Box, 2.4 kg", speed: "Ground", dest: "Summit Field Services · Denver, CO",
+    chain: [["priya", "24 Jul 08:50", "Approve", ""]], decidedH: 2, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3588",
+    desk: { coordinator: "elena", shipDate: "24 Jul 2026", eta: "29 Jul 2026", delivered: "30 Jul 2026", sla: "Late" } }),
+  SHIP({ id: "SHIP-2026-000106", req: "iris", org: "sf", type: "Outbound", priority: "High", sub: "28 Jul 2026 10:05", project: "YR31 customer sampling", purpose: "Customer demo unit",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 2, 1850, 2.1], ["IXN-PSU-15", "Power supply and cable set", 2, 120, 1.1]], pkg: "1 × Box, 6.4 kg", speed: "Overnight", dest: "Northwind Systems · Mountain View, CA",
+    chain: [["priya", "28 Jul 11:20", "Approve", ""], ["elena", "28 Jul 14:05", "Reject", "Commercial invoice missing; export classification blank on line 1. Resubmit with both attached."]], decidedH: 4, approval: "Rejected", ship: "Cancelled", att: 1, flags: { rejected: true },
+    desk: {} }),
+  SHIP({ id: "SHIP-2026-000107", req: "iris", org: "sf", type: "Outbound", priority: "High", sub: "29 Jul 2026 09:30", project: "YR31 customer sampling", purpose: "Customer demo unit (resubmission of 000106)",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 2, 1850, 2.1], ["IXN-PSU-15", "Power supply and cable set", 2, 120, 1.1]], pkg: "1 × Box, 6.4 kg", speed: "Overnight", dest: "Northwind Systems · Mountain View, CA",
+    chain: [["priya", "29 Jul 10:15", "Approve", ""], ["elena", "29 Jul 12:40", "Approve", "Invoice and ECCN attached — thank you"]], decidedH: 3, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3641", att: 3,
+    desk: { coordinator: "elena", shipDate: "29 Jul 2026", eta: "30 Jul 2026", delivered: "30 Jul 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000108", req: "ben", org: "si", type: "Inbound", priority: "Low", sub: "3 Aug 2026 08:45", project: "Wafer carrier loan", purpose: "Loaner cassettes returning to us",
+    items: [["VND-CAS-06", "Wafer carrier cassettes, loaner set", 6, 0, 3.0]], pkg: "1 × Crate, 3.0 kg", speed: "Ground", dest: "Ixana Quasistatics · West Lafayette, IN",
+    chain: [], decidedH: 0, approval: "Auto-Approved", ship: "Delivered", tracking: "7489 0021 3699", cards: 0,
+    desk: { coordinator: "elena", shipDate: "4 Aug 2026", eta: "7 Aug 2026", delivered: "7 Aug 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000109", req: "nadia", org: "si", type: "Sample", priority: "Medium", sub: "5 Aug 2026 14:10", project: "Evaluation — Helio", purpose: "Evaluation hardware for prospect",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 1, 1850, 2.1]], pkg: "1 × Box, 2.1 kg", speed: "2-Day", dest: "Helio Instruments · Cambridge, MA",
+    chain: [["priya", "5 Aug 16:30", "Approve", ""]], decidedH: 2, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3720", att: 2,
+    desk: { coordinator: "elena", shipDate: "6 Aug 2026", eta: "8 Aug 2026", delivered: "8 Aug 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000110", req: "leila", org: "sf", type: "Outbound", priority: "Medium", sub: "10 Aug 2026 09:50", project: "Partner integration — Cascade", purpose: "Replacement under warranty",
+    items: [["IXN-CTL-30", "Line controller module, rev B", 1, 3200, 1.4]], pkg: "1 × Box, 1.4 kg", speed: "2-Day", dest: "Cascade Robotics · Portland, OR",
+    chain: [["priya", "10 Aug 13:10", "Approve", ""]], decidedH: 3, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3788",
+    desk: { coordinator: "elena", shipDate: "10 Aug 2026", eta: "12 Aug 2026", delivered: "12 Aug 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000111", req: "ravi", org: "si", type: "Outbound", priority: "Medium", sub: "12 Aug 2026 15:05", project: "Evaluation hardware — Atlas", purpose: "Evaluation hardware for prospect",
+    items: [["IXN-SNS-04", "Sensor board rev C", 4, 210, 0.3], ["IXN-ANT-09", "Antenna assembly, 2.4 GHz", 4, 95, 0.2]], pkg: "1 × Box, 2.0 kg", speed: "Ground", dest: "Atlas Precision · Charlotte, NC",
+    chain: [["priya", "13 Aug 09:20", "Approve", ""]], decidedH: 3, approval: "Approved", ship: "In Transit", tracking: "7489 0021 3830", att: 2,
+    desk: { coordinator: "elena", shipDate: "17 Aug 2026", eta: "24 Aug 2026" } }),
+  SHIP({ id: "SHIP-2026-000112", req: "tomas", org: "sf", type: "Outbound", priority: "Critical", sub: "17 Aug 2026 10:30", project: "YR31 customer sampling — trade show", purpose: "Customer demo units for the show floor",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 4, 1850, 2.1], ["IXN-PSU-15", "Power supply and cable set", 4, 120, 1.1], ["IXN-CTL-30", "Line controller module, rev B", 1, 3200, 1.4]], pkg: "3 × Box, 11.2 kg", speed: "Overnight", dest: "Northwind Systems · Mountain View, CA",
+    chain: [["priya", "17 Aug 11:05", "Approve", ""], ["elena", "17 Aug 13:20", "Approve", "Boxes 2 and 3 need the lithium-battery label"], ["owen", "17 Aug 16:45", "Approve", "Approved for the show; return shipment to follow as its own request"]], decidedH: 6, approval: "Approved", ship: "Delivered", tracking: "7489 0021 3902", att: 4,
+    desk: { coordinator: "elena", shipDate: "18 Aug 2026", eta: "19 Aug 2026", delivered: "19 Aug 2026", sla: "On Time" } }),
+  SHIP({ id: "SHIP-2026-000113", req: "sam", org: "ops", type: "Return", priority: "Medium", sub: "19 Aug 2026 11:40", project: "Facilities — solvent cabinet", purpose: "Return to supplier under warranty",
+    items: [["OPS-CAB-02", "Fire-rated solvent cabinet, damaged hinge", 1, 1450, 48]], pkg: "1 × Pallet, 48 kg", speed: "Ground", dest: "Ferris Lab Supply · Indianapolis, IN",
+    chain: [["priya", "19 Aug 14:00", "Approve", ""]], decidedH: 2, approval: "Approved", ship: "Label Created", tracking: "7489 0021 3955",
+    desk: { coordinator: "elena", shipDate: "24 Aug 2026" } }),
+  SHIP({ id: "SHIP-2026-000114", req: "clara", org: "sf", type: "Sample", priority: "High", sub: "20 Aug 2026 16:10", project: "Evaluation — Helio", purpose: "Evaluation hardware for prospect",
+    items: [["IXN-SNS-04", "Sensor board rev C", 2, 210, 0.3], ["IXN-ANT-09", "Antenna assembly, 2.4 GHz", 2, 95, 0.2]], pkg: "1 × Box, 1.2 kg", speed: "2-Day", dest: "Helio Instruments · Cambridge, MA",
+    chain: [["priya", "20 Aug 17:00", "Approve", ""], ["elena", "21 Aug 09:30", "Approve", "Ship-from left blank — existing vendor, the carrier holds the address"]], decidedH: 2, approval: "Approved", ship: "Label Created", tracking: "7489 0021 3990", att: 2,
+    desk: { coordinator: "elena", shipDate: "21 Aug 2026" } }),
+  /* In flight: submitted this morning, waiting on the first card. */
+  SHIP({ id: "SHIP-2026-000115", req: "ben", org: "si", type: "Sample", priority: "High", sub: "21 Aug 2026 09:15", project: "Evaluation — Summit", purpose: "Evaluation hardware for prospect",
+    items: [["IXN-WR-200", "Wi-R demo kit, rev D", 1, 1850, 2.1], ["IXN-ANT-09", "Antenna assembly, 2.4 GHz", 2, 95, 0.2]], pkg: "1 × Box, 2.6 kg", speed: "2-Day", dest: "Summit Field Services · Denver, CO",
+    chain: [], decidedH: null, approval: "Pending", ship: "Submitted", att: 1, desk: {} })
+];
+
+const shipById = (id) => SHIPMENTS.find((s) => s.id === id);
+const shipValue = (s) => s.items.reduce((t, it) => t + it[2] * it[3], 0);
+const shipDecided = (s) => s.approval !== "Pending";
+const shipShipped = (s) => ["Label Created", "In Transit", "Delivered"].includes(s.ship);
+const nextApprover = (s) => {
+  const tiers = SHIP_TIERS[s.priority];
+  const decided = s.chain.filter((c) => c[2] === "Approve").map((c) => c[0]);
+  if (s.approval !== "Pending") return null;
+  return tiers.find((t) => !decided.includes(t)) || null;
+};
+function shipStats() {
+  const decided = SHIPMENTS.filter(shipDecided);
+  const shipped = SHIPMENTS.filter(shipShipped);
+  const hrs = decided.filter((s) => s.chain.length).map((s) => s.decidedH).sort((a, b) => a - b);
+  const med = hrs.length ? (hrs.length % 2 ? hrs[(hrs.length - 1) / 2] : (hrs[hrs.length / 2 - 1] + hrs[hrs.length / 2]) / 2) : 0;
+  return {
+    n: decided.length,
+    withinDay: decided.filter((s) => s.decidedH !== null && s.decidedH <= 8).length,
+    auto: decided.filter((s) => s.approval === "Auto-Approved").length,
+    rejected: decided.filter((s) => s.approval === "Rejected").length,
+    shipped: shipped.length,
+    shippedUnapproved: shipped.filter((s) => !["Approved", "Auto-Approved"].includes(s.approval)).length,
+    dupBefore: SHIPMENTS.filter((s) => s.cards > 1 && dayDiff(s.sub, FIX_DATE) < 0).length,
+    dupAfter: SHIPMENTS.filter((s) => s.cards > 1 && dayDiff(s.sub, FIX_DATE) >= 0).length,
+    rows: SHIPMENTS.reduce((t, s) => t + s.items.length, 0),
+    inFlight: SHIPMENTS.filter((s) => !shipDecided(s)).length,
+    medianH: String(med)
+  };
+}
+
+/* ---- Stream 3: the Thursday presentations ------------------ */
+/* One row per scheduled slot, as the schedule workbook holds them.
+   r1 / r2 are the Sent stamps that guard against duplicates; esc is
+   the Escalated flag that stops an escalation firing twice; token
+   is the per-row bearer the confirmation link carries; via is how
+   the answer arrived. */
+const P = (o) => Object.assign({ time: "12:00 PM", loc: "Board room and Teams", r1: "", r2: "", esc: "", token: "", via: "", confirmedAt: "", notes: "", held: true }, o);
+const PRESENTATIONS = [
+  P({ id: "P-01", who: "ravi",  topic: "Probe-card yield on the YR31 test programme",      date: "4 Jun 2026",  status: "Confirmed", r1: "2 Jun 08:00", via: "card-r1", confirmedAt: "2 Jun 09:12", token: "3f9a1c7e5b2d4a6f8e0c1b3d5f7a9c2e" }),
+  P({ id: "P-02", who: "leila", topic: "Firmware update path for the reference headset",   date: "11 Jun 2026", status: "Confirmed", r1: "9 Jun 08:00", r2: "10 Jun 08:00", via: "card-r2", confirmedAt: "10 Jun 10:41", token: "a71d2e9c4b6f8a0d1c3e5b7f9a2c4e6d" }),
+  P({ id: "P-03", who: "nadia", topic: "Die-level thermal survey, first results",           date: "18 Jun 2026", status: "Confirmed", r1: "16 Jun 08:00", via: "card-r1", confirmedAt: "16 Jun 08:37", token: "5c2e7f1a9b4d6e8c0a2f4b6d8e1c3a5f" }),
+  P({ id: "P-04", who: "tomas", topic: "Power sequencing on the six-rail dev board",        date: "25 Jun 2026", status: "Requires Reschedule", r1: "23 Jun 08:00", via: "card-r1", confirmedAt: "23 Jun 11:05", notes: "Requires Reschedule via Teams on 23 Jun; moved to 9 Jul", token: "9e4b1d6f2a8c3e5b7d0f2a4c6e8b1d3f", held: false }),
+  P({ id: "P-05", who: "iris",  topic: "Reference clock module: what we learned in a week", date: "25 Jun 2026", status: "Confirmed", r1: "23 Jun 14:30", r2: "24 Jun 08:00", via: "card-r2", confirmedAt: "24 Jun 09:02", notes: "Swapped in for P-04 on 23 Jun", token: "b83f6a2d1e9c4b7a5d3f1e0c2a4b6d8e" }),
+  P({ id: "P-06", who: "ben",   topic: "Wafer handling in the new cassettes",               date: "2 Jul 2026",  status: "Confirmed", r1: "30 Jun 08:00", via: "card-r1", confirmedAt: "30 Jun 08:55", token: "d16c9e3a7b2f5d8e0c4a6b1f3e5d7c9a" }),
+  P({ id: "P-07", who: "tomas", topic: "Power sequencing on the six-rail dev board",        date: "9 Jul 2026",  status: "Confirmed", r1: "7 Jul 08:00", via: "card-r1", confirmedAt: "7 Jul 12:20", token: "4a8e2c6f1d9b3e7a5c0d2f4b6e8a1c3d" }),
+  P({ id: "P-08", who: "sam",   topic: "Solvent storage and the fire-rated cabinet",        date: "16 Jul 2026", status: "Confirmed", r1: "14 Jul 08:00", via: "card-r1", confirmedAt: "14 Jul 09:48", token: "7d3b9f1e5a2c8d4f6b0e2a4c6d8f1b3e" }),
+  P({ id: "P-09", who: "clara", topic: "Burn-in board sockets: failure modes",              date: "23 Jul 2026", status: "Confirmed", r1: "21 Jul 08:00", r2: "22 Jul 08:00", esc: "23 Jul 08:00", via: "phone", confirmedAt: "23 Jul 09:30", notes: "No response to either card; escalated to the ops group; confirmed by phone", token: "e29a5d1c8f4b6e3a7d2c0f5b9e1a3c7d" }),
+  P({ id: "P-10", who: "dana",  topic: "Six exceptions in five months, and what each changed", date: "6 Aug 2026", status: "Confirmed", r1: "4 Aug 08:00", r2: "5 Aug 08:00", via: "card-r2", confirmedAt: "5 Aug 08:14", notes: "Row reassigned on 28 Jul after EX-023 — original presenter had left", token: "c57f2b8e4a1d9c6f3e5b0a2d4f6c8e1b" }),
+  P({ id: "P-11", who: "iris",  topic: "10 MHz OCXO reference: first measurements",          date: "30 Jul 2026", status: "Confirmed", r1: "28 Jul 08:00", via: "card-r1", confirmedAt: "28 Jul 10:02", token: "f8c4e1a6d3b9f2e7c5a0d1b3f5e7a9c2" }),
+  P({ id: "P-13", who: "yuki",  topic: "Reading a purchase order like a controller",         date: "13 Aug 2026", status: "Confirmed", r1: "11 Aug 08:00", via: "card-r1", confirmedAt: "11 Aug 08:21", token: "2b6d8f3a1c5e9b4d7f0a2c4e6b8d1f3a" }),
+  /* Upcoming — Pending until the speaker answers a card. */
+  P({ id: "P-12", who: "nadia", topic: "Verified ETAs: what the label is for",               date: "27 Aug 2026", status: "Pending", held: false }),
+  P({ id: "P-14", who: "elena", topic: "One card per request: the shipment approval flow",   date: "3 Sep 2026",  status: "Pending", held: false }),
+  P({ id: "P-15", who: "marcus", topic: "Three quotes and a sole-source note",               date: "10 Sep 2026", status: "Pending", held: false })
+];
+const presById = (id) => PRESENTATIONS.find((p) => p.id === id);
+const RUN_DATES = ["21 Aug 2026", "25 Aug 2026", "26 Aug 2026", "27 Aug 2026", "1 Sep 2026"];
+const CLOSED = ["confirmed", "declined"];
+
+function presStats() {
+  const held = PRESENTATIONS.filter((p) => p.held && dayDiff(TODAY, p.date) >= 0);
+  const reminders = PRESENTATIONS.reduce((t, p) => t + (p.r1 ? 1 : 0) + (p.r2 ? 1 : 0), 0);
+  return {
+    n: held.length,
+    confirmedByT1: held.filter((p) => p.via === "card-r1" || p.via === "card-r2").length,
+    confirmedAtR1: held.filter((p) => p.via === "card-r1").length,
+    escalated: PRESENTATIONS.filter((p) => p.esc).length,
+    reminders,
+    dup: 0,
+    upcoming: PRESENTATIONS.filter((p) => dayDiff(p.date, TODAY) >= 0).length
+  };
+}
+
+/* The 08:00 job's decision for one row, as of a date. FR-2 schedule,
+   FR-5 duplicate prevention (the Sent stamps), FR-6 escalation (the
+   Escalated flag). A closed row needs nothing. */
+function presAction(p, asof) {
+  const d = dayDiff(p.date, asof);
+  const closed = CLOSED.includes(p.status.toLowerCase());
+  if (closed) return { d, action: "none" };
+  if (d === 2 && !p.r1) return { d, action: "reminder1" };
+  if (d === 1 && !p.r2) return { d, action: "reminder2" };
+  if (d <= 1 && d >= 0 && p.r2 && !p.esc) return { d, action: "escalate" };
+  return { d, action: "none" };
+}
+const newToken = () => { let s = ""; for (let i = 0; i < 32; i++) s += ((Math.random() * 16) | 0).toString(16); return s; };
+const ACTION_LABEL = { reminder1: "Reminder 1 of 2 — 2 days to go", reminder2: "Reminder 2 of 2 — tomorrow", escalate: "Escalation to the ops group" };
+
+/* ---- shared helpers ----------------------------------------- */
+const pillOf = (text) => {
+  const t = String(text);
+  const cls = { "Approved": "approved", "Auto-Approved": "auto", "Pending": "pending", "Rejected": "rejected",
+    "Delivered": "delivered", "In Transit": "transit", "Label Created": "label", "Cancelled": "cancelled", "Submitted": "muted",
+    "Confirmed": "confirmed", "Requires Reschedule": "reschedule", "Declined": "declined" }[t] || "muted";
+  return '<span class="pill ' + cls + '">' + esc(t) + "</span>";
+};
+const prio = (p) => '<span class="prio ' + p + '">' + esc(p) + "</span>";
+const rowsStrip = (s) => '<div class="rows-strip">' + s.items.map((it, i) =>
+  '<span class="' + (i === 0 ? "one" : "") + '" title="' + esc(it[1]) + '">LineNumber ' + (i + 1) + " of " + s.items.length + "</span>").join("") + "</div>";
+
+/* -- 06 Shipments -------------------------------------------- */
+function viewShipments() {
+  const s = shipStats();
+  const guardHit = /[\\"]/.test(state.guard);
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">06 &middot; One request, one card, however many lines</div>' +
+      "<h2>Shipment requests</h2>" +
+      "<p>The second stream on the same contract. An engineer submits from a form that mints <b>SHIP-YYYY-NNNNNN</b> by creating the request's attachment folder &mdash; a name collision fails, so two people cannot take one number &mdash; and writes one list row per line item. A Teams card goes to the approvers the priority names, in order; the decision is written back to every row; the shipping team fills what is still blank.</p>" +
+    "</div>" +
+
+    '<div class="grid3" style="margin-bottom:16px">' +
+      factTile("Requests decided", s.n, s.inFlight + " in flight", "Every one inside a business day of submission. Low priority is auto-approved by the form and never produces a card; the rest wait for a person.") +
+      gateTile("Shipped with a recorded approval", s.shipped - s.shippedUnapproved, s.shipped, s.shipped, "A shipment leaves against a card response or a form auto-approval, never against a chat message. The one rejection was cancelled, then resubmitted with the documents the rejection asked for.") +
+      gateTile("Duplicate cards since 16 Jul", s.dupAfter, 0, 1, "Zero. One three-line request produced three cards before the trigger condition (EX-022). The check now compares cards sent against requests pending.") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Shipment Requests <span class=\"sub\">" + SHIPMENTS.length + " requests &middot; " + s.rows + " list rows</span> <span class=\"badge auto\">flat list, one row per line item</span></h3>" +
+      "<p>Click a request for its approval card and the decisions recorded on it. The <b>Desk</b> button opens what the shipping team sees: the requestor's half read-only, the tracking half fillable while blank.</p>" +
+      "<table><thead><tr><th>Request</th><th>Requestor</th><th>Type</th><th>Priority</th><th class=\"num\">Lines</th><th class=\"num\">Value</th><th>Approval</th><th>Shipment</th><th class=\"num\">Cards</th><th></th></tr></thead><tbody>" +
+      SHIPMENTS.slice().reverse().map((x) =>
+        '<tr class="click" data-ship="' + x.id + '">' +
+          "<td><span class=\"rid\">" + x.id + "</span><span class=\"sub\">" + esc(x.project) + " &middot; " + esc(x.dest.split(" · ")[0]) + "</span></td>" +
+          "<td>" + esc(person(x.req).n) + "</td>" +
+          "<td>" + esc(x.type) + "</td>" +
+          "<td>" + prio(x.priority) + "</td>" +
+          '<td class="num">' + x.items.length + "</td>" +
+          '<td class="num">' + money(shipValue(x)) + "</td>" +
+          "<td>" + pillOf(x.approval) + "</td>" +
+          "<td>" + pillOf(x.ship) + "</td>" +
+          '<td class="num"' + (x.cards > 1 ? ' style="color:var(--crit-soft)"' : "") + ">" + x.cards + "</td>" +
+          '<td><button class="btn small" data-desk="' + x.id + '">Desk</button></td>' +
+        "</tr>").join("") +
+      "</tbody></table>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Why the flow runs once per request <span class=\"badge auto\">trigger condition</span></h3>" +
+      "<p>A request with three items is three rows sharing a Title, differing only in LineNumber. A plain <i>when an item is created</i> trigger fires three times, and the approver gets three cards for one shipment &mdash; which is exactly what happened on 16 Jul. The fix is a condition on the trigger, not logic in the flow: only line 1 gets through, and only when the form left the request Pending.</p>" +
+      '<div class="mono-block">' + esc(TRIGGER_CONDITION) + "</div>" +
+      '<p style="margin-top:10px">Choice columns are objects, so it reads <span class="mono">ApprovalStatus/Value</span>, not <span class="mono">ApprovalStatus</span>. Everything after the trigger treats the request as a whole: one <i>Get items</i> on the Title collects every row, the card lists every line, and the decision is written back to every row.</p>' +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>The intake guard <span class=\"badge human\">field rule</span></h3>" +
+      "<p>The card is JSON assembled by pasting field values into it. A <span class=\"mono\">&quot;</span> or a <span class=\"mono\">\\</span> in any field ends a string early and the action fails at runtime, after the request is already in the list. So the form refuses both characters at submit, everywhere in the payload &mdash; the guard exists for the flow, not for the form. Type a quote into the field and press validate.</p>" +
+      '<div class="form"><div class="field wide"><label for="gJust">Business justification</label>' +
+        '<input id="gJust" type="text" value="' + esc(state.guard) + '" placeholder=\'e.g. Demo units for the 24 Aug customer visit\'>' +
+        '<span class="help">Blocked at submit: &quot; and \\ anywhere in the request. Everything else is allowed, including newlines, which the card flattens before it renders.</span></div></div>' +
+      '<div class="btnrow"><button class="btn primary" id="gGo">Validate this field</button></div>' +
+      (state.guard ? (guardHit
+        ? '<div class="block"><h4>Not submitted &mdash; &quot;Business justification&quot; can&rsquo;t contain \\ or &quot; characters</h4><p>This is the form&rsquo;s response, verbatim. The request never reached the list, so there is no half-written row for the approval flow to fail on. Remove the character and the same button writes one row per line item.</p></div>'
+        : '<div class="pass"><h4>Passes the guard</h4><p>Nothing in this field would break the card. On the live form this is one of the checks that runs before the folder is created and the ID is minted.</p></div>') : "") +
+    "</div>";
+}
+
+function wireShipments() {
+  document.querySelectorAll("tr[data-ship]").forEach((tr) => {
+    tr.onclick = (e) => {
+      if (e.target.closest("button")) return;
+      state.shipId = tr.dataset.ship; state.open = "card"; syncUrl(); shipCardDrawer(state.shipId);
+    };
+  });
+  document.querySelectorAll("button[data-desk]").forEach((b) => {
+    b.onclick = () => { state.shipId = b.dataset.desk; state.open = "desk"; syncUrl(); shipDeskDrawer(state.shipId); };
+  });
+  const g = $("#gGo");
+  if (g) g.onclick = () => { state.guard = $("#gJust").value; render(); };
+}
+
+/* The Teams card, recreated from approval-card.json: same fields, same
+   order, painted in the demo's palette. */
+function shipCard(s) {
+  const tiers = SHIP_TIERS[s.priority];
+  const nxt = nextApprover(s);
+  return '<div class="acard">' +
+    '<div class="ah"><div><h4>Shipment approval required</h4><span class="rid">' + esc(s.id) + '</span></div>' +
+      '<div class="rt">' + prio(s.priority) + "<br>" + esc(s.type) + " shipment</div></div>" +
+    '<p class="sub">Requested by ' + esc(person(s.req).n) + " &middot; submitted " + esc(s.sub) + "</p>" +
+    '<dl class="facts">' +
+      "<dt>Requestor</dt><dd>" + esc(person(s.req).n) + " &middot; " + esc(person(s.req).r) + "</dd>" +
+      "<dt>Program</dt><dd>" + esc(s.project) + "</dd>" +
+      "<dt>Direction</dt><dd>" + (s.type === "Inbound" || s.type === "Return" ? "Inbound" : "Outbound") + "</dd>" +
+      "<dt>Purpose</dt><dd>" + esc(s.purpose) + "</dd>" +
+      "<dt>Ship by</dt><dd>" + esc(s.desk.shipDate || "as soon as approved") + "</dd>" +
+    "</dl>" +
+    "<h5>Ship to</h5><p class=\"just\" style=\"font-style:normal\">" + esc(s.dest) + "</p>" +
+    "<h5>Items (" + s.items.length + ")</h5>" +
+    '<ul class="items">' + s.items.map((it) => "<li>" + it[2] + " &times; " + esc(it[1]) + " (" + esc(it[0]) + ") &mdash; USD " + it[3].toLocaleString("en-US") + "</li>").join("") + "</ul>" +
+    '<dl class="facts" style="margin-top:8px">' +
+      "<dt>Declared value</dt><dd>" + money(shipValue(s)) + "</dd>" +
+      "<dt>Packages</dt><dd>" + esc(s.pkg) + "</dd>" +
+      "<dt>Carrier</dt><dd>" + esc(s.carrier) + " &middot; " + esc(s.speed) + "</dd>" +
+      "<dt>Billing</dt><dd>Company account</dd>" +
+      "<dt>Attachments</dt><dd>" + s.att + " file" + (s.att === 1 ? "" : "s") + "</dd>" +
+    "</dl>" +
+    "<h5>Approvers for " + esc(s.priority) + " priority</h5>" +
+    (tiers.length ? '<ul class="chain">' + tiers.map((t, i) => {
+      const dec = s.chain.find((c) => c[0] === t);
+      const cls = dec ? (dec[2] === "Approve" ? "ok" : "no") : (t === nxt ? "now" : "");
+      return '<li><span class="st ' + cls + '">' + (dec ? (dec[2] === "Approve" ? "&#10003;" : "&#10005;") : (i + 1)) + "</span><span>" +
+        '<span class="who2">' + esc(person(t).n) + '</span> <span class="rl2">' + esc(TIER_LABEL[t]) + "</span>" +
+        (dec ? '<span class="nt">' + esc(dec[2] === "Approve" ? "Approved" : "Rejected") + " &middot; " + esc(dec[1]) + (dec[3] ? " &middot; &ldquo;" + esc(dec[3]) + "&rdquo;" : "") + "</span>"
+             : t === nxt ? '<span class="nt">Card is with them now</span>' : '<span class="nt">Waits for the tier above</span>') +
+        "</span></li>";
+    }).join("") + "</ul>"
+    : '<p class="just">None. The form wrote <b>Auto-Approved</b> for a Low priority; the flow never ran and no card was posted.</p>') +
+    '<div class="abtn"><button class="btn ghost small" disabled>Open attachments</button><button class="btn ghost small" disabled>Open in SharePoint</button></div>' +
+  "</div>";
+}
+
+function shipCardDrawer(id) {
+  const s = shipById(id);
+  if (!s) return;
+  const nxt = nextApprover(s);
+  const mine = nxt && nxt === state.persona;
+  openDrawer(
+    "<h3>Approval card</h3>" +
+    '<p class="dsub">' + esc(s.id) + " &middot; " + s.items.length + " line row" + (s.items.length === 1 ? "" : "s") + " &middot; " + s.cards + " card" + (s.cards === 1 ? "" : "s") + " sent" +
+      (s.flags.dup ? ' &middot; <span class="badge bad">EX-022</span>' : "") + "</p>" +
+    rowsStrip(s) +
+    '<p style="font-size:11.5px;color:var(--muted);margin:6px 0 14px">One request, ' + s.items.length + " list row" + (s.items.length === 1 ? "" : "s") + ". The trigger condition lets only LineNumber 1 through; the card below lists every line and the decision is written to every row.</p>" +
+    shipCard(s) +
+    (nxt
+      ? '<div class="card"><h3>Record the decision <span class="badge ' + (mine ? "ok" : "human") + '">' + (mine ? "your card" : "not your card") + "</span></h3>" +
+        (mine
+          ? "<p>The card is in your chat because the priority names you at this tier. The response carries your address, the button pressed and the note &mdash; and it is written to every row of the request.</p>" +
+            '<textarea id="cNote" placeholder="Optional note for the requestor"></textarea>' +
+            '<div class="btnrow" style="margin-top:10px"><button class="btn ok" id="cOk">Approve</button><button class="btn no" id="cNo">Reject</button></div>'
+          : "<p>The card is with <b>" + esc(person(nxt).n) + "</b> (" + esc(TIER_LABEL[nxt].toLowerCase()) + "). Nobody else holds a button for it; the flow posts to one approver at a time and waits. Switch to them in the top right to act.</p>") +
+        '<div id="cOut"></div></div>'
+      : '<div class="card"><h3>Written to every row <span class="badge ok">recorded</span></h3>' +
+        "<p>" + (s.chain.length
+          ? "ApprovalStatus <b>" + esc(s.approval) + "</b>, ApprovedBy <b>" + esc(person(s.chain[s.chain.length - 1][0]).n) + "</b>, ApprovalDate <b>" + esc(s.chain[s.chain.length - 1][1]) + "</b> on all " + s.items.length + " row" + (s.items.length === 1 ? "" : "s") +
+            (s.approval === "Rejected" ? ", and ShipmentStatus set to <b>Cancelled</b>. The requestor was emailed the note." : ". The requestor was emailed the decision and the note.")
+          : "The form wrote <b>Auto-Approved</b> at submit. There is no card, no approver and no approval date to stamp &mdash; the shipping desk shows the approval cells as filled by the form.") + "</p></div>") +
+    '<div class="btnrow"><button class="btn primary" id="cDesk">Open the shipping desk for this request</button></div>'
+  );
+  $("#cDesk").onclick = () => { state.open = "desk"; syncUrl(); shipDeskDrawer(s.id); };
+  const act = (ok) => {
+    const note = ($("#cNote").value || "").trim();
+    const now = "21 Aug " + new Date().toTimeString().slice(0, 5);
+    s.chain.push([state.persona, now, ok ? "Approve" : "Reject", note]);
+    if (!ok) { s.approval = "Rejected"; s.ship = "Cancelled"; }
+    else if (!nextApprover(s)) { s.approval = "Approved"; }
+    if (s.decidedH === null) s.decidedH = 1;
+    toast((ok ? "Approved" : "Rejected") + " as <b>" + esc(person(state.persona).n) + "</b> at " + esc(now) + ". " +
+      (ok && nextApprover(s) ? "The next card goes to <b>" + esc(person(nextApprover(s)).n) + "</b>; nothing is written to the list until the chain completes." :
+       "Written to all " + s.items.length + " row" + (s.items.length === 1 ? "" : "s") + " of " + esc(s.id) + " and emailed to " + esc(person(s.req).n) + "."));
+    shipCardDrawer(s.id); render();
+  };
+  const ok = $("#cOk"), no = $("#cNo");
+  if (ok) ok.onclick = () => act(true);
+  if (no) no.onclick = () => act(false);
+}
+
+/* What the shipping team sees: the requestor's half read-only, the
+   flow's stamps read-only, and every blank tracking cell an input. */
+function shipDeskDrawer(id) {
+  const s = shipById(id);
+  if (!s) return;
+  const allowed = can("desk");
+  const d = s.desk;
+  const ro = (label, val, cls, tag) => '<div class="f"><label>' + esc(label) + (tag ? '<span class="tag">' + tag + "</span>" : "") + '</label><div class="ro ' + (cls || "") + '">' + (val ? esc(val) : "&mdash;") + "</div></div>";
+  const inp = (key, label, val, kind, opts) => val
+    ? ro(label, val, "", "filled")
+    : '<div class="f"><label>' + esc(label) + '<span class="tag">blank &middot; fillable</span></label>' +
+      (kind === "select"
+        ? '<select data-k="' + key + '"' + (allowed ? "" : " disabled") + '><option value="">&mdash;</option>' + opts.map((o) => '<option value="' + esc(o) + '">' + esc(o) + "</option>").join("") + "</select>"
+        : '<input data-k="' + key + '" type="text" placeholder="' + esc(opts || "") + '"' + (allowed ? "" : " disabled") + ">") + "</div>";
+  const lastDec = s.chain.length ? s.chain[s.chain.length - 1] : null;
+  openDrawer(
+    "<h3>Shipping desk</h3>" +
+    '<p class="dsub">' + esc(s.id) + " &middot; " + pillOf(s.approval) + " " + pillOf(s.ship) + "</p>" +
+    (allowed ? "" : '<div class="block"><h4>Read-only for ' + esc(person(state.persona).n) + "</h4><p>Only the shipping team writes here. Switch to <b>Elena Marsh</b> to fill the blank cells.</p></div>") +
+    '<div class="card"><h3>Request <span class="badge auto">locked</span></h3><div class="desk">' +
+      ro("Title", s.id, "lock", "system") + ro("SubmittedAt", s.sub, "lock", "system") + ro("LineCount", String(s.items.length), "lock", "system") + ro("AttachmentCount", String(s.att), "lock", "system") +
+    "</div></div>" +
+    '<div class="card"><h3>Requestor and shipment <span class="badge human">filled by the form</span></h3><div class="desk">' +
+      ro("RequestorName", person(s.req).n) + ro("ProgramName", s.project) + ro("ShipmentType", s.type) + ro("Priority", s.priority) + ro("Purpose", s.purpose) + ro("ShipToName", s.dest.split(" · ")[0]) +
+      ro("Carrier", s.carrier) + ro("ShippingSpeed", s.speed) + ro("ShipFromName", "", "", "optional for an existing vendor") +
+    "</div></div>" +
+    '<div class="card"><h3>Approval <span class="badge ok">stamped by the flow</span></h3><div class="desk">' +
+      ro("ApprovalStatus", s.approval, "flow") +
+      ro("ApprovedBy", lastDec ? person(lastDec[0]).n : (s.approval === "Auto-Approved" ? "form (Low priority)" : ""), lastDec ? "flow" : "") +
+      ro("ApprovalDate", lastDec ? lastDec[1] : (s.approval === "Auto-Approved" ? s.sub : ""), lastDec ? "flow" : "") +
+    "</div><p style=\"margin:8px 0 0\">Once the flow stamps these they render read-only here, which is what you want: the desk fills what is blank and never overwrites a decision.</p></div>" +
+    '<div class="card"><h3>Tracking <span class="badge human">fillable while blank</span></h3><div class="desk">' +
+      inp("ship", "ShipmentStatus", s.ship === "Submitted" ? "" : s.ship, "select", ["Label Created", "Carrier Pickup", "In Transit", "Out for Delivery", "Delivered", "Delayed"]) +
+      inp("coordinator", "AssignedShippingCoordinator", d.coordinator ? person(d.coordinator).n : "", "text", "a named person") +
+      inp("tracking", "TrackingNumber", s.tracking, "text", "e.g. 7489 0021 4012") +
+      inp("shipDate", "ShipDate", d.shipDate, "text", "e.g. 24 Aug 2026") +
+      inp("eta", "ExpectedDeliveryDate", d.eta, "text", "e.g. 26 Aug 2026") +
+      inp("delivered", "DeliveryDate", d.delivered, "text", "") +
+      inp("sla", "SLAStatus", d.sla, "select", ["On Time", "At Risk", "Late"]) +
+    "</div>" +
+      '<div class="btnrow" style="margin-top:12px"><button class="btn primary" id="dSave"' + (allowed ? "" : " disabled") + '>Save blank cells</button>' +
+      '<span class="hint">A save writes only the cells you filled, to all ' + s.items.length + " row" + (s.items.length === 1 ? "" : "s") + " of the request. Cells the requestor or the flow filled are skipped, and the page says which.</span></div>" +
+      '<div id="dOut"></div>' +
+    "</div>"
+  );
+  const save = $("#dSave");
+  if (save) save.onclick = () => {
+    const fields = Array.from(document.querySelectorAll("#drawer [data-k]"));
+    const written = [];
+    fields.forEach((el) => {
+      const v = el.value.trim();
+      if (!v) return;
+      const k = el.dataset.k;
+      if (k === "ship") s.ship = v;
+      else if (k === "tracking") s.tracking = v;
+      else if (k === "coordinator") { const p = PEOPLE.find((x) => x.n.toLowerCase() === v.toLowerCase()); d.coordinator = p ? p.id : "elena"; }
+      else d[k] = v;
+      written.push(k);
+    });
+    if (!written.length) { $("#dOut").innerHTML = '<div class="block"><h4>Nothing to save</h4><p>Every cell that could be written is still blank. Filled cells are read-only by design.</p></div>'; return; }
+    toast("Saved " + written.length + " field" + (written.length === 1 ? "" : "s") + " across " + s.items.length + " row" + (s.items.length === 1 ? "" : "s") + " of <b>" + esc(s.id) + "</b>. The saved cells are read-only now; re-open the desk and they will not offer an input.");
+    shipDeskDrawer(s.id); render();
+  };
+}
+
+/* -- 07 Presentations ---------------------------------------- */
+function viewPresentations() {
+  const st = presStats();
+  const asof = state.asof;
+  const actions = PRESENTATIONS.filter((p) => !p.held || dayDiff(p.date, asof) >= 0).map((p) => ({ p, ...presAction(p, asof) })).filter((a) => a.action !== "none");
+  const upcoming = PRESENTATIONS.filter((p) => dayDiff(p.date, TODAY) >= 0).sort((a, b) => toDate(a.date) - toDate(b.date));
+  const past = PRESENTATIONS.filter((p) => dayDiff(p.date, TODAY) < 0).sort((a, b) => toDate(b.date) - toDate(a.date));
+  const row = (p) => {
+    const a = presAction(p, asof);
+    return '<tr class="click" data-pres="' + p.id + '">' +
+      "<td><span class=\"rid\">" + p.id + "</span><span class=\"sub\">" + esc(p.topic) + "</span></td>" +
+      "<td>" + esc(p.date) + "<span class=\"sub\">" + esc(p.time) + "</span></td>" +
+      "<td>" + esc(person(p.who).n) + "</td>" +
+      "<td>" + pillOf(p.status) + "</td>" +
+      "<td>" + (p.r1 ? '<span class="act r1">R1 ' + esc(p.r1.split(" ").slice(0, 2).join(" ")) + "</span>" : '<span class="act">R1 &mdash;</span>') + " " +
+               (p.r2 ? '<span class="act r2">R2 ' + esc(p.r2.split(" ").slice(0, 2).join(" ")) + "</span>" : '<span class="act">R2 &mdash;</span>') + " " +
+               (p.esc ? '<span class="act esc">escalated</span>' : "") + "</td>" +
+      "<td>" + (p.token ? '<span class="tok">' + esc(p.token.slice(0, 8)) + "&hellip;</span>" : '<span class="tok">none yet</span>') + "</td>" +
+      "<td>" + (a.action !== "none" ? '<span class="act ' + (a.action === "escalate" ? "esc" : a.action === "reminder1" ? "r1" : "r2") + '">' + esc(a.action) + "</span>" : '<span style="color:var(--faint)">' + (dayDiff(p.date, asof) >= 0 ? "T&minus;" + dayDiff(p.date, asof) : "held") + "</span>") + "</td>" +
+    "</tr>";
+  };
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">07 &middot; A speaker who has answered, or an escalation before the day</div>' +
+      "<h2>Thursday presentations</h2>" +
+      "<p>The third stream, and the one with no money in it. A weekly presentation series kept in a schedule workbook; the failure was a speaker who had forgotten, discovered on the morning. A job runs at 08:00: two days out the speaker gets a card in a 1:1 Teams chat with <b>Confirm</b>, <b>Need reschedule</b> and <b>Decline</b>; the day before, a second card if the first went unanswered; on the day, an escalation to the ops group if both did. Each button is a link carrying a token minted for that one row.</p>" +
+    "</div>" +
+
+    '<div class="grid3" style="margin-bottom:16px">' +
+      factTile("Sessions held", st.n, "since 4 Jun", "Twelve scheduled rows, one of which asked to move at the first reminder and was swapped the same day.") +
+      gateTile("Confirmed by the speaker before the day", st.confirmedByT1, st.n, st.n, "Ten from the card, seven of them at the first reminder. One speaker answered neither card; the escalation fired on the morning and the coordinator phoned.") +
+      factTile("Reminders sent · duplicates", st.reminders + " · " + st.dup, "", "The Sent columns on the row are the guard. A reminder stamps the row before the next run can consider it, so a re-run cannot double-send.") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Run the 08:00 job <span class=\"badge " + (can("run") ? "ok" : "human") + "\">" + (can("run") ? "you may run it" : "read-only for you") + "</span></h3>" +
+      "<p>The job is scheduled; this button runs the same decision by hand, as of a chosen morning, so the T&minus;2, T&minus;1 and escalation states can be seen without waiting a week. Every row is evaluated; only the ones needing action are listed. A row it acts on gets its Sent stamp and, at the first reminder, its token.</p>" +
+      '<div class="runbar"><label for="asof" class="vh">Run as of</label><select id="asof">' + RUN_DATES.map((d) => '<option value="' + d + '"' + (d === asof ? " selected" : "") + ">" + d + (d === TODAY ? " (today)" : "") + "</option>").join("") + "</select>" +
+        '<button class="btn primary" id="runJob"' + (can("run") ? "" : " disabled") + ">Run as of " + esc(asof) + "</button>" +
+        '<span class="hint">Pick 25 Aug for the T&minus;2 reminder to the 27 Aug speaker, then 26 Aug and 27 Aug to watch the second reminder and the escalation &mdash; or confirm from the card and watch them not fire.</span></div>' +
+      (actions.length
+        ? "<table><thead><tr><th>Row</th><th>Speaker</th><th>Presents</th><th>Action this morning</th><th></th></tr></thead><tbody>" +
+          actions.map((a) => "<tr><td><span class=\"rid\">" + a.p.id + "</span><span class=\"sub\">" + esc(a.p.topic) + "</span></td><td>" + esc(person(a.p.who).n) + "</td><td>" + esc(a.p.date) + " <span class=\"sub\">T&minus;" + a.d + "</span></td>" +
+            '<td><span class="act ' + (a.action === "escalate" ? "esc" : a.action === "reminder1" ? "r1" : "r2") + '">' + esc(ACTION_LABEL[a.action]) + "</span></td>" +
+            '<td><button class="btn small" data-pcard="' + a.p.id + '">' + (a.action === "escalate" ? "See the escalation" : "Open the card") + "</button></td></tr>").join("") +
+          "</tbody></table>"
+        : '<p style="margin-top:8px"><b>Nothing to send as of ' + esc(asof) + ".</b> " + (asof === TODAY ? "The next session is six days out; the first reminder is due on 25 Aug." : "Every row within two days is closed or already stamped for this step.") + "</p>") +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Schedule <span class=\"sub\">" + PRESENTATIONS.length + " rows in the workbook</span> <span class=\"badge human\">Excel is the record</span></h3>" +
+      "<p>Click a row for its card and the confirmation it recorded. Upcoming first.</p>" +
+      "<table><thead><tr><th>Row</th><th>Date</th><th>Speaker</th><th>Status</th><th>Sent stamps</th><th>Token</th><th>As of " + esc(asof) + "</th></tr></thead><tbody>" +
+      upcoming.map(row).join("") + past.map(row).join("") +
+      "</tbody></table>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>The daily digest <span class=\"badge auto\">posted, not visited</span></h3>" +
+      "<p>The dashboard this stream never built. Once a morning the run rolls every row inside fourteen days into one message to the ops group; on a week with nothing scheduled it stays quiet.</p>" +
+      '<div class="mono-block" style="white-space:normal;font-family:var(--sans);color:var(--prose)">' + digestHtml(asof) + "</div>" +
+    "</div>";
+}
+
+function digestHtml(asof) {
+  const HORIZON = 14;
+  const up = PRESENTATIONS.map((p) => ({ p, d: dayDiff(p.date, asof) })).filter((x) => x.d >= 0 && x.d <= HORIZON).sort((a, b) => a.d - b.d);
+  const c = (s) => up.filter((x) => x.p.status.toLowerCase() === s).length;
+  const confirmed = c("confirmed"), declined = c("declined"), resched = c("requires reschedule");
+  const pending = up.length - confirmed - declined - resched;
+  const risk = up.filter((x) => x.d <= 1 && x.p.status.toLowerCase() !== "confirmed");
+  const icon = { confirmed: "&#9989;", declined: "&#10060;", "requires reschedule": "&#128260;" };
+  let h = "<b>Presentation status &mdash; next " + HORIZON + " days</b><br><br>";
+  h += up.length ? up.map((x) => (icon[x.p.status.toLowerCase()] || "&#9203;") + " <b>" + esc(x.p.date) + "</b> " + esc(x.p.time) + " &mdash; " + esc(person(x.p.who).n) + " &mdash; " + esc(x.p.topic) + " <i>(" + esc(x.p.status) + ")</i>").join("<br>") : "<i>No presentations scheduled.</i>";
+  h += "<br><br><b>Confirmations:</b> " + up.length + " scheduled &middot; " + confirmed + " confirmed &middot; " + pending + " pending &middot; " + resched + " reschedule &middot; " + declined + " declined";
+  if (risk.length) h += "<br><br><b>&#9888; Within 24 hours and unconfirmed:</b><br>" + risk.map((x) => esc(person(x.p.who).n) + " &mdash; " + esc(x.p.topic) + " (" + esc(x.p.status) + ")").join("<br>");
+  return h;
+}
+
+function wirePresentations() {
+  const sel = $("#asof");
+  if (sel) sel.onchange = () => { state.asof = sel.value; render(); };
+  const run = $("#runJob");
+  if (run) run.onclick = () => {
+    const stamp = state.asof.split(" ").slice(0, 2).join(" ") + " 08:00";
+    let sent = 0, escalations = 0;
+    PRESENTATIONS.forEach((p) => {
+      const a = presAction(p, state.asof);
+      if (a.action === "reminder1") { p.r1 = stamp; p.token = p.token || newToken(); sent++; }
+      else if (a.action === "reminder2") { p.r2 = stamp; p.token = p.token || newToken(); sent++; }
+      else if (a.action === "escalate") { p.esc = stamp; escalations++; }
+    });
+    toast("Run as of <b>" + esc(state.asof) + "</b>: " + sent + " card" + (sent === 1 ? "" : "s") + " sent, " + escalations + " escalation" + (escalations === 1 ? "" : "s") + ", digest posted. Each row acted on carries its Sent stamp now, so running the same morning again sends nothing.");
+    render();
+  };
+  document.querySelectorAll("tr[data-pres]").forEach((tr) => {
+    tr.onclick = () => { state.presId = tr.dataset.pres; state.open = "pcard"; syncUrl(); presCardDrawer(state.presId); };
+  });
+  document.querySelectorAll("button[data-pcard]").forEach((b) => {
+    b.onclick = () => { state.presId = b.dataset.pcard; state.open = "pcard"; syncUrl(); presCardDrawer(state.presId); };
+  });
+}
+
+/* The reminder card, and the confirmation webhook behind its buttons. */
+function presCardDrawer(id) {
+  const p = presById(id);
+  if (!p) return;
+  const a = presAction(p, state.asof);
+  const label = p.r2 ? "Reminder 2 of 2 - tomorrow" : "Reminder 1 of 2 - 2 days to go";
+  const hasCard = !!(p.r1 || p.r2);
+  const token = p.token || "";
+  const link = (r) => "https://n8n.example/webhook/presentation-confirm?id=" + encodeURIComponent(p.id) + "&response=" + r + "&token=" + (state.tamper ? token.slice(0, 31) + (token.slice(31) === "0" ? "1" : "0") : token);
+  openDrawer(
+    "<h3>Reminder card</h3>" +
+    '<p class="dsub">' + esc(p.id) + " &middot; " + esc(p.date) + " &middot; " + pillOf(p.status) + "</p>" +
+    (a.action === "escalate" || p.esc
+      ? '<div class="resp bad"><h4>Unconfirmed presentation</h4><p>' + esc(person(p.who).n) + " has not confirmed the presentation scheduled for " + esc(p.date) + " at " + esc(p.time) + ".<br>Topic: " + esc(p.topic) + "<br>Location: " + esc(p.loc) + "<br>Current status: " + esc(p.status) + "<br>Both reminders have already been delivered.</p>" +
+        '<p style="margin-top:8px;color:var(--muted)">Posted once to the ops group chat' + (p.esc ? " on " + esc(p.esc) : "") + ". The Escalated flag on the row stops it posting again tomorrow.</p></div>"
+      : "") +
+    (hasCard
+      ? '<div class="acard">' +
+          '<div class="ah"><div><h4>Presentation Reminder</h4><span class="rid" style="font-size:15px">Hello ' + esc(person(p.who).n.split(" ")[0]) + ", you are scheduled to present.</span></div></div>" +
+          '<dl class="facts" style="margin-top:10px">' +
+            "<dt>Topic</dt><dd>" + esc(p.topic) + "</dd>" +
+            "<dt>Date</dt><dd>" + esc(toDate(p.date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })) + "</dd>" +
+            "<dt>Time</dt><dd>" + esc(p.time) + "</dd>" +
+            "<dt>Location</dt><dd>" + esc(p.loc) + "</dd>" +
+            "<dt>Notice</dt><dd>" + esc(label) + "</dd>" +
+          "</dl>" +
+          '<p class="just" style="font-style:normal">Please confirm your availability using the buttons below.</p>' +
+          '<div class="abtn"><button class="btn ok" data-r="confirm">Confirm</button><button class="btn ghost" data-r="reschedule">Need Reschedule</button><button class="btn no" data-r="decline">Decline</button></div>' +
+        "</div>" +
+        '<div class="card"><h3>What the buttons carry <span class="badge auto">per-row token</span></h3>' +
+          '<p class="tok">' + esc(link("confirm").replace(/&token=.*/, "")) + "&amp;token=<b>" + esc(state.tamper ? token.slice(0, 31) + "&#9650;" : token) + "</b></p>" +
+          "<p>The token was written into the row's Token column when the first reminder went out, and it is the whole authorisation: a link can only act on the row it was minted for, a newer reminder does not replace it, and the coordinator can revoke a link by clearing one cell. There is no sign-in &mdash; the person with the card is the person the card was addressed to.</p>" +
+          '<div class="btnrow"><button class="btn small ' + (state.tamper ? "primary" : "") + '" id="tamper">' + (state.tamper ? "Tampered token — press to restore" : "Tamper with the token") + "</button>" +
+          '<span class="hint">Then press a button above and read what the webhook says.</span></div></div>' +
+        '<div id="pOut"></div>'
+      : '<div class="card"><h3>No card yet</h3><p>This row has not reached T&minus;2 as of ' + esc(state.asof) + ". Run the job as of <b>25 Aug 2026</b> and the first reminder goes out with a freshly minted token; come back here and the card will be waiting.</p></div>")
+  );
+  const t = $("#tamper");
+  if (t) t.onclick = () => { state.tamper = !state.tamper; presCardDrawer(p.id); };
+  document.querySelectorAll("#drawer button[data-r]").forEach((b) => {
+    b.onclick = () => {
+      const out = $("#pOut");
+      const r = webhook(p.id, b.dataset.r, state.tamper ? token.slice(0, 31) + (token.slice(31) === "0" ? "1" : "0") : token);
+      out.innerHTML = '<div class="resp ' + (r.valid ? "ok" : "bad") + '"><h4>' + esc(r.headline) + "</h4><p>" + esc(r.detail) + "<br><br><b>" + esc(p.topic) + "</b><br>" + esc(p.date) + " at " + esc(p.time) + '</p><p style="margin-top:12px;color:var(--faint);font-size:11px">You can close this tab.</p></div>' +
+        (r.valid ? '<p style="font-size:11.5px;color:var(--muted);margin:10px 0 0">' +
+          "Written to the row: Status <b>" + esc(r.status) + "</b>, Confirmed Date <b>" + esc(r.stamp) + "</b>, Notes <b>" + esc(r.notes) + "</b>. The card in the chat is soft-deleted and replaced with a one-line confirmation." +
+          (r.opsAlert ? " Ops group notified: <b>Speaker response received &mdash; " + esc(r.status) + "</b>. Only Decline and Need reschedule reach them, and only on a genuine change." : " No ops message: Confirmed is the answer that needs nothing from anyone.") + "</p>" : "");
+      render();
+    };
+  });
+}
+
+/* Everything the link is allowed to do is decided against the row,
+   never against the query string alone. Mirrors Validate Response. */
+function webhook(id, response, token) {
+  const MAP = { confirm: ["Confirmed", "Thank you — your presentation is confirmed."], reschedule: ["Requires Reschedule", "Thanks — Operations will reach out to reschedule."], decline: ["Declined", "Thanks — Operations has been notified."] };
+  const fail = (headline, detail) => ({ valid: false, headline, detail });
+  const choice = MAP[response];
+  if (!id || !token || !choice) return fail("This link is not valid.", "Some of the link was missing or malformed. Please use the buttons in your Teams reminder.");
+  const row = presById(id);
+  if (!row) return fail("We could not find that presentation.", "The record may have been removed. Please contact Operations.");
+  if (String(row.token) !== token) return fail("This link is no longer valid.", "A newer reminder may have replaced it. Please use the buttons in your most recent Teams message.");
+  if (dayDiff(row.date, state.asof) < 0) return fail("That presentation has already taken place.", "No change was recorded.");
+  const previous = row.status || "Pending";
+  const repeat = previous.toLowerCase() === choice[0].toLowerCase();
+  const stamp = state.asof.split(" ").slice(0, 2).join(" ") + " " + new Date().toTimeString().slice(0, 5);
+  if (!repeat) {
+    row.status = choice[0];
+    row.confirmedAt = stamp;
+    row.notes = choice[0] + " via Teams on " + stamp;
+    row.via = row.r2 ? "card-r2" : "card-r1";
+  }
+  return { valid: true, status: choice[0], stamp, notes: row.notes,
+    headline: repeat ? "Already recorded — " + choice[0] + "." : choice[1],
+    detail: repeat ? "We had this answer on file already, so nothing changed." : "Your status was updated from “" + previous + "” to “" + choice[0] + "”.",
+    opsAlert: choice[0] !== "Confirmed" && !repeat };
+}
+
+/* -- 01 Ops board ----------------------------------------------- */
+function viewBoard() {
+  const s = gateStats();
+  const q = (label, v, n, bad, note) =>
+    '<div class="q"><p class="ql">' + label + '</p><div class="qv' + (bad ? " bad" : "") + '">' + v + (n !== null ? "<small>of " + n + "</small>" : "") + "</div><p class=\"qn\">" + note + "</p></div>";
+  return '' +
+    '<div class="head">' +
+      '<div class="kicker">01 &middot; One contract, three kinds of request</div>' +
+      "<h2>Ops board</h2>" +
+      "<p>Three request streams that have nothing in common as work &mdash; buying a thing, sending a thing, turning up to speak &mdash; and everything in common as failure: nobody owned it, the decision was a word in a chat, and the flow that was meant to help failed without saying so. The board asks each stream the same three questions. Every number is counted from the rows behind the other screens; none is stored.</p>" +
+    "</div>" +
+
+    '<div class="qrow">' +
+      '<p class="qq"><b>Q1</b> Was a named person on it within one business day &mdash; an owner, the first approver, or a speaker who answered?</p>' +
+      '<p class="qq"><b>Q2</b> Was every decision an event with evidence &mdash; a document reference, a card response, a token-bearing confirmation &mdash; before the next step?</p>' +
+      '<p class="qq"><b>Q3</b> Did anything fail silently, and how was it found?</p>' +
+    "</div>" +
+
+    '<div class="board">' +
+      '<div class="stream"><h4>Procurement requests</h4><p class="n">' + s.n + " completed &middot; " + inFlight().length + " in flight &middot; Apr&ndash;Aug 2026</p>" +
+        q("Q1 &middot; Named owner within a business day", s.assigned, s.n, s.assigned < s.n, "Two Friday-afternoon requests fell through a gap in one approver map. Median 3.6 days before the pilot, " + s.medianDays + " after.") +
+        q("Q2 &middot; Ordered with a recorded approval", s.ordered - s.unapproved, s.n, s.unapproved > 0, "An approval event with a document reference sits before every order event. The gate that stops the pilot outright.") +
+        q("Q3 &middot; Silent failures found by the check", s.silent, null, false, "A reminder flow that reported success. Found by comparing reminders due against reminders sent, not by reading the flow.") +
+        '<div class="btnrow" style="margin-top:12px"><button class="btn small" data-go="queue">Open the queue</button><button class="btn small" data-go="request">Requester view</button></div>' +
+      "</div>" +
+      '<div class="stream"><h4>Shipment requests</h4><p class="n">' + s.ship.n + " decided &middot; " + s.ship.inFlight + " in flight &middot; " + s.ship.rows + " list rows &middot; Jul&ndash;Aug 2026</p>" +
+        q("Q1 &middot; First approver decided within a business day", s.ship.withinDay, s.ship.n, s.ship.withinDay < s.ship.n, "Median " + s.ship.medianH + " working hours to the first card response. Low priority never waits: the form auto-approves it.") +
+        q("Q2 &middot; Shipped with a recorded approval", s.ship.shipped - s.ship.shippedUnapproved, s.ship.shipped, s.ship.shippedUnapproved > 0, "A card response or a form auto-approval on every shipment that left. One rejection, cancelled and resubmitted with its documents.") +
+        q("Q3 &middot; Duplicate cards, before and after the trigger condition", s.ship.dupBefore + " &rarr; " + s.ship.dupAfter, null, s.ship.dupAfter > 0, "One three-line request, three cards, found because the approver said so. The check now compares cards sent against requests pending.") +
+        '<div class="btnrow" style="margin-top:12px"><button class="btn small" data-go="shipments">Open the shipments</button></div>' +
+      "</div>" +
+      '<div class="stream"><h4>Thursday presentations</h4><p class="n">' + s.pres.n + " held &middot; " + s.pres.upcoming + " upcoming &middot; Jun&ndash;Aug 2026</p>" +
+        q("Q1 &middot; Speaker confirmed before the day", s.pres.confirmedByT1, s.pres.n, s.pres.confirmedByT1 < s.pres.n, s.pres.confirmedAtR1 + " at the first reminder. One answered neither card; the escalation fired on the morning and the coordinator phoned.") +
+        q("Q2 &middot; Reminders stamped on the row before the next run", s.pres.reminders, s.pres.reminders, false, "The Sent columns are the write; a confirmation writes back only to the row its token was minted for. Duplicates: " + s.pres.dup + ".") +
+        q("Q3 &middot; Runs stopped by a bad row", 1, null, false, "A departed presenter's address returned 404 and stopped the run. Found because the digest did not post. Lookups now continue on failure.") +
+        '<div class="btnrow" style="margin-top:12px"><button class="btn small" data-go="presentations">Open the schedule</button></div>' +
+      "</div>" +
+    "</div>" +
+
+    '<div class="card" style="margin-top:16px">' +
+      "<h3>Across the three streams <span class=\"sub\">n = " + s.total + "</span></h3>" +
+      '<div class="grid3">' +
+        gateTile("Owned or answered within 1 business day", s.withinDay, s.total, s.total, "Three misses out of " + s.total + ", each with a named cause on the exceptions screen. This is the gate that is not met, and the case study says why that is useful.") +
+        gateTile("Ordered or shipped with a recorded approval", s.gated - s.gatedUnapproved, s.gated, s.gated, "Twenty-three orders and " + s.ship.shipped + " shipments. Zero without a recorded decision. A single breach stops the pilot.") +
+        gateTile("Flow failures resolved within a business day", s.flowFailResolved, s.flowFail, s.flowFail, "Three ways a flow failed — reported success, fired per line, stopped on a bad row — and three same-day fixes, each now a comparison the morning check makes.") +
+      "</div>" +
+    "</div>" +
+
+    '<div class="card">' +
+      "<h3>Why the same three questions</h3>" +
+      "<p>The temptation with three unrelated streams is three dashboards. The reason for one board is that the failures were the same failure &mdash; the request that was nobody's until somebody complained &mdash; and a contract written once, in words a flow can enforce, is what let the second and third streams be added in weeks rather than quarters. The shipment stream reused the procurement gates unchanged and added one; the presentation stream reused all five and added none.</p>" +
+    "</div>";
+}
+
+function wireBoard() {
+  document.querySelectorAll("button[data-go]").forEach((b) => {
+    b.onclick = () => { state.view = b.dataset.go; state.open = null; render(); };
+  });
+}
+
+/* Open whatever drawer the URL asked for, once the pane exists. */
+function openRequested() {
+  if (!state.open) return;
+  if (state.view === "shipments" && state.open === "card") shipCardDrawer(state.shipId);
+  else if (state.view === "shipments" && state.open === "desk") shipDeskDrawer(state.shipId);
+  else if (state.view === "presentations" && state.open === "pcard") presCardDrawer(state.presId);
 }
 
 /* -- chrome + router ---------------------------------------- */
@@ -1666,28 +2485,35 @@ function renderChrome() {
   document.querySelectorAll("#rail button").forEach((b) => {
     b.onclick = () => { state.view = b.dataset.view; render(); };
   });
+  /* Ten views no longer fit one row at every width; keep the active
+     one in view so the rail always shows where you are. */
+  const active = $('#rail button[aria-current="true"]');
+  if (active && active.scrollIntoView) active.scrollIntoView({ block: "nearest", inline: "nearest" });
 
   const s = gateStats();
-  $("#nChip").innerHTML = '<span class="dot accent"></span><b>' + s.n + "</b> completed pilot requests";
-  $("#apprChip").innerHTML = '<span class="dot good"></span><b>' + s.unapproved + "</b> ordered unapproved";
+  $("#nChip").innerHTML = '<span class="dot accent"></span><b>' + s.total + "</b> completed requests &middot; 3 streams";
+  $("#apprChip").innerHTML = '<span class="dot good"></span><b>' + s.gatedUnapproved + "</b> ordered or shipped unapproved";
   $("#paramNote").innerHTML =
     "<b>Signed in as " + esc(person(state.persona).n) + ".</b> " + esc(me().note) +
-    " Every screen below is the same canonical list read through a different question; the role decides what may be written, never what may be seen.";
+    " Every screen below is one of three canonical lists read through a different question; the role decides what may be written, never what may be seen.";
 }
 
 function render() {
   renderChrome();
   const pane = $("#pane");
   const map = {
+    board: [viewBoard, wireBoard],
     request: [viewRequest, wireRequest],
     submit: [viewSubmit, wireSubmit],
     queue: [viewQueue, wireQueue],
     approvals: [viewApprovals, wireApprovals],
+    shipments: [viewShipments, wireShipments],
+    presentations: [viewPresentations, wirePresentations],
     ageing: [viewAgeing, null],
     exceptions: [viewExceptions, wireExceptions],
     gates: [viewGates, null]
   };
-  const [v, w] = map[state.view] || map.request;
+  const [v, w] = map[state.view] || map.board;
   pane.innerHTML = v();
   if (w) w();
   syncUrl();
@@ -1700,8 +2526,14 @@ function render() {
   if (view && VIEWS.some((v) => v.id === view)) state.view = view;
   const id = p.get("id");
   if (id && byId(id)) state.id = id;
+  if (id && shipById(id)) state.shipId = id;
+  if (id && presById(id)) state.presId = id;
   const as = p.get("as");
   if (as && PERSONAS.some((x) => x.id === as)) state.persona = as;
+  const asof = p.get("asof");
+  if (asof && RUN_DATES.includes(asof)) state.asof = asof;
+  const open = p.get("open");
+  if (open && ["card", "desk", "pcard"].includes(open)) state.open = open;
 
   /* The submission form takes its draft from the URL too, so a link can
      open the state a screenshot was taken in — including the refusal,
@@ -1716,6 +2548,7 @@ function render() {
   $("#scrim").onclick = closeDrawer;
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDrawer(); });
   render();
+  openRequested();
 
   /* try=1 runs the validation the link was written to demonstrate. It goes
      through the same button a person would press — there is no second code

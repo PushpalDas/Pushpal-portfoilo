@@ -77,9 +77,6 @@ export default function WorkList({ items, setModal }: WorkListProps) {
 					<div className='work-list-sub-col'>
 						<h5>Category</h5>
 					</div>
-					<div className='work-list-sub-col'>
-						<h5>Year</h5>
-					</div>
 				</div>
 				<ul className='work-list-items'>
 					{items.map((item, index) => (
@@ -107,9 +104,6 @@ export default function WorkList({ items, setModal }: WorkListProps) {
 								</div>
 								<div className='work-list-col work-list-col-info'>
 									<p>{item.domain}</p>
-								</div>
-								<div className='work-list-col work-list-col-info'>
-									<p>{item.year}</p>
 								</div>
 							</a>
 						</li>

@@ -67,6 +67,16 @@ const nextConfig: NextConfig = {
 				destination: '/demo/team-performance',
 				permanent: true,
 			},
+			// The procurement pilot grew into three streams — procurement,
+			// shipments and the Thursday presentation reminders — on one
+			// operating contract, and the page was renamed to say so. The
+			// old slug had links out in the world, so it redirects.
+			{
+				source:
+					'/work/procurement-orchestrator-procurement-process-automation-with',
+				destination: '/work/ixana-ops-orchestrator',
+				permanent: true,
+			},
 		];
 	},
 	async rewrites() {
@@ -132,10 +142,17 @@ const nextConfig: NextConfig = {
 				source: '/demo/clickup-audit',
 				destination: '/demo/clickup-audit.html',
 			},
-			// The two pilots. Request Desk recreates the M365-native
-			// procurement workflow; Band Desk recreates the salary
+			// The two pilots. Ops Desk recreates the M365-native operations
+			// workflows — procurement, shipments and the presentation
+			// reminders on one contract; Band Desk recreates the salary
 			// benchmarking and offer drafting tool. Both are linked from
-			// section 06 of their case study and from the work card.
+			// section 06 of their case study and from the work card. The
+			// demo file kept its original name when the pilot grew, so the
+			// old path and the new one both land on it.
+			{
+				source: '/demo/ops-desk',
+				destination: '/demo/procurement-desk.html',
+			},
 			{
 				source: '/demo/procurement-desk',
 				destination: '/demo/procurement-desk.html',
@@ -171,6 +188,14 @@ const nextConfig: NextConfig = {
 			{
 				source: '/demo/prd-os',
 				destination: '/demo/prd-os.html',
+			},
+			// The patent programme's drafting clock: nine stages per matter,
+			// every date a cited message, with the provenance and review
+			// queues a person works. Linked from section 06 of that case
+			// study beside the deployed portfolio demo.
+			{
+				source: '/demo/patent-clock',
+				destination: '/demo/patent-clock.html',
 			},
 			...(umami_url
 				? [

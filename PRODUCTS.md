@@ -23,7 +23,7 @@ _Machine-readable inventory of every product in the portfolio, compiled from the
 | 8 | Wi-R Near Field Electric — XA-NFE2001 | Ixana | 2024 - 2026 | silicon | production | Silicon |
 | 9 | Accurate estimation of mineral present in soil | IIRS-ISRO, Govt. of India | 2022 | ai | internal | Remote sensing |
 | 10 | Quantum Gate Simulator — interactive 10-qubit circuit builder | Personal | 2026 - present | ai | prototype | Learning tools |
-| 11 | Procurement Orchestrator — M365-native request workflow | Ixana | 2026 | ai | customer-testing | Procurement ops |
+| 11 | Ops Orchestrator — procurement, shipment and presentation workflows on M365 | Ixana | 2026 | ai | customer-testing | Ops workflows |
 | 12 | WishKey — Key Management System | EEGRAB | 2023 | silicon | production | Access control |
 | 13 | Wi-R reference designs — video smartglasses and tactical headset | Ixana | 2024 - 2026 | silicon | production | Wearable systems |
 | 14 | Cost-effective smart watch | EEGRAB | 2023 | silicon | production | Consumer wearable |
@@ -57,7 +57,7 @@ _Machine-readable inventory of every product in the portfolio, compiled from the
 - **By track:** ai 20 · silicon 17
 - **By status:** internal 14 · production 10 · research 7 · prototype 4 · customer-testing 2
 - **By company:** Ixana 21 · Ricky Kids 6 · EEGRAB 3 · ISKCON (International Society for Krishna Consciousness) 1 · NeuroAdapt, IISc Bangalore 1 · IIRS-ISRO, Govt. of India 1 · Personal 1 · SLB 1 · SRM UAV 1 · NIT Tiruchirapalli & SRM University 1
-- **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Procurement ops 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
+- **By domain:** Silicon 4 · Meeting intelligence 2 · Developer hardware 1 · Internal platform 1 · Applied AI 1 · Research tooling 1 · Remote sensing 1 · Learning tools 1 · Ops workflows 1 · Access control 1 · Wearable systems 1 · Consumer wearable 1 · Delivery reporting 1 · Agile tooling 1 · Engineering ops 1 · Audit tooling 1 · Workplace automation 1 · HR tooling 1 · Planning tooling 1 · Legal tooling 1 · PM tooling 1 · Patent operations 1 · Documentation ops 1 · Audio hardware 1 · Test engineering 1 · Aerial robotics 1 · Sustainable mobility 1 · Weather instrumentation 1 · Health sensing 1 · Road safety 1 · Assistive play 1 · Field robotics 1 · Urban concept 1
 
 ---
 
@@ -633,48 +633,48 @@ _No long-form case study on file — card-level entry only._
 
 ---
 
-### 11. Procurement Orchestrator — M365-native request workflow
+### 11. Ops Orchestrator — procurement, shipment and presentation workflows on M365
 
 | Field | Value |
 |---|---|
-| Slug | |`|p|r|o|c|u|r|e|m|e|n|t|-|o|r|c|h|e|s|t|r|a|t|o|r|-|p|r|o|c|u|r|e|m|e|n|t|-|p|r|o|c|e|s|s|-|a|u|t|o|m|a|t|i|o|n|-|w|i|t|h|`| |
-| Company | |I|x|a|n|a| |
-| Years | |2|0|2|6| |
-| Track | |a|i| |
-| Domain | |P|r|o|c|u|r|e|m|e|n|t| |o|p|s| |
-| Status | |c|u|s|t|o|m|e|r|-|t|e|s|t|i|n|g| |
-| Role | |P|r|o|d|u|c|t| |m|a|n|a|g|e|r|,| |p|i|l|o|t| |o|w|n|e|r| |
-| Team | |2| |o|p|e|r|a|t|i|o|n|s| |a|n|a|l|y|s|t|s|,| |1| |p|l|a|t|f|o|r|m| |a|d|m|i|n|i|s|t|r|a|t|o|r| |
-| Timeline | |A|p|r| |2|0|2|6| |–| |p|r|e|s|e|n|t| |
-| Stage | |C|o|n|t|r|o|l|l|e|d| |p|i|l|o|t| |a|c|r|o|s|s| |t|h|r|e|e| |i|n|t|e|r|n|a|l| |o|r|g|a|n|i|s|a|t|i|o|n|s| |
-| Link | |/|d|e|m|o|/|p|r|o|c|u|r|e|m|e|n|t|-|d|e|s|k| |
+| Slug | `ixana-ops-orchestrator` |
+| Company | Ixana |
+| Years | 2026 |
+| Track | ai |
+| Domain | Ops workflows |
+| Status | customer-testing |
+| Role | Product manager, pilot owner |
+| Team | 2 operations analysts, 1 shipping manager, 1 operations coordinator, 1 platform administrator |
+| Timeline | Apr 2026 – present |
+| Stage | Controlled pilot: three request streams across three internal organisations |
+| Link | /demo/ops-desk |
 
-**Positioning.** A pilot that names one accountable owner within a business day, so requesters stop chasing procurement for a status nobody holds.
+**Positioning.** One operating contract — a named person within a business day, every decision an event with evidence, a morning check that reads the list and not the flow — applied to procurement, shipments and the Thursday presentations.
 
-**Outcome (card copy).** In pilot: names one accountable owner within a business day, so requesters stop chasing procurement by email for status.
+**Outcome (card copy).** In pilot across three request streams: one operating contract names a person within a business day, and no purchase, shipment or Thursday slot moves without a recorded decision.
 
-**Problem.** A physical-goods request entered a process with no named owner. Nineteen interviews and a thread analysis of 63 completed requests found a median of 4 chase emails each, and 22 of the 63 progressed with no recorded approval — not because anyone bypassed a control, but because none existed.
+**Problem.** Three kinds of internal request — a purchase, a shipment, a slot in the Thursday presentation series — failed the same way: the request was nobody's until somebody complained. Across 63 procurement threads, 41 shipping asks and 26 weeks of the schedule, 22 purchases progressed with no recorded approval, 29 shipments arrived with no project named, and 6 Thursdays learned of a missing speaker that morning.
 
-**What I did.** I scoped a lean pilot on tooling we already own, spending the effort on the operating contract rather than the software: who owns a request within a business day, what a status transition must carry as evidence, and which pre-agreed gates would stop the pilot.
+**What I did.** I wrote one operating contract in words a flow could enforce, proved it on procurement with owned tooling, then applied it unchanged to shipments and to the presentation reminders.
 
-**Result.** Early signal only, from 23 pilot requests. 21 of 23 were assigned within one business day against a gate of all of them, none reached order unapproved, and 2 of 23 requesters still chased by email.
+**Result.** Early signal only, n stated on every figure. Of 48 completed requests, 45 had a named person inside a business day, none was ordered or shipped without a recorded approval, and all three flow failures were caught by the morning check the same day.
 
 **Metrics**
 
 | Value | Measure |
 |---|---|
-| 23 | Pilot requests completed so far (n for all figures) |
-| 21 (of 23) | Assigned to a named owner within one business day |
-| 0 (of 23) | Ordered without a recorded approval |
-| 3.6d → 0.6d | Median time from submission to a named owner |
-| 2 (of 23) | Requesters who still chased by email |
+| 48 | Requests completed across three streams (n for all figures) |
+| 45 (of 48) | Owned, decided or answered by a named person within one business day |
+| 0 (of 36) | Ordered or shipped without a recorded approval |
+| 3 → 1 | Approval cards for a three-line shipment request, before and after the trigger condition |
+| 10 (of 11) | Thursday presentations confirmed by the speaker before the day |
 | 1 | Silent flow failure, caught by the daily check (guardrail) |
 
 **Evidence charts**
 
-- Weeks to a working process under each option: lean pilot on existing tooling 5, extend the finance system 14, buy a procurement platform 26
-- Across 63 completed request threads: 51 had no acknowledgement, 34 had an unclear owner throughout, 22 progressed without a recorded approval, 9 were rebuilt in a spreadsheet
-- Pilot performance against each pre-agreed launch gate: assignment 21 of 23 against a target of 23, approval integrity 23 of 23, failure resolution 1 of 1 within a day, volume 23 against a floor of 20
+- Weeks to a working process: buy a platform 26, extend the finance system 14, the first stream on owned tooling 5, the second stream on the same contract 3, the third 1
+- Share of each stream that reached the person who had to act with nobody named: purchases 51 of 63 unacknowledged, purchases 22 of 63 with no recorded approval, shipments 29 of 41 with no project or owner, shipments 17 of 41 chased for details, presentations 9 of 26 unconfirmed the day before
+- Pilot performance against each pre-agreed launch gate across the three streams: named person within a business day 45 of 48 against a target of 48, decision integrity 36 of 36, duplicate cards since the trigger condition 0 against a target of 0, flow failures resolved 3 of 3, volume 48 against a floor of 20
 
 **Case-study narrative**
 
@@ -691,10 +691,10 @@ _No long-form case study on file — card-level entry only._
 
 **Evidence / demos**
 
-- [Open the working demo — the pilot as a requester, an analyst, the controller and a manager](/demo/procurement-desk)
-- [Or start at the gate that is failing, and the two requests that fail it](/demo/procurement-desk?view=gates&as=priya)
+- [Open the working demo — three streams, one board, as a requester, an analyst, an approver or the coordinator](/demo/ops-desk)
+- [Or start at the gate that is not met, and the three requests that miss it](/demo/ops-desk?view=gates&as=owen)
 
-> **Confidentiality.** Internal pilot — the screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price or requester appears on this page.
+> **Confidentiality.** Internal pilot — every screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price, requester or presenter appears on this page.
 
 ---
 
@@ -1570,38 +1570,38 @@ _No long-form case study on file — card-level entry only._
 
 | Field | Value |
 |---|---|
-| Slug | |`|i|x|a|n|a|-|p|a|t|e|n|t|-|p|r|o|g|r|a|m|`| |
-| Company | |I|x|a|n|a| |
-| Years | |2|0|2|6| |
-| Track | |a|i| |
-| Domain | |P|a|t|e|n|t| |o|p|e|r|a|t|i|o|n|s| |
-| Status | |i|n|t|e|r|n|a|l| |
-| Role | |P|r|o|d|u|c|t| |m|a|n|a|g|e|r| |—| |p|a|t|e|n|t| |p|r|o|g|r|a|m|m|e| |o|w|n|e|r| |a|n|d| |W|i|-|R| |p|r|o|d|u|c|t| |l|i|n|e| |P|M| |
-| Team | |F|o|u|n|d|e|r|/|C|T|O| |o|n| |s|t|r|a|t|e|g|y|,| |o|u|t|s|i|d|e| |c|o|u|n|s|e|l| |o|n| |e|x|e|c|u|t|i|o|n|,| |1| |e|n|g|i|n|e|e|r|,| |w|i|t|h| |t|h|e| |p|a|t|e|n|t| |p|a|r|a|l|e|g|a|l| |a|s| |d|o|m|a|i|n| |o|w|n|e|r| |
-| Timeline | |F|e|b| |2|0|2|4| |–| |A|u|g| |2|0|2|6| |
-| Stage | |L|i|v|e|,| |r|u|n|n|i|n|g| |a|c|r|o|s|s| |t|h|r|e|e| |o|u|t|s|i|d|e| |f|i|r|m|s| |
-| Link | |h|t|t|p|s|:|/|/|x|a|n|a|-|n|i|n|e|.|v|e|r|c|e|l|.|a|p|p|/|p|a|t|e|n|t|s| |
+| Slug | `ixana-patent-program` |
+| Company | Ixana |
+| Years | 2026 |
+| Track | ai |
+| Domain | Patent operations |
+| Status | internal |
+| Role | Product manager — patent programme owner and Wi-R product line PM |
+| Team | Founder/CTO on strategy, outside counsel on execution, 1 engineer, with the patent paralegal as domain owner |
+| Timeline | Feb 2024 – Aug 2026 |
+| Stage | Live, running across three outside firms |
+| Link | https://xana-nine.vercel.app/patents · /demo/patent-clock |
 
-**Positioning.** Fifty-plus filings across six product lines, owned end to end — and disclosure-to-filing cut from fourteen weeks to six on no extra inventor time.
+**Positioning.** Fifty-plus filings across six product lines, owned end to end — filing decisions made on the roadmap's own calendar, no statutory date ever computed in-house, and a drafting clock on which every date is a cited message.
 
-**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end, and cut disclosure-to-filing from about fourteen weeks to six on no extra inventor time.
+**Outcome (card copy).** Owned 50+ filings across six Wi-R product lines end to end - what to protect, how broadly, when to file - with filing decisions anchored to the tapeout calendar and a drafting clock on which every date is a cited message.
 
-**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles with about seventy-five people. Roadmap and patent estate were one decision surface run as two, and a matter’s state lived in somebody’s inbox — so a disclosure that had passed its filing date was discovered, not decided.
+**Problem.** Ixana files ~25 applications a year off five-month tapeout cycles — seventy-five people when this began in 2024. Roadmap and patent estate were one decision surface run as two, and a matter's state lived in somebody's inbox: a disclosure past its filing date was discovered, not decided.
 
-**What I did.** I owned both sides of it: the patent estate end to end, and the six Wi-R product programmes those filings exist to protect. Underneath, a mail-triggered spine routed every arriving document to one matter identity and a category, and automated nothing irreversible.
+**What I did.** I owned both sides: the patent estate end to end, and the six Wi-R programmes those filings protect. Underneath, a mail-triggered spine routed every document to one matter identity, and a nine-stage drafting clock read each matter's dates from mail, calendar and chat, refusing any it could not cite.
 
-**Result.** Fifty-plus filings across six product lines, median disclosure-to-filing down from about fourteen weeks to six, and inventor time per disclosure falling rather than rising. No date we have shown has ever disagreed with counsel’s docket.
+**Result.** Fifty-plus filings across six product lines. Nothing irreversible is automated: routing, reminders and a date read from a message, yes; a date, scope or approval decided by a machine, never. The clock's first signal, n stated: median T0 to first draft 39 → 20 days.
 
 **Metrics**
 
 | Value | Measure |
 |---|---|
 | 14w → 6w | Median disclosure to filing |
-| 41 → 0 (of 248 rows) | Double-counted rows in the portfolio total |
+| 39d → 20d (n=10) | Median T0 to the firm's first draft, against a 15-day target (drafting clock) |
 | 19 → 2 (of 54) | Active matters with no owned next action |
 | 95m → 40m | Inventor minutes per disclosure (guardrail) |
-| 0 | Dates disagreeing with counsel’s docket · source sheets modified |
-| 6 → 1 | Places opened to answer what is owed |
+| 0 | Dates disagreeing with counsel's docket · source sheets modified |
+| 0 (of 284) | Dated drafting stages without a cited source message |
 
 **Evidence charts**
 
@@ -1625,8 +1625,9 @@ _No long-form case study on file — card-level entry only._
 **Evidence / demos**
 
 - [Open the working demo — five surfaces on an invented portfolio](https://xana-nine.vercel.app/patents)
+- [Or open the drafting clock — nine stages, every date a cited message, and the queues a person works](/demo/patent-clock)
 
-> **Confidentiality.** Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, and figures are invented or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.
+> **Confidentiality.** Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, the drafting clock runs on invented matters, and figures are invented or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.
 
 ---
 
