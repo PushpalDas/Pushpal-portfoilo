@@ -13,7 +13,7 @@
     "confidentiality": "Internal product — screens on this page are recreations, and figures are relative or anonymised.",
     "evidence": [
       {
-        "label": "Open the working demo — search it yourself, on an invented workspace",
+        "label": "Open the working demo — search it yourself, on a synthetic workspace",
         "url": "https://xana-nine.vercel.app/?q=YR31%20power%20budget"
       }
     ],
@@ -28,7 +28,7 @@
       },
       {
         "lead": "Result.",
-        "text": "118 of 140 employees used it within a quarter — 140 being the current roster, up from about 75 a year earlier. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence."
+        "text": "84 of about 100 employees used it within a quarter — 100 being the current roster, up from about 50 a year earlier. Median time-to-find fell from nine minutes to under one, and duplicate document creation stopped being a weekly occurrence."
       }
     ],
     "sections": [
@@ -261,7 +261,7 @@
                 "text": "The audit found three versions of one spec. A superseded copy still appears in the results, ranked under the current one and labelled — and the answer refuses to quote from it. Hiding duplicates would have made the guardrail this shipped against impossible to read."
               }
             ],
-            "note": "The running demo rather than a mock-up — same code, same layout, on an invented corpus. Ten documents, four recordings and three videos stand in for the five connected sources, and every document, name, part number and figure is made up for publication. The two folders excluded from ingestion are absent from it by construction rather than filtered.",
+            "note": "The running demo rather than a mock-up — same code, same layout, on a synthetic corpus. Ten documents, four recordings and three videos stand in for the five connected sources, and every document, name, part number and figure is synthetic, created for publication. The two folders excluded from ingestion are absent from it by construction rather than filtered.",
             "image": "/static/images/project/ixana-wiki-search.jpg",
             "href": "https://xana-nine.vercel.app/?q=YR31%20power%20budget",
             "hrefLabel": "Search this in the demo — opens the screen above"
@@ -340,8 +340,8 @@
             "kind": "metrics",
             "items": [
               {
-                "value": "118",
-                "sub": "of 140",
+                "value": "84",
+                "sub": "of ~100",
                 "label": "Employees active in first quarter"
               },
               {
@@ -370,14 +370,14 @@
             "kind": "figure",
             "chart": {
               "form": "lineArea",
-              "title": "Weekly active users rising from 18 in week one to 118 by week ten, against a pre-agreed floor of 70",
-              "yMax": 120,
-              "yTicks": [0, 40, 80, 120],
+              "title": "Weekly active users rising from 13 in week one to 84 by week ten, against a pre-agreed floor of 50",
+              "yMax": 100,
+              "yTicks": [0, 25, 50, 75, 100],
               "xLabels": ["Week 1", "Week 4", "Week 7", "Week 10"],
-              "points": [18, 36, 44, 62, 68, 84, 94, 104, 112, 118],
+              "points": [13, 26, 31, 44, 49, 60, 67, 74, 80, 84],
               "threshold": {
-                "value": 70,
-                "label": "Pre-agreed floor: 70 of 140"
+                "value": 50,
+                "label": "Pre-agreed floor: 50 of ~100"
               }
             },
             "caption": "Weekly active users after launch, from the application database. Growth was steady rather than spiked — no company-wide mandate, so adoption spread department by department, and it crossed the pre-agreed floor in week six."
@@ -402,12 +402,12 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. Screens are recreations with invented content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal product. Screens are recreations with synthetic content, and figures are anonymised or expressed as relative change. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "Fixing search in OneDrive alone would have moved almost nothing.",
       "facts": [
         {
-          "text": "Live demo — search an invented workspace yourself",
+          "text": "Live demo — search a synthetic workspace yourself",
           "cls": "A"
         },
         {
@@ -432,7 +432,7 @@
       "team": "3 hardware engineers, 1 firmware engineer, 1 applications engineer",
       "stage": "Shipping, sold through the product page"
     },
-    "confidentiality": "Silicon work. Part numbers, package photography and kit contents are public — the product pages are linked below. Kit volumes, design-in counts and support load on this page are invented placeholders for this sample; schematics, test reports and partner names are not shown.",
+    "confidentiality": "Silicon work. Part numbers, package photography and kit contents are public — the product pages are linked below. Kit volumes, design-in counts and support load on this page are illustrative — the real ones are confidential; schematics, test reports and partner names are not shown.",
     "evidence": [
       {
         "label": "Dev kits product page",
@@ -813,7 +813,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are invented placeholders and should be replaced with real data before this page is used. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "sampleNote": "This page is about real silicon. Part numbers, package photography and product pages are public and linked above; kit volumes, design-in counts, support figures and timings are illustrative — the real ones are confidential. Schematics, test reports and partner names are not shown. I'm glad to walk through the real program and its numbers in a conversation.",
     "fast": {
       "pull": "It is the only metric sales, engineering and I argued about in the same units.",
       "facts": [
@@ -843,7 +843,7 @@
       "team": "3 engineers, 1 data engineer",
       "stage": "Live across three engineering teams"
     },
-    "confidentiality": "Internal product — the screens in section 06 are a running recreation with invented task data, and all figures on this page are invented placeholders for this sample. Every task name, owner, comment and date in the demo is made up for publication; owners are roles rather than people, for the same reason the leaderboard ranks teams.",
+    "confidentiality": "Internal product — the screens in section 06 are a running recreation with synthetic task data, and the figures on this page are illustrative, because the real ones are confidential. Every task name, owner, comment and date in the demo is synthetic, created for publication; owners are roles rather than people, for the same reason the leaderboard ranks teams.",
     "evidence": [
       {
         "label": "Open the working demo — three pipelines, their delays and the reasons behind them",
@@ -1075,7 +1075,7 @@
                 "text": "Every row splits into start, length and completion delay against the planned window. Leads argued about different things once they could see which of the three had moved."
               }
             ],
-            "note": "The running demo, on an invented set of 48 tasks across three pipelines. Layout and interactions are the real ones; every task name, owner, comment and date is made up for publication.",
+            "note": "The running demo, on a synthetic set of 48 tasks across three pipelines. Layout and interactions are the real ones; every task name, owner, comment and date is synthetic, created for publication.",
             "image": "/static/images/project/ixana-flow-pipeline.jpg",
             "alt": "The PS delay view: an eleven-stage test flow in the team's own words, one stage panel open showing its classification confidence and a control to move the work to another stage, and every late task decomposed into start, length and completion delay beside it.",
             "href": "https://xana-nine.vercel.app/efficiency?view=tracker&team=ps&mode=wrong&panel=3",
@@ -1113,7 +1113,7 @@
                 "caption": "A question becomes a filter over stored records, and the filter is printed under the answer. A wrong answer is then a wrong filter — visible, and fixable — rather than a fluent invention. Ask it who the best engineer is and it says the ranking does not exist. The link opens this question already asked."
               }
             ],
-            "note": "Four screens from the same invented dataset as the shot above. Each link opens the screen in the picture — the stage panel, the drawer, the leaderboard and the answered question all travel in the URL, so a link lands on what it shows rather than near it."
+            "note": "Four screens from the same synthetic dataset as the shot above. Each link opens the screen in the picture — the stage panel, the drawer, the leaderboard and the answered question all travel in the URL, so a link lands on what it shows rather than near it."
           }
         ]
       },
@@ -1235,7 +1235,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on an invented set of 48 tasks. Every task name, owner, comment, programme and date there is invented, and all figures on this page are invented placeholders for this sample. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal product. The demo linked above is a running recreation of it: the three pipeline models, the stage-correction control, the delay decomposition and the grounded assistant behave as the real product does, on a synthetic set of 48 tasks. Every task name, owner, comment, programme and date there is synthetic, and the figures on this page are illustrative, because the real ones are confidential. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "A stage nobody recognises is a stage nobody corrects.",
       "facts": [
@@ -1265,7 +1265,7 @@
       "team": "3 engineers",
       "stage": "Live, company-wide"
     },
-    "confidentiality": "Internal product — the player screen described in section 06 is a recreation with invented meeting content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name appears on this page.",
+    "confidentiality": "Internal product — the player screen described in section 06 is a recreation with synthetic meeting content, and the figures on this page are illustrative, because the real ones are confidential. No recording, transcript or attendee name appears on this page.",
     "evidence": [
       {
         "label": "Open the working demo — a recording, its transcript and its minutes",
@@ -1495,7 +1495,7 @@
                 "text": "Third along the top row. The organiser marks it before the meeting, irreversibly — the condition that made indexing the rest acceptable."
               }
             ],
-            "note": "The running demo, on an invented archive of eight items across five channels. Every title, transcript line, name and figure is made up for publication, and the thumbnails are generated title cards — inventing a poster frame would be a picture of a meeting that never happened.",
+            "note": "The running demo, on a synthetic archive of eight items across five channels. Every title, transcript line, name and figure is synthetic, created for publication, and the thumbnails are generated title cards — inventing a poster frame would be a picture of a meeting that never happened.",
             "image": "/static/images/project/ixana-library-shelf.jpg",
             "href": "https://xana-nine.vercel.app/videolibrary",
             "hrefLabel": "Open the library — the shelf above, live"
@@ -1525,7 +1525,7 @@
                 "caption": "Summary, decisions and actions for the item on screen, each claim carrying the moment it came from. Published minutes reached 11% of recorded meetings."
               }
             ],
-            "note": "Three moments from the same invented archive as the shelf above."
+            "note": "Three moments from the same synthetic archive as the shelf above."
           }
         ]
       },
@@ -1588,8 +1588,8 @@
                 "label": "Recorded meetings with published minutes"
               },
               {
-                "value": "47",
-                "sub": "of 140",
+                "value": "34",
+                "sub": "of ~100",
                 "label": "Employees using it weekly by month 3"
               },
               {
@@ -1631,7 +1631,7 @@
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback, excluding sessions with no playback at all — people confirming a meeting exists rather than looking inside it. The 140 in the weekly-use denominator is the company roster, up from about 75 a year earlier and roughly flat since."
+            "text": "Time to the relevant moment means the interval between opening a recording and the last seek before two uninterrupted minutes of playback, excluding sessions with no playback at all — people confirming a meeting exists rather than looking inside it. The 100 in the weekly-use denominator is the company roster, up from about 50 a year earlier and roughly flat since."
           },
           {
             "kind": "config",
@@ -1648,7 +1648,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal product. The screen described in section 06 is a recreation with synthetic content, and the figures on this page are illustrative, because the real ones are confidential. No recording, transcript or attendee name is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "People wanted a passage of speech and were handed a timeline.",
       "facts": [
@@ -1678,7 +1678,7 @@
       "team": "1 engineer, with IT security as reviewer",
       "stage": "Live for the affected group"
     },
-    "confidentiality": "Internal service — the screens in section 06 are a working recreation on an invented week, and every figure on this page is an invented placeholder for this sample. No real calendar content appears anywhere: every person, mailbox, event and time in the demo is made up.",
+    "confidentiality": "Internal service — the screens in section 06 are a working recreation on a synthetic week, and the figures on this page are illustrative, because the real ones are confidential. No real calendar content appears anywhere: every person, mailbox, event and time in the demo is synthetic.",
     "summary": [
       {
         "lead": "Problem.",
@@ -1903,7 +1903,7 @@
                 "text": "The person who needs to know whether last night's sync ran is not going to read a server log, and if checking is hard the checking stops."
               }
             ],
-            "note": "Recreated from the service’s own output as a working demo, on an invented week. Structure, fields, rules and the two write paths are the real ones; every event name, address and time shown is invented. Happy to walk through the real service in a conversation.",
+            "note": "Recreated from the service’s own output as a working demo, on a synthetic week. Structure, fields, rules and the two write paths are the real ones; every event name, address and time shown is synthetic. Happy to walk through the real service in a conversation.",
             "image": "/static/images/project/ixana-calsync-dryrun.jpg",
             "href": "/demo/calendar-sync?view=dryrun",
             "hrefLabel": "Open this preview in the demo and apply the writes",
@@ -1934,7 +1934,7 @@
                 "caption": "Every write with actor, target and reason, retained twelve months — the condition IT security added at approval. The two amber rows are the incident reviews the log has already answered: both traced to something a person had done, not the service."
               }
             ],
-            "note": "Three surfaces of the same demo on the same invented week. Each is the state its own link opens."
+            "note": "Three surfaces of the same demo on the same synthetic week. Each is the state its own link opens."
           }
         ]
       },
@@ -2076,7 +2076,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal service. The screens in section 06 are the running demo on an invented week, and all figures on this page are invented placeholders for this sample. No real calendar content is shown — every event, name, address and time is made up for publication. I’m glad to walk through the real service and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal service. The screens in section 06 are the running demo on a synthetic week, and the figures on this page are illustrative, because the real ones are confidential. No real calendar content is shown — every event, name, address and time is synthetic, created for publication. I’m glad to walk through the real service and the underlying numbers in a conversation.",
     "fast": {
       "pull": "On a product where every write sends email, the interesting decisions are all refusals.",
       "facts": [
@@ -2116,7 +2116,7 @@
       "team": "1 automation engineer, with the five delivery leads as reviewers",
       "stage": "Live across five teams; weekly, monthly and quarterly"
     },
-    "confidentiality": "Internal reporting. The five team names are real internal groupings; every person, task, comment, cause and figure on this page and in the demo is invented for this sample. No individual's performance data appears anywhere.",
+    "confidentiality": "Internal reporting. The five team names are real internal groupings; every person, task, comment, cause and figure on this page and in the demo is synthetic. No individual's performance data appears anywhere.",
     "evidence": [
       {
         "label": "Open the working demo — five teams, three windows, one engine",
@@ -2368,7 +2368,7 @@
                 "text": "A blank cell reads as no delay to explain. The old AMS report was 79% blank cells, and that is exactly how it was misread."
               }
             ],
-            "note": "Recreated from the internal workbook as a working demo. Structure, columns, rules and the signature gate are accurate; every task, name, comment thread, cause and figure shown is invented. Happy to walk through the real reports in a conversation.",
+            "note": "Recreated from the internal workbook as a working demo. Structure, columns, rules and the signature gate are accurate; every task, name, comment thread, cause and figure shown is illustrative. Happy to walk through the real reports in a conversation.",
             "href": "/demo/team-performance?team=ams&cad=monthly&sheet=delay",
             "hrefLabel": "Open this sheet in the demo and sign a cause"
           },
@@ -2416,7 +2416,7 @@
                 "alt": "The portfolio sheet: five teams with reports published, causes signed and coverage, above a banner naming what is deliberately absent."
               }
             ],
-            "note": "Every screen above is the state its own link opens, captured from the running demo on invented data and a simulated run. It exists so the argument on this page can be checked rather than taken on trust: switch team, switch window, sign a cause, try to sign someone else's, or publish a quarter over a month that has not been published and watch the gate refuse."
+            "note": "Every screen above is the state its own link opens, captured from the running demo on synthetic data and a simulated run. It exists so the argument on this page can be checked rather than taken on trust: switch team, switch window, sign a cause, try to sign someone else's, or publish a quarter over a month that has not been published and watch the gate refuse."
           }
         ]
       },
@@ -2553,7 +2553,7 @@
         ]
       }
     ],
-    "sampleNote": "This is internal reporting. The screens in section 06 are a working recreation with invented content, and all figures on this page are invented placeholders for this sample. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is made up. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is internal reporting. The screens in section 06 are a working recreation with synthetic content, and the figures on this page are illustrative, because the real ones are confidential. The five team names are real internal groupings at Ixana; every person, task, comment, cause and number inside them is synthetic. No task, customer or individual's performance data is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "A report is two parameters, not five products.",
       "facts": [
@@ -2583,7 +2583,7 @@
       "team": "2 engineers; 1 automation engineer on the capacity workflow",
       "stage": "Live for leads, architects and PMs"
     },
-    "confidentiality": "Internal product — the screens in section 06 are a working recreation with invented tasks, people and comment threads, and all figures on this page are invented placeholders for this sample.",
+    "confidentiality": "Internal product — the screens in section 06 are a working recreation with synthetic tasks, people and comment threads, and the figures on this page are illustrative, because the real ones are confidential.",
     "summary": [
       {
         "lead": "Problem.",
@@ -2812,7 +2812,7 @@
                 "text": "A task needs a start date, a due date and an assignee to count as committed capacity; anything missing one is excluded and counted as undated, in the open. An engineer with nothing assigned is usually mis-recorded rather than idle, and colouring that as capacity would drive real staffing decisions off a data gap."
               }
             ],
-            "note": "Recreated as a working demo, pinned to a fixed day so the figures here stay true. Layout, interactions, the workday grid and the read-only boundary are accurate; every task, name, date and comment thread shown is invented. Happy to walk through the real product in a conversation.",
+            "note": "Recreated as a working demo, pinned to a fixed day so the figures here stay true. Layout, interactions, the workday grid and the read-only boundary are accurate; every task, name, date and comment thread shown is synthetic. Happy to walk through the real product in a conversation.",
             "image": "/static/images/project/ixana-gantt-timeline.jpg",
             "alt": "A read-only timeline: a pinned task column on the left showing a hierarchy of space, folder and list, and beside it a workday grid where each task is a status-coloured bar. Two bars are past their due date and carry a red hatch running to the today line, each labelled with the number of days late and a why? link. A thin grey lane under two of the bars marks the window the task was originally planned for.",
             "href": "/demo/clickup-gantt",
@@ -2881,7 +2881,7 @@
                 "hrefLabel": "Open the status board"
               }
             ],
-            "note": "The demo runs on invented data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: switch the scale and watch the request count stay at zero, open a late task and read why, or try to change a due date and be told no."
+            "note": "The demo runs on synthetic data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: switch the scale and watch the request count stay at zero, open a late task and read why, or try to change a due date and be told no."
           }
         ]
       },
@@ -3006,7 +3006,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The demo linked from this page is a recreation with invented content on a fixed clock, and all figures here are invented placeholders for this sample. I'm glad to walk through the real product and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal product. The demo linked from this page is a recreation with synthetic content on a fixed clock, and the figures here are illustrative, because the real ones are confidential. I'm glad to walk through the real product and the underlying numbers in a conversation.",
     "evidence": [
       {
         "label": "Open the working demo — a lead's timeline, pinned to a single Wednesday",
@@ -3046,7 +3046,7 @@
       "team": "2 engineers",
       "stage": "Live for one workspace space"
     },
-    "confidentiality": "Internal tooling. The demo linked from this page is a working recreation on a fixed clock, and all figures here are invented placeholders for this sample; no task, customer or individual’s activity appears anywhere on it.",
+    "confidentiality": "Internal tooling. The demo linked from this page is a working recreation on a fixed clock, and the figures here are illustrative, because the real ones are confidential; no task, customer or individual’s activity appears anywhere on it.",
     "evidence": [
       {
         "label": "Open the working demo — the timeline, searched for a date that moved",
@@ -3281,7 +3281,7 @@
                 "text": "For an audit answer, showing the underlying record is the difference between a report and evidence."
               }
             ],
-            "note": "Recreated as a working demo, pinned to a fixed day so the figures on this page stay true. The pipeline order, the field set, the ignore rules and the deduplication key are the real ones; every person, task, value and date shown is invented. Happy to walk through the real system in a conversation.",
+            "note": "Recreated as a working demo, pinned to a fixed day so the figures on this page stay true. The pipeline order, the field set, the ignore rules and the deduplication key are the real ones; every person, task, value and date shown is synthetic. Happy to walk through the real system in a conversation.",
             "image": "/static/images/project/ixana-audit-timeline.jpg",
             "alt": "A change timeline searched for a date. Each row carries the time, the person, the field they changed and both values side by side — the old one struck through, the new one boxed — with the matched text highlighted in both. A banner above the list says 300 automation edits are hidden and offers a switch, and every row ends in a “raw event” button.",
             "href": "/demo/clickup-audit?q=Aug+14",
@@ -3323,7 +3323,7 @@
                 "hrefLabel": "Open the filter, then any raw event"
               }
             ],
-            "note": "The demo runs on invented data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: search for a value and watch it match inside the diff, switch the search to the week-1 behaviour and watch the same query return nothing, or deliver the same webhook twice and watch the duplicate count stay at zero."
+            "note": "The demo runs on synthetic data and a fixed clock. It exists so the claims on this page can be checked rather than taken on trust: search for a value and watch it match inside the diff, switch the search to the week-1 behaviour and watch the same query return nothing, or deliver the same webhook twice and watch the duplicate count stay at zero."
           }
         ]
       },
@@ -3459,7 +3459,7 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The demo linked from section 06 is a recreation with invented content on a fixed clock, and all figures on this page are invented placeholders for this sample. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is internal tooling. The demo linked from section 06 is a recreation with synthetic content on a fixed clock, and the figures on this page are illustrative, because the real ones are confidential. No task, customer or individual’s activity is shown. I’m glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "The record did not contain the answer.",
       "facts": [
@@ -3489,7 +3489,7 @@
       "team": "2 engineers",
       "stage": "Live, syncing daily"
     },
-    "confidentiality": "Internal tooling. All figures on this page are invented placeholders for this sample; no document title, content or author appears on this page.",
+    "confidentiality": "Internal tooling. The figures on this page are illustrative, because the real ones are confidential; no document title, content or author appears on this page.",
     "evidence": [
       {
         "label": "Open the working demo — ClickUp under My Files, where the versions live",
@@ -3725,7 +3725,7 @@
                 "text": "There is no control on this screen that alters a version. An immutable record with an affordance for changing it is not an immutable record, however well the permissions are configured."
               }
             ],
-            "note": "The running demo rather than a mock-up — same code, same layout, on an invented workspace of ten documents, fourteen versions and four nightly runs. Every title, author and line of content is made up for publication; the version model, the register distinction and the sync accounting are the real ones.",
+            "note": "The running demo rather than a mock-up — same code, same layout, on a synthetic workspace of ten documents, fourteen versions and four nightly runs. Every title, author and line of content is synthetic, created for publication; the version model, the register distinction and the sync accounting are the real ones.",
             "image": "/static/images/project/ixana-vc-diff.jpg",
             "href": "https://xana-nine.vercel.app/documents/doc_onboarding?tab=compare",
             "hrefLabel": "Open this comparison in the demo"
@@ -3748,7 +3748,7 @@
                 "caption": "One document, its versions down the left, and a comparison between any two of them. A version exists only where the content hash genuinely moved, so the timeline is a record of real change rather than of how often the sync ran."
               }
             ],
-            "note": "Two surfaces on the same invented workspace as the comparison above."
+            "note": "Two surfaces on the same synthetic workspace as the comparison above."
           }
         ]
       },
@@ -3864,7 +3864,7 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The screen described in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample. No document title, content or author is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is internal tooling. The screen described in section 06 is a recreation with synthetic content, and the figures on this page are illustrative, because the real ones are confidential. No document title, content or author is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "The register was being treated as the estate.",
       "facts": [
@@ -3894,7 +3894,7 @@
       "team": "3 engineers",
       "stage": "Live for internal planning"
     },
-    "confidentiality": "Internal product — the screen described in section 06 is a recreation with an invented brief, and all figures on this page are invented placeholders for this sample.",
+    "confidentiality": "Internal product — the screen described in section 06 is a recreation with a synthetic brief, and the figures on this page are illustrative, because the real ones are confidential.",
     "summary": [
       {
         "lead": "Problem.",
@@ -4118,7 +4118,7 @@
                 "text": "Once tasks derive from a plan version, editing it in place breaks the trace between a task and the reasoning that produced it."
               }
             ],
-            "note": "The review stage, running. The reviewer’s scores are what the model emitted; the approve-or-reject verdict beside them is not stored — it is computed on the page by the product’s own rule, so changing any score changes the verdict. The diff is the same line-level comparison the product uses, and it shows the one change that matters: the sentence naming an owner for the release channel replaced by an explicit unknown that names the question it came from. The brief, the plan and the objections are an invented run.",
+            "note": "The review stage, running. The reviewer’s scores are what the model emitted; the approve-or-reject verdict beside them is not stored — it is computed on the page by the product’s own rule, so changing any score changes the verdict. The diff is the same line-level comparison the product uses, and it shows the one change that matters: the sentence naming an owner for the release channel replaced by an explicit unknown that names the question it came from. The brief, the plan and the objections are a synthetic run.",
             "image": "/static/images/project/prd-review.jpg",
             "alt": "The review stage on round two: the planner and reviewer models named at the top with the pairing marked distinct, a ten-criterion scorecard reading zero fail and two partial with the reviewer’s written note under every criterion it objected to, the line diff against the previous draft beside it, and the plan below marked approved and frozen at version two.",
             "href": "/demo/prd-os?view=review&round=2",
@@ -4176,7 +4176,7 @@
                 "hrefLabel": "Run them"
               }
             ],
-            "note": "The demo is the product’s decision logic — the master template, the scoring rule, the dependency validator, the line diff, the model-pairing assertion and the estimate derivation — ported from source and running on one recorded run of an invented brief. What a model wrote is recorded: the questions, the plan prose, the objections, the checklist. What the system decides about them is computed live, which is the part this page makes claims about."
+            "note": "The demo is the product’s decision logic — the master template, the scoring rule, the dependency validator, the line diff, the model-pairing assertion and the estimate derivation — ported from source and running on one recorded run of a synthetic brief. What a model wrote is recorded: the questions, the plan prose, the objections, the checklist. What the system decides about them is computed live, which is the part this page makes claims about."
           }
         ]
       },
@@ -4305,7 +4305,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal product. The brief, the plan and the run history in the demo linked from section 06 are invented, and the figures on this page are placeholders for a public sample; the structural characteristics — five stages, a 30-section master template, ten scorecard criteria, a five-round cap and distinct planner and reviewer models enforced in code — are the real ones, and the demo runs the product’s own logic so they can be checked. I’m glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is an internal product. The brief, the plan and the run history in the demo linked from section 06 are synthetic, and the figures on this page are illustrative; the structural characteristics — five stages, a 30-section master template, ten scorecard criteria, a five-round cap and distinct planner and reviewer models enforced in code — are the real ones, and the demo runs the product’s own logic so they can be checked. I’m glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "A loop that must terminate in approval will always find a way to approve.",
       "facts": [
@@ -4335,7 +4335,7 @@
       "team": "2 operations analysts, 1 shipping manager, 1 operations coordinator, 1 platform administrator",
       "stage": "Controlled pilot: three request streams across three internal organisations"
     },
-    "confidentiality": "Internal pilot — every screen in section 06 is a recreation with invented requests, all figures on this page are invented placeholders for this sample, and no supplier, price, requester or presenter appears on this page.",
+    "confidentiality": "Internal pilot — every screen in section 06 is a recreation with synthetic requests, the figures on this page are illustrative, because the real ones are confidential, and no supplier, price, requester or presenter appears on this page.",
     "summary": [
       {
         "lead": "Problem.",
@@ -4597,7 +4597,7 @@
                 "text": "Shipments reused the procurement gates and added one; presentations reused all five and added none. That is the evidence the contract is the product."
               }
             ],
-            "note": "Recreated from the pilot as a working demo. The lists, the trigger condition, the card, the token rule and the five gates are the real ones; every organisation, requester, approver, presenter, supplier, item, price and date is invented. Happy to walk through the real pilot in a conversation.",
+            "note": "Recreated from the pilot as a working demo. The lists, the trigger condition, the card, the token rule and the five gates are the real ones; every organisation, requester, approver, presenter, supplier, item, price and date is synthetic. Happy to walk through the real pilot in a conversation.",
             "image": "/static/images/project/ixana-ops-board.jpg",
             "alt": "The Ops board: the three questions written out, then three columns for procurement, shipments and presentations, each answering them with a large number over its denominator — 21 of 23, 14 of 14 and 10 of 11 named within a day; 23 of 23 and 13 of 13 with a recorded approval; and the silent failure, the duplicate cards and the stopped run each stream found.",
             "href": "/demo/ops-desk?view=board&as=owen",
@@ -4655,7 +4655,7 @@
                 "alt": "The five launch gates as number-plus-track rows: owned or answered within a business day 45 of 48 not met, ordered or shipped with a recorded approval 36 of 36, duplicate cards since the trigger condition 0, flow failures resolved 3 of 3, completed requests 48 against a floor of 20."
               }
             ],
-            "note": "Every screen above is the state its own link opens, captured from the running demo on invented data. It exists so the argument on this page can be checked rather than taken on trust: submit above the ceiling, assign to the team mailbox, approve a card as the wrong tier, tamper with a confirmation token, and read what each one refuses."
+            "note": "Every screen above is the state its own link opens, captured from the running demo on synthetic data. It exists so the argument on this page can be checked rather than taken on trust: submit above the ceiling, assign to the team mailbox, approve a card as the wrong tier, tamper with a confirmation token, and read what each one refuses."
           }
         ]
       },
@@ -4820,7 +4820,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal pilot. Every screen in section 06 is a recreation with invented content, and all figures on this page are invented placeholders for this sample — every one is quoted against its sample size because a pilot this small cannot support a rate. No supplier, price, requester or presenter is shown. I'm glad to walk through the real pilot and its gates in a conversation.",
+    "sampleNote": "This is an internal pilot. Every screen in section 06 is a recreation with synthetic content, and the figures on this page are illustrative, because the real ones are confidential — every one is quoted against its sample size because a pilot this small cannot support a rate. No supplier, price, requester or presenter is shown. I'm glad to walk through the real pilot and its gates in a conversation.",
     "evidence": [
       {
         "label": "Open the working demo — three streams, one board, as a requester, an analyst, an approver or the coordinator",
@@ -4860,7 +4860,7 @@
       "team": "1 people operations partner, 1 data engineer, with finance as reviewer",
       "stage": "Controlled pilot across seven requisitions in five job families"
     },
-    "confidentiality": "Internal pilot. Every comparator source, observation count, percentile, band, requisition and figure on this page and in the demo is invented for this sample. No employee’s compensation, no candidate and no real salary survey appears anywhere, and the tool holds no individual pay record to show.",
+    "confidentiality": "Internal pilot. Every comparator source, observation count, percentile, band, requisition and figure on this page and in the demo is synthetic. No employee’s compensation, no candidate and no real salary survey appears anywhere, and the tool holds no individual pay record to show.",
     "evidence": [
       {
         "label": "Open the working demo — seven requisitions, three banded and four refused",
@@ -5102,7 +5102,7 @@
                 "text": "A blended total-compensation figure is the point where a defensible band quietly becomes an indefensible one, and it is too useful a number to leave ambiguous."
               }
             ],
-            "note": "Recreated from the pilot interface as a working demo. The weighting rule, the four floor rules, the refusals and the citation behaviour are the real ones; every source, observation count, band and figure shown is invented, and no employee or candidate data exists in it to show. Happy to walk through the real pilot in a conversation.",
+            "note": "Recreated from the pilot interface as a working demo. The weighting rule, the four floor rules, the refusals and the citation behaviour are the real ones; every source, observation count, band and figure shown is illustrative, and no employee or candidate data exists in it to show. Happy to walk through the real pilot in a conversation.",
             "href": "/demo/salary-bands?view=offer&role=de4-sj",
             "hrefLabel": "Open this draft and follow a figure to its source"
           },
@@ -5150,7 +5150,7 @@
                 "alt": "The evidence table for the Bengaluru role: one local source with weight, and two San Jose sources marked as a different market carrying no weight."
               }
             ],
-            "note": "Every screen above is the state its own link opens, captured from the running demo on invented comparator data. It exists so the argument on this page can be checked rather than taken on trust: switch requisition, press any underlined figure and follow it to the rows and the arithmetic, open one of the four refusals, or ask the offer screen to show you what the model actually wrote."
+            "note": "Every screen above is the state its own link opens, captured from the running demo on synthetic comparator data. It exists so the argument on this page can be checked rather than taken on trust: switch requisition, press any underlined figure and follow it to the rows and the arithmetic, open one of the four refusals, or ask the offer screen to show you what the model actually wrote."
           }
         ]
       },
@@ -5296,7 +5296,7 @@
         ]
       }
     ],
-    "sampleNote": "This is an internal pilot. The screen described in section 06 is a working recreation with invented comparator data, and every figure on this page is an invented placeholder for this sample — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation.",
+    "sampleNote": "This is an internal pilot. The screen described in section 06 is a working recreation with synthetic comparator data, and the figures on this page are illustrative, because the real ones are confidential — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation.",
     "fast": {
       "pull": "An unanswerable number gets renegotiated by whoever is most confident.",
       "facts": [
@@ -5326,7 +5326,7 @@
       "team": "2 engineers, with a patent attorney as domain reviewer",
       "stage": "In customer testing — loopback only, no authentication, and nothing it produced has been filed"
     },
-    "confidentiality": "Internal pilot in customer testing with one reviewing patent attorney. Nothing it produced has been filed, and every disclosure it has run on was prepared for the pilot. The linked demo runs on an invented one: every document, claim, reference identifier, name and cost shown there is made up for publication. The corpus measurement in section 05 is the real result, computed over public patent data.",
+    "confidentiality": "Internal pilot in customer testing with one reviewing patent attorney. Nothing it produced has been filed, and every disclosure it has run on was prepared for the pilot. The linked demo runs on a synthetic one: every document, claim, reference identifier, name and cost shown there is synthetic, created for publication. The corpus measurement in section 05 is the real result, computed over public patent data.",
     "summary": [
       {
         "lead": "Problem.",
@@ -5512,7 +5512,7 @@
                 "text": "Each document was published on its own date and can independently bar foreign rights, so the gate ANDs the clearances. A decision recorded against a bundle would clear documents nobody looked at."
               }
             ],
-            "note": "The running prototype rather than a mock-up — the four states, their rationales, the date classifier and the fail-closed refusal are the real ones, on an invented disclosure. Every document, name, claim and reference identifier in the demo is made up for publication.",
+            "note": "The running prototype rather than a mock-up — the four states, their rationales, the date classifier and the fail-closed refusal are the real ones, on a synthetic disclosure. Every document, name, claim and reference identifier in the demo is synthetic, created for publication.",
             "href": "/demo/ai-lawyer?view=intake&src=wp0092&status=published_us_barred&decided=0",
             "hrefLabel": "Open the gate and try to run a barred document"
           },
@@ -5568,7 +5568,7 @@
                 "hrefLabel": "Move the slider in the demo"
               }
             ],
-            "note": "Six screens from the running demo. The pipeline, the verdicts and the checks are the real ones; the disclosure they run on is invented, and so is every claim, reference identifier, assignee and cost shown."
+            "note": "Six screens from the running demo. The pipeline, the verdicts and the checks are the real ones; the disclosure they run on is synthetic, and so is every claim, reference identifier, assignee and cost shown."
           }
         ]
       },
@@ -5681,7 +5681,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a pilot in customer testing: it runs loopback-only with one patent attorney as reviewer, and nothing it produced has been filed. The linked demo runs on an invented disclosure: every document, claim, reference identifier, assignee, name and cost shown there is made up for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data; the attorney-hours figures in section 01 and the pilot counts in section 05 are invented placeholders for this sample. I'm glad to walk through the real pilot in a conversation.",
+    "sampleNote": "This is a pilot in customer testing: it runs loopback-only with one patent attorney as reviewer, and nothing it produced has been filed. The linked demo runs on a synthetic disclosure: every document, claim, reference identifier, assignee, name and cost shown there is synthetic, created for publication. The corpus measurement — the 80-patent gold set, the 3,399 citations and the 15.4% ceiling — is the real result over public patent data; the attorney-hours figures in section 01 and the pilot counts in section 05 are illustrative. I'm glad to walk through the real pilot in a conversation.",
     "fast": {
       "pull": "Automating the fast half of a slow process is the most expensive way to find the queue.",
       "facts": [
@@ -5711,7 +5711,7 @@
       "team": "2 people",
       "stage": "Research — complete and working, never released to learners"
     },
-    "confidentiality": "Personal project, not confidential. Usage figures here are invented placeholders because the tool was never released; the technical characteristics described are real.",
+    "confidentiality": "Personal project, not confidential. Usage figures here are illustrative because the tool was never released; the technical characteristics described are real.",
     "summary": [
       {
         "lead": "Problem.",
@@ -5979,7 +5979,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a personal research build that was never released to learners. The usage figures on this page are invented placeholders; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the build’s own engine so they can be checked. I’m glad to walk through the full build, backend and 3D renderer included, in a conversation.",
+    "sampleNote": "This is a personal research build that was never released to learners. The usage figures on this page are illustrative; the technical characteristics — ten qubits, nine gates, the 200 ms budget, 32 passing tests — are real, and the demo linked from section 04 runs the build’s own engine so they can be checked. I’m glad to walk through the full build, backend and 3D renderer included, in a conversation.",
     "fast": {
       "pull": "A run button turns exploration into submission.",
       "facts": [
@@ -6351,7 +6351,7 @@
       "team": "4 people",
       "stage": "Research — engine and interface built, not yet connected"
     },
-    "confidentiality": "Volunteer project over published texts. The source material is public; the evaluation figures on this page are invented placeholders for this sample.",
+    "confidentiality": "Volunteer project over published texts. The source material is public; the evaluation figures on this page are illustrative.",
     "evidence": [
       {
         "label": "Product walkthrough",
@@ -6613,7 +6613,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and all evaluation figures on this page are invented placeholders for this sample. I'm glad to walk through the real engine and its evaluation in a conversation.",
+    "sampleNote": "This is a volunteer research project over published texts. The interface described in section 04 is a recreation, and the evaluation figures on this page are illustrative. I'm glad to walk through the real engine and its evaluation in a conversation.",
     "fast": {
       "pull": "Refusal is the feature.",
       "facts": [
@@ -6643,7 +6643,7 @@
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
       "stage": "In production — the part under the BAN dev kit and every on-body reference design since"
     },
-    "confidentiality": "Silicon work. The part number, package photography and the full specification are public — the product page is linked below. Program figures on this page — schedule, escape counts, design-ins, interop results — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.",
+    "confidentiality": "Silicon work. The part number, package photography and the full specification are public — the product page is linked below. Program figures on this page — schedule, escape counts, design-ins, interop results — are illustrative — the real ones are confidential. No schematic, test report, customer name or internal document is shown.",
     "evidence": [
       {
         "label": "Wi-R BAN product page",
@@ -7029,7 +7029,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "sampleNote": "This page is about real silicon. The part number, package photography and full specification are public and linked above. Program figures — schedule, escape counts, design-ins, interop results, team shape — are illustrative — the real ones are confidential. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
     "fast": {
       "pull": "Validation capacity set the tapeout date.",
       "facts": [
@@ -7059,7 +7059,7 @@
       "team": "The same 5 functions across 2 sites as the BAN program, running both lines concurrently",
       "stage": "In production"
     },
-    "confidentiality": "Silicon work. The part number, specification and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are invented placeholders for this sample. No schematic, test report, customer name or internal document is shown.",
+    "confidentiality": "Silicon work. The part number, specification and comparison claims are public — links below. Program figures on this page — sample fulfilment, design-ins, interop results, schedule and team load — are illustrative — the real ones are confidential. No schematic, test report, customer name or internal document is shown.",
     "evidence": [
       {
         "label": "Wi-R NFE product page",
@@ -7438,7 +7438,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "sampleNote": "This page is about real silicon. The part number, specification and NFC comparison claims are public and linked above. Program figures — schedule, sample fulfilment, design-ins, interop results, team load — are illustrative — the real ones are confidential. No schematic, test report or customer name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
     "fast": {
       "pull": "Choosing the comparison is choosing the buyer.",
       "facts": [
@@ -7468,7 +7468,7 @@
       "team": "The same 5 functions as the chip programs, plus 3 applications engineers carrying the live evaluations",
       "stage": "In production — design files released to evaluating teams"
     },
-    "confidentiality": "System-level work over public silicon. The designs, their published descriptions and the demonstration videos are public — linked below. Program figures on this page — evaluation cycle times, support hours, design-in attribution, file requests — are invented placeholders for this sample. No schematic, layout, BOM, partner name or internal document is shown.",
+    "confidentiality": "System-level work over public silicon. The designs, their published descriptions and the demonstration videos are public — linked below. Program figures on this page — evaluation cycle times, support hours, design-in attribution, file requests — are illustrative — the real ones are confidential. No schematic, layout, BOM, partner name or internal document is shown.",
     "evidence": [
       {
         "label": "Reference designs product page",
@@ -7859,7 +7859,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are invented placeholders and should be replaced with real data before this page is used. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
+    "sampleNote": "This page is about real reference designs. The designs, their published descriptions and the demonstration videos are public and linked above. Program figures — evaluation cycle times, support hours, design-in attribution and file releases — are illustrative — the real ones are confidential. No schematic, layout, BOM or partner name is shown. I'm glad to walk through the real program and its numbers in a conversation.",
     "fast": {
       "pull": "No amount of attention transfers a skill — only a design they can copy does.",
       "facts": [
@@ -7889,7 +7889,7 @@
       "team": "The same 5 functions across 2 sites as the YR23 program",
       "stage": "In production — the higher-rate part on the BAN line, alongside YR23"
     },
-    "confidentiality": "Silicon work. The part, its specification and its place on the public roadmap are public — the BAN line page carries the YR31 specification row and is linked below. Yield, test-time, escape and conversion figures on this page are invented placeholders for this sample; none of that class of data is ever public. No schematic, test report, lot data, customer name or internal document is shown.",
+    "confidentiality": "Silicon work. The part, its specification and its place on the public roadmap are public — the BAN line page carries the YR31 specification row and is linked below. Yield, test-time, escape and conversion figures on this page are illustrative — the real ones are confidential; none of that class of data is ever public. No schematic, test report, lot data, customer name or internal document is shown.",
     "evidence": [
       {
         "label": "Wi-R BAN product page (carries the YR31 specification)",
@@ -8287,7 +8287,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are invented placeholders — none of that class of data is ever published — and should be replaced with real data before this page is used. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
+    "sampleNote": "This page is about real silicon. The part, its specification and its place on the public roadmap are public and linked above. Yield, test-time, escape, bring-up and conversion figures are illustrative — none of that class of data is ever published. No schematic, test report, lot data or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
     "fast": {
       "pull": "The hard part was refusing changes.",
       "facts": [
@@ -8317,7 +8317,7 @@
       "team": "The same 5 functions across 2 sites as the XA-NFE2001 programme",
       "stage": "In production — the higher-throughput part on the NFE line, alongside XA-NFE2001"
     },
-    "confidentiality": "Silicon work. The part, its specification, its throughput figures and its application framing are public — the announcement is linked below. Pipeline figures on this page — stalled-evaluation counts, conversion, requirement sheets, socket retention — are invented placeholders for this sample. No schematic, test report, requirement document or customer name is shown.",
+    "confidentiality": "Silicon work. The part, its specification, its throughput figures and its application framing are public — the announcement is linked below. Pipeline figures on this page — stalled-evaluation counts, conversion, requirement sheets, socket retention — are illustrative — the real ones are confidential. No schematic, test report, requirement document or customer name is shown.",
     "evidence": [
       {
         "label": "Wi-R NFE product page",
@@ -8718,7 +8718,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a sample portfolio page about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are invented placeholders and should be replaced with real data before this page is used. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
+    "sampleNote": "This page is about real silicon. The part, its specification, throughput figures and application framing are public and linked above. Pipeline figures — stalled-evaluation counts, conversion, requirement sheets, socket retention and volumes — are illustrative — the real ones are confidential. No schematic, test report or customer name is shown. I'm glad to walk through the real programme and its numbers in a conversation.",
     "fast": {
       "pull": "They were one number.",
       "facts": [
@@ -8748,7 +8748,7 @@
       "team": "3 — myself, a failure-analysis engineer, a LabVIEW developer, with the calibration lab reviewing",
       "stage": "In production — deployed across 40+ SLB failure-analysis labs"
     },
-    "confidentiality": "Internal SLB tooling. The bench photography is my own and shows commercial instruments only. Fault-library contents, tool identities, customer wells and internal ticket data are not shown, and every figure on this page is invented except three the owner confirms are real: 98.2% signature reproduction, 40+ labs, and the industry-scale cost of non-productive time.",
+    "confidentiality": "Internal SLB tooling. The bench photography is my own and shows commercial instruments only. Fault-library contents, tool identities, customer wells and internal ticket data are not shown, and the figures on this page are illustrative except three the owner confirms are real: 98.2% signature reproduction, 40+ labs, and the industry-scale cost of non-productive time.",
     "summary": [
       {
         "lead": "Problem.",
@@ -9094,7 +9094,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. Screens and figures are recreations or invented placeholders and should be replaced with real data before this page is used — with three exceptions the owner confirms are real: 98.2% fault-signature reproduction, deployment across 40+ SLB failure-analysis labs, and the industry-scale cost of non-productive time cited in section 01. Bench photography is my own and shows commercial instruments only; no tool, fault-library content or customer data is shown. I'm glad to walk through the real bench and its numbers in a conversation.",
+    "sampleNote": "Screens are recreations and figures are illustrative — with three exceptions the owner confirms are real: 98.2% fault-signature reproduction, deployment across 40+ SLB failure-analysis labs, and the industry-scale cost of non-productive time cited in section 01. Bench photography is my own and shows commercial instruments only; no tool, fault-library content or customer data is shown. I'm glad to walk through the real bench and its numbers in a conversation.",
     "fast": {
       "pull": "The labs did not have a diagnosis problem, they had a stimulus problem.",
       "facts": [
@@ -9124,7 +9124,7 @@
       "team": "4 engineers — me, firmware, Android, mechanical — with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product through installer partners"
     },
-    "confidentiality": "EEGRAB product work. The brochure and demo linked below are public. The board photograph and the PCB view are my own working files. No customer site, tenant or key inventory is named or shown, and every figure on this page is invented — deployment counts, audit rates, timings and the evidence counts in section 02 are illustrative, not EEGRAB's books.",
+    "confidentiality": "EEGRAB product work. The brochure and demo linked below are public. The board photograph and the PCB view are my own working files. No customer site, tenant or key inventory is named or shown, and the figures on this page are illustrative — deployment counts, audit rates, timings and the evidence counts in section 02 are illustrative, not EEGRAB's books.",
     "evidence": [
       {
         "label": "WishKey brochure — EEGRAB",
@@ -9531,7 +9531,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. Every figure here is invented and reconciled to be internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation.",
+    "sampleNote": "Every figure here is illustrative and internally consistent — deployment counts, audit rates, timings, and the evidence counts in section 02 are illustrative, not EEGRAB's books. What is real: WishKey is a shipping EEGRAB product, and the brochure and demo linked above are the company's own public material. The board photograph and layout view are my own working files. I'm glad to walk through the real product and its numbers in a conversation.",
     "fast": {
       "pull": "The record had to become the act.",
       "facts": [
@@ -9561,7 +9561,7 @@
       "team": "3 — me, a firmware engineer and a mechanical designer, with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product"
     },
-    "confidentiality": "EEGRAB product work. The schematic and board views are my own working files, rev 1.0. There is no public product page to link. The circuit is real — the processor, sensors, crystals and antenna network are what is on the sheet — and every figure is invented: bill-of-materials costs, battery life, return rate, retail band and the nine-watch teardown in section 02 are illustrative, not EEGRAB's books.",
+    "confidentiality": "EEGRAB product work. The schematic and board views are my own working files, rev 1.0. There is no public product page to link. The circuit is real — the processor, sensors, crystals and antenna network are what is on the sheet — and the figures are illustrative: bill-of-materials costs, battery life, return rate, retail band and the nine-watch teardown in section 02 are illustrative, not EEGRAB's books.",
     "summary": [
       {
         "lead": "Problem.",
@@ -9805,7 +9805,7 @@
                 "text": "That is what made the second-source qualification in section 05 possible without a new board, and it is the only reason the concession was survivable."
               }
             ],
-            "note": "My own board view from the project's EasyEDA workspace, rev 1.0. Component placement and the parts visible are real; every cost and performance figure on this page is invented."
+            "note": "My own board view from the project's EasyEDA workspace, rev 1.0. Component placement and the parts visible are real; every cost and performance figure on this page is illustrative."
           },
           {
             "kind": "gallery",
@@ -9956,7 +9956,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. This project is data-thin, so the split matters: what is real is the design — the processor and its part number, the six-axis sensor, both crystals, the antenna matching network, the board size and layer count, and the four board revisions, all from my own EasyEDA workspace. The display type, heart-rate front end, battery and charging circuit are described by function because the sheet names them only as connections, and no part number is claimed for them. Every figure is invented and internally reconciled: bill-of-materials costs, battery life, return rate, retail band, and the nine-watch teardown in section 02. There is no public product page for this watch, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
+    "sampleNote": "This project is data-thin, so the split matters: what is real is the design — the processor and its part number, the six-axis sensor, both crystals, the antenna matching network, the board size and layer count, and the four board revisions, all from my own EasyEDA workspace. The display type, heart-rate front end, battery and charging circuit are described by function because the sheet names them only as connections, and no part number is claimed for them. Every figure is illustrative and internally consistent: bill-of-materials costs, battery life, return rate, retail band, and the nine-watch teardown in section 02. There is no public product page for this watch, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
     "fast": {
       "pull": "In this tier the bracket is the product.",
       "facts": [
@@ -9982,7 +9982,7 @@
       "team": "3 — me, an acoustics consultant and a mechanical designer, with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product"
     },
-    "confidentiality": "EEGRAB product work. The schematic and simulation shown are my own working files, rev 1.0. There is no public product page or datasheet to link, so nothing here is externally verifiable: the circuit and its component values are real, and every number — the capsule study, sensitivity, self-noise, yield, cost — is invented and internally reconciled.",
+    "confidentiality": "EEGRAB product work. The schematic and simulation shown are my own working files, rev 1.0. There is no public product page or datasheet to link, so nothing here is externally verifiable: the circuit and its component values are real, and every number — the capsule study, sensitivity, self-noise, yield, cost — is illustrative and internally consistent.",
     "summary": [
       {
         "lead": "Problem.",
@@ -10213,7 +10213,7 @@
                 "text": "Meters on four nodes and a 1 kHz source, run in the schematic. Finding the operating point in a simulator costs an afternoon; finding it on a fabricated board costs a revision."
               }
             ],
-            "note": "My own schematic from the project's EasyEDA workspace, rev 1.0, with the simulation instruments still placed. The circuit and its component values are real. The capsule specification and every performance figure on this page are invented."
+            "note": "My own schematic from the project's EasyEDA workspace, rev 1.0, with the simulation instruments still placed. The circuit and its component values are real. The capsule specification and every performance figure on this page are illustrative."
           },
           {
             "kind": "gallery",
@@ -10362,7 +10362,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. This project is data-thin: what is real is the circuit — the passive calibration schematic, its component values, the 1:5 transformer, the output trim, and the transient simulation shown, all from my own EasyEDA workspace. Everything else is invented and internally reconciled, including the capsule specification, the sixty-capsule study in section 02, all performance figures, and the acceptance and yield numbers. There is no public datasheet or product page for this microphone, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
+    "sampleNote": "This project is data-thin: what is real is the circuit — the passive calibration schematic, its component values, the 1:5 transformer, the output trim, and the transient simulation shown, all from my own EasyEDA workspace. Everything else is illustrative and internally consistent, including the capsule specification, the sixty-capsule study in section 02, all performance figures, and the acceptance and yield numbers. There is no public datasheet or product page for this microphone, so nothing here can be checked externally — I'm glad to walk through the real design in a conversation.",
     "fast": {
       "pull": "The trim may correct, never rescue.",
       "facts": [
@@ -10392,7 +10392,7 @@
       "team": "8 students across three campuses, with three faculty investigators and a mentor at ISRO ISTRAC",
       "stage": "Research — submitted as an ISRO YUKTI-Sanchita proposal. No flights were conducted."
     },
-    "confidentiality": "Student research with SRM and NIT Tiruchirappalli, mentored from ISRO. The proposal, its component list and the literature it rests on are real. The error budget on this page is our own analysis and its numbers are invented for this sample — no flight data exists, because the work was funded as a two-year programme and this page covers only the study that preceded it.",
+    "confidentiality": "Student research with SRM and NIT Tiruchirappalli, mentored from ISRO. The proposal, its component list and the literature it rests on are real. The error budget on this page is our own analysis and its numbers are illustrative — no flight data exists, because the work was funded as a two-year programme and this page covers only the study that preceded it.",
     "evidence": [
       {
         "label": "The papers this method was decomposed from — UAV-based far-field antenna characterisation for polarimetric weather radars (Umeyama, Matsumoto)",
@@ -10717,7 +10717,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita programme with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are invented — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation.",
+    "sampleNote": "The project is real: proposal YS/PD-IP/318, submitted to ISRO's YUKTI-Sanchita programme with SRM and NIT Tiruchirappalli, and the three papers linked above are the ones the study actually rests on. The specified system and its component list come from the proposal. The error budget, its numbers, the pass mark and the four-experiment decomposition are presented here as a worked illustration and the figures are illustrative — no flights were made and no flight data exists. I'm glad to walk through the real proposal in a conversation.",
     "fast": {
       "pull": "It is a positioning project that happens to need a drone.",
       "facts": [
@@ -10747,7 +10747,7 @@
       "team": "6 students across three universities, with a faculty supervisor in electronics and communication at SRM",
       "stage": "Research — bench feasibility study on healthy volunteers. Never used on patients and never clinically evaluated."
     },
-    "confidentiality": "Student research at SRM, with collaborators at Jadavpur University and VIT Vellore. This page describes an engineering feasibility test and makes no diagnostic or clinical claim of any kind. The workflow observations, the bench comparison and every number on this page are invented for this sample; what is real is the project, its architecture and the contact monitor we measured against.",
+    "confidentiality": "Student research at SRM, with collaborators at Jadavpur University and VIT Vellore. This page describes an engineering feasibility test and makes no diagnostic or clinical claim of any kind. The workflow observations, the bench comparison and every number on this page are illustrative; what is real is the project, its architecture and the contact monitor we measured against.",
     "evidence": [
       {
         "label": "The demo is the docs — Non-contact based COVID-19 monitoring system, the full write-up (PDF)",
@@ -11081,7 +11081,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page describing an engineering feasibility study. It makes no diagnostic or clinical claim: nothing here was tested on patients, no reading was used in anyone's care, and the agreement figures are engineering comparisons against an instrument, not measures of diagnostic accuracy. The project is real — six students across SRM, Jadavpur University and VIT Vellore, with a faculty supervisor and a patent disclosure — as are the architecture, the stand design and the contact monitor photographed. The workflow timings, the bench sessions and every figure are invented and internally reconciled. I'm glad to walk through the real study in a conversation.",
+    "sampleNote": "An engineering feasibility study. It makes no diagnostic or clinical claim: nothing here was tested on patients, no reading was used in anyone's care, and the agreement figures are engineering comparisons against an instrument, not measures of diagnostic accuracy. The project is real — six students across SRM, Jadavpur University and VIT Vellore, with a faculty supervisor and a patent disclosure — as are the architecture, the stand design and the contact monitor photographed. The workflow timings, the bench sessions and every figure are illustrative and internally consistent. I'm glad to walk through the real study in a conversation.",
     "fast": {
       "pull": "A device only removes the gowning cycle if it removes every reason to go in.",
       "facts": [
@@ -11111,7 +11111,7 @@
       "team": "5 students across two universities, with a mechanical-engineering faculty mentor at SRM",
       "stage": "Research — test-tank study, entered in the Technology Infusion Grand Challenge. Never deployed in a live sewer."
     },
-    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The vehicle drawings are our own SolidWorks models and the component list is the project's real one. The test-tank trials and every number on this page — densities, sinkage, run counts, success rates — are invented for this sample. Nothing here was tested in a real sewer.",
+    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The vehicle drawings are our own SolidWorks models and the component list is the project's real one. The test-tank trials and every number on this page — densities, sinkage, run counts, success rates — are illustrative. Nothing here was tested in a real sewer.",
     "evidence": [
       {
         "label": "The demo is the docs — Sludge-Traversing ROV, the full write-up (PDF)",
@@ -11333,7 +11333,7 @@
                 "alt": "The test-lane demo: a density dial at 1.02 grams per cubic centimetre, three drive envelopes against a 1.15 traction limit, and a tank view showing 118 mm of sinkage against a 60 mm track."
               }
             ],
-            "note": "The vehicle drawings are our own SolidWorks models. The lane, the analogues and every number in the demo are invented for this sample, and nothing here was tested in a real sewer. The full write-up is the first link at the top of this page."
+            "note": "The vehicle drawings are our own SolidWorks models. The lane, the analogues and every number in the demo are illustrative, and nothing here was tested in a real sewer. The full write-up is the first link at the top of this page."
           }
         ]
       },
@@ -11449,7 +11449,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are invented and internally reconciled — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation.",
+    "sampleNote": "The project is real: a five-student team from SRM Kattankulathur with a collaborator at Jadavpur University, mentored by a mechanical-engineering faculty member, entered into the Technology Infusion Grand Challenge run by La Trobe University's Centre for Technology Infusion. The vehicle drawings are our own SolidWorks models and the component list in the configuration line is the project's real one. The test tank, the graded media, the densities, sinkage figures, run counts and success rates are illustrative and internally consistent — no sewer was ever entered and no hardware was built. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real work in a conversation.",
     "fast": {
       "pull": "A track is a machine for not leaving it alone.",
       "facts": [
@@ -11479,7 +11479,7 @@
       "team": "3 students across two universities",
       "stage": "Research — concept and modelling study. No vehicle was built and nothing was measured in service."
     },
-    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, its system diagrams and its component list are the project's own. The carbon model, its scenarios and every figure on this page are invented for this sample — no vehicle exists, so nothing here has been measured.",
+    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, its system diagrams and its component list are the project's own. The carbon model, its scenarios and every figure on this page are illustrative — no vehicle exists, so nothing here has been measured.",
     "evidence": [
       {
         "label": "The demo is the docs — Carbon Positive e-car, the full concept write-up (PDF)",
@@ -11807,7 +11807,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real: a three-student concept from SRM Kattankulathur with a collaborator at Jadavpur University, and the system diagrams and component list shown are the team's own. The carbon model is a worked illustration built for this page — the tonnages, grid intensities, scenario counts and percentages are invented and internally reconciled. No vehicle, subsystem or filter stack was built or measured, and there is no public page for this project, so nothing here can be checked externally. The two engineering conclusions it rests on — that harvesting a moving vehicle's own airflow cannot yield net energy, and that HEPA and activated-carbon filtration does not remove carbon dioxide — are not invented. I'm glad to walk through the real concept in a conversation.",
+    "sampleNote": "The project is real: a three-student concept from SRM Kattankulathur with a collaborator at Jadavpur University, and the system diagrams and component list shown are the team's own. The carbon model is a worked illustration built for this page — the tonnages, grid intensities, scenario counts and percentages are illustrative and internally consistent. No vehicle, subsystem or filter stack was built or measured, and there is no public page for this project, so nothing here can be checked externally. The two engineering conclusions it rests on — that harvesting a moving vehicle's own airflow cannot yield net energy, and that HEPA and activated-carbon filtration does not remove carbon dioxide — are established results. I'm glad to walk through the real concept in a conversation.",
     "fast": {
       "pull": "By then the check was a threat rather than a tool.",
       "facts": [
@@ -11837,7 +11837,7 @@
       "team": "3 students across two universities, with a faculty co-author at SRM",
       "stage": "Research — concept study, presented at ICTSGS and published in ECS Transactions. Nothing was built or deployed."
     },
-    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are invented for this sample — nothing was built, measured or deployed anywhere.",
+    "confidentiality": "Student research at SRM Kattankulathur with a collaborator at Jadavpur University. The concept, the poster and the published paper are real and linked below. The block-level model on this page, its scenarios and every figure are illustrative — nothing was built, measured or deployed anywhere.",
     "evidence": [
       {
         "label": "The demo is the research paper — Envi-city: Vision of a Sustainable Smart City of the Future, published in ECS Transactions 107(1) 11007",
@@ -12154,7 +12154,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016, and the poster shown was presented at ICTSGS. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are invented and internally reconciled. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation.",
+    "sampleNote": "The project is real and externally checkable: the paper linked above is Envi-city: Vision of a Sustainable Smart City of the Future, ECS Transactions 107(1) 11007–11016, and the poster shown was presented at ICTSGS. The block-level model described here — the saving, the intervals, the twelve scenarios, the planner interviews — is a worked illustration built for this page, and its figures are illustrative and internally consistent. Nothing was built, no block was instrumented, and no municipality was involved. I'm glad to walk through the real paper and what I would now cut from it in a conversation.",
     "fast": {
       "pull": "The useful work is deciding which single intention you are prepared to be wrong about in public.",
       "facts": [
@@ -12184,7 +12184,7 @@
       "team": "6 students, with a mechanical-engineering faculty supervisor at SRM",
       "stage": "Prototype — built, demonstrated at a student expo and reviewed by special-education teachers. It never went to users: no child ever used it."
     },
-    "confidentiality": "Student work at SRM Kattankulathur. The prototype, its hardware and the reviews with special-education teachers are real; the teachers and the autism care centre involved are not named here. This page makes no clinical or therapeutic claim of any kind, and no child took part in any part of this project. The review scores and every figure are invented for this sample.",
+    "confidentiality": "Student work at SRM Kattankulathur. The prototype, its hardware and the reviews with special-education teachers are real; the teachers and the autism care centre involved are not named here. This page makes no clinical or therapeutic claim of any kind, and no child took part in any part of this project. The review scores and every figure are illustrative.",
     "evidence": [
       {
         "label": "The demo is the docs — Toys for Autistic Kids, the full project write-up (PDF)",
@@ -12420,7 +12420,7 @@
                 "alt": "The letter card interaction: a large letter A, the words 'A for apple', a sound indicator, and a criteria panel reading 12 of 14 met."
               }
             ],
-            "note": "Both screens are the state their own link opens, captured from the running bench review. The kit and its hardware are real; the criteria, the verdicts and the teachers' words are invented for this sample, and no child took part in any of it. The full write-up is the first link at the top of this page."
+            "note": "Both screens are the state their own link opens, captured from the running bench review. The kit and its hardware are real; the criteria, the verdicts and the teachers' words are illustrative, and no child took part in any of it. The full write-up is the first link at the top of this page."
           }
         ]
       },
@@ -12518,7 +12518,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page describing a prototype that never went to users. No child took part in any part of this project, no reading or observation of a child appears here, and no clinical, therapeutic or educational-outcome claim is made or implied — the only evidence is two special-education teachers reviewing a bench prototype. What is real: the project, the hardware shown, its team and supervisor, the demonstration at SRM Project Expo, and the involvement of teachers from an autism care centre, who are not named. The fourteen criteria, the scores, the price points and every figure are invented and internally reconciled. I'm glad to walk through the real prototype and the real review in a conversation.",
+    "sampleNote": "A prototype that never went to users. No child took part in any part of this project, no reading or observation of a child appears here, and no clinical, therapeutic or educational-outcome claim is made or implied — the only evidence is two special-education teachers reviewing a bench prototype. What is real: the project, the hardware shown, its team and supervisor, the demonstration at SRM Project Expo, and the involvement of teachers from an autism care centre, who are not named. The fourteen criteria, the scores, the price points and every figure are illustrative and internally consistent. I'm glad to walk through the real prototype and the real review in a conversation.",
     "fast": {
       "pull": "They wanted a design where stopping is the child pulling their hand away.",
       "facts": [
@@ -12548,7 +12548,7 @@
       "team": "5 students across three institutions, with three faculty advisers at SRM",
       "stage": "In internal use — scores road-safety survey clips for the campus. Never connected to a live camera and never used to identify or penalise anyone."
     },
-    "confidentiality": "Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. The system diagram, the detection approach and the team are real. No footage, number plate, face or person appears anywhere on this page, and none is published: the model runs on survey clips and outputs counts. The accuracy figures, the labelled sample and the observation counts are invented for this sample.",
+    "confidentiality": "Student work at SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur. The system diagram, the detection approach and the team are real. No footage, number plate, face or person appears anywhere on this page, and none is published: the model runs on survey clips and outputs counts. The accuracy figures, the labelled sample and the observation counts are illustrative.",
     "evidence": [
       {
         "label": "The demo is the docs — Triple carry avoidance, including the enforcement pipeline we did not build (PDF)",
@@ -12795,7 +12795,7 @@
                 "text": "The concession from section 05, made structural rather than procedural: there is no camera input in what we built, so connecting one is a rewrite rather than a setting."
               }
             ],
-            "note": "Our own system diagram from the project paper, showing the design including the parts that were cut. No footage, frame, face, number plate or person from this project is published here or anywhere on this page. The tool below is the shipped half of this diagram running on invented clips — batch scoring, the hand-labelled evaluation, and the parts that were cut. No model runs in it and no frame exists in it: it is the counts sheet and the argument around it, not the detector.",
+            "note": "Our own system diagram from the project paper, showing the design including the parts that were cut. No footage, frame, face, number plate or person from this project is published here or anywhere on this page. The tool below is the shipped half of this diagram running on synthetic clips — batch scoring, the hand-labelled evaluation, and the parts that were cut. No model runs in it and no frame exists in it: it is the counts sheet and the argument around it, not the detector.",
             "href": "/demo/rider-count",
             "hrefLabel": "Open the survey tool — the counts, not the detector"
           },
@@ -12930,7 +12930,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is invented and internally reconciled: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation.",
+    "sampleNote": "The project is real — a five-student team from SRM Kattankulathur with collaborators at Jadavpur University and IIEST Shibpur, three faculty advisers, and a written paper describing a full enforcement pipeline that was deliberately not built. The system diagram shown is the team's own. Everything numeric is illustrative and internally consistent: the accuracy figures, the confusion matrix, the labelled sample size, the observation counts and the timings. No footage, frame, face or number plate from this project is published here, and the tool as described extracts no identifiers. I'm glad to walk through the real work in a conversation.",
     "fast": {
       "pull": "Enforcement needs to be right about a person; measurement only needs to be right on average.",
       "facts": [
@@ -12960,7 +12960,7 @@
       "team": "6 in the core build team, across the club's design-and-fabrication and electronics groups",
       "stage": "Prototype — flew a stable circuit on a university field, and was pitched as a concept to DRDO. It never went to users: no operator ever flew it and nothing it recorded was ever used."
     },
-    "confidentiality": "Student club work at SRM Kattankulathur. The concept, the surveillance framing, the component list and the build sequence come from the project's own documents. Every number on this page is invented for this sample — flight times, attempt counts, payload margin and the observer trials. The concept was pitched to DRDO; nothing on this page describes any response to that pitch, because none is recorded.",
+    "confidentiality": "Student club work at SRM Kattankulathur. The concept, the surveillance framing, the component list and the build sequence come from the project's own documents. Every number on this page is synthetic — flight times, attempt counts, payload margin and the observer trials. The concept was pitched to DRDO; nothing on this page describes any response to that pitch, because none is recorded.",
     "evidence": [
       {
         "label": "The demo is the docs — Ornithopter for surveillance, the full project proposal (PDF)",
@@ -13159,7 +13159,7 @@
                 "alt": "The concept-of-operations demo: endurance set to 41 seconds, a time budget short by 103 minutes before the aircraft reaches the station, and a note that no fleet size works."
               }
             ],
-            "note": "The patrol radius, the coverage figure, the shift pattern and the one-hour target are the project's own; the cruise speed, turnaround and fleet arithmetic are a worked illustration for this sample. No operator ever flew this aircraft. The full write-up is the first link at the top of this page."
+            "note": "The patrol radius, the coverage figure, the shift pattern and the one-hour target are the project's own; the cruise speed, turnaround and fleet arithmetic are a worked illustration. No operator ever flew this aircraft. The full write-up is the first link at the top of this page."
           }
         ]
       },
@@ -13278,7 +13278,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample portfolio page. What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is invented and internally reconciled — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation.",
+    "sampleNote": "What is real: the project and the club, the surveillance framing and the seven task areas, the component list, the single-versus-dual-motor choice, the fuselage-wings-tail structure, the club's own written targets of one hour and twenty-five kilometres, and the fact that the concept was pitched to DRDO. Every figure is illustrative and internally consistent — flight times, the nine attempts, payload margin, and the observer trials — and no claim is made about any response to the DRDO pitch, because none is recorded. The category anchors in section 01 are public facts about other people's programmes, not ours. The image is the concept render from the project card, not a photograph of the aircraft that flew. There is no public page for this project, so nothing here can be checked externally. I'm glad to walk through the real build in a conversation.",
     "fast": {
       "pull": "We had been building a bird and testing an aircraft.",
       "facts": [
@@ -13308,10 +13308,10 @@
       "team": "Founder/CTO on strategy, outside counsel on execution, 1 engineer, with the patent paralegal as domain owner",
       "stage": "Live, running across three outside firms"
     },
-    "confidentiality": "Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on invented data, the drafting clock runs on invented matters, and figures are invented or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.",
+    "confidentiality": "Live legal operations: no unpublished subject matter, claim scope, inventor, attorney or firm name, matter number, statutory date or real fee amount appears here — invoice work is described by stage and control only, every screen is the real interface re-rendered or recreated on synthetic data, the drafting clock runs on synthetic matters, and figures are illustrative or relative. The three source workbooks behind the portfolio numbers are described by structure and counting rule only.",
     "evidence": [
       {
-        "label": "Open the working demo — five surfaces on an invented portfolio",
+        "label": "Open the working demo — five surfaces on a synthetic portfolio",
         "url": "https://xana-nine.vercel.app/patents"
       },
       {
@@ -13669,7 +13669,7 @@
         "blocks": [
           {
             "kind": "shot",
-            "alt": "The drafting clock grid: invented matters as rows, nine stage columns from drafting starts to filed, each cell carrying a date and beneath it the days taken against the target in green, amber or red; several rows carry an In progress pill where a review round or a first draft is still open, with the elapsed days running beneath it; the header chips read 108 matters on the roster, 0 dates without a cited source and 6 stages past target today.",
+            "alt": "The drafting clock grid: synthetic matters as rows, nine stage columns from drafting starts to filed, each cell carrying a date and beneath it the days taken against the target in green, amber or red; several rows carry an In progress pill where a review round or a first draft is still open, with the elapsed days running beneath it; the header chips read 108 matters on the roster, 0 dates without a cited source and 6 stages past target today.",
             "callouts": [
               {
                 "lead": "A date is a cited message, or the cell stays empty.",
@@ -13688,7 +13688,7 @@
                 "text": "A winner was chosen by rule; on the provenance view a person can reject it, select another candidate or set a date by hand. Each is a decision with a name and a note, and the grid recomputes."
               }
             ],
-            "note": "A working recreation of the drafting clock, not a mock-up: the nine-stage model, the T0 offsets, the selection order, the minimum confidence per stage and the citation rule are the real ones. Every matter, reference name, firm, person, subject line and message is invented. The deployed portfolio demo linked above carries the other five surfaces.",
+            "note": "A working recreation of the drafting clock, not a mock-up: the nine-stage model, the T0 offsets, the selection order, the minimum confidence per stage and the citation rule are the real ones. Every matter, reference name, firm, person, subject line and message is synthetic. The deployed portfolio demo linked above carries the other five surfaces.",
             "image": "/static/images/project/ixana-patent-clock.jpg",
             "href": "/demo/patent-clock?view=timeline",
             "hrefLabel": "Open the clock, then click a red cell"
@@ -13710,7 +13710,7 @@
                 "hrefLabel": "Open this stage card",
                 "label": "Stage card: reasons for delay, cited or dropped",
                 "caption": "One cell, opened. The facts arrive at once — dates, target, days over, the rule and message the date came from. The status and the reasons for delay are written by a model from the messages in the stage window, each reason tagged Firm, Internal or Open decision and citing the message ids it rests on; a reason it cannot cite is dropped before anyone sees it, and the card says so when that leaves it empty.",
-                "alt": "The stage card for the firm's first draft on an invented matter, open beside the grid: a facts list with the date, the previous stage, a 10-day target, 36 days taken and 26 over, the owner, the source and the rule the date came from; a current-status line; two reasons for delay tagged Firm and Open decision, each followed by citation chips M6, M7, M8 and M5; and the cited messages listed beneath with date, source, side, sender and subject."
+                "alt": "The stage card for the firm's first draft on a synthetic matter, open beside the grid: a facts list with the date, the previous stage, a 10-day target, 36 days taken and 26 over, the owner, the source and the rule the date came from; a current-status line; two reasons for delay tagged Firm and Open decision, each followed by citation chips M6, M7, M8 and M5; and the cited messages listed beneath with date, source, side, sender and subject."
               },
               {
                 "image": "/static/images/project/ixana-patent-dashboard.jpg",
@@ -13741,7 +13741,7 @@
                 "caption": "Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it. The upload half of the same section runs the same extraction for the few invoices the mail spine missed."
               }
             ],
-            "note": "The other surfaces over the same spine, each link opening the screen its image shows — five on the deployed demo's invented portfolio, and the stage card from the drafting-clock recreation."
+            "note": "The other surfaces over the same spine, each link opening the screen its image shows — five on the deployed demo's synthetic portfolio, and the stage card from the drafting-clock recreation."
           },
           {
             "kind": "table",
@@ -13945,12 +13945,12 @@
         ]
       }
     ],
-    "sampleNote": "Sample page — internal legal operations. Every screen here is real software showing invented data: the timeline and the four portfolio surfaces are the actual product re-rendered on a synthetic dataset, and the drafting clock is a working recreation on invented matters. No raw capture was published, cropped or traced, because every one carried real matter titles, application numbers, firm names or fee amounts. All figures on this page are invented placeholders apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I'm glad to walk through the real programme and the underlying numbers in a conversation.",
+    "sampleNote": "Internal legal operations, live. Every screen here is real software showing synthetic data: the timeline and the four portfolio surfaces are the actual product re-rendered on a synthetic dataset, and the drafting clock is a working recreation on synthetic matters. No raw capture was published, cropped or traced, because every one carried real matter titles, application numbers, firm names or fee amounts. The figures on this page are illustrative apart from the public documents linked above, which are live and assignee-verified. No unpublished subject matter, claim, inventor, attorney, firm, matter number, statutory date or real fee appears anywhere. I'm glad to walk through the real programme and the underlying numbers in a conversation.",
     "fast": {
       "pull": "What gets taped out decides what is patentable.",
       "facts": [
         {
-          "text": "Live demo: five surfaces over an invented portfolio",
+          "text": "Live demo: five surfaces over a synthetic portfolio",
           "cls": "A"
         },
         {
@@ -13975,7 +13975,7 @@
       "team": "2 engineers",
       "stage": "Live, company-wide"
     },
-    "confidentiality": "Internal tooling. The screens in section 06 are a recreation on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute appears anywhere on this page.",
+    "confidentiality": "Internal tooling. The screens in section 06 are a recreation on a synthetic workspace, and the figures on this page are illustrative, because the real ones are confidential. No real meeting, transcript, attendee or minute appears anywhere on this page.",
     "evidence": [
       {
         "label": "Open the working demo — a meeting with its transcript, and its notes on the right",
@@ -14210,7 +14210,7 @@
                 "text": "Here no video was found and the frame says so. Capture and transcription are separate paths on purpose: a missing recording file must not take the transcript and the note down with it."
               }
             ],
-            "note": "This is the screen the link above opens — same code, same layout, nothing scrolled or staged, on an invented workspace of five meetings. Every title, speaker and line of speech is written for publication; the note's structure, the capture path and the exclusion model are the real ones.",
+            "note": "This is the screen the link above opens — same code, same layout, nothing scrolled or staged, on a synthetic workspace of five meetings. Every title, speaker and line of speech is written for publication; the note's structure, the capture path and the exclusion model are the real ones.",
             "image": "/static/images/project/ixana-notes-minutes.jpg",
             "href": "https://xana-nine.vercel.app/meetingrecordings/player/meeting-power-review?tab=notes",
             "hrefLabel": "Open this meeting on its notes"
@@ -14240,7 +14240,7 @@
                 "caption": "The link carries the question, so it opens on the answer rather than on an empty box — which is how one of these actually gets shared. The answer states the conclusion, shows the exchange behind it, cites the second of each claim, and reports what it could not find: the trim question was raised, agreed to be real, and left with no action assigned."
               }
             ],
-            "note": "Three surfaces on the same invented workspace. Each is the state its own link opens."
+            "note": "Three surfaces on the same synthetic workspace. Each is the state its own link opens."
           }
         ]
       },
@@ -14374,7 +14374,7 @@
         ]
       }
     ],
-    "sampleNote": "This is internal tooling. The screens in section 06 are the running demo on an invented workspace, and every figure on this page is an invented placeholder for this sample. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
+    "sampleNote": "This is internal tooling. The screens in section 06 are the running demo on a synthetic workspace, and the figures on this page are illustrative, because the real ones are confidential. No real meeting, transcript, attendee or minute is shown. I'm glad to walk through the real system and the underlying numbers in a conversation.",
     "fast": {
       "pull": "A wrong minute is worse than no minute and is read by more people.",
       "facts": [
@@ -14404,7 +14404,7 @@
       "team": "2 engineers",
       "stage": "Live for three engineering squads"
     },
-    "confidentiality": "Internal product — the screens in section 06 are recreations of the working demo on an invented sprint, and every figure on this page is an invented placeholder for this sample.",
+    "confidentiality": "Internal product — the screens in section 06 are recreations of the working demo on a synthetic sprint, and the figures on this page are illustrative, because the real ones are confidential.",
     "evidence": [
       {
         "label": "Open the working demo — a live sprint on day 6, four ceremonies, one record",
@@ -14636,7 +14636,7 @@
                 "text": "This is the concession from section 05 made visible: the card reads \"T-4141, blocked 2 days\", and the per-person column above it is a filter computed on read and never written down."
               }
             ],
-            "note": "A recreation of the running demo rather than a mock-up — same layout, same rules, on an invented ten-day sprint of 21 tasks and 8 engineers. Every name, task and figure is made up for publication; the ceremony rules, the four-field write boundary and the counter are the real ones.",
+            "note": "A recreation of the running demo rather than a mock-up — same layout, same rules, on a synthetic ten-day sprint of 21 tasks and 8 engineers. Every name, task and figure is synthetic, created for publication; the ceremony rules, the four-field write boundary and the counter are the real ones.",
             "href": "/demo/scrum-desk?tab=standup&day=6",
             "hrefLabel": "Open this board in the demo — the day strip replays the sprint"
           },
@@ -14804,7 +14804,7 @@
         ]
       }
     ],
-    "sampleNote": "Sample page. The screens are recreations of the working demo on an invented sprint, and every figure — the audit counts, the meeting lengths, the adoption fraction — is an invented placeholder. The ceremony rules, the four-field write boundary and the reason the retrospective is missing are the real design. Happy to walk through the running product in a conversation.",
+    "sampleNote": "The screens are recreations of the working demo on a synthetic sprint, and the figures — the audit counts, the meeting lengths, the adoption fraction — are illustrative. The ceremony rules, the four-field write boundary and the reason the retrospective is missing are the real design. Happy to walk through the running product in a conversation.",
     "fast": {
       "pull": "A ceremony is a view, not a document.",
       "facts": [
@@ -14834,7 +14834,7 @@
       "team": "One to four engineers per tool, drawn from the same small pool",
       "stage": "Live — fourteen tools in use across the company"
     },
-    "confidentiality": "Program-level view. Every claim and figure on this page comes from a chapter page linked below and carries that page's own data note; nothing is introduced here that a chapter does not already establish.",
+    "confidentiality": "Program-level view. Every claim and figure on this page comes from a chapter page linked below and carries that page's own confidentiality note; nothing is introduced here that a chapter does not already establish.",
     "evidence": [
       {
         "label": "The platform, live — search it yourself",
@@ -14869,7 +14869,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "A silicon company on five-month tapeout cycles roughly doubled, from about 75 people to about 140, and every coordination surface creaked at once: knowledge lived in five tools, reports were rebuilt by hand from memory, ceremonies ran on documents that drifted from the record, and audit questions ended in somebody's recollection."
+        "text": "A silicon company on five-month tapeout cycles roughly doubled, from about 50 people to about 100, and every coordination surface creaked at once: knowledge lived in five tools, reports were rebuilt by hand from memory, ceremonies ran on documents that drifted from the record, and audit questions ended in somebody's recollection."
       },
       {
         "lead": "What I did.",
@@ -15074,7 +15074,7 @@
         "num": "08",
         "heading": "What this page can claim",
         "body": [
-          "Structurally, everything above is checkable: three chapters run live on the deployed platform, the recurring refusals are visible on their surfaces, and every chapter carries its own worked example with its own data note. This page adds no number a chapter does not already carry, and where a chapter's figures are illustrative, that chapter says so in the same breath.",
+          "Structurally, everything above is checkable: three chapters run live on the deployed platform, the recurring refusals are visible on their surfaces, and every chapter carries its own worked example with its own confidentiality note. This page adds no number a chapter does not already carry, and where a chapter's figures are illustrative, that chapter says so in the same breath.",
           "What a program page cannot honestly claim is a program-level metric — there was no baseline year in which the company ran without tools to compare against. The claim is narrower and, I think, stronger: fourteen tools, one person's prioritisation, one doctrine that held under fourteen different pressures to break it."
         ]
       },
@@ -15087,7 +15087,7 @@
         ]
       }
     ],
-    "sampleNote": "This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own data note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation."
+    "sampleNote": "This is a program-level page over fourteen internal tools. It introduces no new figures: every number, guardrail and negotiation it references lives on a chapter page below, with that page's own confidentiality note and worked example. I'm glad to walk through the program — the prioritisation calls, the doctrine, and the real numbers — in a conversation."
   },
   "wi-r-xa-customer-sampling": {
     "slug": "wi-r-xa-customer-sampling",

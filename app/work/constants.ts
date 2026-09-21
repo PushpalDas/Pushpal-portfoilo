@@ -86,7 +86,7 @@ export const workItems: WorkItem[] = [
 		status: 'internal',
 		order: 1,
 		outcome:
-			'Cut the median hunt for a document from nine minutes to under one, and put 118 of 140 employees on a single search box.',
+			'Cut the median hunt for a document from nine minutes to under one, and put most of the company on a single search box.',
 		image: 'Gemini_Generated_Image_anlzx7anlzx7anlz.png',
 		slug: 'xana-multifile-rag-based-data-singularity-platform',
 		tier: 1,

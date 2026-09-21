@@ -1001,29 +1001,6 @@
 	padding-left: 16px;
 }
 
-.cs2 .data-note {
-	margin: 26px 0 0;
-	border: 1px solid var(--line);
-	border-radius: 10px;
-	background: var(--surface);
-	padding: 14px 16px;
-}
-.cs2 .data-note .data-note-kicker {
-	display: inline-block;
-	font-family: var(--mono);
-	font-size: 10px;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: var(--muted);
-	margin-bottom: 6px;
-}
-.cs2 .data-note p {
-	margin: 0;
-	font-size: 14.5px;
-	line-height: 1.6;
-	color: var(--body);
-}
-
 .cs2 .secnav {
 	display: flex;
 	flex-wrap: wrap;

@@ -360,20 +360,6 @@ function verifyKind(url: string): string {
 	return 'Link';
 }
 
-/**
- * The single disclosure component (§ data note). One shape, one placement
- * discipline, everywhere — the same information the notes always carried,
- * presented as professional routine rather than scattered apology.
- */
-function DataNote({ children }: { children: ReactNode }) {
-	return (
-		<aside className='data-note'>
-			<span className='data-note-kicker'>Data note</span>
-			<p>{children}</p>
-		</aside>
-	);
-}
-
 export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 	const badge = STATUS_CONFIG[data.status];
 	const facts = data.fast?.facts ?? [];
@@ -450,8 +436,6 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 					</p>
 				)}
 
-				<DataNote>{data.confidentiality}</DataNote>
-
 				<div className='summary'>
 					{data.summary.map((s) => (
 						<p key={s.lead}>
@@ -486,8 +470,6 @@ export default function CaseStudyV2Page({ data }: { data: CaseStudyV2 }) {
 						))}
 					</section>
 				))}
-
-				<DataNote>{data.sampleNote}</DataNote>
 			</div>
 		</div>
 	);
