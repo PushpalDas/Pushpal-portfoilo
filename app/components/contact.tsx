@@ -150,9 +150,9 @@ export default function Contact() {
 					</div>
 					<div className='contact-bottom-col contact-bottom-col--right'>
 						<div className='contact-bottom-group'>
-							<h5 className='contact-bottom-label'>Local time</h5>
+							<h5 className='contact-bottom-label'>Location</h5>
 							<p className='contact-bottom-value'>
-								<LocalTime />
+								Bengaluru, India · <LocalTime />
 							</p>
 						</div>
 					</div>
@@ -428,12 +428,14 @@ function LocalTime() {
 	useEffect(() => {
 		const update = () => {
 			if (timeRef.current) {
+				// The owner's clock, not the visitor's: it sits beside the location
+				// so a reader sees where I am and what time it is there.
 				const now = new Date();
-				timeRef.current.textContent = now.toLocaleTimeString('en-US', {
+				timeRef.current.textContent = `${now.toLocaleTimeString('en-US', {
 					hour: '2-digit',
 					minute: '2-digit',
-					timeZoneName: 'short',
-				});
+					timeZone: 'Asia/Kolkata',
+				})} IST`;
 			}
 		};
 		update();
