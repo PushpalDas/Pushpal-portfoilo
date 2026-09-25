@@ -1,6 +1,6 @@
 // Captures the spend-by-patent screen for the Patent program operations case
 // study from the XANA demo running locally, so the image is the state its own
-// link opens: /patents/spend with nothing selected — the Spend view, all firms,
+// link opens: /patents/spend with nothing selected — the Spend view, all time, all firms,
 // ranked by total. Same pattern as _elev-capture-patent-clock.mjs, but the
 // subject is a Next app rather than a single file, so start it first:
 //
@@ -28,7 +28,7 @@ for (const [path, file] of shots) {
 	await page.goto(origin + path, { waitUntil: 'networkidle' });
 	await page.evaluate(() => document.fonts.ready);
 	// the bars are drawn once the payload lands; wait for the first one
-	await page.waitForSelector('text=Total paid to date', { timeout: 60000 });
+	await page.waitForSelector('text=Total invoiced to date', { timeout: 60000 });
 	await page.waitForTimeout(900);
 	await page.screenshot({ path: out + file, type: 'jpeg', quality: 84 });
 	console.log('captured', file);

@@ -13700,10 +13700,10 @@
               {
                 "image": "/static/images/project/ixana-patent-spend.jpg",
                 "href": "https://xana-nine.vercel.app/patents/spend",
-                "hrefLabel": "Open spend by patent",
-                "label": "Spend and milestone timeline: spend by patent",
-                "caption": "One ranked bar per matter, its payments stacked by stage of work — draft, filing, office action — never by matter alone, so an invoice line is checkable against the engagement; hovering a bar itemises every payment with its date. The same surface carries the table, the activity histogram, one lane per matter with its filings, publications, office actions, payments and grants, and a changes view that lists what is sitting unanswered. Every date on it is ours — statutory dates live in the firm’s docket and are mirrored, never computed.",
-                "alt": "The spend view of the spend and milestone surface on the synthetic portfolio: a total-paid-to-date figure of $61,900 across 18 matters and 70 payments, four tiles beside it for matters with spend, median, mean and most expensive, and beneath them the matters as horizontal bars ranked by total, each stacked in three colours for draft, filing and office-action fees with the amount at the end of the bar, a green dot marking the granted ones, and the view switch reading Spend, Table, Timeline, Gantt, Changes."
+                "hrefLabel": "Open spend, reasons and routes",
+                "label": "Spend, reasons and routes: spend by matter",
+                "caption": "One ranked bar per matter, stacked by stage of work and never lumped per matter, so an invoice line is checkable against the engagement; under each total sits the matter’s variance against the firm’s quoted price, and ▲ marks a line billed above it. Clicking a bar opens every invoice line with the reason it was charged. The same surface carries nine more views — the ledger itself, variance against quote by fee stage, spend by month, one lane per matter, what is sitting unanswered, the US-only and PCT routes with a forward national-phase budget, a negotiation sheet with editable targets, a like-for-like firm comparison, and the exceptions and open questions. Every date on it is ours or the firm’s docket entry mirrored as such — none is computed.",
+                "alt": "The spend view of the spend, reasons and routes surface on the synthetic portfolio: a total-invoiced-to-date figure of $61,900 across 70 invoice lines and 25 invoices, five tiles beside it for matters with spend, law-firm fees against government fees, spend never quoted, actual against quoted, and most expensive; a period switch, firm, route and colour selectors, a view switch reading Spend, Variance vs quote, Table, Timeline, Gantt, Changes, Routes, Negotiation, Firms, Exceptions; a legend of six fee categories with their totals; and beneath them the matters as horizontal bars ranked by total, stacked by category, with the amount and its variance against quote at the end of each bar, a PCT chip on the PCT-route matters, a green dot on the granted ones and a red triangle on the three billed above quote."
               },
               {
                 "image": "/static/images/project/ixana-patent-clock-card.jpg",
@@ -13776,9 +13776,9 @@
                 "Whether a machine's match or date stands, decided by a person with a note"
               ],
               [
-                "Spend and milestone timeline",
+                "Spend, reasons and routes",
                 "Me at quarter end; each firm, read-only",
-                "Whether a matter is worth what it is costing, by stage"
+                "Whether a matter is worth what it is costing — by stage, against the quote, and for what the rest of its route will cost"
               ],
               [
                 "Lifecycle tracker",
@@ -13809,7 +13809,7 @@
           },
           {
             "kind": "config",
-            "text": "System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · spend held in the tracker’s 3 fee stages — draft, filing, office action — every payment itemised with its date, never lumped per matter · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system · nine-stage drafting clock with T0 offsets −10, −5, 0, +5, +15, +20, +21, +22 and +24 days, read GET-only from one mailbox, the calendars and the group chats · alias match at an 85-point threshold · winners chosen by rule in chronology order with a minimum confidence per stage · stage cards cite message ids or drop the reason · 0 writes to any source"
+            "text": "System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · spend held as an invoice-line ledger — 1 row per line, each carrying its fee type, who keeps the money, the jurisdiction, the firm’s quoted price and a written reason · variance reported on law-firm fees only, government fees passed through · national-phase deadlines mirrored from the firms’ dockets, never computed · forward budget from the firms’ country quotations, labelled estimate · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system · nine-stage drafting clock with T0 offsets −10, −5, 0, +5, +15, +20, +21, +22 and +24 days, read GET-only from one mailbox, the calendars and the group chats · alias match at an 85-point threshold · winners chosen by rule in chronology order with a minimum confidence per stage · stage cards cite message ids or drop the reason · 0 writes to any source"
           }
         ]
       },
