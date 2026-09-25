@@ -48,3 +48,18 @@
 **Context.** Every figure must be synthetic, deterministic and labelled.
 **Decision.** `seed.ts` uses mulberry32 seeded with 20260925; `FINANCE_TODAY` is pinned (aligned to the Patents `DEMO_TODAY` of 2026-08-17 unless Pushpal prefers the Ops `21 Aug 2026`); one USD/INR rate per month in a table; a SHA-256 of the generated ledger is asserted in a test.
 **Consequences.** Byte-reproducible seeds; captions can cite the seed.
+
+## D-10 · Ops procurement posts an expense only once invoiced — 2026-09-26
+**Context.** The desk holds 28 requests ($35,140); four are still submitted or assigned with no invoice.
+**Decision.** Every request is a purchase order (so the desk total is asserted at PO level); an expense line posts only for delivered and ordered requests ($30,860). The rest are open commitments.
+**Consequences.** Budget-vs-actual shows commitments apart from actuals; the test carries the desk total on the POs.
+
+## D-11 · Shipments move inventory; freight and duties are Finance accruals — 2026-09-26
+**Context.** The Ops Desk records item value, weight, service level and destination, never a freight cost.
+**Decision.** Sample and outbound shipments relieve inventory to kit COGS; returns and inbound reverse it; freight (6310) and customs/duties (6311) are accrued per shipment from the desk's own service level and weight, labelled as Finance's estimate.
+**Consequences.** The $38,850 item value reconciles to the desk; logistics cost is visible in its own accounts and never inside the item value.
+
+## D-12 · Award R-01 ground truth — 2026-09-26
+**Context.** The compliance agent needs both a clean line and a violating one per rule.
+**Decision.** The $58,000 oscilloscope on the award carries prior written approval from the award PM (allowable); the $6,200 fixture set does not (questioned, R01-2); one bar charge (R01-1) and one pre-award component invoice (R01-4) are planted.
+**Consequences.** Every rule has a labelled positive and a hard negative in the seed.
