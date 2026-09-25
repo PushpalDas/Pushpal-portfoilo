@@ -13595,6 +13595,7 @@
               "Provenance and review queues for every machine choice",
               "Internal readiness dates, each carrying its provenance",
               "Invoice lines matched against the quoted schedule",
+              "Invoice approval / upload invoices — approval waits on a person opening the PDF, and upload covers what the mail spine missed",
               "Weekly reconciliation against counsel’s docket",
               "Deduplicated portfolio counting across three source workbooks",
               "A combined master view derived from its sources, never authored",
@@ -13739,9 +13740,16 @@
                 "hrefLabel": "Open invoice approval",
                 "label": "Invoice approval",
                 "caption": "Each line checked against what that firm quoted for that stage. The amber block is the one that matters: the system made the match itself, says so, and will not let anyone approve until a person has opened the PDF and confirmed it. The upload half of the same section runs the same extraction for the few invoices the mail spine missed."
+              },
+              {
+                "image": "/static/images/project/ixana-patent-upload.jpg",
+                "href": "https://xana-nine.vercel.app/patents/invoices",
+                "hrefLabel": "Open invoice upload",
+                "label": "Upload invoices",
+                "caption": "The other half of the same section, for the few invoices the mail spine missed. Firm and matter are chosen by hand because they are what ties an invoice to the portfolio; every cost line on the PDF is then read and matched against the quoted schedule exactly as a mailed invoice would be."
               }
             ],
-            "note": "The other surfaces over the same spine, each link opening the screen its image shows — five on the deployed demo's synthetic portfolio, and the stage card from the drafting-clock recreation."
+            "note": "The other surfaces over the same spine, each link opening the screen its image shows — six on the deployed demo's synthetic portfolio, and the stage card from the drafting-clock recreation."
           },
           {
             "kind": "table",
