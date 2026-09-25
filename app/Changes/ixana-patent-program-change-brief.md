@@ -282,3 +282,21 @@ grep -ic "metayage\|purdue\|K&K\|prasa\|shreyas\|subodh\|arunashish\|praneetha\|
 Both files return 0. Every matter, reference name, firm, person, subject line and message in the demo is invented; the stage model, targets, selection order, minimum confidences and citation rule are the real ones.
 
 **Verifier row after the change:** `ixana-patent-program  internal  992  9  6  survival  I`.
+
+
+---
+
+## 14. Change record — 2026-09-26, the spend surface aligned with its tool
+
+**What prompted it.** `patent_spend-1.html` (the real spend-and-timeline tool: five views over the tracker — spend by patent, table, activity timeline, one lane per matter, changes) was handed over as the reference for "the spend part". It is byte-identical to the Aug 21 copy the XANA port was built from, so nothing in the port's logic had drifted; what had drifted was the **demo dataset and the case-study image**.
+
+**Demo (XANA, `Changes-archive/dummy`, deploys to `xana-nine.vercel.app`).**
+- Fee stages are now the tool's own three — **Draft · Filing · Office action** — keyed exactly as the tracker heads its columns (`Draft`, `Filing`, `Office Action`), so the spend view's palette (`--s1`/`--s2`/`--s3`) lands on them by name instead of the hashed fallback colours the old `filing / prosecution / grant` keys got. The ledger was retagged, not re-authored: drafting fees → Draft; government, attorney, assignment, PCT and issue fees → Filing; response and office-action work → Office action. Totals are unchanged ($61,900 across 70 payments, 115 dated events). The payload's `layout.categories` now reads AA/AB, AC/AD, AE/AF as the real parser reports them.
+- `/patents/spend` reads its opening state from the query string (`view`, `range`, `firm`, `sort`, `lanes`), read once on mount from `window.location`, so a case-study link can open the state its image shows. Unknown values are ignored.
+- `totalOf(ref)` replaces the three hand-summed keys in the route and the assistant.
+
+**Case study.** The §06 gallery's first tile is now the **Spend view** — the untouched landing state of `/patents/spend`, which is what its link opens — captured as `ixana-patent-spend.jpg` by `scripts/_elev-capture-patent-spend.mjs` against the demo running locally on port 3011. The previous tile showed the Gantt lanes at `range=all`, a state the link did not open; that image (`ixana-patent-timeline.jpg`) is removed. Label, caption and alt rewritten around spend by stage of work; the surface-table row keeps its name. `config` gains the three fee stages. **No prose changed** — captions, config and alt text sit outside the word band, so the row stays at 992.
+
+**Rule held.** Every image is the state its own link opens. The gallery's other five tiles were re-checked against their links and left alone.
+
+**Confidentiality.** The regression grep in §13 still returns 0 on `data/case-studies-v2.json`, `public/demo/patent-clock.html`, and the demo's `src/lib/patent-demo-data.ts`. The attached HTML itself carries real matter titles, application numbers, firm names and fee amounts; it stays out of the repo (`app/work/patent_spend-1.html` is untracked and must not be committed).

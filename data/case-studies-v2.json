@@ -13698,12 +13698,12 @@
             "kind": "gallery",
             "items": [
               {
-                "image": "/static/images/project/ixana-patent-timeline.jpg",
+                "image": "/static/images/project/ixana-patent-spend.jpg",
                 "href": "https://xana-nine.vercel.app/patents/spend",
-                "hrefLabel": "Open the spend timeline",
-                "label": "Spend and milestone timeline",
-                "caption": "Eighteen lanes, one per matter, with filings, publications, office actions, payments and grants drawn along each. Every date on it is ours — statutory dates live in the firm's docket and are mirrored, never computed — and spend is grouped by stage of work, never by matter, so an invoice is checkable against the engagement.",
-                "alt": "The spend and milestone timeline: eighteen lanes, one per matter, running from the programme's start to today, with filings, publications, USPTO actions, responses, payments and grants drawn as coloured events along each lane"
+                "hrefLabel": "Open spend by patent",
+                "label": "Spend and milestone timeline: spend by patent",
+                "caption": "One ranked bar per matter, its payments stacked by stage of work — draft, filing, office action — never by matter alone, so an invoice line is checkable against the engagement; hovering a bar itemises every payment with its date. The same surface carries the table, the activity histogram, one lane per matter with its filings, publications, office actions, payments and grants, and a changes view that lists what is sitting unanswered. Every date on it is ours — statutory dates live in the firm’s docket and are mirrored, never computed.",
+                "alt": "The spend view of the spend and milestone surface on the synthetic portfolio: a total-paid-to-date figure of $61,900 across 18 matters and 70 payments, four tiles beside it for matters with spend, median, mean and most expensive, and beneath them the matters as horizontal bars ranked by total, each stacked in three colours for draft, filing and office-action fees with the amount at the end of the bar, a green dot marking the granted ones, and the view switch reading Spend, Table, Timeline, Gantt, Changes."
               },
               {
                 "image": "/static/images/project/ixana-patent-clock-card.jpg",
@@ -13809,7 +13809,7 @@
           },
           {
             "kind": "config",
-            "text": "System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system · nine-stage drafting clock with T0 offsets −10, −5, 0, +5, +15, +20, +21, +22 and +24 days, read GET-only from one mailbox, the calendars and the group chats · alias match at an 85-point threshold · winners chosen by rule in chronology order with a minimum confidence per stage · stage cards cite message ids or drop the reason · 0 writes to any source"
+            "text": "System configuration — mail-triggered extraction into 6 lifecycle stages and 5 technology categories, plus an explicit unclassified stage · one internal matter identity mapped across 3 outside firms · portfolio counts deduplicated by family across 3 source workbooks, taking each family’s most recent row · eTag then content-hash change detection on a 60-second poll · master view rebuilt in place through the workbook API with annotations preserved and every write verified · spend held in the tracker’s 3 fee stages — draft, filing, office action — every payment itemised with its date, never lumped per matter · invoice lines matched individually against the quoted schedule · deadline colouring at 60 days, 6 months and 1 year · no statutory date computed anywhere in the system · nine-stage drafting clock with T0 offsets −10, −5, 0, +5, +15, +20, +21, +22 and +24 days, read GET-only from one mailbox, the calendars and the group chats · alias match at an 85-point threshold · winners chosen by rule in chronology order with a minimum confidence per stage · stage cards cite message ids or drop the reason · 0 writes to any source"
           }
         ]
       },
