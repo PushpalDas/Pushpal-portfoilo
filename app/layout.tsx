@@ -1,6 +1,5 @@
 import Analytics from 'app/components/analytics/analytics';
 import Navbar from 'app/components/navbar/navbar';
-import ThemeSwitch from 'app/components/layouts/theme-switch/theme-switch';
 import LenisProvider from 'app/components/providers/LenisProvider';
 import ThemeProvider from 'app/components/providers/ThemeProvider';
 import type { Metadata } from 'next';
@@ -65,11 +64,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
 				<ThemeProvider
 					attribute='class'
 					defaultTheme='dark'
+					forcedTheme='dark'
 					themes={['dark', 'light']}
 				>
 					<LenisProvider>
 						<Navbar />
-						<ThemeSwitch />
 						{children}
 					</LenisProvider>
 					{process.env.NODE_ENV === 'production' && <Analytics />}
