@@ -235,7 +235,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'WishKey — Key Management System',
 		company: 'EEGRAB',
-		year: '2023',
+		year: '',
 		domain: 'Access control',
 		category: 'product',
 		track: 'silicon',
@@ -271,7 +271,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'Cost-effective smart watch',
 		company: 'EEGRAB',
-		year: '2023',
+		year: '',
 		domain: 'Consumer wearable',
 		category: 'product',
 		track: 'silicon',
@@ -583,7 +583,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'Condenser microphone',
 		company: 'EEGRAB',
-		year: '2024',
+		year: '',
 		domain: 'Audio hardware',
 		category: 'product',
 		track: 'silicon',
