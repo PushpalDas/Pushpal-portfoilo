@@ -40,6 +40,8 @@
 
 ## Numbers a reader can check (from the generated dictionary)
 
+> Superseded in P2: the clock moved to 21 Aug 2026 and nothing is generated after it (D-13, D-14), so the totals below are the P1 figures; the current ones are in `data-dictionary.md` and `walkthrough-P2.md`. The two reconciliation totals ($61,900.00 and $35,140 / $38,850) did not move.
+
 | Figure | Value |
 |---|---|
 | Ledger | 2,131 lines in 884 journals · 1,141 expense lines · $17,121,586.22 |

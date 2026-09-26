@@ -2,31 +2,31 @@
 
 **Audience:** engineers and the auditor persona. **Purpose:** every entity, field, type, source, an example row and the view that consumes it — generated from `src/lib/finance/types.ts` and a built dataset by `scripts/finance/build-dictionary.mjs`. Regenerate after any change to the types or the seed.
 
-**Illustrative — synthetic ledger.** Seed 20260925, "today" 2026-08-17. Every vendor, amount, date and event is invented. Payroll exists only in department × month aggregate (groups under 3 suppressed). Read-only adapters carry the Patents ledger and the Ops Desk rows unchanged.
+**Illustrative — synthetic ledger.** Seed 20260925, "today" 2026-08-21. Every vendor, amount, date and event is invented. Payroll exists only in department × month aggregate (groups under 3 suppressed). Read-only adapters carry the Patents ledger and the Ops Desk rows unchanged.
 
 ## Totals a reader can check
 
 | Figure | Value |
 |---|---|
-| Ledger lines (all classes) | 2,131 in 884 journals |
-| Expense lines | 1,141 · $17,121,586.22 |
-| — payroll | $11,299,270.72 |
-| — ap.manual | $4,866,059.23 |
-| — accruals | $706,090.68 |
+| Ledger lines (all classes) | 2,033 in 850 journals |
+| Expense lines | 1,090 · $16,072,625.23 |
+| — payroll | $10,263,598.14 |
+| — ap.manual | $4,929,388.17 |
+| — accruals | $642,489.82 |
 | — patents.invoices | $61,900.00 |
-| — stripe | $58,910.00 |
-| — cards | $54,357.30 |
-| — ops.shipments | $40,608.85 |
-| — ops.procurement | $30,860.00 |
-| — bank | $2,249.95 |
-| — reimbursements | $1,279.49 |
-| Invoices | 314 (25 from Patents, 24 from Ops) |
-| Purchase orders | 66 (28 from Ops) |
-| Card transactions | 189 · reimbursements 14 |
-| Bank lines | 401 |
-| Stripe orders / payouts | 51 / 36 |
+| — stripe | $55,318.80 |
+| — cards | $53,344.10 |
+| — ops.shipments | $35,936.50 |
+| — ops.procurement | $27,660.00 |
+| — bank | $2,032.88 |
+| — reimbursements | $956.82 |
+| Invoices | 315 (25 from Patents, 23 from Ops) |
+| Purchase orders | 72 (28 from Ops) |
+| Card transactions | 189 · reimbursements 11 |
+| Bank lines | 371 |
+| Stripe orders / payouts | 47 / 29 |
 | Vendors | 46 (4 with a bank-detail change on file) |
-| Planted anomalies / hard negatives | 43 / 184 |
+| Planted anomalies / hard negatives | 43 / 178 |
 | Periods | 30 (28 closed, 1 soft-close, 1 open) |
 
 ## Assumptions behind the magnitudes
@@ -221,7 +221,7 @@
 | `source_system` | `SourceSystem` |  |
 | `source_id` | `string` |  |
 
-**Example:** `{"id":"PO-0001","vendor_id":"V-046","department":"silicon","project":"COMBO","fund":"operating","gl":"6140","requester":"nadia","description":"Board build — COMBO rev D","amount_usd":5098.13,"created_on":"2025-09-04","approved_by":"priya","approved_on":"2025-09-05","source_system":"ap.manual","source_id":"PO-0001"}`
+**Example:** `{"id":"PO-0003","vendor_id":"V-016","department":"validation","project":"YR23","fund":"operating","gl":"6140","requester":"iris","description":"Board build — YR23 rev C","amount_usd":8556.87,"created_on":"2025-09-08","approved_by":"priya","approved_on":"2025-09-03","source_system":"ap.manual","source_id":"PO-0003"}`
 
 ## InvoiceLine
 
@@ -275,7 +275,7 @@
 | `source_system` | `SourceSystem` |  |
 | `source_id` | `string` |  |
 
-**Example:** `{"id":"INV-0001","vendor_id":"V-001","vendor_invoice_no":"WC-2025-09","invoice_date":"2025-09-01","received_on":"2025-09-05","due_on":"2025-10-01","currency":"USD","amount_local":28000,"amount_usd":28000,"po_id":null,"department":"ga","project":"INTERNAL","fund":"operating","gl":"6510","entity":"us","created_by":"dana","created_at":"2025-09-05T13:00:00","status":"paid","approved_by":"yuki","approved_on":"2025-09-08","paid_on":"2025-09-08","payment_ref":"ACH-0001","rush":false,"three_way":null,"lines":[{"n":1,"description":"Rent — West Lafayette HQ and lab, 2025-09","qty":1,"unit_price":28000,"amount":28000,"gl":"6510"}],"memo":"Rent — West Lafayette HQ and lab, 2025-09","source_system":"ap.m`
+**Example:** `{"id":"INV-0001","vendor_id":"V-001","vendor_invoice_no":"WC-2025-09","invoice_date":"2025-09-01","received_on":"2025-09-02","due_on":"2025-10-01","currency":"USD","amount_local":28000,"amount_usd":28000,"po_id":null,"department":"ga","project":"INTERNAL","fund":"operating","gl":"6510","entity":"us","created_by":"dana","created_at":"2025-09-02T16:47:00","status":"paid","approved_by":"yuki","approved_on":"2025-09-04","paid_on":"2025-09-08","payment_ref":"ACH-0001","rush":false,"three_way":null,"lines":[{"n":1,"description":"Rent — West Lafayette HQ and lab, 2025-09","qty":1,"unit_price":28000,"amount":28000,"gl":"6510"}],"memo":"Rent — West Lafayette HQ and lab, 2025-09","source_system":"ap.m`
 
 ## CardTransaction
 
@@ -300,7 +300,7 @@
 | `receipt` | `boolean` |  |
 | `memo` | `string` |  |
 
-**Example:** `{"id":"CARD-0008","card_holder":"nadia","department":"silicon","project":"NFE3001","fund":"operating","gl":"6130","entity":"us","merchant":"Cleanroom Consumables Co","merchant_category":"industrial supplies","posted_on":"2025-09-01","posted_time":"11:07","currency":"USD","amount_local":253.4,"amount_usd":253.4,"receipt":true,"memo":"Lab consumables"}`
+**Example:** `{"id":"CARD-0011","card_holder":"iris","department":"validation","project":"COMBO","fund":"operating","gl":"6130","entity":"us","merchant":"Optics Direct","merchant_category":"industrial supplies","posted_on":"2025-09-01","posted_time":"13:13","currency":"USD","amount_local":282.47,"amount_usd":282.47,"receipt":true,"memo":"Lab consumables"}`
 
 ## Reimbursement
 
@@ -323,7 +323,7 @@
 | `paid_on` | `ISODate \| null` |  |
 | `memo` | `string` |  |
 
-**Example:** `{"id":"RB-0001","person":"devika","department":"validation","project":"INTERNAL","fund":"operating","gl":"6610","entity":"us","category":"Ground transport","amount_usd":79.88,"submitted_on":"2025-11-13","approved_by":"clara","approved_on":"2025-11-18","paid_on":"2025-11-25","memo":"Taxis and parking — partner workshop"}`
+**Example:** `{"id":"RB-0001","person":"iris","department":"validation","project":"INTERNAL","fund":"operating","gl":"6610","entity":"us","category":"Ground transport","amount_usd":76.03,"submitted_on":"2025-09-14","approved_by":"clara","approved_on":"2025-09-19","paid_on":"2025-09-26","memo":"Taxis and parking — customer visit"}`
 
 ## PayrollJournal
 
@@ -383,7 +383,7 @@ Payroll only ever exists here in aggregate: department × month.
 | `charge_id` | `string` |  |
 | `refunded` | `boolean` |  |
 
-**Example:** `{"id":"cs_0003","customer":"Sable Instruments","sku":"IXN-WR-200","description":"Wi-R demo kit, rev D","qty":1,"unit_price":1850,"amount":1850,"created":"2025-09-03","charge_id":"ch_0003","refunded":false}`
+**Example:** `{"id":"cs_0002","customer":"Sable Instruments","sku":"IXN-WR-200","description":"Wi-R demo kit, rev D","qty":1,"unit_price":1850,"amount":1850,"created":"2025-09-10","charge_id":"ch_0002","refunded":false}`
 
 ## StripeEvent
 
@@ -397,7 +397,7 @@ Payroll only ever exists here in aggregate: department × month.
 | `object_id` | `string` |  |
 | `amount` | `number` |  |
 
-**Example:** `{"id":"evt_00003","type":"checkout.session.completed","created":"2025-09-03","object_id":"cs_0003","amount":1850}`
+**Example:** `{"id":"evt_00002","type":"checkout.session.completed","created":"2025-09-10","object_id":"cs_0002","amount":1850}`
 
 ## StripeBalanceTransaction
 
@@ -415,7 +415,7 @@ Payroll only ever exists here in aggregate: department × month.
 | `source` | `string` |  |
 | `payout_id` | `string \| null` |  |
 
-**Example:** `{"id":"txn_00003","type":"charge","amount":1850,"fee":53.95,"net":1796.05,"created":"2025-09-03","available_on":"2025-09-05","source":"ch_0003","payout_id":"po_0001"}`
+**Example:** `{"id":"txn_00002","type":"charge","amount":1850,"fee":53.95,"net":1796.05,"created":"2025-09-10","available_on":"2025-09-12","source":"ch_0002","payout_id":"po_0001"}`
 
 ## StripePayout
 
@@ -433,7 +433,7 @@ Payroll only ever exists here in aggregate: department × month.
 | `balance_transaction_ids` | `string[]` |  |
 | `bank_line_id` | `string \| null` |  |
 
-**Example:** `{"id":"po_0001","arrival_date":"2025-09-08","amount":1796.05,"charges":1850,"fees":53.95,"refunds":0,"adjustments":0,"balance_transaction_ids":["txn_00003"],"bank_line_id":"BANK-0336"}`
+**Example:** `{"id":"po_0001","arrival_date":"2025-09-15","amount":1796.05,"charges":1850,"fees":53.95,"refunds":0,"adjustments":0,"balance_transaction_ids":["txn_00002"],"bank_line_id":"BANK-0313"}`
 
 ## LedgerLine
 
@@ -560,7 +560,7 @@ Ground truth for the eval harness. Never carried on the object itself.
 | `looks_like` | `AnomalyType \| null` |  |
 | `note` | `string` |  |
 
-**Example:** `{"id":"LBL-001","object_type":"invoice","object_id":"INV-0220","anomaly":"duplicate-exact","looks_like":"duplicate-exact","note":"Same vendor, invoice number, amount and date as INV-0219; entered a second time by a different analyst."}`
+**Example:** `{"id":"LBL-001","object_type":"invoice","object_id":"INV-0222","anomaly":"duplicate-exact","looks_like":"duplicate-exact","note":"Same vendor, invoice number, amount and date as INV-0221; entered a second time by a different analyst."}`
 
 ## FxRate
 

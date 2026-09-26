@@ -46,7 +46,7 @@
 
 ## D-09 · Seed 20260925, pinned today, fixed monthly FX
 **Context.** Every figure must be synthetic, deterministic and labelled.
-**Decision.** `seed.ts` uses mulberry32 seeded with 20260925; `FINANCE_TODAY` is pinned (aligned to the Patents `DEMO_TODAY` of 2026-08-17 unless Pushpal prefers the Ops `21 Aug 2026`); one USD/INR rate per month in a table; a SHA-256 of the generated ledger is asserted in a test.
+**Decision.** `seed.ts` uses mulberry32 seeded with 20260925; `FINANCE_TODAY` is pinned to **2026-08-21, the Ops Desk clock** (amended in P2: Finance reads Ops rows dated up to that day, and the Patents ledger’s latest date, 14 Aug, sits inside); one USD/INR rate per month in a table; a SHA-256 of the generated ledger is asserted in a test.
 **Consequences.** Byte-reproducible seeds; captions can cite the seed.
 
 ## D-10 · Ops procurement posts an expense only once invoiced — 2026-09-26
@@ -63,3 +63,13 @@
 **Context.** The compliance agent needs both a clean line and a violating one per rule.
 **Decision.** The $58,000 oscilloscope on the award carries prior written approval from the award PM (allowable); the $6,200 fixture set does not (questioned, R01-2); one bar charge (R01-1) and one pre-award component invoice (R01-4) are planted.
 **Consequences.** Every rule has a labelled positive and a hard negative in the seed.
+
+## D-13 · Nothing in the seed is dated after today — 2026-09-26 (P2)
+**Context.** The first render showed September payment approvals and an August payroll in the audit log: the seed had generated documents on their natural dates regardless of the pinned clock.
+**Decision.** Every generator checks the clock: an invoice, card, reimbursement, order, payout, payroll run or settlement that would land after today is not generated; an approval or payment that would fall after today leaves the document approved-but-unpaid or received; a bank line that would book after today has not booked. A test asserts that no document, approval, journal, bank line or payout is dated after `today`.
+**Consequences.** Fewer rows in August (the open period) — which is what an open period looks like — and every audit event sits at or before today.
+
+## D-14 · Ops shipments post by status — 2026-09-26 (P2)
+**Context.** The Ops Desk carries fifteen shipments in every state from submitted to delivered, including one cancelled, and its clock runs to 21 Aug.
+**Decision.** A shipped one (Delivered, In Transit) posts on its ship date and accrues freight and duties; one with only a label or a submission posts on its submission date with no freight; a cancelled one posts and reverses in the same journal, so the desk’s $38,850 item value still reconciles while inventory nets to zero. The test counts freight lines against the shipped count rather than fifteen.
+**Consequences.** The Ops total holds to the cent and the accounting says what the desk says.

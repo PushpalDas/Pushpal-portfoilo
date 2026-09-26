@@ -23,13 +23,13 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] vitest wired (`npm test`, 23 tests) · `docs/finance/data-dictionary.md` generated
 - [x] Walkthrough P1 (`walkthrough-P1.md`)
 
-## P2 — Views (Wiki)
-- [ ] Nav entry after Patents · Finance rail · persona switch (`?as=`) · synthetic chip
-- [ ] `/finance` overview + Where-this-number-comes-from drawer + inline Ask-your-ledger
-- [ ] `/finance/ledger` virtualised table + filters + source chips (deep links to Patents / Ops)
-- [ ] `/finance/ap` queue · `/finance/reconcile` (Bank / Card / Stripe) · `/finance/funds` · `/finance/close` (`?asof=`) · `/finance/health` · `/finance/audit` · `/finance/agents`
-- [ ] Responsive ≥ 360 px, keyboard pass, screenshots of every view; Patents and Ops unchanged (pixel diff)
-- [ ] Walkthrough P2
+## P2 — Views (Wiki) — done 2026-09-26
+- [x] Nav entry after Patents · Finance rail · persona switch (`?as=`) · synthetic chip
+- [x] `/finance` overview + Where-this-number-comes-from drawer + inline Ask-your-ledger control (answers in P3)
+- [x] `/finance/ledger` windowed table + filters + source chips (deep links to Patents / Ops)
+- [x] `/finance/ap` queue · `/finance/reconcile` (Bank / Card / Stripe) · `/finance/funds` · `/finance/close` (`?asof=`) · `/finance/health` · `/finance/audit` · `/finance/agents`
+- [x] Responsive ≥ 360 px, keyboard pass, screenshots of every view; Patents unchanged apart from the nav entry
+- [x] Walkthrough P2 (`walkthrough-P2.md`, screenshots in `walkthrough/P2/`)
 
 ## P3 — Agents (Wiki)
 - [ ] `agents/contract.ts` · trust ladder · audit log with hash chain + verify
