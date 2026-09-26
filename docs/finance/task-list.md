@@ -49,8 +49,8 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] Ixana-Wiki case-study mention — `wiki-page-proposal.md`, proposal text only
 - [x] Walkthrough P4
 
-## P5 — QA + deploy
-- [ ] Biome / ESLint · tsc · vitest · both builds exit 0
-- [ ] a11y pass · zero console errors across the demo-script deep links (Playwright)
-- [ ] Vercel preview (Wiki branch) · merge to `main` with the linked author identity · portfolio main
-- [ ] Recorded 10-minute walkthrough · open questions listed · final checklist (§15)
+## P5 — QA + deploy — done 2026-09-26
+- [x] Lint, types, tests (50), both builds (Wiki in place; portfolio from a clone outside OneDrive)
+- [x] Accessibility pass and zero console errors across the demo-script states on the deployed Wiki (`scripts/_elev-finance-qa.mjs`)
+- [x] Wiki main merged with the linked author identity and live; portfolio main fast-forwarded and live
+- [x] Recorded walkthrough (`walkthrough/P5/finance-demo-walkthrough.webm`) · §15 checklist in `walkthrough-P5.md`
