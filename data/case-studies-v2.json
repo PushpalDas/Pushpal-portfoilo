@@ -5043,17 +5043,17 @@
     "slug": "ai-salary-generator",
     "eyebrow": "Ixana · HR tooling",
     "title": "AI salary generator",
-    "deck": "A pilot that drafts an offer range where every figure on it resolves to a dated comparator row — and refuses the role outright when the rows are not there.",
-    "status": "customer-testing",
+    "deck": "A tool that drafts an offer range where every figure on it resolves to a dated comparator row, and refuses the role outright when the rows are not there. Built in full; never run on a live requisition.",
+    "status": "prototype",
     "meta": {
-      "role": "Product manager, pilot owner",
+      "role": "Product manager, build owner",
       "team": "1 people operations partner, 1 data engineer, with finance as reviewer",
-      "stage": "Controlled pilot across seven requisitions in five job families"
+      "stage": "Prototype — proposed by people operations and built end to end on synthetic comparator data. It never went to users: no live requisition was ever run through it, because priorities shifted before the pilot was scheduled."
     },
-    "confidentiality": "Internal pilot. Every comparator source, observation count, percentile, band, requisition and figure on this page and in the demo is synthetic. No employee’s compensation, no candidate and no real salary survey appears anywhere, and the tool holds no individual pay record to show.",
+    "confidentiality": "A prototype that never went to users. Every comparator source, observation count, percentile, band, requisition and figure on this page and in the demo is synthetic. No employee’s compensation, no candidate and no real salary survey appears anywhere, and the tool holds no individual pay record to show.",
     "evidence": [
       {
-        "label": "Open the working demo — seven requisitions, three banded and four refused",
+        "label": "Open the working demo — seven synthetic requisitions, three banded and four refused",
         "url": "/demo/salary-bands"
       },
       {
@@ -5068,11 +5068,11 @@
       },
       {
         "lead": "What I did.",
-        "text": "I drew the line the tool is built on — every figure computed by rule from dated comparator rows, the model writing the argument and never a number — then added an evidence floor that refuses a role rather than widening a band to cover thin data."
+        "text": "People operations asked for it; I drew the line the tool is built on — every figure computed by rule from dated comparator rows, the model writing the argument and never a number — then added an evidence floor that refuses a role rather than widening a band to cover thin data."
       },
       {
         "lead": "Result.",
-        "text": "Early signal only. What is structural: a figure with no dated source does not render at all, the evidence floor refuses a role rather than widening a band, and no figure anywhere comes from a model — press any number in the demo and its citation opens. The pilot counts below are the worked example."
+        "text": "It never went to users: the pilot was never scheduled after priorities shifted. What is structural still holds in the demo: a figure with no dated source does not render, the floor refuses a role rather than widening a band, and no figure comes from a model."
       }
     ],
     "sections": [
@@ -5080,7 +5080,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "Compensation was not the loudest request; it was the one where being wrong stayed quiet longest. A range nobody can trace still produces an offer, and the cost surfaces a year later in an equity review nobody can reconstruct. I sized it against the two louder asks on how long a mistake stays invisible."
+          "Compensation was not the loudest request; it was the one where being wrong stayed quiet longest. A range nobody can trace still produces an offer, and the cost surfaces a year later in an equity review nobody can reconstruct."
         ],
         "blocks": [
           {
@@ -5112,16 +5112,13 @@
             },
             "caption": "Sizing exercise with people operations and the recruiting lead, estimated from how each error had actually been caught in the previous year. The scheduler is the control: everybody wanted it, and nothing it gets wrong survives the afternoon."
           }
-        ],
-        "after": [
-          "Timing carried the rest: pay transparency filings had made posted ranges usable — a third independent source where a year earlier there were two."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the last 26 closed requisitions and tried to trace every number in each agreed range to something with a date on it, then timed four live offer conversations for how long each spent on where a figure came from."
+          "I read the last 26 closed requisitions, tracing every number in each agreed range to something with a date on it, and timed four offer conversations for how long each spent on where a figure came from."
         ],
         "blocks": [
           {
@@ -5194,14 +5191,14 @@
           }
         ],
         "after": [
-          "The reframe: this was never an accuracy problem. Nobody could show the old ranges were wrong, and neither could I. What nobody could do was answer a question about a number — and an unanswerable number gets renegotiated by whoever is most confident."
+          "The reframe: this was never an accuracy problem. Nobody could show the old ranges were wrong; what nobody could do was answer a question about a number, and an unanswerable number gets renegotiated by whoever is most confident."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I own the pilot scope, the evidence rules, and the line between what a rule computes and what a model may write."
+          "I owned the build scope, the evidence rules, and the line between what a rule computes and what a model may write."
         ],
         "blocks": [
           {
@@ -5230,48 +5227,9 @@
       },
       {
         "num": "04",
-        "heading": "What I cut",
-        "blocks": [
-          {
-            "kind": "scope",
-            "shipped": [
-              "Weighted market bands from dated comparator rows across five source types",
-              "A four-rule evidence floor, any one of which refuses a role",
-              "A drafted range with a model-written rationale and a citation on every figure",
-              "Internal band comparison, aggregate only and suppressed below eight holders",
-              "A source ledger every figure on every screen resolves into"
-            ],
-            "deferred": [
-              "Equity, bonus and any blended total-compensation figure",
-              "A labelled cross-market adjustment for non-US locations",
-              "Automatic refresh of comparator rows when a survey is released"
-            ],
-            "cut": [
-              "A single recommended number",
-              "Any inference from a candidate’s résumé or current pay",
-              "Flagging existing employees as under- or over-paid"
-            ]
-          },
-          {
-            "kind": "para",
-            "text": "Flagging existing employees was the hardest cut: nearly free once the bands exist, and the first thing everyone asks for. It fails on what the data is. Comparator rows describe a market and a level; the gap between a person and a band is explained by tenure, scope and a hiring market from three years ago. A list of names ordered by band position would be read as a finding — it is a rendering of what we do not know."
-          }
-        ]
-      },
-      {
-        "num": "05",
-        "heading": "How I got it agreed",
-        "body": [
-          "The head of people operations did not want the tool to refuse anything, and her objection was correct: a recruiter with a live requisition and no band does not stop hiring — they reopen the spreadsheet. A refusal removes our view of a bad number, not the number.",
-          "So I did not argue it. I proposed instead that a refusal be worth more than the band: it names the rule that failed, the evidence against it, and what would clear it — a task rather than a closed door.",
-          "She agreed, on a condition I would not have proposed: the refusal goes to the hiring manager too, not only the recruiter. Four refusals have since produced three decisions to buy survey data and one levelling review."
-        ]
-      },
-      {
-        "num": "06",
         "heading": "What was built",
         "body": [
-          "One pipeline per requisition. Comparator rows are pulled and weighted by collection method, the four floor rules run, and the role gets a band or gets refused. A model is called once at the end and asked for an argument written around numbered slots; the renderer substitutes every slot. Nothing is stored."
+          "One pipeline per requisition: comparator rows are pulled and weighted by collection method, the four floor rules run, and the role gets a band or a refusal. A model is called once at the end for an argument written around numbered slots, and the renderer substitutes every slot. Nothing is stored."
         ],
         "blocks": [
           {
@@ -5296,7 +5254,7 @@
                 "text": "A blended total-compensation figure is the point where a defensible band quietly becomes an indefensible one, and it is too useful a number to leave ambiguous."
               }
             ],
-            "note": "Recreated from the pilot interface as a working demo. The weighting rule, the four floor rules, the refusals and the citation behaviour are the real ones; every source, observation count, band and figure shown is illustrative, and no employee or candidate data exists in it to show. Happy to walk through the real pilot in a conversation.",
+            "note": "Recreated as a working demo. The weighting rule, the four floor rules, the refusals and the citation behaviour are the real ones; every source, observation count, band and figure shown is illustrative, and no employee or candidate data exists in it to show.",
             "href": "/demo/salary-bands?view=offer&role=de4-sj",
             "hrefLabel": "Open this draft and follow a figure to its source"
           },
@@ -5349,78 +5307,29 @@
         ]
       },
       {
-        "num": "07",
-        "heading": "Tradeoffs",
-        "blocks": [
-          {
-            "kind": "table",
-            "head": [
-              "Tension",
-              "What I chose",
-              "What it cost"
-            ],
-            "rows": [
-              [
-                "Traceability vs coverage",
-                "Refuse the role rather than widen the band",
-                "Four of seven pilot requisitions got no band at all, and a recruiter with a live role still has to do something that day"
-              ],
-              [
-                "Rules vs a model that could reason about a market",
-                "Every figure by rule, the argument by model",
-                "The tool cannot weigh a signal that is not already a comparator row, which is most of what a good recruiter knows"
-              ],
-              [
-                "Aggregate equity vs the question that gets asked",
-                "Counts by quartile, suppressed below eight holders",
-                "Three of the five families are too small to show anything, and those are the families where equity questions are sharpest"
-              ],
-              [
-                "A range vs a number",
-                "Draft a range and stop it at the market median",
-                "Somebody still picks a point inside it, and the tool has made that person more visible rather than better informed"
-              ],
-              [
-                "Base only vs total compensation",
-                "Base salary, stated on the tile itself",
-                "The number that decides an acceptance is the total one, and on that number the tool is deliberately silent"
-              ]
-            ]
-          }
-        ]
-      },
-      {
-        "num": "08",
-        "heading": "Early signal and what I'm watching",
+        "num": "05",
+        "heading": "What we learned",
         "body": [
-          "Eighteen drafts is enough to see whether the citation rule survives a live hiring round, and far too few to say anything about pay."
+          "Seven synthetic requisitions ran through it, three banded and four refused; no live one ever did. Enough to see whether the citation rule and the floor behave as designed, and nothing about pay."
         ],
         "blocks": [
           {
             "kind": "metrics",
             "items": [
               {
-                "value": "18",
-                "label": "Offer drafts produced in the pilot (n for all figures)"
-              },
-              {
-                "value": "23% → 100%",
-                "sub": "6 of 26, then 18 of 18",
-                "label": "Range figures resolving to a dated comparator row"
+                "value": "7",
+                "sub": "synthetic",
+                "label": "Requisitions ever run through the tool; live requisitions: none"
               },
               {
                 "value": "4",
                 "sub": "of 7",
-                "label": "Requisitions refused at the evidence floor"
+                "label": "Refused at the evidence floor rather than given a wider band"
               },
               {
-                "value": "19m → 4m",
-                "label": "Median time an offer conversation spends on provenance"
-              },
-              {
-                "value": "2",
-                "sub": "of 18",
-                "label": "Offers agreed outside the drafted range"
+                "value": "6",
+                "sub": "of 26",
+                "label": "Agreed ranges that resolved to a dated source before build, the number the tool was meant to move"
               },
               {
                 "value": "0",
@@ -5432,7 +5341,7 @@
             "kind": "figure",
             "chart": {
               "form": "dumbbell",
-              "title": "Share of the figures in an agreed range that resolve to a dated source, by job family, before the pilot and during it: three families rise from between 17 and 31 percent to 100, and two do not move at all",
+              "title": "Share of the figures in a range that resolve to a dated source, by job family: the old agreed ranges against the demo’s synthetic requisitions. Three banded families reach 100; the two refused families do not move, because the tool produces nothing for them",
               "max": 100,
               "unit": "% of figures traceable",
               "rows": [
@@ -5463,38 +5372,38 @@
                 }
               ]
             },
-            "caption": "Traceable share per family, from the 26 requisitions read before the pilot to the 18 drafts inside it. The two flat rows are families the floor refused: for those, nothing improved at all, because the tool produced nothing and the range was assembled the old way. That is the honest shape of a four-in-seven refusal rate, and it is the row I expect to move next rather than the ones already at 100."
+            "caption": "Traceable share per family: the 26 requisitions read before build on the left, the demo’s seven synthetic requisitions on the right. The two flat rows are families the floor refuses: the tool produces nothing, so the range would be assembled the old way. No live requisition ever moved a row; this is the shape the design produces on synthetic data, not a result."
+          },
+          {
+            "kind": "para",
+            "text": "The stops were agreed before the first draft: one published figure that cannot be resolved to a dated row, or one figure written by the model rather than substituted into it, ends the tool. Neither was ever tested against a live round."
+          },
+          {
+            "kind": "para",
+            "text": "A tool that refuses is only useful when someone is obliged to act on the refusal; without a scheduled pilot, nobody was."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A figure carries a source when the published draft resolves it to a named comparator row with a date, an observation count and a method. A figure sourced to “market data”, to a previous range, or to another figure in the same document counts as untraceable — which is how the old sheets cited themselves."
+            "text": "A figure carries a source when the draft resolves it to a named comparator row with a date, an observation count and a method. A figure sourced to “market data”, to a previous range, or to another figure in the same document counts as untraceable."
           },
           {
             "kind": "config",
-            "text": "Pilot configuration — five comparator source types weighted by collection method · rule-based weighted percentiles, band edges and draft range · four evidence-floor rules evaluated per role, any one of them refusing · gpt-4o-mini for the rationale only, called once with the computed figures and a slotted template · the renderer substitutes every numeral, so no figure passes through the model · no individual compensation record held anywhere in the system · internal distribution suppressed below eight holders"
+            "text": "Build configuration — five comparator source types weighted by collection method · rule-based weighted percentiles, band edges and draft range · four evidence-floor rules evaluated per role, any one of them refusing · gpt-4o-mini for the rationale only, called once with the computed figures and a slotted template · the renderer substitutes every numeral, so no figure passes through the model · no individual compensation record held anywhere in the system · internal distribution suppressed below eight holders"
           }
         ]
       },
       {
-        "num": "09",
-        "heading": "What would make me stop",
-        "body": [
-          "These were agreed before the tool produced its first draft, and each is a stop rather than a conversation.",
-          "One published draft carrying a figure that cannot be resolved to a dated row stops the pilot. So does any figure written by the model rather than substituted into it — a guardrail on the architecture, where one instance is a design failure, not a bug.",
-          "Two softer gates run to the end. If refusals stay above half of requisitions at 40 drafts, the floor is set for a data estate we do not have — buy data rather than move rules. If offers outside the range pass a fifth, the range is not what is being used."
-        ]
-      },
-      {
-        "num": "10",
+        "num": "06",
         "heading": "What I'd do differently",
         "body": [
-          "I built the weighting table as a constant and treated its numbers as obvious. They are not: the weight on self-reported data is an afternoon judgement I never tested, and the band moves with it. It should have shipped as a versioned assumption.",
-          "I would also have measured provenance time before there was a tool to fix it. The 19 minutes comes from four conversations I sat in after the design was settled — and I chose them."
+          "I built the weighting table as a constant and treated its numbers as obvious; the weight on self-reported data is an afternoon judgement I never tested, and the band moves with it.",
+          "I would have measured provenance time before there was a tool to fix it; the 19 minutes comes from four conversations I chose.",
+          "And I would have tied the build to a named hiring round; a tool with no requisition waiting is the first thing a priority shift shelves."
         ]
       }
     ],
-    "sampleNote": "This is an internal pilot. The screen described in section 06 is a working recreation with synthetic comparator data, and the figures on this page are illustrative, because the real ones are confidential — each quoted against its sample size, because 18 drafts cannot support a rate. No employee’s compensation, no candidate and no real salary survey appears here. I’m glad to walk through the real pilot and its floor rules in a conversation.",
+    "sampleNote": "A prototype that never went to users. The screen in section 04 is a working recreation with synthetic comparator data, and every figure on this page is illustrative: the 26 requisitions read before build, the seven synthetic ones in the demo, and the minutes timed in four conversations. No employee’s compensation, no candidate and no real salary survey appears here, and no live requisition was ever run through the tool. I’m glad to walk through the floor rules in a conversation.",
     "fast": {
       "pull": "An unanswerable number gets renegotiated by whoever is most confident.",
       "facts": [
@@ -14353,13 +14262,6 @@
                 "caption": "Every matter in one of six stages, with an explicit unclassified stage beside them. Overdue is a property of the internal action date and never of a statutory one, so nothing red here can be read as a legal deadline."
               },
               {
-                "image": "/static/images/project/ixana-patent-ask.jpg",
-                "href": "https://xana-nine.vercel.app/patents",
-                "hrefLabel": "Ask the portfolio a question",
-                "label": "Ask the portfolio",
-                "caption": "It reads the same eighteen matters every other view reads and answers from them, naming the matters it used. Asked what is past its internal action date it returns six of fifteen with their refs, stages and dates — and says in the same breath that these are readiness dates and not statutory ones."
-              },
-              {
                 "image": "/static/images/project/ixana-patent-approval.jpg",
                 "href": "https://xana-nine.vercel.app/patents/invoices",
                 "hrefLabel": "Open invoice approval",
@@ -14374,7 +14276,7 @@
                 "caption": "The other half of the same section, for the few invoices the mail spine missed. Firm and matter are chosen by hand because they are what ties an invoice to the portfolio; every cost line on the PDF is then read and matched against the quoted schedule exactly as a mailed invoice would be."
               }
             ],
-            "note": "The other surfaces over the same spine, each link opening the screen its image shows — six on the deployed demo's synthetic portfolio, and the stage card from the drafting-clock recreation."
+            "note": "The other surfaces over the same spine, each link opening the screen its image shows — five on the deployed demo's synthetic portfolio, and the stage card from the drafting-clock recreation."
           },
           {
             "kind": "table",
@@ -16014,14 +15916,14 @@
     "eyebrow": "Ixana · Finance operations",
     "title": "Finance orchestrator",
     "deck": "One book of accounts under payroll, supplier bills, cards, the web store, the patent programme and the Ops Desk, with watchers that point at problems they can prove and draft the fix, while every approval stays a named person and every figure says where it came from.",
-    "status": "development",
+    "status": "prototype",
     "meta": {
       "role": "Product manager",
       "team": "Finance lead, Founders-office associate, 1 full-stack engineer · External accountant (advisory) · Founders in the loop",
-      "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
+      "stage": "Prototype — proposed by the company and built in full on a synthetic ledger inside the Wiki. It never went to users: the read-only trial on real exports was never scheduled after priorities shifted."
     },
-    "confidentiality": "In development. Every figure on this page is illustrative and computed from a made-up set of books (a synthetic ledger, seed 20260925); every name is invented; pay appears only as department-by-month totals, with any group under three people hidden. The two money surfaces it reads, the patent programme and the Ops Desk, are carried in unchanged and checked to the cent by an automated test.",
-    "sampleNote": "BUILT: the made-up books, the two readers that copy Patents and Ops in unchanged, nine screens, five watchers, a question box, a scorecard and 50 automated tests, all running in the linked demo. PLANNED: a read-only trial on real exports, interviews with the finance lead and the founders-office associate, measuring how often people agree with a finding, and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and scores against the answer key, each with its sample size. I'm glad to walk through the data, the rules and the tests in a conversation.",
+    "confidentiality": "A prototype that never went to users. Every figure on this page is illustrative and computed from a made-up set of books (a synthetic ledger, seed 20260925); every name is invented; pay appears only as department-by-month totals, with any group under three people hidden. The two money surfaces it reads, the patent programme and the Ops Desk, are carried in unchanged and checked to the cent by an automated test.",
+    "sampleNote": "BUILT: the made-up books, the two readers that copy Patents and Ops in unchanged, nine screens, five watchers, a question box, a scorecard and 50 automated tests, all running in the linked demo. NEVER RUN: the read-only trial on real exports, the interviews with the finance lead and the founders-office associate, the agreement rate and the business case's measured column; priorities shifted before any of it was scheduled, and the tool never went to users. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and scores against the answer key, each with its sample size. I'm glad to walk through the data, the rules and the tests in a conversation.",
     "evidence": [
       {
         "label": "Open the working demo: nine screens over one made-up set of books, as the finance lead, the founders-office associate, the grant manager or the external accountant",
@@ -16072,11 +15974,11 @@
       },
       {
         "lead": "What I did.",
-        "text": "I built the book of accounts those two surfaces feed, inside the Wiki they live in: made-up books generated the same way every time, with deliberate mistakes and fraud patterns hidden in them; nine screens that work out every number from the rows; and five watchers under one contract, which lets them point and draft but never act."
+        "text": "The company asked for it and I built it in full inside the Wiki: made-up books with deliberate mistakes and fraud patterns hidden in them, nine screens that work out every number from the rows, and five watchers under one contract that may point and draft but never act."
       },
       {
         "lead": "Result.",
-        "text": "Early signal on the made-up data only, with the sample size on every figure. The Invoice Watcher finds all 47 hidden problems and raises no false alarm on the 179 look-alike rows; the tie-out watcher never proposes a match on a wrong amount; every watcher run leaves the books unchanged; nobody has yet decided a warning, so that rate is zero decisions."
+        "text": "It never went to users: priorities shifted before the read-only trial on real exports was scheduled. Every figure here is a score on the made-up books, each with its sample size, and none is adoption, time saved or fraud caught."
       }
     ],
     "sections": [
@@ -16084,7 +15986,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The obvious answer was an supplier bills automation product. I argued for a quarter proving the way of working on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the book between them, and the rule that a watcher may find and draft but never act."
+          "The obvious answer was a supplier-bills automation product. I argued for proving the way of working on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the book between them, and the rule that a watcher may find and draft but never act."
         ],
         "blocks": [
           {
@@ -16124,19 +16026,16 @@
                 }
               ]
             },
-            "caption": "Modelled, not measured: the business case's assumptions, using the finance lead's own estimate of each task today and the share the desk's screens would take over. No hour on this chart has been observed; the planned trial measures the left column before any claim is made about the right."
+            "caption": "Modelled, not measured: the business case's assumptions, using the finance lead's own estimate of each task today and the share the desk's screens would take over. No hour on this chart was ever observed; the trial that would have measured the left column never ran, so no claim is made about the right."
           }
-        ],
-        "after": [
-          "Under two hundred bills a month this is one book and five rule sets; past a thousand, the accounting system is the book."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the two surfaces that existed the way an auditor would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, asking for each dollar who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books.",
-          "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, a grant spreadsheet, bank details by email."
+          "I read the two surfaces that existed the way an auditor would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, asking for each dollar who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third.",
+          "The five other flows had no surface at all."
         ],
         "blocks": [
           {
@@ -16236,7 +16135,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I own the watchers' contract, the made-up data and its answer key, and the integrity rules, with the founders in the loop as read-only users; most of the work was writing rules a finance lead can argue with."
+          "I owned the watchers' contract, the made-up data and its answer key, and the integrity rules; most of the work was writing rules a finance lead can argue with."
         ],
         "blocks": [
           {
@@ -16257,7 +16156,7 @@
               },
               {
                 "lead": "Every number is worked out on the spot, with its source.",
-                "text": "Nothing on a tile is stored, so it cannot drift from its rows."
+                "text": "Nothing on a tile is stored, so it cannot drift."
               }
             ]
           }
@@ -16265,66 +16164,6 @@
       },
       {
         "num": "04",
-        "heading": "What I cut",
-        "blocks": [
-          {
-            "kind": "scope",
-            "shipped": [
-              "BUILT: made-up books generated the same way every time: twelve months, six departments, two entities, a research grant, 46 suppliers, 313 bills, 189 card lines, 371 bank statement lines, 47 web-shop orders and 29 payouts, 47 hidden problems with 179 look-alikes",
-              "BUILT: nine screens: overview with a where-from panel on every tile, books, pots, bills desk, tie-out, month-end, hygiene, audit log, watchers; a persona switch; a link for every state",
-              "BUILT: five watchers under one contract, a question box with refusals, a scorecard with sample sizes, a tamper-proof audit log, 50 automated tests"
-            ],
-            "deferred": [
-              "PLANNED: the read-only trial: nightly exports from the accounting system, the card feed, the payment processor and the payroll provider, replayed through the same readers",
-              "PLANNED: interviews with the finance lead and the founders-office associate, and measuring how often people agree with a warning",
-              "PLANNED: automatic action for exact bank matches under $500, switched on only after 200 human decisions at 98 percent precision"
-            ],
-            "cut": [
-              "A language model in the critical path: the question box is simple text matching over rows, and a rule is a sentence a person can read",
-              "Any view of one person's pay: payroll enters the books as department-by-month totals, groups under three people are hidden, and the refusal is tested",
-              "Tax and filing dates, paying bills, changing supplier bank details, closing months, releasing grant money, posting entries, writing back to Ops or Patents: forbidden by contract, not by a setting"
-            ]
-          },
-          {
-            "kind": "para",
-            "text": "The hardest cut was the AI model. It could write every warning better and might spot things the rules miss; but a rule's reasons are weights a finance lead can disagree with, and the first month of a trial is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
-          },
-          {
-            "kind": "doc",
-            "bar": "From the trust note: what the software is not used for, v1",
-            "lead": "No watcher, at any trust level, will",
-            "items": [
-              {
-                "lead": "Pay a bill or change a supplier's bank details.",
-                "text": "Both are a named person's approval, and the second is refused outright while the change is unverified."
-              },
-              {
-                "lead": "Post an entry, close a month or release grant money.",
-                "text": "Drafts only; the approval is what changes state, and it is written to the audit log."
-              },
-              {
-                "lead": "Write back to the Ops Desk or the Patents ledger.",
-                "text": "Finance reads them; one test per source holds the totals to the cent."
-              },
-              {
-                "lead": "Answer a question about one person's pay, or work out a tax date.",
-                "text": "Refused with the reason, no rows attached."
-              }
-            ],
-            "note": "One page from the trust note. The list is the same on every Finance screen's footer and in the watchers' contract; it is not a setting."
-          }
-        ]
-      },
-      {
-        "num": "05",
-        "heading": "How I got it agreed",
-        "body": [
-          "The two surfaces Finance reads had one condition each, pulling against each other: the patent programme never works out a legal deadline, only mirrors one; the Ops Desk's totals are its own and its clock says 21 August. Finance wanted one clock and one set of books, and the first version broke both promises: September approvals in the audit log, shipments posted after Finance's own today.",
-          "I proposed that Finance take the desk's clock, generate nothing after it, and carry every Patents date as a stored, labelled copy. The patent programme owner agreed and added a condition: the two lawyer charges no matter can be named for stay in a holding account, never guessed into a matter. The price was one test per source."
-        ]
-      },
-      {
-        "num": "06",
         "heading": "What was built",
         "body": [
           "A Finance section inside the Wiki: one generator builds the books, two readers copy Patents and Ops in unchanged, nine screens work out what they show on each visit, five watchers return warnings and drafts, and the question box answers from rows it can point to, or refuses."
@@ -16448,51 +16287,10 @@
         ]
       },
       {
-        "num": "07",
-        "heading": "Tradeoffs",
-        "blocks": [
-          {
-            "kind": "table",
-            "head": [
-              "Tension",
-              "What I chose",
-              "What it cost"
-            ],
-            "rows": [
-              [
-                "Rules or an AI model",
-                "Eleven rule functions with visible weights",
-                "The checker only finds what a finance lead thought to write down; a new pattern is found by nobody"
-              ],
-              [
-                "Worked out on the spot or stored",
-                "Nothing on a screen is stored; every tile recomputes from the rows",
-                "Every visit rebuilds the books; at a thousand bills a month a cache becomes a design"
-              ],
-              [
-                "Made-up books or a blacked-out real set",
-                "Generated data with hidden problems and look-alikes, answer key kept apart",
-                "Every score is a result on data the rules were tuned against; the first real month decides what they are worth"
-              ],
-              [
-                "Refuse or warn",
-                "Same-person and unverified-bank checks refuse; a flagged bill needs a written reason",
-                "A finance lead in a hurry cannot override in place; she must ask another approver"
-              ],
-              [
-                "Deep links or one address",
-                "Persona, screen, row, tab, as-of date and a tried decision all live in the link",
-                "Every screen must show any state on first load, so nothing is set after the fact"
-              ]
-            ]
-          }
-        ]
-      },
-      {
-        "num": "08",
-        "heading": "Early signal and what I'm watching",
+        "num": "05",
+        "heading": "What we learned",
         "body": [
-          "The numbers come from the made-up books and their answer key: 47 hidden problems, 179 look-alikes, 371 bank lines. Enough to see whether the contract holds, not what a real month holds. Every figure is a count against its total, worked out on the visit that drew this page."
+          "The build ran to the end; the rollout never started. The made-up books show the contract holds: 47 hidden problems, 179 look-alikes, 371 bank lines, every figure a count against its total. They cannot show what a real month holds, and no real month was ever read."
         ],
         "blocks": [
           {
@@ -16514,17 +16312,8 @@
                 "label": "Bank matches proposed on a wrong amount (guardrail)"
               },
               {
-                "value": "$61,900.00",
-                "label": "Patent counsel carried to the cent, 70 lines, equal to the Patents surface"
-              },
-              {
-                "value": "5",
-                "sub": "of 5",
-                "label": "Watcher runs that left the books unchanged"
-              },
-              {
                 "value": "0",
-                "label": "Human decisions on a warning so far; the agreement rate is n = 0, not estimated"
+                "label": "Real months read, and human decisions on a warning; it never reached a person"
               }
             ]
           },
@@ -16532,7 +16321,7 @@
             "kind": "figure",
             "chart": {
               "form": "ladder",
-              "title": "The trust ladder as it stands: level 0 suggest, on, 43 warnings at precision 1.00 on the 226-row answer key; level 1 draft, on, 27 drafts and no human decision yet, so no precision; level 2 act automatically, set up but off, 0 actions, gated on 200 human decisions at precision 0.98 or better",
+              "title": "The trust ladder as it was left: level 0 suggest, on, 43 warnings at precision 1.00 on the 226-row answer key; level 1 draft, on, 27 drafts and no human decision, because no person ever used it; level 2 act automatically, set up but off, 0 actions, gated on 200 human decisions at precision 0.98 or better",
               "maxDecisions": 50,
               "rungs": [
                 {
@@ -16540,7 +16329,7 @@
                   "name": "Suggest",
                   "decisions": 43,
                   "decisionsLabel": "43 findings",
-                  "precision": 1.0,
+                  "precision": 1,
                   "precisionLabel": "1.00 (n = 226)",
                   "enabled": true
                 },
@@ -16548,7 +16337,7 @@
                   "level": "L1",
                   "name": "Draft",
                   "decisions": 27,
-                  "decisionsLabel": "27 drafts, 0 decided",
+                  "decisionsLabel": "27 drafts, none decided",
                   "precision": null,
                   "precisionLabel": "n = 0",
                   "enabled": true,
@@ -16566,35 +16355,33 @@
                 }
               ]
             },
-            "caption": "Trust ladder, made-up books, worked out on this visit. Level 0 (the watcher suggests) is earned on the answer key only; level 1 (the watcher drafts, a person approves) is where the demo lives; level 2 (the watcher acts on small, reversible things) stays set up and off until two hundred human decisions say the exact tie-out watcher under $500 deserves it, and every automatic action would be one reversible audit entry. The first scorecard run read 0.34 precision, most of it real warnings the answer key had not recorded, which is the more useful number to remember."
+            "caption": "Trust ladder, made-up books, worked out on this visit. Level 0 (the watcher suggests) is earned on the answer key only; level 1 (the watcher drafts, a person approves) is where the build stopped; level 2 (the watcher acts on small, reversible things) stays set up and off, because the two hundred human decisions that would open it were never collected. The first scorecard run read 0.34 precision, most of it real warnings the answer key had not recorded, which is the more useful number to remember."
+          },
+          {
+            "kind": "para",
+            "text": "The stops were agreed before build with the finance lead who would have run the trial: any action taken by a watcher, any warning shown without a proof row, any write reaching the Ops Desk or the Patents ledger, any screen revealing one person's pay. None was ever tested against a real month."
+          },
+          {
+            "kind": "para",
+            "text": "The lesson is about sequence: proving the way of working on our own data produced a convincing demo and no user. The read-only trial should have been the first milestone, not the next one."
           },
           {
             "kind": "definition",
             "lead": "How we counted.",
-            "text": "A hidden problem counts as found when a warning of its type names its row; a look-alike counts as wrongly flagged when any warning of that type names it. Precision is the share of warnings that were real; recall is the share of real problems found. Agreement would count a person's accept or dismiss in the audit log, and there are none."
+            "text": "A hidden problem counts as found when a warning of its type names its row; a look-alike counts as wrongly flagged when any warning of that type names it. Precision is the share of warnings that were real; recall is the share of real problems found."
           },
           {
             "kind": "config",
-            "text": "Demo configuration — a Finance section inside the Wiki (Next.js 16, React 19, Tailwind 4), nine routes and a mock API · one deterministic seed (mulberry32, seed 20260925, clock 21 Aug 2026), fingerprint pinned by test · two read-only adapters over the Patents ledger and the Ops Desk export (SHA recorded) · eleven rule functions, a three-pass matcher, five watchers under one contract, ask the books as deterministic retrieval · FNV-1a hash-chained audit log · vitest, 50 tests · no model, no network call, no database, no writes"
+            "text": "Build configuration — a Finance section inside the Wiki (Next.js 16, React 19, Tailwind 4), nine routes and a mock API · one deterministic seed (mulberry32, seed 20260925, clock 21 Aug 2026), fingerprint pinned by test · two read-only adapters over the Patents ledger and the Ops Desk export (SHA recorded) · eleven rule functions, a three-pass matcher, five watchers under one contract, ask the books as deterministic retrieval · FNV-1a hash-chained audit log · vitest, 50 tests · no model, no network call, no database, no writes"
           }
         ]
       },
       {
-        "num": "09",
-        "heading": "What would make me stop",
-        "body": [
-          "Written before the first rule and agreed before build with the finance lead who will run the trial, each a stop, not a discussion.",
-          "Any action taken by a watcher stops the trial the same day. A warning shown without a proof row stops the watcher that raised it. Any write reaching the Ops Desk or the Patents ledger stops the readers. Any screen that reveals one person's pay stops the payroll feed.",
-          "Two softer stops: a rule under 90 percent precision in the first real month becomes advice only; the finance lead not opening the queue two weeks running ends the trial."
-        ]
-      },
-      {
-        "num": "10",
+        "num": "06",
         "heading": "What I'd do differently",
         "body": [
           "I wrote the answer key as one problem per row and paid with a first scorecard of 0.34 precision; most of the false alarms were real.",
-          "I gave the books their own clock before reading the two they inherit.",
-          "I shipped the round-number rule as a warning and every large legitimate purchase came back."
+          "I would have asked for the trial’s slot before writing the first rule; a build with no scheduled user is the first thing a priority shift removes."
         ]
       }
     ]
