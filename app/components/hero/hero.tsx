@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { merryWeather } from '../../fonts';
 import { LINKEDIN_URL, X_URL } from '../../lib/social';
 import { AtSignIcon } from '../layouts/icons/at-sign-icon';
-import { GithubIcon } from '../layouts/icons/github-icon';
 import { LinkedinIcon } from '../layouts/icons/linkedin-icon';
 import { XIcon } from '../layouts/icons/x-icon';
 import Magnetic from '../Magnetic';
@@ -53,17 +52,6 @@ export default function Hero() {
 											data-skip-splash-cursor
 										>
 											<LinkedinIcon className='h-9 w-9' />
-										</Link>
-									</Magnetic>
-									<Magnetic strength={25}>
-										<Link
-											href='https://github.com/PushpalDas'
-											target='_blank'
-											rel='noreferrer'
-											aria-label='github'
-											data-skip-splash-cursor
-										>
-											<GithubIcon className='h-9 w-9' />
 										</Link>
 									</Magnetic>
 									<Magnetic strength={25}>
