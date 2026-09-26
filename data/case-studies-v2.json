@@ -16076,7 +16076,7 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The obvious answer was an AP automation product, and two were priced. I argued for a quarter proving the operating model on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the ledger between them, and the rule that an agent may find and draft but never act."
+          "The obvious answer was an AP automation product. I argued for a quarter proving the operating model on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the ledger between them, and the rule that an agent may find and draft but never act."
         ],
         "blocks": [
           {
@@ -16120,14 +16120,14 @@
           }
         ],
         "after": [
-          "Under two hundred invoices a month this is a ledger and five rule sets; past a thousand, the accounting system is the ledger and this is its review layer."
+          "Under two hundred invoices a month this is a ledger and five rule sets; past a thousand, the accounting system is the ledger and this reviews it."
         ]
       },
       {
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the two surfaces that existed the way an auditor would — 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments — coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
+          "I read the two surfaces that existed the way an auditor would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
           "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, an award spreadsheet, and bank details by email."
         ],
         "blocks": [
@@ -16221,7 +16221,7 @@
           }
         ],
         "after": [
-          "Nobody asked for a faster close. The controller wanted to know where any number came from, and that nothing had paid itself."
+          "The controller wanted to know where any number came from, and that nothing had paid itself."
         ]
       },
       {
@@ -16279,7 +16279,7 @@
           },
           {
             "kind": "para",
-            "text": "The hardest cut was the model. It could write every finding in better prose and might raise ones the rules miss; but a rule's attribution is a weight a controller can disagree with, and the first month of a pilot is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
+            "text": "The hardest cut was the model. It could write every finding and might raise ones the rules miss; but a rule's attribution is a weight a controller can disagree with, and the first month of a pilot is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
           },
           {
             "kind": "doc",
@@ -16311,7 +16311,7 @@
         "num": "05",
         "heading": "How I got it agreed",
         "body": [
-          "The two surfaces Finance reads had one condition each, pulling against each other: the patent programme never computes a statutory date, only mirrors one; the Ops Desk's totals are its own and its clock is 21 August. Finance wanted one clock and one set of books, and the first render broke both promises — September approvals in the audit log, shipments posted after Finance's own today.",
+          "The two surfaces Finance reads had one condition each, pulling against each other: the patent programme never computes a statutory date, only mirrors one; the Ops Desk's totals are its own and its clock is 21 August. Finance wanted one clock and one set of books, and the first render broke both promises: September approvals in the audit log, shipments posted after Finance's own today.",
           "I proposed that Finance take the desk's clock, generate nothing after it, and carry every Patents date as a stored, labelled mirror. The patent programme owner agreed and added a condition: the two unallocated charges stay in their holding account, never defaulted into a matter. The price was re-pinning the seed twice, and one test per source that a cent cannot pass."
         ]
       },
@@ -16319,7 +16319,7 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A Finance section inside the Wiki, after Patents: one seed builds the ledger, two adapters carry Patents and Ops unchanged, nine screens compute what they show on each request, five agents return findings and drafts, ask-your-ledger answers from cited rows or refuses, and an audit log chains every event."
+          "A Finance section inside the Wiki: one seed builds the ledger, two adapters carry Patents and Ops unchanged, nine screens compute what they show on each request, five agents return findings and drafts, and ask-your-ledger answers from cited rows or refuses."
         ],
         "blocks": [
           {
@@ -16575,7 +16575,7 @@
         "num": "09",
         "heading": "What would make me stop",
         "body": [
-          "Written before the first rule and agreed before build with the controller who will run the pilot, each a stop rather than a discussion.",
+          "Written before the first rule and agreed with the controller who will run the pilot, each a stop rather than a discussion.",
           "Any action taken by an agent stops the pilot the same day. A finding shown without an evidence row stops the agent that raised it. Any write reaching the Ops Desk or the Patents ledger stops the adapters. Any screen from which one person's pay can be derived stops the payroll feed.",
           "Two softer stops: precision under 0.90 on a rule in the first real month retires it to advisory; the controller not opening the queue two weeks running ends the pilot."
         ]
@@ -16586,7 +16586,7 @@
         "body": [
           "I labelled the seed one anomaly per row and paid with an eval that read 0.34 precision on its first run; most of the false positives were true.",
           "I gave the seed its own clock before reading the two it inherits.",
-          "I shipped the round-number rule as a finding and every large legitimate purchase came back. A weak signal needs a partner."
+          "I shipped the round-number rule as a finding and every large legitimate purchase came back; a weak signal needs a partner."
         ]
       }
     ]
