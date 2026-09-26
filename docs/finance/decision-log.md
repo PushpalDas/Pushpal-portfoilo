@@ -103,3 +103,5 @@
 **Context.** Every other AI-track card carries a generated cover; none exists for Finance.
 **Decision.** The card uses the overview capture (`ixana-finance-overview.jpg`) so the checker passes and the card is honest; a cover prompt is written in `changes/finance-orchestrator-image-prompt.md` in the portfolio's usual pattern for when one is generated.
 **Consequences.** Swap one filename in `constants.ts` when the cover exists.
+
+**D-20, amended 2026-09-26.** Pushpal supplied the cover (`Gemini_Generated_Image_r4xu8br4xu8br4xu.png`, already in `public/static/images/project/`); the card uses it and the overview capture stays as the evidence image and the §06 shot's neighbour.
