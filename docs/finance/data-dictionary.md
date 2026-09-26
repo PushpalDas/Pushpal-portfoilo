@@ -52,7 +52,7 @@
 | `read_only` | `boolean` |  |
 | `can` | `ApprovalKind[]` | What the persona may do. Segregation of duties is enforced on top of this. |
 
-**Example:** `{"id":"yuki","name":"Yuki Tanaka","role":"controller","title":"Finance controller","department":"ga","read_only":false,"can":["approve-invoice","release-payment","approve-po","approve-capex","approve-reimbursement","accept-match","approve-reclass","release-fund","close-period","change-vendor-bank"]}`
+**Example:** `{"id":"yuki","name":"Yuki Tanaka","role":"controller","title":"Finance lead","department":"ga","read_only":false,"can":["approve-invoice","release-payment","approve-po","approve-capex","approve-reimbursement","accept-match","approve-reclass","release-fund","close-period","change-vendor-bank"]}`
 
 ## Entity
 

@@ -16009,14 +16009,14 @@
     "status": "development",
     "meta": {
       "role": "Product manager, sole builder of the demo",
-      "team": "1 finance controller (design partner, planned pilot), 1 AP specialist, 1 award programme manager, 1 platform administrator",
+      "team": "Finance lead, Founders-office associate, 1 full-stack engineer · External accountant (advisory) · Founders in the loop",
       "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
     },
     "confidentiality": "In development — every figure on this page is illustrative and computed from a synthetic ledger (seed 20260925), every name is invented, and payroll appears only as department × month aggregates with groups under three suppressed. The two money surfaces it reads, the patent programme and the Ops Desk, are carried unchanged and reconciled to the cent by test.",
-    "sampleNote": "BUILT: the seed, the two read-only adapters, nine screens, five agents, ask-your-ledger, the eval harness and 50 tests — all running in the linked demo. PLANNED: the read-only pilot on real exports, the controller and AP interviews, the acceptance measurement and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and results on the labelled set, each with its n. I'm glad to walk through the seed, the rules and the tests in a conversation.",
+    "sampleNote": "BUILT: the seed, the two read-only adapters, nine screens, five agents, ask-your-ledger, the eval harness and 50 tests — all running in the linked demo. PLANNED: the read-only pilot on real exports, the finance lead and AP interviews, the acceptance measurement and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and results on the labelled set, each with its n. I'm glad to walk through the seed, the rules and the tests in a conversation.",
     "evidence": [
       {
-        "label": "Open the working demo — nine screens over one synthetic ledger, as the controller, the AP specialist, the award PM or the auditor",
+        "label": "Open the working demo — nine screens over one synthetic ledger, as the finance lead, the Founders-office associate, the award PM or the external accountant",
         "url": "/demo/finance-desk"
       },
       {
@@ -16116,7 +16116,7 @@
                 }
               ]
             },
-            "caption": "Modelled, not measured: the business case's assumptions table, with the controller's own estimate of each task today and the share the desk's screens would carry. No hour on this chart has been observed; the planned pilot measures the left column before any claim is made about the right."
+            "caption": "Modelled, not measured: the business case's assumptions table, with the finance lead's own estimate of each task today and the share the desk's screens would carry. No hour on this chart has been observed; the planned pilot measures the left column before any claim is made about the right."
           }
         ],
         "after": [
@@ -16127,8 +16127,8 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the two surfaces that existed the way an auditor would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
-          "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, an award spreadsheet, and bank details by email."
+          "I read the two surfaces that existed the way an external accountant would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
+          "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, an award spreadsheet, bank details by email."
         ],
         "blocks": [
           {
@@ -16217,18 +16217,18 @@
                 }
               ]
             },
-            "caption": "Synthetic ledger, seed 20260925: twelve months, 2,029 lines, 313 invoices. The 47 anomalies and 179 hard negatives are planted by the seed and labelled in a file the agents never import; the harness alone joins the two. The shape is chosen, not observed — it is the shape a controller described as the year's worries."
+            "caption": "Synthetic ledger, seed 20260925: twelve months, 2,029 lines, 313 invoices. The 47 anomalies and 179 hard negatives are planted by the seed and labelled in a file the agents never import; the harness alone joins the two. The shape is chosen, not observed — it is the shape a finance lead described as the year's worries."
           }
         ],
         "after": [
-          "The controller wanted to know where any number came from, and that nothing had paid itself."
+          "The finance lead wanted to know where any number came from, and that nothing had paid itself."
         ]
       },
       {
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I own the contract the agents sign, the seed and its labels, and the integrity rules; most of the work was writing rules a controller can argue with."
+          "I own the contract the agents sign, the seed and its labels, and the integrity rules, with the founders in the loop as read-only personas; most of the work was writing rules a finance lead can argue with."
         ],
         "blocks": [
           {
@@ -16268,7 +16268,7 @@
             ],
             "deferred": [
               "PLANNED — the read-only pilot: nightly exports from the accounting system, the card feed, the processor and the payroll provider, replayed through the same adapters",
-              "PLANNED — interviews with the controller and the AP specialist, and the acceptance measurement from the audit trail",
+              "PLANNED — interviews with the finance lead and the Founders-office associate, and the acceptance measurement from the audit trail",
               "PLANNED — L2 auto-execute for exact bank matches under $500, promoted only after 200 human decisions at precision ≥ 0.98"
             ],
             "cut": [
@@ -16279,7 +16279,7 @@
           },
           {
             "kind": "para",
-            "text": "The hardest cut was the model. It could write every finding and might raise ones the rules miss; but a rule's attribution is a weight a controller can disagree with, and the first month of a pilot is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
+            "text": "The hardest cut was the model. It could write every finding and might raise ones the rules miss; but a rule's attribution is a weight a finance lead can disagree with, and the first month of a pilot is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
           },
           {
             "kind": "doc",
@@ -16332,7 +16332,7 @@
                 "text": "The $61,000 rush invoice mimics the genuine April packaging invoice, arrives a day after an unverified bank change and is a round amount with no PO. The first eval run scored it as three false positives; the labels were wrong, not the rules."
               },
               {
-                "lead": "Attributions are weights a controller can argue with.",
+                "lead": "Attributions are weights a finance lead can argue with.",
                 "text": "Unverified change 50 %, days to invoice 20 %, requested by email 15 %, rush 15 % — shares of one confidence, summing to one, each with the value that earned it."
               },
               {
@@ -16364,7 +16364,7 @@
               [
                 "Award R-01, restricted, with a period of performance and category budgets",
                 "Net assets with donor restrictions; a project with a budget, a period and allowability rules",
-                "Five rules judge every award line on each read; unallowable lines draft a reclass for the award PM and the Controller"
+                "Five rules judge every award line on each read; unallowable lines draft a reclass for the award PM and the Finance lead"
               ],
               [
                 "Indirect at 20 % on direct costs, never on equipment",
@@ -16389,10 +16389,10 @@
               {
                 "image": "/static/images/project/ixana-finance-ap-sod.jpg",
                 "label": "Refused: whoever keyed it cannot approve it.",
-                "caption": "Dana, the AP specialist, opens an invoice she entered and presses Approve; the check refuses before anything else runs, names the rule, and says who to ask instead. The decision is listed in the audit trail's format. This link opens the row as Dana with the approval already attempted.",
+                "caption": "Dana, the Founders-office associate who keys invoices, opens one she entered and presses Approve; the check refuses before anything else runs, names the rule, and says who to ask instead. The decision is listed in the audit trail's format. This link opens the row as Dana with the approval already attempted.",
                 "alt": "The AP drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
                 "href": "/demo/finance-desk/ap?as=dana&id=INV-0254&try=approve",
-                "hrefLabel": "Open the refusal as the AP specialist"
+                "hrefLabel": "Open the refusal as the Founders-office associate"
               },
               {
                 "image": "/static/images/project/ixana-finance-reconcile.jpg",
@@ -16405,7 +16405,7 @@
               {
                 "image": "/static/images/project/ixana-finance-funds.jpg",
                 "label": "The award's lines, judged by the award's own rules.",
-                "caption": "Award R-01 shown as the startup analog of restricted funds: budget by category, burn against the period of performance, and every line with the rule it passed or failed. An unallowable line offers a reclass that needs the award PM and the Controller. This link opens the unallowable lines.",
+                "caption": "Award R-01 shown as the startup analog of restricted funds: budget by category, burn against the period of performance, and every line with the rule it passed or failed. An unallowable line offers a reclass that needs the award PM and the Finance lead. This link opens the unallowable lines.",
                 "alt": "The funds screen for Award R-01 filtered to unallowable lines: a bar charge under rule R01-1 and a pre-award component invoice under R01-4, each with a Propose reclass button.",
                 "href": "/demo/finance-desk/funds?fund=award-r01&verdict=unallowable",
                 "hrefLabel": "Open the unallowable lines"
@@ -16429,7 +16429,7 @@
               {
                 "image": "/static/images/project/ixana-finance-audit.jpg",
                 "label": "1,556 events in one chain, verified in the browser.",
-                "caption": "Every posting, approval, refusal, bank change, period close and agent run, sequence-numbered and hash-chained. Verify recomputes every hash; Simulate a tamper edits one event and the chain breaks from that number on. The auditor persona can open all of it and change none of it. This link opens the log.",
+                "caption": "Every posting, approval, refusal, bank change, period close and agent run, sequence-numbered and hash-chained. Verify recomputes every hash; Simulate a tamper edits one event and the chain breaks from that number on. The external accountant persona can open all of it and change none of it. This link opens the log.",
                 "alt": "The audit screen: counts of events by kind, a Verify chain button reporting every hash links to the one before it, and a table of events with sequence, time, who, role, what and hash.",
                 "href": "/demo/finance-desk/audit",
                 "hrefLabel": "Open the audit log and verify it"
@@ -16454,7 +16454,7 @@
               [
                 "Rules vs a model",
                 "Eleven rule functions with visible weights",
-                "Recall stops at what a controller thought to write down; a novel pattern is found by nobody"
+                "Recall stops at what a finance lead thought to write down; a novel pattern is found by nobody"
               ],
               [
                 "Computed on request vs stored",
@@ -16469,7 +16469,7 @@
               [
                 "Refuse vs warn",
                 "Segregation of duties and unverified bank details refuse; a flagged invoice needs a written reason",
-                "A controller in a hurry cannot override in place; she must ask another approver"
+                "A finance lead in a hurry cannot override in place; she must ask another approver"
               ],
               [
                 "Deep links vs one URL",
@@ -16575,9 +16575,9 @@
         "num": "09",
         "heading": "What would make me stop",
         "body": [
-          "Written before the first rule and agreed before build with the controller who will run the pilot, each a stop rather than a discussion.",
+          "Written before the first rule and agreed before build with the finance lead who will run the pilot, each a stop rather than a discussion.",
           "Any action taken by an agent stops the pilot the same day. A finding shown without an evidence row stops the agent that raised it. Any write reaching the Ops Desk or the Patents ledger stops the adapters. Any screen from which one person's pay can be derived stops the payroll feed.",
-          "Two softer stops: precision under 0.90 on a rule in the first real month retires it to advisory; the controller not opening the queue two weeks running ends the pilot."
+          "Two softer stops: precision under 0.90 on a rule in the first real month retires it to advisory; the finance lead not opening the queue two weeks running ends the pilot."
         ]
       },
       {
@@ -16586,7 +16586,7 @@
         "body": [
           "I labelled the seed one anomaly per row and paid with an eval that read 0.34 precision on its first run; most of the false positives were true.",
           "I gave the seed its own clock before reading the two it inherits.",
-          "I shipped the round-number rule as a finding and every large legitimate purchase came back; a weak signal needs a partner."
+          "I shipped the round-number rule as a finding and every large legitimate purchase came back."
         ]
       }
     ]

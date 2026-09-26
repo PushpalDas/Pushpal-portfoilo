@@ -18,11 +18,11 @@ Anything about our real ledger. The rules were tuned on the seed they are scored
 
 ## The ask
 
-A read-only pilot: nightly exports from the accounting system, the card issuer, the processor and the payroll provider (aggregate only), replayed through the same adapters; the controller labels one month; the AP specialist works the queue for four weeks. No write path anywhere. Cost: about six engineer-weeks and six hours of the controller's time.
+A read-only pilot: nightly exports from the accounting system, the card issuer, the processor and the payroll provider (aggregate only), replayed through the same adapters; the finance lead labels one month; the Founders-office associate works the queue for four weeks. No write path anywhere. Cost: about six engineer-weeks and six hours of the finance lead's time.
 
 ## What would stop it
 
-Written before the first rule: any action taken by an agent, a finding shown without evidence, any write reaching Ops or Patents, any screen from which one person's pay can be read, precision under 0.90 on a rule in the real month, or the controller not opening the queue two weeks running.
+Written before the first rule: any action taken by an agent, a finding shown without evidence, any write reaching Ops or Patents, any screen from which one person's pay can be read, precision under 0.90 on a rule in the real month, or the finance lead not opening the queue two weeks running.
 
 ## What I would do with a yes
 

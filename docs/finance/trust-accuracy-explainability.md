@@ -1,6 +1,6 @@
 # Trust, accuracy and explainability
 
-**Audience:** the controller, the auditor, and anyone deciding whether an agent's finding can be relied on. **Purpose:** what the agents may and may not do, how their accuracy is measured and shown, and how a finding explains itself. Written as commitments, each with the place it is enforced. Every figure is illustrative and from the synthetic ledger (seed 20260925).
+**Audience:** the finance lead, the external accountant, and anyone deciding whether an agent's finding can be relied on. **Purpose:** what the agents may and may not do, how their accuracy is measured and shown, and how a finding explains itself. Written as commitments, each with the place it is enforced. Every figure is illustrative and from the synthetic ledger (seed 20260925).
 
 ## 1. What AI is not used for
 
@@ -43,7 +43,7 @@ Auto-executed so far: 0. Acceptance so far: n = 0, because no person has decided
 
 ## 5. Explainability — how a finding explains itself
 
-- **Attributions** are shares of the confidence, one per feature, summing to one, each with the value that earned it: *unverified change 50 % — no call-back on the 20 Apr change; days to invoice 20 % — 1 day; requested via 15 % — email; rush 15 %.* A controller can disagree at the weight.
+- **Attributions** are shares of the confidence, one per feature, summing to one, each with the value that earned it: *unverified change 50 % — no call-back on the 20 Apr change; days to invoice 20 % — 1 day; requested via 15 % — email; rush 15 %.* A finance lead can disagree at the weight.
 - **Evidence chips** open the rows: the invoice, the original it duplicates, the vendor's bank history, the purchase orders, the ledger line, the bank line.
 - **The rule** is printed in words under the attributions and in the engineering spec as a predicate.
 - **The recommended action and the approver role** are on the card, so the next step is never "ask the agent".
@@ -69,4 +69,4 @@ Auto-executed so far: 0. Acceptance so far: n = 0, because no person has decided
 
 ## 7. What is not covered
 
-A model is not in the system, so there is no prompt, no hallucination path and no drift to monitor — and no recall beyond what a controller thought to write as a rule. When a model is added at the edge (roadmap, later), every model output will be held to the same contract: cite rows or be dropped.
+A model is not in the system, so there is no prompt, no hallucination path and no drift to monitor — and no recall beyond what a finance lead thought to write as a rule. When a model is added at the edge (roadmap, later), every model output will be held to the same contract: cite rows or be dropped.

@@ -4,7 +4,7 @@
 
 ## 1. What is being valued
 
-Three things, in the order a controller would rank them:
+Three things, in the order a finance lead would rank them:
 
 1. **Money that does not leave wrongly.** A duplicate paid, a payment to a changed bank account, a bar charge on the award that the sponsor disallows at audit.
 2. **Hours in the monthly close** that are reconciliation, review and evidence-gathering rather than judgement.
@@ -18,10 +18,10 @@ Only the second is modelled below in hours; the first is modelled as exposure, n
 |---|---|---|---|---|
 | A1 | Invoices per month | 26 (313 over twelve months in the seed) | synthetic ledger | the accounting export says otherwise |
 | A2 | Bank lines per month | 31 (371 / 12) | synthetic ledger | — |
-| A3 | Controller's fully loaded hour | $95 | placeholder, to be replaced by finance | — |
-| A4 | AP specialist's fully loaded hour | $55 | placeholder | — |
-| A5 | Hours per close today, by task | see §3, the controller's own estimate | interview, PLANNED — placeholder until then | the pilot's measurement differs |
-| A6 | Share of each task the desk carries | see §3 | the demo's screens, judged by what they compute | the controller disagrees on any row |
+| A3 | Finance lead's fully loaded hour | $95 | placeholder, to be replaced by finance | — |
+| A4 | Founders-office associate's fully loaded hour | $55 | placeholder | — |
+| A5 | Hours per close today, by task | see §3, the finance lead's own estimate | interview, PLANNED — placeholder until then | the pilot's measurement differs |
+| A6 | Share of each task the desk carries | see §3 | the demo's screens, judged by what they compute | the finance lead disagrees on any row |
 | A7 | Duplicate exposure | 0.5 % of invoice value paid twice per year, half recovered | industry pattern, unverified here | the first labelled month finds a different rate |
 | A8 | Bank-change fraud exposure | one attempt per two years at the median rush invoice ($18,500 in the seed) | pattern, unverified | — |
 | A9 | Award disallowance exposure | 2 unallowable lines of 31 in the seed ($3,336) | synthetic ledger | the sponsor's audit history |
@@ -30,7 +30,7 @@ Only the second is modelled below in hours; the first is modelled as exposure, n
 
 ## 3. Hours per close — modelled
 
-| Task | Today (A5, controller's estimate) | With the desk (A6) | Modelled saving | What the desk actually does for the task |
+| Task | Today (A5, finance lead's estimate) | With the desk (A6) | Modelled saving | What the desk actually does for the task |
 |---|---:|---:|---:|---|
 | Bank reconciliation | 14 h | 6 h | 8 h | Three passes propose; a person decides suggestions and works exceptions |
 | AP review | 10 h | 5 h | 5 h | Findings on the row with evidence; the reviewer reads the drawer, not the mailbox |
@@ -58,15 +58,15 @@ The desk does not "save" this; it makes each of the three a refusal or a finding
 |---|---:|
 | Build to pilot (A10) | 6 engineer-weeks |
 | Run (A11) | $0 incremental |
-| Controller's time to label one month | ≈ 6 h, once |
-| AP specialist's time in the pilot | inside the AP review hours above |
+| Finance lead's time to label one month | ≈ 6 h, once |
+| Founders-office associate's time in the pilot | inside the AP review hours above |
 
 ## 6. Sensitivity — the three assumptions that decide it
 
-- **A5 / A6 (hours).** If the controller's real close is 30 h rather than 46, the modelled saving halves. Measure before quoting.
+- **A5 / A6 (hours).** If the finance lead's real close is 30 h rather than 46, the modelled saving halves. Measure before quoting.
 - **A7 (duplicate rate).** At 0.1 % the duplicate exposure is ≈ $2,400; at 1 % it is ≈ $24,000. The first labelled month gives the real rate with an n.
 - **A10 (build).** Adapters for real exports are where estimates go wrong; the two adapters that exist took the shape of their sources, and the four planned ones will too.
 
 ## 7. What would make this case wrong
 
-A close that is mostly judgement rather than reconciliation (the hours model collapses); an accounting system that already refuses duplicates and unverified bank changes at entry (the exposure model collapses); or a pilot in which the controller does not open the queue (the whole case collapses, and the roadmap says so).
+A close that is mostly judgement rather than reconciliation (the hours model collapses); an accounting system that already refuses duplicates and unverified bank changes at entry (the exposure model collapses); or a pilot in which the finance lead does not open the queue (the whole case collapses, and the roadmap says so).

@@ -17,7 +17,7 @@ A finance team of one controller and one or two AP people at a company between f
 | AP automation suites | Capture, coding, approval routing, payment execution | This never executes a payment and never codes a line; it reads the AP export and raises findings on it. The suites' value is in *doing*; this one's is in *reading with evidence* |
 | Close management tools | Task lists, owners, due dates, sign-off | Status here is computed from the rows, never stored; a task is done because the ledger says so, not because someone ticked it |
 | Spend-analytics dashboards | Charts over spend | Every chart here opens its rows and names its rule; the dashboards' numbers are typed into a model once |
-| Fraud and anomaly detection services | Models trained across many customers | Eleven rules a controller can read and argue with at the weight; a model is deliberately at the edge, later, and never in the critical path |
+| Fraud and anomaly detection services | Models trained across many customers | Eleven rules a finance lead can read and argue with at the weight; a model is deliberately at the edge, later, and never in the critical path |
 | Fund-accounting systems (nonprofit) | Restricted funds, allowability, sponsor reporting | This borrows the model — funds, periods of performance, category budgets, rules — for a startup award, and maps to it (see the mapping note) rather than replacing it |
 
 ## What is genuinely different, and what is not
@@ -28,7 +28,7 @@ A finance team of one controller and one or two AP people at a company between f
 
 ## What it would need to be a product
 
-Adapters for the common accounting exports; a labelled-month onboarding that gives every customer their own precision per rule with n before any finding is shown; a customer-visible eval page; and the trust ladder's promotion evidence exportable to an auditor. None of that is built.
+Adapters for the common accounting exports; a labelled-month onboarding that gives every customer their own precision per rule with n before any finding is shown; a customer-visible eval page; and the trust ladder's promotion evidence exportable to an external accountant. None of that is built.
 
 ## What it will never do, as a product or otherwise
 

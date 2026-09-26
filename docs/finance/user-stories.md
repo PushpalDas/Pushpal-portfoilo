@@ -1,6 +1,6 @@
 # User stories — AP Anomaly Agent and the Reconciliation workbench
 
-**Audience:** the engineer writing the tests and the controller accepting them. **Purpose:** Given / When / Then for the two surfaces a pilot lives or dies on. Each story names its test where one exists in `tests/finance/`; a story marked *pilot* is accepted on the read-only pilot, not on the synthetic ledger. Every id below is from the synthetic ledger (seed 20260925).
+**Audience:** the engineer writing the tests and the finance lead accepting them. **Purpose:** Given / When / Then for the two surfaces a pilot lives or dies on. Each story names its test where one exists in `tests/finance/`; a story marked *pilot* is accepted on the read-only pilot, not on the synthetic ledger. Every id below is from the synthetic ledger (seed 20260925).
 
 ## A. AP Anomaly Agent
 
@@ -14,7 +14,7 @@ Given rent invoiced at the same amount every month with a different invoice numb
 Given an invoice re-sent a week later with `-R` appended, the same amount · When the agent runs · Then a *duplicate-fuzzy* finding names the re-issue, with attributions for amount, days apart and invoice number that sum to one. *Test:* `duplicate-fuzzy …`, `every finding cites … attributions that sum to one`.
 
 **A4 — An unverified bank change before an invoice is raised, high, and the payment is refused.**
-Given a vendor whose bank details changed by email the day before its invoice, with no call-back recorded · When the agent runs and the controller tries to release the payment · Then a *bank-detail-change* finding at high severity names the invoice and cites the vendor, and the release is refused with the reason and the call-back to make. *Tests:* `bank-detail-change …`, `refuses … payment to unverified bank details`.
+Given a vendor whose bank details changed by email the day before its invoice, with no call-back recorded · When the agent runs and the finance lead tries to release the payment · Then a *bank-detail-change* finding at high severity names the invoice and cites the vendor, and the release is refused with the reason and the call-back to make. *Tests:* `bank-detail-change …`, `refuses … payment to unverified bank details`.
 
 **A5 — A verified change weeks earlier is not raised.**
 Given a vendor whose change was verified by phone six weeks before its next invoice · When the agent runs · Then no finding. *Test:* the hard negatives of `bank-detail-change`.
@@ -38,10 +38,10 @@ Given the dataset · When the agent runs · Then the ledger hash before equals t
 Given a finding with an empty evidence list · When results are finalised · Then it is dropped and the drop is counted on the Agents screen. *Test:* `drops a finding that cannot cite a row`.
 
 **A12 — The queue shows the findings on the row, and a flagged row needs a written reason.**
-Given an invoice with a finding · When the AP specialist opens it and presses Approve with no reason · Then the approval is refused for want of a reason of at least twelve characters; given the same invoice entered by her · Then it is refused under segregation of duties whatever she writes. *Tests:* `refuses the person who entered the invoice`; the reason rule is exercised in the demo.
+Given an invoice with a finding · When the Founders-office associate opens it and presses Approve with no reason · Then the approval is refused for want of a reason of at least twelve characters; given the same invoice entered by her · Then it is refused under segregation of duties whatever she writes. *Tests:* `refuses the person who entered the invoice`; the reason rule is exercised in the demo.
 
-**A13 (pilot) — The controller can retire a rule.**
-Given a rule under 0.90 precision on the first labelled real month · When the controller sets it to advisory · Then its findings still appear in the drawer but not in the queue count, and the change is an audit event.
+**A13 (pilot) — The finance lead can retire a rule.**
+Given a rule under 0.90 precision on the first labelled real month · When the finance lead sets it to advisory · Then its findings still appear in the drawer but not in the queue count, and the change is an audit event.
 
 ## B. Reconciliation workbench
 
@@ -61,7 +61,7 @@ Given a bank line whose amount matches two unpaid invoices from the same counter
 Given a bank line with no reference, no known counterparty and no amount that matches · Then the line is an exception with the sentence that says which pass failed, and the Reconciliation Agent raises a finding citing the line.
 
 **B6 — A read-only persona cannot accept a match.**
-Given the auditor persona · When they press Accept on a suggestion · Then the action is refused with the role named. *Test:* `a read-only persona can change nothing`.
+Given the external accountant persona · When they press Accept on a suggestion · Then the action is refused with the role named. *Test:* `a read-only persona can change nothing`.
 
 **B7 — A payout ties out or it does not.**
 Given a Stripe payout · When the workbench recomputes charges − fees − refunds ± adjustments from the balance transactions · Then it agrees with the payout amount and with the bank line carrying the payout id, or the payout is an exception. *Test:* `reconciles every Stripe payout …` (seed), demo 29 of 29.
@@ -70,7 +70,7 @@ Given a Stripe payout · When the workbench recomputes charges − fees − refu
 Given a card transaction posted from the feed with no receipt attached · Then it is shown as suggested with the holder asked before the close, and it is not an exception.
 
 **B9 — Accepting a suggestion is an audit event.**
-Given a suggested match · When the AP specialist accepts it · Then the decision is listed in the audit trail's format with who, what, and the confidence and rule that proposed it.
+Given a suggested match · When the Founders-office associate accepts it · Then the decision is listed in the audit trail's format with who, what, and the confidence and rule that proposed it.
 
 **B10 (pilot) — L2 stays off until it is earned.**
 Given the trust configuration · When 200 human decisions on exact-reference matches under $500 are recorded at precision ≥ 0.98 · Then and only then may L2 be enabled, and every auto action is reversible in one click with an audit event. *Test:* `L2 is off`.

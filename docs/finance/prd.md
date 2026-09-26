@@ -1,23 +1,23 @@
 # Product requirements — Finance orchestrator
 
-**Audience:** the engineer who will take the demo to a read-only pilot, and the controller who will run it. **Purpose:** what the product must do, for whom, and what it must never do — precise enough to test against. **Status:** in development; every figure in this document is illustrative and computed from a synthetic ledger (seed 20260925). Decisions are logged in `decision-log.md`; the engineering detail is in `engineering-spec.md`.
+**Audience:** the engineer who will take the demo to a read-only pilot, and the finance lead who will run it. **Purpose:** what the product must do, for whom, and what it must never do — precise enough to test against. **Status:** in development; every figure in this document is illustrative and computed from a synthetic ledger (seed 20260925). Decisions are logged in `decision-log.md`; the engineering detail is in `engineering-spec.md`.
 
 ## 1. The problem
 
 A hundred-person chip company has two honest money surfaces — the patent programme's ledger, where every counsel dollar names its matter, and the Ops Desk, where every request has an owner and a ceiling — and no third surface that reads them. Payroll, accounts payable, corporate cards, the web store and one restricted award live in five exports. Nobody can answer, for an arbitrary number, *where did this come from*, and nobody is sure nothing has paid itself.
 
-The controller's words for the job: **"I want to be able to point at any number and see the rows, and I want to know that nothing moved unless a person moved it."**
+The finance lead's words for the job: **"I want to be able to point at any number and see the rows, and I want to know that nothing moved unless a person moved it."**
 
 ## 2. Who it is for
 
 | Persona | Role | What they need | What they may do |
 |---|---|---|---|
-| Yuki (controller) | Owns the books and the close | Every number with provenance; a close that reads from the rows; refusals that hold | Approve and release, accept matches, approve reclasses, close a period |
-| Dana (AP specialist) | Enters and pays invoices | A queue with the agent's findings on the row; a drawer that shows the evidence | Approve invoices she did not enter; accept matches; change vendor bank details (verified) |
+| Yuki (finance lead) | Owns the books and the close, with the founders in the loop | Every number with provenance; a close that reads from the rows; refusals that hold | Approve and release, accept matches, approve reclasses, close a period |
+| Dana (Founders-office associate) | Keys invoices and works the AP queue | A queue with the agent's findings on the row; a drawer that shows the evidence | Approve invoices she did not enter; accept matches; change vendor bank details (verified) |
 | Priya (department head) | Spends a budget | Her department against the phased budget; POs and reimbursements to approve | Approve POs and reimbursements |
-| Leila (award PM) | Runs the restricted award | Every award line judged by the award's rules; reclass proposals to approve with the controller | Approve reclasses; release restricted funds (with the controller) |
-| Founder / CEO | Reads | Runway, burn, the open flags | Nothing — read-only |
-| External auditor | Verifies | The audit chain and the rows behind any figure | Nothing — read-only |
+| Leila (award PM) | Runs the restricted award | Every award line judged by the award's rules; reclass proposals to approve with the finance lead | Approve reclasses; release restricted funds (with the finance lead) |
+| Founders (in the loop) | Read | Runway, burn, the open flags | Nothing — read-only |
+| External accountant (advisory) | Verifies | The audit chain and the rows behind any figure | Nothing — read-only |
 
 ## 3. Goals
 
@@ -62,7 +62,7 @@ Releasing payments · changing vendor bank details · closing periods · releasi
 - **FR-7** Every agent returns `Finding[]` and `Draft[]` under `agents/contract.ts`. A finding without an evidence row is dropped before return and the drop is counted. Every run records the ledger hash before and after; they must be equal.
 - **FR-8** The AP Anomaly Agent implements eleven rules (see the spec) with per-feature attributions that sum to one; each rule has a unit test that plants the pattern and a hard negative.
 - **FR-9** The Reconciliation Agent proposes matches in three passes; it never proposes a match whose amount disagrees to the cent, and the count of such rejections is on screen and asserted zero.
-- **FR-10** The Compliance Agent judges every award line under the award's rules and drafts a reclass for each unallowable line, requiring the award PM and the controller.
+- **FR-10** The Compliance Agent judges every award line under the award's rules and drafts a reclass for each unallowable line, requiring the award PM and the finance lead.
 - **FR-11** The Close Agent computes the checklist and drafts received-not-invoiced accruals; it never closes a period.
 - **FR-12** The Health Agent scores vendors, departments and the chart of accounts with visible weights; it never ranks a person.
 - **FR-13** Ask-your-ledger answers only from cited rows and refuses individual pay and statutory dates with no rows attached.
@@ -83,11 +83,11 @@ Strict TypeScript, no `any` · WCAG 2.2 AA (keyboard reachable, Escape closes dr
 
 | Measure | How counted | Threshold agreed before build |
 |---|---|---|
-| Precision per rule on the first real month | A controller labels the month; the harness scores | ≥ 0.90 per rule, or the rule retires to advisory |
+| Precision per rule on the first real month | A finance lead labels the month; the harness scores | ≥ 0.90 per rule, or the rule retires to advisory |
 | Findings without evidence reaching a screen | Count from the dropped-uncitable counter | 0 |
 | Actions taken by an agent | Count from the audit trail (role = agent, what ≠ run) | 0 — any breach stops the pilot |
 | Wrong-amount matches proposed | Reconciliation summary | 0 |
-| Controller opens the queue | Audit trail | Every week; two missed weeks end the pilot |
+| Finance lead opens the queue | Audit trail | Every week; two missed weeks end the pilot |
 
 On the synthetic ledger today: 47 of 47 planted anomalies raised, 0 of 179 hard negatives, 0 wrong-amount matches, 5 of 5 runs with the hash unchanged, acceptance n = 0.
 
@@ -95,4 +95,4 @@ On the synthetic ledger today: 47 of 47 planted anomalies raised, 0 of 179 hard 
 
 1. Which export formats the accounting system, the card issuer and the payroll provider can hand over read-only (D-19, pending).
 2. Whether the award's sponsor requires a specific allowability rule set beyond the five modelled.
-3. Whether the Wiki's demo sign-in is enough for the pilot's auditor persona, or a separate read-only credential is needed.
+3. Whether the Wiki's demo sign-in is enough for the pilot's external accountant persona, or a separate read-only credential is needed.
