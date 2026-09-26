@@ -13,12 +13,12 @@ import WorkHeader from './work-header';
 const FILTER_KEYS: FilterKey[] = filters.map((f) => f.key);
 
 /**
- * The pill /work opens on when the URL names none. Silicon & systems, at
- * the author's request (2026-09-10) — the page leads with the silicon
- * work rather than the whole catalogue. All is one pill away and keeps
- * its own URL, ?filter=all.
+ * The pill /work opens on when the URL names none. AI programs & platforms,
+ * at the author's request (2026-09-26; Silicon & systems before that) — the
+ * page leads with the AI work, the same order the home page's Selected work
+ * follows. All is one pill away and keeps its own URL, ?filter=all.
  */
-const DEFAULT_FILTER: FilterKey = 'silicon';
+const DEFAULT_FILTER: FilterKey = 'ai';
 
 const isFilterKey = (value: string | null): value is FilterKey =>
 	FILTER_KEYS.includes(value as FilterKey);

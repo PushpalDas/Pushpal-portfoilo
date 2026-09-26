@@ -458,7 +458,7 @@
     "deck": "Turned two pieces of evaluation silicon into a kit a partner engineer can unbox and get an on-body link running the same day.",
     "status": "production",
     "meta": {
-      "role": "Product manager, dev kit program",
+      "role": "Program manager, dev kit program",
       "team": "3 hardware engineers, 1 firmware engineer, 1 applications engineer",
       "stage": "Shipping, sold through the product page"
     },
@@ -484,7 +484,7 @@
       },
       {
         "lead": "What I did.",
-        "text": "I owned the dev kit program across both Wi-R families, defining the kit as the smallest object that produces a working link on day one, sequencing BAN before NFE, and trading configurability away for a fixed electrode geometry a partner could not get wrong."
+        "text": "I ran the dev kit program across both Wi-R families, defining the kit as the smallest object that produces a working link on day one, sequencing BAN before NFE, and trading configurability away for a fixed electrode geometry a partner could not get wrong."
       },
       {
         "lead": "Result.",
@@ -622,7 +622,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I owned the kit as a product: what went in the box, what the first hour had to prove, which silicon shipped first, and what we would refuse to make configurable. I ran the program across hardware, firmware and applications engineering, and owned the boundary with sales on what a kit was allowed to promise."
+          "I ran the kit program end to end: what went in the box, what the first hour had to prove, which silicon shipped first, and what we would refuse to make configurable. I ran the program across hardware, firmware and applications engineering, and held the boundary with sales on what a kit was allowed to promise."
         ],
         "blocks": [
           {
@@ -6782,7 +6782,7 @@
     "deck": "The first Wi-R body-area part a partner could design in rather than admire — 0.12 nJ/bit at 5 Mbit/s, the silicon under the shipping dev kit and both published reference designs.",
     "status": "production",
     "meta": {
-      "role": "Owner of first-silicon scope and launch gates — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) — first-silicon scope and launch gates",
       "team": "5 functions across 2 sites — RTL, analog/mixed-signal and physical design in India; hardware and firmware in the US",
       "stage": "In production — the part under the BAN dev kit and every on-body reference design since"
     },
@@ -7206,7 +7206,7 @@
     "deck": "The second product line: a touch-range electric-field link at 5 Mbit/s under a milliwatt, sold against NFC rather than against Bluetooth.",
     "status": "production",
     "meta": {
-      "role": "Owner of second-line delivery against one validation pool — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) — second line delivered against one validation pool",
       "team": "The same 5 functions across 2 sites as the BAN program, running both lines concurrently",
       "stage": "In production"
     },
@@ -7648,7 +7648,7 @@
     "deck": "Two complete designs an OEM can copy, built to kill the objection that stalls every silicon evaluation: great chip, no path to a product.",
     "status": "production",
     "meta": {
-      "role": "Owner of what “done” meant for a copyable design — program manager, reference design delivery (HW/FW US · applications and validation across both sites)",
+      "role": "Program manager, reference design delivery (HW/FW US · applications and validation across both sites) — held what “done” meant for a copyable design",
       "team": "The same 5 functions as the chip programs, plus 3 applications engineers carrying the live evaluations",
       "stage": "In production — design files released to evaluating teams"
     },
@@ -8089,7 +8089,7 @@
     "deck": "The second spin: four times the rate and a fifth of the latency, bought with a deliberate step backwards on energy per bit.",
     "status": "production",
     "meta": {
-      "role": "Product owner of the gen-2 definition — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) — ran the gen-2 change list",
       "team": "The same 5 functions across 2 sites as the YR23 program",
       "stage": "In production — the higher-rate part on the BAN line, alongside YR23"
     },
@@ -8107,7 +8107,7 @@
       },
       {
         "lead": "What I did.",
-        "text": "I owned the loop that decided what a second spin was for: routing field feedback, yield and test data from the YR23 lots into one ranked change list, and holding the line on what gen-2 would not attempt. The hard part was refusing changes."
+        "text": "I ran the loop that decided what a second spin was for: routing field feedback, yield and test data from the YR23 lots into one ranked change list, and holding the line on what gen-2 would not attempt. The hard part was refusing changes."
       },
       {
         "lead": "Result.",
@@ -8261,7 +8261,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "This is the clearest case on the line of a delivery lens doing product work. The founder owned whether a second BAN part should exist. I owned the loop that decided what it was for: routing field feedback, yield and ATE data from the YR23 lots into one ranked list, and defending the line under it.",
+          "This is the clearest case on the line of a delivery lens feeding product decisions. The founder owned whether a second BAN part should exist and what it was for. I ran the loop that fed that decision: routing field feedback, yield and ATE data from the YR23 lots into one ranked list, and defending the line under it.",
           "The routing was deliberate. Field issues, evaluation complaints and lot data arrived through three channels to three audiences, and nobody scored them against each other — so I ran them into one queue and made the ranking the artefact everyone argued about."
         ],
         "blocks": [
@@ -8525,7 +8525,7 @@
     "deck": "A gen-2 the pipeline asked for: 13.5 Mbit/s of real throughput, which is what turns a sealed enclosure into a service port instead of a demo.",
     "status": "production",
     "meta": {
-      "role": "Owner of the gen-2 specification review — program manager, silicon delivery (RTL/AMS/PS India · HW/FW US)",
+      "role": "Program manager, silicon delivery (RTL/AMS/PS India · HW/FW US) — ran the gen-2 specification review",
       "team": "The same 5 functions across 2 sites as the XA-NFE2001 programme",
       "stage": "In production — the higher-throughput part on the NFE line, alongside XA-NFE2001"
     },

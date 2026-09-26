@@ -31,6 +31,6 @@ export const HIGHLIGHTS_PER_TRACK = 6;
 export const METRICS_PER_CARD = 3;
 
 export const highlightGroups: HighlightGroup[] = [
-	{ track: 'silicon', more: { href: '/work?filter=silicon' } },
 	{ track: 'ai', more: { href: '/work?filter=ai' } },
+	{ track: 'silicon', more: { href: '/work?filter=silicon' } },
 ];
