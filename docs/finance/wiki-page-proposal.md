@@ -8,7 +8,7 @@
 
 **Current (excerpt):** "…check task and efficiency analytics, and track patent invoice records — from on…"
 
-**Proposed addition, appended to that sentence:** "…and, in development, read one ledger under payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise findings they can cite and never act (the Finance orchestrator, its own page)."
+**Proposed addition, appended to that sentence:** "…and, in development, read one ledger under payroll, AP, cards, the web store, the patent programme and the Ops Desk, with watchers that raise findings they can cite and never act (the Finance orchestrator, its own page)."
 
 **Why here and not a gallery tile:** the Wiki page's gallery is at its four-item cap and each tile carries a decision about retrieval; Finance is a chapter with its own page, and a sentence with a link is the honest weight for something in development.
 

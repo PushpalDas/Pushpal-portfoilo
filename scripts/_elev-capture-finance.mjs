@@ -20,28 +20,28 @@ const shots = [
 	['/finance', 'ixana-finance-overview.jpg', 'Spend, twelve months'],
 	// §06 shot — the packaging invoice with three findings on it, drawer open
 	[
-		'/finance/ap?id=INV-0236',
+		'/finance/bills?id=INV-0236',
 		'ixana-finance-ap-finding.jpg',
-		'Agent findings on this invoice',
+		'Watcher findings on this invoice',
 	],
 	// §06 gallery — each the state its link opens
 	[
-		'/finance/ap?as=dana&id=INV-0254&try=approve',
+		'/finance/bills?as=dana&id=INV-0254&try=approve',
 		'ixana-finance-ap-sod.jpg',
 		'Whoever creates or edits an invoice',
 	],
 	[
-		'/finance/reconcile?tab=bank&filter=suggested',
-		'ixana-finance-reconcile.jpg',
-		'Three passes',
+		'/finance/tie-out?tab=bank&filter=suggested',
+		'ixana-finance-tie-out.jpg',
+		'exact reference',
 	],
 	[
 		'/finance/funds?fund=award-r01&verdict=unallowable',
 		'ixana-finance-funds.jpg',
 		'Propose reclass',
 	],
-	['/finance/close?asof=2026-08-05', 'ixana-finance-close.jpg', 'readiness'],
-	['/finance/agents', 'ixana-finance-agents.jpg', 'The contract'],
+	['/finance/month-end?asof=2026-08-05', 'ixana-finance-close.jpg', 'readiness'],
+	['/finance/watchers', 'ixana-finance-watchers.jpg', 'The contract'],
 	['/finance/audit', 'ixana-finance-audit.jpg', 'Verify chain'],
 ];
 

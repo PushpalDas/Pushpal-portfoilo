@@ -16005,7 +16005,7 @@
     "slug": "ixana-finance-orchestrator",
     "eyebrow": "Ixana · Finance operations",
     "title": "Finance orchestrator",
-    "deck": "One book of accounts under payroll, supplier bills, cards, the web store, the patent programme and the Ops Desk, with software helpers that point at problems they can prove and draft the fix, while every approval stays a named person and every figure says where it came from.",
+    "deck": "One book of accounts under payroll, supplier bills, cards, the web store, the patent programme and the Ops Desk, with watchers that point at problems they can prove and draft the fix, while every approval stays a named person and every figure says where it came from.",
     "status": "development",
     "meta": {
       "role": "Product manager",
@@ -16013,7 +16013,7 @@
       "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
     },
     "confidentiality": "In development. Every figure on this page is illustrative and computed from a made-up set of books (a synthetic ledger, seed 20260925); every name is invented; pay appears only as department-by-month totals, with any group under three people hidden. The two money surfaces it reads, the patent programme and the Ops Desk, are carried in unchanged and checked to the cent by an automated test.",
-    "sampleNote": "BUILT: the made-up books, the two readers that copy Patents and Ops in unchanged, nine screens, five software helpers, a question box, a scorecard and 50 automated tests, all running in the linked demo. PLANNED: a read-only trial on real exports, interviews with the finance lead and the founders-office associate, measuring how often people agree with a finding, and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and scores against the answer key, each with its sample size. I'm glad to walk through the data, the rules and the tests in a conversation.",
+    "sampleNote": "BUILT: the made-up books, the two readers that copy Patents and Ops in unchanged, nine screens, five watchers, a question box, a scorecard and 50 automated tests, all running in the linked demo. PLANNED: a read-only trial on real exports, interviews with the finance lead and the founders-office associate, measuring how often people agree with a finding, and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and scores against the answer key, each with its sample size. I'm glad to walk through the data, the rules and the tests in a conversation.",
     "evidence": [
       {
         "label": "Open the working demo: nine screens over one made-up set of books, as the finance lead, the founders-office associate, the grant manager or the external accountant",
@@ -16021,14 +16021,14 @@
       },
       {
         "label": "Or start at the bill that carries three warnings, and try to pay it",
-        "url": "/demo/finance-desk/ap?id=INV-0236"
+        "url": "/demo/finance-desk/bills?id=INV-0236"
       },
       {
         "label": "The PRD",
         "url": "/docs/finance/prd"
       },
       {
-        "label": "Trust, accuracy and explainability — what the agents may and may not do",
+        "label": "Trust, accuracy and explainability — what the watchers may and may not do",
         "url": "/docs/finance/trust-accuracy-explainability"
       },
       {
@@ -16041,18 +16041,18 @@
       }
     ],
     "fast": {
-      "pull": "A warning the helper cannot prove is thrown away before anyone sees it; a change the helper proposes waits for a named person.",
+      "pull": "A warning the watcher cannot prove is thrown away before anyone sees it; a change the watcher proposes waits for a named person.",
       "facts": [
         {
           "text": "Live demo: $61,900.00 of patent counsel and $35,140 of Ops requests carried to the cent, checked by a test",
           "cls": "A"
         },
         {
-          "text": "Eleven rules, one test each; five helpers, the books proven unchanged after every run",
+          "text": "Eleven rules, one test each; five watchers, the books proven unchanged after every run",
           "cls": "A"
         },
         {
-          "text": "Ask-your-ledger refuses any question about one person's pay, and shows no rows",
+          "text": "Ask the books refuses any question about one person's pay, and shows no rows",
           "cls": "A"
         }
       ]
@@ -16064,11 +16064,11 @@
       },
       {
         "lead": "What I did.",
-        "text": "I built the book of accounts those two surfaces feed, inside the Wiki they live in: made-up books generated the same way every time, with deliberate mistakes and fraud patterns hidden in them; nine screens that work out every number from the rows; and five software helpers under one contract, which lets them point and draft but never act."
+        "text": "I built the book of accounts those two surfaces feed, inside the Wiki they live in: made-up books generated the same way every time, with deliberate mistakes and fraud patterns hidden in them; nine screens that work out every number from the rows; and five watchers under one contract, which lets them point and draft but never act."
       },
       {
         "lead": "Result.",
-        "text": "Early signal on the made-up data only, with the sample size on every figure. The bill checker finds all 47 hidden problems and raises no false alarm on the 179 look-alike rows; the bank matcher never proposes a match on a wrong amount; every helper run leaves the books unchanged; nobody has yet decided a warning, so that rate is zero decisions."
+        "text": "Early signal on the made-up data only, with the sample size on every figure. The Invoice Watcher finds all 47 hidden problems and raises no false alarm on the 179 look-alike rows; the tie-out watcher never proposes a match on a wrong amount; every watcher run leaves the books unchanged; nobody has yet decided a warning, so that rate is zero decisions."
       }
     ],
     "sections": [
@@ -16076,26 +16076,26 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The obvious answer was an accounts payable automation product. I argued for a quarter proving the way of working on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the book between them, and the rule that a helper may find and draft but never act."
+          "The obvious answer was an supplier bills automation product. I argued for a quarter proving the way of working on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the book between them, and the rule that a watcher may find and draft but never act."
         ],
         "blocks": [
           {
             "kind": "figure",
             "chart": {
               "form": "pairedBars",
-              "title": "Modelled hours per monthly close, today against with the desk: bank reconciliation 14 to 6, accounts payable review 10 to 5, award compliance 8 to 4, accrual drafting 6 to 3, audit preparation 8 to 3 — modelled, not measured",
+              "title": "Modelled hours per monthly close, today against with the desk: bank tie-out 14 to 6, supplier-bill review 10 to 5, award compliance 8 to 4, accrual drafting 6 to 3, audit preparation 8 to 3 — modelled, not measured",
               "yMax": 16,
               "unit": "hours per close, modelled",
               "beforeLabel": "today (modelled)",
               "afterLabel": "with the desk (modelled)",
               "groups": [
                 {
-                  "name": "Bank reconciliation",
+                  "name": "Bank tie-out",
                   "before": 14,
                   "after": 6
                 },
                 {
-                  "name": "Accounts payable review",
+                  "name": "Supplier-bill review",
                   "before": 10,
                   "after": 5
                 },
@@ -16150,7 +16150,7 @@
                 "4 of 28 requests refused at $5,000; 15 shipments with no freight or duties account until now"
               ],
               [
-                "Accounts payable, cards, payroll, web store, award",
+                "Supplier bills, cards, payroll, web store, award",
                 "No ledger; five exports; a bank-detail change was an email",
                 "0 of 5 flows with a row-level trail; 4 vendor bank changes, 3 never verified by call-back"
               ]
@@ -16160,7 +16160,7 @@
             "kind": "figure",
             "chart": {
               "form": "hbar",
-              "title": "Where the made-up books' hidden problems sit, by rule: duplicates 9, missing purchase order 6, amount unusual 5, bank-detail change 4, off-policy on the grant 4, wrong account 4, round number 4, split purchase orders 7, new supplier with rush 3, after hours 1 (47 in all), kept apart from the rows the helpers read",
+              "title": "Where the made-up books' hidden problems sit, by rule: duplicates 9, missing purchase order 6, amount unusual 5, bank-detail change 4, off-policy on the grant 4, wrong account 4, round number 4, split purchase orders 7, new supplier with rush 3, after hours 1 (47 in all), kept apart from the rows the watchers read",
               "max": 10,
               "unit": "hidden problems (n = 47)",
               "rows": [
@@ -16195,7 +16195,7 @@
                   "label": "4"
                 },
                 {
-                  "name": "Misclassification",
+                  "name": "Wrong account",
                   "value": 4,
                   "label": "4"
                 },
@@ -16217,7 +16217,7 @@
                 }
               ]
             },
-            "caption": "Made-up books, seed 20260925: twelve months, 2,029 lines, 313 bills. The 47 planted anomalies (deliberate mistakes and fraud patterns hidden in the data) and 179 hard negatives (rows that look suspicious but are fine) are written into an answer key the helpers never read; only the scorecard joins the two. The mix is chosen, not observed: it is what a finance lead described as the year's worries."
+            "caption": "Made-up books, seed 20260925: twelve months, 2,029 lines, 313 bills. The 47 planted irregularities (deliberate mistakes and fraud patterns hidden in the data) and 179 hard negatives (rows that look suspicious but are fine) are written into an answer key the watchers never read; only the scorecard joins the two. The mix is chosen, not observed: it is what a finance lead described as the year's worries."
           }
         ],
         "after": [
@@ -16228,7 +16228,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I own the helpers' contract, the made-up data and its answer key, and the integrity rules, with the founders in the loop as read-only users; most of the work was writing rules a finance lead can argue with."
+          "I own the watchers' contract, the made-up data and its answer key, and the integrity rules, with the founders in the loop as read-only users; most of the work was writing rules a finance lead can argue with."
         ],
         "blocks": [
           {
@@ -16240,12 +16240,12 @@
                 "text": "One test per source fails if a cent moves."
               },
               {
-                "lead": "A helper returns warnings and drafts, or nothing.",
+                "lead": "A watcher returns warnings and drafts, or nothing.",
                 "text": "A warning with no proof row is dropped before it is shown."
               },
               {
                 "lead": "The answer key lives apart from the data.",
-                "text": "A test reads the helpers' code to prove they never open it."
+                "text": "A test reads the watchers' code to prove they never open it."
               },
               {
                 "lead": "Every number is worked out on the spot, with its source.",
@@ -16263,8 +16263,8 @@
             "kind": "scope",
             "shipped": [
               "BUILT: made-up books generated the same way every time: twelve months, six departments, two entities, a research grant, 46 suppliers, 313 bills, 189 card lines, 371 bank statement lines, 47 web-shop orders and 29 payouts, 47 hidden problems with 179 look-alikes",
-              "BUILT: nine screens: overview with a where-from panel on every tile, ledger, bills queue, bank matching, grant funds, month-end close, health, audit log, helpers; a persona switch; a link for every state",
-              "BUILT: five helpers under one contract, a question box with refusals, a scorecard with sample sizes, a tamper-proof audit log, 50 automated tests"
+              "BUILT: nine screens: overview with a where-from panel on every tile, ledger, bills desk, tie-out, grant funds, month-end, hygiene, audit log, watchers; a persona switch; a link for every state",
+              "BUILT: five watchers under one contract, a question box with refusals, a scorecard with sample sizes, a tamper-proof audit log, 50 automated tests"
             ],
             "deferred": [
               "PLANNED: the read-only trial: nightly exports from the accounting system, the card feed, the payment processor and the payroll provider, replayed through the same readers",
@@ -16284,7 +16284,7 @@
           {
             "kind": "doc",
             "bar": "From the trust note: what the software is not used for, v1",
-            "lead": "No helper, at any trust level, will",
+            "lead": "No watcher, at any trust level, will",
             "items": [
               {
                 "lead": "Pay a bill or change a supplier's bank details.",
@@ -16303,7 +16303,7 @@
                 "text": "Refused with the reason, no rows attached."
               }
             ],
-            "note": "One page from the trust note. The list is the same on every Finance screen's footer and in the helpers' contract; it is not a setting."
+            "note": "One page from the trust note. The list is the same on every Finance screen's footer and in the watchers' contract; it is not a setting."
           }
         ]
       },
@@ -16319,13 +16319,13 @@
         "num": "06",
         "heading": "What was built",
         "body": [
-          "A Finance section inside the Wiki: one generator builds the books, two readers copy Patents and Ops in unchanged, nine screens work out what they show on each visit, five helpers return warnings and drafts, and the question box answers from rows it can point to, or refuses."
+          "A Finance section inside the Wiki: one generator builds the books, two readers copy Patents and Ops in unchanged, nine screens work out what they show on each visit, five watchers return warnings and drafts, and the question box answers from rows it can point to, or refuses."
         ],
         "blocks": [
           {
             "kind": "shot",
             "image": "/static/images/project/ixana-finance-ap-finding.jpg",
-            "alt": "The bills queue with a side panel open on invoice INV-0236 from Pacific Packaging: the supplier's unverified bank-detail history in a red box, then three warnings stacked: bank-detail change at high severity with four reason bars, a near-copy of the genuine April packaging bill, and a round $61,000 with rush and no purchase order, each with proof links and a recommended action.",
+            "alt": "The Bills desk with a side panel open on invoice INV-0236 from Pacific Packaging: the supplier's unverified bank-detail history in a red box, then three warnings stacked: bank-detail change at high severity with four reason bars, a near-copy of the genuine April packaging bill, and a round $61,000 with rush and no purchase order, each with proof links and a recommended action.",
             "callouts": [
               {
                 "lead": "Three warnings on one bill, because one row can be three things.",
@@ -16345,14 +16345,14 @@
               }
             ],
             "note": "A recreation on the made-up books. The bill, the supplier and the bank are invented; the rule, the weights and the refusal are the ones that run.",
-            "href": "/demo/finance-desk/ap?id=INV-0236",
+            "href": "/demo/finance-desk/bills?id=INV-0236",
             "hrefLabel": "Open the bill, then try to release the payment"
           },
           {
             "kind": "table",
             "head": [
               "Finance idea in the demo",
-              "The standard fund-accounting term (ASC 958 / Financial Edge NXT pattern)",
+              "The standard nonprofit fund-accounting term (ASC 958)",
               "What holds it"
             ],
             "rows": [
@@ -16390,16 +16390,16 @@
                 "image": "/static/images/project/ixana-finance-ap-sod.jpg",
                 "label": "Refused: whoever keyed it cannot approve it.",
                 "caption": "Dana, the founders-office associate who keys bills, opens one she entered and presses Approve; the check refuses before anything else runs, names the rule, and says who to ask instead. The decision is listed in the audit log's format. This link opens the row as Dana with the approval already attempted.",
-                "alt": "The accounts payable drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
-                "href": "/demo/finance-desk/ap?as=dana&id=INV-0254&try=approve",
+                "alt": "The supplier bills drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
+                "href": "/demo/finance-desk/bills?as=dana&id=INV-0254&try=approve",
                 "hrefLabel": "Open the refusal as the Founders-office associate"
               },
               {
-                "image": "/static/images/project/ixana-finance-reconcile.jpg",
+                "image": "/static/images/project/ixana-finance-tie-out.jpg",
                 "label": "Three passes, a confidence score each, nothing accepted below the line.",
                 "caption": "Bank statement lines matched by exact reference, then by amount within five days, then by supplier name; 356 of 371 matched automatically, 3 suggested for a person, 11 unmatched with the reason. A match on a wrong amount is never proposed; the count is on the screen and in a test. This link opens the suggestions.",
-                "alt": "The reconcile screen filtered to suggested bank matches: three lines with their candidate invoice, the rule that found it, the confidence, and Accept and Reject buttons.",
-                "href": "/demo/finance-desk/reconcile?tab=bank&filter=suggested",
+                "alt": "The tie out screen filtered to suggested bank matches: three lines with their candidate invoice, the rule that found it, the confidence, and Accept and Reject buttons.",
+                "href": "/demo/finance-desk/tie-out?tab=bank&filter=suggested",
                 "hrefLabel": "Open the three suggestions"
               },
               {
@@ -16415,21 +16415,21 @@
                 "label": "A month-end checklist worked out from the rows, as of any day.",
                 "caption": "Ten tasks with an owner, what they wait on and a due date; each is done only when the rows say so, and readiness is the weighted sum shown beside it. The as-of date re-runs every check, so the same month reads differently on the fifth and the twenty-first. This link opens July as of 5 August.",
                 "alt": "The close screen for July 2026 as of 5 August: readiness 68 of 100, ten tasks in a table with status pills, the evidence each check found, and the weight it earned.",
-                "href": "/demo/finance-desk/close?asof=2026-08-05",
+                "href": "/demo/finance-desk/month-end?asof=2026-08-05",
                 "hrefLabel": "Open the close as of 5 August"
               },
               {
-                "image": "/static/images/project/ixana-finance-agents.jpg",
-                "label": "Five helpers, one contract, the scorecard beside them.",
-                "caption": "Each card shows what the helper does and never does, its open warnings, drafts, rows read, and the books-unchanged check; the bill checker carries precision (of what it flagged, how much was real), recall (of the real problems, how many it found) and false alarms per rule with sample sizes, and the agreement rate reads zero decisions because no person has decided a warning yet. This link opens the panel.",
-                "alt": "The agents screen: the contract, the trust ladder with L2 marked configured and off, five agent cards with counts, and an eval table with a row per rule.",
-                "href": "/demo/finance-desk/agents",
-                "hrefLabel": "Open the agents and their numbers"
+                "image": "/static/images/project/ixana-finance-watchers.jpg",
+                "label": "Five watchers, one contract, the scorecard beside them.",
+                "caption": "Each card shows what the watcher does and never does, its open warnings, drafts, rows read, and the books-unchanged check; the Invoice Watcher carries precision (of what it flagged, how much was real), recall (of the real problems, how many it found) and false alarms per rule with sample sizes, and the agreement rate reads zero decisions because no person has decided a warning yet. This link opens the panel.",
+                "alt": "The watchers screen: the contract, the trust ladder with L2 marked configured and off, five watcher cards with counts, and an eval table with a row per rule.",
+                "href": "/demo/finance-desk/watchers",
+                "hrefLabel": "Open the watchers and their numbers"
               },
               {
                 "image": "/static/images/project/ixana-finance-audit.jpg",
                 "label": "1,556 entries in one chain, verified in the browser.",
-                "caption": "Every posting, approval, refusal, bank change, month closed and helper run, numbered and chained by fingerprint. Verify recomputes every fingerprint; Simulate a tamper edits one entry and the chain breaks from that number on. The external accountant can open all of it and change none of it. This link opens the log.",
+                "caption": "Every posting, approval, refusal, bank change, month closed and watcher run, numbered and chained by fingerprint. Verify recomputes every fingerprint; Simulate a tamper edits one entry and the chain breaks from that number on. The external accountant can open all of it and change none of it. This link opens the log.",
                 "alt": "The audit screen: counts of events by kind, a Verify chain button reporting every hash links to the one before it, and a table of events with sequence, time, who, role, what and hash.",
                 "href": "/demo/finance-desk/audit",
                 "hrefLabel": "Open the audit log and verify it"
@@ -16493,7 +16493,7 @@
               {
                 "value": "47",
                 "sub": "of 47",
-                "label": "Hidden problems found by the bill checker on the answer key (n = 47 + 179)"
+                "label": "Hidden problems found by the Invoice Watcher on the answer key (n = 47 + 179)"
               },
               {
                 "value": "0",
@@ -16512,7 +16512,7 @@
               {
                 "value": "5",
                 "sub": "of 5",
-                "label": "Helper runs that left the books unchanged"
+                "label": "Watcher runs that left the books unchanged"
               },
               {
                 "value": "0",
@@ -16558,7 +16558,7 @@
                 }
               ]
             },
-            "caption": "Trust ladder, made-up books, worked out on this visit. Level 0 (the helper suggests) is earned on the answer key only; level 1 (the helper drafts, a person approves) is where the demo lives; level 2 (the helper acts on small, reversible things) stays set up and off until two hundred human decisions say the exact bank matcher under $500 deserves it, and every automatic action would be one reversible audit entry. The first scorecard run read 0.34 precision, most of it real warnings the answer key had not recorded, which is the more useful number to remember."
+            "caption": "Trust ladder, made-up books, worked out on this visit. Level 0 (the watcher suggests) is earned on the answer key only; level 1 (the watcher drafts, a person approves) is where the demo lives; level 2 (the watcher acts on small, reversible things) stays set up and off until two hundred human decisions say the exact tie-out watcher under $500 deserves it, and every automatic action would be one reversible audit entry. The first scorecard run read 0.34 precision, most of it real warnings the answer key had not recorded, which is the more useful number to remember."
           },
           {
             "kind": "definition",
@@ -16567,7 +16567,7 @@
           },
           {
             "kind": "config",
-            "text": "Demo configuration — a Finance section inside the Wiki (Next.js 16, React 19, Tailwind 4), nine routes and a mock API · one deterministic seed (mulberry32, seed 20260925, clock 21 Aug 2026), fingerprint pinned by test · two read-only adapters over the Patents ledger and the Ops Desk export (SHA recorded) · eleven rule functions, a three-pass matcher, five agents under one contract, ask-your-ledger as deterministic retrieval · FNV-1a hash-chained audit log · vitest, 50 tests · no model, no network call, no database, no writes"
+            "text": "Demo configuration — a Finance section inside the Wiki (Next.js 16, React 19, Tailwind 4), nine routes and a mock API · one deterministic seed (mulberry32, seed 20260925, clock 21 Aug 2026), fingerprint pinned by test · two read-only adapters over the Patents ledger and the Ops Desk export (SHA recorded) · eleven rule functions, a three-pass matcher, five watchers under one contract, ask the books as deterministic retrieval · FNV-1a hash-chained audit log · vitest, 50 tests · no model, no network call, no database, no writes"
           }
         ]
       },
@@ -16576,7 +16576,7 @@
         "heading": "What would make me stop",
         "body": [
           "Written before the first rule and agreed before build with the finance lead who will run the trial, each a stop, not a discussion.",
-          "Any action taken by a helper stops the trial the same day. A warning shown without a proof row stops the helper that raised it. Any write reaching the Ops Desk or the Patents ledger stops the readers. Any screen that reveals one person's pay stops the payroll feed.",
+          "Any action taken by a watcher stops the trial the same day. A warning shown without a proof row stops the watcher that raised it. Any write reaching the Ops Desk or the Patents ledger stops the readers. Any screen that reveals one person's pay stops the payroll feed.",
           "Two softer stops: a rule under 90 percent precision in the first real month becomes advice only; the finance lead not opening the queue two weeks running ends the trial."
         ]
       },

@@ -8,23 +8,23 @@
 
 ## Who it is for
 
-A finance team of one controller and one or two AP people at a company between fifty and two hundred people, with a real accounting system, a restricted grant or award, a card programme, a web store, and at least one internal system that already tracks money well (here: a patent ledger and an operations desk). Not for a company whose accounting system is the whole finance stack, and not for one big enough to have an internal audit function.
+A finance team of one controller and one or two people on supplier bills at a company between fifty and two hundred people, with a real accounting system, a restricted grant or award, a card programme, a web store, and at least one internal system that already tracks money well (here: a patent ledger and an operations desk). Not for a company whose accounting system is the whole finance stack, and not for one big enough to have an internal audit function.
 
 ## The patterns it sits between
 
 | Pattern | What it does well | Where this differs |
 |---|---|---|
-| AP automation suites | Capture, coding, approval routing, payment execution | This never executes a payment and never codes a line; it reads the AP export and raises findings on it. The suites' value is in *doing*; this one's is in *reading with evidence* |
+| Invoice automation suites | Capture, coding, approval routing, payment execution | This never executes a payment and never codes a line; it reads the bills export and raises findings on it. The suites' value is in *doing*; this one's is in *reading with evidence* |
 | Close management tools | Task lists, owners, due dates, sign-off | Status here is computed from the rows, never stored; a task is done because the ledger says so, not because someone ticked it |
 | Spend-analytics dashboards | Charts over spend | Every chart here opens its rows and names its rule; the dashboards' numbers are typed into a model once |
-| Fraud and anomaly detection services | Models trained across many customers | Eleven rules a finance lead can read and argue with at the weight; a model is deliberately at the edge, later, and never in the critical path |
+| Fraud and irregularity detection services | Models trained across many customers | Eleven rules a finance lead can read and argue with at the weight; a model is deliberately at the edge, later, and never in the critical path |
 | Fund-accounting systems (nonprofit) | Restricted funds, allowability, sponsor reporting | This borrows the model — funds, periods of performance, category budgets, rules — for a startup award, and maps to it (see the mapping note) rather than replacing it |
 
 ## What is genuinely different, and what is not
 
 **Different:** the contract (findings and drafts only, with the ledger hash asserted unchanged); provenance on every number; refusals tested (segregation of duties, unverified bank details, individual pay); a trust ladder where auto-execution is configured, off, and gated on human decisions with a stated n.
 
-**Not different:** the rules themselves are the ones every AP reviewer knows; the matcher is the standard three-pass; the close checklist is the standard one. The claim is not novelty of rule but honesty of surface.
+**Not different:** the rules themselves are the ones every bills reviewer knows; the matcher is the standard three-pass; the close checklist is the standard one. The claim is not novelty of rule but honesty of surface.
 
 ## What it would need to be a product
 

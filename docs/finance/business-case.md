@@ -7,7 +7,7 @@
 Three things, in the order a finance lead would rank them:
 
 1. **Money that does not leave wrongly.** A duplicate paid, a payment to a changed bank account, a bar charge on the award that the sponsor disallows at audit.
-2. **Hours in the monthly close** that are reconciliation, review and evidence-gathering rather than judgement.
+2. **Hours in the monthly close** that are tie-out, review and evidence-gathering rather than judgement.
 3. **The cost of not being able to answer** — audit findings, sponsor questions, a founder decision made on a stale number.
 
 Only the second is modelled below in hours; the first is modelled as exposure, not as "fraud caught", because nothing has been caught.
@@ -32,8 +32,8 @@ Only the second is modelled below in hours; the first is modelled as exposure, n
 
 | Task | Today (A5, finance lead's estimate) | With the desk (A6) | Modelled saving | What the desk actually does for the task |
 |---|---:|---:|---:|---|
-| Bank reconciliation | 14 h | 6 h | 8 h | Three passes propose; a person decides suggestions and works exceptions |
-| AP review | 10 h | 5 h | 5 h | Findings on the row with evidence; the reviewer reads the drawer, not the mailbox |
+| Bank tie-out | 14 h | 6 h | 8 h | Three passes propose; a person decides suggestions and works exceptions |
+| Supplier-bill review | 10 h | 5 h | 5 h | Findings on the row with evidence; the reviewer reads the drawer, not the mailbox |
 | Award compliance | 8 h | 4 h | 4 h | Every line judged on read; reclass drafts prepared |
 | Accrual drafting | 6 h | 3 h | 3 h | Received-not-invoiced drafts from approved POs |
 | Audit preparation | 8 h | 3 h | 5 h | Hash-chained log, provenance on every number |
@@ -59,7 +59,7 @@ The desk does not "save" this; it makes each of the three a refusal or a finding
 | Build to pilot (A10) | 6 engineer-weeks |
 | Run (A11) | $0 incremental |
 | Finance lead's time to label one month | ≈ 6 h, once |
-| Founders-office associate's time in the pilot | inside the AP review hours above |
+| Founders-office associate's time in the pilot | inside the supplier-bill review hours above |
 
 ## 6. Sensitivity — the three assumptions that decide it
 
@@ -69,4 +69,4 @@ The desk does not "save" this; it makes each of the three a refusal or a finding
 
 ## 7. What would make this case wrong
 
-A close that is mostly judgement rather than reconciliation (the hours model collapses); an accounting system that already refuses duplicates and unverified bank changes at entry (the exposure model collapses); or a pilot in which the finance lead does not open the queue (the whole case collapses, and the roadmap says so).
+A close that is mostly judgement rather than tie-out (the hours model collapses); an accounting system that already refuses duplicates and unverified bank changes at entry (the exposure model collapses); or a pilot in which the finance lead does not open the queue (the whole case collapses, and the roadmap says so).

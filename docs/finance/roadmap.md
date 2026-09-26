@@ -8,16 +8,16 @@
 |---|---|---|---|
 | The ledger and two read-only adapters | One set of books under seven flows; Patents and Ops carried to the cent | $61,900.00 and $35,140 / $38,850 by test | — |
 | Nine screens with provenance | Every number names its rule and rows | 9 of 9 routes; 0 console errors | — |
-| AP Anomaly Agent, eleven rules | Findings with attributions and evidence; hold drafts | 47 of 47 planted raised, 0 of 179 hard negatives (n = 226) | The same harness on a real labelled month |
-| Reconciliation, three passes | Auto / suggested / exception; match drafts | 356 of 371 auto, 0 wrong-amount | — |
+| Invoice Watcher, eleven rules | Findings with attributions and evidence; hold drafts | 47 of 47 planted raised, 0 of 179 hard negatives (n = 226) | The same harness on a real labelled month |
+| Tie-out, three passes | Auto / suggested / exception; match drafts | 356 of 371 auto, 0 wrong-amount | — |
 | Compliance on the award | Verdict per line; reclass drafts for two approvers | 2 unallowable, 1 questioned of 31 lines | — |
-| Close from the rows, Health, Audit chain, Agents panel, Ask-your-ledger | Computed on request; refusals tested | 50 tests green | — |
+| Close from the rows, Health, Audit chain, Watchers panel, Ask the books | Computed on request; refusals tested | 50 tests green | — |
 
 ## Next — PLANNED, the read-only pilot
 
 | Step | Capability | Measure | Gate |
 |---|---|---|---|
-| 1 | Nightly read-only exports (accounting system, card issuer, processor, payroll provider in aggregate) replayed through the same adapters | Every export reconciles to its source total by test, as Patents and Ops do today | All four totals to the cent; any write path found → stop |
+| 1 | Nightly read-only exports (accounting system, card issuer, processor, payroll provider in aggregate) replayed through the same adapters | Every export ties out to its source total by test, as Patents and Ops do today | All four totals to the cent; any write path found → stop |
 | 2 | Finance lead labels one real month; the harness scores each rule | Precision and recall per rule with n | ≥ 0.90 precision per rule or the rule retires to advisory |
 | 3 | The Founders-office associate works the queue for four weeks; every accept / dismiss is an audit event | Acceptance per rule with n (today n = 0) | Finance lead opens the queue weekly; two missed weeks end the pilot |
 | 4 | Close run in parallel for two months | Readiness at BD+5, tasks evidenced by the rows | The checklist agrees with the finance lead's own list on every task |
@@ -35,4 +35,4 @@
 
 ## Kill gates (from the case study §09, agreed before build)
 
-Any agent action → stop the same day · a finding shown without evidence → stop that agent · any write to Ops or Patents → stop the adapters · individual pay derivable → stop the payroll feed · precision under 0.90 per rule on a real month → advisory · controller absent two weeks → end the pilot.
+Any watcher action → stop the same day · a finding shown without evidence → stop that watcher · any write to Ops or Patents → stop the adapters · individual pay derivable → stop the payroll feed · precision under 0.90 per rule on a real month → advisory · controller absent two weeks → end the pilot.

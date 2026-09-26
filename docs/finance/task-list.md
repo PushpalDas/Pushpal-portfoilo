@@ -17,7 +17,7 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] `adapters/patents.ts` + test (= $61,900.00 / 70)
 - [x] `ops-source.json` extraction script + `adapters/ops.ts` + tests (= $35,140 / 28; $38,850 / 15; 4 refused → flags only)
 - [x] `funds.ts` — Operating, Award R-01 rules and budget, Capex
-- [x] `labels.ts` — 43 anomalies, 184 hard negatives, apart from inputs
+- [x] `labels.ts` — 43 irregularities, 184 hard negatives, apart from inputs
 - [x] Periods Open → Soft-close → Closed, immutability + adjusting-entry test
 - [x] Payroll aggregation + < 3 suppression test
 - [x] vitest wired (`npm test`, 23 tests) · `docs/finance/data-dictionary.md` generated
@@ -25,23 +25,23 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 
 ## P2 — Views (Wiki) — done 2026-09-26
 - [x] Nav entry after Patents · Finance rail · persona switch (`?as=`) · synthetic chip
-- [x] `/finance` overview + Where-this-number-comes-from drawer + inline Ask-your-ledger control (answers in P3)
+- [x] `/finance` overview + Where-this-number-comes-from drawer + inline Ask the books control (answers in P3)
 - [x] `/finance/ledger` windowed table + filters + source chips (deep links to Patents / Ops)
 - [x] `/finance/ap` queue · `/finance/reconcile` (Bank / Card / Stripe) · `/finance/funds` · `/finance/close` (`?asof=`) · `/finance/health` · `/finance/audit` · `/finance/agents`
 - [x] Responsive ≥ 360 px, keyboard pass, screenshots of every view; Patents unchanged apart from the nav entry
 - [x] Walkthrough P2 (`walkthrough-P2.md`, screenshots in `walkthrough/P2/`)
 
-## P3 — Agents (Wiki) — done 2026-09-26
-- [x] `agents/contract.ts` (Finding, Draft, RowRef, Attribution, AgentRun, trust ladder, `finalize`) · audit log carries one event per agent run, same chain, verify + tamper test
-- [x] AP Anomaly Agent: eleven rules with attributions + one unit test per rule (every positive raised, no hard negative raised)
-- [x] Reconciliation Agent (exact → window → fuzzy) + wrong-match guardrail test (0, and a one-cent nudge test)
-- [x] Compliance Agent (Award R-01 rules, category over budget, burn ahead; reclass drafts for two approvers) · Close Agent (checklist findings, received-not-invoiced drafts) · Health Agent · Ask-your-ledger (`finance/ask`, twelve intents, cited rows, refuses individual pay and statutory dates)
-- [x] Eval harness (`eval.ts`) → live metrics with n on `/finance/agents`; findings on the AP queue and in its drawer
-- [x] "No state change without approval" test (ledger hash before = after, all five) · SoD refusal test · uncitable-finding-dropped test · after-hours-never-alone test · agents-never-read-labels test
+## P3 — Watchers (Wiki) — done 2026-09-26
+- [x] `agents/contract.ts` (Finding, Draft, RowRef, Attribution, WatcherRun, trust ladder, `finalize`) · audit log carries one event per watcher run, same chain, verify + tamper test
+- [x] Invoice Watcher: eleven rules with attributions + one unit test per rule (every positive raised, no hard negative raised)
+- [x] Tie-out Watcher (exact → window → fuzzy) + wrong-match guardrail test (0, and a one-cent nudge test)
+- [x] Grant Rules Watcher (Award R-01 rules, category over budget, burn ahead; reclass drafts for two approvers) · Month-end Watcher (checklist findings, received-not-invoiced drafts) · Hygiene Watcher · Ask the books (`finance/ask`, twelve intents, cited rows, refuses individual pay and statutory dates)
+- [x] Eval harness (`eval.ts`) → live metrics with n on `/finance/agents`; findings on the Bills desk and in its drawer
+- [x] "No state change without approval" test (ledger hash before = after, all five) · SoD refusal test · uncitable-finding-dropped test · after-hours-never-alone test · watchers-never-read-labels test
 - [x] Walkthrough P3 (`walkthrough-P3.md`, screenshots in `walkthrough/P3/`)
 
 ## P4 — Artifacts + case study + demo (portfolio) — done 2026-09-26
-- [x] `docs/finance/` — PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, assumptions table), leadership memo, GTM one-pager, trust/accuracy/explainability, fund-accounting mapping (FE NXT pattern), demo script; decision log and data dictionary already there
+- [x] `docs/finance/` — PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, assumptions table), leadership memo, GTM one-pager, trust/accuracy/explainability, fund-accounting mapping (fund accounting pattern), demo script; decision log and data dictionary already there
 - [x] `/docs/finance/[doc]` route (markdown via next-mdx-remote `format: 'md'` + remark-gfm; twelve public docs, the phase files stay in the repository)
 - [x] Case-study JSON entry (`development`, Ops variant, §08 `ladder`), card after Patents, `/demo/finance-desk` redirects (D-18), Wiki `?view=` hop and `?try=` (D-18)
 - [x] Verifier rules for `development` (D-19) · `verify-case-studies` clean for the slug · card checker accepts the status

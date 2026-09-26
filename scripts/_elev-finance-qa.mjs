@@ -24,19 +24,19 @@ mkdirSync(OUT, { recursive: true });
 // The demo script, in order.
 const STATES = [
 	['/finance', 'Spend, twelve months'],
-	['/finance/ap?id=INV-0236', 'Agent findings on this invoice'],
+	['/finance/bills?id=INV-0236', 'Watcher findings on this invoice'],
 	[
-		'/finance/ap?as=dana&id=INV-0254&try=approve',
+		'/finance/bills?as=dana&id=INV-0254&try=approve',
 		'Whoever creates or edits an invoice',
 	],
-	['/finance/reconcile?tab=bank&filter=suggested', 'Three passes'],
+	['/finance/tie-out?tab=bank&filter=suggested', 'exact reference'],
 	['/finance/funds?fund=award-r01&verdict=unallowable', 'Propose reclass'],
-	['/finance/close?asof=2026-08-05', 'readiness'],
-	['/finance/agents', 'The contract'],
+	['/finance/month-end?asof=2026-08-05', 'readiness'],
+	['/finance/watchers', 'The contract'],
 	['/finance/audit', 'Verify chain'],
 	['/finance/ledger?source=patents.invoices', 'patents'],
-	['/finance/health', 'Chart of accounts'],
-	['/finance?view=ap&id=INV-0236', 'Agent findings on this invoice'],
+	['/finance/hygiene', 'Chart of accounts'],
+	['/finance?view=bills&id=INV-0236', 'Watcher findings on this invoice'],
 ];
 
 const browser = await chromium.launch();
@@ -106,7 +106,7 @@ for (const [path, waitFor] of STATES) {
 		await page.waitForTimeout(record ? 2500 : 300);
 	}
 	if (path === '/finance') {
-		await page.getByLabel('Ask your ledger').fill('What does Priya earn?');
+		await page.getByLabel('Ask the books').fill('What does Priya earn?');
 		await page.getByRole('button', { name: 'Ask', exact: true }).click();
 		await page
 			.getByText('Refused', { exact: false })
@@ -114,7 +114,7 @@ for (const [path, waitFor] of STATES) {
 			.waitFor({ timeout: 15000 });
 		await page.waitForTimeout(record ? 3000 : 300);
 		await page
-			.getByLabel('Ask your ledger')
+			.getByLabel('Ask the books')
 			.fill('How much of Award R-01 is used?');
 		await page.getByRole('button', { name: 'Ask', exact: true }).click();
 		await page
@@ -123,7 +123,7 @@ for (const [path, waitFor] of STATES) {
 			.waitFor({ timeout: 15000 });
 		await page.waitForTimeout(record ? 3000 : 300);
 	}
-	if (path === '/finance/ap?id=INV-0236') {
+	if (path === '/finance/bills?id=INV-0236') {
 		await page.getByRole('button', { name: 'Release payment' }).click();
 		await page.waitForTimeout(record ? 3000 : 300);
 	}
@@ -134,8 +134,8 @@ for (const [path, waitFor] of STATES) {
 await page.setViewportSize({ width: 360, height: 780 });
 for (const path of [
 	'/finance',
-	'/finance/ap?id=INV-0236',
-	'/finance/agents',
+	'/finance/bills?id=INV-0236',
+	'/finance/watchers',
 	'/finance/funds',
 ]) {
 	await page.goto(origin + path, { waitUntil: 'networkidle' });

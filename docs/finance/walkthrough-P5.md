@@ -22,7 +22,7 @@
 | Portfolio `tsc --noEmit` | clean |
 | `verify-case-studies` | clean for `ixana-finance-orchestrator` (994 prose words, ten sections, six tiles, `ladder` unique, tile set unique); `verify-cards` accepts the card |
 | Demo-script states on the deployed Wiki (`scripts/_elev-finance-qa.mjs https://xana-nine.vercel.app`) | eleven states opened in order plus the two ask questions, the payment refusal, Verify and Simulate a tamper: **0 page errors, 0 console errors** |
-| Accessibility pass on each state | every image has alt text, every button and link a name, every control a label, one h1; no horizontal overflow at 360 px on the overview, the AP drawer, the agents panel and funds: **0 issues** |
+| Accessibility pass on each state | every image has alt text, every button and link a name, every control a label, one h1; no horizontal overflow at 360 px on the overview, the Bills desk drawer, the watchers panel and funds: **0 issues** |
 | Keyboard (P2) | header → rail → controls; Escape closes drawers; charts carry text tables |
 | Live figures | overview tiles equal the walkthrough's (spend $16,013,625 · burn $1,040,092 · runway 9.4 months · BvA 105 % · flags 7 · readiness 68/100 · patents $61,900.00); `/patents/spend` still serves $61,900 |
 | Portfolio live pages | case study, docs, redirect: 200 / 200 / 307; one page error per page on the portfolio is site-wide (the LogRocket bootstrap) and appears identically on pages the Finance work did not touch |
@@ -33,10 +33,10 @@
 
 ## §15 — final checklist
 
-- [x] Finance in the Wiki nav directly after Patents; routes `/finance`, `/ledger`, `/funds`, `/ap`, `/reconcile`, `/close`, `/health`, `/audit`, `/agents`
+- [x] Finance in the Wiki nav directly after Patents; routes `/finance`, `/ledger`, `/funds`, `/ap`, `/tie out`, `/close`, `/health`, `/audit`, `/watchers`
 - [x] Case study `ixana-finance-orchestrator`, stage *In development*, the Ops variant with §08 "Early signal and what I'm watching" and §09 "What would make me stop"; BUILT vs PLANNED separated
-- [x] `/demo/finance-desk` with `?as=`, `?view=`, `?id=`, `?open=` (the AP drawer opens on `?id=`; `?try=` attempts a decision), `?asof=`
-- [x] PM artifacts in `docs/finance/*.md`: PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, not measured), leadership memo, GTM one-pager, decision log (D-01 … D-20), trust/accuracy/explainability, fund-accounting (FE NXT) mapping, data dictionary, ten-minute demo script
+- [x] `/demo/finance-desk` with `?as=`, `?view=`, `?id=`, `?open=` (the Bills desk drawer opens on `?id=`; `?try=` attempts a decision), `?asof=`
+- [x] PM artifacts in `docs/finance/*.md`: PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, not measured), leadership memo, GTM one-pager, decision log (D-01 … D-20), trust/accuracy/explainability, fund-accounting (fund accounting) mapping, data dictionary, ten-minute demo script
 - [x] All figures synthetic, deterministic, labelled; payroll department × month only, groups under three suppressed and said so; names synthetic and reused from Ops / Patents
 - [x] No fabricated adoption, time saved or fraud caught — only counts from demo rows and eval results with n; business-case figures modelled
 - [x] Patents and Ops numbers unchanged; Finance reads, never re-authors; $61,900.00 and the Ops sums held by one test each

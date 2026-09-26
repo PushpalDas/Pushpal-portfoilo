@@ -1,6 +1,6 @@
 # Finance Orchestrator — Phase 0 Discovery Report
 
-**Audience:** Pushpal (approver) and whoever picks up P1. **Purpose:** everything found in both repositories before a line of Finance code is written, the exact source totals Finance must reconcile to, the AI-track inventory the new page must sit beside without contradiction, and the questions that need a decision. **Status:** P0 complete, no code changed. Written 2026-09-26.
+**Audience:** Pushpal (approver) and whoever picks up P1. **Purpose:** everything found in both repositories before a line of Finance code is written, the exact source totals Finance must tie out to, the AI-track inventory the new page must sit beside without contradiction, and the questions that need a decision. **Status:** P0 complete, no code changed. Written 2026-09-26.
 
 ---
 
@@ -31,12 +31,12 @@
 | Auth mock | `src/lib/demo-mode.ts` hard-codes `isDemoMode = true`; `src/lib/demo-auth.tsx` replaces MSAL with one account, `Demo Admin <demo.admin@ixana.example>`. There is **one identity**; personas will have to be a Finance-level concept (`?as=`), not a login. |
 | Mock API | One catch-all route, `src/app/api/[...path]/route.ts` (≈1,050 lines), dispatches on the path string (`patents/spend`, `patents/ask`, `invoices/approvals`, `efficiency/ask` …). Finance adds `finance/*` branches there. |
 | Seeding pattern | Typed TS modules per area: `src/lib/patent-demo-data.ts` (18 matters + `TIMELINE` ledger), `src/lib/patent-ledger.ts` (derived invoice-line ledger, quotes, exceptions), `src/lib/efficiency-demo-data.ts`, `src/lib/wiki-demo-data.ts`. Everything derivable is derived; only the irreducible facts are written down. `DEMO_TODAY = '2026-08-17'` is pinned. |
-| Retrieval / citations | `patents/ask` calls `askPortfolio(query)` — deterministic keyword routing over the matters, returning `{answer, provenance:{ours, firm_docket}, matters[], context_used}`; the panel renders the cited matters as chips. `AnswerPanel.tsx` is the site-wide cited-answer component (`[n]` chips → source list). Ask-your-ledger follows this exactly. |
+| Retrieval / citations | `patents/ask` calls `askPortfolio(query)` — deterministic keyword routing over the matters, returning `{answer, provenance:{ours, firm_docket}, matters[], context_used}`; the panel renders the cited matters as chips. `AnswerPanel.tsx` is the site-wide cited-answer component (`[n]` chips → source list). Ask the books follows this exactly. |
 | Design tokens | Page `#0E0805`, surface `#1A1410` / `#141010`, border `#3A3028`, accent `#FF6321` (gradient `#CD3D00→#FF6321`), text `#808080`/white, success `#22C55E`, warning `#F59E0B`, error `#EF4444`. 13 px body, `font-mono tabular-nums` for money, dense tables at `text-[0.62rem]`. Full extraction in `AUDIT/DESIGN-SYSTEM-XANA.md`. |
 | Deploy | Vercel Production on push to `main`. **Only commits authored by the Git-linked identity (`Pushpal <pushpaldas2001@gmail.com>`) are built**; an `ixanawl@gmail.com` commit is accepted and silently never deployed (seen twice on 2026-09-26). |
 | Working copy | The OneDrive clone (`Changes-archive/dummy`) cannot commit or run (cloud-only placeholders; OneDrive client not running). Work is done from a fresh clone outside OneDrive (`npm ci`, ≈3 min); edits are mirrored back. |
 
-## 2. Source totals Finance must reconcile to (read from code, not screenshots)
+## 2. Source totals Finance must tie out to (read from code, not screenshots)
 
 ### 2.1 Patents — `src/lib/patent-ledger.ts`, served by `/api/patents/spend`
 
@@ -102,7 +102,7 @@
 | Q2 | Stage "In development" (`development`) exists but the verifier skips it. Add verifier rules for it mirroring `customer-testing` (band 800–1,000; §08 "Early signal and what I'm watching"; §09 "What would make me stop"; 6 tiles with n)? | Yes, in P4, so the page is checked rather than skipped. |
 | Q3 | `/demo/finance-desk`: build a second, standalone single-file demo in the portfolio (the Ops Desk pattern, duplicating the Wiki views) **or** make it a rewrite to the Wiki's `/finance` with `?as=`, `?view=`, `?id=`, `?open=`, `?asof=` passed through (the Patents pattern)? | **Rewrite to the Wiki.** One implementation, one dataset, no drift. The Wiki Finance section implements the persona switch itself. |
 | Q4 | PM artifacts under `docs/finance/*.md` are not served today. Serve them at `/docs/finance/<name>` through a small MDX route (dependencies already present) so the case study can link them? | Yes. |
-| Q5 | Test runner: the Wiki has none. Add `vitest` as a dev dependency for the reconciliation, rule and seed-reproducibility tests? (Portfolio side keeps plain `node` scripts, like `verify:work`.) | Yes. |
+| Q5 | Test runner: the Wiki has none. Add `vitest` as a dev dependency for the tie-out, rule and seed-reproducibility tests? (Portfolio side keeps plain `node` scripts, like `verify:work`.) | Yes. |
 | Q6 | §08 chart form: new `ladder` form (adds a `ChartSpec` variant and component) or reuse `gateBars`? | New `ladder` form. |
 | Q7 | Award R-01: label as "illustrative award analog of a restricted fund" with no agency named, per §1.1's "mechanism unconfirmed"? | Yes — no agency, no contract number. |
 | Q8 | Nav placement gate: Finance sits inside the `isAdmin` block like Patents (Demo Admin is admin, so it always shows)? | Yes. |

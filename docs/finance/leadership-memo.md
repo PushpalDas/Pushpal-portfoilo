@@ -4,13 +4,13 @@
 
 ## What exists
 
-A Finance section inside the Wiki, directly after Patents, running on a synthetic ledger that mirrors our shape: twelve months, two entities, six departments, one restricted award, payroll in aggregate, AP, cards, the web store, and the two surfaces we already trust — the patent programme's ledger and the Ops Desk — carried unchanged and reconciled to the cent by test.
+A Finance section inside the Wiki, directly after Patents, running on a synthetic ledger that mirrors our shape: twelve months, two entities, six departments, one restricted award, payroll in aggregate, supplier bills, cards, the web store, and the two surfaces we already trust — the patent programme's ledger and the Ops Desk — carried unchanged and tied out to the cent by test.
 
-Nine screens, each computing what it shows on the request, each number with a drawer that names the rule and opens the rows. Five agents under one contract: they return findings with evidence and attributions, and drafts, and nothing else; every run asserts the ledger did not move. Ask-your-ledger answers from cited rows and refuses questions about one person's pay. An audit log chains every posting, approval, refusal, bank change, period close and agent run.
+Nine screens, each computing what it shows on the request, each number with a drawer that names the rule and opens the rows. Five watchers under one contract: they return findings with evidence and attributions, and drafts, and nothing else; every run asserts the ledger did not move. Ask the books answers from cited rows and refuses questions about one person's pay. An audit log chains every posting, approval, refusal, bank change, month-end and watcher run.
 
 ## What it proves
 
-On the labelled synthetic set the AP agent raises all 47 planted anomalies and none of the 179 legitimate rows that resemble one; the matcher proposes no wrong-amount match across 371 bank lines; five of five agent runs leave the ledger hash unchanged. Fifty tests hold those statements and the integrity rules — no agent action, no write to Ops or Patents, no individual pay, no statutory dates.
+On the labelled synthetic set the Invoice Watcher raises all 47 planted irregularities and none of the 179 legitimate rows that resemble one; the matcher proposes no wrong-amount match across 371 bank lines; five of five watcher runs leave the ledger hash unchanged. Fifty tests hold those statements and the integrity rules — no watcher action, no write to Ops or Patents, no individual pay, no statutory dates.
 
 ## What it does not prove
 
@@ -22,8 +22,8 @@ A read-only pilot: nightly exports from the accounting system, the card issuer, 
 
 ## What would stop it
 
-Written before the first rule: any action taken by an agent, a finding shown without evidence, any write reaching Ops or Patents, any screen from which one person's pay can be read, precision under 0.90 on a rule in the real month, or the finance lead not opening the queue two weeks running.
+Written before the first rule: any action taken by an watcher, a finding shown without evidence, any write reaching Ops or Patents, any screen from which one person's pay can be read, precision under 0.90 on a rule in the real month, or the finance lead not opening the queue two weeks running.
 
 ## What I would do with a yes
 
-Week 1–2 adapters and reconciliation-by-test for the four exports; week 3 the labelled month and the eval; weeks 4–7 the queue in use, acceptance measured; week 8 the memo that replaces this one, with the modelled column of the business case struck through.
+Week 1–2 adapters and tie-out-by-test for the four exports; week 3 the labelled month and the eval; weeks 4–7 the queue in use, acceptance measured; week 8 the memo that replaces this one, with the modelled column of the business case struck through.

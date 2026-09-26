@@ -25,7 +25,7 @@
 **Consequences.** Links resolve on the live site; markdown stays reviewable in git.
 
 ## D-05 · Tests: vitest in the Wiki, node scripts in the portfolio — *assumed*
-**Context.** Neither repo has a unit-test runner. The master prompt requires tests for every rule and for the reconciliation math.
+**Context.** Neither repo has a unit-test runner. The master prompt requires tests for every rule and for the tie-out math.
 **Decision.** Add `vitest` (dev dependency) to the Wiki with `npm test`; the portfolio keeps its `node scripts/verify-*.js` style for the new verifier rules.
 **Consequences.** One new dev dependency in the Wiki; tests run in CI-less local runs and are part of the P5 gate.
 
@@ -57,10 +57,10 @@
 ## D-11 · Shipments move inventory; freight and duties are Finance accruals — 2026-09-26
 **Context.** The Ops Desk records item value, weight, service level and destination, never a freight cost.
 **Decision.** Sample and outbound shipments relieve inventory to kit COGS; returns and inbound reverse it; freight (6310) and customs/duties (6311) are accrued per shipment from the desk's own service level and weight, labelled as Finance's estimate.
-**Consequences.** The $38,850 item value reconciles to the desk; logistics cost is visible in its own accounts and never inside the item value.
+**Consequences.** The $38,850 item value ties out to the desk; logistics cost is visible in its own accounts and never inside the item value.
 
 ## D-12 · Award R-01 ground truth — 2026-09-26
-**Context.** The compliance agent needs both a clean line and a violating one per rule.
+**Context.** The compliance watcher needs both a clean line and a violating one per rule.
 **Decision.** The $58,000 oscilloscope on the award carries prior written approval from the award PM (allowable); the $6,200 fixture set does not (questioned, R01-2); one bar charge (R01-1) and one pre-award component invoice (R01-4) are planted.
 **Consequences.** Every rule has a labelled positive and a hard negative in the seed.
 
@@ -71,12 +71,12 @@
 
 ## D-14 · Ops shipments post by status — 2026-09-26 (P2)
 **Context.** The Ops Desk carries fifteen shipments in every state from submitted to delivered, including one cancelled, and its clock runs to 21 Aug.
-**Decision.** A shipped one (Delivered, In Transit) posts on its ship date and accrues freight and duties; one with only a label or a submission posts on its submission date with no freight; a cancelled one posts and reverses in the same journal, so the desk’s $38,850 item value still reconciles while inventory nets to zero. The test counts freight lines against the shipped count rather than fifteen.
+**Decision.** A shipped one (Delivered, In Transit) posts on its ship date and accrues freight and duties; one with only a label or a submission posts on its submission date with no freight; a cancelled one posts and reverses in the same journal, so the desk’s $38,850 item value still ties out while inventory nets to zero. The test counts freight lines against the shipped count rather than fifteen.
 **Consequences.** The Ops total holds to the cent and the accounting says what the desk says.
 
-## D-15 · One label per anomaly, not one per row — 2026-09-26 (P3)
-**Context.** The first eval run scored 0.34 precision. Reading the false positives showed most were true: the planted bank-change invoice mimics the genuine April packaging invoice (so it is also a fuzzy duplicate and a round $61,000 with rush), the after-hours invoice is also from a two-day-old vendor with rush, and the quarter-end $5,000 invoice also fails its three-way match. The label set had recorded one anomaly per row.
-**Decision.** A row carries one label per anomaly it exhibits; the harness scores each type on its own (TP = a positive with a finding of that type; FP = a finding of that type on a row without that label; FPR over the type's hard negatives). The two bank-change rows that had been generated as same-day twins of a monthly invoice are now the monthly invoices themselves, labelled, one with rush. The after-hours row with nothing else unusual becomes a hard negative, because the rule is never to raise after-hours alone. The Ops invoices — which exist only once a request is delivered — record the receipt leg as true, matching their note. Invoices are keyed on business days, so "weekend" means something.
+## D-15 · One label per irregularity, not one per row — 2026-09-26 (P3)
+**Context.** The first eval run scored 0.34 precision. Reading the false positives showed most were true: the planted bank-change invoice mimics the genuine April packaging invoice (so it is also a fuzzy duplicate and a round $61,000 with rush), the after-hours invoice is also from a two-day-old vendor with rush, and the quarter-end $5,000 invoice also fails its three-way match. The label set had recorded one irregularity per row.
+**Decision.** A row carries one label per irregularity it exhibits; the harness scores each type on its own (TP = a positive with a finding of that type; FP = a finding of that type on a row without that label; FPR over the type's hard negatives). The two bank-change rows that had been generated as same-day twins of a monthly invoice are now the monthly invoices themselves, labelled, one with rush. The after-hours row with nothing else unusual becomes a hard negative, because the rule is never to raise after-hours alone. The Ops invoices — which exist only once a request is delivered — record the receipt leg as true, matching their note. Invoices are keyed on business days, so "weekend" means something.
 **Consequences.** 47 positives and 179 hard negatives; the seed fingerprint is re-pinned; the twelve-month spend moves from $16,038,125 to $16,013,625 (two synthetic invoices fewer). The harness reports the missed and the unlabelled ids beside every number so the next disagreement is read the same way.
 
 ## D-16 · Weak signals need a partner — 2026-09-26 (P3)
@@ -85,13 +85,13 @@
 **Consequences.** The rules read as a controller would write them; the eval prints per-rule numbers with n, and the case study will quote those, not a headline.
 
 ## D-17 · Acceptance has n = 0 until people decide — 2026-09-26 (P3)
-**Context.** The agents panel was designed with an acceptance rate per agent. The seed records approvals of invoices and purchase orders, but no human decision on an agent finding.
+**Context.** The watchers panel was designed with an acceptance rate per watcher. The seed records approvals of invoices and purchase orders, but no human decision on an watcher finding.
 **Decision.** The panel shows acceptance as n = 0 with the sentence that says why; it is measured from the audit trail once people accept or dismiss findings. Nothing is estimated and nothing is typed in.
 **Consequences.** One slot on the panel is honestly empty in the demo; the eval slot is full.
 
 ## D-18 · `/demo/finance-desk` is a redirect, not a rewrite — 2026-09-26 (P4)
 **Context.** D-03 chose "a rewrite to the Wiki with parameters passed through, the Patents pattern". The Patents card in fact links the Wiki's origin directly, and a cross-origin rewrite of a Next.js page would serve the Wiki's HTML with this site's asset paths, so nothing would load.
-**Decision.** `next.config.ts` redirects `/demo/finance-desk` → `https://xana-nine.vercel.app/finance` and `/demo/finance-desk/:path*` → `…/finance/:path*` (temporary redirects, query string preserved). The Wiki's `/finance` honours `?view=<screen>` by hopping to `/finance/<screen>` with every other parameter intact, so both `?view=ap&id=…` and `/ap?id=…` work. The AP queue gained `?try=approve|pay`, which opens the row with that decision already attempted, so a case-study image can be the refusal its link opens.
+**Decision.** `next.config.ts` redirects `/demo/finance-desk` → `https://xana-nine.vercel.app/finance` and `/demo/finance-desk/:path*` → `…/finance/:path*` (temporary redirects, query string preserved). The Wiki's `/finance` honours `?view=<screen>` by hopping to `/finance/<screen>` with every other parameter intact, so both `?view=ap&id=…` and `/ap?id=…` work. The Bills desk gained `?try=approve|pay`, which opens the row with that decision already attempted, so a case-study image can be the refusal its link opens.
 **Consequences.** One implementation, one dataset, a clean path in every link; the case study's evidence strip and gallery link `/demo/finance-desk/…`.
 
 ## D-19 · The `development` status gets rules, not a skip — 2026-09-26 (P4)

@@ -24,15 +24,14 @@ const PUBLIC_DOCS: Record<string, string> = {
 	prd: 'Product requirements — Finance orchestrator',
 	'engineering-spec': 'Engineering specification',
 	'user-stories':
-		'User stories — AP Anomaly Agent and Reconciliation workbench',
+		'User stories — Invoice Watcher and Tie-out desk',
 	roadmap: 'Roadmap — Now / Next / Later',
 	'business-case': 'Business case — modelled, not measured',
 	'leadership-memo': 'Leadership memo',
 	'gtm-one-pager': 'Go-to-market one-pager',
 	'decision-log': 'Decision log',
 	'trust-accuracy-explainability': 'Trust, accuracy and explainability',
-	'fund-accounting-mapping': 'Mapping to fund accounting (Financial Edge NXT)',
-	'data-dictionary': 'Data dictionary (generated)',
+	'fund-accounting-mapping': 'Mapping to nonprofit fund accounting',
 	'demo-script': 'Ten-minute demo script',
 };
 
