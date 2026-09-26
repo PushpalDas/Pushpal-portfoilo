@@ -161,6 +161,30 @@ export type ChartSpec =
 			ceiling?: { index: number; label: string };
 			bins: { name: string; value: number }[];
 	  }
+	/**
+	 * A trust ladder: one rung per autonomy level, each with the decisions
+	 * it has taken (a bar against a shared scale), the precision measured
+	 * on those decisions (a dot on a 0–1 scale to the right), whether the
+	 * rung is enabled, and the gate the next rung must clear. Added for
+	 * the Finance orchestrator, where the story is which rung is earned
+	 * and which is configured but off. Distinct from `gateBars` (pass /
+	 * fail against a target) — a rung is a level, not a gate.
+	 */
+	| {
+			form: 'ladder';
+			title: string;
+			maxDecisions: number;
+			rungs: {
+				level: string;
+				name: string;
+				decisions: number;
+				decisionsLabel: string;
+				precision: number | null;
+				precisionLabel: string;
+				enabled: boolean;
+				gate?: string;
+			}[];
+	  }
 	/** One row per pre-agreed gate: actual bar against a target marker */
 	| {
 			form: 'gateBars';

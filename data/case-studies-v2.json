@@ -82,7 +82,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Recalled a document exists",
@@ -308,7 +312,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Breadth vs reliability",
@@ -372,9 +380,31 @@
               "form": "lineArea",
               "title": "Weekly active users rising from 13 in week one to 84 by week ten, against a pre-agreed floor of 50",
               "yMax": 100,
-              "yTicks": [0, 25, 50, 75, 100],
-              "xLabels": ["Week 1", "Week 4", "Week 7", "Week 10"],
-              "points": [13, 26, 31, 44, 49, 60, 67, 74, 80, 84],
+              "yTicks": [
+                0,
+                25,
+                50,
+                75,
+                100
+              ],
+              "xLabels": [
+                "Week 1",
+                "Week 4",
+                "Week 7",
+                "Week 10"
+              ],
+              "points": [
+                13,
+                26,
+                31,
+                44,
+                49,
+                60,
+                67,
+                74,
+                80,
+                84
+              ],
               "threshold": {
                 "value": 50,
                 "label": "Pre-agreed floor: 50 of ~100"
@@ -513,7 +543,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Wired the transceiver to their own MCU",
@@ -713,7 +747,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Configurability vs first-hour success",
@@ -784,8 +822,22 @@
               "form": "cumulative",
               "title": "Cumulative dev kits shipped by quarter, from 4 in the first quarter to 62 by the sixth, against a pre-agreed floor of 40",
               "yMax": 70,
-              "xLabels": ["Qtr 1", "Qtr 2", "Qtr 3", "Qtr 4", "Qtr 5", "Qtr 6"],
-              "points": [4, 13, 24, 38, 52, 62],
+              "xLabels": [
+                "Qtr 1",
+                "Qtr 2",
+                "Qtr 3",
+                "Qtr 4",
+                "Qtr 5",
+                "Qtr 6"
+              ],
+              "points": [
+                4,
+                13,
+                24,
+                38,
+                52,
+                62
+              ],
               "threshold": {
                 "value": 40,
                 "label": "Pre-agreed floor: 40 kits"
@@ -915,7 +967,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Exported the task list",
@@ -1123,7 +1179,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Comparability vs team fit",
@@ -1337,7 +1397,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Searched for the meeting by title",
@@ -1535,7 +1599,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Answer fidelity vs cost per question",
@@ -1744,7 +1812,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Accepted an invite in one tenant",
@@ -1944,7 +2016,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Usefulness vs disclosure",
@@ -2030,27 +2106,51 @@
               "columns": [
                 {
                   "name": "W1",
-                  "values": [41, 22, 8]
+                  "values": [
+                    41,
+                    22,
+                    8
+                  ]
                 },
                 {
                   "name": "W2",
-                  "values": [48, 26, 11]
+                  "values": [
+                    48,
+                    26,
+                    11
+                  ]
                 },
                 {
                   "name": "W3",
-                  "values": [52, 29, 9]
+                  "values": [
+                    52,
+                    29,
+                    9
+                  ]
                 },
                 {
                   "name": "W4",
-                  "values": [57, 31, 14]
+                  "values": [
+                    57,
+                    31,
+                    14
+                  ]
                 },
                 {
                   "name": "W5",
-                  "values": [61, 33, 12]
+                  "values": [
+                    61,
+                    33,
+                    12
+                  ]
                 },
                 {
                   "name": "W6",
-                  "values": [66, 35, 15]
+                  "values": [
+                    66,
+                    35,
+                    15
+                  ]
                 }
               ]
             },
@@ -2202,7 +2302,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the reporting did", "Where it broke", "Evidence"],
+            "head": [
+              "What the reporting did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Counted completed and delayed tasks (AMS)",
@@ -2426,7 +2530,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Reach vs fit",
@@ -2649,7 +2757,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Hand-drew a timeline before planning",
@@ -2820,7 +2932,11 @@
           },
           {
             "kind": "table",
-            "head": ["Surface", "What it answers", "The rule underneath it"],
+            "head": [
+              "Surface",
+              "What it answers",
+              "The rule underneath it"
+            ],
             "rows": [
               [
                 "Timeline",
@@ -2891,7 +3007,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Correcting data vs protecting it",
@@ -2965,22 +3085,46 @@
               "form": "stackedArea",
               "title": "Weekly sessions by role over ten weeks, rising from 24 to 133, split between leads, architects and project managers",
               "yMax": 150,
-              "xLabels": ["W1", "W3", "W5", "W7", "W10"],
+              "xLabels": [
+                "W1",
+                "W3",
+                "W5",
+                "W7",
+                "W10"
+              ],
               "series": [
                 {
                   "name": "Leads",
                   "color": "#5b7cfa",
-                  "points": [14, 31, 44, 55, 62]
+                  "points": [
+                    14,
+                    31,
+                    44,
+                    55,
+                    62
+                  ]
                 },
                 {
                   "name": "Architects",
                   "color": "#2c3a73",
-                  "points": [6, 14, 22, 31, 41]
+                  "points": [
+                    6,
+                    14,
+                    22,
+                    31,
+                    41
+                  ]
                 },
                 {
                   "name": "Project managers",
                   "color": "#3fae8b",
-                  "points": [4, 9, 16, 24, 30]
+                  "points": [
+                    4,
+                    9,
+                    16,
+                    24,
+                    30
+                  ]
                 }
               ]
             },
@@ -3122,7 +3266,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Opened the task's activity feed",
@@ -3333,7 +3481,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Completeness vs readability",
@@ -3758,7 +3910,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Diff quality vs time to ship",
@@ -3828,17 +3984,35 @@
               "form": "dualLine",
               "title": "Documents tracked rising from 248 to 301 while documents changed per night stays between 9 and 34, over eight weeks",
               "yMax": 320,
-              "xLabels": ["W1", "W3", "W5", "W6", "W8"],
+              "xLabels": [
+                "W1",
+                "W3",
+                "W5",
+                "W6",
+                "W8"
+              ],
               "series": [
                 {
                   "name": "Documents tracked",
                   "color": "#5b7cfa",
-                  "points": [248, 251, 278, 296, 301]
+                  "points": [
+                    248,
+                    251,
+                    278,
+                    296,
+                    301
+                  ]
                 },
                 {
                   "name": "Changed that night",
                   "color": "#3fae8b",
-                  "points": [12, 9, 31, 34, 18]
+                  "points": [
+                    12,
+                    9,
+                    31,
+                    34,
+                    18
+                  ]
                 }
               ]
             },
@@ -3960,7 +4134,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the plan did", "Where it broke", "Evidence"],
+            "head": [
+              "What the plan did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Filled gaps in the brief",
@@ -4186,7 +4364,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Independent review vs cost per run",
@@ -4411,7 +4593,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Stream", "Where it broke", "Evidence"],
+            "head": [
+              "Stream",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Purchases, emailed to procurement",
@@ -4665,7 +4851,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Speed to pilot vs control depth",
@@ -4936,7 +5126,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What people did", "Where it broke", "Evidence"],
+            "head": [
+              "What people did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Opened last year’s sheet for the family",
@@ -5160,7 +5354,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Traceability vs coverage",
@@ -5400,7 +5598,10 @@
               "title": "Same code, same prompts, two source documents: a marketing whitepaper yields 1 claimable concept of 7 with 15 quarantined parameters, the disclosure plus its design notes yields 5 of 6 with 4",
               "max": 16,
               "unit": "count, one run each",
-              "seriesNames": ["Marketing whitepaper", "Engineering documents"],
+              "seriesNames": [
+                "Marketing whitepaper",
+                "Engineering documents"
+              ],
               "rows": [
                 {
                   "name": "Candidate concepts found",
@@ -5423,7 +5624,11 @@
           },
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Searched patent databases by keyword",
@@ -5774,7 +5979,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Applied gates as matrix arithmetic",
@@ -5926,8 +6135,24 @@
               "title": "State vector computation time against qubit count, rising from 4 milliseconds at four qubits to 1420 at twelve, against a 200 millisecond interactivity budget",
               "yMax": 1500,
               "yUnit": "ms",
-              "xLabels": ["4", "6", "8", "9", "10", "11", "12"],
-              "points": [4, 15, 62, 121, 244, 610, 1420],
+              "xLabels": [
+                "4",
+                "6",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12"
+              ],
+              "points": [
+                4,
+                15,
+                62,
+                121,
+                244,
+                610,
+                1420
+              ],
               "ceiling": {
                 "value": 200,
                 "label": "200 ms interactivity budget"
@@ -6094,7 +6319,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the analysis did", "Where it broke", "Evidence"],
+            "head": [
+              "What the analysis did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Reported a burst index",
@@ -6423,7 +6652,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What people did", "Where it broke", "Evidence"],
+            "head": [
+              "What people did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Asked a general model",
@@ -6719,7 +6952,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it stalled", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it stalled",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Powered the board and looked for a link",
@@ -6903,7 +7140,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Schedule vs a clean part",
@@ -7112,15 +7353,24 @@
               "columns": [
                 {
                   "name": "Bluetooth LE",
-                  "values": [12, 23]
+                  "values": [
+                    12,
+                    23
+                  ]
                 },
                 {
                   "name": "NFC",
-                  "values": [1, 64]
+                  "values": [
+                    1,
+                    64
+                  ]
                 },
                 {
                   "name": "Wi-R NFE",
-                  "values": [1, 7]
+                  "values": [
+                    1,
+                    7
+                  ]
                 }
               ]
             },
@@ -7330,7 +7580,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Second line vs BAN's dates",
@@ -7405,12 +7659,32 @@
                 "Linux SoC",
                 "Low-power MCU"
               ],
-              "cols": ["5 cm profile", "15 cm profile", "25 cm profile"],
+              "cols": [
+                "5 cm profile",
+                "15 cm profile",
+                "25 cm profile"
+              ],
               "cells": [
-                [100, 98, 94],
-                [100, 96, 91],
-                [98, 97, 89],
-                [96, 88, 62]
+                [
+                  100,
+                  98,
+                  94
+                ],
+                [
+                  100,
+                  96,
+                  91
+                ],
+                [
+                  98,
+                  97,
+                  89
+                ],
+                [
+                  96,
+                  88,
+                  62
+                ]
               ],
               "max": 100,
               "unit": "%",
@@ -7549,7 +7823,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Stage reached", "What killed it there", "Evidence"],
+            "head": [
+              "Stage reached",
+              "What killed it there",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Link working on a kit or eval board",
@@ -7732,7 +8010,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Protecting layout IP vs unblocking integration",
@@ -7827,12 +8109,24 @@
               "rows": [
                 {
                   "name": "Before",
-                  "values": [2, 3, 2, 3, 1],
+                  "values": [
+                    2,
+                    3,
+                    2,
+                    3,
+                    1
+                  ],
                   "label": "11 weeks"
                 },
                 {
                   "name": "After",
-                  "values": [1, 0, 0.5, 0.5, 1],
+                  "values": [
+                    1,
+                    0,
+                    0.5,
+                    0.5,
+                    1
+                  ],
                   "label": "3 weeks"
                 }
               ]
@@ -7974,7 +8268,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What came back", "What it cost them", "Evidence"],
+            "head": [
+              "What came back",
+              "What it cost them",
+              "Evidence"
+            ],
             "rows": [
               [
                 "\"We had to compress harder than planned\"",
@@ -8159,7 +8457,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Rate vs energy per bit",
@@ -8410,7 +8712,11 @@
                 "About 3.4 Mbit/s real throughput",
                 "9 of 14"
               ],
-              ["Sub-millisecond latency", "Met, comfortably", "12 of 14"],
+              [
+                "Sub-millisecond latency",
+                "Met, comfortably",
+                "12 of 14"
+              ],
               [
                 "Operation at 1–5 cm through a sealed wall",
                 "Met, but tuned for longer range than asked",
@@ -8606,7 +8912,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Throughput vs range",
@@ -8678,17 +8988,29 @@
               "title": "Transfer time against payload size: gen-1 leaves the one-minute service window between 25 and 50 megabytes, gen-2 stays inside it to 100 megabytes",
               "yMax": 250,
               "yUnit": "seconds",
-              "xLabels": ["25 MB", "50 MB", "100 MB"],
+              "xLabels": [
+                "25 MB",
+                "50 MB",
+                "100 MB"
+              ],
               "series": [
                 {
                   "name": "XA-NFE2001 (gen-1)",
                   "color": "#2c3a73",
-                  "points": [59, 118, 235]
+                  "points": [
+                    59,
+                    118,
+                    235
+                  ]
                 },
                 {
                   "name": "XA-NFE3001 (gen-2)",
                   "color": "#5b7cfa",
-                  "points": [15, 30, 59]
+                  "points": [
+                    15,
+                    30,
+                    59
+                  ]
                 }
               ],
               "threshold": {
@@ -8815,7 +9137,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What the analyst had", "Where it broke down", "Evidence"],
+            "head": [
+              "What the analyst had",
+              "Where it broke down",
+              "Evidence"
+            ],
             "rows": [
               [
                 "A log file and a fault code",
@@ -8997,7 +9323,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Realism vs repeatability",
@@ -9394,7 +9724,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Per-slot locking vs one cabinet door",
@@ -9487,25 +9821,45 @@
                   "name": "Data-centre halls",
                   "weight": 1450,
                   "weightLabel": "1,450 keys",
-                  "values": [86.1, 9, 4.5, 0.4]
+                  "values": [
+                    86.1,
+                    9,
+                    4.5,
+                    0.4
+                  ]
                 },
                 {
                   "name": "Manufacturing plants",
                   "weight": 1150,
                   "weightLabel": "1,150 keys",
-                  "values": [74, 18, 7.4, 0.6]
+                  "values": [
+                    74,
+                    18,
+                    7.4,
+                    0.6
+                  ]
                 },
                 {
                   "name": "Commercial estates",
                   "weight": 620,
                   "weightLabel": "620 keys",
-                  "values": [81.1, 13, 5.4, 0.5]
+                  "values": [
+                    81.1,
+                    13,
+                    5.4,
+                    0.5
+                  ]
                 },
                 {
                   "name": "Utility substations",
                   "weight": 200,
                   "weightLabel": "200 keys",
-                  "values": [69.2, 22, 7.7, 1.1]
+                  "values": [
+                    69.2,
+                    22,
+                    7.7,
+                    1.1
+                  ]
                 }
               ]
             },
@@ -9640,7 +9994,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What we opened", "What it cost them", "Across 9 watches"],
+            "head": [
+              "What we opened",
+              "What it cost them",
+              "Across 9 watches"
+            ],
             "rows": [
               [
                 "A colour screen behind glass",
@@ -9759,7 +10117,11 @@
               "Over-the-air firmware update",
               "A second display option in the same footprint"
             ],
-            "cut": ["Colour screen", "Blood-oxygen readings", "Wi-Fi"]
+            "cut": [
+              "Colour screen",
+              "Blood-oxygen readings",
+              "Wi-Fi"
+            ]
           },
           {
             "kind": "para",
@@ -9824,7 +10186,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Shelf appeal vs daily use",
@@ -10232,7 +10598,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Sort capsules vs calibrate units",
@@ -10318,12 +10688,66 @@
                   "name": "Capsules as delivered",
                   "label": "60 measured, three lots",
                   "values": [
-                    -2.95, -2.6, -2.4, -2.1, -1.9, -1.8, -1.6, -1.5, -1.4, -1.2,
-                    -1.1, -0.9, -0.8, -0.6, -0.4, -0.2, 0.1, 0.3, 0.4, 0.6,
-                    -2.8, -1.7, -1.3, -0.7, -0.3, 0.2, 0.5, 0.8, 0.9, 1.1, 1.2,
-                    1.4, 1.5, 1.7, 1.8, 2, 2.2, 2.4, 2.6, 2.9, -0.5, 0, 0.7, 1,
-                    1.3, 1.6, 1.9, 2.1, 2.3, 2.5, 2.7, 2.8, 1.45, 0.95, 0.35,
-                    -0.15, -1.05, -2.2, 2.45, 0.55
+                    -2.95,
+                    -2.6,
+                    -2.4,
+                    -2.1,
+                    -1.9,
+                    -1.8,
+                    -1.6,
+                    -1.5,
+                    -1.4,
+                    -1.2,
+                    -1.1,
+                    -0.9,
+                    -0.8,
+                    -0.6,
+                    -0.4,
+                    -0.2,
+                    0.1,
+                    0.3,
+                    0.4,
+                    0.6,
+                    -2.8,
+                    -1.7,
+                    -1.3,
+                    -0.7,
+                    -0.3,
+                    0.2,
+                    0.5,
+                    0.8,
+                    0.9,
+                    1.1,
+                    1.2,
+                    1.4,
+                    1.5,
+                    1.7,
+                    1.8,
+                    2,
+                    2.2,
+                    2.4,
+                    2.6,
+                    2.9,
+                    -0.5,
+                    0,
+                    0.7,
+                    1,
+                    1.3,
+                    1.6,
+                    1.9,
+                    2.1,
+                    2.3,
+                    2.5,
+                    2.7,
+                    2.8,
+                    1.45,
+                    0.95,
+                    0.35,
+                    -0.15,
+                    -1.05,
+                    -2.2,
+                    2.45,
+                    0.55
                   ]
                 },
                 {
@@ -10331,11 +10755,46 @@
                   "label": "240 measured at final test",
                   "own": true,
                   "values": [
-                    -0.38, -0.34, -0.31, -0.29, -0.26, -0.24, -0.21, -0.19,
-                    -0.16, -0.14, -0.11, -0.09, -0.06, -0.04, -0.01, 0.02, 0.04,
-                    0.07, 0.09, 0.12, 0.14, 0.17, 0.19, 0.22, 0.24, 0.27, 0.29,
-                    0.32, 0.35, 0.38, -0.36, -0.27, -0.18, -0.08, 0.01, 0.11,
-                    0.21, 0.31, -0.22, 0.16
+                    -0.38,
+                    -0.34,
+                    -0.31,
+                    -0.29,
+                    -0.26,
+                    -0.24,
+                    -0.21,
+                    -0.19,
+                    -0.16,
+                    -0.14,
+                    -0.11,
+                    -0.09,
+                    -0.06,
+                    -0.04,
+                    -0.01,
+                    0.02,
+                    0.04,
+                    0.07,
+                    0.09,
+                    0.12,
+                    0.14,
+                    0.17,
+                    0.19,
+                    0.22,
+                    0.24,
+                    0.27,
+                    0.29,
+                    0.32,
+                    0.35,
+                    0.38,
+                    -0.36,
+                    -0.27,
+                    -0.18,
+                    -0.08,
+                    0.01,
+                    0.11,
+                    0.21,
+                    0.31,
+                    -0.22,
+                    0.16
                   ]
                 }
               ]
@@ -10498,7 +10957,11 @@
                 "Altitude dominates by roughly three to one",
                 "3 of 4"
               ],
-              ["Flights in clear air", "None flown in precipitation", "4 of 4"]
+              [
+                "Flights in clear air",
+                "None flown in precipitation",
+                "4 of 4"
+              ]
             ]
           },
           {
@@ -10888,17 +11351,29 @@
               "rows": [
                 {
                   "name": "Routine observation",
-                  "values": [3.5, 1.2, 4.8],
+                  "values": [
+                    3.5,
+                    1.2,
+                    4.8
+                  ],
                   "label": "9.5 min"
                 },
                 {
                   "name": "Medication round",
-                  "values": [3.5, 4.1, 4.8],
+                  "values": [
+                    3.5,
+                    4.1,
+                    4.8
+                  ],
                   "label": "12.4 min"
                 },
                 {
                   "name": "Patient request",
-                  "values": [3.5, 2.6, 4.8],
+                  "values": [
+                    3.5,
+                    2.6,
+                    4.8
+                  ],
                   "label": "10.9 min"
                 }
               ]
@@ -11013,11 +11488,36 @@
                 "Beyond 2 m"
               ],
               "cells": [
-                ["pass", "pass", "marginal", "marginal"],
-                ["pass", "marginal", "fail", "fail"],
-                ["marginal", "fail", "fail", "fail"],
-                ["none", "none", "none", "none"],
-                ["none", "none", "none", "none"]
+                [
+                  "pass",
+                  "pass",
+                  "marginal",
+                  "marginal"
+                ],
+                [
+                  "pass",
+                  "marginal",
+                  "fail",
+                  "fail"
+                ],
+                [
+                  "marginal",
+                  "fail",
+                  "fail",
+                  "fail"
+                ],
+                [
+                  "none",
+                  "none",
+                  "none",
+                  "none"
+                ],
+                [
+                  "none",
+                  "none",
+                  "none",
+                  "none"
+                ]
               ],
               "legend": {
                 "pass": "within the agreed margin",
@@ -12317,17 +12817,29 @@
               "rows": [
                 {
                   "name": "Visual and sound prompts",
-                  "values": [12, 2, 0],
+                  "values": [
+                    12,
+                    2,
+                    0
+                  ],
                   "label": "12 of 14"
                 },
                 {
                   "name": "Teacher-assigned content",
-                  "values": [10, 3, 1],
+                  "values": [
+                    10,
+                    3,
+                    1
+                  ],
                   "label": "10 of 14"
                 },
                 {
                   "name": "Guided-writing gantry",
-                  "values": [5, 4, 5],
+                  "values": [
+                    5,
+                    4,
+                    5
+                  ],
                   "label": "5 of 14"
                 }
               ]
@@ -12449,17 +12961,38 @@
                 {
                   "name": "Visual and sound prompts",
                   "color": "#3fae8b",
-                  "values": [5, 5, 4, 4, 4, 4]
+                  "values": [
+                    5,
+                    5,
+                    4,
+                    4,
+                    4,
+                    4
+                  ]
                 },
                 {
                   "name": "Teacher-assigned content",
                   "color": "#5b7cfa",
-                  "values": [5, 4, 5, 2, 3, 3]
+                  "values": [
+                    5,
+                    4,
+                    5,
+                    2,
+                    3,
+                    3
+                  ]
                 },
                 {
                   "name": "Guided-writing gantry",
                   "color": "#d0745a",
-                  "values": [2, 3, 4, 2, 2, 2]
+                  "values": [
+                    2,
+                    3,
+                    4,
+                    2,
+                    2,
+                    2
+                  ]
                 }
               ]
             },
@@ -12829,7 +13362,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Deterrence vs measurement",
@@ -12902,8 +13439,28 @@
             "chart": {
               "form": "confusion",
               "title": "Model rider count against hand-labelled ground truth across 1,840 clips: 64 two-rider clips counted as three or more, and 14 three-rider clips counted as two",
-              "classes": ["1 rider", "2 riders", "3 or more"],
-              "cells": [[624, 12, 3], [20, 956, 64], [1, 14, 146]],
+              "classes": [
+                "1 rider",
+                "2 riders",
+                "3 or more"
+              ],
+              "cells": [
+                [
+                  624,
+                  12,
+                  3
+                ],
+                [
+                  20,
+                  956,
+                  64
+                ],
+                [
+                  1,
+                  14,
+                  146
+                ]
+              ],
               "rowLabel": "Ground truth",
               "colLabel": "Model said",
               "marginLabel": "correct"
@@ -13062,7 +13619,11 @@
                 "The rhythm of the flapping, not the shape",
                 "19 of 24"
               ],
-              ["Did you hear anything?", "Nobody mentioned a sound", "24 of 24"]
+              [
+                "Did you hear anything?",
+                "Nobody mentioned a sound",
+                "24 of 24"
+              ]
             ]
           },
           {
@@ -13072,8 +13633,18 @@
               "title": "Share of observers calling it a bird by distance: 29 percent at 20 metres, 67 at 40, 83 at 60, 88 at 80",
               "yMax": 100,
               "yUnit": "% of observers saying \"a bird\"",
-              "xLabels": ["20 m", "40 m", "60 m", "80 m"],
-              "points": [29, 67, 83, 88],
+              "xLabels": [
+                "20 m",
+                "40 m",
+                "60 m",
+                "80 m"
+              ],
+              "points": [
+                29,
+                67,
+                83,
+                88
+              ],
               "ceiling": {
                 "value": 60,
                 "label": "the level we needed to claim it hides in plain sight"
@@ -13391,7 +13962,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What they did", "Where it broke", "Evidence"],
+            "head": [
+              "What they did",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Asked what was owed on a matter",
@@ -13514,27 +14089,69 @@
               "columns": [
                 {
                   "name": "Half 1",
-                  "values": [5, 0, 2, 0, 0, 1]
+                  "values": [
+                    5,
+                    0,
+                    2,
+                    0,
+                    0,
+                    1
+                  ]
                 },
                 {
                   "name": "Half 2",
-                  "values": [3, 4, 2, 0, 0, 1]
+                  "values": [
+                    3,
+                    4,
+                    2,
+                    0,
+                    0,
+                    1
+                  ]
                 },
                 {
                   "name": "Half 3",
-                  "values": [1, 4, 3, 2, 1, 1]
+                  "values": [
+                    1,
+                    4,
+                    3,
+                    2,
+                    1,
+                    1
+                  ]
                 },
                 {
                   "name": "Half 4",
-                  "values": [1, 2, 2, 4, 2, 1]
+                  "values": [
+                    1,
+                    2,
+                    2,
+                    4,
+                    2,
+                    1
+                  ]
                 },
                 {
                   "name": "Half 5",
-                  "values": [0, 1, 0, 3, 2, 1]
+                  "values": [
+                    0,
+                    1,
+                    0,
+                    3,
+                    2,
+                    1
+                  ]
                 },
                 {
                   "name": "Half 6 (to date)",
-                  "values": [0, 0, 0, 1, 1, 1]
+                  "values": [
+                    0,
+                    0,
+                    0,
+                    1,
+                    1,
+                    1
+                  ]
                 }
               ],
               "markers": [
@@ -13753,7 +14370,11 @@
           },
           {
             "kind": "table",
-            "head": ["Surface", "Who uses it", "The decision it carries"],
+            "head": [
+              "Surface",
+              "Who uses it",
+              "The decision it carries"
+            ],
             "rows": [
               [
                 "Mail-triggered spine",
@@ -13819,7 +14440,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Cycle time vs inventor time",
@@ -13905,17 +14530,41 @@
               "form": "survival",
               "title": "Share of open matters still awaiting their next action by elapsed day: at day 30 the earlier cohort is at 61 percent and the later at 18 percent",
               "xTitle": "Days since the action became owed",
-              "xLabels": ["0", "15", "30", "45", "60", "75", "90+"],
+              "xLabels": [
+                "0",
+                "15",
+                "30",
+                "45",
+                "60",
+                "75",
+                "90+"
+              ],
               "series": [
                 {
                   "name": "Before",
                   "color": "#d0745a",
-                  "points": [100, 82, 61, 44, 33, 26, 21]
+                  "points": [
+                    100,
+                    82,
+                    61,
+                    44,
+                    33,
+                    26,
+                    21
+                  ]
                 },
                 {
                   "name": "After",
                   "color": "#5b7cfa",
-                  "points": [100, 46, 18, 8, 4, 2, 2]
+                  "points": [
+                    100,
+                    46,
+                    18,
+                    8,
+                    4,
+                    2,
+                    2
+                  ]
                 }
               ],
               "threshold": {
@@ -14040,22 +14689,38 @@
               "rows": [
                 {
                   "name": "In-tenant notetaker",
-                  "values": [212, 0, 0],
+                  "values": [
+                    212,
+                    0,
+                    0
+                  ],
                   "label": "212 covered"
                 },
                 {
                   "name": "Vendor bot, all",
-                  "values": [0, 212, 0],
+                  "values": [
+                    0,
+                    212,
+                    0
+                  ],
                   "label": "212 leave the tenant"
                 },
                 {
                   "name": "Vendor bot, cleared",
-                  "values": [0, 66, 146],
+                  "values": [
+                    0,
+                    66,
+                    146
+                  ],
                   "label": "66 covered"
                 },
                 {
                   "name": "Human minutes rota",
-                  "values": [30, 0, 182],
+                  "values": [
+                    30,
+                    0,
+                    182
+                  ],
                   "label": "30 covered"
                 }
               ]
@@ -14076,7 +14741,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["What was assumed", "What the trace found", "Evidence"],
+            "head": [
+              "What was assumed",
+              "What the trace found",
+              "Evidence"
+            ],
             "rows": [
               [
                 "The meetings that matter get minuted",
@@ -14258,7 +14927,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Residency vs transcript quality",
@@ -14341,7 +15014,10 @@
               "title": "Where 24 traced decisions could be found, before against after: a durable written record 5 to 21, a chat thread someone had to locate 7 to 2, somebody's memory 12 to 1",
               "max": 24,
               "unit": "decisions",
-              "seriesNames": ["Before", "After"],
+              "seriesNames": [
+                "Before",
+                "After"
+              ],
               "rows": [
                 {
                   "name": "Durable written record",
@@ -14492,7 +15168,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Artefact", "Where it broke", "Evidence"],
+            "head": [
+              "Artefact",
+              "Where it broke",
+              "Evidence"
+            ],
             "rows": [
               [
                 "Standup document",
@@ -14518,7 +15198,10 @@
               "title": "Rows checked against rows that disagreed with the task record, by artefact, over six sprints",
               "max": 90,
               "unit": "rows",
-              "seriesNames": ["Rows checked", "Rows that disagreed"],
+              "seriesNames": [
+                "Rows checked",
+                "Rows that disagreed"
+              ],
               "rows": [
                 {
                   "name": "Standup document",
@@ -14548,7 +15231,9 @@
       {
         "num": "03",
         "heading": "My role and approach",
-        "body": ["I owned scope, the write boundary and the ceremony rules."],
+        "body": [
+          "I owned scope, the write boundary and the ceremony rules."
+        ],
         "blocks": [
           {
             "kind": "decisions",
@@ -14690,7 +15375,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "Changing state vs protecting the workspace",
@@ -14775,11 +15464,33 @@
               ],
               "upper": {
                 "name": "Standup length",
-                "points": [18, 17, 15, 13, 11, 10, 10, 9, 9, 9]
+                "points": [
+                  18,
+                  17,
+                  15,
+                  13,
+                  11,
+                  10,
+                  10,
+                  9,
+                  9,
+                  9
+                ]
               },
               "lower": {
                 "name": "Minutes not spent reading out state",
-                "points": [7, 7, 8, 8, 8, 8, 8, 8, 8, 8]
+                "points": [
+                  7,
+                  7,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8,
+                  8
+                ]
               },
               "gapLabel": "read out from a document",
               "marker": {
@@ -15052,7 +15763,11 @@
         "blocks": [
           {
             "kind": "table",
-            "head": ["Tension", "What I chose", "What it cost"],
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
             "rows": [
               [
                 "One doctrine vs per-team fit",
@@ -15285,5 +16000,595 @@
       }
     ],
     "sampleNote": "This page describes a confidential programme. The part number, specification, application, customers and dates are withheld and no figure is shown. I’m glad to walk through the programme in a conversation."
+  },
+  "ixana-finance-orchestrator": {
+    "slug": "ixana-finance-orchestrator",
+    "eyebrow": "Ixana · Finance operations",
+    "title": "Finance orchestrator",
+    "deck": "One ledger under payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise findings they can cite and draft the change, while every approval stays a named person and every figure says where it came from.",
+    "status": "development",
+    "meta": {
+      "role": "Product manager, sole builder of the demo",
+      "team": "1 finance controller (design partner, planned pilot), 1 AP specialist, 1 award programme manager, 1 platform administrator",
+      "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
+    },
+    "confidentiality": "In development — every figure on this page is illustrative and computed from a synthetic ledger (seed 20260925), every name is invented, and payroll appears only as department × month aggregates with groups under three suppressed. The two money surfaces it reads, the patent programme and the Ops Desk, are carried unchanged and reconciled to the cent by test.",
+    "sampleNote": "BUILT: the seed, the two read-only adapters, nine screens, five agents, ask-your-ledger, the eval harness and 50 tests — all running in the linked demo. PLANNED: the read-only pilot on real exports, the controller and AP interviews, the acceptance measurement and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and results on the labelled set, each with its n. I'm glad to walk through the seed, the rules and the tests in a conversation.",
+    "evidence": [
+      {
+        "label": "Open the working demo — nine screens over one synthetic ledger, as the controller, the AP specialist, the award PM or the auditor",
+        "url": "/demo/finance-desk"
+      },
+      {
+        "label": "Or start at the invoice that carries three findings, and try to pay it",
+        "url": "/demo/finance-desk/ap?id=INV-0236"
+      },
+      {
+        "label": "The PRD",
+        "url": "/docs/finance/prd"
+      },
+      {
+        "label": "Trust, accuracy and explainability — what the agents may and may not do",
+        "url": "/docs/finance/trust-accuracy-explainability"
+      },
+      {
+        "label": "The business case, modelled and labelled as such",
+        "url": "/docs/finance/business-case"
+      },
+      {
+        "label": "The ten-minute demo script",
+        "url": "/docs/finance/demo-script"
+      }
+    ],
+    "fast": {
+      "pull": "A finding the agent cannot cite is dropped before anyone sees it; a change the agent proposes waits for a named person.",
+      "facts": [
+        {
+          "text": "Live demo: $61,900.00 of patent counsel and $35,140 of Ops requests carried to the cent, by test",
+          "cls": "A"
+        },
+        {
+          "text": "Eleven rules, one unit test each; five agents, the ledger hash unchanged after every run",
+          "cls": "A"
+        },
+        {
+          "text": "Ask-your-ledger refuses any question about one person's pay, with no rows",
+          "cls": "A"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "lead": "Problem.",
+        "text": "Money at a hundred-person chip company had two honest surfaces — the patent ledger, where every counsel dollar names its matter, and the Ops Desk, where every request has an owner and a ceiling — and no third that read them. Payroll, AP, cards, the web store and a restricted award sat in five exports, so a duplicate or a bank-detail change before a rush payment was found by whoever happened to look."
+      },
+      {
+        "lead": "What I did.",
+        "text": "I built the ledger those two surfaces feed, inside the Wiki they live in: a deterministic synthetic ledger with planted anomalies and hard negatives, nine screens that compute every number on request, and five agents under one contract that returns findings and drafts, never actions."
+      },
+      {
+        "lead": "Result.",
+        "text": "Early signal on the labelled set only, n on every figure. The AP agent raises all 47 planted anomalies and none of the 179 hard negatives; the matcher proposes no wrong-amount match across 371 bank lines; every run leaves the ledger hash unchanged; no person has yet decided a finding, so acceptance is n = 0."
+      }
+    ],
+    "sections": [
+      {
+        "num": "01",
+        "heading": "Why this, and why now",
+        "body": [
+          "The obvious answer was an AP automation product, and two were priced. I argued for a quarter proving the operating model on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the ledger between them, and the rule that an agent may find and draft but never act."
+        ],
+        "blocks": [
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "pairedBars",
+              "title": "Modelled hours per monthly close, today against with the desk: bank reconciliation 14 to 6, AP review 10 to 5, award compliance 8 to 4, accrual drafting 6 to 3, audit preparation 8 to 3 — modelled, not measured",
+              "yMax": 16,
+              "unit": "hours per close, modelled",
+              "beforeLabel": "today (modelled)",
+              "afterLabel": "with the desk (modelled)",
+              "groups": [
+                {
+                  "name": "Bank reconciliation",
+                  "before": 14,
+                  "after": 6
+                },
+                {
+                  "name": "AP review",
+                  "before": 10,
+                  "after": 5
+                },
+                {
+                  "name": "Award compliance",
+                  "before": 8,
+                  "after": 4
+                },
+                {
+                  "name": "Accrual drafting",
+                  "before": 6,
+                  "after": 3
+                },
+                {
+                  "name": "Audit preparation",
+                  "before": 8,
+                  "after": 3
+                }
+              ]
+            },
+            "caption": "Modelled, not measured: the business case's assumptions table, with the controller's own estimate of each task today and the share the desk's screens would carry. No hour on this chart has been observed; the planned pilot measures the left column before any claim is made about the right."
+          }
+        ],
+        "after": [
+          "Under two hundred invoices a month this is a ledger and five rule sets; past a thousand, the accounting system is the ledger and this is its review layer."
+        ]
+      },
+      {
+        "num": "02",
+        "heading": "The problem as people experienced it",
+        "body": [
+          "I read the two surfaces that existed the way an auditor would — 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments — coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
+          "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, an award spreadsheet, and bank details by email."
+        ],
+        "blocks": [
+          {
+            "kind": "table",
+            "head": [
+              "Flow",
+              "Where a dollar lost its owner",
+              "Counts from the rows"
+            ],
+            "rows": [
+              [
+                "Patent counsel (Patents ledger)",
+                "Two charges the firm could not name a matter for; held rather than defaulted into one",
+                "2 of 25 invoices carry an unallocated line, $3,360 of $61,900"
+              ],
+              [
+                "Purchases and shipments (Ops Desk)",
+                "Refused at the ceiling, or shipped with no account to post to",
+                "4 of 28 requests refused at $5,000; 15 shipments with no freight or duties account until now"
+              ],
+              [
+                "AP, cards, payroll, web store, award",
+                "No ledger; five exports; a bank-detail change was an email",
+                "0 of 5 flows with a row-level trail; 4 vendor bank changes, 3 never verified by call-back"
+              ]
+            ]
+          },
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "hbar",
+              "title": "Where the synthetic ledger's planted anomalies sit, by rule: duplicates 9, missing purchase order 6, amount unusual 5, bank-detail change 4, off-policy 4, misclassification 4, round number 4, split purchase orders 7, new vendor with rush 3, after hours 1 — 47 in all, kept apart from the rows the agents read",
+              "max": 10,
+              "unit": "planted anomalies (n = 47)",
+              "rows": [
+                {
+                  "name": "Duplicate (exact + fuzzy)",
+                  "value": 9,
+                  "label": "9"
+                },
+                {
+                  "name": "Split purchase orders",
+                  "value": 7,
+                  "label": "7"
+                },
+                {
+                  "name": "Missing PO / three-way",
+                  "value": 6,
+                  "label": "6"
+                },
+                {
+                  "name": "Amount unusual",
+                  "value": 5,
+                  "label": "5"
+                },
+                {
+                  "name": "Bank-detail change",
+                  "value": 4,
+                  "label": "4"
+                },
+                {
+                  "name": "Off-policy on the award",
+                  "value": 4,
+                  "label": "4"
+                },
+                {
+                  "name": "Misclassification",
+                  "value": 4,
+                  "label": "4"
+                },
+                {
+                  "name": "Round number",
+                  "value": 4,
+                  "label": "4"
+                },
+                {
+                  "name": "New vendor + rush",
+                  "value": 3,
+                  "label": "3"
+                },
+                {
+                  "name": "After hours (never alone)",
+                  "value": 1,
+                  "label": "1",
+                  "dim": true
+                }
+              ]
+            },
+            "caption": "Synthetic ledger, seed 20260925: twelve months, 2,029 lines, 313 invoices. The 47 anomalies and 179 hard negatives are planted by the seed and labelled in a file the agents never import; the harness alone joins the two. The shape is chosen, not observed — it is the shape a controller described as the year's worries."
+          }
+        ],
+        "after": [
+          "Nobody asked for a faster close. The controller wanted to know where any number came from, and that nothing had paid itself."
+        ]
+      },
+      {
+        "num": "03",
+        "heading": "My role and approach",
+        "body": [
+          "I own the contract the agents sign, the seed and its labels, and the integrity rules; most of the work was writing rules a controller can argue with."
+        ],
+        "blocks": [
+          {
+            "kind": "decisions",
+            "label": "Key decisions",
+            "items": [
+              {
+                "lead": "Finance reads the two existing surfaces and never re-authors them.",
+                "text": "One test per source fails if a cent moves."
+              },
+              {
+                "lead": "An agent returns findings and drafts, or nothing.",
+                "text": "A finding without an evidence row is dropped before return."
+              },
+              {
+                "lead": "The labels live apart from the rows.",
+                "text": "A test reads the agents' source to prove they import neither."
+              },
+              {
+                "lead": "Every number is computed on request, with its provenance.",
+                "text": "Nothing on a tile is stored, so it cannot drift from its rows."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "num": "04",
+        "heading": "What I cut",
+        "blocks": [
+          {
+            "kind": "scope",
+            "shipped": [
+              "BUILT — a deterministic seed: twelve months, six departments, two entities, a restricted award, 46 vendors, 313 invoices, 189 card lines, 371 bank lines, 47 Stripe orders and 29 payouts, 47 planted anomalies with 179 hard negatives",
+              "BUILT — nine screens: overview with a where-from drawer on every tile, ledger, AP queue, reconcile, funds, close, health, audit, agents; a persona switch; deep links for every state",
+              "BUILT — five agents under one contract, ask-your-ledger with refusals, an eval harness with n, a hash-chained audit log, 50 tests"
+            ],
+            "deferred": [
+              "PLANNED — the read-only pilot: nightly exports from the accounting system, the card feed, the processor and the payroll provider, replayed through the same adapters",
+              "PLANNED — interviews with the controller and the AP specialist, and the acceptance measurement from the audit trail",
+              "PLANNED — L2 auto-execute for exact bank matches under $500, promoted only after 200 human decisions at precision ≥ 0.98"
+            ],
+            "cut": [
+              "A language model in the critical path — ask-your-ledger is deterministic retrieval, and a rule is a function a person can read",
+              "Individual payroll analytics of any kind — payroll enters the ledger as department × month, with groups under three suppressed, and the refusal is tested",
+              "Statutory tax and filing dates, releasing payments, changing vendor bank details, closing periods, releasing restricted funds, posting journals, writing back to Ops or Patents — by contract, not by configuration"
+            ]
+          },
+          {
+            "kind": "para",
+            "text": "The hardest cut was the model. It could write every finding in better prose and might raise ones the rules miss; but a rule's attribution is a weight a controller can disagree with, and the first month of a pilot is her learning which rules she trusts. The model belongs at the edge, after the rules have earned the room."
+          },
+          {
+            "kind": "doc",
+            "bar": "From the trust note — what AI is not used for, v1",
+            "lead": "No agent, at any trust level, will",
+            "items": [
+              {
+                "lead": "Release a payment or change a vendor's bank details.",
+                "text": "Both are a named person's approval, and the second is refused outright when the change is unverified."
+              },
+              {
+                "lead": "Post a journal, close a period or release restricted funds.",
+                "text": "Drafts only; the approval is what changes state, and it is the audit event."
+              },
+              {
+                "lead": "Write back to the Ops Desk or the Patents ledger.",
+                "text": "Finance reads them; one test per source holds the totals to the cent."
+              },
+              {
+                "lead": "Answer a question about one person's pay, or compute a statutory date.",
+                "text": "Refused with the reason, no rows attached."
+              }
+            ],
+            "note": "One page from the trust note. The list is the same on every Finance screen's footer and in the agents' contract; it is not a setting."
+          }
+        ]
+      },
+      {
+        "num": "05",
+        "heading": "How I got it agreed",
+        "body": [
+          "The two surfaces Finance reads had one condition each, pulling against each other: the patent programme never computes a statutory date, only mirrors one; the Ops Desk's totals are its own and its clock is 21 August. Finance wanted one clock and one set of books, and the first render broke both promises — September approvals in the audit log, shipments posted after Finance's own today.",
+          "I proposed that Finance take the desk's clock, generate nothing after it, and carry every Patents date as a stored, labelled mirror. The patent programme owner agreed and added a condition: the two unallocated charges stay in their holding account, never defaulted into a matter. The price was re-pinning the seed twice, and one test per source that a cent cannot pass."
+        ]
+      },
+      {
+        "num": "06",
+        "heading": "What was built",
+        "body": [
+          "A Finance section inside the Wiki, after Patents: one seed builds the ledger, two adapters carry Patents and Ops unchanged, nine screens compute what they show on each request, five agents return findings and drafts, ask-your-ledger answers from cited rows or refuses, and an audit log chains every event."
+        ],
+        "blocks": [
+          {
+            "kind": "shot",
+            "image": "/static/images/project/ixana-finance-ap-finding.jpg",
+            "alt": "The AP queue with a drawer open on invoice INV-0236 from Pacific Packaging: the vendor's unverified bank-detail history in a red panel, then three agent findings stacked — bank-detail change at high severity with four attribution bars, a fuzzy duplicate of the genuine April packaging invoice, and a round $61,000 with rush and no purchase order — each with evidence chips and a recommended action.",
+            "callouts": [
+              {
+                "lead": "Three findings on one invoice, because one row can be three things.",
+                "text": "The $61,000 rush invoice mimics the genuine April packaging invoice, arrives a day after an unverified bank change and is a round amount with no PO. The first eval run scored it as three false positives; the labels were wrong, not the rules."
+              },
+              {
+                "lead": "Attributions are weights a controller can argue with.",
+                "text": "Unverified change 50 %, days to invoice 20 %, requested by email 15 %, rush 15 % — shares of one confidence, summing to one, each with the value that earned it."
+              },
+              {
+                "lead": "Evidence chips open the rows; a finding with none is never shown.",
+                "text": "The contract drops it before return and counts the drop; the count is zero and on screen."
+              },
+              {
+                "lead": "Release payment is refused here whoever asks.",
+                "text": "The bank change is unverified, so the segregation-of-duties check refuses the release with the reason and the call-back to make; the analyst who keyed the invoice is refused the approval as well."
+              }
+            ],
+            "note": "Recreation on the synthetic ledger. The invoice, the vendor and the bank are invented; the rule, the weights and the refusal are the ones that run.",
+            "href": "/demo/finance-desk/ap?id=INV-0236",
+            "hrefLabel": "Open the invoice, then try to release the payment"
+          },
+          {
+            "kind": "table",
+            "head": [
+              "Finance concept in the demo",
+              "Fund-accounting analog (ASC 958 / Financial Edge NXT pattern)",
+              "What holds it"
+            ],
+            "rows": [
+              [
+                "Operating fund, unrestricted",
+                "Net assets without donor restrictions",
+                "Every line carries a fund; the operating fund has no rules"
+              ],
+              [
+                "Award R-01, restricted, with a period of performance and category budgets",
+                "Net assets with donor restrictions; a project with a budget, a period and allowability rules",
+                "Five rules judge every award line on each read; unallowable lines draft a reclass for the award PM and the Controller"
+              ],
+              [
+                "Indirect at 20 % on direct costs, never on equipment",
+                "Indirect cost rate applied to a modified base",
+                "Computed from allowable direct lines; a test holds the base"
+              ],
+              [
+                "Close checklist, BD+1 to BD+5, evidence per task",
+                "Period close with task ownership and a lock",
+                "Status is computed from the rows; the close itself is a person's action"
+              ],
+              [
+                "Hash-chained audit log",
+                "Audit trail with tamper evidence",
+                "Verify recomputes every hash; a tampered event breaks the chain from its sequence number"
+              ]
+            ]
+          },
+          {
+            "kind": "gallery",
+            "items": [
+              {
+                "image": "/static/images/project/ixana-finance-ap-sod.jpg",
+                "label": "Refused: whoever keyed it cannot approve it.",
+                "caption": "Dana, the AP specialist, opens an invoice she entered and presses Approve; the check refuses before anything else runs, names the rule, and says who to ask instead. The decision is listed in the audit trail's format. This link opens the row as Dana with the approval already attempted.",
+                "alt": "The AP drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
+                "href": "/demo/finance-desk/ap?as=dana&id=INV-0254&try=approve",
+                "hrefLabel": "Open the refusal as the AP specialist"
+              },
+              {
+                "image": "/static/images/project/ixana-finance-reconcile.jpg",
+                "label": "Three passes, a confidence each, nothing accepted below the line.",
+                "caption": "Bank lines matched by exact reference, then by amount inside five days, then by counterparty; 356 of 371 auto-matched, 3 suggested for a person, 11 exceptions with the reason. A proposed match with the wrong amount is never made — the count is on the screen and in a test. This link opens the suggestions.",
+                "alt": "The reconcile screen filtered to suggested bank matches: three lines with their candidate invoice, the rule that found it, the confidence, and Accept and Reject buttons.",
+                "href": "/demo/finance-desk/reconcile?tab=bank&filter=suggested",
+                "hrefLabel": "Open the three suggestions"
+              },
+              {
+                "image": "/static/images/project/ixana-finance-funds.jpg",
+                "label": "The award's lines, judged by the award's own rules.",
+                "caption": "Award R-01 shown as the startup analog of restricted funds: budget by category, burn against the period of performance, and every line with the rule it passed or failed. An unallowable line offers a reclass that needs the award PM and the Controller. This link opens the unallowable lines.",
+                "alt": "The funds screen for Award R-01 filtered to unallowable lines: a bar charge under rule R01-1 and a pre-award component invoice under R01-4, each with a Propose reclass button.",
+                "href": "/demo/finance-desk/funds?fund=award-r01&verdict=unallowable",
+                "hrefLabel": "Open the unallowable lines"
+              },
+              {
+                "image": "/static/images/project/ixana-finance-close.jpg",
+                "label": "A close checklist computed from the rows, as of any day.",
+                "caption": "Ten tasks with owner, dependency and business-day due date; each is done only when the rows say so, and readiness is the weighted sum shown beside it. The as-of date re-runs every check, so the same period reads differently on the fifth and the twenty-first. This link opens July as of 5 August.",
+                "alt": "The close screen for July 2026 as of 5 August: readiness 68 of 100, ten tasks in a table with status pills, the evidence each check found, and the weight it earned.",
+                "href": "/demo/finance-desk/close?asof=2026-08-05",
+                "hrefLabel": "Open the close as of 5 August"
+              },
+              {
+                "image": "/static/images/project/ixana-finance-agents.jpg",
+                "label": "Five agents, one contract, the eval beside them.",
+                "caption": "Each card shows what the agent does and never does, its queue, drafts, rows read, and the ledger-unchanged check; the AP agent carries precision, recall, F1 and false-positive rate per rule with n, and acceptance reads n = 0 because no person has decided a finding yet. This link opens the panel.",
+                "alt": "The agents screen: the contract, the trust ladder with L2 marked configured and off, five agent cards with counts, and an eval table with a row per rule.",
+                "href": "/demo/finance-desk/agents",
+                "hrefLabel": "Open the agents and their numbers"
+              },
+              {
+                "image": "/static/images/project/ixana-finance-audit.jpg",
+                "label": "1,556 events in one chain, verified in the browser.",
+                "caption": "Every posting, approval, refusal, bank change, period close and agent run, sequence-numbered and hash-chained. Verify recomputes every hash; Simulate a tamper edits one event and the chain breaks from that number on. The auditor persona can open all of it and change none of it. This link opens the log.",
+                "alt": "The audit screen: counts of events by kind, a Verify chain button reporting every hash links to the one before it, and a table of events with sequence, time, who, role, what and hash.",
+                "href": "/demo/finance-desk/audit",
+                "hrefLabel": "Open the audit log and verify it"
+              }
+            ],
+            "note": "Every image is the state its own link opens. All six are recreations on the synthetic ledger; the personas are invented and the refusals are the ones that run."
+          }
+        ]
+      },
+      {
+        "num": "07",
+        "heading": "Tradeoffs",
+        "blocks": [
+          {
+            "kind": "table",
+            "head": [
+              "Tension",
+              "What I chose",
+              "What it cost"
+            ],
+            "rows": [
+              [
+                "Rules vs a model",
+                "Eleven rule functions with visible weights",
+                "Recall stops at what a controller thought to write down; a novel pattern is found by nobody"
+              ],
+              [
+                "Computed on request vs stored",
+                "Nothing on a screen is stored; every tile recomputes from the rows",
+                "Every request rebuilds the ledger; at a thousand invoices a month the cache becomes a design"
+              ],
+              [
+                "A synthetic ledger vs a redacted real one",
+                "A seed with planted anomalies and hard negatives, labelled apart",
+                "Every metric is a result on a seed the rules were tuned against; the first real month decides what they are worth"
+              ],
+              [
+                "Refuse vs warn",
+                "Segregation of duties and unverified bank details refuse; a flagged invoice needs a written reason",
+                "A controller in a hurry cannot override in place; she must ask another approver"
+              ],
+              [
+                "Deep links vs one URL",
+                "Persona, screen, row, tab, as-of and a tried decision all live in the query",
+                "Every screen must render any state on first paint, so nothing is set in an effect"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "num": "08",
+        "heading": "Early signal and what I'm watching",
+        "body": [
+          "The numbers come from the synthetic ledger and its labels — 47 planted anomalies, 179 hard negatives, 371 bank lines — enough to see whether the contract holds, not what a real month holds. Every figure is a count against its denominator, computed on the request that drew this page."
+        ],
+        "blocks": [
+          {
+            "kind": "metrics",
+            "items": [
+              {
+                "value": "47",
+                "sub": "of 47",
+                "label": "Planted anomalies raised by the AP agent on the labelled set (n = 47 + 179)"
+              },
+              {
+                "value": "0",
+                "sub": "of 179",
+                "label": "Hard negatives raised — legitimate rows that resemble an anomaly"
+              },
+              {
+                "value": "0",
+                "sub": "of 371",
+                "label": "Bank matches proposed on a wrong amount (guardrail)"
+              },
+              {
+                "value": "$61,900.00",
+                "label": "Patent counsel carried to the cent, 70 lines, equal to the Patents surface"
+              },
+              {
+                "value": "5",
+                "sub": "of 5",
+                "label": "Agent runs with the ledger hash unchanged"
+              },
+              {
+                "value": "0",
+                "label": "Human decisions on a finding so far — acceptance is n = 0, not estimated"
+              }
+            ]
+          },
+          {
+            "kind": "figure",
+            "chart": {
+              "form": "ladder",
+              "title": "The trust ladder as it stands: L0 Suggest enabled with 43 findings at precision 1.00 on the labelled set of 226 rows; L1 Draft enabled with 27 drafts and no human decision yet, so no precision; L2 Auto-execute configured and off with 0 actions, gated on 200 human decisions at precision 0.98 or better",
+              "maxDecisions": 50,
+              "rungs": [
+                {
+                  "level": "L0",
+                  "name": "Suggest",
+                  "decisions": 43,
+                  "decisionsLabel": "43 findings",
+                  "precision": 1.0,
+                  "precisionLabel": "1.00 (n = 226)",
+                  "enabled": true
+                },
+                {
+                  "level": "L1",
+                  "name": "Draft",
+                  "decisions": 27,
+                  "decisionsLabel": "27 drafts, 0 decided",
+                  "precision": null,
+                  "precisionLabel": "n = 0",
+                  "enabled": true,
+                  "gate": "promotion from L0: a person accepts drafts"
+                },
+                {
+                  "level": "L2",
+                  "name": "Auto-execute",
+                  "decisions": 0,
+                  "decisionsLabel": "0 actions",
+                  "precision": null,
+                  "precisionLabel": "off",
+                  "enabled": false,
+                  "gate": "gate: ≥ 200 human decisions at precision ≥ 0.98"
+                }
+              ]
+            },
+            "caption": "Trust ladder, synthetic ledger, computed on this request. L0 is earned on the labelled set only; L1 is where the demo lives; L2 stays configured and off until two hundred people-decisions say the exact-reference matcher under $500 deserves it, and every auto action would be one reversible audit event. The first eval run read 0.34 precision — most of it true findings the labels had not recorded — which is the more useful number to remember."
+          },
+          {
+            "kind": "definition",
+            "lead": "How we counted.",
+            "text": "A planted anomaly counts as raised when a finding of its type names its row; a hard negative counts as raised when any finding of the type it resembles names it. Precision and recall are per type, micro-averaged; the false-positive rate is findings on hard negatives over hard negatives. Acceptance would count a person's accept or dismiss in the audit trail, and there are none."
+          },
+          {
+            "kind": "config",
+            "text": "Demo configuration — a Finance section inside the Wiki (Next.js 16, React 19, Tailwind 4), nine routes and a mock API · one deterministic seed (mulberry32, seed 20260925, clock 21 Aug 2026), fingerprint pinned by test · two read-only adapters over the Patents ledger and the Ops Desk export (SHA recorded) · eleven rule functions, a three-pass matcher, five agents under one contract, ask-your-ledger as deterministic retrieval · FNV-1a hash-chained audit log · vitest, 50 tests · no model, no network call, no database, no writes"
+          }
+        ]
+      },
+      {
+        "num": "09",
+        "heading": "What would make me stop",
+        "body": [
+          "Written before the first rule and agreed before build with the controller who will run the pilot, each a stop rather than a discussion.",
+          "Any action taken by an agent stops the pilot the same day. A finding shown without an evidence row stops the agent that raised it. Any write reaching the Ops Desk or the Patents ledger stops the adapters. Any screen from which one person's pay can be derived stops the payroll feed.",
+          "Two softer stops: precision under 0.90 on a rule in the first real month retires it to advisory; the controller not opening the queue two weeks running ends the pilot."
+        ]
+      },
+      {
+        "num": "10",
+        "heading": "What I'd do differently",
+        "body": [
+          "I labelled the seed one anomaly per row and paid with an eval that read 0.34 precision on its first run; most of the false positives were true.",
+          "I gave the seed its own clock before reading the two it inherits.",
+          "I shipped the round-number rule as a finding and every large legitimate purchase came back. A weak signal needs a partner."
+        ]
+      }
+    ]
   }
 }

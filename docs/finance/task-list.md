@@ -40,14 +40,14 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] "No state change without approval" test (ledger hash before = after, all five) · SoD refusal test · uncitable-finding-dropped test · after-hours-never-alone test · agents-never-read-labels test
 - [x] Walkthrough P3 (`walkthrough-P3.md`, screenshots in `walkthrough/P3/`)
 
-## P4 — Artifacts + case study + demo (portfolio)
-- [ ] `docs/finance/` — PRD, engineering spec, user stories, roadmap, business case, leadership memo, GTM, trust/accuracy/explainability, FE NXT mapping, demo script
-- [ ] `/docs/finance/[doc]` route
-- [ ] Case-study JSON entry (`development`, Ops variant, §08 `ladder`), card, `/demo/finance-desk` rewrite
-- [ ] Verifier rules for `development` · `npm run verify:work` clean
-- [ ] Captures `ixana-finance-*.jpg` (each the state its link opens)
-- [ ] Ixana-Wiki case-study mention — proposal text only
-- [ ] Walkthrough P4
+## P4 — Artifacts + case study + demo (portfolio) — done 2026-09-26
+- [x] `docs/finance/` — PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, assumptions table), leadership memo, GTM one-pager, trust/accuracy/explainability, fund-accounting mapping (FE NXT pattern), demo script; decision log and data dictionary already there
+- [x] `/docs/finance/[doc]` route (markdown via next-mdx-remote `format: 'md'` + remark-gfm; twelve public docs, the phase files stay in the repository)
+- [x] Case-study JSON entry (`development`, Ops variant, §08 `ladder`), card after Patents, `/demo/finance-desk` redirects (D-18), Wiki `?view=` hop and `?try=` (D-18)
+- [x] Verifier rules for `development` (D-19) · `verify-case-studies` clean for the slug · card checker accepts the status
+- [x] Captures `ixana-finance-*.jpg` (eight, each the state its link opens; `scripts/_elev-capture-finance.mjs`)
+- [x] Ixana-Wiki case-study mention — `wiki-page-proposal.md`, proposal text only
+- [x] Walkthrough P4
 
 ## P5 — QA + deploy
 - [ ] Biome / ESLint · tsc · vitest · both builds exit 0

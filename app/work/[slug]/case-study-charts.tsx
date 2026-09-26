@@ -967,6 +967,113 @@ function GateBars({
 	);
 }
 
+function Ladder({ spec }: { spec: Extract<ChartSpec, { form: 'ladder' }> }) {
+	// rails at x=250 and x=470 carry the decisions bar; the precision scale sits from 520 to 660
+	const L = 250;
+	const W = 220;
+	const PL = 520;
+	const PW = 140;
+	const step = 64;
+	const h = spec.rungs.length * step + 44;
+	return (
+		<Frame title={spec.title} height={h}>
+			{/* the two rails of the ladder */}
+			<line className='g-line' x1={L - 6} y1={6} x2={L - 6} y2={h - 30} />
+			<line
+				className='g-line'
+				x1={L + W + 6}
+				y1={6}
+				x2={L + W + 6}
+				y2={h - 30}
+			/>
+			{/* precision scale */}
+			<line className='g-line' x1={PL} y1={h - 26} x2={PL + PW} y2={h - 26} />
+			<text className='g-lbl' x={PL} y={h - 10} textAnchor='middle'>
+				0
+			</text>
+			<text className='g-lbl' x={PL + PW} y={h - 10} textAnchor='middle'>
+				1.0
+			</text>
+			<text className='g-lbl' x={PL + PW / 2} y={h - 10} textAnchor='middle'>
+				precision
+			</text>
+			{spec.rungs.map((r, i) => {
+				// the top rung is the highest level, so draw from the bottom up
+				const y = (spec.rungs.length - 1 - i) * step + 16;
+				const w = Math.max(2, (r.decisions / spec.maxDecisions) * W);
+				const px = r.precision == null ? null : PL + r.precision * PW;
+				const fill = r.enabled ? (i === 0 ? SHIP : ACCENT) : ACCENT_DIM;
+				return (
+					<g key={r.level}>
+						<text className='g-name' x='0' y={y + 13}>
+							{r.level} · {r.name}
+						</text>
+						<text
+							className='g-lbl'
+							x='0'
+							y={y + 30}
+							fill={r.enabled ? undefined : WARN}
+						>
+							{r.enabled ? 'enabled' : 'configured, off'}
+						</text>
+						{/* the rung */}
+						<rect
+							x={L}
+							y={y}
+							width={W}
+							height='18'
+							rx='3'
+							fill={ACCENT_DIM}
+							fillOpacity='0.25'
+						/>
+						<rect
+							x={L}
+							y={y}
+							width={w}
+							height='18'
+							rx='3'
+							fill={fill}
+							fillOpacity='0.9'
+						/>
+						<text className='g-val' x={L + W + 14} y={y + 13}>
+							{r.decisionsLabel}
+						</text>
+						{px == null ? (
+							<text
+								className='g-lbl'
+								x={PL + PW / 2}
+								y={y + 13}
+								textAnchor='middle'
+							>
+								{r.precisionLabel}
+							</text>
+						) : (
+							<g>
+								<line
+									className='g-line'
+									x1={PL}
+									y1={y + 9}
+									x2={PL + PW}
+									y2={y + 9}
+								/>
+								<circle cx={px} cy={y + 9} r='5' fill={fill} />
+								<text className='g-lbl' x={px} y={y + 28} textAnchor='middle'>
+									{r.precisionLabel}
+								</text>
+							</g>
+						)}
+						{r.gate && (
+							<text className='g-lbl' x={L} y={y - 6} fill={WARN}>
+								{r.gate}
+							</text>
+						)}
+					</g>
+				);
+			})}
+		</Frame>
+	);
+}
+
 function Curve({ spec }: { spec: Extract<ChartSpec, { form: 'curve' }> }) {
 	const L = 56;
 	const R = 660;
@@ -2953,6 +3060,8 @@ export default function Chart({ spec }: { spec: ChartSpec }) {
 			return <Histogram spec={spec} />;
 		case 'gateBars':
 			return <GateBars spec={spec} />;
+		case 'ladder':
+			return <Ladder spec={spec} />;
 		case 'curve':
 			return <Curve spec={spec} />;
 		case 'scatter':

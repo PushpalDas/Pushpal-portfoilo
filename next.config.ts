@@ -25,6 +25,21 @@ const nextConfig: NextConfig = {
 				destination: '/hobby',
 				permanent: true,
 			},
+			// The Finance desk lives in the Wiki (one implementation, one
+			// dataset). A cross-origin rewrite would serve the Wiki's page
+			// with this site's asset paths, so the clean path redirects
+			// instead; the query string (as, view, id, open, asof, tab…)
+			// travels with it and the Wiki's /finance honours ?view=.
+			{
+				source: '/demo/finance-desk',
+				destination: 'https://xana-nine.vercel.app/finance',
+				permanent: false,
+			},
+			{
+				source: '/demo/finance-desk/:path*',
+				destination: 'https://xana-nine.vercel.app/finance/:path*',
+				permanent: false,
+			},
 			// The reading list moved under Hobby, behind the switch at the top
 			// of that page. Book pages themselves stay at /books/<slug>.
 			{

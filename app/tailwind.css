@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -11,13 +11,13 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
 }
 
 @theme inline {
@@ -80,19 +80,19 @@
 }
 
 html::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 /* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
-  transition:
-    background-color 600000s 0s,
-    color 600000s 0s;
+	transition:
+		background-color 600000s 0s,
+		color 600000s 0s;
 }
 
 .underline-magical {
-  @apply bg-linear-to-r from-primary-500 to-primary-500 bg-no-repeat 
+	@apply bg-linear-to-r from-primary-500 to-primary-500 bg-no-repeat 
   no-underline [background-position:0_100%]
   [background-size:100%_0.2em] focus:[background-size:100%_100%] hover:text-white
   hover:[background-size:100%_100%] motion-safe:transition-all
@@ -100,79 +100,117 @@ input:-webkit-autofill:focus {
 }
 
 .horizontal-underline {
-  border-bottom-width: 0;
-  background-image:
-    linear-gradient(transparent, transparent), linear-gradient(#3b82f6, #3b82f6);
-  background-size: 0 3px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.5s ease-in-out;
+	border-bottom-width: 0;
+	background-image:
+		linear-gradient(transparent, transparent), linear-gradient(#3b82f6, #3b82f6);
+	background-size: 0 3px;
+	background-position: 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size 0.5s ease-in-out;
 }
 
 .horizontal-underline:hover {
-  background-size: 100% 3px;
-  background-position: 0 100%;
+	background-size: 100% 3px;
+	background-position: 0 100%;
 }
 
 .horizontal-underline-active {
-  background-size: 100% 3px;
-  background-position: 0 100%;
+	background-size: 100% 3px;
+	background-position: 0 100%;
 }
 
 #nprogress .bar {
-  background: #3b82f6;
-  height: 4px;
+	background: #3b82f6;
+	height: 4px;
 }
 
 .intro-text {
-  transition: opacity 0.4s;
+	transition: opacity 0.4s;
 }
 
 /* ViewTransition API Animations for Theme Toggle */
 html {
-  view-transition-name: theme;
+	view-transition-name: theme;
 }
 
 ::view-transition-old(theme),
 ::view-transition-new(theme) {
-  animation: none;
-  mix-blend-mode: normal;
+	animation: none;
+	mix-blend-mode: normal;
 }
 
 /* Circle animation from top-right */
 ::view-transition-new(theme) {
-  clip-path: circle(0% at top right);
-  animation: circle-top-right 0.5s ease-out;
-  animation-fill-mode: both;
-  transform-origin: top right;
+	clip-path: circle(0% at top right);
+	animation: circle-top-right 0.5s ease-out;
+	animation-fill-mode: both;
+	transform-origin: top right;
 }
 
 ::view-transition-old(theme) {
-  z-index: -1;
+	z-index: -1;
 }
 
 @keyframes circle-top-right {
-  from {
-    clip-path: circle(0% at top right);
-  }
-  to {
-    clip-path: circle(150% at top right);
-  }
+	from {
+		clip-path: circle(0% at top right);
+	}
+	to {
+		clip-path: circle(150% at top right);
+	}
 }
 
 .font-mukta {
-  font-family: var(--font-mukta), sans-serif;
+	font-family: var(--font-mukta), sans-serif;
 }
 
 .font-inter {
-  font-family: var(--font-inter), sans-serif;
+	font-family: var(--font-inter), sans-serif;
 }
 
 .font-merriweather {
-  font-family: var(--font-merriweather), serif;
+	font-family: var(--font-merriweather), serif;
 }
 
 .font-fraunces {
-  font-family: var(--font-fraunces), serif;
+	font-family: var(--font-fraunces), serif;
 }
 
+/* The Finance orchestrator's PM artifacts (/docs/finance/<doc>): markdown
+   tables and code, which the shared MDX components leave unstyled. */
+.finance-doc {
+	line-height: 1.65;
+}
+.finance-doc p,
+.finance-doc li {
+	margin-block: 0.5rem;
+}
+.finance-doc table {
+	display: block;
+	overflow-x: auto;
+	margin-block: 1rem;
+	border-collapse: collapse;
+	font-size: 0.875rem;
+}
+.finance-doc th,
+.finance-doc td {
+	border: 1px solid rgb(0 0 0 / 0.12);
+	padding: 0.4rem 0.6rem;
+	text-align: left;
+	vertical-align: top;
+}
+.finance-doc th {
+	font-weight: 700;
+	background: rgb(0 0 0 / 0.04);
+}
+.dark .finance-doc th,
+.dark .finance-doc td {
+	border-color: rgb(255 255 255 / 0.14);
+}
+.dark .finance-doc th {
+	background: rgb(255 255 255 / 0.05);
+}
+.finance-doc hr {
+	margin-block: 1.5rem;
+	opacity: 0.3;
+}

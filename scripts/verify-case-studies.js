@@ -19,6 +19,9 @@ const BANDS = {
   production: [1000, 1200],
   internal: [800, 1000],
   'customer-testing': [800, 1000],
+  // In development: the customer-testing shape (early signal, kill gates), and the
+  // page must separate what is built from what is planned and label every figure synthetic.
+  development: [800, 1000],
   prototype: [500, 700],
   research: [500, 800],
 };
@@ -103,12 +106,18 @@ for (const [slug, cs] of Object.entries(v2)) {
   for (const d of DROPPED[st] || []) {
     if (headings.includes(d)) problems.push(`${slug} (${st}): section "${d}" should be dropped`);
   }
-  // customer-testing extra section
-  if (st === 'customer-testing' && !headings.includes('What would make me stop')) {
-    problems.push(`${slug}: customer-testing needs "What would make me stop"`);
+  // customer-testing and development extra section
+  if ((st === 'customer-testing' || st === 'development') && !headings.includes('What would make me stop')) {
+    problems.push(`${slug}: ${st} needs "What would make me stop"`);
+  }
+  // development: built vs planned stated, and the figures labelled synthetic, with n
+  if (st === 'development') {
+    if (!/\bBUILT\b/.test(all) || !/\bPLANNED\b/.test(all)) problems.push(`${slug}: development page must separate BUILT from PLANNED`);
+    if (!/synthetic/i.test(all)) problems.push(`${slug}: development page must say its figures are synthetic`);
+    if (!/\bn\s*=|\bof \d/.test(all)) problems.push(`${slug}: development page quotes no n`);
   }
   // section 08 naming
-  const expect08 = { production: 'Impact and outcomes', internal: 'Impact and outcomes', 'customer-testing': 'Early signal and what I\'m watching', prototype: 'What we learned', research: 'Finding and what it changed' }[st];
+  const expect08 = { production: 'Impact and outcomes', internal: 'Impact and outcomes', 'customer-testing': 'Early signal and what I\'m watching', development: 'Early signal and what I\'m watching', prototype: 'What we learned', research: 'Finding and what it changed' }[st];
   if (!headings.includes(expect08)) problems.push(`${slug} (${st}): missing outcome section "${expect08}"`);
 
   // sequential numbering
@@ -153,7 +162,7 @@ for (const [slug, cs] of Object.entries(v2)) {
 
   // metric definition line (full case studies)
   const defs = cs.sections.flatMap((s) => (s.blocks || []).filter((b) => b.kind === 'definition'));
-  if (['production', 'internal', 'customer-testing'].includes(st) && defs.length !== 1) {
+  if (['production', 'internal', 'customer-testing', 'development'].includes(st) && defs.length !== 1) {
     problems.push(`${slug}: ${defs.length} "how we counted" lines, expected 1`);
   }
 
@@ -169,7 +178,7 @@ for (const [slug, cs] of Object.entries(v2)) {
   // configuration must not appear in metric tiles
   const tiles = cs.sections.flatMap((s) => (s.blocks || []).filter((b) => b.kind === 'metrics')).flatMap((b) => b.items);
   const tileCount = tiles.length;
-  const expectTiles = ['production', 'internal', 'customer-testing'].includes(st) ? 6 : 4;
+  const expectTiles = ['production', 'internal', 'customer-testing', 'development'].includes(st) ? 6 : 4;
   if (tileCount !== expectTiles) problems.push(`${slug}: ${tileCount} metric tiles, expected ${expectTiles}`);
 
   // ── differentiation keys ──

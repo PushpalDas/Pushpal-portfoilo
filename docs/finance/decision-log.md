@@ -88,3 +88,18 @@
 **Context.** The agents panel was designed with an acceptance rate per agent. The seed records approvals of invoices and purchase orders, but no human decision on an agent finding.
 **Decision.** The panel shows acceptance as n = 0 with the sentence that says why; it is measured from the audit trail once people accept or dismiss findings. Nothing is estimated and nothing is typed in.
 **Consequences.** One slot on the panel is honestly empty in the demo; the eval slot is full.
+
+## D-18 · `/demo/finance-desk` is a redirect, not a rewrite — 2026-09-26 (P4)
+**Context.** D-03 chose "a rewrite to the Wiki with parameters passed through, the Patents pattern". The Patents card in fact links the Wiki's origin directly, and a cross-origin rewrite of a Next.js page would serve the Wiki's HTML with this site's asset paths, so nothing would load.
+**Decision.** `next.config.ts` redirects `/demo/finance-desk` → `https://xana-nine.vercel.app/finance` and `/demo/finance-desk/:path*` → `…/finance/:path*` (temporary redirects, query string preserved). The Wiki's `/finance` honours `?view=<screen>` by hopping to `/finance/<screen>` with every other parameter intact, so both `?view=ap&id=…` and `/ap?id=…` work. The AP queue gained `?try=approve|pay`, which opens the row with that decision already attempted, so a case-study image can be the refusal its link opens.
+**Consequences.** One implementation, one dataset, a clean path in every link; the case study's evidence strip and gallery link `/demo/finance-desk/…`.
+
+## D-19 · The `development` status gets rules, not a skip — 2026-09-26 (P4)
+**Context.** The verifier skipped `development` with a warning (Q2 in discovery).
+**Decision.** `development` takes the customer-testing shape — band 800–1,000 prose words, §08 "Early signal and what I'm watching", §09 "What would make me stop", six tiles, one definition — plus three rules of its own: the page must separate **BUILT** from **PLANNED**, must say its figures are synthetic, and must quote an n. The card checker accepts the status.
+**Consequences.** The Finance page is checked, not skipped; the three in-development silicon cards now report their own problems (missing §02, shared tile sets) instead of a skip line, which is information rather than noise.
+
+## D-20 · The card image is a capture, pending a cover — 2026-09-26 (P4)
+**Context.** Every other AI-track card carries a generated cover; none exists for Finance.
+**Decision.** The card uses the overview capture (`ixana-finance-overview.jpg`) so the checker passes and the card is honest; a cover prompt is written in `changes/finance-orchestrator-image-prompt.md` in the portfolio's usual pattern for when one is generated.
+**Consequences.** Swap one filename in `constants.ts` when the cover exists.

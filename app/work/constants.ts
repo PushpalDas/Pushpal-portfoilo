@@ -564,6 +564,23 @@ export const workItems: WorkItem[] = [
 		color: '#dbeafe',
 	},
 	{
+		title: 'Finance orchestrator',
+		company: 'Ixana',
+		year: '2026',
+		domain: 'Finance operations',
+		category: 'product',
+		track: 'ai',
+		status: 'development',
+		order: 4,
+		outcome:
+			'One ledger over payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise cited findings and draft the change while every approval stays a named person - in development on a synthetic ledger.',
+		image: 'ixana-finance-overview.jpg',
+		slug: 'ixana-finance-orchestrator',
+		tier: 2,
+		demoUrl: '/demo/finance-desk',
+		color: '#dbeafe',
+	},
+	{
 		title: 'Document change intelligence',
 		company: 'Ixana',
 		year: '2026',

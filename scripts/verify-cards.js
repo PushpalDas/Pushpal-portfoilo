@@ -15,7 +15,7 @@ const src = fs.readFileSync(rel('app/work/constants.ts'), 'utf8');
 const v2 = JSON.parse(fs.readFileSync(rel('data/case-studies-v2.json'), 'utf8'));
 const v1 = JSON.parse(fs.readFileSync(rel('data/case-studies.json'), 'utf8'));
 
-const VALID = ['production', 'internal', 'customer-testing', 'prototype', 'research'];
+const VALID = ['development', 'production', 'internal', 'customer-testing', 'prototype', 'research'];
 const STATUS_RANK = { production: 1, internal: 2, 'customer-testing': 3, prototype: 4, research: 5, null: 6 };
 
 // Parse the work items out of the source array.
