@@ -59,24 +59,27 @@ export function filterWorkItems(
 	const shown = items.filter((w) => !w.programHead);
 	if (filter === 'all') return shown;
 	if (filter === 'personal') return personalOrder(shown);
-	// A track pill shows the track's shipped and in-use work only. Its
-	// prototypes and research file under Personal instead, so every product
-	// sits under exactly one of the three.
-	const track = shown.filter((w) => w.track === filter && !isUnshipped(w));
+	// A track pill shows the track's shipped and in-use work, plus the
+	// unshipped work an employer commissioned. Personal prototypes and
+	// research file under Personal instead, so every product sits under
+	// exactly one of the three.
+	const track = shown.filter((w) => w.track === filter && !isPersonal(w));
 	return filter === 'ai' ? aiOrder(track) : track;
 }
 
 /**
  * The three platforms that open the AI pill, in this order, at the
  * author's request (2026-09-26): the knowledge platform, the patent
- * program it grew into, and the finance desk built on both. The home
+ * program it grew into, and Flow Tracker. The finance desk held the third
+ * slot until it was re-filed as a prototype that never went to users; a
+ * lead must be shipped and in use. The home
  * page's AI highlights read the same order, since they are this list's
  * first six.
  */
 const AI_LEAD = [
 	'xana-multifile-rag-based-data-singularity-platform',
 	'ixana-patent-program',
-	'ixana-finance-orchestrator',
+	'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
 ];
 
 /** AI: the three lead platforms first, then the rest in the standard order. */
@@ -92,9 +95,22 @@ function aiOrder(track: WorkItem[]): WorkItem[] {
 	return [...lead, ...rest];
 }
 
-/** Prototype or research: the unshipped work Personal collects. */
+/** Prototype or research: work that never went to users. */
 export function isUnshipped(item: WorkItem): boolean {
 	return item.status === 'prototype' || item.status === 'research';
+}
+
+/**
+ * The employers whose unshipped work stays on its track. A prototype an
+ * employer proposed and paid for is not off-the-clock work, whatever
+ * happened to its rollout; the finance orchestrator and the salary
+ * generator (both built for Ixana, neither rolled out) are the cases.
+ */
+const EMPLOYERS = new Set(['Ixana', 'EEGRAB', 'SLB']);
+
+/** Unshipped work done off the clock: what the Personal pill collects. */
+export function isPersonal(item: WorkItem): boolean {
+	return isUnshipped(item) && !EMPLOYERS.has(item.company.trim());
 }
 
 /**
@@ -109,12 +125,12 @@ const PERSONAL_LEAD = [
 
 /**
  * Personal: everything off the clock. The three lead engines first, then
- * the rest of the prototypes and research in the standard order, and the
+ * the rest of the personal prototypes and research in the standard order, and the
  * engineering builds only after every unshipped product has been shown.
  */
 function personalOrder(shown: WorkItem[]): WorkItem[] {
 	const unshipped = shown.filter(
-		(w) => w.category === 'product' && isUnshipped(w),
+		(w) => w.category === 'product' && isPersonal(w),
 	);
 	const lead = PERSONAL_LEAD.map((slug) => {
 		const item = unshipped.find((w) => w.slug === slug);
