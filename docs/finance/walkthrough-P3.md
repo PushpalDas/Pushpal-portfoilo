@@ -6,7 +6,7 @@
 
 | Piece | Where | What it does |
 |---|---|---|
-| Contract | `src/lib/finance/agents/contract.ts` | `Finding` (subject rows · what · why = evidence rows + attributions that sum to 1 + rule · confidence · severity · recommended action · required approver), `Draft` (accrual / reclass / hold / match, proposed against a finding, with the approver roles), `WatcherRun` (findings, drafts, uncitable dropped, ledger hash before and after, rows read), the trust ladder (L0 Suggest, L1 Draft, L2 Auto-execute configured and off: exact bank matches under $500, promotion at precision ≥ 0.98 over ≥ 200 human decisions, one-click reversal), `finalize()` which drops any finding that cannot cite a row. |
+| Contract | `src/lib/finance/watchers/contract.ts` | `Finding` (subject rows · what · why = evidence rows + attributions that sum to 1 + rule · confidence · severity · recommended action · required approver), `Draft` (accrual / reclass / hold / match, proposed against a finding, with the approver roles), `WatcherRun` (findings, drafts, uncitable dropped, ledger hash before and after, rows read), the trust ladder (L0 Suggest, L1 Draft, L2 Auto-execute configured and off: exact bank matches under $500, promotion at precision ≥ 0.98 over ≥ 200 human decisions, one-click reversal), `finalize()` which drops any finding that cannot cite a row. |
 | Invoice Watcher | `agents/ap-anomaly.ts` | Eleven rules as plain functions of the dataset, each with attributions a controller can argue with: duplicate-exact, duplicate-fuzzy (same amount ±1 % inside 21 days with a near-identical number or description), bank-detail-change (unverified, inside 21 days), amount-unusual (median + MAD over ≥ 4 prior invoices, unless a PO approved the amount), split-po (one vendor, one requester, inside a week, each under the ceiling, together over it), missing-po (a three-way leg missing), round-number (≥ $5,000, no PO, not a contracted amount, **plus** rush / young vendor / failed match / vague memo), after-hours (**never alone**), new-vendor-rush (≤ 30 days, rush or no PO), off-policy (the award's rules; entertainment anywhere without approval), wrong-account (outside the vendor's usual group; card coded away from its merchant type). High-severity findings on invoices become *hold* drafts. |
 | Tie-out Watcher | `agents/reconciliation.ts` | Wraps the three-pass matcher; exceptions become findings, suggestions become *match* drafts for a person; a proposed match with the wrong amount is thrown away and counted (**0**). |
 | Grant Rules Watcher | `agents/compliance.ts` | Every Award R-01 line judged; unallowable → finding + *reclass* draft needing the award PM **and** the Controller; questioned → finding; category over budget and burn ahead of the period of performance as findings. |
@@ -15,7 +15,7 @@
 | Ask the books | `agents/ask.ts` · `GET /api/finance/ask?q=` | Twelve deterministic intents (tape-outs, bank changes, the award, runway, the close, patents, findings, the Bills desk, and spend by vendor / project / department / account group / period). Every figure has a chip that opens the rows; no row, no figure. **Refuses** any question about one person's pay and any statutory date. |
 | Eval harness | `src/lib/finance/eval.ts` | Joins findings to the planted labels: per type TP / FP / FN, precision, recall, F1, FPR over that type's hard negatives, with n, and the ids missed or raised without a label. The watcher never imports the labels (a test reads the source to prove it). |
 | Audit | `agents/index.ts` `auditViewWithWatchers` | One event per watcher run — who (the watcher), what it read, what it returned, the ledger hash before and after — appended to the seeded chain; Verify still passes; a tampered watcher event breaks it. |
-| Screens | `/finance/agents`, `/finance/ap`, `/finance` (ask), `/finance/audit` | Watchers: queue, last run, drafts, rows read, uncitable dropped, ledger-unchanged pill per watcher; the eval table per rule; acceptance shown as n = 0 with the reason. Bills desk: a *Findings* column and, in the drawer, every finding with its attribution bars and evidence chips; a finding counts as a flag for the written-reason rule. Ask: the control on the overview now answers. |
+| Screens | `/finance/watchers`, `/finance/bills`, `/finance` (ask), `/finance/audit` | Watchers: queue, last run, drafts, rows read, uncitable dropped, ledger-unchanged pill per watcher; the eval table per rule; acceptance shown as n = 0 with the reason. Bills desk: a *Findings* column and, in the drawer, every finding with its attribution bars and evidence chips; a finding counts as a flag for the written-reason rule. Ask: the control on the overview now answers. |
 
 ## Screens
 
@@ -82,7 +82,7 @@ The first run scored 0.34 precision. Most "false positives" were true — the la
 ## Gate check
 
 - [x] Unit test per rule; ledger hash unchanged after every watcher run; uncitable finding dropped; SoD refusal; audit chain verifies and detects tampering — all as tests
-- [x] Live eval metrics on `/finance/agents`, with n and the method beside them
+- [x] Live eval metrics on `/finance/watchers`, with n and the method beside them
 - [x] Findings on the Bills desk and in its drawer; ask the books answering and refusing
 - [x] Screenshots; zero console errors; 360 px
 

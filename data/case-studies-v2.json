@@ -16263,7 +16263,7 @@
             "kind": "scope",
             "shipped": [
               "BUILT: made-up books generated the same way every time: twelve months, six departments, two entities, a research grant, 46 suppliers, 313 bills, 189 card lines, 371 bank statement lines, 47 web-shop orders and 29 payouts, 47 hidden problems with 179 look-alikes",
-              "BUILT: nine screens: overview with a where-from panel on every tile, ledger, bills desk, tie-out, grant funds, month-end, hygiene, audit log, watchers; a persona switch; a link for every state",
+              "BUILT: nine screens: overview with a where-from panel on every tile, books, pots, bills desk, tie-out, month-end, hygiene, audit log, watchers; a persona switch; a link for every state",
               "BUILT: five watchers under one contract, a question box with refusals, a scorecard with sample sizes, a tamper-proof audit log, 50 automated tests"
             ],
             "deferred": [
@@ -16407,7 +16407,7 @@
                 "label": "The grant's lines, judged by the grant's own rules.",
                 "caption": "Award R-01 shown as grant money with strings attached: a budget by category, spending against the allowed dates, and every line with the rule it passed or failed. A line that breaks a rule offers a move to operating that needs the grant manager and the finance lead. This link opens the failing lines.",
                 "alt": "The funds screen for Award R-01 filtered to unallowable lines: a bar charge under rule R01-1 and a pre-award component invoice under R01-4, each with a Propose reclass button.",
-                "href": "/demo/finance-desk/funds?fund=award-r01&verdict=unallowable",
+                "href": "/demo/finance-desk/pots?fund=award-r01&verdict=unallowable",
                 "hrefLabel": "Open the unallowable lines"
               },
               {

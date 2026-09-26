@@ -30,11 +30,11 @@ const STATES = [
 		'Whoever creates or edits an invoice',
 	],
 	['/finance/tie-out?tab=bank&filter=suggested', 'exact reference'],
-	['/finance/funds?fund=award-r01&verdict=unallowable', 'Propose reclass'],
+	['/finance/pots?fund=award-r01&verdict=unallowable', 'Propose reclass'],
 	['/finance/month-end?asof=2026-08-05', 'readiness'],
 	['/finance/watchers', 'The contract'],
 	['/finance/audit', 'Verify chain'],
-	['/finance/ledger?source=patents.invoices', 'patents'],
+	['/finance/books?source=patents.invoices', 'patents'],
 	['/finance/hygiene', 'Chart of accounts'],
 	['/finance?view=bills&id=INV-0236', 'Watcher findings on this invoice'],
 ];
@@ -136,7 +136,7 @@ for (const path of [
 	'/finance',
 	'/finance/bills?id=INV-0236',
 	'/finance/watchers',
-	'/finance/funds',
+	'/finance/pots',
 ]) {
 	await page.goto(origin + path, { waitUntil: 'networkidle' });
 	await page.waitForTimeout(400);

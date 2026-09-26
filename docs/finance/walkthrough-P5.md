@@ -33,7 +33,7 @@
 
 ## §15 — final checklist
 
-- [x] Finance in the Wiki nav directly after Patents; routes `/finance`, `/ledger`, `/funds`, `/ap`, `/tie out`, `/close`, `/health`, `/audit`, `/watchers`
+- [x] Finance in the Wiki nav directly after Patents; routes `/finance`, `/books`, `/pots`, `/ap`, `/tie out`, `/close`, `/health`, `/audit`, `/watchers`
 - [x] Case study `ixana-finance-orchestrator`, stage *In development*, the Ops variant with §08 "Early signal and what I'm watching" and §09 "What would make me stop"; BUILT vs PLANNED separated
 - [x] `/demo/finance-desk` with `?as=`, `?view=`, `?id=`, `?open=` (the Bills desk drawer opens on `?id=`; `?try=` attempts a decision), `?asof=`
 - [x] PM artifacts in `docs/finance/*.md`: PRD, engineering spec, user stories (13 + 10 G/W/T), roadmap, business case (modelled, not measured), leadership memo, GTM one-pager, decision log (D-01 … D-20), trust/accuracy/explainability, fund-accounting (fund accounting) mapping, data dictionary, ten-minute demo script

@@ -26,8 +26,8 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 ## P2 — Views (Wiki) — done 2026-09-26
 - [x] Nav entry after Patents · Finance rail · persona switch (`?as=`) · synthetic chip
 - [x] `/finance` overview + Where-this-number-comes-from drawer + inline Ask the books control (answers in P3)
-- [x] `/finance/ledger` windowed table + filters + source chips (deep links to Patents / Ops)
-- [x] `/finance/ap` queue · `/finance/reconcile` (Bank / Card / Stripe) · `/finance/funds` · `/finance/close` (`?asof=`) · `/finance/health` · `/finance/audit` · `/finance/agents`
+- [x] `/finance/books` windowed table + filters + source chips (deep links to Patents / Ops)
+- [x] `/finance/bills` queue · `/finance/tie-out` (Bank / Card / Stripe) · `/finance/pots` · `/finance/month-end` (`?asof=`) · `/finance/hygiene` · `/finance/audit` · `/finance/watchers`
 - [x] Responsive ≥ 360 px, keyboard pass, screenshots of every view; Patents unchanged apart from the nav entry
 - [x] Walkthrough P2 (`walkthrough-P2.md`, screenshots in `walkthrough/P2/`)
 
@@ -36,7 +36,7 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] Invoice Watcher: eleven rules with attributions + one unit test per rule (every positive raised, no hard negative raised)
 - [x] Tie-out Watcher (exact → window → fuzzy) + wrong-match guardrail test (0, and a one-cent nudge test)
 - [x] Grant Rules Watcher (Award R-01 rules, category over budget, burn ahead; reclass drafts for two approvers) · Month-end Watcher (checklist findings, received-not-invoiced drafts) · Hygiene Watcher · Ask the books (`finance/ask`, twelve intents, cited rows, refuses individual pay and statutory dates)
-- [x] Eval harness (`eval.ts`) → live metrics with n on `/finance/agents`; findings on the Bills desk and in its drawer
+- [x] Eval harness (`eval.ts`) → live metrics with n on `/finance/watchers`; findings on the Bills desk and in its drawer
 - [x] "No state change without approval" test (ledger hash before = after, all five) · SoD refusal test · uncitable-finding-dropped test · after-hours-never-alone test · watchers-never-read-labels test
 - [x] Walkthrough P3 (`walkthrough-P3.md`, screenshots in `walkthrough/P3/`)
 

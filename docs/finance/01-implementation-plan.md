@@ -86,8 +86,8 @@ type Draft   = { id; watcher; kind: 'accrual'|'reclass'|'hold'|'match'; payload;
 - Findings without evidence rows are dropped before return (tested).
 - Trust ladder: L0 Suggest, L1 Draft, L2 Auto-execute within shown limits. Demo runs L0/L1; L2 is configured and off, with promotion criteria shown (precision ≥ 0.98 over ≥ 200 decisions) and the reversal path.
 - Invoice Watcher rules (each a pure function with a unit test and a labelled positive + hard negative): duplicate exact, duplicate fuzzy (normalised vendor + amount ± 1 % + 14 days), bank-detail change ≤ 14 days before payment, amount unusual (median/MAD z ≥ 3.5 with n ≥ 5), split POs under the $5,000 ceiling (same vendor/requester, sum ≥ ceiling, ≤ 7 days), missing PO / three-way-match failure, round-number, weekend/after-hours (weight 0.1, never alone), new vendor + rush, off-policy or unallowable-on-fund, wrong-account (GL vs vendor category prior).
-- Eval harness: precision, recall, F1, FPR per rule against `labels.ts`; the numbers on `/finance/agents` and in the case study are computed at build/run time, never typed.
-- "AI is not used for": releasing payments, changing vendor bank details, closing periods, releasing funds, posting journals, writing back to Ops/Patents, statutory tax or filing dates, individual payroll analytics — rendered on `/finance/agents` and in the case study §04 doc block.
+- Eval harness: precision, recall, F1, FPR per rule against `labels.ts`; the numbers on `/finance/watchers` and in the case study are computed at build/run time, never typed.
+- "AI is not used for": releasing payments, changing vendor bank details, closing periods, releasing funds, posting journals, writing back to Ops/Patents, statutory tax or filing dates, individual payroll analytics — rendered on `/finance/watchers` and in the case study §04 doc block.
 
 ## 6. Views (reuse Patents' grammar)
 
@@ -115,7 +115,7 @@ Virtualisation: a small windowed list (no new dependency) for the ledger table. 
 | **P0** | This plan, the discovery report, the task list, the decision log | Approved by Pushpal |
 | **P1** | `types.ts`, `seed.ts`, adapters, `ops-source.json`, `labels.ts`, `data-dictionary.md`, vitest wired | `patents` sum = $61,900.00 / 70 lines; `ops` = $35,140 / 28 and $38,850 / 15; seed SHA pinned and stable across two runs; payroll suppression tested; closed-period immutability tested |
 | **P2** | Nine routes, rail, nav entry, persona switch, synthetic chip, every view rendering from the seed | All routes 200; screenshots of each view at 1440×900 and 360 px; Patents and Ops screenshots byte-identical before/after; keyboard walk of the ledger and Bills desk |
-| **P3** | Watcher contract, five watchers + ask, eval harness, audit log, trust ladder UI | Unit test per rule; ledger hash unchanged after every watcher run; uncitable finding dropped (test); SoD refusal (test); audit chain verifies and detects tampering (test); live eval metrics on `/finance/agents` |
+| **P3** | Watcher contract, five watchers + ask, eval harness, audit log, trust ladder UI | Unit test per rule; ledger hash unchanged after every watcher run; uncitable finding dropped (test); SoD refusal (test); audit chain verifies and detects tampering (test); live eval metrics on `/finance/watchers` |
 | **P4** | PM artifacts, case-study JSON entry, card, rewrite, docs route, captures, verifier rules | `npm run verify:work` clean for the new slug; every figure labelled; BUILT vs PLANNED explicit; Wiki-page proposal written, not applied |
 | **P5** | Lint, types, tests, builds, a11y pass, zero console errors across deep links, Vercel preview, recorded walkthrough (§11) | Both `npm run build` exit 0; Playwright script logs zero page/console errors across the demo-script states; recording attached; open questions listed |
 

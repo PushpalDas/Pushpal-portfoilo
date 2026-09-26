@@ -36,7 +36,7 @@ const shots = [
 		'exact reference',
 	],
 	[
-		'/finance/funds?fund=award-r01&verdict=unallowable',
+		'/finance/pots?fund=award-r01&verdict=unallowable',
 		'ixana-finance-funds.jpg',
 		'Propose reclass',
 	],
