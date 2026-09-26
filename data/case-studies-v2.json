@@ -16005,7 +16005,7 @@
     "slug": "ixana-finance-orchestrator",
     "eyebrow": "Ixana · Finance operations",
     "title": "Finance orchestrator",
-    "deck": "One ledger under payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise findings they can cite and draft the change, while every approval stays a named person and every figure says where it came from.",
+    "deck": "One ledger under payroll, accounts payable, cards, the web store, the patent programme and the Ops Desk, with agents that raise findings they can cite and draft the change, while every approval stays a named person and every figure says where it came from.",
     "status": "development",
     "meta": {
       "role": "Product manager",
@@ -16013,7 +16013,7 @@
       "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
     },
     "confidentiality": "In development — every figure on this page is illustrative and computed from a synthetic ledger (seed 20260925), every name is invented, and payroll appears only as department × month aggregates with groups under three suppressed. The two money surfaces it reads, the patent programme and the Ops Desk, are carried unchanged and reconciled to the cent by test.",
-    "sampleNote": "BUILT: the seed, the two read-only adapters, nine screens, five agents, ask-your-ledger, the eval harness and 50 tests — all running in the linked demo. PLANNED: the read-only pilot on real exports, the finance lead and AP interviews, the acceptance measurement and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and results on the labelled set, each with its n. I'm glad to walk through the seed, the rules and the tests in a conversation.",
+    "sampleNote": "BUILT: the seed, the two read-only adapters, nine screens, five agents, ask-your-ledger, the eval harness and 50 tests — all running in the linked demo. PLANNED: the read-only pilot on real exports, the finance lead and accounts payable interviews, the acceptance measurement and the business case's measured column. Nothing on this page is adoption, time saved or fraud caught; the only counts are rows in the demo and results on the labelled set, each with its n. I'm glad to walk through the seed, the rules and the tests in a conversation.",
     "evidence": [
       {
         "label": "Open the working demo — nine screens over one synthetic ledger, as the finance lead, the Founders-office associate, the award PM or the external accountant",
@@ -16060,7 +16060,7 @@
     "summary": [
       {
         "lead": "Problem.",
-        "text": "Money at a hundred-person chip company had two honest surfaces — the patent ledger, where every counsel dollar names its matter, and the Ops Desk, where every request has an owner and a ceiling — and no third that read them. Payroll, AP, cards, the web store and a restricted award sat in five exports, so a duplicate or a bank-detail change before a rush payment was found by whoever happened to look."
+        "text": "Money at a hundred-person chip company had two honest surfaces — the patent ledger, where every counsel dollar names its matter, and the Ops Desk, where every request has an owner and a ceiling — and no third that read them. Payroll, accounts payable, cards, the web store and a restricted award sat in five exports, so a duplicate or a bank-detail change before a rush payment was found by whoever happened to look."
       },
       {
         "lead": "What I did.",
@@ -16068,7 +16068,7 @@
       },
       {
         "lead": "Result.",
-        "text": "Early signal on the labelled set only, n on every figure. The AP agent raises all 47 planted anomalies and none of the 179 hard negatives; the matcher proposes no wrong-amount match across 371 bank lines; every run leaves the ledger hash unchanged; no person has yet decided a finding, so acceptance is n = 0."
+        "text": "Early signal on the labelled set only, n on every figure. The accounts payable agent raises all 47 planted anomalies and none of the 179 hard negatives; the matcher proposes no wrong-amount match across 371 bank lines; every run leaves the ledger hash unchanged; nobody has yet decided a finding, so acceptance is n = 0."
       }
     ],
     "sections": [
@@ -16076,14 +16076,14 @@
         "num": "01",
         "heading": "Why this, and why now",
         "body": [
-          "The obvious answer was an AP automation product. I argued for a quarter proving the operating model on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the ledger between them, and the rule that an agent may find and draft but never act."
+          "The obvious answer was an accounts payable automation product. I argued for a quarter proving the operating model on data we own: the two surfaces that already worked here won because every figure names its row and every change names its person. What was missing was the ledger between them, and the rule that an agent may find and draft but never act."
         ],
         "blocks": [
           {
             "kind": "figure",
             "chart": {
               "form": "pairedBars",
-              "title": "Modelled hours per monthly close, today against with the desk: bank reconciliation 14 to 6, AP review 10 to 5, award compliance 8 to 4, accrual drafting 6 to 3, audit preparation 8 to 3 — modelled, not measured",
+              "title": "Modelled hours per monthly close, today against with the desk: bank reconciliation 14 to 6, accounts payable review 10 to 5, award compliance 8 to 4, accrual drafting 6 to 3, audit preparation 8 to 3 — modelled, not measured",
               "yMax": 16,
               "unit": "hours per close, modelled",
               "beforeLabel": "today (modelled)",
@@ -16095,7 +16095,7 @@
                   "after": 6
                 },
                 {
-                  "name": "AP review",
+                  "name": "Accounts payable review",
                   "before": 10,
                   "after": 5
                 },
@@ -16127,7 +16127,7 @@
         "num": "02",
         "heading": "The problem as people experienced it",
         "body": [
-          "I read the two surfaces that existed the way an external accountant would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books, only exports.",
+          "I read the two surfaces that existed the way an auditor would: 25 patent invoices and their 70 lines, the Ops Desk's 28 requests and 15 shipments, coding for each dollar whether a person could say who owned it, what it was for and where it sat in the books. Both answered the first two on every row; neither the third, because there were no books.",
           "The five other flows had no surface at all: a payroll file, a card statement, a processor payout, an award spreadsheet, bank details by email."
         ],
         "blocks": [
@@ -16150,7 +16150,7 @@
                 "4 of 28 requests refused at $5,000; 15 shipments with no freight or duties account until now"
               ],
               [
-                "AP, cards, payroll, web store, award",
+                "Accounts payable, cards, payroll, web store, award",
                 "No ledger; five exports; a bank-detail change was an email",
                 "0 of 5 flows with a row-level trail; 4 vendor bank changes, 3 never verified by call-back"
               ]
@@ -16263,7 +16263,7 @@
             "kind": "scope",
             "shipped": [
               "BUILT — a deterministic seed: twelve months, six departments, two entities, a restricted award, 46 vendors, 313 invoices, 189 card lines, 371 bank lines, 47 Stripe orders and 29 payouts, 47 planted anomalies with 179 hard negatives",
-              "BUILT — nine screens: overview with a where-from drawer on every tile, ledger, AP queue, reconcile, funds, close, health, audit, agents; a persona switch; deep links for every state",
+              "BUILT — nine screens: overview with a where-from drawer on every tile, ledger, accounts payable queue, reconcile, funds, close, health, audit, agents; a persona switch; deep links for every state",
               "BUILT — five agents under one contract, ask-your-ledger with refusals, an eval harness with n, a hash-chained audit log, 50 tests"
             ],
             "deferred": [
@@ -16325,7 +16325,7 @@
           {
             "kind": "shot",
             "image": "/static/images/project/ixana-finance-ap-finding.jpg",
-            "alt": "The AP queue with a drawer open on invoice INV-0236 from Pacific Packaging: the vendor's unverified bank-detail history in a red panel, then three agent findings stacked — bank-detail change at high severity with four attribution bars, a fuzzy duplicate of the genuine April packaging invoice, and a round $61,000 with rush and no purchase order — each with evidence chips and a recommended action.",
+            "alt": "The accounts payable queue with a drawer open on invoice INV-0236 from Pacific Packaging: the vendor's unverified bank-detail history in a red panel, then three agent findings stacked — bank-detail change at high severity with four attribution bars, a fuzzy duplicate of the genuine April packaging invoice, and a round $61,000 with rush and no purchase order — each with evidence chips and a recommended action.",
             "callouts": [
               {
                 "lead": "Three findings on one invoice, because one row can be three things.",
@@ -16390,7 +16390,7 @@
                 "image": "/static/images/project/ixana-finance-ap-sod.jpg",
                 "label": "Refused: whoever keyed it cannot approve it.",
                 "caption": "Dana, the Founders-office associate who keys invoices, opens one she entered and presses Approve; the check refuses before anything else runs, names the rule, and says who to ask instead. The decision is listed in the audit trail's format. This link opens the row as Dana with the approval already attempted.",
-                "alt": "The AP drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
+                "alt": "The accounts payable drawer as Dana Whitfield on an invoice she entered, with a red refusal under the Approve button: whoever creates or edits an invoice cannot approve or pay it; ask Yuki Tanaka, the Finance controller.",
                 "href": "/demo/finance-desk/ap?as=dana&id=INV-0254&try=approve",
                 "hrefLabel": "Open the refusal as the Founders-office associate"
               },
@@ -16421,7 +16421,7 @@
               {
                 "image": "/static/images/project/ixana-finance-agents.jpg",
                 "label": "Five agents, one contract, the eval beside them.",
-                "caption": "Each card shows what the agent does and never does, its queue, drafts, rows read, and the ledger-unchanged check; the AP agent carries precision, recall, F1 and false-positive rate per rule with n, and acceptance reads n = 0 because no person has decided a finding yet. This link opens the panel.",
+                "caption": "Each card shows what the agent does and never does, its queue, drafts, rows read, and the ledger-unchanged check; the accounts payable agent carries precision, recall, F1 and false-positive rate per rule with n, and acceptance reads n = 0 because no person has decided a finding yet. This link opens the panel.",
                 "alt": "The agents screen: the contract, the trust ladder with L2 marked configured and off, five agent cards with counts, and an eval table with a row per rule.",
                 "href": "/demo/finance-desk/agents",
                 "hrefLabel": "Open the agents and their numbers"
@@ -16493,7 +16493,7 @@
               {
                 "value": "47",
                 "sub": "of 47",
-                "label": "Planted anomalies raised by the AP agent on the labelled set (n = 47 + 179)"
+                "label": "Planted anomalies raised by the accounts payable agent on the labelled set (n = 47 + 179)"
               },
               {
                 "value": "0",
