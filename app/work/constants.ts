@@ -183,7 +183,7 @@ export const workItems: WorkItem[] = [
 	},
 	{
 		title: 'Accurate estimation of mineral present in soil',
-		company: 'IIRS-ISRO, Govt. of India',
+		company: 'IIRS-ISRO, Govt. of India · Project Intern',
 		year: '2022',
 		domain: 'Remote sensing',
 		category: 'product',
@@ -235,7 +235,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'WishKey — Key Management System',
 		company: 'EEGRAB',
-		year: '',
+		year: '2024',
 		domain: 'Access control',
 		category: 'product',
 		track: 'silicon',
@@ -271,7 +271,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'Cost-effective smart watch',
 		company: 'EEGRAB',
-		year: '',
+		year: '2024',
 		domain: 'Consumer wearable',
 		category: 'product',
 		track: 'silicon',
@@ -600,7 +600,7 @@ export const workItems: WorkItem[] = [
 	{
 		title: 'Condenser microphone',
 		company: 'EEGRAB',
-		year: '',
+		year: '2024',
 		domain: 'Audio hardware',
 		category: 'product',
 		track: 'silicon',

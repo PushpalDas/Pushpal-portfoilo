@@ -9066,7 +9066,7 @@
     "deck": "A bench that plays back downhole sensor faults on demand, so a failure analyst stops waiting for a well to reproduce one.",
     "status": "production",
     "meta": {
-      "role": "Owner of the problem choice and the bench's contract — failure analysis & R&D engineer",
+      "role": "Owner of the problem choice and the bench's contract — electrical engineer intern",
       "team": "3 — myself, a failure-analysis engineer, a LabVIEW developer, with the calibration lab reviewing",
       "stage": "In production — deployed across 40+ SLB failure-analysis labs"
     },
@@ -9204,7 +9204,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "I was a failure-analysis and R&D engineer, not a product manager. What I owned was the choice of which problem to attack, what the bench had to do before anyone else would use it, and what it would deliberately never do.",
+          "I was an electrical engineer intern on the failure-analysis bench, not a product manager. What I owned was the choice of which problem to attack, what the bench had to do before anyone else would use it, and what it would deliberately never do.",
           "The decision that shaped everything was refusing to emulate a tool. A closed-loop tool simulator is the impressive version and it reproduces behaviour, not faults — the loop hides the thing you are trying to see."
         ],
         "blocks": [
@@ -9260,7 +9260,8 @@
             "kind": "para",
             "text": "Closed-loop tool emulation was the hardest cut, and it is what most people picture. Modelling a tool well enough to respond to its own outputs meant firmware models we did not have, and it fails the actual requirement: a loop introduces its own dynamics, so the same fault does not land the same way twice. Open-loop playback covers it — a fault the analyst can trigger, repeat and instrument; where genuine loop behaviour matters they still put the tool on a rig. The honest cost: interaction faults, where two channels misbehave together, stay outside the bench and outside the 56."
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "05",
@@ -9351,7 +9352,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "08",
@@ -9450,7 +9452,7 @@
     "deck": "An electronic key cabinet that makes a key impossible to take anonymously, replacing a paper register nobody could reconcile.",
     "status": "production",
     "meta": {
-      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
+      "role": "Product owner end to end, requirements to production handoff — embedded design engineer",
       "team": "4 engineers — me, firmware, Android, mechanical — with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product through installer partners"
     },
@@ -9608,7 +9610,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "My title was senior embedded design engineer. The CTO owned the commercial relationships — the installer channel, pricing, which enquiries we chased — and I owned the product from requirements through schematic, board, firmware, enclosure and production handoff. The product-definition work was mine without the title.",
+          "My title was embedded design engineer. The CTO owned the commercial relationships — the installer channel, pricing, which enquiries we chased — and I owned the product from requirements through schematic, board, firmware, enclosure and production handoff. The product-definition work was mine without the title.",
           "The decision everything else follows from is per-slot locking. A cabinet with one locked door is far cheaper and gives you a door audit: a person opened the cabinet — not which key left with them."
         ],
         "blocks": [
@@ -9665,7 +9667,8 @@
             "kind": "para",
             "text": "Fingerprint authentication was the hardest cut and the one every prospect asked about. It failed on the population: our sites run shift workers and contractors with dirty, wet or damaged fingertips, often gloved, and a false reject at the cabinet does not degrade gracefully — it sends someone to the mechanical override or to propping the door, precisely the behaviour we were selling against. An employee RFID card plus PIN covers the gap, with the anti-smash seal so a returned tag cannot be a decoy. The honest cost: the trail attributes to a card and a PIN, not a face."
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "05",
@@ -9752,7 +9755,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "08",
@@ -9911,7 +9915,7 @@
     "deck": "A watch that loses in the shop and wins on the wrist: the colour screen went, and a week of battery came back with it.",
     "status": "production",
     "meta": {
-      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
+      "role": "Product owner end to end, requirements to production handoff — embedded design engineer",
       "team": "3 — me, a firmware engineer and a mechanical designer, with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product"
     },
@@ -10070,7 +10074,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "My title was senior embedded design engineer. The CTO owned the commercial relationships — retail buyers, pricing, which white-label enquiries we chased — and I owned the product end to end from requirements through schematic, board, firmware bring-up, enclosure and production handoff.",
+          "My title was embedded design engineer. The CTO owned the commercial relationships — retail buyers, pricing, which white-label enquiries we chased — and I owned the product end to end from requirements through schematic, board, firmware bring-up, enclosure and production handoff.",
           "The governing decision is that the display is a cost decision disguised as a feature decision. Once you accept that, the battery, the charging circuit and half the enclosure stop being separate problems and become consequences of one choice."
         ],
         "blocks": [
@@ -10127,7 +10131,8 @@
             "kind": "para",
             "text": "The colour screen was the cut that set the tier, and what it really removed was the shop-window demo. A reflective display is unreadable in the one place a buyer sees it — a lit cabinet, held for thirty seconds — and unbeatable everywhere they will actually use it. What covers the gap is the number we could print: nine days on a charge, on a stated profile, against a tier that claims a week and delivers three days. The honest cost: we depend on the box, the listing and the reviews to make an argument the product cannot make by being picked up — in a retail aisle we lose to a brighter rectangle."
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "05",
@@ -10214,7 +10219,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "08",
@@ -10344,7 +10350,7 @@
     "deck": "The variance war: the supplier's window is the problem, and the answer was calibrating every unit at test instead of sorting capsules into bins that die with the next lot.",
     "status": "production",
     "meta": {
-      "role": "Product owner end to end, requirements to production handoff — senior embedded design engineer",
+      "role": "Product owner end to end, requirements to production handoff — embedded design engineer",
       "team": "3 — me, an acoustics consultant and a mechanical designer, with the CTO carrying the commercial side",
       "stage": "In production — shipping as a catalogue product"
     },
@@ -10483,7 +10489,7 @@
         "num": "03",
         "heading": "My role and approach",
         "body": [
-          "My title was senior embedded design engineer. The CTO owned the commercial relationships — dealers, pricing, which enquiries we chased — and I owned the product end to end from requirements through schematic, simulation, board, enclosure and production handoff.",
+          "My title was embedded design engineer. The CTO owned the commercial relationships — dealers, pricing, which enquiries we chased — and I owned the product end to end from requirements through schematic, simulation, board, enclosure and production handoff.",
           "Everything follows from refusing to sort. Binning capsules is the standard answer and it makes the product hostage to whatever the next lot is centred on; calibrating each unit puts the variance where I control it."
         ],
         "blocks": [
@@ -10539,7 +10545,8 @@
             "kind": "para",
             "text": "Cutting the matched-pair product is what set the tier, and it still costs us sales. A pair has to match in more than level: the trim makes two microphones agree at 1 kHz and says nothing about 8 kHz or thirty degrees off axis — exactly what a stereo pair is for. Selling pairs honestly meant screening for response shape as well as sensitivity: a second rejection criterion, and inventory held while a partner is found for each unit. We ship singles, and the review that costs us most says the microphone is very good and cannot be bought twice."
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "05",
@@ -10626,7 +10633,8 @@
               ]
             ]
           }
-        ]
+        ],
+        "body": []
       },
       {
         "num": "08",
