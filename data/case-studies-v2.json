@@ -16008,7 +16008,7 @@
     "deck": "One ledger under payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise findings they can cite and draft the change, while every approval stays a named person and every figure says where it came from.",
     "status": "development",
     "meta": {
-      "role": "Product manager, sole builder of the demo",
+      "role": "Product manager",
       "team": "Finance lead, Founders-office associate, 1 full-stack engineer · External accountant (advisory) · Founders in the loop",
       "stage": "In development: the full surface runs on a synthetic ledger inside the Wiki; a read-only pilot on real exports is the next step"
     },
