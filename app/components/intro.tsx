@@ -57,8 +57,9 @@ export default function Intro() {
 						className="intro-text inline-block after:content-['_']"
 						style={{ opacity: opacityForBlock(progress, 1) }}
 					>
-						From silicon to AI, I turn complex technical problems into products
-						people actually use.
+						I run the internal AI platforms the company plans, delivers and
+						searches with, the Wi-R silicon programme, and the patent programme
+						around them.
 					</span>
 					<span
 						className='intro-text inline-block'
