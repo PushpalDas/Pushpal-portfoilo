@@ -4,7 +4,7 @@ import AboutPage from './about-page';
 export const metadata: Metadata = {
 	title: 'About',
 	description:
-		"Pushpal Das, PM in Ixana's CTO office. Electronics, embedded systems and product — built at the intersection of art and science.",
+		"Pushpal Das, Founder's office at Ixana. Electronics, embedded systems and product — built at the intersection of art and science.",
 };
 
 export default function Page() {
