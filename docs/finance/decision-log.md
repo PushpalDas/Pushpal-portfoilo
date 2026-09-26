@@ -73,3 +73,18 @@
 **Context.** The Ops Desk carries fifteen shipments in every state from submitted to delivered, including one cancelled, and its clock runs to 21 Aug.
 **Decision.** A shipped one (Delivered, In Transit) posts on its ship date and accrues freight and duties; one with only a label or a submission posts on its submission date with no freight; a cancelled one posts and reverses in the same journal, so the desk’s $38,850 item value still reconciles while inventory nets to zero. The test counts freight lines against the shipped count rather than fifteen.
 **Consequences.** The Ops total holds to the cent and the accounting says what the desk says.
+
+## D-15 · One label per anomaly, not one per row — 2026-09-26 (P3)
+**Context.** The first eval run scored 0.34 precision. Reading the false positives showed most were true: the planted bank-change invoice mimics the genuine April packaging invoice (so it is also a fuzzy duplicate and a round $61,000 with rush), the after-hours invoice is also from a two-day-old vendor with rush, and the quarter-end $5,000 invoice also fails its three-way match. The label set had recorded one anomaly per row.
+**Decision.** A row carries one label per anomaly it exhibits; the harness scores each type on its own (TP = a positive with a finding of that type; FP = a finding of that type on a row without that label; FPR over the type's hard negatives). The two bank-change rows that had been generated as same-day twins of a monthly invoice are now the monthly invoices themselves, labelled, one with rush. The after-hours row with nothing else unusual becomes a hard negative, because the rule is never to raise after-hours alone. The Ops invoices — which exist only once a request is delivered — record the receipt leg as true, matching their note. Invoices are keyed on business days, so "weekend" means something.
+**Consequences.** 47 positives and 179 hard negatives; the seed fingerprint is re-pinned; the twelve-month spend moves from $16,038,125 to $16,013,625 (two synthetic invoices fewer). The harness reports the missed and the unlabelled ids beside every number so the next disagreement is read the same way.
+
+## D-16 · Weak signals need a partner — 2026-09-26 (P3)
+**Context.** A round amount with no purchase order described most of the large synthetic purchases (tape-out packaging, probe cards, trade-show stands, an annual licence): true, and useless as a finding.
+**Decision.** *round-number* raises only with rush, a vendor under sixty days old, a failed three-way match or a memo that names no project, period, matter, quote, milestone or contract. *after-hours* raises only with rush, a vendor under thirty days old, or an amount just under the ceiling with no PO — never with "no PO" alone, and never alone. *amount-unusual* does not raise an invoice whose purchase order approved the amount. Inside a duplicate pair, the copy is the unpaid one, else the one entered later; an invoice already rejected is the copy.
+**Consequences.** The rules read as a controller would write them; the eval prints per-rule numbers with n, and the case study will quote those, not a headline.
+
+## D-17 · Acceptance has n = 0 until people decide — 2026-09-26 (P3)
+**Context.** The agents panel was designed with an acceptance rate per agent. The seed records approvals of invoices and purchase orders, but no human decision on an agent finding.
+**Decision.** The panel shows acceptance as n = 0 with the sentence that says why; it is measured from the audit trail once people accept or dismiss findings. Nothing is estimated and nothing is typed in.
+**Consequences.** One slot on the panel is honestly empty in the demo; the eval slot is full.

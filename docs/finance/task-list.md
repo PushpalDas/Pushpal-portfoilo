@@ -31,14 +31,14 @@ Kept current per commit. `[x]` done · `[~]` in progress · `[ ]` open · `[!]` 
 - [x] Responsive ≥ 360 px, keyboard pass, screenshots of every view; Patents unchanged apart from the nav entry
 - [x] Walkthrough P2 (`walkthrough-P2.md`, screenshots in `walkthrough/P2/`)
 
-## P3 — Agents (Wiki)
-- [ ] `agents/contract.ts` · trust ladder · audit log with hash chain + verify
-- [ ] AP Anomaly Agent (10 rules, attributions) + unit test per rule
-- [ ] Reconciliation Agent (exact → window → fuzzy) + wrong-match guardrail test
-- [ ] Compliance Agent (Award R-01) · Close Agent · Health Agent · Ask-your-ledger (cited, refuses compensation)
-- [ ] Eval harness → live metrics on `/finance/agents`
-- [ ] "No state change without approval" test (ledger hash) · SoD refusal test · uncitable-finding-dropped test
-- [ ] Walkthrough P3
+## P3 — Agents (Wiki) — done 2026-09-26
+- [x] `agents/contract.ts` (Finding, Draft, RowRef, Attribution, AgentRun, trust ladder, `finalize`) · audit log carries one event per agent run, same chain, verify + tamper test
+- [x] AP Anomaly Agent: eleven rules with attributions + one unit test per rule (every positive raised, no hard negative raised)
+- [x] Reconciliation Agent (exact → window → fuzzy) + wrong-match guardrail test (0, and a one-cent nudge test)
+- [x] Compliance Agent (Award R-01 rules, category over budget, burn ahead; reclass drafts for two approvers) · Close Agent (checklist findings, received-not-invoiced drafts) · Health Agent · Ask-your-ledger (`finance/ask`, twelve intents, cited rows, refuses individual pay and statutory dates)
+- [x] Eval harness (`eval.ts`) → live metrics with n on `/finance/agents`; findings on the AP queue and in its drawer
+- [x] "No state change without approval" test (ledger hash before = after, all five) · SoD refusal test · uncitable-finding-dropped test · after-hours-never-alone test · agents-never-read-labels test
+- [x] Walkthrough P3 (`walkthrough-P3.md`, screenshots in `walkthrough/P3/`)
 
 ## P4 — Artifacts + case study + demo (portfolio)
 - [ ] `docs/finance/` — PRD, engineering spec, user stories, roadmap, business case, leadership memo, GTM, trust/accuracy/explainability, FE NXT mapping, demo script

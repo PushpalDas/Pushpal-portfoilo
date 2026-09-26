@@ -8,10 +8,10 @@
 
 | Figure | Value |
 |---|---|
-| Ledger lines (all classes) | 2,033 in 850 journals |
-| Expense lines | 1,090 · $16,072,625.23 |
+| Ledger lines (all classes) | 2,029 in 848 journals |
+| Expense lines | 1,088 · $16,048,125.23 |
 | — payroll | $10,263,598.14 |
-| — ap.manual | $4,929,388.17 |
+| — ap.manual | $4,904,888.17 |
 | — accruals | $642,489.82 |
 | — patents.invoices | $61,900.00 |
 | — stripe | $55,318.80 |
@@ -20,13 +20,13 @@
 | — ops.procurement | $27,660.00 |
 | — bank | $2,032.88 |
 | — reimbursements | $956.82 |
-| Invoices | 315 (25 from Patents, 23 from Ops) |
+| Invoices | 313 (25 from Patents, 23 from Ops) |
 | Purchase orders | 72 (28 from Ops) |
 | Card transactions | 189 · reimbursements 11 |
-| Bank lines | 371 |
+| Bank lines | 370 |
 | Stripe orders / payouts | 47 / 29 |
 | Vendors | 46 (4 with a bank-detail change on file) |
-| Planted anomalies / hard negatives | 43 / 178 |
+| Planted anomalies / hard negatives | 47 / 179 |
 | Periods | 30 (28 closed, 1 soft-close, 1 open) |
 
 ## Assumptions behind the magnitudes
