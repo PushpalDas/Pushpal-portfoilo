@@ -62,7 +62,34 @@ export function filterWorkItems(
 	// A track pill shows the track's shipped and in-use work only. Its
 	// prototypes and research file under Personal instead, so every product
 	// sits under exactly one of the three.
-	return shown.filter((w) => w.track === filter && !isUnshipped(w));
+	const track = shown.filter((w) => w.track === filter && !isUnshipped(w));
+	return filter === 'ai' ? aiOrder(track) : track;
+}
+
+/**
+ * The three platforms that open the AI pill, in this order, at the
+ * author's request (2026-09-26): the knowledge platform, the patent
+ * program it grew into, and the finance desk built on both. The home
+ * page's AI highlights read the same order, since they are this list's
+ * first six.
+ */
+const AI_LEAD = [
+	'xana-multifile-rag-based-data-singularity-platform',
+	'ixana-patent-program',
+	'ixana-finance-orchestrator',
+];
+
+/** AI: the three lead platforms first, then the rest in the standard order. */
+function aiOrder(track: WorkItem[]): WorkItem[] {
+	const lead = AI_LEAD.map((slug) => {
+		const item = track.find((w) => w.slug === slug);
+		if (!item) {
+			throw new Error(`AI lead ${slug} is not a shipped AI-track product`);
+		}
+		return item;
+	});
+	const rest = track.filter((w) => !w.slug || !AI_LEAD.includes(w.slug));
+	return [...lead, ...rest];
 }
 
 /** Prototype or research: the unshipped work Personal collects. */
