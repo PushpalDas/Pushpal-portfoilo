@@ -68,26 +68,28 @@ export function filterWorkItems(
 }
 
 /**
- * The three platforms that open the AI pill, in this order, at the
+ * The four platforms that open the AI pill, in this order, at the
  * author's request (2026-09-26): the knowledge platform, the patent
- * program it grew into, and Flow Tracker. The finance desk held the third
- * slot until it was re-filed as a prototype that never went to users; a
- * lead must be shipped and in use. The home
- * page's AI highlights read the same order, since they are this list's
- * first six.
+ * program it grew into, and the two builds the company commissioned on
+ * top of them, the finance desk and the salary generator. Those two are
+ * prototypes that never went to users; they lead anyway because they are
+ * the most recent and most complete work here, and each says so on its
+ * own page. The home page's AI highlights read the same order, since
+ * they are this list's first six.
  */
 const AI_LEAD = [
 	'xana-multifile-rag-based-data-singularity-platform',
 	'ixana-patent-program',
-	'ai-pm-generative-ai-engine-for-real-time-pipeline-diagnostic',
+	'ixana-finance-orchestrator',
+	'ai-salary-generator',
 ];
 
-/** AI: the three lead platforms first, then the rest in the standard order. */
+/** AI: the four lead platforms first, then the rest in the standard order. */
 function aiOrder(track: WorkItem[]): WorkItem[] {
 	const lead = AI_LEAD.map((slug) => {
 		const item = track.find((w) => w.slug === slug);
 		if (!item) {
-			throw new Error(`AI lead ${slug} is not a shipped AI-track product`);
+			throw new Error(`AI lead ${slug} is not on the AI track`);
 		}
 		return item;
 	});

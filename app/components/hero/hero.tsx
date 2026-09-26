@@ -32,10 +32,9 @@ export default function Hero() {
 						</h1>
 						<section className='relative z-10'>
 							<p className='text-base text-justify'>
-								Founder&apos;s office at Ixana — I run the Wi-R
-								silicon programs, the patent program around them, and the
-								internal AI platforms the company plans, delivers and searches
-								with.
+								Founder&apos;s office at Ixana — I run the Wi-R silicon
+								programs, the patent program around them, and the internal AI
+								platforms the company plans, delivers and searches with.
 							</p>
 						</section>
 						<section className='relative z-10 flex space-x-4 items-center text-sm'>

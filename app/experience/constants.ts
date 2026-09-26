@@ -123,7 +123,7 @@ export const experienceItems: ExperienceItem[] = [
 	},
 
 	{
-		title: 'Project Intern | Team lead',
+		title: 'Project Intern',
 		company: 'ISRO, Govt. of India',
 		location: 'Dehradun, Uttarakhand, India · Remote',
 		services: '',
