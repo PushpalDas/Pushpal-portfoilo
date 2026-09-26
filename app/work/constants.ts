@@ -573,7 +573,7 @@ export const workItems: WorkItem[] = [
 		status: 'development',
 		order: 4,
 		outcome:
-			'One ledger over payroll, AP, cards, the web store, the patent programme and the Ops Desk, with agents that raise cited findings and draft the change while every approval stays a named person - in development on a synthetic ledger.',
+			'One book of accounts under payroll, supplier bills, cards, the web store, the patent programme and the Ops Desk, with watchers that point at problems they can prove and draft the fix while every approval stays a named person - in development on made-up data.',
 		image: 'Gemini_Generated_Image_r4xu8br4xu8br4xu.png',
 		slug: 'ixana-finance-orchestrator',
 		tier: 2,
